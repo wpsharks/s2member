@@ -1,0 +1,60 @@
+<?php
+/* --------------------------------------------------------------- */
+
+$_g = stripslashes_deep ($_GET);
+
+/* ------------------------------------------------------------------------------------ */
+
+if (isset ($_g["_s2member_seeking"]["type"]) /* One of: page|post|catg|ptag|file|ruri */ )
+	echo 'You were trying to access a protected: ' . esc_html ($_g["_s2member_seeking"]["type"]) . '.';
+
+/* --------------------------------------------------------------- */
+
+if (isset ($_g["_s2member_seeking"]["page"]))
+	echo 'You were trying to access Page ID #' . esc_html ($_g["_s2member_seeking"]["page"]) . '.';
+
+else if (isset ($_g["_s2member_seeking"]["post"]))
+	echo 'You were trying to access Post ID #' . esc_html ($_g["_s2member_seeking"]["post"]) . '.';
+
+else if (isset ($_g["_s2member_seeking"]["catg"]))
+	echo 'You were trying to access Category ID #' . esc_html ($_g["_s2member_seeking"]["catg"]) . '.';
+
+else if (isset ($_g["_s2member_seeking"]["ptag"]))
+	echo 'You were trying to access the Tag ID #' . esc_html ($_g["_s2member_seeking"]["ptag"]) . '.';
+
+else if (isset ($_g["_s2member_seeking"]["file"]))
+	echo 'You were trying to access the File: ' . esc_html ($_g["_s2member_seeking"]["file"]) . '.';
+
+else if (isset ($_g["_s2member_seeking"]["ruri"]) /* Full URI they were trying to access. */)
+	echo 'You were trying to access URI: ' . esc_html (base64_decode ($_g["_s2member_seeking"]["ruri"])) . '.';
+/* See also: <http://codex.wordpress.org/Function_Reference/site_url>. */
+/* See also: <http://php.net/manual/en/function.base64-decode.php>. */
+
+/* --------------------------------------------------------------- */
+
+if (isset ($_g["_s2member_seeking"]["_uri"]) /* Full URI they were trying to access. */ )
+	echo 'You were trying to access URL: ' . esc_html (site_url(base64_decode($_g["_s2member_seeking"]["_uri"]))) . '.';
+/* See also: <http://codex.wordpress.org/Function_Reference/site_url>. */
+/* See also: <http://php.net/manual/en/function.base64-decode.php>. */
+
+/* ------------------------------------------------------------------------------------ */
+
+if (isset ($_g["_s2member_req"]["type"]) /* One of: level|ccap|sp */)
+	echo 'You were trying to access content that requires: ' . esc_html ($_g["_s2member_req"]["type"]) . '.';
+
+/* --------------------------------------------------------------- */
+
+if (isset ($_g["_s2member_req"]["level"]))
+	echo 'You must be a Member at Level #' . esc_html ($_g["_s2member_req"]["level"]) . ' or higher.';
+
+else if (isset ($_g["_s2member_req"]["ccap"]))
+	echo 'You must be a Member with Custom Capability: ' . esc_html ($_g["_s2member_req"]["ccap"]) . '.';
+
+else if (isset ($_g["_s2member_req"]["sp"]))
+	echo 'You must purchase Specific Post/Page ID #' . esc_html ($_g["_s2member_req"]["sp"]) . '.';
+
+/* ------------------------------------------------------------------------------------ */
+
+if (isset ($_g["_s2member_res"]["type"]) /* One of: post|page|catg|ptag|file|ruri|ccap|sp|sys */)
+	echo 'You were trying to access content protected via s2Member: ' . esc_html ($_g["_s2member_res"]["type"]) . ' restrictions.';
+?>

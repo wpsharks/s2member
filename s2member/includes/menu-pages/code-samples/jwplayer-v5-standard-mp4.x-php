@@ -1,0 +1,30 @@
+<?php
+// Configuration.
+$s2_jw_config["jwplayer"] = "/jwplayer/"; // Relative URL path to JW Player files directory.
+$s2_jw_config["mp4_video_file_name"] = "video.mp4"; // Name of your MP4 test file.
+// Don't edit anything else below unless you know what you're doing.
+?>
+
+<div id="jw-container">JW Player® appears here.</div>
+<script type="text/javascript" src="<?php echo $s2_jw_config["jwplayer"]; ?>jwplayer.js"></script>
+<script type="text/javascript">
+	jwplayer("jw-container").setup({modes: /* JW Player®. */
+	[
+		/* First try psuedo-streaming with Flash® player. */
+		{type: "flash", provider: "http", src: "<?php echo $s2_jw_config["jwplayer"]; ?>player.swf",
+			config: {file: "/wp-content/plugins/s2member-files/s2member-file-inline/<?php echo $s2_jw_config["mp4_video_file_name"]; ?>"}},
+			/* Shortcode equivalent: [s2File rewrite="yes" inline="yes" download="<?php echo $s2_jw_config["mp4_video_file_name"]; ?>" /] */
+	
+		/* Else, try an HTML5 video tag. */
+		{type: "html5", provider: "video",
+			config: {file: "/wp-content/plugins/s2member-files/s2member-file-inline/<?php echo $s2_jw_config["mp4_video_file_name"]; ?>"}},
+			/* Shortcode equivalent: [s2File rewrite="yes" inline="yes" download="<?php echo $s2_jw_config["mp4_video_file_name"]; ?>" /] */
+	
+		/* Else, this is a safe fallback. */
+		{type: "download", /* Download the file. */
+			config: {file: "/wp-content/plugins/s2member-files/s2member-file-inline/<?php echo $s2_jw_config["mp4_video_file_name"]; ?>"}}
+			/* Shortcode equivalent: [s2File rewrite="yes" inline="yes" download="<?php echo $s2_jw_config["mp4_video_file_name"]; ?>" /] */
+	],
+	/* Set video dimensions. */ width: 480, height: 270
+	});
+</script>

@@ -1,0 +1,34 @@
+------- Example #1 ------------------------------------------------------
+
+<?php if(s2member_paid_registration_time() > 0){ ?>
+
+	This is some content that will be displayed to all Members that have paid you at some point.
+
+	<?php if(s2member_paid_registration_time("level2") > 0){ ?>
+		This will be displayed to all Members that have paid for Level#2 at some point.
+	<?php } ?>
+
+	<?php if(s2member_paid_registration_time("level3") > 0){ ?>
+		This will be displayed to all Members that have paid for Level#3 at some point.
+	<?php } ?>
+
+<?php } ?>
+
+------- Example #2 ------------------------------------------------------
+
+<?php if(s2member_paid_registration_time() > 0){ ?>
+
+	This is some content that will be displayed to all Members that have paid you at some point.
+
+	<?php /* Timestamp at Level #1, or `0` if they've NOT yet paid for Level #1. */
+			 $level1_payment_time =  s2member_paid_registration_time("level1"); ?>
+	
+	<?php if($level1_payment_time && $level1_payment_time <= ($_30_days_ago = strtotime("-30 days"))){ ?>
+		Drip content to Members that started paying you at Level#1, at least 30 days ago.
+	<?php } ?>
+
+	<?php if($level1_payment_time && $level1_payment_time <= ($_60_days_ago = strtotime("-60 days"))){ ?>
+		Drip more content to Members that started paying you at Level#1, at least 60 days ago.
+	<?php } ?>
+
+<?php } ?>
