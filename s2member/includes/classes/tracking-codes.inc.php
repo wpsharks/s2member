@@ -244,7 +244,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				*/
 				public static function generate_all_tracking_codes ()
 					{
-						ob_start (); /* Begin output buffering so we can "return". */
+						ob_start /* Begin output buffering so we can "return". */ ();
 						/**/
 						c_ws_plugin__s2member_tracking_codes::display_signup_tracking_codes ();
 						c_ws_plugin__s2member_tracking_codes::display_modification_tracking_codes ();
