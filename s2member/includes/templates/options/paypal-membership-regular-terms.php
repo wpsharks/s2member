@@ -10,6 +10,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 <option value="1-M-1" selected="selected"><?php echo esc_html (_x ("Monthly ( recurring charge, for ongoing access )", "s2member-admin", "s2member")); ?></option>
 <option value="2-M-1"><?php echo esc_html (_x ("Bi-Monthly ( recurring charge, for ongoing access )", "s2member-admin", "s2member")); ?></option>
 <option value="3-M-1"><?php echo esc_html (_x ("Quarterly ( recurring charge, for ongoing access )", "s2member-admin", "s2member")); ?></option>
+<option value="6-M-1"><?php echo esc_html (_x ("Semi-Yearly ( recurring charge, for ongoing access )", "s2member-admin", "s2member")); ?></option>
 <option value="1-Y-1"><?php echo esc_html (_x ("Yearly ( recurring charge, for ongoing access )", "s2member-admin", "s2member")); ?></option>
 </optgroup>
 
