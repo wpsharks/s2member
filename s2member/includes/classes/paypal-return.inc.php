@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return"))
 				*/
 				public static function paypal_return ()
 					{
-						if (!empty ($_GET["s2member_paypal_return"])) /* Call inner routine? */
+						if /* Call inner routine? */ (!empty ($_GET["s2member_paypal_return"]))
 							{
 								return c_ws_plugin__s2member_paypal_return_in::paypal_return ();
 							}
