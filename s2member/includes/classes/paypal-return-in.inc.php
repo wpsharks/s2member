@@ -96,7 +96,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 													}
 												else // Else, use the default ``$_SERVER["HTTP_HOST"]`` error.
 													{
-														$paypal["s2member_log"][] = "Unable to verify `\$_SERVER[\"HTTP_HOST\"]`. Please check the `custom` value in your Button Code. It MUST start with your domain name.";
+														if /* Enqueue an admin notice if the site owner is using the wrong domain variation. */ ($paypal["custom"] && ($paypal["custom"] === "www.".$_SERVER["HTTP_HOST"] || "www.".$paypal["custom"] === $_SERVER["HTTP_HOST"]))
+															c_ws_plugin__s2member_admin_notices::enqueue_admin_notice("<strong>s2Member:</strong> Post-processing failed on at least one transaction. It appears that you have a PayPal® Button configured with a <code>custom=\"\"</code> Shortcode Attribute that does NOT match up with your installation domain name. If your site uses the <code>www.</code> prefix, please include that. If it does not, please exclude the <code>www.</code> prefix. You should have <code>custom=\"".preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"])."\"</code>", "*:*", true);
+														/**/
+														$paypal["s2member_log"][] = 'Unable to verify `$_SERVER["HTTP_HOST"]`. Please check the `custom` value in your Button Code. It MUST start with your domain name.';
 														/**/
 														$paypal["s2member_log"][] = "Redirecting Customer to the Home Page (after displaying an error message).";
 														/**/
@@ -116,7 +119,11 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								/**/
 								else // Extensive log reporting here. This is an area where many site owners find trouble. Depending on server configuration; remote HTTPS connections may fail.
 									{
+										if /* Enqueue an admin notice if the site owner is missing the PDT Identity Key. */ (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_identity_token"])
+											c_ws_plugin__s2member_admin_notices::enqueue_admin_notice("<strong>s2Member:</strong> You have no PayPal® PDT Identity Token configured. PayPal® Auto-Return handling failed. Please update your PayPal® PDT Identity Key. See: <code>s2Member -› PayPal® Options -› PayPal® PDT/Auto-Return Integration</code>. Thank you!", "*:*", true);
+										/**/
 										$paypal["s2member_log"][] = "Unable to verify \$_POST vars. This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility.";
+										$paypal["s2member_log"][] = "Please make sure that you configure a PayPal® PDT Identity Token for your installation of s2Member®. See: `s2Member -› PayPal® Options -› PayPal® PDT/Auto-Return Integration`.";
 										$paypal["s2member_log"][] = "If you're absolutely SURE that your configuration is valid, you may want to run some tests on your server, just to be sure \$_POST variables are populated, and that your server is able to connect/communicate with your Payment Gateway over an HTTPS connection.";
 										$paypal["s2member_log"][] = "s2Member uses the `WP_Http` class for remote connections; which will try to use `cURL` first, and then fall back on the `FOPEN` method when `cURL` is not available. On a Windows® server, you may have to disable your `cURL` extension; and instead, set `allow_url_fopen = yes` in your php.ini file. The `cURL` extension (usually) does NOT support SSL connections on a Windows® server.";
 										$paypal["s2member_log"][] = "Please see this thread: `http://www.s2member.com/forums/topic/ideal-server-configuration-for-s2member/` for details regarding the ideal server configuration for s2Member.";

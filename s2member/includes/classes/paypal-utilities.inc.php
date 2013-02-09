@@ -39,14 +39,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_postvars", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/*
 						Custom conditionals can be applied by filters.
 						*/
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						if(!($postvars = apply_filters("ws_plugin__s2member_during_paypal_postvars_conditionals", array(), get_defined_vars())))
 							{
-								unset($__refs, $__v); /* Unset defined __refs, __v. */
+								unset /* Unset defined __refs, __v. */($__refs, $__v);
 								/**/
 								if(!empty($_GET["tx"]) && empty($_GET["s2member_paypal_proxy"]))
 									{
@@ -69,11 +69,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 														foreach($postvars as &$value)
 															$value = @mb_convert_encoding($value, "UTF-8", (($postvars["charset"] === "gb2312") ? "GBK" : $postvars["charset"]));
 													}
-												/**/
 												return apply_filters("ws_plugin__s2member_paypal_postvars", $postvars, get_defined_vars());
 											}
-										else /* Nope. */
-											return false;
+										else return false;
 									}
 								else if(!empty($_REQUEST) && is_array($postvars = stripslashes_deep($_REQUEST)))
 									{
@@ -81,7 +79,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											if(preg_match("/^s2member_/", $key))
 												unset($postvars[$key]);
 										/**/
-										$postback = $postvars; /* Copy. */
+										$postback = /* Copy. */ $postvars;
 										$postback["cmd"] = "_notify-validate";
 										/**/
 										$postvars = c_ws_plugin__s2member_utils_strings::trim_deep($postvars);
@@ -91,7 +89,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 												foreach($postvars as &$value)
 													$value = @mb_convert_encoding($value, "UTF-8", (($postvars["charset"] === "gb2312") ? "GBK" : $postvars["charset"]));
 											}
-										/**/
 										$endpoint = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com";
 										/**/
 										if(!empty($_GET["s2member_paypal_proxy"]) && !empty($_GET["s2member_paypal_proxy_verification"]) && $_GET["s2member_paypal_proxy_verification"] === c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen())
@@ -103,15 +100,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										else if(trim(strtolower(c_ws_plugin__s2member_utils_urls::remote("https://".$endpoint."/cgi-bin/webscr", $postback, array("timeout" => 20)))) === "verified")
 											return apply_filters("ws_plugin__s2member_paypal_postvars", $postvars, get_defined_vars());
 										/**/
-										else /* Nope. */
-											return false;
+										else return false;
 									}
-								else /* Nope. */
-									return false;
+								else return false;
 							}
-						else /* Else a custom conditional has been applied by Filters. */
+						else // Else a custom conditional has been applied by Filters.
 							{
-								unset($__refs, $__v); /* Unset defined __refs, __v. */
+								unset /* Unset defined __refs, __v. */($__refs, $__v);
 								/**/
 								return apply_filters("ws_plugin__s2member_paypal_postvars", $postvars, get_defined_vars());
 							}
@@ -124,18 +119,18 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				*
 				* @return str A Proxy Key. It's an MD5 Hash, 32 chars, URL-safe.
 				*/
-				public static function paypal_proxy_key_gen() /* Generate Key. */
+				public static function paypal_proxy_key_gen()
 					{
-						global $current_site, $current_blog; /* Multisite Networking. */
+						global /* Multisite Networking. */ $current_site, $current_blog;
 						/**/
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_proxy_key_gen", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						if(is_multisite() && !is_main_site())
 							$key = md5(c_ws_plugin__s2member_utils_encryption::xencrypt($current_blog->domain.$current_blog->path, false, false));
 						/**/
-						else /* Else it's a standard Proxy Key; not on a Multisite Network, or not on the Main Site anyway. */
+						else // Else it's a standard Proxy Key; not on a Multisite Network, or not on the Main Site anyway.
 							$key = md5(c_ws_plugin__s2member_utils_encryption::xencrypt(preg_replace("/\:[0-9]+$/", "", $_SERVER["HTTP_HOST"]), false, false));
 						/**/
 						return apply_filters("ws_plugin__s2member_paypal_proxy_key_gen", $key, get_defined_vars());
@@ -189,10 +184,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 									/* translators: Exclude `%2$s` and `%3$s`. These are English details returned by PayPal®. Replace `%2$s` and `%3$s` with: `Unable to process, please try again`, or something to that affect. Or, if you prefer, you could Filter ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`. */
 									$response["__error"] = sprintf(_x('Error #%1$s. %2$s. %3$s.', "s2member-front", "s2member"), $response["L_ERRORCODE0"], rtrim($response["L_SHORTMESSAGE0"], "."), rtrim($response["L_LONGMESSAGE0"], "."));
 								/**/
-								else /* Else, generate an error messsage - so something is reported back to the Customer. */
+								else // Else, generate an error messsage - so something is reported back to the Customer.
 									$response["__error"] = _x("Error. Please contact Support for assistance.", "s2member-front", "s2member");
 							}
-						/**/
 						$logv = c_ws_plugin__s2member_utilities::ver_details();
 						$logm = c_ws_plugin__s2member_utilities::mem_details();
 						$log4 = $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]."\nUser-Agent: ".$_SERVER["HTTP_USER_AGENT"];
@@ -226,7 +220,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("_ws_plugin__s2member_before_paypal_api_response_filters", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						if(!empty($response["__error"]) && !empty($response["L_ERRORCODE0"]))
 							{
@@ -239,8 +233,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								else if((int)$response["L_ERRORCODE0"] === 10417)
 									$response["__error"] = sprintf(_x("Error #%s. Transaction declined. Please use an alternate funding source.", "s2member-front", "s2member"), $response["L_ERRORCODE0"]);
 							}
-						/**/
-						return $response; /* Filters already applied with: ``ws_plugin__s2member_paypal_api_response``. */
+						return /* Filters already applied with: ``ws_plugin__s2member_paypal_api_response``. */ $response;
 					}
 				/**
 				* Cleans up values passed through PayPal® NVP strings.
@@ -362,7 +355,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("_ws_plugin__s2member_before_paypal_payflow_api_response_filters", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						if(!empty($response["__error"]) && !empty($response["L_ERRORCODE0"]))
 							{
@@ -376,7 +369,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 									$response["__error"] = sprintf(_x("Error #%s. Transaction declined. Please use an alternate funding source.", "s2member-front", "s2member"), $response["L_ERRORCODE0"]);
 							}
 						/**/
-						return $response; /* Filters already applied with: ``ws_plugin__s2member_paypal_payflow_api_response``. */
+						return /* Filters already applied with: ``ws_plugin__s2member_paypal_payflow_api_response``. */ $response;
 					}
 				/**
 				* Cleans up values passed through PayPal® text/namevalue strings.
@@ -413,7 +406,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_pro_term", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						$paypal_pro_terms = array("D" => "Day", "W" => "Week", "M" => "Month", "Y" => "Year");
 						/**/
@@ -437,7 +430,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_payflow_term", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						$paypal_payflow_terms = array("D" => "DAY", "W" => "WEEK", "M" => "MONT", "Y" => "YEAR");
 						/**/
@@ -467,7 +460,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_std_term", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						$paypal_std_terms = array("DAY" => "D", "WEEK" => "W", "MONTH" => "M", "YEAR" => "Y");
 						/**/
@@ -488,7 +481,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_pro_subscr_id", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						if(is_array($array = $array_or_string) && !empty($array["recurring_payment_id"]))
 							$subscr_id = trim($array["recurring_payment_id"]);
@@ -515,7 +508,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_pro_item_number", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						if(isset($array_or_string["PROFILENAME"]) /* Payflow® API alternative. */)
 							$array_or_string["PROFILEREFERENCE"] = $array_or_string["PROFILENAME"];
@@ -553,7 +546,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_pro_item_name", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						if(is_array($array = $array_or_string) && !empty($array["product_name"]))
 							$item_name = trim($array["product_name"]);
@@ -587,7 +580,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_pro_period1", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						if(isset($array_or_string["PROFILENAME"]) /* Payflow® API alternative. */)
 							$array_or_string["PROFILEREFERENCE"] = $array_or_string["PROFILENAME"];
@@ -603,7 +596,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						else if(is_string($string = $array_or_string) && !empty($string))
 							$_period1 = trim($string);
 						/**/
-						if(!empty($_period1)) /* Were we able to get a `period1` string? */
+						if /* Were we able to get a `period1` string? */(!empty($_period1))
 							{
 								list($num, $span) = array_map("trim", preg_split("/ /", $_period1, 2));
 								/**/
@@ -611,7 +604,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 									if(is_numeric($num) && $num >= 1)
 										eval('$num = "2"; $span = "W";');
 								/**/
-								if(strlen($span) !== 1) /* To Standard format. */
+								if /* To Standard format. */(strlen($span) !== 1)
 									$span = c_ws_plugin__s2member_paypal_utilities::paypal_std_term($span);
 								/**/
 								$span = (preg_match("/^[DWMY]$/i", $span)) ? $span : "";
@@ -621,8 +614,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								/**/
 								return apply_filters("ws_plugin__s2member_paypal_pro_period1", $period1, get_defined_vars());
 							}
-						else /* Default. */
-							return apply_filters("ws_plugin__s2member_paypal_pro_period1", $default, get_defined_vars());
+						else return apply_filters("ws_plugin__s2member_paypal_pro_period1", $default, get_defined_vars());
 					}
 				/**
 				* Get `period3` from either an array with `PROFILEREFERENCE|rp_invoice_id|period3`, or use an existing string.
@@ -643,7 +635,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_paypal_pro_period3", get_defined_vars());
-						unset($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */($__refs, $__v);
 						/**/
 						if(isset($array_or_string["PROFILENAME"]) /* Payflow® API alternative. */)
 							$array_or_string["PROFILEREFERENCE"] = $array_or_string["PROFILENAME"];
@@ -659,7 +651,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						else if(is_string($string = $array_or_string) && !empty($string))
 							$_period3 = trim($string);
 						/**/
-						if(!empty($_period3)) /* Were we able to get a `period3` string? */
+						if /* Were we able to get a `period3` string? */(!empty($_period3))
 							{
 								list($num, $span) = array_map("trim", preg_split("/ /", $_period3, 2));
 								/**/
@@ -667,7 +659,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 									if(is_numeric($num) && $num >= 1)
 										eval('$num = "2"; $span = "W";');
 								/**/
-								if(strlen($span) !== 1) /* To Standard format. */
+								if /* To Standard format. */(strlen($span) !== 1)
 									$span = c_ws_plugin__s2member_paypal_utilities::paypal_std_term($span);
 								/**/
 								$span = (preg_match("/^[DWMY]$/i", $span)) ? $span : "";
@@ -677,8 +669,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								/**/
 								return apply_filters("ws_plugin__s2member_paypal_pro_period3", $period3, get_defined_vars());
 							}
-						else /* Default. */
-							return apply_filters("ws_plugin__s2member_paypal_pro_period3", $default, get_defined_vars());
+						else return apply_filters("ws_plugin__s2member_paypal_pro_period3", $default, get_defined_vars());
 					}
 			}
 	}
