@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_constants"))
 	{
 		/**
@@ -44,15 +44,15 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 				public static function constants ()
 					{
 						do_action ("ws_plugin__s2member_before_constants", get_defined_vars ());
-						/**/
+
 						$links = c_ws_plugin__s2member_cache::cached_page_links ();
-						/**/
+
 						$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && $user->ID) ? $user : false;
-						/**/
+
 						$level = c_ws_plugin__s2member_user_access::user_access_level ($user);
 						$file_downloads = c_ws_plugin__s2member_files::user_downloads ($user);
 						$login_redirection_url = c_ws_plugin__s2member_login_redirects::login_redirection_url ($user);
-						/**/
+
 						$custom = ($user) ? get_user_option ("s2member_custom", $user->ID) : "";
 						$subscr_id = ($user) ? get_user_option ("s2member_subscr_id", $user->ID) : "";
 						$subscr_gateway = ($user) ? get_user_option ("s2member_subscr_gateway", $user->ID) : "";
@@ -60,7 +60,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						$custom_fields = ($user) ? get_user_option ("s2member_custom_fields", $user->ID) : array ();
 						$paid_registration_times = ($user) ? get_user_option ("s2member_paid_registration_times", $user->ID) : array ();
 						$login_counter = ($user) ? (int)get_user_option ("s2member_login_counter") : -1;
-						/**/
+
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_during_constants", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -2392,7 +2392,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						Calls the after Hook. Do NOT set Constants here.
 						*/
 						do_action ("ws_plugin__s2member_after_constants", get_defined_vars ());
-						/**/
+
 						return /* Return for uniformity. */;
 					}
 			}

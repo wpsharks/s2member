@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_user_access"))
 	{
 		/**
@@ -73,11 +73,11 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 						else /* Otherwise, we DO have the $user object available. */
 							{
 								$ccaps = array (); /* Initializes $ccaps array. */
-								/**/
+
 								foreach ($user->allcaps as $cap => $cap_enabled)
 									if (preg_match ("/^access_s2member_ccap_/", $cap))
 										$ccaps[] = preg_replace ("/^access_s2member_ccap_/", "", $cap);
-								/**/
+
 								return apply_filters ("ws_plugin__s2member_user_access_ccaps", $ccaps, get_defined_vars ());
 							}
 					}
@@ -101,7 +101,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 							{
 								return apply_filters ("ws_plugin__s2member_user_access_level", -1, get_defined_vars ()); /* No $user, or NOT logged in. */
 							}
-						/**/
+
 						for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--)
 							{
 								if ($user->has_cap ("access_s2member_level" . $n)) /* Testing for Membership Level Access. */

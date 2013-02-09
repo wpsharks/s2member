@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 	{
 		/**
@@ -38,15 +38,15 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				public static function users_in_database ()
 					{
 						global /* Global database object reference. */ $wpdb;
-						/**/
+
 						$q1 = mysql_query ("SELECT SQL_CALC_FOUND_ROWS `" . $wpdb->users . "`.`ID` FROM `" . $wpdb->users . "`, `" . $wpdb->usermeta . "` WHERE `" . $wpdb->users . "`.`ID` = `" . $wpdb->usermeta . "`.`user_id` AND `" . $wpdb->usermeta . "`.`meta_key` = '" . esc_sql ($wpdb->prefix . "capabilities") . "' LIMIT 1", $wpdb->dbh);
 						$q2 = mysql_query ("SELECT FOUND_ROWS()", $wpdb->dbh);
-						/**/
+
 						$users = (int)mysql_result ($q2, 0);
-						/**/
+
 						mysql_free_result ($q2);
 						mysql_free_result ($q1);
-						/**/
+
 						return $users;
 					}
 				/**
@@ -64,10 +64,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				public static function get_user_custom_with ($subscr_or_txn_id = FALSE, $os0 = FALSE)
 					{
 						global /* Need global DB obj. */ $wpdb;
-						/**/
+
 						if /* This case includes some additional routines that can use the ``$os0`` value. */ ($subscr_or_txn_id && $os0)
 							{
-								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . $wpdb->escape ($subscr_or_txn_id) . "' OR `meta_value` = '" . $wpdb->escape ($os0) . "') LIMIT 1"))/**/
+								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . $wpdb->escape ($subscr_or_txn_id) . "' OR `meta_value` = '" . $wpdb->escape ($os0) . "') LIMIT 1"))
 								|| ($q = $wpdb->get_row ("SELECT `ID` AS `user_id` FROM `" . $wpdb->users . "` WHERE `ID` = '" . $wpdb->escape ($os0) . "' LIMIT 1")))
 									if (($custom = get_user_option ("s2member_custom", $q->user_id)))
 										return $custom;
@@ -95,10 +95,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				public static function get_user_id_with ($subscr_or_txn_id = FALSE, $os0 = FALSE)
 					{
 						global /* Need global DB obj. */ $wpdb;
-						/**/
+
 						if  /* This case includes some additional routines that can use the ``$os0`` value. */($subscr_or_txn_id && $os0)
 							{
-								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . $wpdb->escape ($subscr_or_txn_id) . "' OR `meta_value` = '" . $wpdb->escape ($os0) . "') LIMIT 1"))/**/
+								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . $wpdb->escape ($subscr_or_txn_id) . "' OR `meta_value` = '" . $wpdb->escape ($os0) . "') LIMIT 1"))
 								|| ($q = $wpdb->get_row ("SELECT `ID` AS `user_id` FROM `" . $wpdb->users . "` WHERE `ID` = '" . $wpdb->escape ($os0) . "' LIMIT 1")))
 									return $q->user_id;
 							}
@@ -124,10 +124,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				public static function get_user_email_with ($subscr_or_txn_id = FALSE, $os0 = FALSE)
 					{
 						global /* Need global DB obj. */ $wpdb;
-						/**/
+
 						if  /* This case includes some additional routines that can use the ``$os0`` value. */($subscr_or_txn_id && $os0)
 							{
-								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . $wpdb->escape ($subscr_or_txn_id) . "' OR `meta_value` = '" . $wpdb->escape ($os0) . "') LIMIT 1"))/**/
+								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . $wpdb->escape ($subscr_or_txn_id) . "' OR `meta_value` = '" . $wpdb->escape ($os0) . "') LIMIT 1"))
 								|| ($q = $wpdb->get_row ("SELECT `ID` AS `user_id` FROM `" . $wpdb->users . "` WHERE `ID` = '" . $wpdb->escape ($os0) . "' LIMIT 1")))
 									if (is_object ($user = new WP_User ($q->user_id)) && !empty ($user->ID) && ($email = $user->user_email))
 										return $email;
@@ -226,11 +226,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				public static function user_login_email_exists ($user_login = FALSE, $user_email = FALSE)
 					{
 						global /* Global database object reference. */ $wpdb;
-						/**/
+
 						if /* Only if we have both of these. */ ($user_login && $user_email)
 							if (($user_id = $wpdb->get_var ("SELECT `ID` FROM `" . $wpdb->users . "` WHERE `user_login` LIKE '" . esc_sql (like_escape ($user_login)) . "' AND `user_email` LIKE '" . esc_sql (like_escape ($user_email)) . "' LIMIT 1")))
 								return  /* Return the associated WordPress® ID. */$user_id;
-						/**/
+
 						return  /* Else return false. */false;
 					}
 				/**
@@ -251,7 +251,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 						if /* Only if we have both of these. */ ($user_login && $user_email)
 							if (is_multisite () && ($user_id = c_ws_plugin__s2member_utils_users::user_login_email_exists ($user_login, $user_email)) && !is_user_member_of_blog ($user_id, $blog_id))
 								return $user_id;
-						/**/
+
 						return /* Else return false. */ false;
 					}
 				/**
@@ -293,53 +293,53 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				public static function get_user_field ($field_id = FALSE, $user_id = FALSE) /* Very powerful function here. */
 					{
 						global /* Global database object reference. */ $wpdb;
-						/**/
+
 						$current_user = /* Current User's object ( used when/if `$user_id` is empty ). */ wp_get_current_user ();
-						/**/
+
 						if (is_object ($user = ($user_id) ? new WP_User ($user_id) : $current_user) && !empty ($user->ID) && ($user_id = $user->ID))
 							{
 								if  /* Immediate User object property? ( most likely ) */(isset ($user->$field_id))
 									return $user->$field_id;
-								/**/
+
 								else if /* Also try the data object property. */ (isset ($user->data->$field_id))
 									return $user->data->$field_id;
-								/**/
+
 								else if /* Immediate prefixed? */ (isset ($user->{$wpdb->prefix . $field_id}))
 									return $user->{$wpdb->prefix . $field_id};
-								/**/
+
 								else if /* Data prefixed? */ (isset ($user->data->{$wpdb->prefix . $field_id}))
 									return $user->data->{$wpdb->prefix . $field_id};
-								/**/
+
 								else if /* First/last full name? */ (strcasecmp ($field_id, "full_name") === 0)
 									return trim ($user->first_name . " " . $user->last_name);
-								/**/
+
 								else if /* Email address? */ (preg_match ("/^(email|user_email)$/i", $field_id))
 									return $user->user_email;
-								/**/
+
 								else if /* Username / login? */ (preg_match ("/^(login|user_login)$/i", $field_id))
 									return $user->user_login;
-								/**/
+
 								else if /* Role name/ID? */ (strcasecmp ($field_id, "s2member_access_role") === 0)
 									return c_ws_plugin__s2member_user_access::user_access_role ($user);
-								/**/
+
 								else if /* Access Level? */ (strcasecmp ($field_id, "s2member_access_level") === 0)
 									return c_ws_plugin__s2member_user_access::user_access_level ($user);
-								/**/
+
 								else if /* Access Label? */ (strcasecmp ($field_id, "s2member_access_label") === 0)
 									return c_ws_plugin__s2member_user_access::user_access_label ($user);
-								/**/
+
 								else if /* Custom Caps? */ (strcasecmp ($field_id, "s2member_access_ccaps") === 0)
 									return c_ws_plugin__s2member_user_access::user_access_ccaps ($user);
-								/**/
+
 								else if (strcasecmp ($field_id, "ip") === 0 && is_object ($current_user) && !empty ($current_user->ID) && $current_user->ID === ($user_id = $user->ID))
 									return /* The current User's IP address, right now. */ $_SERVER["REMOTE_ADDR"];
-								/**/
+
 								else if (strcasecmp ($field_id, "s2member_registration_ip") === 0 || strcasecmp ($field_id, "reg_ip") === 0 || strcasecmp ($field_id, "ip") === 0)
 									return get_user_option ("s2member_registration_ip", $user_id);
-								/**/
+
 								else if (strcasecmp ($field_id, "s2member_subscr_or_wp_id") === 0)
 									return ($subscr_id = get_user_option ("s2member_subscr_id", $user_id)) ? $subscr_id : $user_id;
-								/**/
+
 								else if (is_array ($fields = get_user_option ("s2member_custom_fields", $user_id)))
 									if (isset ($fields[preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field_id))]))
 										return $fields[preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field_id))];

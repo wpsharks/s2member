@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 	{
 		/**
@@ -39,15 +39,15 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				public static function array_unique ($array = FALSE)
 					{
 						$array = (array)$array;
-						/**/
+
 						foreach ($array as &$value)
 							$value = serialize ($value);
-						/**/
+
 						$array = array_unique ($array);
-						/**/
+
 						foreach ($array as &$value)
 							$value = unserialize ($value);
-						/**/
+
 						return $array;
 					}
 				/**
@@ -125,12 +125,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				public static function remove_nulls ($array = FALSE)
 					{
 						$array = (array)$array;
-						/**/
+
 						foreach ($array as $key => &$value)
 							{
 								if (is_array ($value) /* Recursive function call here. */)
 									$value = c_ws_plugin__s2member_utils_arrays::remove_nulls ($value);
-								/**/
+
 								else if (is_null /* Is it null? */ ($value))
 									unset ($array[$key]);
 							}
@@ -148,12 +148,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				public static function remove_0b_strings ($array = FALSE)
 					{
 						$array = (array)$array;
-						/**/
+
 						foreach ($array as $key => &$value)
 							{
 								if (is_array ($value) /* Recursive function call here. */)
 									$value = c_ws_plugin__s2member_utils_arrays::remove_0b_strings ($value);
-								/**/
+
 								else if (is_string ($value) && !strlen ($value))
 									unset ($array[$key]);
 							}
@@ -171,12 +171,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				public static function force_strings ($array = FALSE)
 					{
 						$array = (array)$array;
-						/**/
+
 						foreach ($array as &$value)
 							{
 								if (is_array ($value) /* Recursive function call here. */)
 									$value = c_ws_plugin__s2member_utils_arrays::force_strings ($value);
-								/**/
+
 								else if (!is_string ($value) /* String? */)
 									$value = (string)$value;
 							}
@@ -194,12 +194,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				public static function force_integers ($array = FALSE)
 					{
 						$array = (array)$array;
-						/**/
+
 						foreach ($array as &$value)
 							{
 								if (is_array ($value) /* Recursive function call here. */)
 									$value = c_ws_plugin__s2member_utils_arrays::force_integers ($value);
-								/**/
+
 								else if (!is_integer ($value) /* Integer? */)
 									$value = (int)$value;
 							}
@@ -220,11 +220,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 					{
 						$array = (array)$array;
 						ksort /* Sort by key. */ ($array, $flags);
-						/**/
+
 						foreach ($array as &$value)
 							if (is_array ($value) /* Recursive function call here. */)
 								$value = c_ws_plugin__s2member_utils_arrays::ksort_deep ($value, $flags);
-						/**/
+
 						return /* Now return the array. */ $array;
 					}
 			}

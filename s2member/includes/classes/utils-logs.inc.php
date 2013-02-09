@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 	{
 		/**
@@ -46,9 +46,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 								if (is_dir ($dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]) && is_writable ($dir))
 									{
 										$max = apply_filters ("ws_plugin__s2member_oversize_log_file_bytes", 2097152, get_defined_vars ());
-										/**/
+
 										eval ('$log_files = scandir ($dir); shuffle($log_files); $counter = 1;');
-										/**/
+
 										foreach ($log_files as $file) /* Go through each log file. Up to 25 files at a time. */
 											{
 												if (preg_match ("/\.log$/i", $file) && !preg_match ("/-ARCHIVED-/i", $file) && is_file ($dir_file = $dir . "/" . $file))
@@ -57,13 +57,13 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 															if ($log = preg_replace ("/\.log$/i", "", $dir_file)) /* Strip .log before renaming. */
 																rename ($dir_file, $log . "-ARCHIVED-" . date ("m-d-Y") . "-" . time () . ".log");
 													}
-												/**/
+
 												if (($counter = $counter + 1) > 25) /* Up to 25 files at a time. */
 													break; /* Stop for now. */
 											}
 									}
 							}
-						/**/
+
 						return true;
 					}
 				/**
@@ -83,7 +83,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 				public static function cleanup_expired_s2m_transients ($stagger = TRUE)
 					{
 						global $wpdb; /* Will need this for database cleaning. */
-						/**/
+
 						if (!$stagger || is_float ($stagger = time () / 2)) /* Stagger this routine? */
 							{
 								if (is_array ($expired_s2m_transients = $wpdb->get_results ("SELECT * FROM `" . $wpdb->options . "` WHERE `option_name` LIKE '" . esc_sql (like_escape ("_transient_timeout_s2m_")) . "%' AND `option_value` < '" . esc_sql (time ()) . "' LIMIT 5")) && !empty ($expired_s2m_transients))
@@ -93,7 +93,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 												$wpdb->query ("DELETE FROM `" . $wpdb->options . "` WHERE `option_id` = '" . esc_sql ($id) . "' OR `option_name` = '" . esc_sql ($name) . "'");
 									}
 							}
-						/**/
+
 						return true;
 					}
 			}

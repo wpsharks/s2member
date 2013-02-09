@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 	{
 		/**
@@ -65,7 +65,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				public static function basename_dir_app_data ($path = FALSE)
 					{
 						$path = preg_replace ("/\/app_data$/", "", c_ws_plugin__s2member_utils_dirs::n_dir_seps ((string)$path), 1, $app_data);
-						/**/
+
 						return basename ($path) . (($app_data) ? "/app_data" : "");
 					}
 				/**
@@ -80,7 +80,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				public static function doc_root_path ($path = FALSE)
 					{
 						$doc_root = c_ws_plugin__s2member_utils_dirs::n_dir_seps ($_SERVER["DOCUMENT_ROOT"]);
-						/**/
+
 						return preg_replace ("/^" . preg_quote ($doc_root, "/") . "/", "", c_ws_plugin__s2member_utils_dirs::n_dir_seps ((string)$path));
 					}
 				/**
@@ -101,25 +101,25 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 							{
 								$from = ($try_realpaths && ($_real_from = realpath ($from))) ? $_real_from : $from; /* Try this? */
 								$to = ($try_realpaths && ($_real_to = realpath ($to))) ? $_real_to : $to; /* Try to find realpath? */
-								/**/
+
 								$from = (is_file ($from)) ? dirname ($from) . "/" : $from . "/"; /* A (directory) with trailing `/`. */
-								/**/
+
 								$from = c_ws_plugin__s2member_utils_dirs::n_dir_seps ($from); /* Normalize directory separators now. */
 								$to = c_ws_plugin__s2member_utils_dirs::n_dir_seps ($to); /* Normalize directory separators here too. */
-								/**/
+
 								$from = preg_split ("/\//", $from); /* Convert ``$from``, to an array. Split on each directory separator. */
 								$to = preg_split ("/\//", $to); /* Also convert ``$to``, to an array. Split this on each directory separator. */
-								/**/
+
 								if ($use_win_diff_drive_jctn && stripos (PHP_OS, "win") === 0 /* Test for different drives on Windows® servers? */)
-									/**/
+
 									if (/*Drive? */preg_match ("/^([A-Z])\:$/i", $from[0], $_m) && ($_from_drive = $_m[1]) && preg_match ("/^([A-Z])\:$/i", $to[0], $_m) && ($_to_drive = $_m[1]))
 										if ( /* Are these locations on completely different drives? */$_from_drive !== $_to_drive)
 											{
 												$_from_drive_jctn = $_from_drive . ":/s2-" . $_to_drive . "-jctn";
 												$_sys_temp_dir_jctn = c_ws_plugin__s2member_utils_dirs::get_temp_dir (false) . "/s2-" . $_to_drive . "-jctn";
-												/**/
+
 												$_jctn = ($_sys_temp_dir_jctn && strpos ($_sys_temp_dir_jctn, $_from_drive) === 0) ? $_sys_temp_dir_jctn : $_from_drive_jctn;
-												/**/
+
 												if (($_from_drive_jctn_exists = (is_dir ($_from_drive_jctn)) ? true : false) || c_ws_plugin__s2member_utils_dirs::create_win_jctn ($_jctn, $_to_drive . ":/"))
 													{
 														array_shift /* Shift drive off and use junction now. */ ($to);
@@ -132,16 +132,16 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 															" Please create a Directory Junction here: " . $_from_drive_jctn . ", pointing to: " . $_to_drive . ":/", E_USER_ERROR);
 													}
 											}
-								/**/
+
 								unset ($_real_from, $_real_to, $_from_drive, $_to_drive, $_from_drive_jctn, $_sys_temp_dir_jctn, $_jctn, $_from_drive_jctn_exists, $_jctn_dir, $_m);
-								/**/
+
 								$rel_path = $to; /* Re-initialize. Start ``$rel_path`` as the value of the ``$to`` array. */
-								/**/
+
 								foreach (array_keys ($from) as $_depth) /* Each ``$from`` directory ``$_depth``. */
 									{
 										if (isset ($from[$_depth], $to[$_depth]) && $from[$_depth] === $to[$_depth])
 											array_shift ($rel_path);
-										/**/
+
 										else if (($_remaining = count ($from) - $_depth) > 1)
 											{
 												$_left_p = -1 * (count ($rel_path) + ($_remaining - 1));
@@ -155,7 +155,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 											}
 									}
 							}
-						/**/
+
 						return implode ("/", $rel_path);
 					}
 				/**
@@ -174,11 +174,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 							{
 								if (is_dir ($jctn)) /* Does it already exist? If so return now. */
 									return true; /* Return now to save extra processing time below. */
-								/**/
+
 								else if ( /* Possible? */function_exists ("shell_exec") && ($esa = "escapeshellarg"))
 									{
 										@shell_exec ("mklink /J " . $esa ($jctn) . " " . $esa ($target));
-										/**/
+
 										clearstatcache (); /* Clear ``stat()`` cache now. */
 										if (is_dir ($jctn)) /* Created successfully? */
 											return true;
@@ -199,7 +199,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 					{
 						$temp_dir = (($temp_dir = realpath (sys_get_temp_dir ())) && is_writable ($temp_dir)) ? $temp_dir : false;
 						$temp_dir = (!$temp_dir && $fallback && ($wp_temp_dir = realpath (get_temp_dir ())) && is_writable ($wp_temp_dir)) ? $wp_temp_dir : $temp_dir;
-						/**/
+
 						return ($temp_dir) ? c_ws_plugin__s2member_utils_dirs::n_dir_seps ($temp_dir) : false;
 					}
 			}

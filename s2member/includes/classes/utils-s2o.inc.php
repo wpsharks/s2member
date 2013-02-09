@@ -42,11 +42,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 									{
 										for ($one_dir_up = 0; $one_dir_up < $i; $one_dir_up++)
 											$dir = dirname ($dir);
-										/**/
+
 										if (file_exists ($dir . "/wp-settings.php"))
 											return ($wp_dir = $dir);
 									}
-						/**/
+
 						header ("Content-Type: text/plain; charset=utf-8") . eval ('while (@ob_end_clean ());');
 						header ("HTTP/1.0 500 Error") . exit ("ERROR: s2Member® unable to locate WordPress® directory.");
 					}
@@ -97,7 +97,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 											}
 									}
 							}
-						/**/
+
 						return false;
 					}
 				/**
@@ -127,9 +127,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 				public static function evl ($code = FALSE)
 					{
 						ob_start (); /* Output buffer. */
-						/**/
+
 						eval ("?>" . trim ($code));
-						/**/
+
 						return ob_get_clean ();
 					}
 			}

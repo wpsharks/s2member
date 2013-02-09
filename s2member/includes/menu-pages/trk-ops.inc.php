@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 	{
 		/**
@@ -30,27 +30,27 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 				public function __construct ()
 					{
 						echo '<div class="wrap ws-menu-page">' . "\n";
-						/**/
+
 						echo '<div id="icon-plugins" class="icon32"><br /></div>' . "\n";
 						echo '<h2>s2Member® API / Tracking</h2>' . "\n";
-						/**/
+
 						echo '<table class="ws-menu-page-table">' . "\n";
 						echo '<tbody class="ws-menu-page-table-tbody">' . "\n";
 						echo '<tr class="ws-menu-page-table-tr">' . "\n";
 						echo '<td class="ws-menu-page-table-l">' . "\n";
-						/**/
+
 						echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">' . "\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-options-save")) . '" />' . "\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />' . "\n";
-						/**/
+
 						do_action ("ws_plugin__s2member_during_trk_ops_page_before_left_sections", get_defined_vars ());
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_signup_tracking", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_signup_tracking", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Signup Tracking Codes">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-signup-tracking-section">' . "\n";
 								echo '<h3>Signup Tracking Codes ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, a list server, tracking codes from advertising networks, or the like; you\'ll want to read this section. The HTML' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' and/or PHP') . ' code that you enter below, will be loaded up in a web browser, after a "new", "paying" Member, completes Signup through your Payment Gateway. This is marked `Signup`, because Signup Tracking Codes will be displayed each time a "new", "paying" Member, signs up. Depending on your fee structure, this may include a first Initial Payment that establishes their Subscription, or it may not.</p>' . "\n";
@@ -60,20 +60,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<p>Signup Tracking Codes will NOT be processed for Free Subscribers that register without going through your Payment Gateway at all. Signup Tracking Codes will NOT be processed when an "existing" User/Member pays for a new Subscription <em>( see: Modification Tracking Codes for that scenario )</em>.' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' And, Signup Tracking Codes will NOT be processed on Buy Now transactions for Independent Custom Capabilities <em>( see: Capability Tracking Codes for that scenario )</em>.') . '</p>' . "\n";
 								echo '<p><em><strong>AD BLOCKERS:</strong> If a web browser has ad blockers enabled (i.e. the web browser has an ad blocking extension or add-on), Tracking Codes from popular online advertising companies (including many affiliate networks) may NOT be shown. Ad blockers can prevent your Tracking Codes from being loaded in a customer\'s browser. If you\'d like to avoid this problem, consider integrating with s2Member\'s API Notifications instead of with Tracking Codes. API Notifications occur silently behind-the-scene (more reliably), whereas Tracking Codes are loaded in a customer\'s browser. For more information, please see: <code>s2Member -> API / Notifications</code>.</em></p>' . "\n";
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_signup_tracking", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-signup-tracking-codes">' . "\n";
 								echo 'Integrate Signup Tracking Codes:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<textarea name="ws_plugin__s2member_signup_tracking_codes" id="ws-plugin--s2member-signup-tracking-codes" rows="8" wrap="off" spellcheck="false" style="font-family:Consolas, monospace;">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["signup_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' ( or even PHP )') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google® Analytics code works just fine, AdSense® performance tracking, as well as Yahoo® tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
@@ -93,7 +93,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<li><code>%%initial_term%%</code> = This is the term length of the Initial Period. This will be a numeric value, followed by a space, then a single letter. [ <a href="#" onclick="alert(\'Here are some examples:\\n\\n%%initial_term%% = 1 D ( this means 1 Day )\\n%%initial_term%% = 1 W ( this means 1 Week )\\n%%initial_term%% = 1 M ( this means 1 Month )\\n%%initial_term%% = 1 Y ( this means 1 Year )\\n\\nThe Initial Period never recurs, so this only lasts for the term length specified, then it is over.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%regular_term%%</code> = This is the term length of the Regular Period. This will be a numeric value, followed by a space, then a single letter. [ <a href="#" onclick="alert(\'Here are some examples:\\n\\n%%regular_term%% = 1 D ( this means 1 Day )\\n%%regular_term%% = 1 W ( this means 1 Week )\\n%%regular_term%% = 1 M ( this means 1 Month )\\n%%regular_term%% = 1 Y ( this means 1 Year )\\n%%regular_term%% = 1 L ( this means 1 Lifetime )\\n\\nThe Regular Term is usually recurring. So the Regular Term value represents the period ( or duration ) of each recurring period. If %%recurring%% = 0, then the Regular Term only applies once, because it is not recurring. So if it is not recurring, the value of %%regular_term%% simply represents how long their Membership privileges are going to last after the %%initial_term%% has expired, if there was an Initial Term. The value of this variable ( %%regular_term%% ) will never be empty, it will always be at least: 1 D, meaning 1 day. No exceptions.\'); return false;">?</a> ]</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -102,28 +102,28 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><em><strong>*Tip*</strong> With <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices")) . '" target="_blank" rel="external">s2Member Pro Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member -> Pro Coupon Codes -> Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_signup_tracking", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_modification_tracking", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_modification_tracking", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Modification Tracking Codes">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-modification-tracking-section">' . "\n";
 								echo '<h3>Modification Tracking Codes ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, a list server, tracking codes from advertising networks, or the like; you\'ll want to read this section. The HTML' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' and/or PHP') . ' code that you enter below, will be loaded up in a web browser, each time a Subscription Modification occurs. This is marked `Modification`, because Modification Tracking Codes are displayed each time an "existing" User/Member <em>( even if they are/were a Free Subscriber )</em> signs up for a paid Subscription <em>( i.e. a Modification takes place against an existing account within WordPress® )</em>, or an "existing" Member modifies their paid Subscription terms <em>( again, a Modification takes places against an existing account within WordPress® )</em>. Depending on your fee structure, this may include a first Initial Payment that establishes their Subscription, or it may not.</p>' . "\n";
@@ -133,20 +133,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<p>Modification Tracking Codes will NOT be processed for Free Subscribers that register without going through your Payment Gateway at all. Modification Tracking Codes will NOT be processed when a "new" User/Member signs up <em>( see: Signup Tracking Codes for that scenario )</em>.' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' And, Modification Tracking Codes will NOT be processed on Buy Now transactions for Independent Custom Capabilities <em>( see: Capability Tracking Codes for that scenario )</em>.') . '</p>' . "\n";
 								echo '<p><em><strong>AD BLOCKERS:</strong> If a web browser has ad blockers enabled (i.e. the web browser has an ad blocking extension or add-on), Tracking Codes from popular online advertising companies (including many affiliate networks) may NOT be shown. Ad blockers can prevent your Tracking Codes from being loaded in a customer\'s browser. If you\'d like to avoid this problem, consider integrating with s2Member\'s API Notifications instead of with Tracking Codes. API Notifications occur silently behind-the-scene (more reliably), whereas Tracking Codes are loaded in a customer\'s browser. For more information, please see: <code>s2Member -> API / Notifications</code>.</em></p>' . "\n";
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_modification_tracking", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-modification-tracking-codes">' . "\n";
 								echo 'Integrate Modification Tracking Codes:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<textarea name="ws_plugin__s2member_modification_tracking_codes" id="ws-plugin--s2member-modification-tracking-codes" rows="8" wrap="off" spellcheck="false" style="font-family:Consolas, monospace;">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' ( or even PHP )') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google® Analytics code works just fine, AdSense® performance tracking, as well as Yahoo® tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
@@ -172,7 +172,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
 								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
@@ -180,7 +180,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
 								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -189,48 +189,48 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><em><strong>*Tip*</strong> With <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices")) . '" target="_blank" rel="external">s2Member Pro Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member -> Pro Coupon Codes -> Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_modification_tracking", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_ccap_tracking", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_ccap_tracking", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Capability Tracking Codes">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-ccap-tracking-section">' . "\n";
 								echo '<h3>Capability Tracking Codes ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, a list server, tracking codes from advertising networks, or the like; you\'ll want to read this section. The HTML' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' and/or PHP') . ' code that you enter below, will be loaded up in a web browser, each time Independent Custom Capabilities are purchased. This is marked `Capability`, because Capability Tracking Codes are displayed each time an "existing" User/Member <em>( even if they are/were a Free Subscriber )</em> pays you for Independent Custom Capabilities through a Buy Now transaction. This is the only circumstance in which your Capability Tracking Codes will be displayed.</p>' . "\n";
 								echo '<p>s2Member will display your Capability Tracking Codes in one of three possible locations... <strong>1.</strong> If possible, on the Thank-You Return Page, after returning from your Payment Gateway. <strong>2.</strong> Otherwise, if possible, on the Login Form after returning from your Payment Gateway <em>( i.e. when the Customer is asked to log back in )</em>. <strong>3.</strong> Otherwise, in the footer of your WordPress® theme, as soon as possible <em>( immediately with s2Member Pro Form integration )</em>; or after the Customer\'s next login.</p>' . "\n";
 								echo '<p><em><strong>AD BLOCKERS:</strong> If a web browser has ad blockers enabled (i.e. the web browser has an ad blocking extension or add-on), Tracking Codes from popular online advertising companies (including many affiliate networks) may NOT be shown. Ad blockers can prevent your Tracking Codes from being loaded in a customer\'s browser. If you\'d like to avoid this problem, consider integrating with s2Member\'s API Notifications instead of with Tracking Codes. API Notifications occur silently behind-the-scene (more reliably), whereas Tracking Codes are loaded in a customer\'s browser. For more information, please see: <code>s2Member -> API / Notifications</code>.</em></p>' . "\n";
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_ccap_tracking", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-ccap-tracking-codes">' . "\n";
 								echo 'Integrate Capability Tracking Codes:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<textarea name="ws_plugin__s2member_ccap_tracking_codes" id="ws-plugin--s2member-ccap-tracking-codes" rows="8" wrap="off" spellcheck="false" style="font-family:Consolas, monospace;">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' ( or even PHP )') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google® Analytics code works just fine, AdSense® performance tracking, as well as Yahoo® tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
@@ -252,7 +252,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
 								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
@@ -260,7 +260,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
 								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -269,47 +269,47 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><em><strong>*Tip*</strong> With <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices")) . '" target="_blank" rel="external">s2Member Pro Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member -> Pro Coupon Codes -> Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_ccap_tracking", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_sp_tracking", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_sp_tracking", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Specific Post/Page Tracking Codes">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-sp-tracking-section">' . "\n";
 								echo '<h3>Tracking Codes For Specific Post/Page Access ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, a list server, tracking codes from advertising networks, or the like; you\'ll want to read this section. The HTML' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' and/or PHP') . ' code that you enter below, will be loaded up in a web browser, after a Customer completes a successful transaction through your Payment Gateway; specifically for Post/Page Access. These Codes are NOT injected for any type of Membership Level Access' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' or Independent Custom Capabilities') . '. These are only for Specific Post/Page transactions. The Tracking Codes that you enter below, will be displayed in one of two possible locations... <strong>1.</strong> If possible, on the Thank-You Return Page, after returning from your Payment Gateway. <strong>2.</strong> Otherwise, in the footer of your WordPress® theme, as soon as possible <em>( immediately with s2Member Pro Form integration )</em>.</p>' . "\n";
 								echo '<p><em><strong>AD BLOCKERS:</strong> If a web browser has ad blockers enabled (i.e. the web browser has an ad blocking extension or add-on), Tracking Codes from popular online advertising companies (including many affiliate networks) may NOT be shown. Ad blockers can prevent your Tracking Codes from being loaded in a customer\'s browser. If you\'d like to avoid this problem, consider integrating with s2Member\'s API Notifications instead of with Tracking Codes. API Notifications occur silently behind-the-scene (more reliably), whereas Tracking Codes are loaded in a customer\'s browser. For more information, please see: <code>s2Member -> API / Notifications</code>.</em></p>' . "\n";
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_sp_tracking", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-sp-tracking-codes">' . "\n";
 								echo 'Specific Post/Page Tracking Codes:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<textarea name="ws_plugin__s2member_sp_tracking_codes" id="ws-plugin--s2member-sp-tracking-codes" rows="8" wrap="off" spellcheck="false" style="font-family:Consolas, monospace;">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' ( or even PHP )') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google® Analytics code works just fine, AdSense® performance tracking, as well as Yahoo® tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
@@ -325,7 +325,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<li><code>%%item_number%%</code> = The Item Number. Ex: <code><em>sp:13,24,36:72</em></code> ( translates to: <code><em>sp:comma-delimited IDs:expiration hours</em></code> ).</li>' . "\n";
 								echo '<li><code>%%item_name%%</code> = The Item Name ( as provided by the <code>desc=""</code> attribute in your Shortcode, which briefly describes the Item Number ).</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -334,56 +334,56 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><em><strong>*Tip*</strong> With <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices")) . '" target="_blank" rel="external">s2Member Pro Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member -> Pro Coupon Codes -> Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_sp_tracking", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_integrations_header", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_integrations_header", get_defined_vars ());
-								/**/
+
 								echo '<div style="border-bottom:1px solid #DFDFDF; margin:-20px 0 9px 0; padding:0;">&nbsp;</div>' . "\n";
 								echo '<div id="icon-tools" class="icon32" style="margin-top:0; margin-bottom:0; padding-top:0; padding-bottom:0;"><br /></div>' . "\n";
 								echo '<h2 style="margin-top:0; margin-bottom:0; padding-top:0; padding-bottom:0;">API / Tracking Integrations</h2>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_integrations_header", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_idev", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_idev", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Integrating iDevAffiliate®">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-idev-section">' . "\n";
 								echo '<h3>Integrating iDevAffiliate® ( affiliate program management )</h3>' . "\n";
 								echo '<a href="http://www.s2member.com/idev-affiliate" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/images/idev-logo.gif" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>' . "\n";
 								echo '<p>Adding affiliate tracking software to your site is one of the most effective ways to achieve more sales, more traffic, and more search engine ranking. <a href="http://www.s2member.com/idev-affiliate" target="_blank" rel="external">iDevAffiliate®</a> ( an affiliate management portal ), installs in just minutes, and can be integrated seamlessly with s2Member. We recommend <a href="http://www.s2member.com/idev-affiliate" target="_blank" rel="external">iDevAffiliate® Standard</a> ( $99 ) because of its proven track record, and its ability to integrate with s2Member using a variety of techniques. The most popular being a Hidden Image Tag.</p>' . "\n";
 								echo '<p>If you choose to <a href="http://www.s2member.com/idev-affiliate" target="_blank" rel="external">install iDevAffiliate®</a>, you will need to configure your <code>iDevAffiliate® -> Shopping Cart Integration</code>. Please choose <code>Generic Tracking Pixel</code>. Then, grab your Hidden Image Tag, and pop the code provided by iDevAffiliate® into one of the fields for Tracking Codes <em>( at the top of this page )</em>. You MUST also add Replacement Codes to your Hidden Image Tag. To save you some trouble, we\'ve provided some examples below, one for each of s2Member\'s Tracking Code integrations.</p>' . "\n";
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_idev", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><strong>Signup Tracking Code, for iDevAffiliate® integration:</strong></p>' . "\n";
 								echo '<p>idev_saleamt=<strong>%%initial%%</strong><br />idev_ordernum=<strong>%%subscr_id%%</strong></p>' . "\n";
 								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/idev-signup-tracking-code.x-php")) . '</p>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><strong>Modification Tracking Code, for iDevAffiliate® integration:</strong></p>' . "\n";
 								echo '<p>idev_saleamt=<strong>%%initial%%</strong><br />idev_ordernum=<strong>%%subscr_id%%</strong></p>' . "\n";
 								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/idev-modification-tracking-code.x-php")) . '</p>' . "\n";
-								/**/
+
 								if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
 									{
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -391,48 +391,48 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 										echo '<p>idev_saleamt=<strong>%%amount%%</strong><br />idev_ordernum=<strong>%%txn_id%%</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/idev-ccap-tracking-code.x-php")) . '</p>' . "\n";
 									}
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><strong>Specific Post/Page Tracking Code, for iDevAffiliate® integration:</strong></p>' . "\n";
 								echo '<p>idev_saleamt=<strong>%%amount%%</strong><br />idev_ordernum=<strong>%%txn_id%%</strong></p>' . "\n";
 								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/idev-sp-tracking-code.x-php")) . '</p>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p>Your <code>profile</code> ID will be assigned by iDevAffiliate®. Be sure to replace <code>profile=123</code> with your own profile ID.</p>' . "\n";
 								echo '<p><em><strong>*Tip*</strong> iDevAffiliate® also provides an alternative method, using a 3rd-party call. The alternative 3rd-party call, could be used with <code>s2Member -> API Notifications.</code> A 3rd-party call, is essentially an HTTP connection that runs silently behind-the-scene, as opposed to being loaded in a browser. It\'s a bit more powerful (and reliable), but also more advanced.</em></p>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><em><strong>*Tip*</strong> With <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices")) . '" target="_blank" rel="external">s2Member Pro Forms</a>, it\'s possible to integrate Affiliate Coupon Codes with iDevAffiliate®. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member -> Pro Coupon Codes -> Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_idev", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_shareasale", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_shareasale", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Integrating ShareASale®">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-shareasale-section">' . "\n";
 								echo '<h3>Integrating ShareASale® ( affiliate program management )</h3>' . "\n";
 								echo '<a href="http://www.s2member.com/shareasale" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/images/sas-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>' . "\n";
 								echo '<p>Established in 2000, <a href="http://www.s2member.com/shareasale" target="_blank" rel="external">ShareASale®</a> provides award winning technology and service; which will enable you to connect with a network of established affiliates, as well as recruit new ones. Joining ShareASale®, maximizes your ability to reach the greatest number of affiliates, with the least amount of work. At ShareASale®, you\'ll have access to an existing affiliate-base. You place your site on the market, and let their existing affiliates promote your products/services.</p>' . "\n";
 								echo '<p>If you <a href="http://www.s2member.com/shareasale" target="_blank" rel="external">become a Merchant at ShareASale®</a>, you will need to configure your <code>ShareASale® -> Sale Tracking</code>. Grab your Hidden Image Tag, and pop the code provided by ShareASale® into one of the fields for Tracking Codes <em>( at the top of this page )</em>. You MUST also add Replacement Codes to your Hidden Image Tag. To save you some trouble, we\'ve provided some examples below, one for each of s2Member\'s Tracking Code integrations.</p>' . "\n";
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_shareasale", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><strong>Signup Tracking Code, for ShareASale® integration:</strong></p>' . "\n";
 								echo '<p>amount=<strong>%%initial%%</strong><br />tracking=<strong>%%subscr_id%%</strong></p>' . "\n";
 								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sas-signup-tracking-code.x-php")) . '</p>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><strong>Modification Tracking Code, for ShareASale® integration:</strong></p>' . "\n";
 								echo '<p>amount=<strong>%%initial%%</strong><br />tracking=<strong>%%subscr_id%%</strong></p>' . "\n";
 								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sas-modification-tracking-code.x-php")) . '</p>' . "\n";
-								/**/
+
 								if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
 									{
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -440,67 +440,67 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 										echo '<p>amount=<strong>%%amount%%</strong><br />tracking=<strong>%%txn_id%%</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sas-ccap-tracking-code.x-php")) . '</p>' . "\n";
 									}
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><strong>Specific Post/Page Tracking Code, for ShareASale® integration:</strong></p>' . "\n";
 								echo '<p>amount=<strong>%%amount%%</strong><br />tracking=<strong>%%txn_id%%</strong></p>' . "\n";
 								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sas-sp-tracking-code.x-php")) . '</p>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p>Your <code>merchantID</code> will be assigned by ShareASale®. Be sure to replace <code>merchantID=123</code> with the one they assign you.</p>' . "\n";
 								echo '<p><em><strong>*Tip*</strong> ShareASale® also provides an alternative method, using a 3rd-party call. The alternative 3rd-party call, could be used with <code>s2Member -> API Notifications.</code> A 3rd-party call, is essentially an HTTP connection that runs silently behind-the-scene, as opposed to being loaded in a browser. It\'s a bit more powerful (and reliable), but also more advanced.</em></p>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><em><strong>*Tip*</strong> With <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices")) . '" target="_blank" rel="external">s2Member Pro Forms</a>, it\'s possible to integrate Affiliate Coupon Codes with ShareASale®. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member -> Pro Coupon Codes -> Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_shareasale", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_other_methods", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_other_methods", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Other Tracking Methods Available">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-other-methods-section">' . "\n";
 								echo '<h3>Other Tracking Methods Are Available ( there\'s always a way )</h3>' . "\n";
 								echo '<p>Check the s2Member API Notifications panel. You\'ll find additional layers of automation available through the use of the `Signup`, `Registration`, `Payment`, `Modification`, `EOT/Deletion`, `Refund/Reversal`, and `Specific Post/Page` Notifications that are available to you through the s2Member API. The s2Member API Notifications make it possible to integrate with 3rd party applications; like list servers, affiliate programs, and other back-office routines; in more advanced ways. Since s2Member API Notifications operate silently on the back-end, they tend to be more reliable and also more versatile. That being said, nothing replaces the simplicity of Tracking Codes. The more advanced API Notifications are NOT always the best tool for the job. For instance, API Notifications will NOT work with Google® Analytics, or 1 pixel &lt;img&gt; tags. They operate silently behind-the-scene, using HTTP connections, as opposed to being loaded in a browser.</p>' . "\n";
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_other_methods", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 								echo '<p><em><strong>*Tip*</strong> With <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices")) . '" target="_blank" rel="external">s2Member Pro Forms</a>, it\'s possible to integrate Affiliate Coupon Codes with iDevAffiliate®. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member -> Pro Coupon Codes -> Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_other_methods", get_defined_vars ());
 							}
-						/**/
+
 						do_action ("ws_plugin__s2member_during_trk_ops_page_after_left_sections", get_defined_vars ());
-						/**/
+
 						echo '<div class="ws-menu-page-hr"></div>' . "\n";
-						/**/
+
 						echo '<p class="submit"><input type="submit" class="button-primary" value="Save All Changes" /></p>' . "\n";
-						/**/
+
 						echo '</form>' . "\n";
-						/**/
+
 						echo '</td>' . "\n";
-						/**/
+
 						echo '<td class="ws-menu-page-table-r">' . "\n";
 						c_ws_plugin__s2member_menu_pages_rs::display ();
 						echo '</td>' . "\n";
-						/**/
+
 						echo '</tr>' . "\n";
 						echo '</tbody>' . "\n";
 						echo '</table>' . "\n";
-						/**/
+
 						echo '</div>' . "\n";
 					}
 			}
 	}
-/**/
+
 new c_ws_plugin__s2member_menu_page_trk_ops ();
 ?>

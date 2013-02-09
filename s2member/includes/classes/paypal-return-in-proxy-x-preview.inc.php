@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 	{
 		/**
@@ -39,27 +39,27 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 				public static function /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */ cp ($vars = array ())
 					{
 						extract /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */($vars);
-						/**/
+
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_during_paypal_return_before_explicit_x_preview", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
-						/**/
+
 						$paypal["s2member_log"][] = "Test preview of Return Page `proxy_use`: ( `x_preview` ).";
-						/**/
+
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_during_paypal_return_during_explicit_x_preview", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
-						/**/
+
 						if /* Using a custom success redirection URL? */ ($custom_success_redirection)
 						{
 							$paypal["s2member_log"][] = "Redirecting Customer to a custom URL on success: " . $custom_success_redirection . ".";
-							/**/
+
 							wp_redirect($custom_success_redirection);
 						}
 						else // Else we use the default redirection URL for this scenario, which is the Home Page.
 						{
 							$paypal["s2member_log"][] = "Redirecting Customer to the Home Page (after displaying preview information).";
-							/**/
+
 							echo c_ws_plugin__s2member_return_templates::return_template ($paypal["subscr_gateway"],
 								sprintf (_x ('<strong>Thank you! ( this is a preview, no action necessary ).</strong><br /><br />* Note: each of your Customers are returned back to your site immediately after they complete checkout. This Return Page displays a message and instructions for the Customer. s2Member may change the message and instructions dynamically, based on what the Customer is actually doing <em>( i.e. based on the type of transaction that is taking place )</em>.<br /><br /><em>* With <a href="%s" target="_blank">s2Member Pro</a> installed, it is possible to customize this Return Page in various ways.</em>', "s2member-front", "s2member"), esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices"))),
 							   _x ("Continue ( Click Here )", "s2member-front", "s2member"), home_url ("/"));
@@ -67,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_during_paypal_return_after_explicit_x_preview", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
-						/**/
+
 						return apply_filters ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview", $paypal, get_defined_vars ());
 					}
 			}

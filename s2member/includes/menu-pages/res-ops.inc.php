@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 	{
 		/**
@@ -30,27 +30,27 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 				public function __construct ()
 					{
 						echo '<div class="wrap ws-menu-page">' . "\n";
-						/**/
+
 						echo '<div id="icon-plugins" class="icon32"><br /></div>' . "\n";
 						echo '<h2>s2Member® Restriction Options</h2>' . "\n";
-						/**/
+
 						echo '<table class="ws-menu-page-table">' . "\n";
 						echo '<tbody class="ws-menu-page-table-tbody">' . "\n";
 						echo '<tr class="ws-menu-page-table-tr">' . "\n";
 						echo '<td class="ws-menu-page-table-l">' . "\n";
-						/**/
+
 						echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">' . "\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-options-save")) . '" />' . "\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />' . "\n";
-						/**/
+
 						do_action ("ws_plugin__s2member_during_res_ops_page_before_left_sections", get_defined_vars ());
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_post_level_access", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_post_level_access", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Post Access Restrictions">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-post-level-access-section">' . "\n";
 								echo '<h3>Post Level Access Restrictions ( optional )</h3>' . "\n";
 								echo '<p>Here you can specify Posts that are restricted to certain Membership Access Levels. s2Member also supports Custom <a href="http://codex.wordpress.org/Post_Types" target="_blank" rel="external">Post Types</a> here. If you have a theme or plugin installed, which has enabled Custom Post Types <em>( i.e. Music/Videos or something else )</em>, you can put the IDs for those Posts here.</p>' . "\n";
@@ -58,250 +58,250 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								echo '<p><em><strong>*Note*</strong> If you would like to protect many Posts at once ( including Archive views ), you can use Category Level Restrictions, Tag Level Restrictions, or have a look down below at s2Member\'s options for "Alternative View Protection", which deals with search results, as well as feeds.</em></p>' . "\n";
 								echo ((!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) && !$GLOBALS["WS_PLUGIN__"]["wp_show_ids"]) ? '<p><em><strong>*Tip*</strong> Can\'t find your Post IDs? Get <a href="http://wordpress.org/extend/plugins/wp-show-ids/" target="_blank" rel="external">WP Show IDs</a>.</em></p>' . "\n" : '';
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_post_level_access", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
-								/**/
+
 								for ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 									{
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<th>' . "\n";
 										echo '<label for="ws-plugin--s2member-level' . $n . '-posts">' . "\n";
 										echo ($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Posts That Require Highest Level #' . $n . ':' . "\n" : 'Posts That Require Level #' . $n . ' Or Higher:' . "\n";
 										echo '</label>' . "\n";
 										echo '</th>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<td>' . "\n";
 										echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_level' . $n . '_posts" id="ws-plugin--s2member-level' . $n . '-posts" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"]) . '" /><br />' . "\n";
 										echo 'Post IDs in comma-delimited format. Example: <code>1,2,3,34,8,21</code> — or you can type: <code>all</code>.<br />' . "\n";
 										echo 'You can also include all Post IDs of a specific <a href="http://codex.wordpress.org/Post_Types" target="_blank" rel="external">Post Type</a>. Ex: <code>1,2,3,34,all-newspapers</code>.<br />' . "\n";
 										echo '<em>( which protects several Post IDs, and <code>all</code> Posts of type: <code>newspaper</code> )</em>' . "\n";
 										echo '</td>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
 									}
-								/**/
+
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_post_level_access", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_page_level_access", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_page_level_access", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Page Access Restrictions">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-page-level-access-section">' . "\n";
 								echo '<h3>Page Level Access Restrictions ( optional )</h3>' . "\n";
 								echo '<p>Here you can specify Pages that are restricted to certain Membership Access Levels.</p>' . "\n";
 								echo ((!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) && !$GLOBALS["WS_PLUGIN__"]["wp_show_ids"]) ? '<p><em><strong>*Tip*</strong> Can\'t find your Page IDs? Get <a href="http://wordpress.org/extend/plugins/wp-show-ids/" target="_blank" rel="external">WP Show IDs</a>.</em></p>' . "\n" : '';
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_page_level_access", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
-								/**/
+
 								for ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 									{
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<th>' . "\n";
 										echo '<label for="ws-plugin--s2member-level' . $n . '-pages">' . "\n";
 										echo ($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Pages That Require Highest Level #' . $n . ':' . "\n" : 'Pages That Require Level #' . $n . ' Or Higher:' . "\n";
 										echo '</label>' . "\n";
 										echo '</th>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<td>' . "\n";
 										echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_level' . $n . '_pages" id="ws-plugin--s2member-level' . $n . '-pages" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_pages"]) . '" /><br />' . "\n";
 										echo 'Page IDs in comma-delimited format. Example: <code>1,2,3,34,8,21</code> — or you can type: <code>all</code>.' . "\n";
 										echo '</td>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
 									}
-								/**/
+
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_page_level_access", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_tag_level_access", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_tag_level_access", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Tag Access Restrictions">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-tag-level-access-section">' . "\n";
 								echo '<h3>Tag Level Access Restrictions ( optional )</h3>' . "\n";
 								echo '<p>Here you can specify Tags that are restricted to certain Membership Access Levels. This is very similar to Category Level Access. When you restrict access to a Tag Archive, it also restricts access to any Post having that Tag; even if a Post has other Tags. <em>*Tip*</em> ... Tags can be applied to any Post, without affecting your Category structure at all. If you\'d like to use Tags with Pages, get <a href="http://wordpress.org/extend/plugins/page-tagger/" target="_blank" rel="external">Page Tagger</a>.</p>' . "\n";
 								echo '<p>Tags are caSe sensitive. The Tag <code>members only</code> is NOT the same as <code>Members Only</code>.</p>' . "\n";
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_tag_level_access", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
-								/**/
+
 								for ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 									{
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<th>' . "\n";
 										echo '<label for="ws-plugin--s2member-level' . $n . '-ptags">' . "\n";
 										echo ($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Tags That Require Highest Level #' . $n . ':' . "\n" : 'Tags That Require Level #' . $n . ' Or Higher:' . "\n";
 										echo '</label>' . "\n";
 										echo '</th>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<td>' . "\n";
 										echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_level' . $n . '_ptags" id="ws-plugin--s2member-level' . $n . '-ptags" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ptags"]) . '" /><br />' . "\n";
 										echo 'Tags in comma-delimited format. Example: ' . (($n === 0) ? '<code>free,subscribers only</code>' : '<code>members,members only</code>') . ' — or you can type: <code>all</code>.' . "\n";
 										echo '</td>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
 									}
-								/**/
+
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_tag_level_access", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_category_level_access", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_category_level_access", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Category Access Restrictions">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-category-level-access-section">' . "\n";
 								echo '<h3>Category Level Access Restrictions ( optional )</h3>' . "\n";
 								echo '<p>Here you can specify Categories that are restricted to certain Membership Access Levels. Category restrictions are a bit more complex. When you restrict access to a Category, it also restricts access to any child Categories it may have <em>( aka: sub-Categories )</em>. In other words, restricting a Category, protects a Category Archive, all of its child Category Archives, and any Posts contained within the Category, or its child Categories. This is a VERY powerful form of protection, so please be careful. It\'s very easy to protect too much content by accident.</p>' . "\n";
 								echo ((!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) && !$GLOBALS["WS_PLUGIN__"]["wp_show_ids"]) ? '<p><em><strong>*Tip*</strong> Can\'t find your Category IDs? Get <a href="http://wordpress.org/extend/plugins/wp-show-ids/" target="_blank" rel="external">WP Show IDs</a>.</em></p>' . "\n" : '';
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_category_level_access", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
-								/**/
+
 								for ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 									{
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<th>' . "\n";
 										echo '<label for="ws-plugin--s2member-level' . $n . '-catgs">' . "\n";
 										echo ($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Categories That Require Highest Level #' . $n . ':' . "\n" : 'Categories That Require Level #' . $n . ' Or Higher:' . "\n";
 										echo '</label>' . "\n";
 										echo '</th>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<td>' . "\n";
 										echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_level' . $n . '_catgs" id="ws-plugin--s2member-level' . $n . '-catgs" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_catgs"]) . '" /><br />' . "\n";
 										echo 'Category IDs in comma-delimited format. Example: <code>1,2,3,34,8,21</code> — or you can type: <code>all</code>.' . "\n";
 										echo '</td>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
-										/**/
+
 										echo '<tr>' . "\n";
 									}
-								/**/
+
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_category_level_access", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_uri_level_access", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_uri_level_access", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="URI Restrictions ( typical w/BuddyPress )">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-uri-level-access-section">' . "\n";
 								echo '<h3>URI Level Access Restrictions ( optional )</h3>' . "\n";
 								echo '<p>Here you can specify URIs <em>( or word fragments found in URIs )</em> that are restricted to certain Membership Access Levels. Control over URIs is a little more complex. This section is intended for advanced webmasters only. That being said, here are the basics... A <code>REQUEST_URI</code>, is the portion of a <code>URL</code> that comes immediately after the domain. This is a URL <code>http://www.example.com/path/to/file.php</code>, and this is the URI: <code>/path/to/file.php</code>. In other words, a <code>REQUEST_URI</code> is the full path to a real <em>( or virtual )</em> directory and/or file on your domain.</p>' . "\n";
 								echo '<p>In the fields below, you can provide a list <em>( one per line )</em> of URIs on your site that should be off-limits based on Membership Level. You can also use word fragments instead of a full URI. If a word fragment is found anywhere in the URI, it will be protected. Wildcards and other regex patterns are NOT supported here, and therefore you don\'t need to escape special characters or anything. Please note, these ARE caSe sensitive. You must be specific with respect to case sensitivity. The word fragment <code>some-path/</code> would NOT match a URI that contains <code>some-Path/</code>. <em>A few <a href="#" onclick="alert(\'URI Replacement Codes:\\n\\n%%current_user_login%% = The current User\\\'s Username, lowercase.\\n%%current_user_id%% = The current User\\\'s ID.\\n%%current_user_level%% = The current User\\\'s s2Member Level.\\n%%current_user_role%% = The current User\\\'s WordPress® Role.' . ((!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '\\n%%current_user_ccaps%% = The current User\\\'s Custom Capabilities.' : '') . '\\n%%current_user_logins%% = Number of times the current User has logged in.\\n\\nFor example, if you\\\'re using BuddyPress, and want to protect BuddyPress Groups, you could add URI protection, like this: /members/%%current_user_login%%/groups/\'); return false;">Replacement Codes</a> are also supported here.</em></p>' . "\n";
 								echo '<p><em><strong>*BuddyPress ( and similar )*</strong> URI Restrictions work great with plugins like BuddyPress that add new areas to your site ( where those new areas are NOT necessarily a Post/Page/Tag/Category ). In other words, anytime you\'d like to protect a specific feature offered by BuddyPress ( or other plugins ), you\'ll need to nail down specific word fragments found in the URIs associated with those areas. For instance, with BuddyPress you might have: [ <a href="#" onclick="alert(\'/members/\\n/groups/\\n/blogs/\\n/activity/\\n/messages/\\n/profile/\\n/friends/\\n/settings/\'); return false;">click for example</a> ].</em></p>' . "\n";
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_uri_level_access", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
-								/**/
+
 								for ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 									{
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<th>' . "\n";
 										echo '<label for="ws-plugin--s2member-level' . $n . '-ruris">' . "\n";
 										echo ($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'URIs That Require Highest Level #' . $n . ':' . "\n" : 'URIs That Require Level #' . $n . ' Or Higher:' . "\n";
 										echo '</label>' . "\n";
 										echo '</th>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
 										echo '<tr>' . "\n";
-										/**/
+
 										echo '<td>' . "\n";
 										echo '<textarea name="ws_plugin__s2member_level' . $n . '_ruris" id="ws-plugin--s2member-level' . $n . '-ruris" rows="3" wrap="off" spellcheck="false">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"]) . '</textarea><br />' . "\n";
 										echo 'URIs and/or word fragments found in URIs. One per line please.' . "\n";
 										echo '</td>' . "\n";
-										/**/
+
 										echo '</tr>' . "\n";
 									}
-								/**/
+
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_uri_level_access", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_query_level_access", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_query_level_access", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Alternative View Protection ( please read )">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-query-level-access-section">' . "\n";
 								echo '<h3>Alternative View Protection ( optional / experimental )</h3>' . "\n";
 								echo '<p>s2Member protects Categories, Tags, Posts, Pages, Files, URIs &amp; more. BUT, even with all of those security restrictions, it\'s still possible for protected content excerpts to be seen through XML feeds, in search results generated by WordPress®; and/or <em>( depending on your theme )</em>, possibly in other Archive views; which might include: Posts by Author, Posts by Date, a list of featured items formulated by your theme, OR even through other widgets/plugins adding functionality to your site. ~ We refer to all of these collectively, as "Alternative Views".</p>' . "\n";
 								echo '<p>Using the options below, you can tell s2Member to protect some <em>( or all )</em> of these "Alternative Views", by filtering WordPress® database queries for you. s2Member can automatically hide protected content that is NOT available to the current User/Member. In other words, s2Member is capable of pre-filtering ALL database queries, so that excerpts of protected content will not be allowed to slip through. This is marked "experimental", because we\'re still testing this against MANY widget/plugin/theme combinations. Please <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Forum URI")) . '" target="_blank">report</a> all bugs.</p>' . "\n";
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_uri_level_access", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-filter-wp-query">' . "\n";
 								echo 'Protect Alternative Views?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<div class="ws-menu-page-scrollbox" style="height:105px;">' . "\n";
 								echo '<input type="hidden" name="ws_plugin__s2member_filter_wp_query[]" value="update-signal" />' . "\n";
@@ -313,23 +313,23 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								echo '<code><a href="http://codex.wordpress.org/Function_Reference/get_posts" target="_blank" rel="external">get_posts</a>()</code> auto-suppresses filters.<br />' . "\n";
 								echo 'Also see <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-functions/#src_doc_attach_s2member_query_filters()" target="_blank" rel="external">this article</a> in the s2Member® Codex.' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_query_level_access", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_sp_access", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_sp_access", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Specific Post/Page Access Restrictions">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-sp-access-section">' . "\n";
 								echo '<h3>Specific Post/Page Access Restrictions ( optional )</h3>' . "\n";
 								echo '<p>s2Member now supports an additional layer of functionality <em>( very powerful )</em>, which allows you to sell access to specific Posts/Pages that you\'ve created in WordPress®. Specific Post/Page Access works independently from Member Level Access. That is, you can sell an unlimited number of Posts/Pages using "Buy Now" Buttons, and your Customers will NOT be required to have a Membership Account with your site in order to receive access. If they are already a Member, that\'s fine, but they won\'t need to be.</p>' . "\n";
@@ -338,61 +338,61 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								echo '<p>Very simple. All you do is protect the Specific Post/Page IDs that are being sold on your site. Then, you can go to <code>s2Member -> PayPal® Buttons -> Specific Post/Page</code> to generate "Buy Now" Buttons that you can insert into your WordPress® Editor, and make available on your site. The Button Generator for s2Member, will even let you Package Additional Posts/Pages together into one transaction.</p>' . "\n";
 								echo ((!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) && !$GLOBALS["WS_PLUGIN__"]["wp_show_ids"]) ? '<p><em><strong>*Tip*</strong> Can\'t find your Post/Page IDs? Get <a href="http://wordpress.org/extend/plugins/wp-show-ids/" target="_blank" rel="external">WP Show IDs</a>.</em></p>' . "\n" : '';
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_sp_access", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-specific-ids">' . "\n";
 								echo 'Specific Post/Page IDs Being Sold On Your Site:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_specific_ids" id="ws-plugin--s2member-specific-ids" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"]) . '" /><br />' . "\n";
 								echo 'Post/Page IDs in comma-delimited format. Example: <code>1,2,3,34,8,21</code> * Note... the word <code>all</code> does NOT work here. Also, please be careful not to create a conflict with other Access Restrictions. If you are going to sell Specific Post/Page Access, you should enter specific Post/Page IDs here; and <strong>make SURE that you\'ve NOT already protected any of these Posts/Pages with Member Level Access Restrictions</strong>. In other words, if you configure s2Member, in such as a way, that a Post/Page requires Membership Level Access, you cannot sell that same Post/Page through Specific Post/Page Access. Doing so, would create a conflict. Customers that purchased Specific Post/Page Access, would be unable to access the Post/Page - without also having a Membership. Not good. So please be careful.' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_sp_access", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_brute_force_restrictions", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_brute_force_restrictions", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Brute Force IP/Login Restrictions">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-brute-force-restrictions-section">' . "\n";
 								echo '<h3>Brute Force IP/Login Restrictions ( prevents username/password guessing )</h3>' . "\n";
 								echo '<input type="button" id="ws-plugin--s2member-brute-force-restrictions-reset-button" value="Reset Brute Force Logs" class="ws-menu-page-right" style="min-width:175px;" />' . "\n";
 								echo '<p>As with any Membership system, it is possible for someone to try and guess Username/Password combinations by attempting a <a href="http://en.wikipedia.org/wiki/Brute-force_attack" target="_blank" rel="external">Brute Force Attack</a>; whereby multiple/repeated logins are strategically attempted with various Username/Password combinations until a correct guess is made. It is NOT likely that you\'ll be attacked in this way, but it\'s still a good idea to protect your system; just in case somebody tries this. s2Member thwarts this behavior by monitoring failed login attempts that occur within a short period of time. Whenever s2Member detects an IP address <em>( i.e. a remote user )</em> that is consistently failing to enter a valid Username/Password, a temporary ban is created; preventing additional attempts from taking place for 30 minutes. This temporary ban, will ONLY affect the offending IP address.</p>' . "\n";
 								echo '<p><em>*Note* an empty IP address ( associated with someone browsing anonymously ), is also considered a unique IP address, so it cannot circumvent s2Member\'s security.</em></p>' . "\n";
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_ip_restrictions", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-max-failed-login-attempts">' . "\n";
 								echo 'Maximum Failed Login Attempts:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<select name="ws_plugin__s2member_max_failed_login_attempts" id="ws-plugin--s2member-max-failed-login-attempts">' . "\n";
 								$ws_plugin__s2member_temp_s = apply_filters ("ws_plugin__s2member_track_failed_logins__exp_time", "30 minutes");
@@ -413,43 +413,43 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								echo 'When/if you change this, you should also <strong>Reset Brute Force Logs</strong> ( click button above ).' . "\n";
 								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<br /><br />The default period of "30 minutes" could be modified through this WordPress® Filter:<br /><code>ws_plugin__s2member_track_failed_logins__exp_time</code>' . "\n" : '';
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_ip_restrictions", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_ip_restrictions", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_ip_restrictions", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Unique IP Access Restrictions">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-ip-restrictions-section">' . "\n";
 								echo '<h3>Unique IP Access Restrictions ( prevents username/link sharing )</h3>' . "\n";
 								echo '<input type="button" id="ws-plugin--s2member-ip-restrictions-reset-button" value="Reset IP Restriction Logs" class="ws-menu-page-right" style="min-width:175px;" />' . "\n";
 								echo '<p>As with any Membership system, it is possible for one Member to signup, and then share their Username with someone else; or even post it online for the whole world to see. This is known as Link Sharing <em>( aka: Username Sharing )</em>. It is NOT likely that you\'ll be attacked in this way, but it\'s still a good idea to protect your system; just in case somebody tries this. s2Member\'s IP Restrictions work for Membership Level Access <em>( account logins )</em>, Specific Post/Page Access, Registration Links, and other secure Entry Points. In all cases, the rules are simple. A single Username, Access Link, and/or Entry Point ... is only valid for a certain number of unique IP addresses. Once that limit is reached, s2Member assumes there has been a security breach. At that time, s2Member will place a temporary ban <em>( preventing access )</em> to a Specific Post/Page, or to an account associated with a particular Username. This temporary ban, will ONLY affect the offending Link and/or Username associated with the security breach. You can fine-tune this behavior, using the options below.</p>' . "\n";
 								echo '<p><em>*Note* an empty IP address ( associated with someone browsing anonymously ), is also considered a unique IP address, so it cannot circumvent s2Member\'s security.</em></p>' . "\n";
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_ip_restrictions", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-max-ip-restriction">' . "\n";
 								echo 'Maximum Unique IP Addresses Allowed:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<select name="ws_plugin__s2member_max_ip_restriction" id="ws-plugin--s2member-max-ip-restriction">' . "\n";
 								$ws_plugin__s2member_temp_s = apply_filters ("ws_plugin__s2member_ip_restrictions__concurrency_time_per_ip", "30 days");
@@ -469,19 +469,19 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								echo '</select>' . "\n";
 								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<br />The default period of "30 days" could be modified through this WordPress® Filter:<br /><code>ws_plugin__s2member_ip_restrictions__concurrency_time_per_ip</code>' . "\n" : '';
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-max-ip-restriction-time">' . "\n";
 								echo 'Security Breach Timeout Period:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<select name="ws_plugin__s2member_max_ip_restriction_time" id="ws-plugin--s2member-max-ip-restriction-time">' . "\n";
 								echo '<option value="300"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction_time"] == 300) ? ' selected="selected"' : '') . '>If limit is exceeded ( punish for 5 mins )</option>' . "\n";
@@ -506,39 +506,39 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								echo '</select><br />' . "\n";
 								echo 'When/if you change this, you should also <strong>Reset IP Restriction Logs</strong> ( click button above ).' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_ip_restrictions", get_defined_vars ());
 							}
-						/**/
+
 						do_action ("ws_plugin__s2member_during_res_ops_page_after_left_sections", get_defined_vars ());
-						/**/
+
 						echo '<div class="ws-menu-page-hr"></div>' . "\n";
-						/**/
+
 						echo '<p class="submit"><input type="submit" class="button-primary" value="Save All Changes" /></p>' . "\n";
-						/**/
+
 						echo '</form>' . "\n";
-						/**/
+
 						echo '</td>' . "\n";
-						/**/
+
 						echo '<td class="ws-menu-page-table-r">' . "\n";
 						c_ws_plugin__s2member_menu_pages_rs::display ();
 						echo '</td>' . "\n";
-						/**/
+
 						echo '</tr>' . "\n";
 						echo '</tbody>' . "\n";
 						echo '</table>' . "\n";
-						/**/
+
 						echo '</div>' . "\n";
 					}
 			}
 	}
-/**/
+
 new c_ws_plugin__s2member_menu_page_res_ops ();
 ?>

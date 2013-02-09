@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 	{
 		/**
@@ -30,27 +30,27 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 				public function __construct ()
 					{
 						echo '<div class="wrap ws-menu-page">' . "\n";
-						/**/
+
 						echo '<div id="icon-plugins" class="icon32"><br /></div>' . "\n";
 						echo '<h2>s2Member® API / Notifications</h2>' . "\n";
-						/**/
+
 						echo '<table class="ws-menu-page-table">' . "\n";
 						echo '<tbody class="ws-menu-page-table-tbody">' . "\n";
 						echo '<tr class="ws-menu-page-table-tr">' . "\n";
 						echo '<td class="ws-menu-page-table-l">' . "\n";
-						/**/
+
 						echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">' . "\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-options-save")) . '" />' . "\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />' . "\n";
-						/**/
+
 						do_action ("ws_plugin__s2member_during_api_ops_page_before_left_sections", get_defined_vars ());
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_signup_notifications", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_signup_notifications", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Signup Notifications">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-signup-notifications-section">' . "\n";
 								echo '<h3>Signup Notification URLs ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever a new Subscription is created, you\'ll want to read this section. This is marked `Signup`, because the URLs that you list below, will be notified each time a "new", "paying" Member, signs up. Depending on your fee structure, this may include a first Initial Payment that establishes their Subscription, or it may not. This Notification will only be triggered once for each Member. Signup Notifications are sent right after a "new", "paying" Member, signs up successfully through your Payment Gateway, regardless of whether any money has actually been transacted initially. In other words, this Notification is triggered anytime a "new", "paying" Member, signs up through your Payment Gateway, even if you provided them with a 100% Free Trial Period <em>( e.g. no money is being transacted intially )</em>.</p>' . "\n";
@@ -58,20 +58,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>( and other service integrations )</em> are already built into s2Member. They remain active at all times. These Signup Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_signup_notifications", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-signup-notification-urls">' . "\n";
 								echo 'Signup Notification URLs:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo 'You can input multiple Notification URLs by inserting one per line.<br />' . "\n";
 								echo '<textarea name="ws_plugin__s2member_signup_notification_urls" id="ws-plugin--s2member-signup-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["signup_notification_urls"]) . '</textarea><br />' . "\n";
@@ -92,7 +92,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%initial_term%%</code> = This is the term length of the Initial Period. This will be a numeric value, followed by a space, then a single letter. [ <a href="#" onclick="alert(\'Here are some examples:\\n\\n%%initial_term%% = 1 D ( this means 1 Day )\\n%%initial_term%% = 1 W ( this means 1 Week )\\n%%initial_term%% = 1 M ( this means 1 Month )\\n%%initial_term%% = 1 Y ( this means 1 Year )\\n\\nThe Initial Period never recurs, so this only lasts for the term length specified, then it is over.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%regular_term%%</code> = This is the term length of the Regular Period. This will be a numeric value, followed by a space, then a single letter. [ <a href="#" onclick="alert(\'Here are some examples:\\n\\n%%regular_term%% = 1 D ( this means 1 Day )\\n%%regular_term%% = 1 W ( this means 1 Week )\\n%%regular_term%% = 1 M ( this means 1 Month )\\n%%regular_term%% = 1 Y ( this means 1 Year )\\n%%regular_term%% = 1 L ( this means 1 Lifetime )\\n\\nThe Regular Term is usually recurring. So the Regular Term value represents the period ( or duration ) of each recurring period. If %%recurring%% = 0, then the Regular Term only applies once, because it is not recurring. So if it is not recurring, the value of %%regular_term%% simply represents how long their Membership privileges are going to last after the %%initial_term%% has expired, if there was an Initial Term. The value of this variable ( %%regular_term%% ) will never be empty, it will always be at least: 1 D, meaning 1 day. No exceptions.\'); return false;">?</a> ]</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -101,48 +101,48 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-								/**/
+
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th style="padding-top:0;">' . "\n";
 								echo '<label for="ws-plugin--s2member-signup-notification-recipients">' . "\n";
 								echo 'Send An Email Transaction Log Of This Event?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_signup_notification_recipients" id="ws-plugin--s2member-signup-notification-recipients" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["signup_notification_recipients"]) . '" /><br />' . "\n";
 								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />' . "\n";
 								echo '<code>"John" &lt;john@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_registration_notifications", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_registration_notifications", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Registration Notifications">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-registration-notifications-section">' . "\n";
 								echo '<h3>Registration Notification URLs ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever a "new" Member is created, you\'ll want to read this section. This is marked `Registration`, because the URLs that you list below, will be notified each time a "new" Member registers a Username. This is usually triggered right after a `Signup` Notification; at the point in which a "new" Member successfully completes the Registration form, and they are assigned a Username.</p>' . "\n";
@@ -150,20 +150,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>( and other service integrations )</em> are already built into s2Member. They remain active at all times. These Registration Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_registration_notifications", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-registration-notification-urls">' . "\n";
 								echo 'Registration Notification URLs:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo 'You can input multiple Notification URLs by inserting one per line.<br />' . "\n";
 								echo '<textarea name="ws_plugin__s2member_registration_notification_urls" id="ws-plugin--s2member-registration-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["registration_notification_urls"]) . '</textarea><br />' . "\n";
@@ -183,7 +183,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_ip%%</code> = The User\'s IP Address, detected via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
 								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID generated during registration.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
@@ -191,7 +191,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
 								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -200,50 +200,50 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-								/**/
+
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th style="padding-top:0;">' . "\n";
 								echo '<label for="ws-plugin--s2member-registration-notification-recipients">' . "\n";
 								echo 'Send An Email Transaction Log Of This Event?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_registration_notification_recipients" id="ws-plugin--s2member-registration-notification-recipients" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["registration_notification_recipients"]) . '" /><br />' . "\n";
 								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />' . "\n";
 								echo '<code>"John" &lt;john@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_registration_notifications", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_payment_notifications", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_payment_notifications", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Payment Notifications">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-payment-notifications-section">' . "\n";
 								echo '<h3>Payment Notification URLs ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever payment transactions <em>( including Recurring Payments )</em> take place, you\'ll want to read this section. This is marked `Payment`, because the URLs that you list below, will be notified each time an actual payment occurs. Depending on your fee structure, this may include a first Initial Payment that establishes a Subscription. But more importantly, this will be triggered on all future payments that are received for the lifetime of the Subscription.</p>' . "\n";
@@ -252,20 +252,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>( and other service integrations )</em> are already built into s2Member. They remain active at all times. These Payment Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_payment_notifications", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-payment-notification-urls">' . "\n";
 								echo 'Payment Notification URLs:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo 'You can input multiple Notification URLs by inserting one per line.<br />' . "\n";
 								echo '<textarea name="ws_plugin__s2member_payment_notification_urls" id="ws-plugin--s2member-payment-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["payment_notification_urls"]) . '</textarea><br />' . "\n";
@@ -289,7 +289,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
 								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
@@ -297,7 +297,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
 								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -306,50 +306,50 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-								/**/
+
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th style="padding-top:0;">' . "\n";
 								echo '<label for="ws-plugin--s2member-payment-notification-recipients">' . "\n";
 								echo 'Send An Email Transaction Log Of This Event?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_payment_notification_recipients" id="ws-plugin--s2member-payment-notification-recipients" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["payment_notification_recipients"]) . '" /><br />' . "\n";
 								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />' . "\n";
 								echo '<code>"John" &lt;john@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_payment_notifications", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_modification_notifications", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_modification_notifications", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Modification Notifications">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-modification-notifications-section">' . "\n";
 								echo '<h3>Modification Notification URLs ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified each time a new Subscription is created by an "existing" User/Member, or an "existing" Member modifies their paid Subscription terms, you\'ll want to read this section. This is marked `Modification`, because the URLs that you list below, will be notified each time an "existing" User/Member <em>( even if they are/were a Free Subscriber )</em> signs up for a paid Subscription <em>( i.e. a Modification takes place against an existing account within WordPress® )</em>, or an "existing" Member modifies their paid Subscription terms <em>( again, a Modification takes places against an existing account within WordPress® )</em>. Depending on your fee structure, this may include a first Initial Payment that establishes their Subscription, or it may not.</p>' . "\n";
@@ -358,20 +358,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>( and other service integrations )</em> are already built into s2Member. They remain active at all times. These Modification Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_modification_notifications", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-modification-notification-urls">' . "\n";
 								echo 'Modification Notification URLs:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo 'You can input multiple Notification URLs by inserting one per line.<br />' . "\n";
 								echo '<textarea name="ws_plugin__s2member_modification_notification_urls" id="ws-plugin--s2member-modification-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_notification_urls"]) . '</textarea><br />' . "\n";
@@ -398,7 +398,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
 								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
@@ -406,7 +406,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
 								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -415,48 +415,48 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-								/**/
+
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th style="padding-top:0;">' . "\n";
 								echo '<label for="ws-plugin--s2member-modification-notification-recipients">' . "\n";
 								echo 'Send An Email Transaction Log Of This Event?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_modification_notification_recipients" id="ws-plugin--s2member-modification-notification-recipients" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_notification_recipients"]) . '" /><br />' . "\n";
 								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />' . "\n";
 								echo '<code>"John" &lt;john@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_cancellation_notifications", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_cancellation_notifications", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Cancellation Notifications">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-cancellation-notifications-section">' . "\n";
 								echo '<h3>Cancellation Notification URLs ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever Subscriptions are cancelled through your Payment Gateway, you\'ll want to read this section. This is marked `Cancellation`, because the URLs that you list below, will be notified each time a Subscription is cancelled. A Cancellation is triggered when you cancel a Customer\'s Subscription through your Payment Gateway, or when a Customer cancels their own Subscription.</p>' . "\n";
@@ -466,20 +466,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p><em>s2Member will not process an EOT ( End Of Term ) until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system ( based on your configuration ). s2Member also calculates one extra day ( 24 hours ) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_cancellation_notifications", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-cancellation-notification-urls">' . "\n";
 								echo 'Cancellation Notification URLs:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo 'You can input multiple Notification URLs by inserting one per line.<br />' . "\n";
 								echo '<textarea name="ws_plugin__s2member_cancellation_notification_urls" id="ws-plugin--s2member-cancellation-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_urls"]) . '</textarea><br />' . "\n";
@@ -497,7 +497,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
 								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
@@ -505,7 +505,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
 								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -514,50 +514,50 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-								/**/
+
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th style="padding-top:0;">' . "\n";
 								echo '<label for="ws-plugin--s2member-cancellation-notification-recipients">' . "\n";
 								echo 'Send An Email Transaction Log Of This Event?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_cancellation_notification_recipients" id="ws-plugin--s2member-cancellation-notification-recipients" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_recipients"]) . '" /><br />' . "\n";
 								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />' . "\n";
 								echo '<code>"John" &lt;john@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_cancellation_notifications", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_eot_deletion_notifications", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_eot_deletion_notifications", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="EOT/Deletion Notifications">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-eot-deletion-notifications-section">' . "\n";
 								echo '<h3>EOT/Deletion Notification URLs ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever Subscriptions have ended <em>( and a Member is demoted to a Free Subscriber )</em>, or when an account is deleted from the system, you\'ll want to read this section. This is marked `EOT/Deletion`, because the URLs that you list below, will be notified in both cases.</p>' . "\n";
@@ -568,20 +568,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p><em>s2Member will not process an EOT ( End Of Term ) until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system ( based on your configuration ). s2Member also calculates one extra day ( 24 hours ) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_eot_deletion_notifications", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-eot-del-notification-urls">' . "\n";
 								echo 'EOT/Deletion Notification URLs:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo 'You can input multiple Notification URLs by inserting one per line.<br />' . "\n";
 								echo '<textarea name="ws_plugin__s2member_eot_del_notification_urls" id="ws-plugin--s2member-eot-del-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"]) . '</textarea><br />' . "\n";
@@ -598,7 +598,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
 								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
@@ -606,7 +606,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
 								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -615,50 +615,50 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-								/**/
+
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th style="padding-top:0;">' . "\n";
 								echo '<label for="ws-plugin--s2member-eot-del-notification-recipients">' . "\n";
 								echo 'Send An Email Transaction Log Of This Event?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_eot_del_notification_recipients" id="ws-plugin--s2member-eot-del-notification-recipients" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"]) . '" /><br />' . "\n";
 								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />' . "\n";
 								echo '<code>"John" &lt;john@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_eot_deletion_notifications", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_refund_reversal_notifications", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_refund_reversal_notifications", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Refund/Reversal Notifications">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-refund-reversal-notifications-section">' . "\n";
 								echo '<h3>Refund/Reversal Notification URLs ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever Subscriptions have been refunded or reversed <em>( i.e. charged back to you )</em>, you\'ll want to read this section. This is marked `Refund/Reversal`, because the URLs that you list below, will ONLY be notified in those specific cases, as opposed to EOT/Deletion Notifications, which are all-inclusive.</p>' . "\n";
@@ -667,20 +667,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>( and other service integrations )</em> are already built into s2Member. They remain active at all times. These Refund/Reversal Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_refund_reversal_notifications", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-ref-rev-notification-urls">' . "\n";
 								echo 'Refund/Reversal Notification URLs:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo 'You can input multiple Notification URLs by inserting one per line.<br />' . "\n";
 								echo '<textarea name="ws_plugin__s2member_ref_rev_notification_urls" id="ws-plugin--s2member-ref-rev-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_urls"]) . '</textarea><br />' . "\n";
@@ -700,7 +700,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
 								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
@@ -708,7 +708,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
 								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -717,50 +717,50 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-								/**/
+
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th style="padding-top:0;">' . "\n";
 								echo '<label for="ws-plugin--s2member-ref-rev-notification-recipients">' . "\n";
 								echo 'Send An Email Transaction Log Of This Event?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_ref_rev_notification_recipients" id="ws-plugin--s2member-ref-rev-notification-recipients" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_recipients"]) . '" /><br />' . "\n";
 								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />' . "\n";
 								echo '<code>"John" &lt;john@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_refund_reversal_notifications", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_sp_sale_notifications", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_sp_sale_notifications", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Specific Post/Page ~ Sale Notifications">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-sp-sale-notifications-section">' . "\n";
 								echo '<h3>Specific Post/Page ~ Sale Notification URLs ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever Specific Post/Page sales take place, you\'ll want to read this section. This is marked `Specific Post/Page`, because the URLs that you list below, will be notified each time a payment occurs, on a sale providing access to a Specific Post/Page.</p>' . "\n";
@@ -768,20 +768,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>( and other service integrations )</em> are already built into s2Member. They remain active at all times. These Sale Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_sp_sale_notifications", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-sp-sale-notification-urls">' . "\n";
 								echo 'Specific Post/Page ~ Sale Notification URLs:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo 'You can input multiple Notification URLs by inserting one per line.<br />' . "\n";
 								echo '<textarea name="ws_plugin__s2member_sp_sale_notification_urls" id="ws-plugin--s2member-sp-sale-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_urls"]) . '</textarea><br />' . "\n";
@@ -800,7 +800,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%item_number%%</code> = The Item Number. Ex: <code><em>sp:13,24,36:72</em></code> ( translates to: <code><em>sp:comma-delimited IDs:expiration hours</em></code> ).</li>' . "\n";
 								echo '<li><code>%%item_name%%</code> = The Item Name ( as provided by the <code>desc=""</code> attribute in your Shortcode, which briefly describes the Item Number ).</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -809,50 +809,50 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-								/**/
+
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th style="padding-top:0;">' . "\n";
 								echo '<label for="ws-plugin--s2member-sp-sale-notification-recipients">' . "\n";
 								echo 'Send An Email Transaction Log Of This Event?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_sp_sale_notification_recipients" id="ws-plugin--s2member-sp-sale-notification-recipients" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_recipients"]) . '" /><br />' . "\n";
 								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />' . "\n";
 								echo '<code>"John" &lt;john@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_sp_sale_notifications", get_defined_vars ());
 							}
-						/**/
+
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_sp_refund_reversal_notifications", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_sp_refund_reversal_notifications", get_defined_vars ());
-								/**/
+
 								echo '<div class="ws-menu-page-group" title="Specific Post/Page ~ Refund/Reversal Notifications">' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-sp-refund-reversal-notifications-section">' . "\n";
 								echo '<h3>Specific Post/Page ~ Refund/Reversal Notification URLs ( optional )</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever sales have been refunded or reversed <em>( i.e. charged back to you )</em>, you\'ll want to read this section. This is marked `Specific Post/Page`, because the URLs that you list below, will be notified each time a Refund or Reversal occurs, on a sale that provided access to a Specific Post/Page.</p>' . "\n";
@@ -860,20 +860,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>( and other service integrations )</em> are already built into s2Member. They remain active at all times. These Refund/Reversal Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_sp_refund_reversal_notifications", get_defined_vars ());
-								/**/
+
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th>' . "\n";
 								echo '<label for="ws-plugin--s2member-sp-ref-rev-notification-urls">' . "\n";
 								echo 'Specific Post/Page ~ Refund/Reversal Notification URLs:' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo 'You can input multiple Notification URLs by inserting one per line.<br />' . "\n";
 								echo '<textarea name="ws_plugin__s2member_sp_ref_rev_notification_urls" id="ws-plugin--s2member-sp-ref-rev-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_urls"]) . '</textarea><br />' . "\n";
@@ -891,7 +891,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%item_number%%</code> = The Item Number. Ex: <code><em>sp:13,24,36:72</em></code> ( translates to: <code><em>sp:comma-delimited IDs:expiration hours</em></code> ).</li>' . "\n";
 								echo '<li><code>%%item_name%%</code> = The Item Name ( as provided by the <code>desc=""</code> attribute in your Shortcode, which briefly describes the Item Number ).</li>' . "\n";
 								echo '</ul>' . "\n";
-								/**/
+
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
 								echo '<ul>' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
@@ -900,66 +900,66 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />' . "\n";
 								echo '<em>( The campaign ( i.e. christmas-promo ) could be referenced using <code>%%cv1%%</code> )</em><br />' . "\n";
 								echo '<code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|christmas-promo"</code>' . "\n";
-								/**/
+
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
-								/**/
+
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-								/**/
+
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<th style="padding-top:0;">' . "\n";
 								echo '<label for="ws-plugin--s2member-sp-ref-rev-notification-recipients">' . "\n";
 								echo 'Send An Email Transaction Log Of This Event?' . "\n";
 								echo '</label>' . "\n";
 								echo '</th>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '<tr>' . "\n";
-								/**/
+
 								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_sp_ref_rev_notification_recipients" id="ws-plugin--s2member-sp-ref-rev-notification-recipients" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_recipients"]) . '" /><br />' . "\n";
 								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />' . "\n";
 								echo '<code>"John" &lt;john@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>' . "\n";
 								echo '</td>' . "\n";
-								/**/
+
 								echo '</tr>' . "\n";
 								echo '</tbody>' . "\n";
 								echo '</table>' . "\n";
 								echo '</div>' . "\n";
-								/**/
+
 								echo '</div>' . "\n";
-								/**/
+
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_sp_refund_reversal_notifications", get_defined_vars ());
 							}
-						/**/
+
 						do_action ("ws_plugin__s2member_during_api_ops_page_after_left_sections", get_defined_vars ());
-						/**/
+
 						echo '<div class="ws-menu-page-hr"></div>' . "\n";
-						/**/
+
 						echo '<p class="submit"><input type="submit" class="button-primary" value="Save All Changes" /></p>' . "\n";
-						/**/
+
 						echo '</form>' . "\n";
-						/**/
+
 						echo '</td>' . "\n";
-						/**/
+
 						echo '<td class="ws-menu-page-table-r">' . "\n";
 						c_ws_plugin__s2member_menu_pages_rs::display ();
 						echo '</td>' . "\n";
-						/**/
+
 						echo '</tr>' . "\n";
 						echo '</tbody>' . "\n";
 						echo '</table>' . "\n";
-						/**/
+
 						echo '</div>' . "\n";
 					}
 			}
 	}
-/**/
+
 new c_ws_plugin__s2member_menu_page_api_ops ();
 ?>

@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_paypal_notify"))
 	{
 		/**
@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify"))
 				*/
 				public static function paypal_notify ()
 					{
-						if (!empty ($_GET["s2member_paypal_notify"])) /* Call inner routine? */
+						if (!empty ($_GET["s2member_paypal_notify"]))
 							{
 								return c_ws_plugin__s2member_paypal_notify_in::paypal_notify ();
 							}

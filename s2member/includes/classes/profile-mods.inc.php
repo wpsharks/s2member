@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_profile_mods"))
 	{
 		/**
@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods"))
 				*/
 				public static function handle_profile_modifications ()
 					{
-						if (!empty ($_POST["ws_plugin__s2member_profile_save"])) /* Call inner routine? */
+						if (!empty ($_POST["ws_plugin__s2member_profile_save"]))
 							{
 								return c_ws_plugin__s2member_profile_mods_in::handle_profile_modifications ();
 							}

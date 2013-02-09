@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 	{
 		/**
@@ -40,13 +40,13 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 				public static function s_badge_status ()
 					{
 						do_action ("ws_plugin__s2member_before_s_badge_status", get_defined_vars ());
-						/**/
+
 						if (!empty ($_GET["s2member_s_badge_status"])) /* Requesting status? */
 							{
 								status_header (200); /* Send a 200 OK status header. */
 								header ("Content-Type: text/plain; charset=utf-8"); /* Content-Type with UTF-8. */
 								eval ('while (@ob_end_clean ());'); /* End/clean all output buffers that may exist. */
-								/**/
+
 								if ( /* Badge status API enabled? */$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["s_badge_status_enabled"])
 									{
 										if ( /* Valid key? */strlen ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) >= 56)
@@ -79,13 +79,13 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 																	}
 														}
 											}
-										/**/
+
 										exit ("0"); /* Else, NOT secure. */
 									}
 								else
 									exit ("-"); /* Else, service NOT enabled. */
 							}
-						/**/
+
 						do_action ("ws_plugin__s2member_after_s_badge_status", get_defined_vars ());
 					}
 			}

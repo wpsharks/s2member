@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!function_exists ("wp_new_user_notification"))
 	{
 		/**
@@ -34,7 +34,7 @@ if (!function_exists ("wp_new_user_notification"))
 				function /* Accepts any number of arguments. */ wp_new_user_notification ()
 					{
 						$args = /* Pulls the arguments passed in to this function. */ func_get_args ();
-						/**/
+
 						return call_user_func_array ("c_ws_plugin__s2member_email_configs::new_user_notification", $args);
 					}
 				add_filter /* Combine. */ ("wpmu_welcome_user_notification", "wp_new_user_notification", 10, 2);

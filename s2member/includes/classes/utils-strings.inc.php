@@ -16,7 +16,7 @@
 */
 if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 	{
 		/**
@@ -63,7 +63,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function esc_dq($string = FALSE, $times = FALSE, $escape_char = "\\")
 					{
 						$times = (is_numeric($times) && $times >= 0) ? (int)$times : 1;
-						/**/
+
 						return str_replace('"', str_repeat($escape_char, $times).'"', (string)$string);
 					}
 				/**
@@ -79,7 +79,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function esc_sq($string = FALSE, $times = FALSE)
 					{
 						$times = (is_numeric($times) && $times >= 0) ? (int)$times : 1;
-						/**/
+
 						return str_replace("'", str_repeat("\\", $times)."'", (string)$string);
 					}
 				/**
@@ -95,7 +95,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function esc_js_sq($string = FALSE, $times = FALSE)
 					{
 						$times = (is_numeric($times) && $times >= 0) ? (int)$times : 1;
-						/**/
+
 						return str_replace("'", str_repeat("\\", $times)."'", str_replace(array("\r", "\n"), array("", '\\n'), str_replace("\'", "'", (string)$string)));
 					}
 				/**
@@ -114,7 +114,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function esc_ds($string = FALSE, $times = FALSE)
 					{
 						$times = (is_numeric($times) && $times >= 0) ? (int)$times : 1;
-						/**/
+
 						return str_replace('$', str_repeat("\\", $times).'$', (string)$string);
 					}
 				/**
@@ -130,7 +130,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function esc_refs($string = NULL, $times = NULL)
 					{
 						$times = (is_numeric($times) && $times >= 0) ? (int)$times : 1;
-						/**/
+
 						return str_replace(array("\\", '$'), array(str_repeat("\\", $times)."\\", str_repeat("\\", $times).'$'), (string)$string);
 					}
 				/**
@@ -182,7 +182,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 					{
 						$chars = /* List of chars to be trimmed by this routine. */ (is_string($chars)) ? $chars : " \t\n\r\0\x0B";
 						$chars = (is_string($extra_chars) /* Adding additional chars? */) ? $chars.$extra_chars : $chars;
-						/**/
+
 						if(is_array($value)) /* Handles all types of arrays.
 				Note, we do NOT use ``array_map()`` here, because multiple args to ``array_map()`` causes a loss of string keys.
 				For further details, see: <http://php.net/manual/en/function.array-map.php>. */
@@ -246,7 +246,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function trim_qts_deep($value = FALSE)
 					{
 						$qts = implode("|", array_keys /* Keys are regex patterns. */(c_ws_plugin__s2member_utils_strings::$quote_entities_w_variations));
-						/**/
+
 						return is_array($value) ? array_map("c_ws_plugin__s2member_utils_strings::trim_qts_deep", $value) : preg_replace("/^(?:".$qts.")+|(?:".$qts.")+$/", "", (string)$value);
 					}
 				/**
@@ -311,14 +311,14 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function random_str_gen($length = FALSE, $special_chars = TRUE, $extra_special_chars = FALSE)
 					{
 						$length = (is_numeric($length) && $length >= 0) ? (int)$length : 12;
-						/**/
+
 						$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 						$chars .= ($extra_special_chars) ? "-_ []{}<>~`+=,.;:/?|" : "";
 						$chars .= ($special_chars) ? "!@#$%^&*()" : "";
-						/**/
+
 						for($i = 0, $random_str = ""; $i < $length; $i++)
 							$random_str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
-						/**/
+
 						return /* Randomly generated string of chars. */ $random_str;
 					}
 				/**
@@ -333,7 +333,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function highlight_php($string = FALSE)
 					{
 						$string = highlight_string((string)$string, true); /* Start with PHP syntax, then Shortcodes. */
-						/**/
+
 						return preg_replace("/\[\/?_*s2[a-z0-9_\-]+.*?\]/i", '<span style="color:#164A61;">$0</span>', $string);
 					}
 				/**
@@ -361,7 +361,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 							{
 								if(preg_match("/\<(.+?)\>/", $section, $m) && strpos($m[1], "@") !== false)
 									$emails[] = $m[1]; /* Email inside <brackets>. */
-								/**/
+
 								else if(strpos($section, "@") !== false)
 									$emails[] = $section;
 							}
@@ -383,10 +383,10 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 					{
 						$string = (string)$string; /* Force string values here. String MUST be a string. */
 						$trim_padding_chars = (string)$trim_padding_chars; /* And force this one too. */
-						/**/
+
 						$base64_url_safe = str_replace((array)$url_unsafe_chars, (array)$url_safe_chars, (string)base64_encode($string));
 						$base64_url_safe = (strlen($trim_padding_chars)) ? rtrim($base64_url_safe, $trim_padding_chars) : $base64_url_safe;
-						/**/
+
 						return $base64_url_safe; /* Base64 encoded, with URL-safe replacements. */
 					}
 				/**
@@ -408,11 +408,11 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 					{
 						$base64_url_safe = (string)$base64_url_safe; /* Force string values here. This MUST be a string. */
 						$trim_padding_chars = (string)$trim_padding_chars; /* And force this one too. */
-						/**/
+
 						$string = (strlen($trim_padding_chars)) ? rtrim($base64_url_safe, $trim_padding_chars) : $base64_url_safe;
 						$string = (strlen($trim_padding_chars)) ? str_pad($string, strlen($string) % 4, "=", STR_PAD_RIGHT) : $string;
 						$string = (string)base64_decode(str_replace((array)$url_safe_chars, (array)$url_unsafe_chars, $string));
-						/**/
+
 						return $string; /* Base64 decoded, with URL-safe replacements. */
 					}
 				/**
@@ -428,23 +428,23 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function rsa_sha1_sign($string = FALSE, $key = FALSE)
 					{
 						$key = /* Fixes key wrappers. */ c_ws_plugin__s2member_utils_strings::_rsa_sha1_key_fix_wrappers((string)$key);
-						/**/
+
 						$signature = /* Command line. */ c_ws_plugin__s2member_utils_strings::_rsa_sha1_shell_sign((string)$string, (string)$key);
-						/**/
+
 						if(empty($signature) && stripos(PHP_OS, "win") === 0 && file_exists(($openssl = "c:\openssl-win32\bin\openssl.exe")))
 							$signature = c_ws_plugin__s2member_utils_strings::_rsa_sha1_shell_sign((string)$string, (string)$key, /* Specific location. */ $openssl);
-						/**/
+
 						if(empty($signature) && stripos(PHP_OS, "win") === 0 && file_exists(($openssl = "c:\openssl-win64\bin\openssl.exe")))
 							$signature = c_ws_plugin__s2member_utils_strings::_rsa_sha1_shell_sign((string)$string, (string)$key, /* Specific location. */ $openssl);
-						/**/
+
 						if(empty($signature) && function_exists("openssl_get_privatekey") && function_exists("openssl_sign") && is_resource($private_key = openssl_get_privatekey((string)$key)))
 							openssl_sign((string)$string, $signature, $private_key, OPENSSL_ALGO_SHA1).openssl_free_key($private_key);
-						/**/
+
 						if(empty($signature)) /* Now, if we're still empty, trigger an error here. */
 							trigger_error("s2Member was unable to generate an RSA-SHA1 signature.".
 								" Please make sure your installation of PHP is compiled with OpenSSL: `openssl_sign()`.".
 								" See: http://php.net/manual/en/function.openssl-sign.php", E_USER_ERROR);
-						/**/
+
 						return (!empty($signature)) ? $signature : false;
 					}
 				/**
@@ -467,7 +467,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 								file_put_contents(($string_file = $temp_dir."/".md5(uniqid("", true)."rsa-sha1-string").".tmp"), (string)$string);
 								file_put_contents(($private_key_file = $temp_dir."/".md5(uniqid("", true)."rsa-sha1-private-key").".tmp"), (string)$key);
 								file_put_contents(($rsa_sha1_sig_file = $temp_dir."/".md5(uniqid("", true)."rsa-sha1-sig").".tmp"), "");
-								/**/
+
 								@shell_exec($esa($openssl)." sha1 -sign ".$esa($private_key_file)." -out ".$esa($rsa_sha1_sig_file)." ".$esa($string_file));
 								$signature = /* Do NOT trim here. */ file_get_contents($rsa_sha1_sig_file); /* Was the signature was written? */
 								unlink($rsa_sha1_sig_file).unlink($private_key_file).unlink($string_file); /* Cleanup. */
@@ -515,7 +515,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				public static function hmac_sha1_sign($string = FALSE, $key = FALSE)
 					{
 						$key_64 = str_pad(((strlen((string)$key) > 64) ? pack('H*', sha1((string)$key)) : (string)$key), 64, chr(0x00));
-						/**/
+
 						return pack('H*', sha1(($key_64 ^ str_repeat(chr(0x5c), 64)).pack('H*', sha1(($key_64 ^ str_repeat(chr(0x36), 64)).(string)$string))));
 					}
 				/**

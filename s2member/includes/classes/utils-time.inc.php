@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 	{
 		/**
@@ -45,11 +45,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 					{
 						$from = (!$from) ? strtotime ("now") : (int)$from;
 						$to = (!$to) ? strtotime ("now") : (int)$to;
-						/**/
+
 						if (($difference = abs ($to - $from)) < 3600)
 							{
 								$m = (int)round ($difference / 60);
-								/**/
+
 								$since = ($m < 1) ? _x ("less than a minute", "s2member-front", "s2member") : $since;
 								$since = ($m === 1) ? _x ("1 minute", "s2member-front", "s2member") : $since;
 								$since = ($m > 1) ? sprintf (_nx ("%s minute", "%s minutes", $m, "s2member-front", "s2member"), $m) : $since;
@@ -58,7 +58,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						else if ($difference >= 3600 && $difference < 86400)
 							{
 								$h = (int)round ($difference / 3600);
-								/**/
+
 								$since = ($h === 1) ? _x ("1 hour", "s2member-front", "s2member") : $since;
 								$since = ($h > 1) ? sprintf (_nx ("%s hour", "%s hours", $h, "s2member-front", "s2member"), $h) : $since;
 								$since = ($h >= 24) ? _x ("about 1 day", "s2member-front", "s2member") : $since;
@@ -66,7 +66,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						else if ($difference >= 86400 && $difference < 604800)
 							{
 								$d = (int)round ($difference / 86400);
-								/**/
+
 								$since = ($d === 1) ? _x ("1 day", "s2member-front", "s2member") : $since;
 								$since = ($d > 1) ? sprintf (_nx ("%s day", "%s days", $d, "s2member-front", "s2member"), $d) : $since;
 								$since = ($d >= 7) ? _x ("about 1 week", "s2member-front", "s2member") : $since;
@@ -74,7 +74,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						else if ($difference >= 604800 && $difference < 2592000)
 							{
 								$w = (int)round ($difference / 604800);
-								/**/
+
 								$since = ($w === 1) ? _x ("1 week", "s2member-front", "s2member") : $since;
 								$since = ($w > 1) ? sprintf (_nx ("%s week", "%s weeks", $w, "s2member-front", "s2member"), $w) : $since;
 								$since = ($w >= 4) ? _x ("about 1 month", "s2member-front", "s2member") : $since;
@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						else if ($difference >= 2592000 && $difference < 31556926)
 							{
 								$m = (int)round ($difference / 2592000);
-								/**/
+
 								$since = ($m === 1) ? _x ("1 month", "s2member-front", "s2member") : $since;
 								$since = ($m > 1) ? sprintf (_nx ("%s month", "%s months", $m, "s2member-front", "s2member"), $m) : $since;
 								$since = ($m >= 12) ? _x ("about 1 year", "s2member-front", "s2member") : $since;
@@ -90,11 +90,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						else if ($difference >= 31556926) /* Years. */
 							{
 								$y = (int)round ($difference / 31556926);
-								/**/
+
 								$since = ($y === 1) ? _x ("1 year", "s2member-front", "s2member") : $since;
 								$since = ($y > 1) ? sprintf (_nx ("%s year", "%s years", $y, "s2member-front", "s2member"), $y) : $since;
 							}
-						/**/
+
 						return $since;
 					}
 				/**
@@ -129,13 +129,13 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 								$registration_time = strtotime ($user->user_registered);
 								$last_payment_time = get_user_option ("s2member_last_payment_time", $user_id);
 								$last_payment_time = ((int)$lpt) ? (int)$lpt : (int)$last_payment_time;
-								/**/
+
 								if (!($p1_time = 0) && ($period1 = trim (strtoupper ($period1))))
 									{
 										list ($num, $span) = preg_split ("/ /", $period1, 2);
-										/**/
+
 										$days = 0; /* Days start at 0. */
-										/**/
+
 										if (is_numeric ($num) && !is_numeric ($span))
 											{
 												$days = ($span === "D") ? 1 : $days;
@@ -143,17 +143,17 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 												$days = ($span === "M") ? 30 : $days;
 												$days = ($span === "Y") ? 365 : $days;
 											}
-										/**/
+
 										$p1_days = (int)$num * (int)$days;
 										$p1_time = $p1_days * 86400;
 									}
-								/**/
+
 								if (!($p3_time = 0) && ($period3 = trim (strtoupper ($period3))))
 									{
 										list ($num, $span) = preg_split ("/ /", $period3, 2);
-										/**/
+
 										$days = 0; /* Days start at 0. */
-										/**/
+
 										if (is_numeric ($num) && !is_numeric ($span))
 											{
 												$days = ($span === "D") ? 1 : $days;
@@ -161,31 +161,31 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 												$days = ($span === "M") ? 30 : $days;
 												$days = ($span === "Y") ? 365 : $days;
 											}
-										/**/
+
 										$p3_days = (int)$num * (int)$days;
 										$p3_time = $p3_days * 86400;
 									}
-								/**/
+
 								if (!$last_payment_time) /* If there's been no payment yet.
 								After p1, if there was a p1. Otherwise, reg. time + 1 day grace. */
 									$auto_eot_time = $registration_time + $p1_time + 86400;
-								/**/
+
 								/* Else if p1, and last payment within p1, last + p1 + 1 day grace. */
 								else if ($p1_time && $last_payment_time <= $registration_time + $p1_time)
 									$auto_eot_time = $last_payment_time + $p1_time + 86400;
-								/**/
+
 								else /* Otherwise, after last payment + p3 + 1 day grace. */
 									$auto_eot_time = $last_payment_time + $p3_time + 86400;
 							}
-						/**/
+
 						else if ($eotper) /* Otherwise, if we have a specific EOT period; calculate from today. */
 							{
 								if (!($eot_time = 0) && ($eotper = trim (strtoupper ($eotper))))
 									{
 										list ($num, $span) = preg_split ("/ /", $eotper, 2);
-										/**/
+
 										$days = 0; /* Days start at 0. */
-										/**/
+
 										if (is_numeric ($num) && !is_numeric ($span))
 											{
 												$days = ($span === "D") ? 1 : $days;
@@ -193,20 +193,20 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 												$days = ($span === "M") ? 30 : $days;
 												$days = ($span === "Y") ? 365 : $days;
 											}
-										/**/
+
 										$eot_days = (int)$num * (int)$days;
 										$eot_time = $eot_days * 86400;
 									}
-								/**/
+
 								$auto_eot_time = strtotime ("now") + $eot_time + 86400;
 							}
-						/**/
+
 						settype ($auto_eot_time, "integer"); /* Force to integer type here. */
-						/**/
+
 						if ($ext && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_time_ext_behavior"] === "extend")
 							if ((int)$ext > strtotime ("now")) /* Existing EOT Time must be in the future. */
 								$auto_eot_time = $auto_eot_time + ((int)$ext - strtotime ("now"));
-						/**/
+
 						return ($auto_eot_time <= 0) ? strtotime ("now") : $auto_eot_time;
 					}
 				/**
@@ -229,13 +229,13 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				public static function term_cycle ($term_or_period_term = FALSE, $directive = "recurring")
 					{
 						$term_cycle_key = trim (strtoupper (preg_replace ("/^(.+?) /", "", $term_or_period_term)));
-						/**/
+
 						if ($term_cycle_key && $directive === "recurring") /* recurring = Daily, Weekly, Bi-Weekly, Monthly, Bi-Monthly, Quarterly, Yearly, Lifetime. */
 							{
 								$paypal_term_cycles = array ("D" => _x ("Daily", "s2member-front", "s2member"), "W" => _x ("Weekly", "s2member-front", "s2member"), "M" => _x ("Monthly", "s2member-front", "s2member"), "Y" => _x ("Yearly", "s2member-front", "s2member"), "L" => _x ("Lifetime", "s2member-front", "s2member"), "DAY" => _x ("Daily", "s2member-front", "s2member"), "WEEK" => _x ("Weekly", "s2member-front", "s2member"), "MONTH" => _x ("Monthly", "s2member-front", "s2member"), "YEAR" => _x ("Yearly", "s2member-front", "s2member"), "Lifetime" => _x ("Lifetime", "s2member-front", "s2member"));
-								/**/
+
 								$term_cycle = isset ($paypal_term_cycles[$term_cycle_key]) ? $paypal_term_cycles[$term_cycle_key] : false;
-								/**/
+
 								$term_cycle = (strtoupper ($term_or_period_term) === "2 W") ? _x ("Bi-Weekly", "s2member-front", "s2member") : $term_cycle;
 								$term_cycle = (strtoupper ($term_or_period_term) === "2 M") ? _x ("Bi-Monthly", "s2member-front", "s2member") : $term_cycle;
 								$term_cycle = (strtoupper ($term_or_period_term) === "3 M") ? _x ("Quarterly", "s2member-front", "s2member") : $term_cycle;
@@ -243,16 +243,16 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						else if ($term_cycle_key && $directive === "singular") /* singular = Day, Week, Month, Year, Lifetime. */
 							{
 								$paypal_term_cycles = array ("D" => _x ("Day", "s2member-front", "s2member"), "W" => _x ("Week", "s2member-front", "s2member"), "M" => _x ("Month", "s2member-front", "s2member"), "Y" => _x ("Year", "s2member-front", "s2member"), "L" => _x ("Lifetime", "s2member-front", "s2member"), "DAY" => _x ("Day", "s2member-front", "s2member"), "WEEK" => _x ("Week", "s2member-front", "s2member"), "MONTH" => _x ("Month", "s2member-front", "s2member"), "YEAR" => _x ("Year", "s2member-front", "s2member"), "Lifetime" => _x ("Lifetime", "s2member-front", "s2member"));
-								/**/
+
 								$term_cycle = isset ($paypal_term_cycles[$term_cycle_key]) ? $paypal_term_cycles[$term_cycle_key] : false;
 							}
 						else if ($term_cycle_key && $directive === "plural") /* plural = Days, Weeks, Months, Years, Lifetimes. */
 							{
 								$paypal_term_cycles = array ("D" => _x ("Days", "s2member-front", "s2member"), "W" => _x ("Weeks", "s2member-front", "s2member"), "M" => _x ("Months", "s2member-front", "s2member"), "Y" => _x ("Years", "s2member-front", "s2member"), "L" => _x ("Lifetimes", "s2member-front", "s2member"), "DAY" => _x ("Days", "s2member-front", "s2member"), "WEEK" => _x ("Weeks", "s2member-front", "s2member"), "MONTH" => _x ("Months", "s2member-front", "s2member"), "YEAR" => _x ("Years", "s2member-front", "s2member"), "Lifetime" => _x ("Lifetimes", "s2member-front", "s2member"));
-								/**/
+
 								$term_cycle = isset ($paypal_term_cycles[$term_cycle_key]) ? $paypal_term_cycles[$term_cycle_key] : false;
 							}
-						/**/
+
 						return (!empty ($term_cycle)) ? $term_cycle : false;
 					}
 				/**
@@ -274,25 +274,25 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 					{
 						list ($period, $term) = preg_split ("/ /", ($period_term = strtoupper ($period_term)), 2);
 						$recurring = (is_string ($recurring) && strtoupper ($recurring) === "BN") ? (int)0 : (int)$recurring;
-						/**/
+
 						$cycle_recurring = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "recurring");
 						$cycle_singular = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "singular");
 						$cycle_plural = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "plural");
-						/**/
+
 						if ($recurring && in_array ($period_term, array ("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "1 Y")))
 							$period_term = strtolower ($cycle_recurring); /* Results in an "ly" ending. */
-						/**/
+
 						else if ($recurring) /* Otherwise, it's recurring; but NOT an "ly" ending. */
 							/* translators: Each cycle ( i.e. `each day/week/month` or `every 2 days/weeks/months`, etc. ). Cycles are translated elsewhere. */
 							$period_term = strtolower (sprintf (_nx ('each %2$s', 'every %1$s %3$s', $period, "s2member-front", "s2member"), $period, $cycle_singular, $cycle_plural));
-						/**/
+
 						else if (strtoupper ($term) === "L") /* One-payment for lifetime access. */
 							$period_term = strtolower (_x ("lifetime", "s2member-front", "s2member")); /* Life. */
-						/**/
+
 						else /* Otherwise, this is NOT recurring. Results in X days/weeks/months/years/lifetime. */
 							/* translators: Membership cycle ( i.e. `1 day/week/month` or `2 days/weeks/months`, etc. ). Most of this is translated elsewhere. */
 							$period_term = strtolower (sprintf (_nx ('%1$s %2$s', '%1$s %3$s', $period, "s2member-front", "s2member"), $period, $cycle_singular, $cycle_plural));
-						/**/
+
 						return $period_term; /* Return converted value. */
 					}
 				/**
@@ -315,25 +315,25 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 					{
 						list ($period, $term) = preg_split ("/ /", ($period_term = strtoupper ($period_term)), 2);
 						$recurring = (is_string ($recurring) && strtoupper ($recurring) === "BN") ? (int)0 : (int)$recurring;
-						/**/
+
 						$cycle_recurring = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "recurring");
 						$cycle_singular = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "singular");
 						$cycle_plural = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "plural");
-						/**/
+
 						if ($recurring && in_array ($period_term, array ("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "1 Y")))
 							$amount_period_term = number_format ($amount, 2, ".", "") . " / " . strtolower ($cycle_recurring);
-						/**/
+
 						else if ($recurring) /* Otherwise, it's recurring; but NOT an "ly" ending. */
 							/* translators: Each cycle ( i.e. `each day/week/month` or `every 2 days/weeks/months`, etc. ). Cycles are translated elsewhere. */
 							$amount_period_term = number_format ($amount, 2, ".", "") . " " . strtolower (sprintf (_nx ('each %2$s', 'every %1$s %3$s', $period, "s2member-front", "s2member"), $period, $cycle_singular, $cycle_plural));
-						/**/
+
 						else if (strtoupper ($term) === "L") /* One-payment for lifetime access. */
 							$amount_period_term = number_format ($amount, 2, ".", ""); /* Price. */
-						/**/
+
 						else /* Otherwise, this is NOT recurring. Results in 0.00 for X days/weeks/months/years/lifetime. */
 							/* translators: Cycle ( i.e. `for 1 day/week/month` or `for 2 days/weeks/months`, etc. ). Most of this is translated elsewhere. */
 							$amount_period_term = number_format ($amount, 2, ".", "") . " " . strtolower (sprintf (_nx ('for %1$s %2$s', 'for %1$s %3$s', $period, "s2member-front", "s2member"), $period, $cycle_singular, $cycle_plural));
-						/**/
+
 						return $amount_period_term; /* Return converted value. */
 					}
 			}

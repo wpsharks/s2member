@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_sc_s_badge_in"))
 	{
 		/**
@@ -44,14 +44,14 @@ if (!class_exists ("c_ws_plugin__s2member_sc_s_badge_in"))
 					{
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_sc_s_badge", get_defined_vars ());
-						unset ($__refs, $__v); /* Unset defined __refs, __v. */
-						/**/
+						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
 						$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr);
-						/**/
+
 						$attr = shortcode_atts (array ("v" => "1"), $attr); /* One attribute. */
-						/**/
+
 						$code = c_ws_plugin__s2member_utilities::s_badge_gen ($attr["v"], false, false);
-						/**/
+
 						return apply_filters ("ws_plugin__s2member_sc_s_badge", $code, get_defined_vars ());
 					}
 			}

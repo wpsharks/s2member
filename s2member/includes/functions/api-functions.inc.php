@@ -132,13 +132,13 @@ if(!function_exists("user_is"))
 		function user_is($id = FALSE, $role = FALSE)
 			{
 				$role = ($role === "s2member_level0") ? "subscriber" : preg_replace("/^access_/i", "", $role);
-				/**/
+
 				if(($role === "super_administrator" || $role === "administrator") && is_multisite() && is_super_admin($id))
 					return /* Return true, Super Admins are always considered an Admnistrator, for all Blogs. */ true;
-				/**/
+
 				else if /* Else return false for Super Admins here. */(is_multisite() && is_super_admin($id))
 					return /* Super Admins can access all Capabilities, so the default handling would fail. */ false;
-				/**/
+
 				return user_can($id, $role);
 			}
 	}
@@ -294,13 +294,13 @@ if(!function_exists("current_user_is"))
 		function current_user_is($role = FALSE)
 			{
 				$role = ($role === "s2member_level0") ? "subscriber" : preg_replace("/^access_/i", "", $role);
-				/**/
+
 				if(($role === "super_administrator" || $role === "administrator") && is_multisite() && is_super_admin())
 					return /* Return true, Super Admins are always considered an Admnistrator, for all Blogs. */ true;
-				/**/
+
 				else if /* Else return false for Super Admins here. */(is_multisite() && is_super_admin())
 					return /* Super Admins can access all Capabilities, so the default handling would fail. */ false;
-				/**/
+
 				return current_user_can($role);
 			}
 	}
@@ -461,13 +461,13 @@ if(!function_exists("current_user_is_for_blog"))
 		function current_user_is_for_blog($blog_id = FALSE, $role = FALSE)
 			{
 				$role = ($role === "s2member_level0") ? "subscriber" : preg_replace("/^access_/i", "", $role);
-				/**/
+
 				if(($role === "super_administrator" || $role === "administrator") && is_multisite() && is_super_admin())
 					return /* Return true, Super Admins are always considered an Admnistrator, for all Blogs. */ true;
-				/**/
+
 				else if /* Else return false for Super Admins here. */(is_multisite() && is_super_admin())
 					return /* Super Admins can access all Capabilities, so the default handling would fail. */ false;
-				/**/
+
 				return current_user_can_for_blog($blog_id, $role);
 			}
 	}
@@ -857,25 +857,25 @@ if(!function_exists("is_protected_by_s2member"))
 		function is_protected_by_s2member($what = FALSE, $type = FALSE, $check_user = FALSE)
 			{
 				global /* Global reference to $post in The Loop. */ $post;
-				/**/
+
 				$what = ($what) ? $what : ((is_object($post) && $post->ID) ? $post->ID : false);
 				$type = ($type) ? strtolower($type) : "singular";
-				/**/
+
 				if($type === "category" && ($array = c_ws_plugin__s2member_catgs_sp::check_specific_catg_level_access($what, $check_user)))
 					return /* A non-empty array with ["s2member_level_req"]. */ $array;
-				/**/
+
 				else if($type === "tag" && ($array = c_ws_plugin__s2member_ptags_sp::check_specific_ptag_level_access($what, $check_user)))
 					return /* A non-empty array with ["s2member_level_req"]. */ $array;
-				/**/
+
 				else if(($type === "post" || $type === "singular") && ($array = c_ws_plugin__s2member_posts_sp::check_specific_post_level_access($what, $check_user)))
 					return /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */ $array;
-				/**/
+
 				else if(($type === "page" || $type === "singular") && ($array = c_ws_plugin__s2member_pages_sp::check_specific_page_level_access($what, $check_user)))
 					return  /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */$array;
-				/**/
+
 				else if($type === "uri" && ($array = c_ws_plugin__s2member_ruris_sp::check_specific_ruri_level_access($what, $check_user)))
 					return /* A non-empty array with ["s2member_level_req"]. */ $array;
-				/**/
+
 				return false;
 			}
 	}
@@ -979,25 +979,25 @@ if(!function_exists("is_permitted_by_s2member"))
 		function is_permitted_by_s2member($what = FALSE, $type = FALSE)
 			{
 				global /* Global reference to $post in The Loop. */ $post;
-				/**/
+
 				$what = ($what) ? $what : ((is_object($post) && $post->ID) ? $post->ID : false);
 				$type = ($type) ? strtolower($type) : "singular";
-				/**/
+
 				if($type === "category" && c_ws_plugin__s2member_catgs_sp::check_specific_catg_level_access($what, true))
 					return false;
-				/**/
+
 				else if($type === "tag" && c_ws_plugin__s2member_ptags_sp::check_specific_ptag_level_access($what, true))
 					return false;
-				/**/
+
 				else if(($type === "post" || $type === "singular") && c_ws_plugin__s2member_posts_sp::check_specific_post_level_access($what, true))
 					return false;
-				/**/
+
 				else if(($type === "page" || $type === "singular") && c_ws_plugin__s2member_pages_sp::check_specific_page_level_access($what, true))
 					return false;
-				/**/
+
 				else if($type === "uri" && c_ws_plugin__s2member_ruris_sp::check_specific_ruri_level_access($what, true))
 					return false;
-				/**/
+
 				return true;
 			}
 	}
@@ -1072,7 +1072,7 @@ if(!function_exists("is_category_protected_by_s2member"))
 			{
 				if($cat_id && ($array = c_ws_plugin__s2member_catgs_sp::check_specific_catg_level_access($cat_id, $check_user)))
 					return /* A non-empty array with ["s2member_level_req"]. */ $array;
-				/**/
+
 				return false;
 			}
 	}
@@ -1140,7 +1140,7 @@ if(!function_exists("is_category_permitted_by_s2member"))
 			{
 				if($cat_id && c_ws_plugin__s2member_catgs_sp::check_specific_catg_level_access($cat_id, true))
 					return false;
-				/**/
+
 				return true;
 			}
 	}
@@ -1228,7 +1228,7 @@ if(!function_exists("is_tag_protected_by_s2member"))
 			{
 				if($tag_id_slug_or_name && ($array = c_ws_plugin__s2member_ptags_sp::check_specific_ptag_level_access($tag_id_slug_or_name, $check_user)))
 					return /* A non-empty array with ["s2member_level_req"]. */ $array;
-				/**/
+
 				return false;
 			}
 	}
@@ -1309,7 +1309,7 @@ if(!function_exists("is_tag_permitted_by_s2member"))
 			{
 				if($tag_id_slug_or_name && c_ws_plugin__s2member_ptags_sp::check_specific_ptag_level_access($tag_id_slug_or_name, true))
 					return false;
-				/**/
+
 				return true;
 			}
 	}
@@ -1384,7 +1384,7 @@ if(!function_exists("is_post_protected_by_s2member"))
 			{
 				if($post_id && ($array = c_ws_plugin__s2member_posts_sp::check_specific_post_level_access($post_id, $check_user)))
 					return /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */ $array;
-				/**/
+
 				return false;
 			}
 	}
@@ -1452,7 +1452,7 @@ if(!function_exists("is_post_permitted_by_s2member"))
 			{
 				if($post_id && c_ws_plugin__s2member_posts_sp::check_specific_post_level_access($post_id, true))
 					return false;
-				/**/
+
 				return true;
 			}
 	}
@@ -1527,7 +1527,7 @@ if(!function_exists("is_page_protected_by_s2member"))
 			{
 				if($page_id && ($array = c_ws_plugin__s2member_pages_sp::check_specific_page_level_access($page_id, $check_user)))
 					return /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */ $array;
-				/**/
+
 				return false;
 			}
 	}
@@ -1595,7 +1595,7 @@ if(!function_exists("is_page_permitted_by_s2member"))
 			{
 				if($page_id && c_ws_plugin__s2member_pages_sp::check_specific_page_level_access($page_id, true))
 					return false;
-				/**/
+
 				return true;
 			}
 	}
@@ -1677,7 +1677,7 @@ if(!function_exists("is_uri_protected_by_s2member"))
 			{
 				if($uri_or_full_url && ($array = c_ws_plugin__s2member_ruris_sp::check_specific_ruri_level_access($uri_or_full_url, $check_user)))
 					return /* A non-empty array with ["s2member_level_req"]. */ $array;
-				/**/
+
 				return false;
 			}
 	}
@@ -1752,7 +1752,7 @@ if(!function_exists("is_uri_permitted_by_s2member"))
 			{
 				if($uri_or_full_url && c_ws_plugin__s2member_ruris_sp::check_specific_ruri_level_access($uri_or_full_url, true))
 					return false;
-				/**/
+
 				return true;
 			}
 	}
@@ -2420,7 +2420,7 @@ if(!function_exists("get_s2member_custom_fields"))
 		function get_s2member_custom_fields($user_id = FALSE)
 			{
 				$fields = ($user_id) ? get_user_option("s2member_custom_fields", $user_id) : false;
-				/**/
+
 				foreach(json_decode($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 					{
 						if /* Should we try to fill the User's value for this Custom Field? */($user_id)

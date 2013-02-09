@@ -16,7 +16,7 @@
 */
 if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 	{
 		/**
@@ -49,14 +49,14 @@ if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 							{
 								$q = number_format($a, 2, ".", "").$from."=?".$to;
 								$api = "http://www.google.com/ig/calculator?hl=en&q=".urlencode($q);
-								/**/
+
 								if(($json = preg_replace('/([{,])\s*([^"]+?)\s*:/', '$1"$2":', c_ws_plugin__s2member_utils_urls::remote($api))) && is_array($json = json_decode($json, true)) && !empty($json["icc"]) && isset($json["rhs"]) && strlen($json["rhs"]))
 									{
 										if(is_numeric($c_a = preg_replace("/ .*$/", "", trim($json["rhs"]))) && $c_a >= 0)
 											return number_format($c_a, 2, ".", "");
 									}
 							}
-						/**/
+
 						return false; /* Default return value. */
 					}
 				/**
@@ -95,10 +95,10 @@ if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 						$symbols["TWD"] = "NT$"; /* Taiwan New Dollar */
 						$symbols["THB"] = "฿"; /* Thai Baht */
 						$symbols["USD"] = "$"; /* U.S. Dollar */
-						/**/
+
 						if(($currency = strtoupper($currency)) && !empty($symbols[$currency]))
 							return $symbols[$currency];
-						/**/
+
 						else /* Else `$` sign. */
 						return "$";
 					}

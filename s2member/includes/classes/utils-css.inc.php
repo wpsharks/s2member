@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_utils_css"))
 	{
 		/**
@@ -60,7 +60,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_css"))
 						$css = preg_replace ("/ \: | \:|\: /", ":", $css);
 						$css = preg_replace ("/ ; | ;|; /", ";", $css);
 						$css = preg_replace ("/;\}/", "}", $css);
-						/**/
+
 						return preg_replace_callback ($c6, "c_ws_plugin__s2member_utils_css::_compress_css_c3", $css);
 					}
 				/**

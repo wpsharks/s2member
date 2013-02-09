@@ -16,7 +16,7 @@
 */
 if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 	{
 		/**
@@ -38,11 +38,11 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 				public static function config_roles()
 					{
 						do_action("ws_plugin__s2member_before_config_roles", get_defined_vars());
-						/**/
+
 						if(!apply_filters("ws_plugin__s2member_lock_roles_caps", false))
 							{
 								c_ws_plugin__s2member_roles_caps::unlink_roles();
-								/**/
+
 								if(function_exists("bbp_get_dynamic_roles") /* bbPress® v2.2+ integration. */)
 									{
 										foreach(bbp_get_caps_for_role(bbp_get_participant_role()) as $bbp_participant_cap => $bbp_participant_cap_is)
@@ -54,44 +54,44 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 										foreach(bbp_get_caps_for_role(bbp_get_participant_role()) as $bbp_participant_cap)
 											$bbp_participant_caps[$bbp_participant_cap] = true;
 									}
-								/**/
+
 								if(0 === 0) /* Subscriber Role is required by s2Member. */
 									{
 										$caps = array("read" => true, "level_0" => true);
 										$caps = array_merge($caps, array("access_s2member_level0" => true));
 										$caps = (!empty($bbp_participant_caps)) ? array_merge($caps, $bbp_participant_caps) : $caps;
-										/**/
+
 										if(!($role = &get_role("subscriber")))
 											{
 												add_role("subscriber", "Subscriber");
 												$role = &get_role("subscriber");
 											}
-										/**/
+
 										foreach(array_keys($caps) as $cap)
 											$role->add_cap($cap);
 									}
-								/**/
+
 								for($n = 1; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 									{
 										for($i = 0, $caps = array("read" => true, "level_0" => true); $i <= $n; $i++)
 											$caps = array_merge($caps, array("access_s2member_level".$i => true));
 										$caps = (!empty($bbp_participant_caps)) ? array_merge($caps, $bbp_participant_caps) : $caps;
-										/**/
+
 										if(!($role = &get_role("s2member_level".$n)))
 											{
 												add_role("s2member_level".$n, "s2Member Level ".$n);
 												$role = &get_role("s2member_level".$n);
 											}
-										/**/
+
 										foreach(array_keys($caps) as $cap)
 											$role->add_cap($cap);
 									}
-								/**/
+
 								$full_access_roles = array("administrator", "editor", "author", "contributor");
-								/**/
+
 								if(function_exists("bbp_get_caps_for_role") && !function_exists("bbp_get_dynamic_roles") /* bbPress® < v2.2 integration. */)
 									$full_access_roles = array_merge($full_access_roles, (array)bbp_get_moderator_role());
-								/**/
+
 								foreach($full_access_roles as $role)
 									{
 										if(($role = &get_role($role)))
@@ -99,10 +99,10 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 												$role->add_cap("access_s2member_level".$n);
 									}
 							}
-						/**/
+
 						do_action("ws_plugin__s2member_after_config_roles", get_defined_vars());
-						/**/
-						return; /* Return for uniformity. */
+
+						return /* Return for uniformity. */;
 					}
 				/**
 				* Adds support for bbPress® v2.2+ dynamic roles.
@@ -120,7 +120,7 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 							{
 								$caps = array_merge($caps, array("read" => true, "level_0" => true));
 								$caps = array_merge($caps, array("access_s2member_level0" => true));
-								/**/
+
 								if(in_array($role, array(bbp_get_keymaster_role(), bbp_get_moderator_role()), TRUE))
 									{
 										for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
@@ -140,20 +140,20 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 				public static function unlink_roles()
 					{
 						do_action("ws_plugin__s2member_before_unlink_roles", get_defined_vars());
-						/**/
+
 						if(!apply_filters("ws_plugin__s2member_lock_roles_caps", false))
 							{
 								if(($role = &get_role("subscriber")))
 									$role->remove_cap("access_s2member_level0");
-								/**/
+
 								for($n = 1; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["max_levels"]; $n++)
 									remove_role("s2member_level".$n);
-								/**/
+
 								$full_access_roles = array("administrator", "editor", "author", "contributor");
-								/**/
+
 								if(function_exists("bbp_get_caps_for_role") && !function_exists("bbp_get_dynamic_roles") /* bbPress® < v2.2 integration. */)
 									$full_access_roles = array_merge($full_access_roles, (array)bbp_get_moderator_role());
-								/**/
+
 								foreach($full_access_roles as $role)
 									{
 										if(($role = &get_role($role)))
@@ -161,10 +161,10 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 												$role->remove_cap("access_s2member_level".$n);
 									}
 							}
-						/**/
+
 						do_action("ws_plugin__s2member_after_unlink_roles", get_defined_vars());
-						/**/
-						return; /* Return for uniformity. */
+
+						return /* Return for uniformity. */;
 					}
 				/**
 				* Updates Roles/Capabilities via AJAX.
@@ -179,17 +179,17 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 				public static function update_roles_via_ajax()
 					{
 						do_action("ws_plugin__s2member_before_update_roles_via_ajax", get_defined_vars());
-						/**/
+
 						status_header(200); /* Send a 200 OK status header. */
 						header("Content-Type: text/plain; charset=utf-8"); /* Content-Type with UTF-8. */
 						eval('while (@ob_end_clean ());'); /* End/clean all output buffers that may exist. */
-						/**/
+
 						if(current_user_can("create_users")) /* Check priveledges. Ability to create Users? */
-							/**/
+
 							if(!empty($_POST["ws_plugin__s2member_update_roles_via_ajax"]))
 								if(($nonce = $_POST["ws_plugin__s2member_update_roles_via_ajax"]))
 									if(wp_verify_nonce($nonce, "ws-plugin--s2member-update-roles-via-ajax"))
-										/**/
+
 										if(!apply_filters("ws_plugin__s2member_lock_roles_caps", false))
 											{
 												c_ws_plugin__s2member_roles_caps::config_roles();
@@ -197,7 +197,7 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 											}
 										else /* Else flag as having been locked here. */
 											$locked = true;
-						/**/
+
 						exit(apply_filters("ws_plugin__s2member_update_roles_via_ajax", /* Also handle ``$locked`` here. */
 						((isset($success) && $success) ? "1" : ((isset($locked) && $locked) ? "l" : "0")), get_defined_vars()));
 					}

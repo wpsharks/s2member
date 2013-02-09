@@ -2738,7 +2738,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 			{
 				for($_dir = $_dirname, $__i = 0; $__i < $_i; $__i++)
 					$_dir = dirname($_dir);
-				/**/
+
 				if(file_exists($_dir."/wp-load.php"))
 					return $_dir."/wp-load.php";
 			}

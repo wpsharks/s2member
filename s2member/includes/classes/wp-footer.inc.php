@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_wp_footer"))
 	{
 		/**
@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_wp_footer"))
 				public static function wp_footer_code ()
 					{
 						do_action ("ws_plugin__s2member_before_wp_footer_code", get_defined_vars ());
-						/**/
+
 						if (($code = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["wp_footer_code"]))
 							{
 								if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
@@ -51,7 +51,7 @@ if (!class_exists ("c_ws_plugin__s2member_wp_footer"))
 									}
 							}
 						do_action ("ws_plugin__s2member_after_wp_footer_code", get_defined_vars ());
-						/**/
+
 						return /* Return for uniformity. */;
 					}
 			}

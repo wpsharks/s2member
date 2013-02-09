@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 	{
 		/**
@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 					{
 						$singular_id = ($singular_id && is_numeric ($singular_id)) ? (int)$singular_id : false; /* Force types. */
 						$uri = ($uri && is_string ($uri) && ($uri = c_ws_plugin__s2member_utils_urls::parse_uri ($uri))) ? $uri : false;
-						/**/
+
 						if ($uri && ($_q = c_ws_plugin__s2member_utils_urls::parse_url ($uri, PHP_URL_QUERY)) && preg_match ("/[\?&]s2member/", $_q) && c_ws_plugin__s2member_utils_conds::is_site_root ($uri))
 							{
 								return ($is_s2_systematic = apply_filters ("ws_plugin__s2member_is_s2_systematic_use_specific_page", true, get_defined_vars ()));
@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 					{
 						$singular_id = ($singular_id && is_numeric ($singular_id)) ? (int)$singular_id : false; /* Force types. */
 						$uri = ($uri && is_string ($uri) && ($uri = c_ws_plugin__s2member_utils_urls::parse_uri ($uri))) ? $uri : false;
-						/**/
+
 						if ($uri && preg_match ("/\/wp-admin(?:\/|\?|$)/", $uri)) /* Inside a WordPress® administrative area? */
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_specific_page", true, get_defined_vars ()));
@@ -91,10 +91,10 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 				public static function is_systematic_use_specific_page ($singular_id = FALSE, $uri = FALSE)
 					{
 						global $bp; /* If BuddyPress is installed, we'll need this global reference. */
-						/**/
+
 						$singular_id = ($singular_id && is_numeric ($singular_id)) ? (int)$singular_id : false; /* Force types. */
 						$uri = ($uri && is_string ($uri) && ($uri = c_ws_plugin__s2member_utils_urls::parse_uri ($uri))) ? $uri : false;
-						/**/
+
 						if (c_ws_plugin__s2member_systematics_sp::is_s2_systematic_use_specific_page /* An s2Member® Systematic Use Page? */ ($singular_id, $uri))
 							{
 								return ($is_systematic = apply_filters ("ws_plugin__s2member_is_systematic_use_specific_page", true, get_defined_vars ()));

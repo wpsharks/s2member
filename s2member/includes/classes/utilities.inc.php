@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_utilities"))
 	{
 		/**
@@ -39,9 +39,9 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				public static function evl ($code = FALSE)
 					{
 						ob_start (); /* Output buffer. */
-						/**/
+
 						eval ("?>" . trim ($code));
-						/**/
+
 						return ob_get_clean ();
 					}
 				/**
@@ -61,11 +61,11 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 					{
 						$args = func_get_args ();
 						$function = array_shift ($args);
-						/**/
+
 						if (is_string ($function) && $function)
 							{
 								ob_start ();
-								/**/
+
 								if (is_array ($args) && !empty ($args))
 									{
 										$return = call_user_func_array ($function, $args);
@@ -74,9 +74,9 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 									{
 										$return = call_user_func ($function);
 									}
-								/**/
+
 								$echo = ob_get_clean ();
-								/**/
+
 								return (!strlen ($echo) && strlen ($return)) ? $return : $echo;
 							}
 						else /* Else return null. */
@@ -95,7 +95,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 						$checksum = WS_PLUGIN__S2MEMBER_VERSION; /* Software version string. */
 						$checksum .= (c_ws_plugin__s2member_utils_conds::pro_is_installed ()) ? "-" . WS_PLUGIN__S2MEMBER_PRO_VERSION : ""; /* Pro version string? */
 						$checksum .= "-" . abs (crc32 ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["checksum"] . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["options_checksum"] . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["options_version"]));
-						/**/
+
 						return $checksum; /* ( i.e. version-pro version-checksum ) */
 					}
 				/**
@@ -110,7 +110,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 					{
 						$details = "PHP v" . PHP_VERSION . " :: WordPress® v" . get_bloginfo ("version") . " :: s2Member® v" . WS_PLUGIN__S2MEMBER_VERSION;
 						$details .= (c_ws_plugin__s2member_utils_conds::pro_is_installed ()) ? " :: s2Member® Pro v" . WS_PLUGIN__S2MEMBER_PRO_VERSION : "";
-						/**/
+
 						return $details; /* Return all details. */
 					}
 				/**
@@ -133,7 +133,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 								$badge = preg_replace ("/%%no_cache%%/i", (($no_cache) ? "&amp;no_cache=" . urlencode (mt_rand (0, PHP_INT_MAX)) : ""), $badge);
 								$badge = preg_replace ("/%%display_on_failure%%/i", (($display_on_failure) ? "&amp;display_on_failure=1" : ""), $badge);
 							}
-						/**/
+
 						return (!empty ($badge)) ? $badge : ""; /* Return Security Badge. */
 					}
 				/**
@@ -150,9 +150,9 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 						$real_memory = number_format (memory_get_usage (true) / 1048576, 2, ".", "");
 						$peak_memory = number_format (memory_get_peak_usage () / 1048576, 2, ".", "");
 						$real_peak_memory = number_format (memory_get_peak_usage (true) / 1048576, 2, ".", "");
-						/**/
+
 						$details = "Memory " . $memory . " MB :: Real Memory " . $real_memory . " MB :: Peak Memory " . $peak_memory . " MB :: Real Peak Memory " . $real_peak_memory . " MB";
-						/**/
+
 						return $details; /* Return all details. */
 					}
 				/**
@@ -182,7 +182,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 						foreach (($debug_backtrace = (is_array ($debug_backtrace)) ? $debug_backtrace : debug_backtrace ()) as $caller)
 							if (isset ($caller["class"], $caller["function"]) || (!isset ($caller["class"]) && isset ($caller["function"])))
 								$callers[] = (isset ($caller["class"])) ? $caller["class"] . "::" . $caller["function"] : $caller["function"];
-						/**/
+
 						return array_map ("strtolower", array_unique ($callers));
 					}
 			}

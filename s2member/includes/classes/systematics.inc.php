@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_systematics"))
 	{
 		/**
@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 				public static function is_s2_systematic_use_page ()
 					{
 						static $is_s2_systematic; /* For optimization. */
-						/**/
+
 						if (isset ($is_s2_systematic)) /* Already cached statically? Saves time. */
 							{
 								return $is_s2_systematic; /* Filters will have already been applied here. */
@@ -67,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 				public static function is_wp_systematic_use_page ()
 					{
 						static $is_wp_systematic; /* For optimization. */
-						/**/
+
 						if (isset ($is_wp_systematic)) /* Already cached statically? Saves time. */
 							{
 								return $is_wp_systematic; /* Filters will have already been applied here. */
@@ -113,7 +113,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 				public static function is_systematic_use_page ()
 					{
 						static $is_systematic; /* For optimization. */
-						/**/
+
 						if (isset ($is_systematic)) /* Already cached statically? Saves time. */
 							{
 								return $is_systematic; /* Filters will have already been applied here. */

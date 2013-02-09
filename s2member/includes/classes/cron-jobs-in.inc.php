@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 	{
 		/**
@@ -43,9 +43,9 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_extend_cron_schedules", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
-						/**/
+
 						$array = array ("every10m" => array ("interval" => 600, "display" => "Every 10 Minutes"));
-						/**/
+
 						return apply_filters ("ws_plugin__s2member_extend_cron_schedules", array_merge ($array, $schedules), get_defined_vars ());
 					}
 				/**
@@ -61,13 +61,13 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 				public static function auto_eot_system_via_cron ()
 					{
 						do_action ("ws_plugin__s2member_before_auto_eot_system_via_cron", get_defined_vars ());
-						/**/
+
 						if /* Called through HTTP? */ (!empty ($_GET["s2member_auto_eot_system_via_cron"]))
 							{
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"])
 									{
 										c_ws_plugin__s2member_auto_eots::auto_eot_system (); /* Process. */
-										/**/
+
 										do_action ("ws_plugin__s2member_during_auto_eot_system_via_cron", get_defined_vars ());
 									}
 								exit /* Clean exit. */ ();

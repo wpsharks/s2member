@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 	{
 		/**
@@ -43,8 +43,8 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 					{
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_synchronize_paid_reg_times", get_defined_vars ());
-						unset ($__refs, $__v); /* Unset defined __refs, __v. */
-						/**/
+						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
 						if ($user_id && is_object ($user = new WP_User ($user_id)) && !empty ($user->ID) && ($level = c_ws_plugin__s2member_user_access::user_access_level ($user)) > 0)
 							{
 								$pr_times = get_user_option ("s2member_paid_registration_times", $user_id);
@@ -52,8 +52,8 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 								$pr_times["level" . $level] = (empty ($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
 								update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); /* Update now. */
 							}
-						/**/
-						return; /* Return for uniformity. */
+
+						return /* Return for uniformity. */;
 					}
 				/**
 				* Retrieves a Registration Time.
@@ -68,10 +68,10 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 					{
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_registration_time", get_defined_vars ());
-						unset ($__refs, $__v); /* Unset defined __refs, __v. */
-						/**/
+						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
 						$user = ($user_id) ? new WP_User ($user_id) : ((is_user_logged_in ()) ? wp_get_current_user () : false);
-						/**/
+
 						if (is_object ($user) && !empty ($user->ID) && ($user_id = $user->ID) && $user->user_registered)
 							{
 								return apply_filters ("ws_plugin__s2member_registration_time", strtotime ($user->user_registered), get_defined_vars ());
@@ -93,11 +93,11 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 					{
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_paid_registration_time", get_defined_vars ());
-						unset ($__refs, $__v); /* Unset defined __refs, __v. */
-						/**/
+						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
 						$level = (!is_numeric ($level)) ? "level" : "level" . preg_replace ("/[^0-9]/", "", (string)$level);
 						$user = ($user_id) ? new WP_User ($user_id) : ((is_user_logged_in ()) ? wp_get_current_user () : false);
-						/**/
+
 						if ($level && is_object ($user) && !empty ($user->ID) && ($user_id = $user->ID) && is_array ($pr_times = get_user_option ("s2member_paid_registration_times", $user_id)))
 							{
 								return apply_filters ("ws_plugin__s2member_paid_registration_time", ((isset ($pr_times[$level])) ? (int)$pr_times[$level] : 0), get_defined_vars ());

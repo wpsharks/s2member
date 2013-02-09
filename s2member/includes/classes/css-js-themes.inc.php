@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 	{
 		/**
@@ -40,17 +40,17 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 				public static function add_css ()
 					{
 						do_action ("ws_plugin__s2member_before_add_css", get_defined_vars ());
-						/**/
+
 						if /* Not in the admin. */ (!is_admin ())
 							{
 								$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"];
-								/**/
+
 								wp_enqueue_style ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_css=1&qcABC=1", array (), c_ws_plugin__s2member_utilities::ver_checksum (), "all");
-								/**/
+
 								do_action ("ws_plugin__s2member_during_add_css", get_defined_vars ());
 							}
 						do_action ("ws_plugin__s2member_after_add_css", get_defined_vars ());
-						/**/
+
 						return /* Return for uniformity. */;
 					}
 				/**
@@ -68,13 +68,13 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 				public static function add_js_w_globals ()
 					{
 						global /* Need this for comparisons. */ $pagenow;
-						/**/
+
 						do_action ("ws_plugin__s2member_before_add_js_w_globals", get_defined_vars ());
-						/**/
+
 						if (!is_admin () || (is_user_admin () && $pagenow === "profile.php" && !current_user_can ("edit_users")))
 							{
 								$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"];
-								/**/
+
 								if /* Separate version for logged-in Users/Members. */ (is_user_logged_in ())
 									{
 										$md5 = /* An MD5 hash based on global key => values. */ WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5;
@@ -89,7 +89,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 								do_action ("ws_plugin__s2member_during_add_js_w_globals", get_defined_vars ());
 							}
 						do_action ("ws_plugin__s2member_after_add_js_w_globals", get_defined_vars ());
-						/**/
+
 						return /* Return for uniformity. */;
 					}
 			}

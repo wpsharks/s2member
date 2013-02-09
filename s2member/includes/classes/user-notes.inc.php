@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 	{
 		/**
@@ -41,19 +41,19 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 					{
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_append_user_notes", get_defined_vars ());
-						unset ($__refs, $__v); /* Unset defined __refs, __v. */
-						/**/
+						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
 						if ($user_id && $notes && is_string ($notes)) /* Must have these. */
 							{
 								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 								do_action ("ws_plugin__s2member_during_append_user_notes", get_defined_vars ());
-								unset ($__refs, $__v); /* Unset defined __refs, __v. */
-								/**/
+								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
 								$notes = trim (get_user_option ("s2member_notes", $user_id) . "\n" . $notes);
-								/**/
+
 								update_user_option ($user_id, "s2member_notes", $notes);
 							}
-						/**/
+
 						return apply_filters ("ws_plugin__s2member_append_user_notes", ((!empty ($notes)) ? $notes : ""), get_defined_vars ());
 					}
 				/**
@@ -70,8 +70,8 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 					{
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_clear_user_note_lines", get_defined_vars ());
-						unset ($__refs, $__v); /* Unset defined __refs, __v. */
-						/**/
+						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
 						if ($user_id && $regex && is_string ($regex) && ($lines = array ()))
 							{
 								/* Careful here to preserve empty lines. */
@@ -79,16 +79,16 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 								foreach (preg_split ("/\n/", $notes) as $line)
 									if (!preg_match ($regex, $line))
 										$lines[] = $line;
-								/**/
+
 								$notes = trim (implode ("\n", $lines));
-								/**/
+
 								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 								do_action ("ws_plugin__s2member_during_clear_user_note_lines", get_defined_vars ());
-								unset ($__refs, $__v); /* Unset defined __refs, __v. */
-								/**/
+								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
 								update_user_option ($user_id, "s2member_notes", $notes);
 							}
-						/**/
+
 						return apply_filters ("ws_plugin__s2member_clear_user_note_lines", ((!empty ($notes)) ? $notes : ""), get_defined_vars ());
 					}
 			}

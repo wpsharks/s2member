@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_register"))
 	{
 		/**
@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_register"))
 				*/
 				public static function register ()
 					{
-						if (!empty ($_GET["s2member_register"])) /* Call inner routine? */
+						if (!empty ($_GET["s2member_register"]))
 							{
 								return c_ws_plugin__s2member_register_in::register ();
 							}

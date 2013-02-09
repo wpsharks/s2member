@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_user_new"))
 	{
 		/**
@@ -42,19 +42,19 @@ if (!class_exists ("c_ws_plugin__s2member_user_new"))
 				public static function admin_user_new_fields ()
 					{
 						global $pagenow; /* The current admin page file name. */
-						/**/
+
 						do_action ("ws_plugin__s2member_before_admin_user_new_fields", get_defined_vars ());
-						/**/
+
 						if (is_blog_admin () && $pagenow === "user-new.php" && current_user_can ("create_users"))
 							{
 								ob_start ("c_ws_plugin__s2member_user_new_in::_admin_user_new_fields");
-								/**/
+
 								do_action ("ws_plugin__s2member_during_admin_user_new_fields", get_defined_vars ());
 							}
-						/**/
+
 						do_action ("ws_plugin__s2member_after_admin_user_new_fields", get_defined_vars ());
-						/**/
-						return; /* Return for uniformity. */
+
+						return /* Return for uniformity. */;
 					}
 			}
 	}

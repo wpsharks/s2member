@@ -22,7 +22,7 @@ jQuery(document).ready (function($)
 		var filesBaseDir = '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])); ?>';
 		var skipAllFileConfirmations = ( typeof ws_plugin__s2member_skip_all_file_confirmations !== 'undefined' && ws_plugin__s2member_skip_all_file_confirmations) ? true : false;
 		var uniqueFilesDownloadedInPage = /* Real-time counts in a single page/instance. */ [];
-		/**/
+
 		if (S2MEMBER_CURRENT_USER_IS_LOGGED_IN && S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY < S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED && !skipAllFileConfirmations)
 			{
 				$('a[href*="s2member_file_download="], a[href*="/s2member-files/"], a[href^="s2member-files/"], a[href*="/' + filesBaseDir.replace (/([\:\.\[\]])/g, '\\$1') + '/"], a[href^="' + filesBaseDir.replace (/([\:\.\[\]])/g, '\\$1') + '/"]').click (function()
@@ -32,12 +32,12 @@ jQuery(document).ready (function($)
 								var c = '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Confirm File Download —", "s2member-front", "s2member")); ?>' + '\n\n';
 								c += $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`ve downloaded %s protected %s in the last %s.", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY, ((S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("file", "s2member-front", "s2member")); ?>' : '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("files", "s2member-front", "s2member")); ?>'), ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("24 hours", "s2member-front", "s2member")); ?>' : $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("%s days", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS))) + '\n\n';
 								c += (S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`re entitled to UNLIMITED downloads though ( so, no worries ).", "s2member-front", "s2member")); ?>' : $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`re entitled to %s unique %s %s.", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED, ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("download", "s2member-front", "s2member")); ?>' : '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("downloads", "s2member-front", "s2member")); ?>'), ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("each day", "s2member-front", "s2member")); ?>' : $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("every %s-day period", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS)));
-								/**/
+
 								if ((this.href.match (/s2member[_\-]skip[_\-]confirmation/i) && !this.href.match (/s2member[_\-]skip[_\-]confirmation[\=\-](0|no|false)/i)) || confirm(c))
 									{
 										if ($.inArray (this.href, uniqueFilesDownloadedInPage) === -1)
 											S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY++, uniqueFilesDownloadedInPage.push (this.href);
-										/**/
+
 										return /* Allow. */ true;
 									}
 								else /* Disallow. */
@@ -47,102 +47,102 @@ jQuery(document).ready (function($)
 							return true;
 					});
 			}
-		/**/
+
 		if (!location.href.match (/\/wp-admin(\/|\?|$)/))
 			{
 				$('input#ws-plugin--s2member-profile-password1, input#ws-plugin--s2member-profile-password2').keyup (function()
 					{
 						ws_plugin__s2member_passwordStrength($('input#ws-plugin--s2member-profile-login'), $('input#ws-plugin--s2member-profile-password1'), $('input#ws-plugin--s2member-profile-password2'), $('div#ws-plugin--s2member-profile-password-strength'));
 					});
-				/**/
+
 				$('form#ws-plugin--s2member-profile').submit ( /* Validate Profile. */function()
 					{
 						var context = this, label = '', error = '', errors = '';
-						/**/
+
 						var $password1 = $('input#ws-plugin--s2member-profile-password1', context);
 						var $password2 = $('input#ws-plugin--s2member-profile-password2', context);
-						/**/
+
 						var $submissionButton = $('input#ws-plugin--s2member-profile-submit', context);
-						/**/
+
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
 								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
-								/**/
+
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().children ('strong').first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
 										if (error = ws_plugin__s2member_validationErrors(label, this, context))
 											errors += /* Collect errors. */ error + '\n\n';
 									}
 							});
-						/**/
+
 						if (errors = $.trim (errors))
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + errors);
-								/**/
+
 								return false;
 							}
-						/**/
+
 						else if ($.trim ($password1.val ()) && $.trim ($password1.val ()) !== $.trim ($password2.val ()))
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Passwords do not match up. Please try again.", "s2member-front", "s2member")); ?>');
-								/**/
+
 								return false;
 							}
-						/**/
+
 						else if ($.trim ($password1.val ()) && /* Enforce minimum length requirement here. */ $.trim ($password1.val ()).length < 6)
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Password MUST be at least 6 characters. Please try again.", "s2member-front", "s2member")); ?>');
-								/**/
+
 								return false;
 							}
-						/**/
+
 						ws_plugin__s2member_animateProcessing($submissionButton);
-						/**/
+
 						return true;
 					});
 			}
-		/**/
+
 		if (location.href.match (/\/wp-signup\.php/))
 			{
 				$('div#content > div.mu_register > form#setupform').submit (function()
 					{
 						var context = this, label = '', error = '', errors = '';
-						/**/
+
 						$('input#user_email', context).attr ('data-expected', 'email');
-						/**/
+
 						var $submissionButton = $('p.submit input[type="submit"]', context);
-						/**/
+
 						$('input#user_name, input#user_email, input#blogname, input#blog_title, input#captcha_code', context).attr ({'aria-required': 'true'});
-						/**/
+
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
 								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
-								/**/
+
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
 										if (error = ws_plugin__s2member_validationErrors(label, this, context))
 											errors += /* Collect errors. */ error + '\n\n';
 									}
 							});
-						/**/
+
 						if (errors = $.trim (errors))
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + errors);
-								/**/
+
 								return false;
 							}
-						/**/
+
 						ws_plugin__s2member_animateProcessing($submissionButton);
-						/**/
+
 						return true;
 					});
 			}
-		/**/
+
 		if (location.href.match (/\/wp-login\.php/))
 			{
 				$('input#user_login').attr('tabindex', '10'), $('input#user_email').attr('tabindex', '20');
 				$('div#login > form#registerform input#wp-submit').attr ('tabindex', '1000');
-				/**/
+
 				$('input#ws-plugin--s2member-custom-reg-field-user-pass1, input#ws-plugin--s2member-custom-reg-field-user-pass2').keyup (function()
 					{
 						ws_plugin__s2member_passwordStrength($('input#user_login'), $('input#ws-plugin--s2member-custom-reg-field-user-pass1'), $('input#ws-plugin--s2member-custom-reg-field-user-pass2'), $('div#ws-plugin--s2member-custom-reg-field-user-pass-strength'));
@@ -150,20 +150,20 @@ jQuery(document).ready (function($)
 				$('div#login > form#registerform').submit (function()
 					{
 						var context = this, label = '', error = '', errors = '';
-						/**/
+
 						$('input#user_email', context).attr ('data-expected', 'email');
-						/**/
+
 						var $pass1 = $('input#ws-plugin--s2member-custom-reg-field-user-pass1[aria-required="true"]', context);
 						var $pass2 = $('input#ws-plugin--s2member-custom-reg-field-user-pass2', context);
-						/**/
+
 						var $submissionButton = /* Registration submission button. */ $('input#wp-submit', context);
-						/**/
+
 						$('input#user_login, input#user_email, input#captcha_code', context).attr ({'aria-required': 'true'});
-						/**/
+
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
 								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
-								/**/
+
 								if /* No for="" attribute on these fields. */ ($.inArray (id, ['user_login', 'user_email', 'captcha_code']) !== -1)
 									{
 										if /* Use label. */ ((label = $.trim ($(this).parent ('label').text ().replace (/[\r\n\t]+/g, ' '))))
@@ -178,129 +178,129 @@ jQuery(document).ready (function($)
 											errors += /* Collect errors. */ error + '\n\n';
 									}
 							});
-						/**/
+
 						if (errors = $.trim (errors))
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + errors);
-								/**/
+
 								return false;
 							}
-						/**/
+
 						else if ($pass1.length && $.trim ($pass1.val ()) !== $.trim ($pass2.val ()))
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Passwords do not match up. Please try again.", "s2member-front", "s2member")); ?>');
-								/**/
+
 								return false;
 							}
-						/**/
+
 						else if /* Enforce minimum length requirement here. */ ($pass1.length && $.trim ($pass1.val ()).length < 6)
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Password MUST be at least 6 characters. Please try again.", "s2member-front", "s2member")); ?>');
-								/**/
+
 								return false;
 							}
-						/**/
+
 						ws_plugin__s2member_animateProcessing($submissionButton);
-						/**/
+
 						return true;
 					});
 			}
-		/**/
+
 		if (location.href.match (/\/wp-admin\/(user\/)?profile\.php/))
 			{
 				$('form#your-profile').submit ( /* Validation. */function()
 					{
 						var context = this, label = '', error = '', errors = '';
-						/**/
+
 						$('input#email', context).attr ('data-expected', 'email');
-						/**/
+
 						$(':input[id^="ws-plugin--s2member-profile-"]', context).each ( /* Go through them all together. */function()
 							{
 								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
-								/**/
+
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
 										if (error = ws_plugin__s2member_validationErrors(label, this, context))
 											errors += /* Collect errors. */ error + '\n\n';
 									}
 							});
-						/**/
+
 						if (errors = $.trim (errors))
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + errors);
-								/**/
+
 								return false;
 							}
-						/**/
+
 						return true;
 					});
 			}
-		/**/
+
 		if /* Attach form submission handler to `/register` for BuddyPress. */ (runningBuddyPress)
 			{
 				$('body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section').closest ('form').submit (function()
 					{
 						var context = this, label = '', error = '', errors = '';
-						/**/
+
 						$('input#signup_email', context).attr ('data-expected', 'email');
-						/**/
+
 						$('input#signup_username, input#signup_email, input#signup_password, input#field_1', context).attr ({'aria-required': 'true'});
-						/**/
+
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
 								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
-								/**/
+
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
 										if (error = ws_plugin__s2member_validationErrors(label, this, context))
 											errors += /* Collect errors. */ error + '\n\n';
 									}
 							});
-						/**/
+
 						if (errors = $.trim (errors))
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + errors);
-								/**/
+
 								return false;
 							}
-						/**/
+
 						return true;
 					});
-				/**/
+
 				$('body.logged-in.profile.profile-edit :input.ws-plugin--s2member-profile-field-4bp').closest ('form').submit (function()
 					{
 						var context = this, label = '', error = '', errors = '';
-						/**/
+
 						$('input#field_1', context).attr ({'aria-required': 'true'});
-						/**/
+
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
 								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
-								/**/
+
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
 										if (error = ws_plugin__s2member_validationErrors(label, this, context))
 											errors += /* Collect errors. */ error + '\n\n';
 									}
 							});
-						/**/
+
 						if (errors = $.trim (errors))
 							{
 								alert('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Oops, you missed something: —", "s2member-front", "s2member")); ?>' + '\n\n' + errors);
-								/**/
+
 								return false;
 							}
-						/**/
+
 						return true;
 					});
 			}
-		/**/
+
 		ws_plugin__s2member_passwordStrength = function($username, $pass1, $pass2, $result)
 			{
 				if ($username instanceof jQuery && $pass1 instanceof jQuery && $pass2 instanceof jQuery && $result instanceof jQuery && typeof passwordStrength === 'function' && typeof pwsL10n === 'object')
 					{
 						$result.removeClass ('ws-plugin--s2member-password-strength-short ws-plugin--s2member-password-strength-bad ws-plugin--s2member-password-strength-good ws-plugin--s2member-password-strength-strong ws-plugin--s2member-password-strength-mismatch');
-						/**/
+
 						switch /* Uses WordPress® script: `password-strength-meter` and `pwsL10n`. */ (passwordStrength($pass1.val (), $username.val (), $pass2.val ()))
 							{
 								case 1:
@@ -322,10 +322,10 @@ jQuery(document).ready (function($)
 									$result.addClass ('ws-plugin--s2member-password-strength-short').html (pwsL10n['short']);
 							}
 					}
-				/**/
+
 				return;
 			};
-		/**/
+
 		ws_plugin__s2member_validationErrors = function(label, field, context, required, expected)
 			{
 				if (typeof label === 'string' && label && typeof field === 'object' && typeof context === 'object')
@@ -333,10 +333,10 @@ jQuery(document).ready (function($)
 						{
 							var tag = field.tagName.toLowerCase (), $field = $(field), type = $.trim ($field.attr ('type')).toLowerCase (), name = $.trim ($field.attr ('name')), value = $field.val ();
 							var required = ( typeof required === 'boolean') ? required : ($field.attr ('aria-required') === 'true'), expected = ( typeof expected === 'string') ? expected : $.trim ($field.attr ('data-expected'));
-							/**/
+
 							var forcePersonalEmails = ('<?php echo strlen($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_force_personal_emails"]); ?>' > 0) ? true : false;
 							var nonPersonalEmailUsers = new RegExp('^(<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (implode ("|", preg_split ("/[\r\n\t ;,]+/", preg_quote ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_force_personal_emails"], "/")))); ?>)@', 'i');
-							/**/
+
 							if (tag === 'input' && type === 'checkbox' && name.match (/\[\]$/))
 								{
 									if (typeof field.id === 'string' && field.id.match (/-0$/))
@@ -452,19 +452,19 @@ jQuery(document).ready (function($)
 									else if (expected.match (/^(any|alphanumerics-spaces-punctuation|alphanumerics-spaces|alphanumerics-punctuation|alphanumerics|alphabetics|numerics)-([0-9]+)(-e)?$/))
 										{
 											var split = expected.split ('-'), length = Number(split[1]), exactLength = (split.length > 2 && split[2] === 'e') ? true : false;
-											/**/
+
 											if /* An exact length is required? */ (exactLength && value.length !== length)
 												return label + '\n' + $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be exactly %s %s.", "s2member-front", "s2member")); ?>', length, ((split[0] === 'numerics') ? ((length === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("digit", "s2member-front", "s2member")); ?>' : '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("digits", "s2member-front", "s2member")); ?>') : ((length === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("character", "s2member-front", "s2member")); ?>' : '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("characters", "s2member-front", "s2member")); ?>')));
-											/**/
+
 											else if /* Otherwise, we interpret as the minimum length. */ (value.length < length)
 												return label + '\n' + $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be at least %s %s.", "s2member-front", "s2member")); ?>', length, ((split[0] === 'numerics') ? ((length === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("digit", "s2member-front", "s2member")); ?>' : '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("digits", "s2member-front", "s2member")); ?>') : ((length === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("character", "s2member-front", "s2member")); ?>' : '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("characters", "s2member-front", "s2member")); ?>')));
 										}
 								}
 						}
-				/**/
+
 				return '';
 			};
-		/**/
+
 		ws_plugin__s2member_animateProcessingConfig = {originalText: '', interval: null, speed: 100}, ws_plugin__s2member_animateProcessing = function($obj, reset)
 			{
 				if /* This function expects a valid jQuery object. */ ($obj instanceof jQuery)
@@ -472,21 +472,21 @@ jQuery(document).ready (function($)
 						if /* Resets back to originalText value ( also clears interval ). */ (reset)
 							{
 								clearInterval(ws_plugin__s2member_animateProcessingConfig.interval);
-								/**/
+
 								if (ws_plugin__s2member_animateProcessingConfig.originalText) /* ? */
 									$obj.val (ws_plugin__s2member_animateProcessingConfig.originalText);
-								/**/
+
 								return; /* No need to proceed any further. */
 							}
-						/**/
+
 						$obj.first ().each ( /* Interval routine configured here. */function()
 							{
 								var $this = $(this), i = 0, dir = 'r', dots = ['.', '..', '...'];
-								/**/
+
 								ws_plugin__s2member_animateProcessingConfig.originalText = $this.val ();
-								/**/
+
 								clearInterval(ws_plugin__s2member_animateProcessingConfig.interval);
-								/**/
+
 								ws_plugin__s2member_animateProcessingConfig.interval = setInterval(function()
 									{
 										if /* Right... */ (dir === 'r')
@@ -496,7 +496,7 @@ jQuery(document).ready (function($)
 												else /* Switch direction. */
 													i = i - 1, dir = 'l';
 											}
-										/**/
+
 										else if /* Left.. */ (dir === 'l')
 											{
 												if (i - 1 >= 0)
@@ -504,12 +504,12 @@ jQuery(document).ready (function($)
 												else /* Switch direction. */
 													i = i + 1, dir = 'r';
 											}
-										/**/
+
 										for (var _dots = dots[i], l = dots[i].length; l < dots.length; l++)
 											{
 												_dots += /* Prevents jumping. */ ' ';
 											}
-										/**/
+
 										$this.val ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Processing", "s2member-front", "s2member")); ?>' + _dots);
 									}, ws_plugin__s2member_animateProcessingConfig.speed);
 							});

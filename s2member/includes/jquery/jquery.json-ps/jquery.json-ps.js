@@ -31,12 +31,12 @@
 		if (typeof $.JSON !== 'object')
 			{
 				$.JSON = {}; /* Initialize. */
-				/**/
+
 				$.JSON.stringify = function(_obj)
 					{
 						return JSON.__stringify (_obj);
 					};
-				/**/
+
 				$.JSON.parse = function(_json)
 					{
 						return JSON.__parse (_json);

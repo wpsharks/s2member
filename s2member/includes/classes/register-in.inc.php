@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_register_in"))
 	{
 		/**
@@ -40,13 +40,13 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 				public static function register ()
 					{
 						do_action ("ws_plugin__s2member_before_register", get_defined_vars ());
-						/**/
+
 						if (!empty ($_GET["s2member_register"])) /* If they're attempting to access the registration system. */
 							{
 								eval('while (@ob_end_clean ());'); /* First we end/clean any output buffers that may exist already. */
-								/**/
+
 								$msg_503 = _x ('<strong>Your Link Expired:</strong><br />Please contact Support if you need assistance.', "s2member-front", "s2member");
-								/**/
+
 								if (is_array ($register = preg_split ("/\:\.\:\|\:\.\:/", c_ws_plugin__s2member_utils_encryption::decrypt (trim (stripslashes ((string)$_GET["s2member_register"]))))))
 									{
 										if (count ($register) === 6 && $register[0] === "subscr_gateway_subscr_id_custom_item_number_time" /* Does the checksum value match up here? */)
@@ -57,19 +57,19 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 														$_COOKIE["s2member_subscr_id"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_utils_encryption::encrypt ($register[2]);
 														$_COOKIE["s2member_custom"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_utils_encryption::encrypt ($register[3]);
 														$_COOKIE["s2member_item_number"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_utils_encryption::encrypt ($register[4]);
-														/**/
+
 														if (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) /* Needed? */)
 															{
 																status_header(200); /* Send a 200 OK status header. */
 																header("Content-Type: text/html; charset=utf-8"); /* Content-Type with UTF-8. */
-																/**/
+
 																setcookie ("s2member_subscr_gateway", $_COOKIE["s2member_subscr_gateway"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_subscr_gateway", $_COOKIE["s2member_subscr_gateway"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
 																setcookie ("s2member_subscr_id", $_COOKIE["s2member_subscr_id"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_subscr_id", $_COOKIE["s2member_subscr_id"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
 																setcookie ("s2member_custom", $_COOKIE["s2member_custom"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_custom", $_COOKIE["s2member_custom"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
 																setcookie ("s2member_item_number", $_COOKIE["s2member_item_number"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_item_number", $_COOKIE["s2member_item_number"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
-																/**/
+
 																do_action ("ws_plugin__s2member_during_register", get_defined_vars ());
-																/**/
+
 																if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && is_main_site () && ($location = c_ws_plugin__s2member_utils_urls::wp_signup_url ()))
 																	{
 																		echo '<script type="text/javascript">' . "\n";
@@ -96,7 +96,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 								else
 									status_header(503) . header ("Content-Type: text/html; charset=utf-8") . exit ($msg_503);
 							}
-						/**/
+
 						do_action ("ws_plugin__s2member_after_register", get_defined_vars ());
 					}
 			}

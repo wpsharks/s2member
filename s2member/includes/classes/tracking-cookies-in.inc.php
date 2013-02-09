@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_tracking_cookies_in"))
 	{
 		/**
@@ -40,23 +40,23 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_cookies_in"))
 				public static function delete_tracking_cookie ()
 					{
 						do_action ("ws_plugin__s2member_before_delete_tracking_cookie", get_defined_vars ());
-						/**/
+
 						if (!empty ($_GET["s2member_delete_tracking_cookie"])) /* Deletes cookie. */
 							{
 								setcookie ("s2member_tracking", "", time () + 31556926, COOKIEPATH, COOKIE_DOMAIN);
 								setcookie ("s2member_tracking", "", time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
-								/**/
+
 								do_action ("ws_plugin__s2member_during_delete_tracking_cookie", get_defined_vars ());
-								/**/
+
 								@ini_set ("zlib.output_compression", 0); /* Turn off. */
-								/**/
+
 								status_header (200); /* Send a 200 OK status header. */
 								header ("Content-Type: image/png"); /* Content-Type image/png for 1px transparency. */
 								eval ('while (@ob_end_clean ());'); /* End/clean all output buffers that may or may not exist. */
-								/**/
+
 								exit (file_get_contents (dirname (dirname (dirname (__FILE__))) . "/images/trans-1px.png"));
 							}
-						/**/
+
 						do_action ("ws_plugin__s2member_after_delete_tracking_cookie", get_defined_vars ());
 					}
 				/**
@@ -72,23 +72,23 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_cookies_in"))
 				public static function delete_sp_tracking_cookie ()
 					{
 						do_action ("ws_plugin__s2member_before_delete_sp_tracking_cookie", get_defined_vars ());
-						/**/
+
 						if (!empty ($_GET["s2member_delete_sp_tracking_cookie"])) /* Deletes cookie. */
 							{
 								setcookie ("s2member_sp_tracking", "", time () + 31556926, COOKIEPATH, COOKIE_DOMAIN);
 								setcookie ("s2member_sp_tracking", "", time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
-								/**/
+
 								do_action ("ws_plugin__s2member_during_delete_sp_tracking_cookie", get_defined_vars ());
-								/**/
+
 								@ini_set ("zlib.output_compression", 0); /* Turn off. */
-								/**/
+
 								status_header (200); /* Send a 200 OK status header. */
 								header ("Content-Type: image/png"); /* Content-Type image/png for 1px transparency. */
 								eval ('while (@ob_end_clean ());'); /* End/clean all output buffers that may or may not exist. */
-								/**/
+
 								exit (file_get_contents (dirname (dirname (dirname (__FILE__))) . "/images/trans-1px.png"));
 							}
-						/**/
+
 						do_action ("ws_plugin__s2member_after_delete_sp_tracking_cookie", get_defined_vars ());
 					}
 			}

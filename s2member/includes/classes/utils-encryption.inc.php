@@ -16,7 +16,7 @@
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
-/**/
+
 if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 	{
 		/**
@@ -62,15 +62,15 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 							{
 								$string = /* Force a valid string value here. */ (is_string ($string)) ? $string : "";
 								$string = /* Indicating this is an RIJNDAEL 256 encrypted string. */ (strlen ($string)) ? "~r2|" . $string : "";
-								/**/
+
 								$key = /* Obtain encryption/decryption key. */ c_ws_plugin__s2member_utils_encryption::key ($key);
 								$key = /* Proper key length. */ substr ($key, 0, mcrypt_get_key_size (MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC));
-								/**/
+
 								$iv = c_ws_plugin__s2member_utils_strings::random_str_gen (mcrypt_get_iv_size (MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC), false);
-								/**/
+
 								if (strlen ($string) && is_string ($e = mcrypt_encrypt /* Encrypt the string. */ (MCRYPT_RIJNDAEL_256, $key, $string, MCRYPT_MODE_CBC, $iv)) && strlen ($e))
 									$e = /* RIJNDAEL 256 encrypted string with IV and checksum built into itself. */ "~r2:" . $iv . (($w_md5_cs) ? ":" . md5 ($e) : "") . "|" . $e;
-								/**/
+
 								return (isset ($e) && is_string ($e) && strlen ($e)) ? ($base64 = c_ws_plugin__s2member_utils_strings::base64_url_safe_encode ($e)) : "";
 							}
 						else /* Fallback on XOR encryption. */
@@ -92,23 +92,23 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 					{
 						$base64 = /* Force a valid string value here. */ (is_string ($base64)) ? $base64 : "";
 						$e = (strlen ($base64)) ? c_ws_plugin__s2member_utils_strings::base64_url_safe_decode ($base64) : "";
-						/**/
+
 						if (function_exists ("mcrypt_decrypt") && in_array ("rijndael-256", mcrypt_list_algorithms ()) && in_array ("cbc", mcrypt_list_modes ()) #
 						&& strlen ($e) /* And, is this an RIJNDAEL 256 encrypted string? */ && preg_match ("/^~r2\:([a-zA-Z0-9]+)(?:\:([a-zA-Z0-9]+))?\|(.*?)$/s", $e, $iv_md5_e))
 							{
 								$key = /* Obtain encryption/decryption key. */ c_ws_plugin__s2member_utils_encryption::key ($key);
 								$key = /* Proper key length. */ substr ($key, 0, mcrypt_get_key_size (MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC));
-								/**/
+
 								if (strlen ($iv_md5_e[3]) && ( /* No checksum? */!$iv_md5_e[2] || /* Or, a matching checksum? */ $iv_md5_e[2] === md5 ($iv_md5_e[3])))
 									$d = /* Decrypt the string. */ mcrypt_decrypt (MCRYPT_RIJNDAEL_256, $key, $iv_md5_e[3], MCRYPT_MODE_CBC, $iv_md5_e[1]);
-								/**/
+
 								if (isset ($d) && /* Was ``$iv_md5_e[3]`` decrypted successfully? */ is_string ($d) && strlen ($d))
-									/**/
+
 									if (strlen ($d = preg_replace ("/^~r2\|/", "", $d, 1, $r2)) && $r2)
 										$d = rtrim /* Right-trim NULLS and EOTs. */ ($d, "\0\4");
 									else /* Else we need to empty this out. */
 										$d = /* Empty string. Invalid. */ "";
-								/**/
+
 								return (isset ($d) && is_string ($d) && strlen ($d)) ? ($string = $d) : "";
 							}
 						else /* Fallback on XOR decryption. */
@@ -129,9 +129,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 					{
 						$string = /* Force a valid string value here. */ (is_string ($string)) ? $string : "";
 						$string = /* Indicating this is an XOR encrypted string. */ (strlen ($string)) ? "~xe|" . $string : "";
-						/**/
+
 						$key = /* Obtain encryption/decryption key. */ c_ws_plugin__s2member_utils_encryption::key ($key);
-						/**/
+
 						for ($i = 1, $e = ""; $i <= /* Will NOT run if ``$string`` has no length. */ strlen ($string); $i++)
 							{
 								$char = substr ($string, $i - 1, 1);
@@ -139,7 +139,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 								$e .= chr (ord ($char) + ord ($keychar));
 							}
 						$e = /* XOR encrypted? */ (strlen ($e)) ? "~xe" . (($w_md5_cs) ? ":" . md5 ($e) : "") . "|" . $e : "";
-						/**/
+
 						return (strlen ($e)) ? ($base64 = c_ws_plugin__s2member_utils_strings::base64_url_safe_encode ($e)) : "";
 					}
 				/**
@@ -156,13 +156,13 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 					{
 						$base64 = /* Force a valid string value here. */ (is_string ($base64)) ? $base64 : "";
 						$e = (strlen ($base64)) ? c_ws_plugin__s2member_utils_strings::base64_url_safe_decode ($base64) : "";
-						/**/
+
 						if (strlen ($e) /* And, is this an XOR encrypted string? */ && preg_match ("/^~xe(?:\:([a-zA-Z0-9]+))?\|(.*?)$/s", $e, $md5_e))
 							{
 								$key = /* Obtain encryption/decryption key. */ c_ws_plugin__s2member_utils_encryption::key ($key);
-								/**/
+
 								if (strlen ($md5_e[2]) && ( /* No checksum? */!$md5_e[1] || /* Or a matching checksum? */ $md5_e[1] === md5 ($md5_e[2])))
-									/**/
+
 									for ($i = 1, $d = ""; $i <= /* Will NOT run if ``$md5_e[2]`` has no length. */ strlen ($md5_e[2]); $i++)
 										{
 											$char = substr ($md5_e[2], $i - 1, 1);
@@ -170,12 +170,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 											$d .= chr (ord ($char) - ord ($keychar));
 										}
 								if (isset ($d) && /* Was ``$md5_e[2]`` decrypted successfully? */ is_string ($d) && strlen ($d))
-									/**/
+
 									if (strlen ($d = preg_replace ("/^~xe\|/", "", $d, 1, $xe)) && $xe)
 										$d = /* Just re-assign this here. Nothing more to do. */ $d;
 									else /* Else we need to empty this out. */
 										$d = /* Empty string. Invalid. */ "";
-								/**/
+
 								return (isset ($d) && is_string ($d) && strlen ($d)) ? ($string = $d) : "";
 							}
 						else /* Otherwise we must fail here with an empty string value. */
