@@ -55,7 +55,7 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 											$bbp_participant_caps[$bbp_participant_cap] = true;
 									}
 
-								if(0 === 0) /* Subscriber Role is required by s2Member. */
+								if(0 === 0) // Subscriber Role is required by s2Member.
 									{
 										$caps = array("read" => true, "level_0" => true);
 										$caps = array_merge($caps, array("access_s2member_level0" => true));
@@ -180,11 +180,11 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 					{
 						do_action("ws_plugin__s2member_before_update_roles_via_ajax", get_defined_vars());
 
-						status_header(200); /* Send a 200 OK status header. */
-						header("Content-Type: text/plain; charset=utf-8"); /* Content-Type with UTF-8. */
-						eval('while (@ob_end_clean ());'); /* End/clean all output buffers that may exist. */
+						status_header(200); // Send a 200 OK status header.
+						header("Content-Type: text/plain; charset=utf-8"); // Content-Type with UTF-8.
+						eval('while (@ob_end_clean ());'); // End/clean all output buffers that may exist.
 
-						if(current_user_can("create_users")) /* Check priveledges. Ability to create Users? */
+						if(current_user_can("create_users")) // Check privileges. Ability to create Users?
 
 							if(!empty($_POST["ws_plugin__s2member_update_roles_via_ajax"]))
 								if(($nonce = $_POST["ws_plugin__s2member_update_roles_via_ajax"]))
@@ -193,12 +193,12 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 										if(!apply_filters("ws_plugin__s2member_lock_roles_caps", false))
 											{
 												c_ws_plugin__s2member_roles_caps::config_roles();
-												$success = true; /* Roles updated. */
+												$success = true; // Roles updated.
 											}
-										else /* Else flag as having been locked here. */
+										else // Else flag as having been locked here.
 											$locked = true;
 
-						exit(apply_filters("ws_plugin__s2member_update_roles_via_ajax", /* Also handle ``$locked`` here. */
+						exit(apply_filters("ws_plugin__s2member_update_roles_via_ajax", // Also handle ``$locked`` here.
 						((isset($success) && $success) ? "1" : ((isset($locked) && $locked) ? "l" : "0")), get_defined_vars()));
 					}
 			}

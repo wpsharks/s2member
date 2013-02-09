@@ -40,17 +40,17 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 				*/
 				public static function is_s2_systematic_use_page ()
 					{
-						static $is_s2_systematic; /* For optimization. */
+						static $is_s2_systematic; // For optimization.
 
-						if (isset ($is_s2_systematic)) /* Already cached statically? Saves time. */
+						if (isset ($is_s2_systematic)) // Already cached statically? Saves time.
 							{
-								return $is_s2_systematic; /* Filters will have already been applied here. */
+								return $is_s2_systematic; // Filters will have already been applied here.
 							}
 						else if (!empty ($_SERVER["QUERY_STRING"]) && preg_match ("/[\?&]s2member/", $_SERVER["QUERY_STRING"]) && c_ws_plugin__s2member_utils_conds::is_site_root ($_SERVER["REQUEST_URI"]))
 							{
 								return ($is_s2_systematic = apply_filters ("ws_plugin__s2member_is_s2_systematic_use_page", true, get_defined_vars ()));
 							}
-						else /* Otherwise, we return false ( it's NOT an s2Member® Systematic Use Page ). */
+						else // Otherwise, we return false ( it's NOT an s2Member® Systematic Use Page ).
 							return ($is_s2_systematic = apply_filters ("ws_plugin__s2member_is_s2_systematic_use_page", false, get_defined_vars ()));
 					}
 				/**
@@ -66,29 +66,29 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 				*/
 				public static function is_wp_systematic_use_page ()
 					{
-						static $is_wp_systematic; /* For optimization. */
+						static $is_wp_systematic; // For optimization.
 
-						if (isset ($is_wp_systematic)) /* Already cached statically? Saves time. */
+						if (isset ($is_wp_systematic)) // Already cached statically? Saves time.
 							{
-								return $is_wp_systematic; /* Filters will have already been applied here. */
+								return $is_wp_systematic; // Filters will have already been applied here.
 							}
-						else if (is_admin ()) /* In the admin area? All administrational pages are considered Systematic. */
-							{
-								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
-							}
-						else if (defined ("WP_INSTALLING") && WP_INSTALLING) /* Installing? All WordPress® installs are considered Systematic. */
+						else if (is_admin ()) // In the admin area? All administrational pages are considered Systematic.
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
-						else if (defined ("APP_REQUEST") && APP_REQUEST) /* App request? All WordPress® app requests are considered Systematic. */
+						else if (defined ("WP_INSTALLING") && WP_INSTALLING) // Installing? All WordPress® installs are considered Systematic.
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
-						else if (defined ("XMLRPC_REQUEST") && XMLRPC_REQUEST) /* An XML-RPC request? All of these are considered Systematic too. */
+						else if (defined ("APP_REQUEST") && APP_REQUEST) // App request? All WordPress® app requests are considered Systematic.
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
-						else if ((defined ("DOING_CRON") && DOING_CRON) || strcasecmp (PHP_SAPI, "CLI") === 0) /* CLI ( command line ) or CRON job. */
+						else if (defined ("XMLRPC_REQUEST") && XMLRPC_REQUEST) // An XML-RPC request? All of these are considered Systematic too.
+							{
+								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
+							}
+						else if ((defined ("DOING_CRON") && DOING_CRON) || strcasecmp (PHP_SAPI, "CLI") === 0) // CLI or CRON job.
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
@@ -96,7 +96,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
-						else /* Otherwise, we return false ( it's NOT a WordPress® Systematic Use Page ). */
+						else // Otherwise, we return false ( it's NOT a WordPress® Systematic Use Page ).
 							return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", false, get_defined_vars ()));
 					}
 				/**
@@ -112,11 +112,11 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 				*/
 				public static function is_systematic_use_page ()
 					{
-						static $is_systematic; /* For optimization. */
+						static $is_systematic; // For optimization.
 
-						if (isset ($is_systematic)) /* Already cached statically? Saves time. */
+						if (isset ($is_systematic)) // Already cached statically? Saves time.
 							{
-								return $is_systematic; /* Filters will have already been applied here. */
+								return $is_systematic; // Filters will have already been applied here.
 							}
 						else if (c_ws_plugin__s2member_systematics::is_s2_systematic_use_page /* An s2Member® Systematic Use Page? */ ())
 							{
@@ -146,7 +146,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 							{
 								return ($is_systematic = apply_filters ("ws_plugin__s2member_is_systematic_use_page", true, get_defined_vars ()));
 							}
-						else /* Otherwise, we return false ( it's NOT a Systematic Use Page in any way ). */
+						else // Otherwise, we return false ( it's NOT a Systematic Use Page in any way ).
 							return ($is_systematic = apply_filters ("ws_plugin__s2member_is_systematic_use_page", false, get_defined_vars ()));
 					}
 			}

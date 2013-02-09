@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				*/
 				public static function evl ($code = FALSE)
 					{
-						ob_start (); /* Output buffer. */
+						ob_start (); // Output buffer.
 
 						eval ("?>" . trim ($code));
 
@@ -70,7 +70,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 									{
 										$return = call_user_func_array ($function, $args);
 									}
-								else /* There are no additional arguments to pass. */
+								else // There are no additional arguments to pass.
 									{
 										$return = call_user_func ($function);
 									}
@@ -79,7 +79,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 
 								return (!strlen ($echo) && strlen ($return)) ? $return : $echo;
 							}
-						else /* Else return null. */
+						else // Else return null.
 							return;
 					}
 				/**
@@ -92,11 +92,11 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				*/
 				public static function ver_checksum ()
 					{
-						$checksum = WS_PLUGIN__S2MEMBER_VERSION; /* Software version string. */
-						$checksum .= (c_ws_plugin__s2member_utils_conds::pro_is_installed ()) ? "-" . WS_PLUGIN__S2MEMBER_PRO_VERSION : ""; /* Pro version string? */
+						$checksum = WS_PLUGIN__S2MEMBER_VERSION; // Software version string.
+						$checksum .= (c_ws_plugin__s2member_utils_conds::pro_is_installed ()) ? "-" . WS_PLUGIN__S2MEMBER_PRO_VERSION : ""; // Pro version string?
 						$checksum .= "-" . abs (crc32 ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["checksum"] . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["options_checksum"] . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["options_version"]));
 
-						return $checksum; /* ( i.e. version-pro version-checksum ) */
+						return $checksum; // ( i.e. version-pro version-checksum )
 					}
 				/**
 				* String with all version details *( for PHP, WordPress®, s2Member, and Pro )*.
@@ -111,7 +111,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 						$details = "PHP v" . PHP_VERSION . " :: WordPress® v" . get_bloginfo ("version") . " :: s2Member® v" . WS_PLUGIN__S2MEMBER_VERSION;
 						$details .= (c_ws_plugin__s2member_utils_conds::pro_is_installed ()) ? " :: s2Member® Pro v" . WS_PLUGIN__S2MEMBER_PRO_VERSION : "";
 
-						return $details; /* Return all details. */
+						return $details; // Return all details.
 					}
 				/**
 				* Generates s2Member Security Badge.
@@ -134,7 +134,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 								$badge = preg_replace ("/%%display_on_failure%%/i", (($display_on_failure) ? "&amp;display_on_failure=1" : ""), $badge);
 							}
 
-						return (!empty ($badge)) ? $badge : ""; /* Return Security Badge. */
+						return (!empty ($badge)) ? $badge : ""; // Return Security Badge.
 					}
 				/**
 				* Acquires information about memory usage.
@@ -153,7 +153,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 
 						$details = "Memory " . $memory . " MB :: Real Memory " . $real_memory . " MB :: Peak Memory " . $peak_memory . " MB :: Real Peak Memory " . $real_peak_memory . " MB";
 
-						return $details; /* Return all details. */
+						return $details; // Return all details.
 					}
 				/**
 				* Acquires s2Member options for the Main Site of a Multisite Network.
@@ -178,7 +178,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				*/
 				public static function callers ($debug_backtrace = FALSE)
 					{
-						$callers = array (); /* Initialize array. */
+						$callers = array (); // Initialize array.
 						foreach (($debug_backtrace = (is_array ($debug_backtrace)) ? $debug_backtrace : debug_backtrace ()) as $caller)
 							if (isset ($caller["class"], $caller["function"]) || (!isset ($caller["class"]) && isset ($caller["function"])))
 								$callers[] = (isset ($caller["class"])) ? $caller["class"] . "::" . $caller["function"] : $caller["function"];

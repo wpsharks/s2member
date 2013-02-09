@@ -57,7 +57,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 							{
 								if (($code = get_transient ($transient = "s2m_" . md5 ("s2member_transient_signup_tracking_codes_" . $subscr_or_txn_id))))
 									{
-										delete_transient($transient); /* Only display this ONE time. Delete transient immediately. */
+										delete_transient($transient); // Only display this ONE time. Delete transient immediately.
 
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
@@ -67,9 +67,9 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 
 										if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 											{
-												echo do_shortcode ($code) . "\n"; /* No PHP here. */
+												echo do_shortcode ($code) . "\n"; // No PHP here.
 											}
-										else /* Otherwise, safe to allow PHP code. */
+										else // Otherwise, safe to allow PHP code.
 											{
 												echo do_shortcode (c_ws_plugin__s2member_utilities::evl ($code));
 											}
@@ -109,7 +109,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 							{
 								if (($code = get_transient ($transient = "s2m_" . md5 ("s2member_transient_modification_tracking_codes_" . $subscr_or_txn_id))))
 									{
-										delete_transient($transient); /* Only display this ONE time. Delete transient immediately. */
+										delete_transient($transient); // Only display this ONE time. Delete transient immediately.
 
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
@@ -119,9 +119,9 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 
 										if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 											{
-												echo do_shortcode ($code) . "\n"; /* No PHP here. */
+												echo do_shortcode ($code) . "\n"; // No PHP here.
 											}
-										else /* Otherwise, safe to allow PHP code. */
+										else // Otherwise, safe to allow PHP code.
 											{
 												echo do_shortcode (c_ws_plugin__s2member_utilities::evl ($code));
 											}
@@ -161,7 +161,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 							{
 								if (($code = get_transient ($transient = "s2m_" . md5 ("s2member_transient_ccap_tracking_codes_" . $subscr_or_txn_id))))
 									{
-										delete_transient($transient); /* Only display this ONE time. Delete transient immediately. */
+										delete_transient($transient); // Only display this ONE time. Delete transient immediately.
 
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
@@ -171,9 +171,9 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 
 										if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 											{
-												echo do_shortcode ($code) . "\n"; /* No PHP here. */
+												echo do_shortcode ($code) . "\n"; // No PHP here.
 											}
-										else /* Otherwise, safe to allow PHP code. */
+										else // Otherwise, safe to allow PHP code.
 											{
 												echo do_shortcode (c_ws_plugin__s2member_utilities::evl ($code));
 											}
@@ -209,7 +209,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 							{
 								if (($code = get_transient ($transient = "s2m_" . md5 ("s2member_transient_sp_tracking_codes_" . $txn_id))))
 									{
-										delete_transient($transient); /* Only display this ONE time. Delete transient immediately. */
+										delete_transient($transient); // Only display this ONE time. Delete transient immediately.
 
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_sp_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
@@ -219,9 +219,9 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 
 										if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 											{
-												echo $code . "\n"; /* No PHP here. */
+												echo $code . "\n"; // No PHP here.
 											}
-										else /* Otherwise, it's safe to allow PHP code. */
+										else // Otherwise, it's safe to allow PHP code.
 											{
 												eval("?>" . $code);
 											}

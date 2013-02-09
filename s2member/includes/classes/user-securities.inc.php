@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 				*
 				* @return null
 				*/
-				public static function initialize () /* Initializes the Filter for `user_has_cap`. */
+				public static function initialize () // Initializes the Filter for `user_has_cap`.
 					{
 						add_filter ("user_has_cap", "c_ws_plugin__s2member_user_securities::user_capabilities", 10, 3);
 					}
@@ -91,7 +91,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 				*/
 				public static function ms_allow_edits ($allow = FALSE)
 					{
-						global $user_id; /* Available inside `/wp-admin/user-edit.php`. */
+						global $user_id; // Available inside `/wp-admin/user-edit.php`.
 
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_ms_allow_edits", get_defined_vars ());
@@ -99,7 +99,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 
 						if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm ())
 							if (is_super_admin () || (current_user_can ("administrator") && $user_id && is_user_member_of_blog ($user_id)))
-								$allow = true; /* Yes, allow Administrators to edit User Profiles. */
+								$allow = true; // Yes, allow Administrators to edit User Profiles.
 
 						return apply_filters ("ws_plugin__s2member_ms_allow_edits", $allow, get_defined_vars ());
 					}
@@ -131,7 +131,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 									$show = false;
 
 						if ($show && is_object ($user) && !empty ($user->ID) && $user->user_login === "demo")
-							$show = false; /* Lock Password on Demos. */
+							$show = false; // Lock Password on Demos.
 
 						return apply_filters ("ws_plugin__s2member_hide_password_fields", $show, get_defined_vars ());
 					}

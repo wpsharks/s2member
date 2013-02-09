@@ -47,7 +47,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 							{
 								return apply_filters ("ws_plugin__s2member_user_access_role", "", get_defined_vars ());
 							}
-						else /* Else we return the first Role in their array of assigned WordPress® Roles. */
+						else // Else we return the first Role in their array of assigned WordPress® Roles.
 							return apply_filters ("ws_plugin__s2member_user_access_role", reset ($user->roles), get_defined_vars ());
 					}
 				/**
@@ -70,9 +70,9 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 							{
 								return apply_filters ("ws_plugin__s2member_user_access_ccaps", array (), get_defined_vars ());
 							}
-						else /* Otherwise, we DO have the $user object available. */
+						else // Otherwise, we DO have the $user object available.
 							{
-								$ccaps = array (); /* Initializes $ccaps array. */
+								$ccaps = array (); // Initializes $ccaps array.
 
 								foreach ($user->allcaps as $cap => $cap_enabled)
 									if (preg_match ("/^access_s2member_ccap_/", $cap))
@@ -99,17 +99,17 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 					{
 						if ((func_num_args () && (!is_object ($user) || empty ($user->ID))) || (!func_num_args () && !$user && (!is_object ($user = (is_user_logged_in ()) ? wp_get_current_user () : false) || empty ($user->ID))))
 							{
-								return apply_filters ("ws_plugin__s2member_user_access_level", -1, get_defined_vars ()); /* No $user, or NOT logged in. */
+								return apply_filters ("ws_plugin__s2member_user_access_level", -1, get_defined_vars ()); // No $user, or NOT logged in.
 							}
 
 						for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--)
 							{
-								if ($user->has_cap ("access_s2member_level" . $n)) /* Testing for Membership Level Access. */
+								if ($user->has_cap ("access_s2member_level" . $n)) // Testing for Membership Level Access.
 									{
 										return apply_filters ("ws_plugin__s2member_user_access_level", $n, get_defined_vars ());
 									}
 							}
-						/* Else we assume this is a "User" ( a Free Subscriber with an Access Level of 0. ). */
+						// Else we assume this is a "User" ( a Free Subscriber with an Access Level of 0. ).
 						return apply_filters ("ws_plugin__s2member_user_access_level", 0, get_defined_vars ());
 					}
 				/**
@@ -123,7 +123,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				*/
 				public static function user_access_role_to_level ($role = FALSE)
 					{
-						if (!($role = strtolower ($role))) /* No ``$role`` provided. Default value of -1. */
+						if (!($role = strtolower ($role))) // No ``$role`` provided. Default value of -1.
 							{
 								return apply_filters ("ws_plugin__s2member_user_access_role_to_level", -1, get_defined_vars ());
 							}
@@ -131,15 +131,15 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 							{
 								return apply_filters ("ws_plugin__s2member_user_access_role_to_level", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"], get_defined_vars ());
 							}
-						else if (preg_match ("/^s2member_level([0-9]+)$/i", $role, $m) && $m[1] >= 1) /* Test for s2Member Roles. */
+						else if (preg_match ("/^s2member_level([0-9]+)$/i", $role, $m) && $m[1] >= 1) // Test for s2Member Roles.
 							{
 								return apply_filters ("ws_plugin__s2member_user_access_role_to_level", (int)$m[1], get_defined_vars ());
 							}
-						else if ($role === "subscriber") /* Testing for Free Subscriber Role. */
+						else if ($role === "subscriber") // Testing for Free Subscriber Role.
 							{
 								return apply_filters ("ws_plugin__s2member_user_access_role_to_level", 0, get_defined_vars ());
 							}
-						else /* Else we assume this is a "User" ( a Free Subscriber with an Access Level of 0. ). */
+						else // Else we assume this is a "User" ( a Free Subscriber with an Access Level of 0. ).
 							return apply_filters ("ws_plugin__s2member_user_access_role_to_level", 0, get_defined_vars ());
 					}
 				/**
@@ -159,13 +159,13 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 					{
 						if ((func_num_args () && (!is_object ($user) || empty ($user->ID))) || (!func_num_args () && !$user && (!is_object ($user = (is_user_logged_in ()) ? wp_get_current_user () : false) || empty ($user->ID))))
 							{
-								return apply_filters ("ws_plugin__s2member_user_access_label", "", get_defined_vars ()); /* No $user, or NOT logged in. */
+								return apply_filters ("ws_plugin__s2member_user_access_label", "", get_defined_vars ()); // No $user, or NOT logged in.
 							}
 						else if (($level = c_ws_plugin__s2member_user_access::user_access_level ($user)) >= 0 && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_label"]))
 							{
 								return apply_filters ("ws_plugin__s2member_user_access_label", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_label"], get_defined_vars ());
 							}
-						else /* Else there is no Label configured for this User/Member. Return empty string. */
+						else // Else there is no Label configured for this User/Member. Return empty string.
 							return apply_filters ("ws_plugin__s2member_user_access_label", "", get_defined_vars ());
 					}
 			}

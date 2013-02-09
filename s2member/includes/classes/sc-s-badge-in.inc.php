@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_s_badge_in"))
 
 						$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr);
 
-						$attr = shortcode_atts (array ("v" => "1"), $attr); /* One attribute. */
+						$attr = shortcode_atts (array ("v" => "1"), $attr); // One attribute.
 
 						$code = c_ws_plugin__s2member_utilities::s_badge_gen ($attr["v"], false, false);
 

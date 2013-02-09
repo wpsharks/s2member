@@ -99,16 +99,16 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 					{
 						if ( /* Initialize/validate. */!($rel_path = array ()) && is_string ($from) && strlen ($from) && is_string ($to) && strlen ($to))
 							{
-								$from = ($try_realpaths && ($_real_from = realpath ($from))) ? $_real_from : $from; /* Try this? */
-								$to = ($try_realpaths && ($_real_to = realpath ($to))) ? $_real_to : $to; /* Try to find realpath? */
+								$from = ($try_realpaths && ($_real_from = realpath ($from))) ? $_real_from : $from; // Try this?
+								$to = ($try_realpaths && ($_real_to = realpath ($to))) ? $_real_to : $to; // Try to find realpath?
 
-								$from = (is_file ($from)) ? dirname ($from) . "/" : $from . "/"; /* A (directory) with trailing `/`. */
+								$from = (is_file ($from)) ? dirname ($from) . "/" : $from . "/"; // A (directory) with trailing `/`.
 
-								$from = c_ws_plugin__s2member_utils_dirs::n_dir_seps ($from); /* Normalize directory separators now. */
-								$to = c_ws_plugin__s2member_utils_dirs::n_dir_seps ($to); /* Normalize directory separators here too. */
+								$from = c_ws_plugin__s2member_utils_dirs::n_dir_seps ($from); // Normalize directory separators now.
+								$to = c_ws_plugin__s2member_utils_dirs::n_dir_seps ($to); // Normalize directory separators here too.
 
-								$from = preg_split ("/\//", $from); /* Convert ``$from``, to an array. Split on each directory separator. */
-								$to = preg_split ("/\//", $to); /* Also convert ``$to``, to an array. Split this on each directory separator. */
+								$from = preg_split ("/\//", $from); // Convert ``$from``, to an array. Split on each directory separator.
+								$to = preg_split ("/\//", $to); // Also convert ``$to``, to an array. Split this on each directory separator.
 
 								if ($use_win_diff_drive_jctn && stripos (PHP_OS, "win") === 0 /* Test for different drives on Windows® servers? */)
 
@@ -126,7 +126,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 														foreach (array_reverse (preg_split ("/\//", (($_from_drive_jctn_exists) ? $_from_drive_jctn : $_jctn))) as $_jctn_dir)
 															array_unshift ($to, $_jctn_dir);
 													}
-												else /* Else, we should trigger an error in this case. It's NOT possible to generate this. */
+												else // Else, we should trigger an error in this case. It's NOT possible to generate this.
 													{
 														trigger_error ("Unable to generate a relative path across different Windows® drives." .
 															" Please create a Directory Junction here: " . $_from_drive_jctn . ", pointing to: " . $_to_drive . ":/", E_USER_ERROR);
@@ -135,9 +135,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 
 								unset ($_real_from, $_real_to, $_from_drive, $_to_drive, $_from_drive_jctn, $_sys_temp_dir_jctn, $_jctn, $_from_drive_jctn_exists, $_jctn_dir, $_m);
 
-								$rel_path = $to; /* Re-initialize. Start ``$rel_path`` as the value of the ``$to`` array. */
+								$rel_path = $to; // Re-initialize. Start ``$rel_path`` as the value of the ``$to`` array.
 
-								foreach (array_keys ($from) as $_depth) /* Each ``$from`` directory ``$_depth``. */
+								foreach (array_keys ($from) as $_depth) // Each ``$from`` directory ``$_depth``.
 									{
 										if (isset ($from[$_depth], $to[$_depth]) && $from[$_depth] === $to[$_depth])
 											array_shift ($rel_path);
@@ -146,12 +146,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 											{
 												$_left_p = -1 * (count ($rel_path) + ($_remaining - 1));
 												$rel_path = array_pad ($rel_path, $_left_p, "..");
-												break; /* Stop now, no need to go any further. */
+												break; // Stop now, no need to go any further.
 											}
-										else /* Else, set as the same directory `./[0]`. */
+										else // Else, set as the same directory `./[0]`.
 											{
 												$rel_path[0] = "./" . $rel_path[0];
-												break; /* Stop now. */
+												break; // Stop now.
 											}
 									}
 							}
@@ -172,19 +172,19 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 					{
 						if ($jctn && is_string ($jctn) && $target && is_string ($target) && stripos (PHP_OS, "win") === 0)
 							{
-								if (is_dir ($jctn)) /* Does it already exist? If so return now. */
-									return true; /* Return now to save extra processing time below. */
+								if (is_dir ($jctn)) // Does it already exist? If so return now.
+									return true; // Return now to save extra processing time below.
 
 								else if ( /* Possible? */function_exists ("shell_exec") && ($esa = "escapeshellarg"))
 									{
 										@shell_exec ("mklink /J " . $esa ($jctn) . " " . $esa ($target));
 
-										clearstatcache (); /* Clear ``stat()`` cache now. */
-										if (is_dir ($jctn)) /* Created successfully? */
+										clearstatcache (); // Clear ``stat()`` cache now.
+										if (is_dir ($jctn)) // Created successfully?
 											return true;
 									}
 							}
-						return false; /* Else return false. */
+						return false; // Else return false.
 					}
 				/**
 				* Get the system's temporary directory.

@@ -62,7 +62,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 						do_action("ws_plugin__s2member_after_force_query_level_access", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						return; /* For uniformity. */
+						return; // For uniformity.
 					}
 				/**
 				* Filter all WordPress® queries.
@@ -87,15 +87,15 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*/
 				public static function query_level_access(&$wp_query = FALSE, $force = FALSE)
 					{
-						global $wpdb; /* Need this global DB object reference here. */
-						static $initial_query = true; /* Tracks the initial query. */
+						global $wpdb; // Need this global DB object reference here.
+						static $initial_query = true; // Tracks the initial query.
 						c_ws_plugin__s2member_querys::$current_wp_query = &$wp_query;
 
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("ws_plugin__s2member_before_query_level_access", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						c_ws_plugin__s2member_querys::_query_level_access_sys($wp_query); /* Systematics. */
+						c_ws_plugin__s2member_querys::_query_level_access_sys($wp_query); // Systematics.
 
 						remove_filter("comment_feed_where", "c_ws_plugin__s2member_querys::_query_level_access_coms", 100, 2);
 						remove_filter("wp_get_nav_menu_items", "c_ws_plugin__s2member_querys::_query_level_access_navs", 100);
@@ -104,18 +104,18 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 							{
 								if(!is_admin() || c_ws_plugin__s2member_querys::_is_admin_ajax_search($wp_query))
 									{
-										$suppressing_filters = $wp_query->get("suppress_filters"); /* Filter suppression on? */
-										if(!$suppressing_filters && $force /* Forcing this routine bypasses all of these other conditionals. Works with API function ``attach_s2member_query_filters()``. */
-										|| (!$suppressing_filters && in_array("all", $o) && !($initial_query && $wp_query->is_singular())) /* Don't create 404 errors. Allow Security Gate to handle these. */
-										|| (!$suppressing_filters && (in_array("all", $o) || in_array("searches", $o)) && $wp_query->is_search()) /* Or, is this a search results query, possibly via AJAX: `admin-ajax.php`? */
-										|| (!$suppressing_filters && (in_array("all", $o) || in_array("feeds", $o)) && $wp_query->is_feed() && !$wp_query->is_comment_feed()) /* Or, is this a feed; and it's NOT for comments? */
-										|| (!$suppressing_filters && (in_array("all", $o) || in_array("comment-feeds", $o)) && $wp_query->is_feed() && $wp_query->is_comment_feed()) /* Or, is this a feed; and it IS indeed for comments? */
+										$suppressing_filters = $wp_query->get("suppress_filters"); // Filter suppression on?
+										if(!$suppressing_filters && $force // Forcing this routine bypasses all of these other conditionals. Works with API function ``attach_s2member_query_filters()``.
+										|| (!$suppressing_filters && in_array("all", $o) && !($initial_query && $wp_query->is_singular())) // Don't create 404 errors. Allow Security Gate to handle these.
+										|| (!$suppressing_filters && (in_array("all", $o) || in_array("searches", $o)) && $wp_query->is_search()) // Or, is this a search results query, possibly via AJAX: `admin-ajax.php`?
+										|| (!$suppressing_filters && (in_array("all", $o) || in_array("feeds", $o)) && $wp_query->is_feed() && !$wp_query->is_comment_feed()) // Or, is this a feed; and it's NOT for comments?
+										|| (!$suppressing_filters && (in_array("all", $o) || in_array("comment-feeds", $o)) && $wp_query->is_feed() && $wp_query->is_comment_feed()) // Or, is this a feed; and it IS indeed for comments?
 										|| (($suppressing_filters !== "n/a") && (in_array("all", $o) || in_array("nav-menus", $o)) && in_array("wp_get_nav_menu_items", ($callers = (isset($callers) ? $callers : c_ws_plugin__s2member_utilities::callers())))))
 											{
 												if(!$suppressing_filters && (in_array("all", $o) || in_array("comment-feeds", $o)) && $wp_query->is_feed() && $wp_query->is_comment_feed())
 													add_filter("comment_feed_where", "c_ws_plugin__s2member_querys::_query_level_access_coms", 100, 2);
 
-												if($suppressing_filters !== "n/a" && (in_array("all", $o) || in_array("nav-menus", $o))) /* Suppression irrelevant here. */
+												if($suppressing_filters !== "n/a" && (in_array("all", $o) || in_array("nav-menus", $o))) // Suppression irrelevant here.
 													if(in_array("wp_get_nav_menu_items", ($callers = (isset($callers) ? $callers : c_ws_plugin__s2member_utilities::callers()))))
 														add_filter("wp_get_nav_menu_items", "c_ws_plugin__s2member_querys::_query_level_access_navs", 100);
 
@@ -146,15 +146,15 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 															}
 														unset /* A little housekeeping here. Ditch these temporary variables. */($_lwp, $_dep, $_ccaps, $_sps);
 
-														for($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) /* Category Level Restrictions. */
+														for($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Category Level Restrictions.
 															{
 																if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_catgs"] === "all" && (!$user || !current_user_can("access_s2member_level".$n)))
 																	{
-																		$wp_query->set("category__in", array()); /* Include no other Categories. */
+																		$wp_query->set("category__in", array()); // Include no other Categories.
 																		$wp_query->set("category__not_in", ($_catgs = c_ws_plugin__s2member_utils_gets::get_all_category_ids()));
 																		$wp_query->set("post__not_in", array_unique(array_merge(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__not_in")), ($_singulars = c_ws_plugin__s2member_utils_gets::get_singular_ids_in_terms($_catgs)))));
 																		$wp_query->set("post__in", array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__in")), $_singulars)));
-																		break; /* All Categories will be locked down. */
+																		break; // All Categories will be locked down.
 																	}
 																else if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_catgs"] && (!$user || !current_user_can("access_s2member_level".$n)))
 																	{
@@ -169,15 +169,15 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 															}
 														unset /* A little housekeeping here. Ditch these temporary variables. */($_catgs, $_catg, $_singulars);
 
-														for($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) /* Tag Level Restrictions. */
+														for($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Tag Level Restrictions.
 															{
 																if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_ptags"] === "all" && (!$user || !current_user_can("access_s2member_level".$n)))
 																	{
-																		$wp_query->set("tag__in", array()); /* Include no other Tags. */
+																		$wp_query->set("tag__in", array()); // Include no other Tags.
 																		$wp_query->set("tag__not_in", ($_tags = c_ws_plugin__s2member_utils_gets::get_all_tag_ids()));
 																		$wp_query->set("post__not_in", array_unique(array_merge(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__not_in")), ($_singulars = c_ws_plugin__s2member_utils_gets::get_singular_ids_in_terms($_tags)))));
 																		$wp_query->set("post__in", array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__in")), $_singulars)));
-																		break; /* ALL Tags will be locked down. */
+																		break; // ALL Tags will be locked down.
 																	}
 																else if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_ptags"] && (!$user || !current_user_can("access_s2member_level".$n)))
 																	{
@@ -191,13 +191,13 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 															}
 														unset /* A little housekeeping here. Ditch these temporary variables. */($_tags, $_tag, $_singulars);
 
-														for($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) /* Post Level Restrictions. */
+														for($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Post Level Restrictions.
 															{
 																if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_posts"] === "all" && (!$user || !current_user_can("access_s2member_level".$n)))
 																	{
 																		$wp_query->set("post__in", array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__in")), ($_posts = c_ws_plugin__s2member_utils_gets::get_all_post_ids()))));
 																		$wp_query->set("post__not_in", array_unique(array_merge(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__not_in")), $_posts)));
-																		break; /* ALL Posts will be locked down. */
+																		break; // ALL Posts will be locked down.
 																	}
 																else if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_posts"] && (!$user || !current_user_can("access_s2member_level".$n)))
 																	{
@@ -214,13 +214,13 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 															}
 														unset /* A little housekeeping here. Ditch these temporary variables. */($_posts, $_p, $_m, $_p_of_type);
 
-														for($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) /* Page Level Restrictions. */
+														for($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Page Level Restrictions.
 															{
 																if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_pages"] === "all" && (!$user || !current_user_can("access_s2member_level".$n)))
 																	{
 																		$wp_query->set("post__in", array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__in")), ($_pages = c_ws_plugin__s2member_utils_gets::get_all_page_ids()))));
 																		$wp_query->set("post__not_in", array_unique(array_merge(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__not_in")), $_pages)));
-																		break; /* ALL Pages will be locked down. */
+																		break; // ALL Pages will be locked down.
 																	}
 																else if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_pages"] && (!$user || !current_user_can("access_s2member_level".$n)))
 																	{
@@ -244,9 +244,9 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 						do_action("ws_plugin__s2member_after_query_level_access", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						$initial_query = false; /* No longer. */
+						$initial_query = false; // No longer.
 
-						return; /* For uniformity. */
+						return; // For uniformity.
 					}
 				/**
 				* Always filters Systematics in search results & feeds.
@@ -262,7 +262,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*/
 				public static function _query_level_access_sys(&$wp_query = FALSE)
 					{
-						global $wpdb; /* Need this global DB object reference here. */
+						global $wpdb; // Need this global DB object reference here.
 
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action("_ws_plugin__s2member_before_query_level_access_sys", get_defined_vars());
@@ -286,7 +286,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 						do_action("_ws_plugin__s2member_after_query_level_access_sys", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						return; /* For uniformity. */
+						return; // For uniformity.
 					}
 				/**
 				* Filters WordPress® navigation menu items.
@@ -301,7 +301,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*/
 				public static function _query_level_access_navs($items = FALSE)
 					{
-						global $wpdb; /* Need this global DB object reference here. */
+						global $wpdb; // Need this global DB object reference here.
 						$wp_query = &c_ws_plugin__s2member_querys::$current_wp_query;
 
 						if(is_array($items) && !empty($items) && is_object($wpdb) && is_object($wp_query) && $wp_query->get("suppress_filters") !== "n/a")
@@ -312,7 +312,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 								$x_taxonomy_ids = array_merge((array)$wp_query->get("category__not_in"), (array)$wp_query->get("tag__not_in"));
 								$x_taxonomy_ids = c_ws_plugin__s2member_utils_arrays::force_integers /* Force integer values here. */($x_taxonomy_ids);
 
-								foreach($items as $key => $item) /* Filter through all navigational menu ``$items``. */
+								foreach($items as $key => $item) // Filter through all navigational menu ``$items``.
 									if(isset($item->ID, $item->object_id, $item->type) && (int)$item->ID !== (int)$item->object_id && in_array($item->type, array("post_type", "category"), true))
 										if(($item->type === "post_type" && in_array($item->object_id, $x_post_ids)) || ($item->type === "category" && in_array($item->object_id, $x_taxonomy_ids)))
 											{
@@ -339,7 +339,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*/
 				public static function _query_level_access_coms($cwhere = FALSE, &$wp_query = FALSE)
 					{
-						global $wpdb; /* Need this global DB object reference here. */
+						global $wpdb; // Need this global DB object reference here.
 
 						if(is_string($cwhere) && is_object($wpdb) && is_object($wp_query) && !$wp_query->get("suppress_filters"))
 							{
@@ -364,7 +364,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*/
 				public static function _is_admin_ajax_search(&$wp_query = FALSE)
 					{
-						global $wpdb; /* Need this global DB object reference here. */
+						global $wpdb; // Need this global DB object reference here.
 
 						if(is_object($wpdb) && is_object($wp_query) && is_admin() && $wp_query->is_search())
 							if(defined("DOING_AJAX") && DOING_AJAX && !empty($_REQUEST["action"]) && (did_action("wp_ajax_nopriv_".$_REQUEST["action"]) || did_action("wp_ajax_".$_REQUEST["action"])))

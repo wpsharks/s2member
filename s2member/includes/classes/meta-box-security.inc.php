@@ -44,7 +44,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 
 						if(is_object($post) && ($post_id = $post->ID) && (($post->post_type === "page" && current_user_can("edit_page", $post_id)) || current_user_can("edit_post", $post_id)))
 							{
-								if($post->post_type === "page" && ($page_id = $post_id)) /* OK. So we're dealing with a Page classification. */
+								if /* OK. So we're dealing with a Page classification. */($post->post_type === "page" && ($page_id = $post_id))
 									{
 										if(!in_array($page_id, array_merge(array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"], $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"], $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"]), preg_split("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"]))))
 											{
@@ -60,11 +60,11 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 												echo '<p style="margin-left:2px;"><strong>Page Level Restriction?</strong></p>'."\n";
 												echo '<label class="screen-reader-text" for="ws-plugin--s2member-security-meta-box-level">Add Level Restriction?</label>'."\n";
 												echo '<select name="ws_plugin__s2member_security_meta_box_level" id="ws-plugin--s2member-security-meta-box-level" style="width:99%;">'."\n";
-												echo '<option value=""></option>'."\n"; /* By default, we allow public access to any Post/Page. */
+												echo  /* By default, we allow public access to any Post/Page. */'<option value=""></option>'."\n";
 
 												for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
-													echo ($pages[$n] !== array("all")) ? /* Protecting `all` Pages, of any kind? */
-													((!in_array("all-pages", $posts[$n])) /* Protecting Posts of type: `page` ( i.e. `all-pages` )? */
+													echo ($pages[$n] !== array("all")) ? // Protecting `all` Pages, of any kind?
+													((!in_array("all-pages", $posts[$n])) // Protecting Posts of type: `page` ( i.e. `all-pages` )?
 													? '<option value="'.$n.'"'.((in_array($page_id, $pages[$n])) ? ' selected="selected"' : '').'>'.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Require Highest Level #'.$n : 'Require Level #'.$n.' ( or higher )').'</option>'."\n"
 													: '<option value="" disabled="disabled">Level #'.$n.' ( already protects "all" Posts of this type )</option>'."\n")
 													: '<option value="" disabled="disabled">Level #'.$n.' ( already protects "all" Pages )</option>'."\n";
@@ -72,7 +72,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 												echo '</select><br /><small>* see: <code>Restriction Options -> Pages</code></small>'."\n";
 
 												if(!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site())
-													/* ^ Will change once Custom Capabilities are compatible with a Blog Farm. */
+													// ^ Will change once Custom Capabilities are compatible with a Blog Farm.
 													{
 														echo '<p style="margin-top:15px; margin-left:2px;"><strong>Require Custom Capabilities?</strong></p>'."\n";
 														echo '<label class="screen-reader-text" for="ws-plugin--s2member-security-meta-box-ccaps">Custom Capabilities?</label>'."\n";
@@ -93,7 +93,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 										else if(in_array($page_id, preg_split("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"])))
 											echo 'This Page is a:<br /><strong>Specific Post/Page for sale</strong><br />( already guarded by s2Member )';
 									}
-								else /* Otherwise, we assume this is a Post, or possibly a Custom Post Type. It's NOT a Page. */
+								else // Otherwise, we assume this is a Post, or possibly a Custom Post Type. It's NOT a Page.
 									{
 										if(!in_array($post_id, preg_split("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"])))
 											{
@@ -106,11 +106,11 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 												echo '<p style="margin-left:2px;"><strong>Post Level Restriction?</strong></p>'."\n";
 												echo '<label class="screen-reader-text" for="ws-plugin--s2member-security-meta-box-level">Add Level Restriction?</label>'."\n";
 												echo '<select name="ws_plugin__s2member_security_meta_box_level" id="ws-plugin--s2member-security-meta-box-level" style="width:99%;">'."\n";
-												echo '<option value=""></option>'."\n"; /* By default, we allow public access to any Post/Page. */
+												echo '<option value=""></option>'."\n"; // By default, we allow public access to any Post/Page.
 
 												for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
-													echo ($posts[$n] !== array("all")) ? /* Protecting `all` Posts, of any kind? */
-													((!in_array("all-".$post->post_type."s", $posts[$n])) /* Protecting Posts `all-[of-this-type]` ( don't forget plural `s` )? */
+													echo ($posts[$n] !== array("all")) ? // Protecting `all` Posts, of any kind?
+													((!in_array("all-".$post->post_type."s", $posts[$n])) // Protecting Posts `all-[of-this-type]` ( don't forget plural `s` )?
 													? '<option value="'.$n.'"'.((in_array($post_id, $posts[$n])) ? ' selected="selected"' : '').'>'.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Require Highest Level #'.$n : 'Require Level #'.$n.' ( or higher )').'</option>'."\n"
 													: '<option value="" disabled="disabled">Level #'.$n.' ( already protects "all" Posts of this type )</option>'."\n")
 													: '<option value="" disabled="disabled">Level #'.$n.' ( already protects "all" Posts )</option>'."\n";
@@ -118,7 +118,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 												echo '</select><br /><small>* see: <code>Restriction Options -> Posts</code></small>'."\n";
 
 												if(!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site())
-													/* ^ Will change once Custom Capabilities are compatible with a Blog Farm. */
+													// ^ Will change once Custom Capabilities are compatible with a Blog Farm.
 													{
 														echo '<p style="margin-top:15px; margin-left:2px;"><strong>Require Custom Capabilities?</strong></p>'."\n";
 														echo '<label class="screen-reader-text" for="ws-plugin--s2member-security-meta-box-ccaps">Custom Capabilities?</label>'."\n";

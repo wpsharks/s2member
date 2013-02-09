@@ -41,9 +41,9 @@ if (!class_exists ("c_ws_plugin__s2member_profile_in"))
 					{
 						do_action ("ws_plugin__s2member_before_profile", get_defined_vars ());
 
-						if (!empty ($_GET["s2member_profile"])) /* Requesting Profile? */
+						if (!empty ($_GET["s2member_profile"])) // Requesting Profile?
 							{
-								c_ws_plugin__s2member_no_cache::no_cache_constants (true); /* No caching. */
+								c_ws_plugin__s2member_no_cache::no_cache_constants (true); // No caching.
 
 								$tabindex = apply_filters ("ws_plugin__s2member_sc_profile_tabindex", 0, get_defined_vars ());
 
@@ -171,12 +171,12 @@ if (!class_exists ("c_ws_plugin__s2member_profile_in"))
 
 										if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_display_custom_fields", true, get_defined_vars ()))
 											{
-												if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"]) /* Now, do we have Custom Fields? */
+												if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"]) // Now, do we have Custom Fields?
 													if ($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level ("auto-detection", "profile"))
 														{
 															$fields = get_user_option ("s2member_custom_fields", $user_id);
 
-															$tabindex = $tabindex + 9; /* Start tabindex at +9 ( +1 below ). */
+															$tabindex = $tabindex + 9; // Start tabindex at +9 ( +1 below ).
 
 															eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 															do_action ("ws_plugin__s2member_during_profile_during_fields_before_custom_fields", get_defined_vars ());
@@ -188,7 +188,7 @@ if (!class_exists ("c_ws_plugin__s2member_profile_in"))
 																	do_action ("ws_plugin__s2member_during_profile_during_fields_during_custom_fields_before", get_defined_vars ());
 																	unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-																	if (in_array ($field["id"], $fields_applicable)) /* Field applicable? */
+																	if (in_array ($field["id"], $fields_applicable)) // Field applicable?
 																		{
 																			$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
 																			$field_id_class = preg_replace ("/_/", "-", $field_var);
@@ -196,7 +196,7 @@ if (!class_exists ("c_ws_plugin__s2member_profile_in"))
 																			eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 																			if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_during_custom_fields_display", true, get_defined_vars ()))
 																				{
-																					if (!empty ($field["section"]) && $field["section"] === "yes") /* Starts a new section? */
+																					if (!empty ($field["section"]) && $field["section"] === "yes") // Starts a new section?
 																						echo '<tr><td><div class="ws-plugin--s2member-profile-field-divider-section' . ((!empty ($field["sectitle"])) ? '-title' : '') . '">' . ((!empty ($field["sectitle"])) ? $field["sectitle"] : '') . '</div></td></tr>';
 
 																					echo '<tr>' . "\n";

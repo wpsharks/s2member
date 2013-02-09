@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 								$pr_times = get_user_option ("s2member_paid_registration_times", $user_id);
 								$pr_times["level"] = (empty ($pr_times["level"])) ? time () : $pr_times["level"];
 								$pr_times["level" . $level] = (empty ($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
-								update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); /* Update now. */
+								update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 							}
 
 						return /* Return for uniformity. */;
@@ -76,7 +76,7 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 							{
 								return apply_filters ("ws_plugin__s2member_registration_time", strtotime ($user->user_registered), get_defined_vars ());
 							}
-						else /* Else we return a default value of 0, because there is insufficient data. */
+						else // Else we return a default value of 0, because there is insufficient data.
 							return apply_filters ("ws_plugin__s2member_registration_time", 0, get_defined_vars ());
 					}
 				/**
@@ -102,7 +102,7 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 							{
 								return apply_filters ("ws_plugin__s2member_paid_registration_time", ((isset ($pr_times[$level])) ? (int)$pr_times[$level] : 0), get_defined_vars ());
 							}
-						else /* Else we return a default value of `0`, because there is insufficient data. */
+						else // Else we return a default value of `0`, because there is insufficient data.
 							return apply_filters ("ws_plugin__s2member_paid_registration_time", 0, get_defined_vars ());
 					}
 			}

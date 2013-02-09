@@ -138,8 +138,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 
 								return (!empty($parse["query"])) ? $parse["path"]."?".$parse["query"] : $parse["path"];
 							}
-						else /* Force a string return value here. */
-						return /* Empty string. */ "";
+						else // Force a string return value here.
+							return /* Empty string. */ "";
 					}
 				/**
 				* Parses a URL/URI with same args as PHP's ``parse_url()`` function.
@@ -224,11 +224,11 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 								else if(!is_wp_error($response) && is_array($response) /* Return body only. */)
 									return /* Return ``$response`` body only. */ wp_remote_retrieve_body($response);
 
-								else /* Else this remote request has failed completely. Return false. */
-								return false; /* Remote request failed, return false. */
+								else // Else this remote request has failed completely. Return false.
+								return false; // Remote request failed, return false.
 							}
-						else /* Else, return false. */
-						return false;
+						else // Else, return false.
+							return false;
 					}
 				/**
 				* Shortens a long URL, based on s2Member configuration.
@@ -361,11 +361,11 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 								if /* Checking time? This must NOT be older than ``$exp_secs`` seconds ago. */($check_time)
 									return ($sig === $valid_sig && $time >= strtotime("-".$exp_secs." seconds"));
 
-								else /* Ignoring time? Just need to compare signatures in this case. */
+								else // Ignoring time? Just need to compare signatures in this case.
 								return /* Do they match up? */ ($sig === $valid_sig);
 							}
-						else /* Return false. No ``$query``, or no ``$sigs``. */
-						return /* False, it's NOT ok. */ false;
+						else // Return false. No ``$query``, or no ``$sigs``.
+							return /* False, it's NOT ok. */ false;
 					}
 			}
 	}

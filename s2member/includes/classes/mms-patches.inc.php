@@ -40,7 +40,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 				*/
 				public static function sync_mms_patches ($message = FALSE)
 					{
-						global $pagenow; /* Need access to this global var. */
+						global $pagenow; // Need access to this global var.
 
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_sync_mms_patches", get_defined_vars ());
@@ -72,7 +72,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 								{
 									do_action ("ws_plugin__s2member_during_mms_patches_before", get_defined_vars ());
 
-									$wp_login_file = ABSPATH . "wp-login.php"; /* This works for both WordPress® 3.0 and 3.1. WordPress® 3.1+ uses: `site_url('wp-signup.php')`. WordPress® 3.5+ uses: `network_site_url('wp-signup.php')`. */
+									$wp_login_file = ABSPATH . "wp-login.php"; // This works for both WordPress® 3.0 and 3.1. WordPress® 3.1+ uses: `site_url('wp-signup.php')`. WordPress® 3.5+ uses: `network_site_url('wp-signup.php')`.
 									$wp_login_section = "/([\r\n\t\s ]+)(wp_redirect( *?)\(( *?)apply_filters( *?)\(( *?)['\"]wp_signup_location['\"],( *?)(site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|network_site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|get_bloginfo( *?)\(['\"]wpurl['\"]\)( *?)\.( *?)['\"]\/wp-signup\.php['\"])( *?)\)( *?)\);)([\r\n\t\s ]+)(exit;)/";
 									$wp_login_replace = "\n\t\t// Modified for full plugin compatiblity.\n\t\t//wp_redirect( apply_filters( 'wp_signup_location', network_site_url('wp-signup.php') ) );\n\t\t//exit;";
 
@@ -80,12 +80,12 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 										{
 											if ((($wp_login_written = file_put_contents ($wp_login_file, preg_replace ($wp_login_section, $wp_login_replace, $wp_login, 1, $wp_login_patched))) && $wp_login_patched) || ($wp_login_patched_already = $wp_login_patched = strpos ($wp_login, $wp_login_replace)))
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file ' . (($wp_login_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
-											else if (!$wp_login_written) /* Otherwise, we need to report that /wp-login.php could NOT be updated. Possibly a permissions error. */
+											else if (!$wp_login_written) // Otherwise, we need to report that /wp-login.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file could NOT be patched. Patch NOT written.', true) : null;
-											else if (!$wp_login_patched) /* Otherwise, we need to report that /wp-login.php could NOT be updated. Wrong WordPress® version? */
+											else if (!$wp_login_patched) // Otherwise, we need to report that /wp-login.php could NOT be updated. Wrong WordPress® version?
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file could NOT be patched. Unverifiable.', true) : null;
 										}
-									else /* Otherwise, we need to report that /wp-login.php could NOT be updated. Possibly a permissions error. */
+									else // Otherwise, we need to report that /wp-login.php could NOT be updated. Possibly a permissions error.
 										($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file could NOT be patched. File NOT writable.', true) : null;
 
 									$load_file = ABSPATH . WPINC . "/load.php";
@@ -96,12 +96,12 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 										{
 											if ((($load_written = file_put_contents ($load_file, preg_replace ($load_section, $load_replace, $load, 1, $load_patched))) && $load_patched) || ($load_patched_already = $load_patched = strpos ($load, $load_replace)))
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file ' . (($load_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
-											else if (!$load_written) /* Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Possibly a permissions error. */
+											else if (!$load_written) // Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file could NOT be patched. Patch NOT written.', true) : null;
-											else if (!$load_patched) /* Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Wrong WordPress® version? */
+											else if (!$load_patched) // Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Wrong WordPress® version?
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file could NOT be patched. Unverifiable.', true) : null;
 										}
-									else /* Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Possibly a permissions error. */
+									else // Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Possibly a permissions error.
 										($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file could NOT be patched. File NOT writable.', true) : null;
 
 									$user_new_file = ABSPATH . "wp-admin/user-new.php";
@@ -112,12 +112,12 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 										{
 											if ((($user_new_written = file_put_contents ($user_new_file, preg_replace ($user_new_section, $user_new_replace, $user_new, 1, $user_new_patched))) && $user_new_patched) || ($user_new_patched_already = $user_new_patched = strpos ($user_new, $user_new_replace)))
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file ' . (($user_new_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
-											else if (!$user_new_written) /* Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Possibly a permissions error. */
+											else if (!$user_new_written) // Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file could NOT be patched. Patch NOT written.', true) : null;
-											else if (!$user_new_patched) /* Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Wrong WordPress® version? */
+											else if (!$user_new_patched) // Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Wrong WordPress® version?
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file could NOT be patched. Unverifiable.', true) : null;
 										}
-									else /* Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Possibly a permissions error. */
+									else // Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Possibly a permissions error.
 										($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file could NOT be patched. File NOT writable.', true) : null;
 
 									$ms_functions_file = ABSPATH . "wp-includes/ms-functions.php";
@@ -128,15 +128,15 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 										{
 											if ((($ms_functions_written = file_put_contents ($ms_functions_file, preg_replace ($ms_functions_section, $ms_functions_replace, $ms_functions, 1, $ms_functions_patched))) && $ms_functions_patched) || ($ms_functions_patched_already = $ms_functions_patched = strpos ($ms_functions, $ms_functions_replace)))
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file ' . (($ms_functions_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
-											else if (!$ms_functions_written) /* Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Possibly a permissions error. */
+											else if (!$ms_functions_written) // Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file could NOT be patched. Patch NOT written.', true) : null;
-											else if (!$ms_functions_patched) /* Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Wrong WordPress® version? */
+											else if (!$ms_functions_patched) // Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Wrong WordPress® version?
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file could NOT be patched. Unverifiable.', true) : null;
 										}
-									else /* Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Possibly a permissions error. */
+									else // Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Possibly a permissions error.
 										($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file could NOT be patched. File NOT writable.', true) : null;
 
-									$ran_mms_patches = true; /* Flag indicating this routine was indeed processed. */
+									$ran_mms_patches = true; // Flag indicating this routine was indeed processed.
 
 									do_action ("ws_plugin__s2member_during_mms_patches_after", get_defined_vars ());
 								}

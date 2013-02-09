@@ -38,9 +38,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level"))
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
-				public static function cp ($vars = array ()) /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+				public static function cp ($vars = array ()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
-						extract ($vars); /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+						extract ($vars); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
 						if ((!empty ($paypal["txn_type"]) && preg_match ("/^web_accept$/i", $paypal["txn_type"]))
 						&& (!empty ($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_wo_level_regex"], $paypal["item_number"]))
@@ -60,23 +60,23 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level"))
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
 
-										if (preg_match ("/(referenc|associat|updat|upgrad)/i", $paypal["option_name1"]) && $paypal["option_selection1"]) /* Must have this information for Capability additions. */
+										if (preg_match ("/(referenc|associat|updat|upgrad)/i", $paypal["option_name1"]) && $paypal["option_selection1"]) // Must have this information for Capability additions.
 											{
 												if (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["txn_id"], $paypal["option_selection1"])) && is_object ($user = new WP_User ($user_id)) && $user->ID)
 													{
-														if (!$user->has_cap ("administrator")) /* Do NOT process this routine on Administrators. */
+														if (!$user->has_cap ("administrator")) // Do NOT process this routine on Administrators.
 															{
-																$processing = $during = true; /* Yes, we ARE processing this. */
+																$processing = $during = true; // Yes, we ARE processing this.
 
 																eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 																do_action ("ws_plugin__s2member_during_paypal_notify_during_before_new_ccaps", get_defined_vars ());
 																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-																$fields = get_user_option ("s2member_custom_fields", $user_id); /* These will be needed in the routines below. */
-																$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); /* Original IP during Registration. */
-																$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"]; /* Now merge conditionally. */
+																$fields = get_user_option ("s2member_custom_fields", $user_id); // These will be needed in the routines below.
+																$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); // Original IP during Registration.
+																$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"]; // Now merge conditionally.
 
-																if (is_multisite () && !is_user_member_of_blog ($user_id)) /* Must have a Role on this Blog. */
+																if (is_multisite () && !is_user_member_of_blog ($user_id)) // Must have a Role on this Blog.
 																	{
 																		add_existing_user_to_blog (array ("user_id" => $user_id, "role" => get_option ("default_role")));
 																		$user = new WP_User ($user_id);
@@ -101,7 +101,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level"))
 
 																$paypal["s2member_log"][] = "Capability Confirmation Email sent to Customer, with a URL that provides them with a way to log back in.";
 
-																if ($processing && $_GET["s2member_paypal_proxy"] && ($url = $_GET["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) /* A Proxy is requesting a Return URL? */
+																if ($processing && $_GET["s2member_paypal_proxy"] && ($url = $_GET["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
 																	{
 																		if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)) && ($url = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["subscr_id"])), $url)))
 																			if (($url = preg_replace ("/%%amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["mc_gross"])), $url)) && ($url = preg_replace ("/%%txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["txn_id"])), $url)))
@@ -122,8 +122,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level"))
 																																		if (!($url = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (maybe_serialize ($val))), $url)))
 																																			break;
 
-																																if (($url = trim ($url))) /* Preserve remaining replacements. */
-																																	/* Because the parent routine may perform replacements too. */
+																																if (($url = trim ($url))) // Preserve remaining replacements.
+																																	// Because the parent routine may perform replacements too.
 																																	$paypal["s2member_paypal_proxy_return_url"] = $url;
 																															}
 																								}
@@ -165,7 +165,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level"))
 																if ($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["payment_notification_recipients"] && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
 																	{
 																		$msg = $sbj = "( s2Member / API Notification Email ) - Payment";
-																		$msg .= "\n\n"; /* Spacing in the message body. */
+																		$msg .= "\n\n"; // Spacing in the message body.
 
 																		$msg .= "subscr_id: %%subscr_id%%\n";
 																		$msg .= "amount: %%amount%%\n";
@@ -219,7 +219,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level"))
 																																		if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
 																																			break;
 
-																																if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) /* Still have a ``$sbj`` and a ``$msg``? */
+																																if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																																	foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["payment_notification_recipients"]) as $recipient)
 																																		wp_mail ($recipient, apply_filters ("ws_plugin__s2member_payment_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_payment_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=utf-8");
@@ -250,7 +250,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level"))
 																																		if (!($code = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $code)))
 																																			break;
 
-																																if (($code = trim (preg_replace ("/%%(.+?)%%/i", "", $code)))) /* This gets stored into a Transient Queue. */
+																																if (($code = trim (preg_replace ("/%%(.+?)%%/i", "", $code)))) // This gets stored into a Transient Queue.
 																																	{
 																																		$paypal["s2member_log"][] = "Storing Payment Tracking Codes into a Transient Queue. These will be processed on-site.";
 																																		set_transient ("s2m_" . md5 ("s2member_transient_ccap_tracking_codes_" . $paypal["txn_id"]), $code, 43200);
@@ -272,7 +272,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level"))
 										else
 											$paypal["s2member_log"][] = "Unable to add new Capabilities. Missing User/Member details. Please check the `on0` and `os0` variables in your Button Code.";
 									}
-								else /* Else, this is a duplicate IPN. Must stop here. */
+								else // Else, this is a duplicate IPN. Must stop here.
 									{
 										$paypal["s2member_log"][] = "Not processing. Duplicate IPN.";
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `web_accept` ) w/ update vars for Capabilities w/o Level.";

@@ -38,15 +38,15 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
-				public static function cp($vars = array()) /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+				public static function cp($vars = array()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
-						extract($vars); /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+						extract($vars); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
 						if(((!empty($paypal["txn_type"]) && preg_match("/^(subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment)$/i", $paypal["txn_type"]) && ($recurring = true))
 						|| (!empty($paypal["txn_type"]) && preg_match("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]) && !empty($paypal["initial_payment_status"]) && preg_match("/^failed$/i", $paypal["initial_payment_status"]) && ($recurring = true))
-						|| (!empty($paypal["txn_type"]) && preg_match("/^new_case$/i", $paypal["txn_type"]) && !empty($paypal["case_type"]) && preg_match("/^chargeback$/i", $paypal["case_type"]) && !($recurring = false)) /* Seeking this for future compatibility. */
-						|| (!empty($paypal["payment_status"]) && preg_match("/^(refunded|reversed|reversal)$/i", $paypal["payment_status"]) && !($recurring = false))) /* The `txn_type` is irrelevant in all of these payment statuses: `refunded|reversed|reversal`. */
-						&& (!empty($paypal["subscr_id"]) || ($paypal["subscr_id"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id($paypal)) || (!empty($paypal["parent_txn_id"]) && ($paypal["subscr_id"] = $paypal["parent_txn_id"]))) /* Other MUST haves. */
+						|| (!empty($paypal["txn_type"]) && preg_match("/^new_case$/i", $paypal["txn_type"]) && !empty($paypal["case_type"]) && preg_match("/^chargeback$/i", $paypal["case_type"]) && !($recurring = false)) // Seeking this for future compatibility.
+						|| (!empty($paypal["payment_status"]) && preg_match("/^(refunded|reversed|reversal)$/i", $paypal["payment_status"]) && !($recurring = false))) // The `txn_type` is irrelevant in all of these payment statuses: `refunded|reversed|reversal`.
+						&& (!empty($paypal["subscr_id"]) || ($paypal["subscr_id"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id($paypal)) || (!empty($paypal["parent_txn_id"]) && ($paypal["subscr_id"] = $paypal["parent_txn_id"]))) // Other MUST haves.
 						&& (!empty($paypal["period1"]) || ($paypal["period1"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_period1($paypal, false)) || empty($recurring) || ($paypal["period1"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("period1", false, $paypal["subscr_id"])) || ($paypal["period1"] = "0 D"))
 						&& (!empty($paypal["period3"]) || ($paypal["period3"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_period3($paypal, false)) || empty($recurring) || ($paypal["period3"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("period3", false, $paypal["subscr_id"])) || ($paypal["period3"] = "1 D"))
 						&& ((!empty($paypal["item_number"]) || ($paypal["item_number"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_number($paypal)) || ($paypal["item_number"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_number", false, $paypal["subscr_id"])) || ($paypal["item_number"] = "1")) && preg_match($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"]))
@@ -62,7 +62,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										$is_refund = (preg_match("/^refunded$/i", $paypal["payment_status"]) && $paypal["parent_txn_id"]);
 										$is_reversal = (preg_match("/^(reversed|reversal)$/i", $paypal["payment_status"]) && $paypal["parent_txn_id"]);
 										$is_reversal = (!$is_reversal) ? (preg_match("/^new_case$/i", $paypal["txn_type"]) && preg_match("/^chargeback$/i", $paypal["case_type"])) : $is_reversal;
-										$is_refund_or_reversal = ($is_refund || $is_reversal); /* If either of the previous tests above evaluated to true; then it's obviously a Refund and/or a Reversal. */
+										$is_refund_or_reversal = ($is_refund || $is_reversal); // If either of the previous tests above evaluated to true; then it's obviously a Refund and/or a Reversal.
 										$is_delayed_eot = (!$is_refund_or_reversal && preg_match("/^(subscr_eot|recurring_payment_expired)$/i", $paypal["txn_type"]) && preg_match("/^I-/i", $paypal["subscr_id"]));
 
 										if($is_refund_or_reversal)
@@ -71,8 +71,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 											$paypal["s2member_log"][] = "s2Member `txn_type` identified as ".($identified_as = "( `subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment` ) - or - `recurring_payment_profile_cancel` w/ `initial_payment_status` ( `failed` )").".";
 
 										$paypal["s2member_log"][] = "Sleeping for 5 seconds. Waiting for a possible ( `subscr_signup|subscr_modify|recurring_payment_profile_created` ).";
-										sleep(5); /* Sleep here for a moment. PayPal® sometimes sends a subscr_eot before the subscr_signup, subscr_modify. */
-										/* It is NOT a big deal if they do. However, s2Member goes to sleep here, just to help keep the log files in a logical order. */
+										sleep(5); // Sleep here for a moment. PayPal® sometimes sends a subscr_eot before the subscr_signup, subscr_modify.
+										// It is NOT a big deal if they do. However, s2Member goes to sleep here, just to help keep the log files in a logical order.
 										$paypal["s2member_log"][] = "Awake. It's ".date("D M j, Y g:i:s a T").". s2Member `txn_type` identified as ".$identified_as.".";
 
 										$paypal["ip"] = (preg_match("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
@@ -80,25 +80,25 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 										if(($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal["subscr_id"])) && is_object($user = new WP_User($user_id)) && !empty($user->ID))
 											{
-												$fields = get_user_option("s2member_custom_fields", $user_id); /* These will be needed below. */
-												$user_reg_ip = get_user_option("s2member_registration_ip", $user_id); /* Needed below. */
+												$fields = get_user_option("s2member_custom_fields", $user_id); // These will be needed below.
+												$user_reg_ip = get_user_option("s2member_registration_ip", $user_id); // Needed below.
 												$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"];
 
-												if( /* Here we take action, BUT based on Auto EOT Behavior options; as configured by the Site Owner. */
+												if( // Here we take action, BUT based on Auto EOT Behavior options; as configured by the Site Owner.
 												(!$is_refund_or_reversal && !$is_delayed_eot && !get_user_option("s2member_auto_eot_time", $user_id))
 												|| ($is_refund_or_reversal && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,reversals")
 												|| ($is_reversal && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "reversals")
 												|| ($is_refund && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds"))
 													{
-														if(!$user->has_cap("administrator")) /* Do NOT process this routine on Administrators. */
+														if(!$user->has_cap("administrator")) // Do NOT process this routine on Administrators.
 															{
-																if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"]) /* EOT enabled? */
+																if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"]) // EOT enabled?
 																	{
 																		if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "demote")
 																			{
-																				$processing = $during = true; /* Yes, we ARE processing this. */
+																				$processing = $during = true; // Yes, we ARE processing this.
 
-																				$eot_del_type = ($is_refund_or_reversal) ? /* Set EOT/Del type. */
+																				$eot_del_type = ($is_refund_or_reversal) ? // Set EOT/Del type.
 																				"ipn-refund-reversal-demotion" : "ipn-cancellation-expiration-demotion";
 
 																				$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role("subscriber");
@@ -110,8 +110,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																				do_action("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars(), $eot_del_type, "modification");
 																				unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-																				if($existing_role !== $demotion_role) /* Only if NOT the existing Role. */
-																					$user->set_role($demotion_role); /* Give User the demotion Role. */
+																				if($existing_role !== $demotion_role) // Only if NOT the existing Role.
+																					$user->set_role($demotion_role); // Give User the demotion Role.
 
 																				foreach($user->allcaps as $cap => $cap_enabled)
 																					if(preg_match("/^access_s2member_ccap_/", $cap))
@@ -138,7 +138,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 																				if($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
 																					{
-																						foreach(preg_split("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"]) as $url) /* Handle EOT Notifications. */
+																						foreach(preg_split("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"]) as $url) // Handle EOT Notifications.
 
 																							if(($url = preg_replace("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)) && ($url = preg_replace("/%%eot_del_type%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($eot_del_type)), $url)) && ($url = preg_replace("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["subscr_id"])), $url)))
 																								if(($url = preg_replace("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user->first_name)), $url)) && ($url = preg_replace("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user->last_name)), $url)))
@@ -149,7 +149,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																													if(($url = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user_id)), $url)))
 																														{
 																															if(is_array($fields) && !empty($fields))
-																																foreach($fields as $var => $val) /* Custom Registration/Profile Fields. */
+																																foreach($fields as $var => $val) // Custom Registration/Profile Fields.
 																																	if(!($url = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode(maybe_serialize($val))), $url)))
 																																		break;
 
@@ -163,7 +163,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																				if($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
 																					{
 																						$msg = $sbj = "( s2Member / API Notification Email ) - EOT/Deletion";
-																						$msg .= "\n\n"; /* Spacing in the message body. */
+																						$msg .= "\n\n"; // Spacing in the message body.
 
 																						$msg .= "eot_del_type: %%eot_del_type%%\n";
 																						$msg .= "subscr_id: %%subscr_id%%\n";
@@ -199,11 +199,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																												if(($msg = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user_id), $msg)))
 																													{
 																														if(is_array($fields) && !empty($fields))
-																															foreach($fields as $var => $val) /* Custom Registration/Profile Fields. */
+																															foreach($fields as $var => $val) // Custom Registration/Profile Fields.
 																																if(!($msg = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(maybe_serialize($val)), $msg)))
 																																	break;
 
-																														if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) /* Still have a ``$sbj`` and a ``$msg``? */
+																														if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																															foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"]) as $recipient)
 																																wp_mail($recipient, apply_filters("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=utf-8");
@@ -219,9 +219,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 																		else if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "delete")
 																			{
-																				$processing = $during = true; /* Yes, we ARE processing this. */
+																				$processing = $during = true; // Yes, we ARE processing this.
 
-																				$eot_del_type = $GLOBALS["ws_plugin__s2member_eot_del_type"] = /* Configure EOT/Del type. */
+																				$eot_del_type = $GLOBALS["ws_plugin__s2member_eot_del_type"] = // Configure EOT/Del type.
 																				($is_refund_or_reversal) ? "ipn-refund-reversal-deletion" : "ipn-cancellation-expiration-deletion";
 
 																				eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
@@ -229,16 +229,16 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																				do_action("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars(), $eot_del_type, "removal-deletion");
 																				unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-																				if(is_multisite()) /* Multisite does NOT actually delete; ONLY removes. */
+																				if(is_multisite()) // Multisite does NOT actually delete; ONLY removes.
 																					{
 																						remove_user_from_blog($user_id, $current_blog->blog_id);
-																						/* This will automatically trigger `eot_del_notification_urls` as well. */
+																						// This will automatically trigger `eot_del_notification_urls` as well.
 																						c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions($user_id, $current_blog->blog_id, "s2says");
 																					}
 
-																				else /* Otherwise, we can actually delete them. */
-																					/* This will automatically trigger `eot_del_notification_urls` as well. */
-																					wp_delete_user($user_id); /* `c_ws_plugin__s2member_user_deletions::handle_user_deletions()` */
+																				else // Otherwise, we can actually delete them.
+																					// This will automatically trigger `eot_del_notification_urls` as well.
+																					wp_delete_user($user_id); // `c_ws_plugin__s2member_user_deletions::handle_user_deletions()`
 
 																				$paypal["s2member_log"][] = "This Member's account has been ".((is_multisite()) ? "removed" : "deleted").".";
 
@@ -254,9 +254,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																	}
 
-																else /* Otherwise, treat this as if it were a cancellation. EOTs are currently disabled. */
+																else // Otherwise, treat this as if it were a cancellation. EOTs are currently disabled.
 																	{
-																		$processing = $during = true; /* Yes, we ARE processing this. */
+																		$processing = $during = true; // Yes, we ARE processing this.
 
 																		update_user_option($user_id, "s2member_auto_eot_time", ($auto_eot_time = strtotime("now")));
 
@@ -274,14 +274,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 												else if($is_delayed_eot && !get_user_option("s2member_auto_eot_time", $user_id))
 													{
-														if(!$user->has_cap("administrator")) /* Do NOT process this routine on Administrators. */
+														if(!$user->has_cap("administrator")) // Do NOT process this routine on Administrators.
 															{
-																$processing = $during = true; /* Yes, we ARE processing this. */
+																$processing = $during = true; // Yes, we ARE processing this.
 
 																$auto_eot_time = c_ws_plugin__s2member_utils_time::auto_eot_time($user_id, $paypal["period1"], $paypal["period3"], "", time());
 																/* We assume the last payment was today, because this is how newer PayPal® accounts function with respect to EOT handling.
 																Newer PayPal® accounts ( i.e. Subscription IDs starting with `I-`, will have their EOT triggered upon the last payment. */
-																update_user_option($user_id, "s2member_auto_eot_time", $auto_eot_time); /* s2Member will follow-up on this later. */
+																update_user_option($user_id, "s2member_auto_eot_time", $auto_eot_time); // s2Member will follow-up on this later.
 
 																$paypal["s2member_log"][] = "Auto-EOT Time for this account ( delayed ), set to: ".date("D M j, Y g:i a T", $auto_eot_time);
 
@@ -302,11 +302,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 												else if($is_refund)
 													$paypal["s2member_log"][] = "Skipping ( demote|delete ) Member. Your configuration dictates that s2Member should NOT take any immediate action on an EOT associated with a Refund. An s2Member API Notification will still be processed however.";
 											}
-										else if($is_delayed_eot) /* Otherwise, we need to re-generate/store this IPN into a Transient Queue. Then re-process it on registration. */
+										else if($is_delayed_eot) // Otherwise, we need to re-generate/store this IPN into a Transient Queue. Then re-process it on registration.
 											{
 												$paypal["s2member_log"][] = "Skipping this IPN response, for now. The Subscr. ID is not associated with a registered Member.";
 
-												$ipn = array("txn_type" => "subscr_eot"); /* Create a simulated IPN response for txn_type=subscr_eot. */
+												$ipn = array("txn_type" => "subscr_eot"); // Create a simulated IPN response for txn_type=subscr_eot.
 
 												foreach($paypal as $var => $val)
 													if(in_array($var, array("subscr_gateway", "subscr_id", "custom", "invoice", "payer_email", "first_name", "last_name", "item_name", "item_number", /* Exclude; might be defaults. "period1", "period3", */ "option_name1", "option_selection1", "option_name2", "option_selection2")))
@@ -325,11 +325,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										Since this routine ignores the processing check, it is *possible* that Refund/Reversal Notification URLs will be contacted more than once.
 											If you're writing scripts that depend on Refund/Reversal Notifications, please keep this in mind.
 										*/
-										if($is_refund_or_reversal) /* Here we access this variable that was previously assigned as a quick method of Refund/Reversal detection. */
+										if($is_refund_or_reversal) // Here we access this variable that was previously assigned as a quick method of Refund/Reversal detection.
 											{
-												$fields = ($user_id) ? get_user_option("s2member_custom_fields", $user_id) : array(); /* These will be needed below. */
-												$user_reg_ip = ($user_id) ? get_user_option("s2member_registration_ip", $user_id) : ""; /* Needed below. */
-												$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"]; /* Now merge conditionally. */
+												$fields = ($user_id) ? get_user_option("s2member_custom_fields", $user_id) : array(); // These will be needed below.
+												$user_reg_ip = ($user_id) ? get_user_option("s2member_registration_ip", $user_id) : ""; // Needed below.
+												$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"]; // Now merge conditionally.
 
 												if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_urls"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
 													{
@@ -345,7 +345,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																						if(($url = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user_id)), $url)))
 																							{
 																								if(is_array($fields) && !empty($fields))
-																									foreach($fields as $var => $val) /* Custom Registration/Profile Fields. */
+																									foreach($fields as $var => $val) // Custom Registration/Profile Fields.
 																										if(!($url = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode(maybe_serialize($val))), $url)))
 																											break;
 
@@ -359,7 +359,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 												if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_recipients"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
 													{
 														$msg = $sbj = "( s2Member / API Notification Email ) - Refund/Reversal";
-														$msg .= "\n\n"; /* Spacing in the message body. */
+														$msg .= "\n\n"; // Spacing in the message body.
 
 														$msg .= "subscr_id: %%subscr_id%%\n";
 														$msg .= "parent_txn_id: %%parent_txn_id%%\n";
@@ -399,11 +399,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																					if(($msg = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user_id), $msg)))
 																						{
 																							if(is_array($fields) && !empty($fields))
-																								foreach($fields as $var => $val) /* Custom Registration/Profile Fields. */
+																								foreach($fields as $var => $val) // Custom Registration/Profile Fields.
 																									if(!($msg = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(maybe_serialize($val)), $msg)))
 																										break;
 
-																							if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) /* Still have a ``$sbj`` and a ``$msg``? */
+																							if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																								foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_recipients"]) as $recipient)
 																									wp_mail($recipient, apply_filters("ws_plugin__s2member_ref_rev_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_ref_rev_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=utf-8");
@@ -417,7 +417,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 											}
 									}
-								else /* Else, this is a duplicate IPN. Must stop here. */
+								else // Else, this is a duplicate IPN. Must stop here.
 									{
 										$paypal["s2member_log"][] = "Not processing. Duplicate IPN.";
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as a type of EOT.";
@@ -430,8 +430,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 								return apply_filters("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level", $paypal, get_defined_vars());
 							}
-						else
-							return apply_filters("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level", false, get_defined_vars());
+						else return apply_filters("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level", false, get_defined_vars());
 					}
 			}
 	}

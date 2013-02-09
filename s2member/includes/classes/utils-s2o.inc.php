@@ -67,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 								$wp_shortinit_section /* Run ``preg_match()`` to confirm existence. */ = "/if *\( *SHORTINIT *\)[\r\n\t\s ]*\{?[\r\n\t\s ]*return false;[\r\n\t\s ]*\}?[\r\n\t\s ]*/";
 								if (preg_match ($wp_shortinit_section, $_wp_settings) && ($_wp_settings_parts = preg_split ($wp_shortinit_section, $_wp_settings, 2)) && ($_wp_settings = trim ($_wp_settings_parts[1])) && ($_wp_settings = "<?php\n" . $_wp_settings))
 									{
-										if (($_wp_settings = str_replace ("__FILE__", "'" . str_replace ("'", "\'", $wp_settings) . "'", $_wp_settings))) /* Eval compatible. Hard-code the ``__FILE__`` location here. */
+										if (($_wp_settings = str_replace ("__FILE__", "'" . str_replace ("'", "\'", $wp_settings) . "'", $_wp_settings))) // Eval compatible. Hard-code the ``__FILE__`` location here.
 											{
 												$mu_plugins_section = "/[\r\n\t\s ]+foreach *\( *wp_get_mu_plugins *\( *\) *as *\\\$mu_plugin *\)[\r\n\t\s ]*\{?[\r\n\t\s ]*include_once *\( *\\\$mu_plugin *\);[\r\n\t\s ]*\}?[\r\n\t\s ]*unset *\( *\\\$mu_plugin *\);/";
 												$mu_plugins_replace = "\n\n" . c_ws_plugin__s2member_utils_s2o::esc_ds (trim (c_ws_plugin__s2member_utils_s2o::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/cfg-files/s2o-mu-plugins.php")))) . "\n";
@@ -85,10 +85,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 																		$th_funcs_replace = "\n\n" . c_ws_plugin__s2member_utils_s2o::esc_ds (trim (c_ws_plugin__s2member_utils_s2o::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/cfg-files/s2o-th-funcs.php")))) . "\n";
 																		if (($_wp_settings = preg_replace ($th_funcs_section, $th_funcs_replace, $_wp_settings, 1, $th_funcs_replaced)) && $th_funcs_replaced)
 																			{
-																				if (($_wp_settings = str_replace ("__FILE__", '"' . str_replace ('"', '\"', $o_file) . '"', $_wp_settings))) /* Eval compatible. */
+																				if (($_wp_settings = str_replace ("__FILE__", '"' . str_replace ('"', '\"', $o_file) . '"', $_wp_settings))) // Eval compatible.
 																					{
-																						if (($_wp_settings = trim ($_wp_settings))) /* WordPress®, with s2Member only. */
-																							return ($wp_settings_as = $_wp_settings); /* After ``SHORTINIT``. */
+																						if (($_wp_settings = trim ($_wp_settings))) // WordPress®, with s2Member only.
+																							return ($wp_settings_as = $_wp_settings); // After ``SHORTINIT``.
 																					}
 																			}
 																	}
@@ -97,7 +97,6 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 											}
 									}
 							}
-
 						return false;
 					}
 				/**
@@ -126,7 +125,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 				*/
 				public static function evl ($code = FALSE)
 					{
-						ob_start (); /* Output buffer. */
+						ob_start (); // Output buffer.
 
 						eval ("?>" . trim ($code));
 

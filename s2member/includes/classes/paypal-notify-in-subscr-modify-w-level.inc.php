@@ -38,9 +38,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
-				public static function cp ($vars = array ()) /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+				public static function cp ($vars = array ()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
-						extract($vars); /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+						extract($vars); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
 						if ((!empty ($paypal["txn_type"]) && preg_match ("/^subscr_modify$/i", $paypal["txn_type"]))
 						&& (!empty ($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"]))
@@ -59,33 +59,33 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
 
-										$paypal["period1"] = (preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : "0 D"; /* Defaults to "0 D" ( zero days ). */
-										$paypal["mc_amount1"] = (strlen ($paypal["mc_amount1"]) && $paypal["mc_amount1"] > 0) ? $paypal["mc_amount1"] : "0.00"; /* "0.00". */
+										$paypal["period1"] = (preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : "0 D"; // Defaults to "0 D" ( zero days ).
+										$paypal["mc_amount1"] = (strlen ($paypal["mc_amount1"]) && $paypal["mc_amount1"] > 0) ? $paypal["mc_amount1"] : "0.00"; // "0.00".
 
-										$paypal["initial_term"] = (preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : "0 D"; /* Defaults to "0 D" ( zero days ). */
+										$paypal["initial_term"] = (preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : "0 D"; // Defaults to "0 D" ( zero days ).
 										$paypal["initial"] = (strlen ($paypal["mc_amount1"]) && preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["mc_amount1"] : $paypal["mc_amount3"];
-										$paypal["regular"] = $paypal["mc_amount3"]; /* This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal®. */
-										$paypal["regular_term"] = $paypal["period3"]; /* This is just set to keep a standard; this way both initial_term & regular_term are available. */
-										$paypal["recurring"] = ($paypal["recurring"]) ? $paypal["mc_amount3"] : "0"; /* If non-recurring, this should be zero, otherwise Regular. */
+										$paypal["regular"] = $paypal["mc_amount3"]; // This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal®.
+										$paypal["regular_term"] = $paypal["period3"]; // This is just set to keep a standard; this way both initial_term & regular_term are available.
+										$paypal["recurring"] = ($paypal["recurring"]) ? $paypal["mc_amount3"] : "0"; // If non-recurring, this should be zero, otherwise Regular.
 
-										eval('$ipn_signup_vars = $paypal; unset($ipn_signup_vars["s2member_log"]);'); /* Create array of IPN signup vars w/o s2member_log. */
+										eval('$ipn_signup_vars = $paypal; unset($ipn_signup_vars["s2member_log"]);'); // Create array of IPN signup vars w/o s2member_log.
 
 										if (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"])) && is_object ($user = new WP_User ($user_id)) && $user->ID)
 											{
-												if (!$user->has_cap ("administrator")) /* Do NOT process this routine on Administrators. */
+												if (!$user->has_cap ("administrator")) // Do NOT process this routine on Administrators.
 													{
-														$processing = $modifying = $during = true; /* Yes, we ARE processing this. */
+														$processing = $modifying = $during = true; // Yes, we ARE processing this.
 
 														eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 														do_action ("ws_plugin__s2member_during_paypal_notify_during_before_subscr_modify", get_defined_vars ());
 														do_action ("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars (), "ipn-upgrade-downgrade", "modification", "s2member_level" . $paypal["level"]);
 														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-														$fields = get_user_option ("s2member_custom_fields", $user_id); /* These will be needed in the routines below. */
-														$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); /* Original IP during Registration. */
-														$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"]; /* Now merge conditionally. */
+														$fields = get_user_option ("s2member_custom_fields", $user_id); // These will be needed in the routines below.
+														$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); // Original IP during Registration.
+														$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"]; // Now merge conditionally.
 
-														if (is_multisite () && !is_user_member_of_blog ($user_id)) /* Must have a Role on this Blog. */
+														if (is_multisite () && !is_user_member_of_blog ($user_id)) // Must have a Role on this Blog.
 															{
 																add_existing_user_to_blog(array ("user_id" => $user_id, "role" => "s2member_level" . $paypal["level"]));
 																$user = new WP_User ($user_id);
@@ -93,8 +93,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 
 														$current_role = c_ws_plugin__s2member_user_access::user_access_role ($user);
 
-														if ($current_role !== "s2member_level" . $paypal["level"]) /* Only if we need to. */
-															$user->set_role ("s2member_level" . $paypal["level"]); /* (upgrade/downgrade) */
+														if ($current_role !== "s2member_level" . $paypal["level"]) // Only if we need to.
+															$user->set_role ("s2member_level" . $paypal["level"]); // (upgrade/downgrade)
 
 														if ($paypal["ccaps"] && preg_match ("/^-all/", str_replace ("+", "", $paypal["ccaps"])))
 															foreach ($user->allcaps as $cap => $cap_enabled)
@@ -120,9 +120,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 														delete_user_option ($user_id, "s2member_auto_eot_time");
 
 														$pr_times = get_user_option ("s2member_paid_registration_times", $user_id);
-														$pr_times["level"] = (!$pr_times["level"]) ? time () : $pr_times["level"]; /* Preserves existing. */
+														$pr_times["level"] = (!$pr_times["level"]) ? time () : $pr_times["level"]; // Preserves existing.
 														$pr_times["level" . $paypal["level"]] = (!$pr_times["level" . $paypal["level"]]) ? time () : $pr_times["level" . $paypal["level"]];
-														update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); /* Update now. */
+														update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 
 														c_ws_plugin__s2member_user_notes::clear_user_note_lines ($user_id, "/^Demoted by s2Member\:/");
 
@@ -166,7 +166,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 														if ($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_notification_recipients"] && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
 															{
 																$msg = $sbj = "( s2Member / API Notification Email ) - Modification";
-																$msg .= "\n\n"; /* Spacing in the message body. */
+																$msg .= "\n\n"; // Spacing in the message body.
 
 																$msg .= "subscr_id: %%subscr_id%%\n";
 																$msg .= "initial: %%initial%%\n";
@@ -224,7 +224,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 																																if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
 																																	break;
 
-																														if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) /* Still have a ``$sbj`` and a ``$msg``? */
+																														if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																															foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_notification_recipients"]) as $recipient)
 																																wp_mail ($recipient, apply_filters ("ws_plugin__s2member_modification_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_modification_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=utf-8");
@@ -255,7 +255,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 																																	if (!($code = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $code)))
 																																		break;
 
-																															if (($code = trim (preg_replace ("/%%(.+?)%%/i", "", $code)))) /* This gets stored into a Transient Queue. */
+																															if (($code = trim (preg_replace ("/%%(.+?)%%/i", "", $code)))) // This gets stored into a Transient Queue.
 																																{
 																																	$paypal["s2member_log"][] = "Storing Modification Tracking Codes into a Transient Queue. These will be processed on-site.";
 																																	set_transient ("s2m_" . md5 ("s2member_transient_modification_tracking_codes_" . $paypal["subscr_id"]), $code, 43200);
@@ -274,7 +274,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 										else
 											$paypal["s2member_log"][] = "Unable to modify Subscription. Could not get the existing User ID from the DB.";
 									}
-								else /* Else, this is a duplicate IPN. Must stop here. */
+								else // Else, this is a duplicate IPN. Must stop here.
 									{
 										$paypal["s2member_log"][] = "Not processing. Duplicate IPN.";
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `subscr_modify` ).";

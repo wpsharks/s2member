@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 							{
 								$register = c_ws_plugin__s2member_utils_encryption::encrypt ("subscr_gateway_subscr_id_custom_item_number_time:.:|:.:" . $subscr_gateway . ":.:|:.:" . $subscr_id . ":.:|:.:" . $custom . ":.:|:.:" . $item_number . ":.:|:.:" . strtotime ("now"));
 
-								$register_link = site_url ("/?s2member_register=" . urlencode ($register)); /* Generate long URL/link. */
+								$register_link = site_url ("/?s2member_register=" . urlencode ($register)); // Generate long URL/link.
 
 								if ($shrink && ($shorter_url = c_ws_plugin__s2member_utils_urls::shorten ($register_link)))
 									$register_link = $shorter_url . "#" . $_SERVER["HTTP_HOST"];
@@ -72,11 +72,11 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 					{
 						do_action ("ws_plugin__s2member_before_reg_access_link_via_ajax", get_defined_vars ());
 
-						status_header(200); /* Send a 200 OK status header. */
-						header("Content-Type: text/plain; charset=utf-8"); /* Content-Type with UTF-8. */
-						eval('while (@ob_end_clean ());'); /* End/clean all output buffers that may exist. */
+						status_header(200); // Send a 200 OK status header.
+						header("Content-Type: text/plain; charset=utf-8"); // Content-Type with UTF-8.
+						eval('while (@ob_end_clean ());'); // End/clean all output buffers that may exist.
 
-						if (current_user_can ("create_users")) /* Check priveledges as well. Ability to create Users? */
+						if (current_user_can ("create_users")) // Check privileges as well. Ability to create Users?
 
 							if (!empty ($_POST["ws_plugin__s2member_reg_access_link_via_ajax"]) && is_string ($nonce = $_POST["ws_plugin__s2member_reg_access_link_via_ajax"]) && wp_verify_nonce ($nonce, "ws-plugin--s2member-reg-access-link-via-ajax"))
 

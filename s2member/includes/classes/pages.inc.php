@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 				*/
 				public static function check_page_level_access ()
 					{
-						global $post; /* ``get_the_ID()`` unavailable outside The Loop. */
+						global $post; // ``get_the_ID()`` unavailable outside The Loop.
 
 						do_action ("ws_plugin__s2member_before_check_page_level_access", get_defined_vars ());
 
@@ -45,9 +45,9 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 
 						if (!$excluded && is_page () && is_object ($post) && !empty ($post->ID) && ($page_id = (int)$post->ID) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 							{
-								if (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page ()) /* Do NOT touch WordPress® Systematics. This excludes all WordPress® Systematics. */
+								if (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page ()) // Do NOT touch WordPress® Systematics. This excludes all WordPress® Systematics.
 									{
-										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false; /* Current User's object. */
+										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false; // Current User's object.
 
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"] && $page_id === (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"] && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level0")) && $page_id !== (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 											c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", 0, $_SERVER["REQUEST_URI"], "sys") . exit ();
@@ -58,9 +58,9 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 										else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"] && $page_id === (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"] && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level0")) && $page_id !== (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 											c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", 0, $_SERVER["REQUEST_URI"], "sys") . exit ();
 
-										else if (!c_ws_plugin__s2member_systematics::is_systematic_use_page ()) /* Never restrict Systematics. However, there are 3 exceptions above. */
+										else if (!c_ws_plugin__s2member_systematics::is_systematic_use_page ()) // Never restrict Systematics. However, there are 3 exceptions above.
 											{
-												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) /* Page Level restrictions. Go through each Level. */
+												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Page Level restrictions. Go through each Level.
 													{
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_pages"] === "all" && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 															c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"]) . exit ();
@@ -72,9 +72,9 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 															c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"]) . exit ();
 													}
 
-												if (has_tag ()) /* Here we take a look to see if this Page has any Tags. If so, we need to run the full set of routines against Tags also. */
+												if (has_tag ()) // Here we take a look to see if this Page has any Tags. If so, we need to run the full set of routines against Tags also.
 													{
-														for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) /* Tag Level restrictions ( possibly through Page Tagger ). Go through each Level. */
+														for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Tag Level restrictions ( possibly through Page Tagger ). Go through each Level.
 															{
 																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ptags"] === "all" && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 																	c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"], "ptag") . exit ();
@@ -84,9 +84,9 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 															}
 													}
 
-												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) /* URIs. Go through each Level. */
+												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // URIs. Go through each Level.
 													{
-														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"]) /* URIs configured at this Level? */
+														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"]) // URIs configured at this Level?
 
 															foreach (preg_split ("/[\r\n\t]+/", c_ws_plugin__s2member_ruris::fill_ruri_level_access_rc_vars ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"], $user)) as $str)
 																if ($str && preg_match ("/" . preg_quote ($str, "/") . "/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
@@ -95,7 +95,7 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 
 												if (is_array ($ccaps_req = get_post_meta ($page_id, "s2member_ccaps_req", true)) && !empty ($ccaps_req) && c_ws_plugin__s2member_no_cache::no_cache_constants (true))
 													{
-														foreach ($ccaps_req as $ccap) /* The ``$user`` MUST satisfy ALL Custom Capability requirements. Stored as an array of Custom Capabilities. */
+														foreach ($ccaps_req as $ccap) // The ``$user`` MUST satisfy ALL Custom Capability requirements. Stored as an array of Custom Capabilities.
 															if (strlen ($ccap) && (!$user || !$user->has_cap ("access_s2member_ccap_" . $ccap)) /* Does this ``$user``, have this Custom Capability? */)
 																c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "ccap", $ccap, $_SERVER["REQUEST_URI"], "ccap") . exit ();
 													}
@@ -110,7 +110,7 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 
 						do_action ("ws_plugin__s2member_after_check_page_level_access", get_defined_vars ());
 
-						return; /* For uniformity. */
+						return; // For uniformity.
 					}
 			}
 	}

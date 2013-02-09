@@ -73,7 +73,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 
 								return (isset ($e) && is_string ($e) && strlen ($e)) ? ($base64 = c_ws_plugin__s2member_utils_strings::base64_url_safe_encode ($e)) : "";
 							}
-						else /* Fallback on XOR encryption. */
+						else // Fallback on XOR encryption.
 							return c_ws_plugin__s2member_utils_encryption::xencrypt ($string, $key, $w_md5_cs);
 					}
 				/**
@@ -106,12 +106,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 
 									if (strlen ($d = preg_replace ("/^~r2\|/", "", $d, 1, $r2)) && $r2)
 										$d = rtrim /* Right-trim NULLS and EOTs. */ ($d, "\0\4");
-									else /* Else we need to empty this out. */
+									else // Else we need to empty this out.
 										$d = /* Empty string. Invalid. */ "";
 
 								return (isset ($d) && is_string ($d) && strlen ($d)) ? ($string = $d) : "";
 							}
-						else /* Fallback on XOR decryption. */
+						else // Fallback on XOR decryption.
 							return c_ws_plugin__s2member_utils_encryption::xdecrypt ($base64, $key);
 					}
 				/**
@@ -173,12 +173,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 
 									if (strlen ($d = preg_replace ("/^~xe\|/", "", $d, 1, $xe)) && $xe)
 										$d = /* Just re-assign this here. Nothing more to do. */ $d;
-									else /* Else we need to empty this out. */
+									else // Else we need to empty this out.
 										$d = /* Empty string. Invalid. */ "";
 
 								return (isset ($d) && is_string ($d) && strlen ($d)) ? ($string = $d) : "";
 							}
-						else /* Otherwise we must fail here with an empty string value. */
+						else // Otherwise we must fail here with an empty string value.
 							return /* Just return an empty string in this case. */ "";
 					}
 			}

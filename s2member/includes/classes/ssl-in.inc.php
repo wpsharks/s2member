@@ -45,7 +45,7 @@ if(!class_exists("c_ws_plugin__s2member_ssl_in"))
 				* @todo Add `form` to the array ``$non_ssl_attr_only_tags``?
 				* @todo Cleanup this routine and convert callback functions to static class methods?
 				*/
-				public static function force_ssl($vars = array()) /* Phase 2 of ``c_ws_plugin__s2member_ssl::check_force_ssl()``. */
+				public static function force_ssl($vars = array()) // Phase 2 of ``c_ws_plugin__s2member_ssl::check_force_ssl()``.
 					{
 						extract /* Extract all vars passed in from: ``c_ws_plugin__s2member_ssl::check_force_ssl()``. */($vars);
 
@@ -62,8 +62,8 @@ if(!class_exists("c_ws_plugin__s2member_ssl_in"))
 								$https_with_s2_ssl_gv = add_query_arg($s2_ssl_gv, urlencode($force_ssl), $https);
 								wp_redirect($https_with_s2_ssl_gv).exit();
 							}
-						else /* Otherwise, we buffer all output, and switch all content over to `https`. */
-							/* Assume here that other links on the site should NOT be converted to `https`. */
+						else // Otherwise, we buffer all output, and switch all content over to `https`.
+							// Assume here that other links on the site should NOT be converted to `https`.
 							{
 								add_filter("redirect_canonical", "__return_false");
 
@@ -71,11 +71,11 @@ if(!class_exists("c_ws_plugin__s2member_ssl_in"))
 								define("_ws_plugin__s2member_force_ssl_port", $ssl_port);
 								define("_ws_plugin__s2member_force_ssl_host_port", $ssl_host_port);
 
-								/* Filter these. Do NOT create a sitewide conversion to `https`. */
+								// Filter these. Do NOT create a sitewide conversion to `https`.
 								add_filter("home_url", "_ws_plugin__s2member_force_non_ssl_scheme", 10, 3);
 								add_filter("network_home_url", "_ws_plugin__s2member_force_non_ssl_scheme", 10, 3);
 
-								/* Filter these. Do NOT create a sitewide conversion to `https`. */
+								// Filter these. Do NOT create a sitewide conversion to `https`.
 								add_filter("site_url", "_ws_plugin__s2member_force_non_ssl_scheme", 10, 3);
 								add_filter("network_site_url", "_ws_plugin__s2member_force_non_ssl_scheme", 10, 3);
 								/*
@@ -128,7 +128,7 @@ if(!class_exists("c_ws_plugin__s2member_ssl_in"))
 														else if(($scheme === "login" || $scheme === "admin") && force_ssl_admin())
 															$scheme = "https";
 
-														else /* Default to non-SSL: `http`. */
+														else // Default to non-SSL: `http`.
 															$scheme = "http";
 													}
 												return preg_replace("/^(?:https?\:)?\/\//i", $scheme."://", $url);
@@ -162,7 +162,6 @@ if(!class_exists("c_ws_plugin__s2member_ssl_in"))
 
 								ob_start("_ws_plugin__s2member_force_ssl_buffer");
 							}
-
 						return /* Return for uniformity. */;
 					}
 			}

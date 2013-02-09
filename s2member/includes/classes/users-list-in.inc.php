@@ -47,12 +47,12 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 						do_action("ws_plugin__s2member_before_users_list_edit_cols", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						$current_user = (is_user_logged_in()) ? wp_get_current_user() : false; /* Current User. */
+						$current_user = (is_user_logged_in()) ? wp_get_current_user() : false; // Current User.
 
 						if(is_object($user) && !empty($user->ID) && ($user_id = $user->ID) && is_object($current_user) && !empty($current_user->ID))
 							{
-								$role = c_ws_plugin__s2member_user_access::user_access_role($user); /* This User's current WordPress® Role. */
-								$level = c_ws_plugin__s2member_user_access::user_access_level($user); /* User's Access Level for s2Member. */
+								$role = c_ws_plugin__s2member_user_access::user_access_role($user); // This User's current WordPress® Role.
+								$level = c_ws_plugin__s2member_user_access::user_access_level($user); // User's Access Level for s2Member.
 
 								if(current_user_can("edit_users") && (!is_multisite() || is_super_admin() || is_user_member_of_blog($user_id)))
 									{
@@ -66,8 +66,8 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 										do_action("ws_plugin__s2member_during_users_list_edit_cols_before", get_defined_vars());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-										if(is_multisite() && is_super_admin()) /* MUST be a Super Admin. */
-											/* On a Multisite Network, the Super Administrator can ALWAYS edit this. */
+										if(is_multisite() && is_super_admin()) // MUST be a Super Admin.
+											// On a Multisite Network, the Super Administrator can ALWAYS edit this.
 											{
 												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 												do_action("ws_plugin__s2member_during_users_list_edit_cols_before_originating_blog", get_defined_vars());
@@ -140,7 +140,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 										if(!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site())
-											/* ^ Will change once Custom Capabilities are compatible with a Blog Farm. */
+											// ^ Will change once Custom Capabilities are compatible with a Blog Farm.
 											{
 												foreach($user->allcaps as $cap => $cap_enabled)
 													if(preg_match("/^access_s2member_ccap_/", $cap))
@@ -160,7 +160,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 											}
 
-										if(!$user->has_cap("administrator")) /* Do NOT present these details for Administrator accounts. */
+										if(!$user->has_cap("administrator")) // Do NOT present these details for Administrator accounts.
 											{
 												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 												do_action("ws_plugin__s2member_during_users_list_edit_cols_before_auto_eot_time", get_defined_vars());
@@ -178,7 +178,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 											}
 
-										if(c_ws_plugin__s2member_list_servers::list_servers_integrated()) /* Only if integrated with s2Member. */
+										if(c_ws_plugin__s2member_list_servers::list_servers_integrated()) // Only if integrated with s2Member.
 											{
 												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 												do_action("ws_plugin__s2member_during_users_list_edit_cols_before_opt_in", get_defined_vars());
@@ -225,7 +225,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 										do_action("ws_plugin__s2member_during_users_list_edit_cols_after_ip_restrictions", get_defined_vars());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-										if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"]) /* Only if configured. */
+										if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"]) // Only if configured.
 											if($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level($level, "administrative"))
 												{
 													echo '<tr>'."\n";
@@ -234,7 +234,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 													echo '</td>'."\n";
 													echo '</tr>'."\n";
 
-													$fields = get_user_option("s2member_custom_fields", $user_id); /* Existing fields. */
+													$fields = get_user_option("s2member_custom_fields", $user_id); // Existing fields.
 
 													eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 													do_action("ws_plugin__s2member_during_users_list_edit_cols_before_custom_fields", get_defined_vars());
@@ -246,7 +246,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 															do_action("ws_plugin__s2member_during_users_list_edit_cols_during_custom_fields_before", get_defined_vars());
 															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-															if(in_array($field["id"], $fields_applicable)) /* Field applicable? */
+															if(in_array($field["id"], $fields_applicable)) // Field applicable?
 																{
 																	$field_var = preg_replace("/[^a-z0-9]/i", "_", strtolower($field["id"]));
 																	$field_id_class = preg_replace("/_/", "-", $field_var);
@@ -254,7 +254,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 																	eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 																	if(apply_filters("ws_plugin__s2member_during_users_list_edit_cols_during_custom_fields_display", true, get_defined_vars()))
 																		{
-																			if(!empty($field["section"]) && $field["section"] === "yes") /* Starts a new section? */
+																			if(!empty($field["section"]) && $field["section"] === "yes") // Starts a new section?
 																				echo '<tr><td colspan="2"><div class="ws-plugin--s2member-profile-divider-section'.((!empty($field["sectitle"])) ? '-title' : '').'">'.((!empty($field["sectitle"])) ? $field["sectitle"] : '').'</div></td></tr>';
 
 																			echo '<tr>'."\n";
@@ -303,7 +303,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 										echo '<div style="margin:25px 0 25px 0; height:1px; line-height:1px; background:#CCCCCC;"></div>'."\n";
 									}
 
-								else if($current_user->ID === $user->ID) /* Otherwise, a User can always edit their own Profile. */
+								else if($current_user->ID === $user->ID) // Otherwise, a User can always edit their own Profile.
 									{
 										if /* Only if configured. */($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 											if($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level($level, "profile"))
@@ -318,7 +318,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 													do_action("ws_plugin__s2member_during_users_list_edit_cols_before", get_defined_vars());
 													unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-													$fields = get_user_option("s2member_custom_fields", $user_id); /* Existing fields. */
+													$fields = get_user_option("s2member_custom_fields", $user_id); // Existing fields.
 
 													eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 													do_action("ws_plugin__s2member_during_users_list_edit_cols_before_custom_fields", get_defined_vars());
@@ -330,7 +330,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 															do_action("ws_plugin__s2member_during_users_list_edit_cols_during_custom_fields_before", get_defined_vars());
 															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-															if(in_array($field["id"], $fields_applicable)) /* Field applicable? */
+															if(in_array($field["id"], $fields_applicable)) // Field applicable?
 																{
 																	$field_var = preg_replace("/[^a-z0-9]/i", "_", strtolower($field["id"]));
 																	$field_id_class = preg_replace("/_/", "-", $field_var);
@@ -338,7 +338,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 																	eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 																	if(apply_filters("ws_plugin__s2member_during_users_list_edit_cols_during_custom_fields_display", true, get_defined_vars()))
 																		{
-																			if(!empty($field["section"]) && $field["section"] === "yes") /* Starts a new section? */
+																			if(!empty($field["section"]) && $field["section"] === "yes") // Starts a new section?
 																				echo '<tr><td colspan="2"><div class="ws-plugin--s2member-profile-divider-section'.((!empty($field["sectitle"])) ? '-title' : '').'">'.((!empty($field["sectitle"])) ? $field["sectitle"] : '').'</div></td></tr>';
 
 																			echo '<tr>'."\n";
@@ -417,7 +417,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 
 												$auto_eot_time = (!empty($_p["ws_plugin__s2member_profile_s2member_auto_eot_time"])) ? strtotime($_p["ws_plugin__s2member_profile_s2member_auto_eot_time"]) : "";
 
-												if($role !== $old_role) /* In this case, we need to fire Hook: `ws_plugin__s2member_during_collective_mods`. */
+												if($role !== $old_role) // In this case, we need to fire Hook: `ws_plugin__s2member_during_collective_mods`.
 													do_action("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars(), "user-role-change", "modification", $role, $user, $old_user);
 
 												if(isset($_p["ws_plugin__s2member_profile_s2member_originating_blog"]) && is_multisite() && is_super_admin())
@@ -477,7 +477,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 														$pr_times = get_user_option("s2member_paid_registration_times", $user_id);
 														$pr_times["level"] = (empty($pr_times["level"])) ? time() : $pr_times["level"];
 														$pr_times["level".$level] = (empty($pr_times["level".$level])) ? time() : $pr_times["level".$level];
-														update_user_option($user_id, "s2member_paid_registration_times", $pr_times); /* Update now. */
+														update_user_option($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 													}
 												if /* Should we process List Servers? */(!empty($_p["ws_plugin__s2member_profile_opt_in"]) && !empty($role) && $level >= 0)
 													c_ws_plugin__s2member_list_servers::process_list_servers($role, $level, $user->user_login, ((!empty($_p["pass1"])) ? $_p["pass1"] : ""), $user->user_email, $user->first_name, $user->last_name, false, true, true, $user_id);
@@ -511,14 +511,14 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 																		{
 																			if(isset($_existing_fields[$field_var]) && ((is_array($_existing_fields[$field_var]) && !empty($_existing_fields[$field_var])) || (is_string($_existing_fields[$field_var]) && strlen($_existing_fields[$field_var]))))
 																				$fields[$field_var] = $_existing_fields[$field_var];
-																			else /* Else ``unset()``. */
+																			else // Else ``unset()``.
 																				unset($fields[$field_var]);
 																		}
 																	else if($field["required"] === "yes" && (!isset($_p["ws_plugin__s2member_profile_".$field_var]) || (!is_array($_p["ws_plugin__s2member_profile_".$field_var]) && !is_string($_p["ws_plugin__s2member_profile_".$field_var])) || (is_array($_p["ws_plugin__s2member_profile_".$field_var]) && empty($_p["ws_plugin__s2member_profile_".$field_var])) || (is_string($_p["ws_plugin__s2member_profile_".$field_var]) && !strlen($_p["ws_plugin__s2member_profile_".$field_var]))))
 																		{
 																			if(isset($_existing_fields[$field_var]) && ((is_array($_existing_fields[$field_var]) && !empty($_existing_fields[$field_var])) || (is_string($_existing_fields[$field_var]) && strlen($_existing_fields[$field_var]))))
 																				$fields[$field_var] = $_existing_fields[$field_var];
-																			else /* Else ``unset()``. */
+																			else // Else ``unset()``.
 																				unset($fields[$field_var]);
 																		}
 																	else if(isset($_p["ws_plugin__s2member_profile_".$field_var]))

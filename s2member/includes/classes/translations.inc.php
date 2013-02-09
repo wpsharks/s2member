@@ -40,7 +40,7 @@ if (!class_exists ("c_ws_plugin__s2member_translations"))
 				public static function load ()
 					{
 						load_plugin_textdomain ("s2member", false, c_ws_plugin__s2member_utils_dirs::rel_path (WP_PLUGIN_DIR, dirname (dirname (__FILE__)) . "/translations"));
-						load_plugin_textdomain ("s2member"); /* Allows `.mo` file to be loaded from the `/wp-content/plugins/s2member-[locale].mo`. */
+						load_plugin_textdomain ("s2member"); // Allows `.mo` file to be loaded from the `/wp-content/plugins/s2member-[locale].mo`.
 
 						do_action ("ws_plugin__s2member_during_translations_load", get_defined_vars ());
 
@@ -69,16 +69,16 @@ if (!class_exists ("c_ws_plugin__s2member_translations"))
 				*/
 				public static function translation_mangler ($translated = FALSE, $original = FALSE, $domain = FALSE)
 					{
-						global $current_site, $current_blog; /* In support of Multisite Networking. */
-						static $s = array (); /* This static array optimizes all of these routines. */
+						global $current_site, $current_blog; // In support of Multisite Networking.
+						static $s = array (); // This static array optimizes all of these routines.
 
 						if ((isset ($s["is_wp_login"]) && $s["is_wp_login"]) || (!isset ($s["is_wp_login"]) && ($s["is_wp_login"] = (strpos ($_SERVER["REQUEST_URI"], "/wp-login.php") !== false && empty ($_REQUEST["action"]) && empty ($_REQUEST["checkemail"])) ? true : false)))
 							{
-								if ($original === "Username") /* Give Filters a chance here. */
+								if ($original === "Username") // Give Filters a chance here.
 									{
 										$translated = apply_filters ("ws_plugin__s2member_translation_mangler", _x ("Username:", "s2member-front", "s2member"), get_defined_vars ());
 									}
-								else if ($original === "Password") /* Give Filters a chance here. */
+								else if ($original === "Password") // Give Filters a chance here.
 									{
 										$translated = apply_filters ("ws_plugin__s2member_translation_mangler", _x ("My Password:", "s2member-front", "s2member"), get_defined_vars ());
 									}
@@ -86,15 +86,15 @@ if (!class_exists ("c_ws_plugin__s2member_translations"))
 
 						else if ((isset ($s["is_wp_login_register"]) && $s["is_wp_login_register"]) || (!isset ($s["is_wp_login_register"]) && ($s["is_wp_login_register"] = (strpos ($_SERVER["REQUEST_URI"], "/wp-login.php") !== false && !empty ($_REQUEST["action"]) && $_REQUEST["action"] === "register") ? true : false)))
 							{
-								if ($original === "Username") /* Give Filters a chance here. */
+								if ($original === "Username") // Give Filters a chance here.
 									{
 										$translated = apply_filters ("ws_plugin__s2member_translation_mangler", _x ("Username *", "s2member-front", "s2member"), get_defined_vars ());
 									}
-								else if ($original === "Password") /* Give Filters a chance here. */
+								else if ($original === "Password") // Give Filters a chance here.
 									{
 										$translated = apply_filters ("ws_plugin__s2member_translation_mangler", _x ("Password *", "s2member-front", "s2member"), get_defined_vars ());
 									}
-								else if ($original === "E-mail") /* Give Filters a chance here. */
+								else if ($original === "E-mail") // Give Filters a chance here.
 									{
 										$translated = apply_filters ("ws_plugin__s2member_translation_mangler", _x ("Email Address *", "s2member-front", "s2member"), get_defined_vars ());
 									}
@@ -138,7 +138,7 @@ if (!class_exists ("c_ws_plugin__s2member_translations"))
 												$blogs_allowed = (int)@$mms_options["mms_registration_blogs_level" . c_ws_plugin__s2member_user_access::user_access_level ($user)];
 												$user_blogs = (is_array ($blogs = get_blogs_of_user ($user->ID))) ? count ($blogs) - 1 : 0;
 
-												$user_blogs = ($user_blogs >= 0) ? $user_blogs : 0; /* NOT less than zero. */
+												$user_blogs = ($user_blogs >= 0) ? $user_blogs : 0; // NOT less than zero.
 												$blogs_allowed = ($blogs_allowed >= 0) ? $blogs_allowed : 0;
 
 												$translated = apply_filters ("ws_plugin__s2member_translation_mangler", _x ('By filling out the form below, you can <strong>add a site to your account</strong>.', "s2member-front", "s2member") . (($blogs_allowed > 1) ? '<br />' . sprintf (_nx ('You may create up to <strong>%s</strong> site.', 'You may create up to <strong>%s</strong> sites.', $blogs_allowed, "s2member-front", "s2member"), $blogs_allowed) : ''), get_defined_vars ());
@@ -160,15 +160,14 @@ if (!class_exists ("c_ws_plugin__s2member_translations"))
 												$blogs_allowed = (int)@$mms_options["mms_registration_blogs_level" . c_ws_plugin__s2member_user_access::user_access_level ($user)];
 												$user_blogs = (is_array ($blogs = get_blogs_of_user ($user->ID))) ? count ($blogs) - 1 : 0;
 
-												$user_blogs = ($user_blogs >= 0) ? $user_blogs : 0; /* NOT less than zero. */
+												$user_blogs = ($user_blogs >= 0) ? $user_blogs : 0; // NOT less than zero.
 												$blogs_allowed = ($blogs_allowed >= 0) ? $blogs_allowed : 0;
 
 												$translated = apply_filters ("ws_plugin__s2member_translation_mangler", _x ('By filling out the form below, you can <strong>add a site to your account</strong>.', "s2member-front", "s2member") . (($blogs_allowed > 1) ? '<br />' . sprintf (_nx ('You may create up to <strong>%s</strong> site.', 'You may create up to <strong>%s</strong> sites.', $blogs_allowed, "s2member-front", "s2member"), $blogs_allowed) : ''), get_defined_vars ());
 											}
 									}
 							}
-
-						return $translated; /* No Filters. */
+						return $translated; // No Filters.
 					}
 			}
 	}

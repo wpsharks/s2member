@@ -52,8 +52,8 @@ if (!class_exists ("c_ws_plugin__s2member_mo_page_in"))
 							{
 								$args = /* Initialize this to an empty array value. */ array ();
 
-								foreach ($_g as $var => $value) /* Include all of the `_?s2member_` variables. */
-									/* Do NOT include `s2member_membership_options_page`; creates a redirection loop. */
+								foreach ($_g as $var => $value) // Include all of the `_?s2member_` variables.
+									// Do NOT include `s2member_membership_options_page`; creates a redirection loop.
 									if (preg_match ("/^_?s2member_/", $var) && $var !== "s2member_membership_options_page")
 										$args[$var] = /* Supports nested arrays. */ $value;
 
@@ -98,7 +98,7 @@ if (!class_exists ("c_ws_plugin__s2member_mo_page_in"))
 
 						do_action ("ws_plugin__s2member_after_wp_redirect_w_mop_vars", get_defined_vars ());
 
-						return true; /* Always returns true here. */
+						return true; // Always returns true here.
 					}
 			}
 	}

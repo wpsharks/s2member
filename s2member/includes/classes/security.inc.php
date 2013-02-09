@@ -37,23 +37,23 @@ if (!class_exists ("c_ws_plugin__s2member_security"))
 				*
 				* @return null May redirect a browser *(exiting script execution)*, when/if content is NOT available to the current User/Member.
 				*/
-				public static function security_gate () /* s2Member's Security Gate. */
+				public static function security_gate () // s2Member's Security Gate.
 					{
 						do_action ("ws_plugin__s2member_before_security_gate", get_defined_vars ());
 
-						if (is_category ()) /* Categories & other inclusives. */
+						if (is_category ()) // Categories & other inclusives.
 							c_ws_plugin__s2member_catgs::check_catg_level_access ();
 
-						else if (is_tag ()) /* Post/Page Tags & other inclusives. */
+						else if (is_tag ()) // Post/Page Tags & other inclusives.
 							c_ws_plugin__s2member_ptags::check_ptag_level_access ();
 
-						else if (is_single ()) /* All Posts & other inclusives. */
+						else if (is_single ()) // All Posts & other inclusives.
 							c_ws_plugin__s2member_posts::check_post_level_access ();
 
-						else if (is_page ()) /* All Pages & other inclusives. */
+						else if (is_page ()) // All Pages & other inclusives.
 							c_ws_plugin__s2member_pages::check_page_level_access ();
 
-						else /* Else, we simply look at URIs & other inclusives. */
+						else // Else, we simply look at URIs & other inclusives.
 							c_ws_plugin__s2member_ruris::check_ruri_level_access ();
 
 						do_action ("ws_plugin__s2member_after_security_gate", get_defined_vars ());
@@ -71,11 +71,11 @@ if (!class_exists ("c_ws_plugin__s2member_security"))
 				* @param obj $wp_query Global ``$wp_query``, by reference.
 				* @return null May filter WordPress® queries, by hiding protected content which is NOT available to the current User/Member.
 				*/
-				public static function security_gate_query (&$wp_query = FALSE) /* s2Member's Security Gate. */
+				public static function security_gate_query (&$wp_query = FALSE) // s2Member's Security Gate.
 					{
 						do_action ("ws_plugin__s2member_before_security_gate_query", get_defined_vars ());
 
-						c_ws_plugin__s2member_querys::query_level_access ($wp_query); /* By reference. */
+						c_ws_plugin__s2member_querys::query_level_access ($wp_query); // By reference.
 
 						do_action ("ws_plugin__s2member_after_security_gate_query", get_defined_vars ());
 

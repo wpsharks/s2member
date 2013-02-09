@@ -39,11 +39,11 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 				*/
 				public static function general_ops_notice ()
 					{
-						global $pagenow; /* Need this global variable. */
+						global $pagenow; // Need this global variable.
 
 						do_action ("ws_plugin__s2member_before_general_ops_notice", get_defined_vars ());
 
-						if (is_blog_admin () && $pagenow === "options-general.php" && !isset ($_GET["page"]) && !is_multisite ()) /* Multisite does NOT provide these options. */
+						if (is_blog_admin () && $pagenow === "options-general.php" && !isset ($_GET["page"]) && !is_multisite ()) // Multisite does NOT provide these options.
 							{
 								$notice = "<em>* Note: The s2Member plugin has control over two options on this page.<br /><code>Allow Open Registration = " . esc_html (get_option ("users_can_register")) . "</code>, and <code>Default Role = " . esc_html (get_option ("default_role")) . "</code>.<br />For further details, see: <code>s2Member -> General Options -> Open Registration</code>.";
 
@@ -72,7 +72,7 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 				*/
 				public static function multisite_ops_notice ()
 					{
-						global $pagenow; /* Need this global variable. */
+						global $pagenow; // Need this global variable.
 
 						do_action ("ws_plugin__s2member_before_multisite_ops_notice", get_defined_vars ());
 
@@ -105,13 +105,13 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 				*/
 				public static function reading_ops_notice ()
 					{
-						global $pagenow; /* Need this global variable. */
+						global $pagenow; // Need this global variable.
 
 						do_action ("ws_plugin__s2member_before_reading_ops_notice", get_defined_vars ());
 
 						if (is_blog_admin () && $pagenow === "options-reading.php" && !isset ($_GET["page"]))
 							{
-								do_action ("ws_plugin__s2member_during_reading_ops_notice", get_defined_vars ()); /* Now check for conflicts. */
+								do_action ("ws_plugin__s2member_during_reading_ops_notice", get_defined_vars ()); // Now check for conflicts.
 
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"] && (string)get_option ("page_on_front") === $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"]
 								&& ($notice = '<strong>NOTE:</strong> Your Membership Options Page for s2Member is currently configured as your Home Page ( i.e. static page ) for WordPress®. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this.'))

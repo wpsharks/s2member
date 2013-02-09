@@ -55,12 +55,12 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 
 						if (!empty ($_GET["s2member_paypal_notify"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !empty ($_GET["s2member_paypal_proxy"])))
 							{
-								@ignore_user_abort (true); /* Important. Continue processing even if/when the connection is broken by the sending party. */
+								@ignore_user_abort (true); // Important. Continue processing even if/when the connection is broken by the sending party.
 
-								include_once ABSPATH . "wp-admin/includes/admin.php"; /* Get administrative functions. Needed for `wp_delete_user()`. */
+								include_once ABSPATH . "wp-admin/includes/admin.php"; // Get administrative functions. Needed for `wp_delete_user()`.
 
-								$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status (); /* Filters on? */
-								c_ws_plugin__s2member_email_configs::email_config_release (); /* Release s2Member Filters. */
+								$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status (); // Filters on?
+								c_ws_plugin__s2member_email_configs::email_config_release (); // Release s2Member Filters.
 
 								if (is_array ($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
 									{
@@ -71,7 +71,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 
 										$paypal["subscr_gateway"] = (!empty ($_GET["s2member_paypal_proxy"])) ? esc_html (trim (stripslashes ($_GET["s2member_paypal_proxy"]))) : "paypal";
 
-										if (empty ($paypal["custom"]) && !empty ($paypal["recurring_payment_id"])) /* Lookup on Recurring Profiles? */
+										if (empty ($paypal["custom"]) && !empty ($paypal["recurring_payment_id"])) // Lookup on Recurring Profiles?
 											$paypal["custom"] = c_ws_plugin__s2member_utils_users::get_user_custom_with ($paypal["recurring_payment_id"]);
 
 										if (!empty ($paypal["custom"]) && preg_match ("/^" . preg_quote (preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"]), "/") . "/i", $paypal["custom"]))
@@ -125,10 +125,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 														else if (($_paypal_cp = c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal::cp (get_defined_vars ())))
 															$paypal = $_paypal_cp;
 
-														else /* Ignoring this IPN request. The txn_type/status does NOT require any action. */
+														else // Ignoring this IPN request. The txn_type/status does NOT require any action.
 															$paypal["s2member_log"][] = "Ignoring this IPN request. The `txn_type/status` does NOT require any action on the part of s2Member.";
 													}
-												else /* Else a custom conditional has been applied by Filters. */
+												else // Else a custom conditional has been applied by Filters.
 													unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 											}
 
@@ -138,23 +138,23 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 												$paypal["s2member_log"][] = "It's likely this account was just upgraded/downgraded by s2Member Pro; so the Subscr. ID has probably been updated on-site; nothing to worry about here.";
 											}
 
-										else if (!empty ($paypal["txn_type"]) && preg_match ("/^recurring_/i", $paypal["txn_type"])) /* Otherwise, is this a ^recurring_ txn_type? */
+										else if (!empty ($paypal["txn_type"]) && preg_match ("/^recurring_/i", $paypal["txn_type"])) // Otherwise, is this a ^recurring_ txn_type?
 											$paypal["s2member_log"][] = "Transaction type ( `^recurring_?` ), but there is no match to an existing account; so verification of `\$_SERVER[\"HTTP_HOST\"]` was not possible.";
 
-										else /* Else, use the default ``$_SERVER["HTTP_HOST"]`` error. */
+										else // Else, use the default ``$_SERVER["HTTP_HOST"]`` error.
 											$paypal["s2member_log"][] = "Unable to verify `\$_SERVER[\"HTTP_HOST\"]`. Please check the `custom` value in your Button Code. It MUST start with your domain name.";
 									}
 
-								else /* Extensive log reporting here. This is an area where many site owners find trouble. Depending on server configuration; remote HTTPS connections may fail. */
+								else // Extensive log reporting here. This is an area where many site owners find trouble. Depending on server configuration; remote HTTPS connections may fail.
 									{
 										$paypal["s2member_log"][] = "Unable to verify \$_POST vars. This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility.";
 										$paypal["s2member_log"][] = "If you're absolutely SURE that your configuration is valid, you may want to run some tests on your server, just to be sure \$_POST variables are populated, and that your server is able to connect/communicate with your Payment Gateway over an HTTPS connection.";
 										$paypal["s2member_log"][] = "s2Member uses the `WP_Http` class for remote connections; which will try to use `cURL` first, and then fall back on the `FOPEN` method when `cURL` is not available. On a Windows® server, you may have to disable your `cURL` extension; and instead, set `allow_url_fopen = yes` in your php.ini file. The `cURL` extension (usually) does NOT support SSL connections on a Windows® server.";
 										$paypal["s2member_log"][] = "Please see this thread: `http://www.s2member.com/forums/topic/ideal-server-configuration-for-s2member/` for details regarding the ideal server configuration for s2Member.";
-										$paypal["s2member_log"][] = var_export ($_REQUEST, true); /* Recording _POST + _GET vars for analysis and debugging. */
+										$paypal["s2member_log"][] = var_export ($_REQUEST, true); // Recording _POST + _GET vars for analysis and debugging.
 									}
 
-								if ($email_configs_were_on) /* Back on? */
+								if ($email_configs_were_on) // Back on?
 									c_ws_plugin__s2member_email_configs::email_config ();
 								/*
 								Add IPN proxy ( when available ) to the ``$paypal`` array.
@@ -190,9 +190,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								do_action ("ws_plugin__s2member_during_paypal_notify", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-								status_header (200); /* Send a 200 OK status header. */
-								header ("Content-Type: text/plain; charset=utf-8"); /* Content-Type text/plain with UTF-8. */
-								eval ('while (@ob_end_clean ());'); /* End/clean all output buffers that may or may not exist. */
+								status_header (200); // Send a 200 OK status header.
+								header ("Content-Type: text/plain; charset=utf-8"); // Content-Type text/plain with UTF-8.
+								eval ('while (@ob_end_clean ());'); // End/clean all output buffers that may or may not exist.
 
 								exit (((!empty ($paypal["s2member_paypal_proxy_return_url"])) ? $paypal["s2member_paypal_proxy_return_url"] : ""));
 							}

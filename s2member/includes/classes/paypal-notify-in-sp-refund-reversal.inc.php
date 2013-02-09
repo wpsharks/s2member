@@ -38,9 +38,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
-				public static function cp ($vars = array ()) /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+				public static function cp ($vars = array ()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
-						extract ($vars); /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+						extract ($vars); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
 						if (((!empty ($paypal["txn_type"]) && preg_match ("/^new_case$/i", $paypal["txn_type"]) && !empty ($paypal["case_type"]) && preg_match ("/^chargeback$/i", $paypal["case_type"]))
 						|| (!empty ($paypal["payment_status"]) && preg_match ("/^(refunded|reversed|reversal)$/i", $paypal["payment_status"])) /* The "txn_type" is irrelevant in these special situations. */)
@@ -59,7 +59,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
 
-										$processing = $during = true; /* Yes, we ARE processing this. */
+										$processing = $during = true; // Yes, we ARE processing this.
 										/*
 										Refunds and chargeback reversals. This is excluded from the processing check.
 										In other words, s2Member sends `Refund/Reversal` Notifications ANYTIME a Refund/Reversal occurs; even if s2Member did not process it otherwise.
@@ -87,7 +87,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_recipients"] && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
 											{
 												$msg = $sbj = "( s2Member / API Notification Email ) - Specific Post/Page ~ Refund/Reversal";
-												$msg .= "\n\n"; /* Spacing in the message body. */
+												$msg .= "\n\n"; // Spacing in the message body.
 
 												$msg .= "parent_txn_id: %%parent_txn_id%%\n";
 												$msg .= "item_number: %%item_number%%\n";
@@ -119,7 +119,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 																	if (($msg = preg_replace ("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["payer_email"]), $msg)))
 																		if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["ip"]), $msg)))
 
-																			if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) /* Still have a ``$sbj`` and a ``$msg``? */
+																			if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																				foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_recipients"]) as $recipient)
 																					wp_mail ($recipient, apply_filters ("ws_plugin__s2member_sp_ref_rev_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_sp_ref_rev_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=utf-8");
@@ -131,7 +131,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 										do_action ("ws_plugin__s2member_during_paypal_notify_during_sp_refund_reversal", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
-								else /* Else, this is a duplicate IPN. Must stop here. */
+								else // Else, this is a duplicate IPN. Must stop here.
 									{
 										$paypal["s2member_log"][] = "Not processing. Duplicate IPN.";
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback` ).";

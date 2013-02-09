@@ -41,9 +41,9 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 					{
 						do_action ("ws_plugin__s2member_before_register", get_defined_vars ());
 
-						if (!empty ($_GET["s2member_register"])) /* If they're attempting to access the registration system. */
+						if (!empty ($_GET["s2member_register"])) // If they're attempting to access the registration system.
 							{
-								eval('while (@ob_end_clean ());'); /* First we end/clean any output buffers that may exist already. */
+								eval('while (@ob_end_clean ());'); // First we end/clean any output buffers that may exist already.
 
 								$msg_503 = _x ('<strong>Your Link Expired:</strong><br />Please contact Support if you need assistance.', "s2member-front", "s2member");
 
@@ -60,8 +60,8 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 
 														if (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) /* Needed? */)
 															{
-																status_header(200); /* Send a 200 OK status header. */
-																header("Content-Type: text/html; charset=utf-8"); /* Content-Type with UTF-8. */
+																status_header(200); // Send a 200 OK status header.
+																header("Content-Type: text/html; charset=utf-8"); // Content-Type with UTF-8.
 
 																setcookie ("s2member_subscr_gateway", $_COOKIE["s2member_subscr_gateway"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_subscr_gateway", $_COOKIE["s2member_subscr_gateway"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
 																setcookie ("s2member_subscr_id", $_COOKIE["s2member_subscr_id"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_subscr_id", $_COOKIE["s2member_subscr_id"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 																		echo "window.location = '" . c_ws_plugin__s2member_utils_strings::esc_js_sq ($location) . "';";
 																		echo '</script>' . "\n";
 																	}
-																exit (); /* Clean exit. The browser will now be redirected to ``$location``. */
+																exit (); // Clean exit. The browser will now be redirected to ``$location``.
 															}
 														else
 															status_header(503) . header ("Content-Type: text/html; charset=utf-8") . exit ($msg_503);

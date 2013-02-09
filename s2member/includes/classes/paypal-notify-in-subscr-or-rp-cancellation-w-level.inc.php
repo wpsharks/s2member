@@ -38,9 +38,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
-				public static function cp ($vars = array ()) /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+				public static function cp ($vars = array ()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
-						extract ($vars); /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+						extract ($vars); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
 						if ((!empty ($paypal["txn_type"]) && preg_match ("/^(subscr_cancel|recurring_payment_profile_cancel)$/i", $paypal["txn_type"]))
 						&& !(preg_match ("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]) && !empty ($paypal["initial_payment_status"]) && preg_match ("/^failed$/i", $paypal["initial_payment_status"]))
@@ -66,19 +66,19 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 
 										if (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"])) && is_object ($user = new WP_User ($user_id)) && $user->ID)
 											{
-												if (!$user->has_cap ("administrator")) /* Do NOT process this routine on Administrators. */
+												if (!$user->has_cap ("administrator")) // Do NOT process this routine on Administrators.
 													{
-														$fields = get_user_option ("s2member_custom_fields", $user_id); /* These will be needed in the routines below. */
-														$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); /* Original IP during Registration. */
-														$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"]; /* Now merge conditionally. */
+														$fields = get_user_option ("s2member_custom_fields", $user_id); // These will be needed in the routines below.
+														$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); // Original IP during Registration.
+														$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"]; // Now merge conditionally.
 
-														if (!get_user_option ("s2member_auto_eot_time", $user_id)) /* Respect existing. */
+														if (!get_user_option ("s2member_auto_eot_time", $user_id)) // Respect existing.
 															{
-																$processing = $during = true; /* Yes, we ARE processing this. */
+																$processing = $during = true; // Yes, we ARE processing this.
 
 																$auto_eot_time = c_ws_plugin__s2member_utils_time::auto_eot_time ($user_id, $paypal["period1"], $paypal["period3"]);
 
-																update_user_option ($user_id, "s2member_auto_eot_time", $auto_eot_time); /* s2Member follows-up later. */
+																update_user_option ($user_id, "s2member_auto_eot_time", $auto_eot_time); // s2Member follows-up later.
 
 																$paypal["s2member_log"][] = "Auto-EOT Time for this account: " . date ("D M j, Y g:i a T", $auto_eot_time);
 
@@ -91,7 +91,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_urls"] && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
 															{
-																foreach (preg_split ("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_urls"]) as $url) /* Handle Cancellation Notifications. */
+																foreach (preg_split ("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_urls"]) as $url) // Handle Cancellation Notifications.
 
 																	if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)) && ($url = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["subscr_id"])), $url)))
 																		if (($url = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_number"])), $url)) && ($url = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_name"])), $url)))
@@ -117,7 +117,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_recipients"] && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
 															{
 																$msg = $sbj = "( s2Member / API Notification Email ) - Cancellation";
-																$msg .= "\n\n"; /* Spacing in the message body. */
+																$msg .= "\n\n"; // Spacing in the message body.
 
 																$msg .= "subscr_id: %%subscr_id%%\n";
 																$msg .= "item_number: %%item_number%%\n";
@@ -159,7 +159,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 																											if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
 																												break;
 
-																									if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) /* Still have a ``$sbj`` and a ``$msg``? */
+																									if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																										foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_recipients"]) as $recipient)
 																											wp_mail ($recipient, apply_filters ("ws_plugin__s2member_cancellation_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_cancellation_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=utf-8");
@@ -174,7 +174,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 										else
 											$paypal["s2member_log"][] = "Unable to handle Cancellation. Could not get the existing User ID from the DB.";
 									}
-								else /* Else, this is a duplicate IPN. Must stop here. */
+								else // Else, this is a duplicate IPN. Must stop here.
 									{
 										$paypal["s2member_log"][] = "Not processing. Duplicate IPN.";
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `subscr_cancel|recurring_payment_profile_cancel` ).";
@@ -187,8 +187,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 
 								return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancellation_w_level", $paypal, get_defined_vars ());
 							}
-						else
-							return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancellation_w_level", false, get_defined_vars ());
+						else return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancellation_w_level", false, get_defined_vars ());
 					}
 			}
 	}

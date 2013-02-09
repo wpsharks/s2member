@@ -57,7 +57,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 									}
 							}
 
-						return false; /* Default return value. */
+						return false; // Default return value.
 					}
 				/**
 				* Converts Currency Codes to Currency Symbols.
@@ -72,35 +72,35 @@ if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 				*/
 				public static function symbol($currency = FALSE)
 					{
-						$symbols["AUD"] = "$"; /* Australian Dollar */
-						$symbols["BRL"] = "R$"; /* Brazilian Real */
-						$symbols["CAD"] = "$"; /* Canadian Dollar */
-						$symbols["CZK"] = "Kč"; /* Czech Koruna */
-						$symbols["DKK"] = "kr"; /* Danish Krone */
-						$symbols["EUR"] = "€"; /* Euro */
-						$symbols["HKD"] = "$"; /* Hong Kong Dollar */
-						$symbols["HUF"] = "Ft"; /* Hungarian Forint */
-						$symbols["ILS"] = "₪"; /* Israeli New Sheqel */
-						$symbols["JPY"] = "¥"; /* Japanese Yen */
-						$symbols["MYR"] = "RM"; /* Malaysian Ringgit */
-						$symbols["MXN"] = "$"; /* Mexican Peso */
-						$symbols["NOK"] = "kr"; /* Norwegian Krone */
-						$symbols["NZD"] = "$"; /* New Zealand Dollar */
-						$symbols["PHP"] = "Php"; /* Philippine Peso */
-						$symbols["PLN"] = "zł"; /* Polish Zloty */
-						$symbols["GBP"] = "£"; /* Pound Sterling */
-						$symbols["SGD"] = "$"; /* Singapore Dollar */
-						$symbols["SEK"] = "kr"; /* Swedish Krona */
-						$symbols["CHF"] = "CHF"; /* Swiss Franc */
-						$symbols["TWD"] = "NT$"; /* Taiwan New Dollar */
-						$symbols["THB"] = "฿"; /* Thai Baht */
-						$symbols["USD"] = "$"; /* U.S. Dollar */
+						$symbols["AUD"] = "$"; // Australian Dollar
+						$symbols["BRL"] = "R$"; // Brazilian Real
+						$symbols["CAD"] = "$"; // Canadian Dollar
+						$symbols["CZK"] = "Kč"; // Czech Koruna
+						$symbols["DKK"] = "kr"; // Danish Krone
+						$symbols["EUR"] = "€"; // Euro
+						$symbols["HKD"] = "$"; // Hong Kong Dollar
+						$symbols["HUF"] = "Ft"; // Hungarian Forint
+						$symbols["ILS"] = "₪"; // Israeli New Sheqel
+						$symbols["JPY"] = "¥"; // Japanese Yen
+						$symbols["MYR"] = "RM"; // Malaysian Ringgit
+						$symbols["MXN"] = "$"; // Mexican Peso
+						$symbols["NOK"] = "kr"; // Norwegian Krone
+						$symbols["NZD"] = "$"; // New Zealand Dollar
+						$symbols["PHP"] = "Php"; // Philippine Peso
+						$symbols["PLN"] = "zł"; // Polish Zloty
+						$symbols["GBP"] = "£"; // Pound Sterling
+						$symbols["SGD"] = "$"; // Singapore Dollar
+						$symbols["SEK"] = "kr"; // Swedish Krona
+						$symbols["CHF"] = "CHF"; // Swiss Franc
+						$symbols["TWD"] = "NT$"; // Taiwan New Dollar
+						$symbols["THB"] = "฿"; // Thai Baht
+						$symbols["USD"] = "$"; // U.S. Dollar
 
 						if(($currency = strtoupper($currency)) && !empty($symbols[$currency]))
 							return $symbols[$currency];
 
-						else /* Else `$` sign. */
-						return "$";
+						else // Else `$` sign.
+							return "$";
 					}
 			}
 	}

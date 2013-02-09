@@ -43,9 +43,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 				*/
 				public static function doctype_html_head ($doctype_html_head_title = FALSE, $doctype_html_head_action = FALSE)
 					{
-						$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"]; /* Loads s2Member only. */
+						$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"]; // Loads s2Member only.
 
-						ob_start (); /* Start output buffering here so we can "return" the output from this utility. */
+						ob_start (); // Start output buffering here so we can "return" the output from this utility.
 
 						echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n";
 
@@ -63,10 +63,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 
 						echo '<link href="' . esc_attr ($s2o . "?ws_plugin__s2member_css=1&amp;qcABC=1&amp;ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ())) . '" type="text/css" rel="stylesheet" media="all" />' . "\n";
 
-						if ($doctype_html_head_title) /* Add <title></title> tag? */
+						if ($doctype_html_head_title) // Add <title></title> tag?
 							echo '<title>' . $doctype_html_head_title . '</title>' . "\n";
 
-						if ($doctype_html_head_action) /* Add content from Hook? */
+						if ($doctype_html_head_action) // Add content from Hook?
 							do_action ($doctype_html_head_action, get_defined_vars ());
 
 						echo '</head>' . "\n";

@@ -51,22 +51,22 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 				public static function bp_is_installed($query_active_plugins = NULL)
 					{
 						if(defined("BP_VERSION") && did_action("bp_core_loaded"))
-							return true; /* Quickest/easiest way to determine. */
+							return true; // Quickest/easiest way to determine.
 
 						$s2o = (defined("WS_PLUGIN__S2MEMBER_ONLY") && WS_PLUGIN__S2MEMBER_ONLY) ? true : false;
 
 						if(($query_active_plugins = (!isset($query_active_plugins) && $s2o) ? true : $query_active_plugins))
 							{
-								$buddypress = "buddypress/bp-loader.php"; /* BuddyPress. */
+								$buddypress = "buddypress/bp-loader.php"; // BuddyPress.
 
 								$active_plugins = (is_multisite()) ? wp_get_active_network_plugins() : array();
 								$active_plugins = array_unique(array_merge($active_plugins, wp_get_active_and_valid_plugins()));
 
-								foreach($active_plugins as $active_plugin) /* Search. */
+								foreach($active_plugins as $active_plugin) // Search.
 									if(plugin_basename($active_plugin) === $buddypress)
-										return true; /* BuddyPress active. */
+										return true; // BuddyPress active.
 							}
-						return false; /* Default return false. */
+						return false; // Default return false.
 					}
 				/**
 				* Determines whether or not this is a Multisite Farm;
@@ -102,7 +102,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 								if($descendants && in_category($descendants, $post_id))
 									return true;
 							}
-						return false; /* Default return false. */
+						return false; // Default return false.
 					}
 				/**
 				* Checks to see if a URL/URI leads to the site root.
@@ -124,7 +124,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 										if(get_option("permalink_structure") || (empty($_GET["post_id"]) && empty($_GET["page_id"]) && empty($_GET["p"])))
 											return true;
 							}
-						return false; /* Default return false. */
+						return false; // Default return false.
 					}
 				/**
 				* Checks to see if we're in a localhost environment.

@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_gets_in"))
 						do_action ("ws_plugin__s2member_before_sc_get_details", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr); /* Force array; trim quote entities. */
+						$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr); // Force array; trim quote entities.
 
 						$attr = shortcode_atts (array ("constant" => "", "user_field" => "", "user_option" => "", "user_id" => ""), $attr);
 
@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_gets_in"))
 						do_action ("ws_plugin__s2member_before_sc_get_details_after_shortcode_atts", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						if ($attr["constant"] && defined ($attr["constant"])) /* Security check here. It must start with S2MEMBER_ on a Blog Farm. */
+						if ($attr["constant"] && defined ($attr["constant"])) // Security check here. It must start with S2MEMBER_ on a Blog Farm.
 							{
 								if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site () || preg_match ("/^S2MEMBER_/i", $attr["constant"]))
 									$get = constant ($attr["constant"]);

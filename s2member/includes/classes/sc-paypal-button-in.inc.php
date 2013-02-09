@@ -199,7 +199,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								do_action ("ws_plugin__s2member_during_sc_paypal_ccaps_button", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 							}
-						else /* Otherwise, we'll process this Button normally, using Membership routines. */
+						else // Otherwise, we'll process this Button normally, using Membership routines.
 							{
 								$default_image = "https://www.paypal.com/" . _x ("en_US", "s2member-front paypal-button-lang-code", "s2member") . "/i/btn/btn_xpressCheckout.gif";
 
@@ -229,7 +229,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								$code = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $code);
 								$code = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $code);
 								$code = preg_replace ("/%%level_label%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $attr["level"] . "_label"])), $code);
-								$code = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (home_url ("/"))), $code); /* This brings them back to Front Page. */
+								$code = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (home_url ("/"))), $code); // This brings them back to Front Page.
 								$code = preg_replace ("/%%notify_url%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ("/?s2member_paypal_notify=1"))), $code);
 								$code = preg_replace ("/%%return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($success_return_url)), $code);
 								$code = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($attr["custom"])), $code);

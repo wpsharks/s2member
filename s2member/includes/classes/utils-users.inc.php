@@ -290,7 +290,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				* @param int|str $user_id Optional. Defaults to the current User's ID.
 				* @return mixed The value of the requested field, or false if the field does not exist.
 				*/
-				public static function get_user_field ($field_id = FALSE, $user_id = FALSE) /* Very powerful function here. */
+				public static function get_user_field ($field_id = FALSE, $user_id = FALSE) // Very powerful function here.
 					{
 						global /* Global database object reference. */ $wpdb;
 

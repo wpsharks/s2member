@@ -36,9 +36,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_notify_in::paypal_notify()}.
 				* @return array|bool The original ``$paypal`` array passed in ( extracted ) from ``$vars``, or false when conditions do NOT apply.
 				*/
-				public static function cp ($vars = array ()) /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+				public static function cp ($vars = array ()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
-						extract($vars); /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+						extract($vars); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
 						if ((!empty ($paypal["txn_type"]) && preg_match ("/^(subscr_failed|recurring_payment_failed|recurring_payment_skipped)$/i", $paypal["txn_type"]))
 						&& ((!empty ($paypal["item_number"]) || ($paypal["item_number"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_number ($paypal))) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"]))
@@ -54,7 +54,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 									{
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `subscr_failed|recurring_payment_failed|recurring_payment_skipped` ).";
 
-										$processing = $during = true; /* Yes, we ARE processing this. */
+										$processing = $during = true; // Yes, we ARE processing this.
 
 										$paypal["s2member_log"][] = "This `txn_type` does not require any action on the part of s2Member.";
 										$paypal["s2member_log"][] = "s2Member does NOT respond to individual failed payments, only multiple consecutive failed payments.";
@@ -64,7 +64,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 										do_action ("ws_plugin__s2member_during_paypal_notify_during_subscr_failed", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
-								else /* Else, this is a duplicate IPN. Must stop here. */
+								else // Else, this is a duplicate IPN. Must stop here.
 									{
 										$paypal["s2member_log"][] = "Not processing. Duplicate IPN.";
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `subscr_failed|recurring_payment_failed|recurring_payment_skipped` ).";

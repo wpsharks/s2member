@@ -309,8 +309,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 									/* translators: Exclude `%2$s`. These are English details returned by PayPal®. Replace `%2$s` with: `Unable to process, please try again`, or something to that affect. Or, if you prefer, you could Filter ``$response["__error"]`` with `ws_plugin__s2member_paypal_payflow_api_response`. */
 									$response["__error"] = sprintf(_x('Error #%1$s. %2$s.', "s2member-front", "s2member"), $response["RESULT"], rtrim($response["RESPMSG"], "."));
 
-								else
-									$response["__error"] = _x("Error. Please contact Support for assistance.", "s2member-front", "s2member");
+								else $response["__error"] = _x("Error. Please contact Support for assistance.", "s2member-front", "s2member");
 							}
 						else if(isset($response["TRXRESULT"]) && $response["TRXRESULT"] !== "0")
 							{
@@ -318,8 +317,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 									/* translators: Exclude `%2$s`. These are English details returned by PayPal®. Replace `%2$s` with: `Unable to process, please try again`, or something to that affect. Or, if you prefer, you could Filter ``$response["__error"]`` with `ws_plugin__s2member_paypal_payflow_api_response`. */
 									$response["__error"] = sprintf(_x('Error #%1$s. %2$s.', "s2member-front", "s2member"), $response["TRXRESULT"], rtrim($response["TRXRESPMSG"], "."));
 
-								else
-									$response["__error"] = _x("Error. Please contact Support for assistance.", "s2member-front", "s2member");
+								else $response["__error"] = _x("Error. Please contact Support for assistance.", "s2member-front", "s2member");
 							}
 
 						$logv = c_ws_plugin__s2member_utilities::ver_details();

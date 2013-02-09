@@ -36,9 +36,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_cart"))
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_notify_in::paypal_notify()}.
 				* @return array|bool The original ``$paypal`` array passed in ( extracted ) from ``$vars``, or false when conditions do NOT apply.
 				*/
-				public static function cp ($vars = array ()) /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+				public static function cp ($vars = array ()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
-						extract ($vars); /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
+						extract ($vars); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
 						if ((!empty ($paypal["txn_type"]) && preg_match ("/^cart$/i", $paypal["txn_type"]))
 						&& (empty ($paypal["payment_status"]) || empty ($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
@@ -52,7 +52,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_cart"))
 									{
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `cart` ).";
 
-										$processing = $during = true; /* Yes, we ARE processing this. */
+										$processing = $during = true; // Yes, we ARE processing this.
 
 										$paypal["s2member_log"][] = "The `txn_type` does not require any action on the part of s2Member.";
 										$paypal["s2member_log"][] = "s2Member Pro handles Cart events on-site, with an IPN proxy.";
@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_cart"))
 										do_action ("ws_plugin__s2member_during_paypal_notify_during_cart", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
-								else /* Else, this is a duplicate IPN. Must stop here. */
+								else // Else, this is a duplicate IPN. Must stop here.
 									{
 										$paypal["s2member_log"][] = "Not processing. Duplicate IPN.";
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `cart` ).";
@@ -74,8 +74,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_cart"))
 
 								return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_cart", $paypal, get_defined_vars ());
 							}
-						else
-							return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_cart", false, get_defined_vars ());
+						else return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_cart", false, get_defined_vars ());
 					}
 			}
 	}

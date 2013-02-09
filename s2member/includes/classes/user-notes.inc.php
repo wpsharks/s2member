@@ -43,7 +43,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 						do_action ("ws_plugin__s2member_before_append_user_notes", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						if ($user_id && $notes && is_string ($notes)) /* Must have these. */
+						if ($user_id && $notes && is_string ($notes)) // Must have these.
 							{
 								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 								do_action ("ws_plugin__s2member_during_append_user_notes", get_defined_vars ());
@@ -74,7 +74,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 
 						if ($user_id && $regex && is_string ($regex) && ($lines = array ()))
 							{
-								/* Careful here to preserve empty lines. */
+								// Careful here to preserve empty lines.
 								$notes = trim (get_user_option ("s2member_notes", $user_id));
 								foreach (preg_split ("/\n/", $notes) as $line)
 									if (!preg_match ($regex, $line))

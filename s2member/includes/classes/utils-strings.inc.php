@@ -187,9 +187,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				Note, we do NOT use ``array_map()`` here, because multiple args to ``array_map()`` causes a loss of string keys.
 				For further details, see: <http://php.net/manual/en/function.array-map.php>. */
 							{
-								foreach($value as &$r) /* Reference. */
+								foreach($value as &$r) // Reference.
 									$r = c_ws_plugin__s2member_utils_strings::trim_deep($r, $chars);
-								return $value; /* Return modified array. */
+								return $value; // Return modified array.
 							}
 						return trim((string)$value, $chars);
 					}
@@ -269,9 +269,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				Note, we do NOT use ``array_map()`` here, because multiple args to ``array_map()`` causes a loss of string keys.
 				For further details, see: <http://php.net/manual/en/function.array-map.php>. */
 							{
-								foreach($value as &$r) /* Reference. */
+								foreach($value as &$r) // Reference.
 									$r = c_ws_plugin__s2member_utils_strings::wrap_deep($r, $beg, $end, $wrap_e);
-								return $value; /* Return modified array. */
+								return $value; // Return modified array.
 							}
 						return (strlen((string)$value) || $wrap_e) ? (string)$beg.(string)$value.(string)$end : (string)$value;
 					}
@@ -291,9 +291,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				Note, we do NOT use ``array_map()`` here, because multiple args to ``array_map()`` causes a loss of string keys.
 				For further details, see: <http://php.net/manual/en/function.array-map.php>. */
 							{
-								foreach($value as &$r) /* Reference. */
+								foreach($value as &$r) // Reference.
 									$r = c_ws_plugin__s2member_utils_strings::preg_quote_deep($r, $delimiter);
-								return $value; /* Return modified array. */
+								return $value; // Return modified array.
 							}
 						return preg_quote((string)$value, (string)$delimiter);
 					}
@@ -332,7 +332,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*/
 				public static function highlight_php($string = FALSE)
 					{
-						$string = highlight_string((string)$string, true); /* Start with PHP syntax, then Shortcodes. */
+						$string = highlight_string((string)$string, true); // Start with PHP syntax, then Shortcodes.
 
 						return preg_replace("/\[\/?_*s2[a-z0-9_\-]+.*?\]/i", '<span style="color:#164A61;">$0</span>', $string);
 					}
@@ -351,16 +351,16 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				Note, we do NOT use ``array_map()`` here, because multiple args to ``array_map()`` causes a loss of string keys.
 				For further details, see: <http://php.net/manual/en/function.array-map.php>. */
 							{
-								$emails = array(); /* Initialize array. */
+								$emails = array(); // Initialize array.
 								foreach /* Loop through array. */($value as $v)
 									$emails = array_merge($emails, c_ws_plugin__s2member_utils_strings::parse_emails($v));
-								return $emails; /* Return array. */
+								return $emails; // Return array.
 							}
 						$delimiter = /* Supports semicolons or commas. */ (strpos((string)$value, ";") !== false) ? ";" : ",";
 						foreach(c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/".preg_quote($delimiter, "/")."+/", (string)$value)) as $section)
 							{
 								if(preg_match("/\<(.+?)\>/", $section, $m) && strpos($m[1], "@") !== false)
-									$emails[] = $m[1]; /* Email inside <brackets>. */
+									$emails[] = $m[1]; // Email inside <brackets>.
 
 								else if(strpos($section, "@") !== false)
 									$emails[] = $section;
@@ -381,13 +381,13 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*/
 				public static function base64_url_safe_encode($string = FALSE, $url_unsafe_chars = array("+", "/"), $url_safe_chars = array("-", "_"), $trim_padding_chars = "=~.")
 					{
-						$string = (string)$string; /* Force string values here. String MUST be a string. */
-						$trim_padding_chars = (string)$trim_padding_chars; /* And force this one too. */
+						$string = (string)$string; // Force string values here. String MUST be a string.
+						$trim_padding_chars = (string)$trim_padding_chars; // And force this one too.
 
 						$base64_url_safe = str_replace((array)$url_unsafe_chars, (array)$url_safe_chars, (string)base64_encode($string));
 						$base64_url_safe = (strlen($trim_padding_chars)) ? rtrim($base64_url_safe, $trim_padding_chars) : $base64_url_safe;
 
-						return $base64_url_safe; /* Base64 encoded, with URL-safe replacements. */
+						return $base64_url_safe; // Base64 encoded, with URL-safe replacements.
 					}
 				/**
 				* Base64 URL-safe decoding.
@@ -406,14 +406,14 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*/
 				public static function base64_url_safe_decode($base64_url_safe = FALSE, $url_unsafe_chars = array("+", "/"), $url_safe_chars = array("-", "_"), $trim_padding_chars = "=~.")
 					{
-						$base64_url_safe = (string)$base64_url_safe; /* Force string values here. This MUST be a string. */
-						$trim_padding_chars = (string)$trim_padding_chars; /* And force this one too. */
+						$base64_url_safe = (string)$base64_url_safe; // Force string values here. This MUST be a string.
+						$trim_padding_chars = (string)$trim_padding_chars; // And force this one too.
 
 						$string = (strlen($trim_padding_chars)) ? rtrim($base64_url_safe, $trim_padding_chars) : $base64_url_safe;
 						$string = (strlen($trim_padding_chars)) ? str_pad($string, strlen($string) % 4, "=", STR_PAD_RIGHT) : $string;
 						$string = (string)base64_decode(str_replace((array)$url_safe_chars, (array)$url_unsafe_chars, $string));
 
-						return $string; /* Base64 decoded, with URL-safe replacements. */
+						return $string; // Base64 decoded, with URL-safe replacements.
 					}
 				/**
 				* Generates an RSA-SHA1 signature.
@@ -440,7 +440,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 						if(empty($signature) && function_exists("openssl_get_privatekey") && function_exists("openssl_sign") && is_resource($private_key = openssl_get_privatekey((string)$key)))
 							openssl_sign((string)$string, $signature, $private_key, OPENSSL_ALGO_SHA1).openssl_free_key($private_key);
 
-						if(empty($signature)) /* Now, if we're still empty, trigger an error here. */
+						if(empty($signature)) // Now, if we're still empty, trigger an error here.
 							trigger_error("s2Member was unable to generate an RSA-SHA1 signature.".
 								" Please make sure your installation of PHP is compiled with OpenSSL: `openssl_sign()`.".
 								" See: http://php.net/manual/en/function.openssl-sign.php", E_USER_ERROR);
@@ -469,8 +469,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 								file_put_contents(($rsa_sha1_sig_file = $temp_dir."/".md5(uniqid("", true)."rsa-sha1-sig").".tmp"), "");
 
 								@shell_exec($esa($openssl)." sha1 -sign ".$esa($private_key_file)." -out ".$esa($rsa_sha1_sig_file)." ".$esa($string_file));
-								$signature = /* Do NOT trim here. */ file_get_contents($rsa_sha1_sig_file); /* Was the signature was written? */
-								unlink($rsa_sha1_sig_file).unlink($private_key_file).unlink($string_file); /* Cleanup. */
+								$signature = // Do NOT trim here. */ file_get_contents($rsa_sha1_sig_file); /* Was the signature was written?
+								unlink($rsa_sha1_sig_file).unlink($private_key_file).unlink($string_file); // Cleanup.
 							}
 						return (!empty($signature)) ? $signature : false;
 					}
@@ -492,15 +492,15 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 						if(($key = trim((string)$key)) && (strpos($key, "-----BEGIN RSA PRIVATE KEY-----") === false || strpos($key, "-----END RSA PRIVATE KEY-----") === false))
 							{
 								foreach(($lines = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/[\r\n]+/", $key))) as $line => $value)
-									if(strpos($value, "-") === 0) /* Begins with a boundary identifying character ( a hyphen `-` )? */
+									if(strpos($value, "-") === 0) // Begins with a boundary identifying character ( a hyphen `-` )?
 										{
-											$boundaries = (empty($boundaries)) ? 1 : $boundaries + 1; /* Counter. */
-											unset($lines[$line]); /* Remove this boundary line. We'll fix these below. */
+											$boundaries = (empty($boundaries)) ? 1 : $boundaries + 1; // Counter.
+											unset($lines[$line]); // Remove this boundary line. We'll fix these below.
 										}
-								if(empty($boundaries) || $boundaries <= 2) /* Do NOT modify keys with more than 2 boundaries. */
+								if(empty($boundaries) || $boundaries <= 2) // Do NOT modify keys with more than 2 boundaries.
 									$key = "-----BEGIN RSA PRIVATE KEY-----\n".implode("\n", $lines)."\n-----END RSA PRIVATE KEY-----";
 							}
-						return $key; /* Always a trimmed string here. */
+						return $key; // Always a trimmed string here.
 					}
 				/**
 				* Generates an HMAC-SHA1 signature.
@@ -537,9 +537,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				Note, we do NOT use ``array_map()`` here, because multiple args to ``array_map()`` causes a loss of string keys.
 				For further details, see: <http://php.net/manual/en/function.array-map.php>. */
 							{
-								foreach($value as &$r) /* Reference. */
+								foreach($value as &$r) // Reference.
 									$r = c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep($r);
-								return $value; /* Return modified array. */
+								return $value; // Return modified array.
 							}
 						return str_replace(array("%2D", "%2E", "%5F", "%7E"), array("-", ".", "_", "~"), (string)$value);
 					}

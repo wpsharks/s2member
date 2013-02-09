@@ -47,18 +47,18 @@ if (!class_exists ("c_ws_plugin__s2member_ruris_sp"))
 
 						if (!$excluded && !empty ($uri) && is_string ($uri) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 							{
-								if (!c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page (null, $uri)) /* Do NOT touch WordPress® Systematics. */
+								if (!c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page (null, $uri)) // Do NOT touch WordPress® Systematics.
 									{
-										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false; /* Current User's object. */
+										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false; // Current User's object.
 
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri ($user, "root-returns-false")) && preg_match ("/^" . preg_quote ($login_redirection_uri, "/") . "$/", $uri) && (!$check_user || !$user || !$user->has_cap ("access_s2member_level0")))
 											return apply_filters ("ws_plugin__s2member_check_specific_ruri_level_access", array ("s2member_level_req" => 0), get_defined_vars ());
 
-										else if (!c_ws_plugin__s2member_systematics_sp::is_systematic_use_specific_page (null, $uri)) /* Never restrict Systematics. However, there is 1 exception above. */
+										else if (!c_ws_plugin__s2member_systematics_sp::is_systematic_use_specific_page (null, $uri)) // Never restrict Systematics. However, there is 1 exception above.
 											{
-												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) /* URIs. Go through each Level. */
+												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // URIs. Go through each Level.
 													{
-														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"]) /* URIs configured at this Level? */
+														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"]) // URIs configured at this Level?
 
 															foreach (preg_split ("/[\r\n\t]+/", c_ws_plugin__s2member_ruris::fill_ruri_level_access_rc_vars ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"], $user)) as $str)
 																if ($str && preg_match ("/" . preg_quote ($str, "/") . "/", $uri) && (!$check_user || !$user || !$user->has_cap ("access_s2member_level" . $n)))

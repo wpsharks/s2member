@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 				*/
 				public static function _admin_user_new_fields ($buffer = FALSE)
 					{
-						global $pagenow; /* The current admin page file name. */
+						global $pagenow; // The current admin page file name.
 
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("_ws_plugin__s2member_before_admin_user_new_fields", get_defined_vars ());
@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-								if (is_multisite ()) /* Multisite Networking is currently lacking these fields; we pop them in. */
+								if (is_multisite ()) // Multisite Networking is currently lacking these fields; we pop them in.
 									{
 										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_first_name", get_defined_vars ());
@@ -147,7 +147,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 								if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
-									/* ^ Will change once Custom Capabilities are compatible with a Blog Farm. */
+									// ^ Will change once Custom Capabilities are compatible with a Blog Farm.
 									{
 										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_ccaps", get_defined_vars ());
@@ -176,7 +176,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_auto_eot_time", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-								if (c_ws_plugin__s2member_list_servers::list_servers_integrated ()) /* Only if integrated with s2Member. */
+								if (c_ws_plugin__s2member_list_servers::list_servers_integrated ()) // Only if integrated with s2Member.
 									{
 										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_opt_in", get_defined_vars ());
@@ -192,7 +192,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
 
-								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"]) /* Now, do we have Custom Fields? */
+								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"]) // Now, do we have Custom Fields?
 									if ($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level ("any", "administrative"))
 										{
 											$unfs .= '<tr>' . "\n";
@@ -211,7 +211,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 													do_action ("_ws_plugin__s2member_during_admin_user_new_fields_during_custom_fields_before", get_defined_vars ());
 													unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-													if (in_array ($field["id"], $fields_applicable)) /* Field applicable? */
+													if (in_array ($field["id"], $fields_applicable)) // Field applicable?
 														{
 															$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
 															$field_id_class = preg_replace ("/_/", "-", $field_var);
@@ -219,7 +219,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 															eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 															if (apply_filters ("_ws_plugin__s2member_during_admin_user_new_fields_during_custom_fields_display", true, get_defined_vars ()))
 																{
-																	if (!empty ($field["section"]) && $field["section"] === "yes") /* Starts a new section? */
+																	if (!empty ($field["section"]) && $field["section"] === "yes") // Starts a new section?
 																		$unfs .= '<tr><td colspan="2"><div class="ws-plugin--s2member-user-new-divider-section' . ((!empty ($field["sectitle"])) ? '-title' : '') . '">' . ((!empty ($field["sectitle"])) ? $field["sectitle"] : '') . '</div></td></tr>';
 
 																	$unfs .= '<tr>' . "\n";

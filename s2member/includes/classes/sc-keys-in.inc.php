@@ -54,7 +54,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_keys_in"))
 						do_action ("ws_plugin__s2member_before_sc_get_key_after_shortcode_atts", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						if ($attr["file_download"]) /* Requesting a File Download Key? */
+						if ($attr["file_download"]) // Requesting a File Download Key?
 							$get = c_ws_plugin__s2member_files::file_download_key ($attr["file_download"], $attr["directive"]);
 
 						return apply_filters ("ws_plugin__s2member_sc_get_key", ((isset ($get)) ? $get : null), get_defined_vars ());

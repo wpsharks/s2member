@@ -321,7 +321,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 																		if (($rec = preg_replace ("/%%recurring%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["recurring"]), $rec)) && ($rec = preg_replace ("/%%recurring\/regular_cycle%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ((($paypal["recurring"]) ? $paypal["recurring"] . " / " . c_ws_plugin__s2member_utils_time::period_term ($paypal["regular_term"], true) : "0 / non-recurring")), $rec)))
 																			if (($rec = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["item_number"]), $rec)) && ($rec = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["item_name"]), $rec)))
 																				if (($rec = preg_replace ("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["first_name"])), $rec)) && ($rec = preg_replace ("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["last_name"])), $rec)))
-																					if (($rec = preg_replace ("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds (trim ($paypal["first_name"] . " " . $paypal["last_name"]))), $rec))) /* **NOTE** c_ws_plugin__s2member_utils_strings::esc_dq() is applied here. ( ex. "N\"ame" <email> ). */
+																					if (($rec = preg_replace ("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds (trim ($paypal["first_name"] . " " . $paypal["last_name"]))), $rec))) // **NOTE** c_ws_plugin__s2member_utils_strings::esc_dq() is applied here. ( ex. "N\"ame" <email> ).
 																						if (($rec = preg_replace ("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["payer_email"]), $rec)))
 																							if (($rec = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["ip"]), $rec)))
 
@@ -445,7 +445,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 												do_action ("ws_plugin__s2member_during_paypal_notify_after_subscr_signup_wo_update_vars", get_defined_vars ());
 												unset  /* Unset defined __refs, __v. */($__refs, $__v);
 											}
-										if ($processing && $_GET["s2member_paypal_proxy"] && ($url = $_GET["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) /* A Proxy is requesting a Return URL? */
+										if ($processing && $_GET["s2member_paypal_proxy"] && ($url = $_GET["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
 											{
 												if (($user_id && is_object ($user) && $user->ID) || (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"], $paypal["option_selection1"])) && is_object ($user = new WP_User ($user_id)) && $user->ID))
 													{

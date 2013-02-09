@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 
 						do_action ("ws_plugin__s2member_after_no_cache", get_defined_vars ());
 
-						return true; /* Always return true. */
+						return true; // Always return true.
 					}
 				/**
 				* Defines no-cache constants for various WordPress® plugins.
@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 				*/
 				public static function no_cache_constants ($no_cache = FALSE)
 					{
-						static $once; /* We only need to set these constants once. */
+						static $once; // We only need to set these constants once.
 
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_no_cache_constants", get_defined_vars ());
@@ -131,7 +131,7 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 								if (!defined ("QUICK_CACHE_ALLOWED"))
 									define ("QUICK_CACHE_ALLOWED", false);
 
-								$once = true; /* Only need to set these constants one time. */
+								$once = true; // Only need to set these constants one time.
 
 								c_ws_plugin__s2member_no_cache::$headers = /* Headers required too. */ true;
 
@@ -140,7 +140,7 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 
 						do_action ("ws_plugin__s2member_after_no_cache_constants", get_defined_vars ());
 
-						return true; /* Always return true. */
+						return true; // Always return true.
 					}
 				/**
 				* Sends Cache-Control ( no-cache ) headers.
@@ -162,7 +162,7 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 				*/
 				public static function no_cache_headers ($no_cache = FALSE)
 					{
-						static $once; /* We only need to set these headers one time. */
+						static $once; // We only need to set these headers one time.
 
 						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_before_no_cache_headers", get_defined_vars ());
@@ -173,23 +173,23 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 						if (!$once && !headers_sent () && empty ($_GET["qcABC"]) && ($no_cache || !$using_selective_behavior || c_ws_plugin__s2member_no_cache::$headers))
 							if ( /* Give Filters a chance. */!apply_filters ("ws_plugin__s2member_disable_no_cache_headers", false, get_defined_vars ()))
 								{
-									foreach (headers_list () as $header) /* No-cache headers already sent? We need to check here. */
-										if (stripos ($header, "no-cache") !== false) /* No-cache headers already sent? */
+									foreach (headers_list () as $header) // No-cache headers already sent? We need to check here.
+										if (stripos ($header, "no-cache") !== false) // No-cache headers already sent?
 											{
-												$no_cache_headers_already_sent = true; /* Yep, sent. */
-												break; /* Break now, no need to continue further. */
+												$no_cache_headers_already_sent = true; // Yep, sent.
+												break; // Break now, no need to continue further.
 											}
-									if (!isset ($no_cache_headers_already_sent)) /* Not yet? */
-										nocache_headers (); /* Only if NOT already sent. */
+									if (!isset ($no_cache_headers_already_sent)) // Not yet?
+										nocache_headers (); // Only if NOT already sent.
 
-									$once = true; /* This is static var. Only send headers once. */
+									$once = true; // This is static var. Only send headers once.
 
 									do_action ("ws_plugin__s2member_during_no_cache_headers", get_defined_vars ());
 								}
 
 						do_action ("ws_plugin__s2member_after_no_cache_headers", get_defined_vars ());
 
-						return true; /* Always return true. */
+						return true; // Always return true.
 					}
 			}
 	}

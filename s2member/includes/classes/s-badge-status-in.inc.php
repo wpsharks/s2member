@@ -41,11 +41,11 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 					{
 						do_action ("ws_plugin__s2member_before_s_badge_status", get_defined_vars ());
 
-						if (!empty ($_GET["s2member_s_badge_status"])) /* Requesting status? */
+						if (!empty ($_GET["s2member_s_badge_status"]))
 							{
-								status_header (200); /* Send a 200 OK status header. */
-								header ("Content-Type: text/plain; charset=utf-8"); /* Content-Type with UTF-8. */
-								eval ('while (@ob_end_clean ());'); /* End/clean all output buffers that may exist. */
+								status_header (200); // Send a 200 OK status header.
+								header ("Content-Type: text/plain; charset=utf-8"); // Content-Type with UTF-8.
+								eval ('while (@ob_end_clean ());'); // End/clean all output buffers that may exist.
 
 								if ( /* Badge status API enabled? */$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["s_badge_status_enabled"])
 									{
@@ -69,9 +69,7 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 																											if ( /* Enabled by site owner? */$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"])
 																												{
 																													if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_failed_login_attempts"])
-																														{
-																															exit ("1"); /* OK good. Things look pretty secure here. */
-																														}
+																														exit ("1"); // OK good. Things look pretty secure here.
 																												}
 																									}
 																							}
@@ -79,11 +77,9 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 																	}
 														}
 											}
-
-										exit ("0"); /* Else, NOT secure. */
+										exit ("0"); // Else, NOT secure.
 									}
-								else
-									exit ("-"); /* Else, service NOT enabled. */
+								else exit ("-"); // Else, service NOT enabled.
 							}
 
 						do_action ("ws_plugin__s2member_after_s_badge_status", get_defined_vars ());
