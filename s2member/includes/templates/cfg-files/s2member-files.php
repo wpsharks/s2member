@@ -2,10 +2,10 @@
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
 
-global $base; /* A Multisite ``$base`` configuration? */
+global /* A Multisite ``$base`` configuration? */ $base;
 $ws_plugin__s2member_temp_s_base = (!empty ($base)) ? $base : c_ws_plugin__s2member_utils_urls::parse_url (network_home_url ("/"), PHP_URL_PATH);
-/* This works on Multisite installs too. The function ``network_home_url ()`` defaults to ``home_url ()`` on standard WordPress® installs. */
-/* Do NOT use ``site`` URL. Must use the `home` URL here, because that's what WordPress® uses in its own `mod_rewrite` implementation. */
+// This works on Multisite installs too. The function ``network_home_url ()`` defaults to ``home_url ()`` on standard WordPress® installs.
+// Do NOT use ``site`` URL. Must use the `home` URL here, because that's what WordPress® uses in its own `mod_rewrite` implementation.
 ?>
 
 Options +FollowSymLinks -MultiViews -Indexes
@@ -75,28 +75,28 @@ Options +FollowSymLinks -MultiViews -Indexes
 # Cleanup variables not used in this request. Looking for `0` values.
 	RewriteCond %{ENV:s2member_file_download_wp_vdir} ^0$
 	RewriteRule ^(.*)$ - [E=s2member_file_download_wp_vdir:]
-	
+
 	RewriteCond %{ENV:s2member_file_stream} ^0$
 	RewriteRule ^(.*)$ - [E=s2member_file_stream:]
-	
+
 	RewriteCond %{ENV:s2member_file_inline} ^0$
 	RewriteRule ^(.*)$ - [E=s2member_file_inline:]
-	
+
 	RewriteCond %{ENV:s2member_file_storage} ^0$
 	RewriteRule ^(.*)$ - [E=s2member_file_storage:]
-	
+
 	RewriteCond %{ENV:s2member_file_remote} ^0$
 	RewriteRule ^(.*)$ - [E=s2member_file_remote:]
-	
+
 	RewriteCond %{ENV:s2member_file_ssl} ^0$
 	RewriteRule ^(.*)$ - [E=s2member_file_ssl:]
-	
+
 	RewriteCond %{ENV:s2member_file_download_key} ^0$
 	RewriteRule ^(.*)$ - [E=s2member_file_download_key:]
-	
+
 	RewriteCond %{ENV:s2member_skip_confirmation} ^0$
 	RewriteRule ^(.*)$ - [E=s2member_skip_confirmation:]
-	
+
 # Put everything together now and process the internal rewrite.
 	RewriteRule ^(.*)$ %{ENV:s2member_file_download_wp_vdir}?s2member_file_download=%{ENV:s2member_file_download}%{ENV:s2member_file_stream}%{ENV:s2member_file_inline}%{ENV:s2member_file_storage}%{ENV:s2member_file_remote}%{ENV:s2member_file_ssl}%{ENV:s2member_file_download_key}%{ENV:s2member_skip_confirmation} [QSA,L]
 </IfModule>

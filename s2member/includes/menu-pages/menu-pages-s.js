@@ -19,7 +19,6 @@ jQuery(document).ready(function($)
 			{
 				return String(str).replace(/"/g, '&quot;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
 			};
-		/**/
 		if(location.href.match /* Any & all s2Member® pages. */(/page\=ws-plugin--s2member/))
 			{
 				$('input.ws-plugin--s2member-update-roles-button, input.ws-plugin--s2member-reset-roles-button').click(function()
@@ -38,14 +37,12 @@ jQuery(document).ready(function($)
 								else if(response === 'l' /* Locked? */)
 									alert('Sorry, your request failed.\ns2Member\'s Roles/Capabilities are locked by Filter:\nws_plugin__s2member_lock_roles_caps'), $this.val(resetUpdate+' Roles/Capabilities');
 								/**/
-								else /* Default response message here. */
+								else // Default response message here.
 									alert('Sorry, your request failed.\nAccess denied. Do you have the ability to `create_users`?'), $this.val(resetUpdate+' Roles/Capabilities');
 							});
-						/**/
 						return false;
 					});
 			}
-		/**/
 		if(location.href.match(/page\=ws-plugin--s2member-mms-ops/))
 			{
 				$('select#ws-plugin--s2member-mms-registration-file').change(function()
@@ -64,7 +61,6 @@ jQuery(document).ready(function($)
 								$('div.ws-plugin--s2member-mms-registration-wp-signup-blogs-level0, table.ws-plugin--s2member-mms-registration-wp-signup-blogs-level0').hide();
 								$('input#ws-plugin--s2member-mms-registration-blogs-level0').val('0');
 							}
-					/**/
 					}).trigger /* Fire on ready too. */('change');
 				/**/
 				$('select#ws-plugin--s2member-mms-registration-grants').change(function()
@@ -72,7 +68,6 @@ jQuery(document).ready(function($)
 						$('select#ws-plugin--s2member-mms-registration-file').trigger('change');
 					});
 			}
-		/**/
 		if(location.href.match(/page\=ws-plugin--s2member-gen-ops/))
 			{
 				ws_plugin__s2member_generateSecurityKey = /* Generates a unique Security Key. */ function()
@@ -86,6 +81,7 @@ jQuery(document).ready(function($)
 							};
 						/**/
 						var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+						/**/
 						for(var i = 0, key = ''; i < 64; i++)
 							key += chars.substr(mt_rand(0, chars.length-1), 1);
 						/**/
@@ -93,7 +89,6 @@ jQuery(document).ready(function($)
 						/**/
 						return false;
 					};
-				/**/
 				ws_plugin__s2member_enableSecurityKey = /* Allow Security Key editing?? */ function()
 					{
 						if(confirm('Edit Key? Are you sure?\nThis could break your installation!\n\n*Note* If you\'ve been testing s2Member, feel free to change this Key before you go live. Just don\'t go live, and then change it. You\'ll have unhappy Customers. Data corruption WILL occur! For your safety, s2Member keeps a history of the last 10 Keys that you\'ve used. If you get yourself into a real situation, s2Member will let you revert back to a previous Key.'))
@@ -101,14 +96,12 @@ jQuery(document).ready(function($)
 						/**/
 						return false;
 					};
-				/**/
 				ws_plugin__s2member_securityKeyHistory = /* Displays history of Keys. */ function()
 					{
 						$('div#ws-plugin--s2member-sec-encryption-key-history').toggle();
 						/**/
 						return false;
 					};
-				/**/
 				$('select#ws-plugin--s2member-new-user-emails-enabled').change(function()
 					{
 						var $pluggable = $('input#ws-plugin--s2member-pluggables-wp-new-user-notification'), $this = $(this), $newUserEmails = $('div#ws-plugin--s2member-new-user-emails');
@@ -118,7 +111,7 @@ jQuery(document).ready(function($)
 								($pluggable.val() === '0') ? $this.attr('disabled', 'disabled') : $this.removeAttr('disabled');
 								$(':input', $newUserEmails).attr('disabled', 'disabled'), $newUserEmails.css('opacity', '0.5');
 							}
-						else /* Else we allow the emails to be customized. */
+						else // Else we allow the emails to be customized.
 							$this.removeAttr('disabled'), $(':input', $newUserEmails).removeAttr('disabled'), $newUserEmails.css('opacity', '');
 					/**/
 					}).trigger /* Fire on ready too. */('change');
@@ -154,7 +147,6 @@ jQuery(document).ready(function($)
 										/**/
 										(section === 'yes') ? $(sectitle_trs).css('display', '') : $(sectitle_trs).css('display', 'none');
 									};
-								/**/
 								ws_plugin__s2member_customRegFieldTypeChange = /* Handle change events here. */ function(select)
 									{
 										var type = /* Current selection ( type of Field, selected by site owner ). */ $(select).val();
@@ -165,7 +157,6 @@ jQuery(document).ready(function($)
 										(type.match(/^(select|selects|checkboxes|radios)$/)) ? $(options_trs).css('display', '') : $(options_trs).css('display', 'none');
 										(type.match(/^(text|textarea)$/)) ? $(expected_trs).css('display', '') : $(expected_trs).css('display', 'none');
 									};
-								/**/
 								ws_plugin__s2member_customRegFieldDelete = function(index)
 									{
 										var newFields = /* Build array. */ new Array();
@@ -176,7 +167,6 @@ jQuery(document).ready(function($)
 										/**/
 										fields = newFields, updateFields(), buildTable();
 									};
-								/**/
 								ws_plugin__s2member_customRegFieldMoveUp = function(index)
 									{
 										if(typeof fields[index] === 'object' && typeof fields[index-1] === 'object')
@@ -188,7 +178,6 @@ jQuery(document).ready(function($)
 												updateFields(), buildTable();
 											}
 									};
-								/**/
 								ws_plugin__s2member_customRegFieldMoveDown = function(index)
 									{
 										if(typeof fields[index] === 'object' && typeof fields[index+1] === 'object')
@@ -200,7 +189,6 @@ jQuery(document).ready(function($)
 												updateFields(), buildTable();
 											}
 									};
-								/**/
 								ws_plugin__s2member_customRegFieldCreate = function()
 									{
 										var $table = $('table#ws-plugin--s2member-custom-reg-field-configuration-tools-form'), field = {};
@@ -211,7 +199,6 @@ jQuery(document).ready(function($)
 												/**/
 												field[property] = val;
 											});
-										/**/
 										if /* If it can be validated. */((field = validateField(field)))
 											{
 												fields.push(field), updateFields(), buildTools(), buildTable(), scrollReset();
@@ -224,7 +211,6 @@ jQuery(document).ready(function($)
 													}, 500);
 											}
 									};
-								/**/
 								ws_plugin__s2member_customRegFieldUpdate = function(index)
 									{
 										var $table = $('table#ws-plugin--s2member-custom-reg-field-configuration-tools-form'), field = {};
@@ -235,7 +221,6 @@ jQuery(document).ready(function($)
 												/**/
 												field[property] = val;
 											});
-										/**/
 										if /* If it validates. */((field = validateField(field, index)))
 											{
 												fields[index] = field, updateFields(), buildTools(), buildTable(), scrollReset();
@@ -248,33 +233,27 @@ jQuery(document).ready(function($)
 													}, 500);
 											}
 									};
-								/**/
 								ws_plugin__s2member_customRegFieldAdd = /* Add new field links. */ function()
 									{
 										buildTools /* No need to reset scroll position. */(true);
 									};
-								/**/
 								ws_plugin__s2member_customRegFieldEdit = /* Edit links. */ function(index)
 									{
 										buildTools(false, index), scrollReset();
 									};
-								/**/
 								ws_plugin__s2member_customRegFieldCancel = /* Cancel form. */ function()
 									{
 										buildTools(), scrollReset();
 									};
-								/**/
 								var validateField = function(field, index)
 									{
 										var editing = ( typeof index === 'number' && typeof fields[index] === 'object') ? true : false, errors = [], options, i;
 										/**/
-										if(typeof field !== 'object' || typeof (field = $.extend(true, {
-										}, fieldDefaults, field)) !== 'object')
+										if(typeof field !== 'object' || typeof (field = $.extend(true, {}, fieldDefaults, field)) !== 'object')
 											{
 												alert('Invalid field object. Please try again.');
 												return false;
 											}
-										/**/
 										field.sectitle = (field.section === 'yes') ? field.sectitle : '';
 										field.deflt = (field.type.match(/^(text|textarea)$/)) ? field.deflt : '';
 										field.deflt = (field.type.match(/^(text)$/)) ? field.deflt.replace(/[\r\n\t ]+/g, ' ') : field.deflt;
@@ -309,7 +288,6 @@ jQuery(document).ready(function($)
 																break; /* Break now. There could potentially be lots of lines with errors. */
 															}
 													}
-												/**/
 												field.options = /* Clean up. */ $.trim(options.join('\n'));
 											}
 										/**/
@@ -342,20 +320,17 @@ jQuery(document).ready(function($)
 												alert(errors.join('\n\n'));
 												return false;
 											}
-										else /* Return. */
+										else // Return.
 											return field;
 									};
-								/**/
 								var updateFields = /* Update hidden input value. */ function()
 									{
 										$fields.val(((fields.length > 0) ? $.JSON.stringify(fields) : ''));
 									};
-								/**/
 								var fieldId2Var = /* Convert ids to variables. */ function(fieldId)
 									{
 										return ( typeof fieldId === 'string') ? $.trim(fieldId).toLowerCase().replace(/[^a-z0-9]/g, '_') : '';
 									};
-								/**/
 								var fieldTypeDesc = function(type)
 									{
 										var types = {text: 'Text ( single line )', textarea: 'Textarea ( multi-line )', select: 'Select Menu ( drop-down )', selects: 'Select Menu ( multi-option )', checkbox: 'Checkbox ( single )', pre_checkbox: 'Checkbox ( pre-checked )', checkboxes: 'Checkboxes ( multi-option )', radios: 'Radio Buttons ( multi-option )'};
@@ -365,19 +340,16 @@ jQuery(document).ready(function($)
 										/**/
 										return /* Default. */ '';
 									};
-								/**/
 								var fieldIdExists = /* Already exists? */ function(fieldId)
 									{
 										for(var i = 0; i < fields.length; i++)
 											if(fields[i].id === fieldId)
 												return true;
 									};
-								/**/
 								var scrollReset = /* Return to Custom Fields section. */ function()
 									{
 										scrollTo(0, $('div.ws-plugin--s2member-custom-reg-fields-section').offset()['top']-100);
 									};
-								/**/
 								var buildTools = /* This builds tools into the configuration. */ function(adding, index)
 									{
 										var i = 0, html = '', form = '', w = 0, h = 0, editing = ( typeof index === 'number' && typeof fields[index] === 'object') ? true : false, displayForm = (adding || editing) ? true : false, field = (editing) ? $.extend(true, {
@@ -742,10 +714,8 @@ jQuery(document).ready(function($)
 												/**/
 												$('table#ws-plugin--s2member-custom-reg-field-configuration-tools-form').show();
 											}
-										/**/
 										$tools.html(html);
 									};
-								/**/
 								var buildTable = /* This builds the table of existing fields. */ function()
 									{
 										var l = fields.length, i = 0, html = '', eo = 'o';
@@ -786,13 +756,10 @@ jQuery(document).ready(function($)
 										/**/
 										$table.html(html);
 									};
-								/* Initialize config. */
 								buildTools(), buildTable();
-							/**/
 							})();
 					}
 			}
-		/**/
 		if(location.href.match(/page\=ws-plugin--s2member-res-ops/))
 			{
 				$('input#ws-plugin--s2member-brute-force-restrictions-reset-button').click(function()
@@ -807,7 +774,6 @@ jQuery(document).ready(function($)
 						/**/
 						return false;
 					});
-				/**/
 				$('input#ws-plugin--s2member-ip-restrictions-reset-button').click(function()
 					{
 						var $this = /* Save $(this) into $this. */ $(this);
@@ -817,10 +783,8 @@ jQuery(document).ready(function($)
 							{
 								alert('s2Member\'s IP Restriction Logs have all been reset.'), $this.val('Reset IP Restriction Logs');
 							});
-						/**/
 						return false;
 					});
-				/**/
 				$('div.ws-plugin--s2member-query-level-access-section input[type="checkbox"][name="ws_plugin__s2member_filter_wp_query\[\]"]').change(function()
 					{
 						var thisChange = /* Record value associated with change event. Allows for intutitive unchecking. */ $(this).val();
@@ -838,10 +802,8 @@ jQuery(document).ready(function($)
 										(thisChange === 'all') ? $this.nextAll(checkboxes).removeAttr('checked') : null;
 									}
 							});
-					/**/
 					}).last().trigger('change');
 			}
-		/**/
 		if(location.href.match(/page\=ws-plugin--s2member-down-ops/))
 			{
 				var updateCloudFrontPrivateKey = /* Attaches to events below. */ function()
@@ -853,7 +815,6 @@ jQuery(document).ready(function($)
 						if((hiddenPrivateKeyValue && !visiblePrivateKeyEntryValue) || visiblePrivateKeyEntryValue.match /* 9679.toString(16).toUpperCase() = 25CF. */(/[^\r\n\u25CF]/))
 							$hiddenPrivateKey.val(visiblePrivateKeyEntryValue), $visiblePrivateKeyEntry.val(visiblePrivateKeyEntryValue.replace(/[^\r\n]/g, String.fromCharCode(9679)));
 					};
-				/**/
 				$('form#ws-plugin--s2member-options-form').submit(updateCloudFrontPrivateKey);
 				$('textarea#ws-plugin--s2member-amazon-cf-files-private-key-entry').change(updateCloudFrontPrivateKey).trigger('change');
 				/**/
@@ -880,7 +841,6 @@ jQuery(document).ready(function($)
 								$autoConfigDistros.attr /* Forcibly check. */('checked', 'checked');
 							}
 					};
-				/**/
 				$('input#ws-plugin--s2member-amazon-cf-files-private-key-id').change(updateCloudFrontDistroCfgs);
 				$('textarea#ws-plugin--s2member-amazon-cf-files-private-key-entry').change(updateCloudFrontDistroCfgs);
 				/**/
@@ -895,7 +855,6 @@ jQuery(document).ready(function($)
 					/**/
 					}).trigger('change');
 			}
-		/**/
 		if(location.href.match(/page\=ws-plugin--s2member-paypal-ops/))
 			{
 				$('select#ws-plugin--s2member-auto-eot-system-enabled').change(function()
@@ -905,17 +864,17 @@ jQuery(document).ready(function($)
 						/**/
 						if /* Display Cron instructions. */(val == 2)
 							$viaCron.show()
-						else /* Hide instructions. */
+						else // Hide instructions.
 							$viaCron.hide();
 					});
 			}
-		/**/
 		if(location.href.match(/page\=ws-plugin--s2member-paypal-buttons/))
 			{
 				$('div.ws-menu-page select[id]').filter( /* Filter all select elements with an id. */function()
 					{
 						return this.id.match(/^ws-plugin--s2member-(level[1-9][0-9]*|modification)-term$/);
-					}).change(function()
+					})
+					.change(function()
 					{
 						var button = this.id.replace(/^ws-plugin--s2member-(.+?)-term$/g, '$1');
 						var trialDisabled = ($(this).val().split('-')[2].replace(/[^0-1BN]/g, '') === 'BN') ? 1 : 0;
@@ -927,17 +886,16 @@ jQuery(document).ready(function($)
 						(trialDisabled) ? $('input#ws-plugin--s2member-'+button+'-trial-period').val(0) : null;
 						(trialDisabled) ? $('input#ws-plugin--s2member-'+button+'-trial-amount').val('0.00') : null;
 					});
-				/**/
 				$('div.ws-menu-page input[id]').filter( /* Filter all input elements with an id. */function()
 					{
 						return this.id.match(/^ws-plugin--s2member-(level[1-9][0-9]*|modification|ccap)-ccaps$/);
-					}).keyup(function()
+					})
+					.keyup(function()
 					{
 						var value = this.value.replace(/^(-all|-al|-a|-)[;,]*/gi, ''), _all = (this.value.match(/^(-all|-al|-a|-)[;,]*/i)) ? '-all,' : '';
 						if /* Only if there is a problem with the actual values; because this causes interruptions. */(value.match(/[^a-z_0-9,]/))
 							this.value = _all+$.trim($.trim(value).replace(/[ \-]/g, '_').replace(/[^a-z_0-9,]/gi, '').toLowerCase());
 					});
-				/**/
 				ws_plugin__s2member_paypalButtonGenerate = /* Handles PayPal® Button Generation. */ function(button)
 					{
 						var shortCodeTemplate = '[s2Member-PayPal-Button %%attrs%% image="default" output="button" /]', shortCodeTemplateAttrs = '', labels = {};
@@ -1020,7 +978,6 @@ jQuery(document).ready(function($)
 								alert('— Oops, a slight problem: —\n\nPlease type a Description for this Button.');
 								return false;
 							}
-						/**/
 						code.html(code.val().replace(/ \<\!--(\<input type\="hidden" name\="(amount|src|srt|sra|a1|p1|t1|a3|p3|t3)" value\="(.*?)" \/\>)--\>/g, " $1"));
 						(parseInt(trialPeriod) <= 0) ? code.html(code.val().replace(/ (\<input type\="hidden" name\="(a1|p1|t1)" value\="(.*?)" \/\>)/g, " <!--$1-->")) : null;
 						(regRecur === 'BN') ? code.html(code.val().replace(/ (\<input type\="hidden" name\="cmd" value\=")(.*?)(" \/\>)/g, " $1_xclick$3")) : null;
@@ -1064,10 +1021,8 @@ jQuery(document).ready(function($)
 							{
 								this.focus(), this.select();
 							});
-						/**/
 						return false;
 					};
-				/**/
 				ws_plugin__s2member_paypalCcapButtonGenerate = /* Handles PayPal® Button Generation for Independent Capabilities. */ function()
 					{
 						var shortCodeTemplate = '[s2Member-PayPal-Button %%attrs%% image="default" output="button" /]', shortCodeTemplateAttrs = '';
@@ -1135,10 +1090,8 @@ jQuery(document).ready(function($)
 							{
 								this.focus(), this.select();
 							});
-						/**/
 						return false;
 					};
-				/**/
 				ws_plugin__s2member_paypalSpButtonGenerate = /* Handles PayPal® Button Generation for Specific Post/Page Access. */ function()
 					{
 						var shortCodeTemplate = '[s2Member-PayPal-Button %%attrs%% image="default" output="button" /]', shortCodeTemplateAttrs = '';
@@ -1177,7 +1130,6 @@ jQuery(document).ready(function($)
 								alert('— Oops, a slight problem: —\n\nPlease type a Description for this Button.');
 								return false;
 							}
-						/**/
 						for(var i = 0, ids = leading; i < additionals.length; i++)
 							if(additionals[i] && additionals[i] !== leading)
 								ids += ','+additionals[i];
@@ -1206,10 +1158,8 @@ jQuery(document).ready(function($)
 							{
 								this.focus(), this.select();
 							});
-						/**/
 						return false;
 					};
-				/**/
 				ws_plugin__s2member_paypalRegLinkGenerate = /* Handles PayPal® Link Generation. */ function()
 					{
 						var level = $('select#ws-plugin--s2member-reg-link-level').val().replace(/[^0-9]/g, '');
@@ -1237,15 +1187,12 @@ jQuery(document).ready(function($)
 								alert('— Oops, a slight problem: —\n\nThe Fixed Term Length is not formatted properly.');
 								return false;
 							}
-						/**/
 						$link.hide(), $loading.show(), $.post(ajaxurl, {action: 'ws_plugin__s2member_reg_access_link_via_ajax', ws_plugin__s2member_reg_access_link_via_ajax: '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (wp_create_nonce ("ws-plugin--s2member-reg-access-link-via-ajax")); ?>', s2member_reg_access_link_subscr_gateway: 'paypal', s2member_reg_access_link_subscr_id: subscrID, s2member_reg_access_link_custom: custom, s2member_reg_access_link_item_number: levelCcapsPer}, function(response)
 							{
 								$link.show().html('<a href="'+esc_attr(response)+'" target="_blank" rel="external">'+esc_html(response)+'</a>'), $loading.hide();
 							});
-						/**/
 						return false;
 					};
-				/**/
 				ws_plugin__s2member_paypalSpLinkGenerate = /* Handles PayPal® Link Generation. */ function()
 					{
 						var leading = $('select#ws-plugin--s2member-sp-link-leading-id').val().replace(/[^0-9]/g, '');
@@ -1258,7 +1205,6 @@ jQuery(document).ready(function($)
 								alert('— Oops, a slight problem: —\n\nPlease select a Leading Post/Page.\n\n*Tip* If there are no Posts/Pages in the menu, it\'s because you\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member -> Restriction Options -> Specific Post/Page Access.');
 								return false;
 							}
-						/**/
 						for(var i = 0, ids = leading; i < additionals.length; i++)
 							if(additionals[i] && additionals[i] !== leading)
 								ids += ','+additionals[i];
@@ -1267,11 +1213,9 @@ jQuery(document).ready(function($)
 							{
 								$link.show().html('<a href="'+esc_attr(response)+'" target="_blank" rel="external">'+esc_html(response)+'</a>'), $loading.hide();
 							});
-						/**/
 						return false;
 					};
 			}
-		/**/
 		if(location.href.match(/page\=ws-plugin--s2member-els-ops/))
 			{
 				$('select#ws-plugin--s2member-custom-reg-opt-in').change(function()
@@ -1289,7 +1233,6 @@ jQuery(document).ready(function($)
 						else if /* Enabled, unchecked by default. */(val == 2)
 							$rows.css('display', ''), $prevImg.attr('src', $prevImg.attr('src').replace(/\/checked\.png$/, '/unchecked.png'));
 					});
-				/**/
 				$('div.ws-plugin--s2member-opt-out-section input[type="checkbox"][name="ws_plugin__s2member_custom_reg_auto_opt_outs\[\]"]').change(function()
 					{
 						var /* Record value associated with change event. Also initialize checkedIndexes array. */ thisChange = $(this).val(), checkedIndexes = [];
@@ -1306,7 +1249,6 @@ jQuery(document).ready(function($)
 										$this.nextAll(checkboxes).slice(0, 2).removeAttr('disabled');
 										(thisChange === 'removal-deletion') ? $this.nextAll(checkboxes).slice(0, 2).removeAttr('checked') : null;
 									}
-								/**/
 								else if /* All sub-items get checked/disabled too. */(val === 'modification' && this.checked)
 									$this.nextAll(checkboxes).slice(0, 3).attr({'checked': 'checked', 'disabled': 'disabled'});
 								/**/
@@ -1316,12 +1258,10 @@ jQuery(document).ready(function($)
 										$this.nextAll(checkboxes).slice(0, 3).removeAttr('disabled');
 									}
 							})
-						/**/
 						.each( /* Now, which ones are checked? */function(index)
 							{
 								(this.checked) ? checkedIndexes.push(index) : null;
 							});
-						/**/
 						$('select#ws-plugin--s2member-custom-reg-auto-opt-out-transitions').removeAttr('disabled');
 						if($.inArray(3, checkedIndexes) === -1 && $.inArray(4, checkedIndexes) === -1 && $.inArray(5, checkedIndexes) === -1 && $.inArray(6, checkedIndexes) === -1)
 							$('select#ws-plugin--s2member-custom-reg-auto-opt-out-transitions').attr('disabled', 'disabled');

@@ -26,7 +26,7 @@ div#ws-plugin--s2member-custom-reg-field-configuration-tools > a
 	}
 div#ws-plugin--s2member-custom-reg-field-configuration-thickbox-tools-form > table
 	{
-		display: none; /* Hide until it's inside thickbox. */
+		display: /* Hide until it's inside thickbox. */ none;
 	}
 table#ws-plugin--s2member-custom-reg-field-configuration-tools-form
 	{

@@ -43,7 +43,7 @@ if(!class_exists("c_ws_plugin__s2member_admin_css_js_in"))
 						/**/
 						if(!empty($_GET["ws_plugin__s2member_menu_pages_css"]) && is_user_logged_in() && current_user_can("create_users"))
 							{
-								status_header(200); /* 200 OK status header. */
+								status_header /* 200 OK status header. */(200);
 								/**/
 								header("Content-Type: text/css; charset=utf-8");
 								header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("-1 week"))." GMT");
@@ -51,7 +51,7 @@ if(!class_exists("c_ws_plugin__s2member_admin_css_js_in"))
 								header("Cache-Control: no-cache, must-revalidate, max-age=0");
 								header("Pragma: no-cache");
 								/**/
-								eval('while (@ob_end_clean ());'); /* Clean buffers. */
+								eval /* Clean buffers. */('while (@ob_end_clean ());');
 								/**/
 								$u = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"];
 								$i = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images";
@@ -60,15 +60,14 @@ if(!class_exists("c_ws_plugin__s2member_admin_css_js_in"))
 								/**/
 								include_once dirname(dirname(__FILE__))."/menu-pages/menu-pages.css";
 								/**/
-								echo "\n"; /* Add a line break before inclusion of this file. */
+								echo /* Add a line break before inclusion of this file. */ "\n";
 								/**/
 								@include_once dirname(dirname(__FILE__))."/menu-pages/menu-pages-s.css";
 								/**/
 								do_action("ws_plugin__s2member_during_menu_pages_css", get_defined_vars());
 								/**/
-								exit(); /* Clean exit. */
+								exit /* Clean exit. */();
 							}
-						/**/
 						do_action("ws_plugin__s2member_after_menu_pages_css", get_defined_vars());
 					}
 				/**
@@ -87,7 +86,7 @@ if(!class_exists("c_ws_plugin__s2member_admin_css_js_in"))
 						/**/
 						if(!empty($_GET["ws_plugin__s2member_menu_pages_js"]) && is_user_logged_in() && current_user_can("create_users"))
 							{
-								status_header(200); /* 200 OK status header. */
+								status_header /* 200 OK status header. */(200);
 								/**/
 								header("Content-Type: application/x-javascript; charset=utf-8");
 								header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("-1 week"))." GMT");
@@ -95,7 +94,7 @@ if(!class_exists("c_ws_plugin__s2member_admin_css_js_in"))
 								header("Cache-Control: no-cache, must-revalidate, max-age=0");
 								header("Pragma: no-cache");
 								/**/
-								eval('while (@ob_end_clean ());'); /* Clean buffers. */
+								eval /* Clean buffers. */('while (@ob_end_clean ());');
 								/**/
 								$u = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"];
 								$i = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images";
@@ -106,15 +105,14 @@ if(!class_exists("c_ws_plugin__s2member_admin_css_js_in"))
 								/**/
 								include_once dirname(dirname(__FILE__))."/menu-pages/menu-pages-min.js";
 								/**/
-								echo "\n"; /* Add a line break before inclusion of this file. */
+								echo  /* Add a line break before inclusion of this file. */"\n";
 								/**/
 								@include_once dirname(dirname(__FILE__))."/menu-pages/menu-pages-s-min.js";
 								/**/
 								do_action("ws_plugin__s2member_during_menu_pages_js", get_defined_vars());
 								/**/
-								exit(); /* Clean exit. */
+								exit /* Clean exit. */();
 							}
-						/**/
 						do_action("ws_plugin__s2member_after_menu_pages_js", get_defined_vars());
 					}
 			}

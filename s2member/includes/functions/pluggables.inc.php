@@ -31,13 +31,13 @@ if (!function_exists ("wp_new_user_notification"))
 		*/
 		if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_emails_enabled"])
 			{
-				function wp_new_user_notification () /* Accepts any number of arguments. */
+				function /* Accepts any number of arguments. */ wp_new_user_notification ()
 					{
-						$args = func_get_args (); /* Pulls the arguments passed in to this function. */
+						$args = /* Pulls the arguments passed in to this function. */ func_get_args ();
 						/**/
 						return call_user_func_array ("c_ws_plugin__s2member_email_configs::new_user_notification", $args);
 					}
-				add_filter ("wpmu_welcome_user_notification", "wp_new_user_notification", 10, 2); /* Combine. */
+				add_filter /* Combine. */ ("wpmu_welcome_user_notification", "wp_new_user_notification", 10, 2);
 			}
 		$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["pluggables"]["wp_new_user_notification"] = true;
 	}

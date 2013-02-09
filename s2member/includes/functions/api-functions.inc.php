@@ -26,7 +26,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 * <!php
 * if(is_user_logged_in())
 * 	echo 'You ARE logged in.';
-* 	
+*
 * else if(is_user_not_logged_in())
 * 	echo 'You are NOT logged in.';
 * !>
@@ -66,10 +66,10 @@ if(!function_exists("is_user_not_logged_in"))
 * <!php
 * if(user_is(123, "subscriber"))
 * 	echo 'User ID# 123 is a Free Subscriber at Level #0.';
-* 	
+*
 * else if(user_is(123, "s2member_level1"))
 * 	echo 'User ID# 123 is a Member at Level #1.';
-* 	
+*
 * else if(user_can(123, "access_s2member_level2"))
 * 	echo 'User ID# 123 has access to content protected at Level #2.';
 * 	# But, (important) they could actually be a Level #3 or #4 Member;
@@ -134,10 +134,10 @@ if(!function_exists("user_is"))
 				$role = ($role === "s2member_level0") ? "subscriber" : preg_replace("/^access_/i", "", $role);
 				/**/
 				if(($role === "super_administrator" || $role === "administrator") && is_multisite() && is_super_admin($id))
-					return true; /* Return true, Super Admins are always considered an Admnistrator, for all Blogs. */
+					return /* Return true, Super Admins are always considered an Admnistrator, for all Blogs. */ true;
 				/**/
-				else if(is_multisite() && is_super_admin($id)) /* Else return false for Super Admins here. */
-					return false; /* Super Admins can access all Capabilities, so the default handling would fail. */
+				else if /* Else return false for Super Admins here. */(is_multisite() && is_super_admin($id))
+					return /* Super Admins can access all Capabilities, so the default handling would fail. */ false;
 				/**/
 				return user_can($id, $role);
 			}
@@ -152,10 +152,10 @@ if(!function_exists("user_is"))
 * <!php
 * if(user_is(123, "subscriber"))
 * 	echo 'User ID# 123 is a Free Subscriber at Level #0.';
-* 	
+*
 * else if(user_is(123, "s2member_level1"))
 * 	echo 'User ID# 123 is a Member at Level #1.';
-* 	
+*
 * else if(user_can(123, "access_s2member_level2") && user_is_not(123, "s2member_level2"))
 * 	echo 'User ID# 123 has access to content protected at Level #2, but they are NOT a Level #2 Member.';
 * 	# So, (important) they could actually be a Level #3 or #4 Member;
@@ -229,10 +229,10 @@ if(!function_exists("user_is_not"))
 * <!php
 * if(current_user_is("subscriber"))
 * 	echo 'You ARE a Free Subscriber at Level #0.';
-* 	
+*
 * else if(current_user_is("s2member_level1"))
 * 	echo 'You ARE a Member at Level #1.';
-* 	
+*
 * else if(current_user_can("access_s2member_level2"))
 * 	echo 'You DO have access to content protected at Level #2.';
 * 	# But, (important) they could actually be a Level #3 or #4 Member;
@@ -296,10 +296,10 @@ if(!function_exists("current_user_is"))
 				$role = ($role === "s2member_level0") ? "subscriber" : preg_replace("/^access_/i", "", $role);
 				/**/
 				if(($role === "super_administrator" || $role === "administrator") && is_multisite() && is_super_admin())
-					return true; /* Return true, Super Admins are always considered an Admnistrator, for all Blogs. */
+					return /* Return true, Super Admins are always considered an Admnistrator, for all Blogs. */ true;
 				/**/
-				else if(is_multisite() && is_super_admin()) /* Else return false for Super Admins here. */
-					return false; /* Super Admins can access all Capabilities, so the default handling would fail. */
+				else if /* Else return false for Super Admins here. */(is_multisite() && is_super_admin())
+					return /* Super Admins can access all Capabilities, so the default handling would fail. */ false;
 				/**/
 				return current_user_can($role);
 			}
@@ -314,10 +314,10 @@ if(!function_exists("current_user_is"))
 * <!php
 * if(current_user_is("subscriber"))
 * 	echo 'You ARE a Free Subscriber at Level #0.';
-* 	
+*
 * else if(current_user_is("s2member_level1"))
 * 	echo 'You ARE a Member at Level #1.';
-* 	
+*
 * else if(current_user_can("access_s2member_level2") && current_user_is_not("s2member_level2"))
 * 	echo 'You DO have access to content protected at Level #2, but you are NOT a Level #2 Member.';
 * 	# So, (important) they could actually be a Level #3 or #4 Member;
@@ -390,13 +390,13 @@ if(!function_exists("current_user_is_not"))
 * <!php
 * if(current_user_is("subscriber"))
 * 	echo 'You ARE a Free Subscriber at Level #0 ( on this Blog ).';
-* 	
+*
 * else if(current_user_is_for_blog(5, "subscriber"))
 * 	echo 'You ARE a Free Subscriber at Level #0 ( on Blog ID 5 ).';
-* 	
+*
 * else if(current_user_is_for_blog(5, "s2member_level1"))
 * 	echo 'You ARE a Member at Level #1 ( on Blog ID 5 ).';
-* 	
+*
 * else if(current_user_can_for_blog(5, "access_s2member_level2"))
 * 	echo 'You DO have access to content protected at Level #2 ( on Blog ID 5 ).';
 * 	# But, (important) they could actually be a Level #3 or #4 Member ( on Blog ID 5 );
@@ -463,10 +463,10 @@ if(!function_exists("current_user_is_for_blog"))
 				$role = ($role === "s2member_level0") ? "subscriber" : preg_replace("/^access_/i", "", $role);
 				/**/
 				if(($role === "super_administrator" || $role === "administrator") && is_multisite() && is_super_admin())
-					return true; /* Return true, Super Admins are always considered an Admnistrator, for all Blogs. */
+					return /* Return true, Super Admins are always considered an Admnistrator, for all Blogs. */ true;
 				/**/
-				else if(is_multisite() && is_super_admin()) /* Else return false for Super Admins here. */
-					return false; /* Super Admins can access all Capabilities, so the default handling would fail. */
+				else if /* Else return false for Super Admins here. */(is_multisite() && is_super_admin())
+					return /* Super Admins can access all Capabilities, so the default handling would fail. */ false;
 				/**/
 				return current_user_can_for_blog($blog_id, $role);
 			}
@@ -481,7 +481,7 @@ if(!function_exists("current_user_is_for_blog"))
 * <!php
 * if(current_user_is_for_blog(5, "subscriber"))
 * 	echo 'You ARE a Free Subscriber at Level #0 ( on Blog ID 5 ).';
-* 	
+*
 * else if(current_user_can_for_blog(5, "access_s2member_level1") && current_user_is_not_for_blog(5, "s2member_level1"))
 * 	echo 'You DO have access to content protected at Level #1 ( on Blog ID 5 ), but you are NOT a Level #1 Member ( on Blog ID 5 ).';
 * 	# So, (important) they could actually be a Level #2 or #3 or #4 Member ( on Blog ID 5 );
@@ -552,7 +552,7 @@ if(!function_exists("current_user_is_not_for_blog"))
 * <!php
 * if(user_can(123, "access_s2member_level0"))
 * 	echo 'User ID# 123 CAN access content protected at Level #0.';
-* 	
+*
 * else if(user_cannot(123, "access_s2member_level0"))
 * 	echo 'User ID# 123 CANNOT access content at Level #0.';
 * !>
@@ -621,7 +621,7 @@ if(!function_exists("user_cannot"))
 * <!php
 * if(current_user_can("access_s2member_level0"))
 * 	echo 'You CAN access content protected at Level #0.';
-* 	
+*
 * else if(current_user_cannot("access_s2member_level0"))
 * 	echo 'You CANNOT access content protected at Level #0.';
 * !>
@@ -690,7 +690,7 @@ if(!function_exists("current_user_cannot"))
 * <!php
 * if(current_user_can_for_blog(5, "access_s2member_level0"))
 * 	echo 'You CAN access content protected at Level #0 ( on Blog ID 5 ).';
-* 	
+*
 * else if(current_user_cannot_for_blog(5, "access_s2member_level0"))
 * 	echo 'You CANNOT access content protected at Level #0 ( on Blog ID 5 ).';
 * !>
@@ -785,16 +785,16 @@ if(!function_exists("current_user_cannot_for_blog"))
 * <!php
 * if(is_protected_by_s2member(123))
 * 	echo 'Post or Page ID #123 is protected by s2Member.';
-* 	
+*
 * else if(is_protected_by_s2member(332, "tag"))
 * 	echo 'Tag ID #332 is protected by s2Member.';
-* 	
+*
 * else if(is_protected_by_s2member(554, "category"))
 * 	echo 'Category ID #554 is protected by s2Member.';
-* 	
+*
 * else if(is_protected_by_s2member("http://example.com/members/", "uri"))
 * 	echo 'This URL is protected by URI Restrictions.';
-* 	
+*
 * else if(is_protected_by_s2member("/members/", "uri"))
 * 	echo 'This URI is protected by URI Restrictions.';
 * !>
@@ -856,25 +856,25 @@ if(!function_exists("is_protected_by_s2member"))
 	{
 		function is_protected_by_s2member($what = FALSE, $type = FALSE, $check_user = FALSE)
 			{
-				global $post; /* Global reference to $post in The Loop. */
+				global /* Global reference to $post in The Loop. */ $post;
 				/**/
 				$what = ($what) ? $what : ((is_object($post) && $post->ID) ? $post->ID : false);
 				$type = ($type) ? strtolower($type) : "singular";
 				/**/
 				if($type === "category" && ($array = c_ws_plugin__s2member_catgs_sp::check_specific_catg_level_access($what, $check_user)))
-					return $array; /* A non-empty array with ["s2member_level_req"]. */
+					return /* A non-empty array with ["s2member_level_req"]. */ $array;
 				/**/
 				else if($type === "tag" && ($array = c_ws_plugin__s2member_ptags_sp::check_specific_ptag_level_access($what, $check_user)))
-					return $array; /* A non-empty array with ["s2member_level_req"]. */
+					return /* A non-empty array with ["s2member_level_req"]. */ $array;
 				/**/
 				else if(($type === "post" || $type === "singular") && ($array = c_ws_plugin__s2member_posts_sp::check_specific_post_level_access($what, $check_user)))
-					return $array; /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */
+					return /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */ $array;
 				/**/
 				else if(($type === "page" || $type === "singular") && ($array = c_ws_plugin__s2member_pages_sp::check_specific_page_level_access($what, $check_user)))
-					return $array; /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */
+					return  /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */$array;
 				/**/
 				else if($type === "uri" && ($array = c_ws_plugin__s2member_ruris_sp::check_specific_ruri_level_access($what, $check_user)))
-					return $array; /* A non-empty array with ["s2member_level_req"]. */
+					return /* A non-empty array with ["s2member_level_req"]. */ $array;
 				/**/
 				return false;
 			}
@@ -910,16 +910,16 @@ if(!function_exists("is_protected_by_s2member"))
 * <!php
 * if(is_permitted_by_s2member(123))
 * 	echo 'Post or Page ID #123 is permitted by s2Member.';
-* 	
+*
 * else if(is_permitted_by_s2member(332, "tag"))
 * 	echo 'Tag ID #332 is permitted by s2Member.';
-* 	
+*
 * else if(is_permitted_by_s2member(554, "category"))
 * 	echo 'Category ID #554 is permitted by s2Member.';
-* 	
+*
 * else if(is_permitted_by_s2member("http://example.com/members/", "uri"))
 * 	echo 'This URL is permitted by s2Member.';
-* 	
+*
 * else if(is_permitted_by_s2member("/members/", "uri"))
 * 	echo 'This URI is permitted by s2Member.';
 * !>
@@ -978,7 +978,7 @@ if(!function_exists("is_permitted_by_s2member"))
 	{
 		function is_permitted_by_s2member($what = FALSE, $type = FALSE)
 			{
-				global $post; /* Global reference to $post in The Loop. */
+				global /* Global reference to $post in The Loop. */ $post;
 				/**/
 				$what = ($what) ? $what : ((is_object($post) && $post->ID) ? $post->ID : false);
 				$type = ($type) ? strtolower($type) : "singular";
@@ -1071,7 +1071,7 @@ if(!function_exists("is_category_protected_by_s2member"))
 		function is_category_protected_by_s2member($cat_id = FALSE, $check_user = FALSE)
 			{
 				if($cat_id && ($array = c_ws_plugin__s2member_catgs_sp::check_specific_catg_level_access($cat_id, $check_user)))
-					return $array; /* A non-empty array with ["s2member_level_req"]. */
+					return /* A non-empty array with ["s2member_level_req"]. */ $array;
 				/**/
 				return false;
 			}
@@ -1169,10 +1169,10 @@ if(!function_exists("is_category_permitted_by_s2member"))
 * <!php
 * if(is_tag_protected_by_s2member(123))
 * 	echo 'Tag ID #123 is protected by s2Member.';
-* 	
+*
 * else if(is_tag_protected_by_s2member("members-only"))
 * 	echo 'Tag Slug (members-only) is protected by s2Member.';
-* 	
+*
 * else if(is_tag_protected_by_s2member("Members Only"))
 * 	echo 'Tag Name (Members Only) is protected by s2Member.';
 * !>
@@ -1227,7 +1227,7 @@ if(!function_exists("is_tag_protected_by_s2member"))
 		function is_tag_protected_by_s2member($tag_id_slug_or_name = FALSE, $check_user = FALSE)
 			{
 				if($tag_id_slug_or_name && ($array = c_ws_plugin__s2member_ptags_sp::check_specific_ptag_level_access($tag_id_slug_or_name, $check_user)))
-					return $array; /* A non-empty array with ["s2member_level_req"]. */
+					return /* A non-empty array with ["s2member_level_req"]. */ $array;
 				/**/
 				return false;
 			}
@@ -1253,10 +1253,10 @@ if(!function_exists("is_tag_protected_by_s2member"))
 * <!php
 * if(is_tag_permitted_by_s2member(123))
 * 	echo 'Tag ID #123 is permitted by s2Member.';
-* 	
+*
 * else if(is_tag_permitted_by_s2member("members-only"))
 * 	echo 'Tag Slug (members-only) is permitted by s2Member.';
-* 	
+*
 * else if(is_tag_permitted_by_s2member("Members Only"))
 * 	echo 'Tag Name (Members Only) is permitted by s2Member.';
 * !>
@@ -1383,7 +1383,7 @@ if(!function_exists("is_post_protected_by_s2member"))
 		function is_post_protected_by_s2member($post_id = FALSE, $check_user = FALSE)
 			{
 				if($post_id && ($array = c_ws_plugin__s2member_posts_sp::check_specific_post_level_access($post_id, $check_user)))
-					return $array; /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */
+					return /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */ $array;
 				/**/
 				return false;
 			}
@@ -1526,7 +1526,7 @@ if(!function_exists("is_page_protected_by_s2member"))
 		function is_page_protected_by_s2member($page_id = FALSE, $check_user = FALSE)
 			{
 				if($page_id && ($array = c_ws_plugin__s2member_pages_sp::check_specific_page_level_access($page_id, $check_user)))
-					return $array; /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */
+					return /* A non-empty array with ["s2member_(level|sp|ccap)_req"]. */ $array;
 				/**/
 				return false;
 			}
@@ -1601,7 +1601,7 @@ if(!function_exists("is_page_permitted_by_s2member"))
 	}
 /**
 * Conditional to determine if a specific URI or URL is protected by s2Member;
-* without considering the current User's Role/Capabilites.
+* without considering the current User's Role/Capabilities.
 *
 * ———— Extra Detail On Function Parameters ————
 *
@@ -1624,7 +1624,7 @@ if(!function_exists("is_page_permitted_by_s2member"))
 * <!php
 * if(is_uri_protected_by_s2member("/members-only/sub-section"))
 * 	echo 'The URI (/members-only/sub-section) is protected by URI Restrictions.';
-* 	
+*
 * else if(is_uri_protected_by_s2member("http://example.com/members-only/sub-section"))
 * 	echo 'The URL (http://example.com/members-only/sub-section) is protected by URI Restrictions.';
 * !>
@@ -1676,7 +1676,7 @@ if(!function_exists("is_uri_protected_by_s2member"))
 		function is_uri_protected_by_s2member($uri_or_full_url = FALSE, $check_user = FALSE)
 			{
 				if($uri_or_full_url && ($array = c_ws_plugin__s2member_ruris_sp::check_specific_ruri_level_access($uri_or_full_url, $check_user)))
-					return $array; /* A non-empty array with ["s2member_level_req"]. */
+					return /* A non-empty array with ["s2member_level_req"]. */ $array;
 				/**/
 				return false;
 			}
@@ -1702,7 +1702,7 @@ if(!function_exists("is_uri_protected_by_s2member"))
 * <!php
 * if(is_uri_permitted_by_s2member("/members-only/sub-section"))
 * 	echo 'The URI (/members-only/sub-section) is permitted by URI Restrictions.';
-* 	
+*
 * else if(is_uri_permitted_by_s2member("http://example.com/members-only/sub-section"))
 * 	echo 'The URL (http://example.com/members-only/sub-section) is permitted by URI Restrictions.';
 * !>
@@ -1769,7 +1769,7 @@ if(!function_exists("is_uri_permitted_by_s2member"))
 * <!php
 * attach_s2member_query_filters();
 * 	query_posts("posts_per_page=5");
-* 	
+*
 * 	if (have_posts()):
 * 		while (have_posts()):
 * 			the_post();
@@ -1777,7 +1777,7 @@ if(!function_exists("is_uri_permitted_by_s2member"))
 * 		# ( based on the current User's Role/Capabilities )
 * 		endwhile;
 * 	endif;
-* 	
+*
 * 	wp_reset_query();
 * detach_s2member_query_filters();
 * !>
@@ -1815,7 +1815,7 @@ if(!function_exists("attach_s2member_query_filters"))
 * <!php
 * attach_s2member_query_filters();
 * 	query_posts("posts_per_page=5");
-* 	
+*
 * 	if (have_posts()):
 * 		while (have_posts()):
 * 			the_post();
@@ -1823,7 +1823,7 @@ if(!function_exists("attach_s2member_query_filters"))
 * 		# ( based on the current User's Role/Capabilities )
 * 		endwhile;
 * 	endif;
-* 	
+*
 * 	wp_reset_query();
 * detach_s2member_query_filters();
 * !>
@@ -2138,7 +2138,7 @@ if(!function_exists("s2member_total_unique_downloads_of"))
 * <!php
 * if(s2member_registration_time() <= strtotime("-30 days"))
 * 	echo 'The current User has existed for at least 30 days.';
-* 	
+*
 * else if(s2member_registration_time(123) <= strtotime("-30 days"))
 * 	echo 'User with ID #123 has existed for at least 30 days.';
 * !>
@@ -2420,14 +2420,13 @@ if(!function_exists("get_s2member_custom_fields"))
 		function get_s2member_custom_fields($user_id = FALSE)
 			{
 				$fields = ($user_id) ? get_user_option("s2member_custom_fields", $user_id) : false;
-				/**//**/
+				/**/
 				foreach(json_decode($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 					{
-						if($user_id) /* Should we try to fill the User's value for this Custom Field? */
+						if /* Should we try to fill the User's value for this Custom Field? */($user_id)
 							$s2member_custom_fields[$field["id"]]["user_value"] = (isset($fields[$field["id"]])) ? $fields[$field["id"]] : false;
-						$s2member_custom_fields[$field["id"]]["config"] = $field; /* Copy configuration into config element. */
+						$s2member_custom_fields[$field["id"]]["config"] = /* Copy configuration into config element. */ $field;
 					}
-				/**/
 				return (isset($s2member_custom_fields)) ? (array)$s2member_custom_fields : array();
 			}
 	}
@@ -2441,7 +2440,7 @@ if(!function_exists("get_s2member_custom_fields"))
 * ———— Shortcode & JavaScript Equivalents ————
 * ```
 * [s2Get constant="S2MEMBER_VALUE_FOR_PP_INV" /]
-* 
+*
 * <script type="text/javascript">
 * 	document.write(s2member_value_for_pp_inv_gen());
 * </script>

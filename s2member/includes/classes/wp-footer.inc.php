@@ -43,17 +43,16 @@ if (!class_exists ("c_ws_plugin__s2member_wp_footer"))
 							{
 								if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 									{
-										echo do_shortcode ($code) . "\n"; /* No PHP here. */
+										echo /* No PHP here. */ do_shortcode ($code) . "\n";
 									}
-								else /* Otherwise, safe to allow PHP code. */
+								else // Otherwise, safe to allow PHP code.
 									{
 										echo do_shortcode (c_ws_plugin__s2member_utilities::evl ($code));
 									}
 							}
-						/**/
 						do_action ("ws_plugin__s2member_after_wp_footer_code", get_defined_vars ());
 						/**/
-						return; /* Return for uniformity. */
+						return /* Return for uniformity. */;
 					}
 			}
 	}

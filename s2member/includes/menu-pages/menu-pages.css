@@ -496,9 +496,9 @@ div.ws-menu-page-updates input[type = "submit"],
 div.ws-menu-page-updates textarea,
 div.ws-menu-page-updates select
 	{
-		width: 100%; /* 100% does not work across all browsers. */
-		width: 98% !ie<8; /* 100% does not work in IE browsers < 8. */
-		box-sizing: border-box; /* Make all fields behave the same. */
+		width: /* 100% does not work across all browsers. */ 100%;
+		width: /* 100% does not work in IE browsers < 8. */ 98% !ie<8;
+		box-sizing: /* Make all fields behave the same. */ border-box;
 		-ms-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
@@ -511,9 +511,9 @@ div.ws-menu-page-updates input[type = "radio"]
 	}
 div.ws-menu-page-updates input[type = "submit"]
 	{
-		width: 100% !ie<8; /* This width required in IE < 8. */
+		width: /* This width required in IE < 8. */ 100% !ie<8;
 	}
 div.ws-menu-page-updates select
 	{
-		width: 99.5% !ie<8; /* Required in IE < 8. */
+		width: /* Required in IE < 8. */ 99.5% !ie<8;
 	}

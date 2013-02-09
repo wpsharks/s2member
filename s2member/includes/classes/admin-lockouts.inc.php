@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 				*
 				* @return null Or exits script execution after redirection.
 				*/
-				public static function admin_lockout () /* Prevents admin access. */
+				public static function admin_lockout ()
 					{
 						do_action ("ws_plugin__s2member_before_admin_lockouts", get_defined_vars ());
 						/**/
@@ -45,15 +45,14 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 							if (apply_filters ("ws_plugin__s2member_admin_lockout", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["force_admin_lockouts"], get_defined_vars ()))
 								{
 									if ($redirection_url = c_ws_plugin__s2member_login_redirects::login_redirection_url ())
-										wp_redirect ($redirection_url) . exit (); /* Special Redirection. */
+										/* Special Redirection. */wp_redirect ($redirection_url) . exit ();
 									/**/
-									else /* Else we use the Login Welcome Page configured for s2Member. */
+									else // Else we use the Login Welcome Page configured for s2Member.
 										wp_redirect (get_page_link ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"])) . exit ();
 								}
-						/**/
 						do_action ("ws_plugin__s2member_after_admin_lockouts", get_defined_vars ());
 						/**/
-						return; /* Return for uniformity. */
+						return /* Return for uniformity. */;
 					}
 				/**
 				* Filters administrative menu bar for Users/Members.
@@ -98,7 +97,6 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 								if ($uses_nodes && $wp_admin_bar->get_node /* We have this node? */ ("my-sites"))
 									$wp_admin_bar->remove_node /* Ditch this node. */ ("my-sites");
 							}
-						/**/
 						if (is_object ($wp_admin_bar) && !current_user_can ("edit_posts") /* If locking Users/Members out of `/wp-admin/` areas. */)
 							if (apply_filters ("ws_plugin__s2member_admin_lockout", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["force_admin_lockouts"], get_defined_vars ()))
 								{
@@ -132,10 +130,9 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 									if (!$uses_nodes && isset /* Have this item? */ ($wp_admin_bar->menu->{"my-account-with-avatar"}["children"]->{"edit-profile"}["href"]))
 										$wp_admin_bar->menu->{"my-account-with-avatar"}["children"]->{"edit-profile"}["href"] = /* Update this item. */ $lwp;
 								}
-						/**/
 						do_action ("ws_plugin__s2member_after_filter_admin_menu_bar", get_defined_vars ());
 						/**/
-						return; /* Return for uniformity. */
+						return /* Return for uniformity. */;
 					}
 			}
 	}

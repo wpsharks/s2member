@@ -58,48 +58,44 @@ if (!class_exists ("c_ws_plugin__s2member_cache"))
 							{
 								$links["login_welcome_page"] = $lwp_cache["link"];
 							}
-						else /* Otherwise, query the database using ``get_page_link()`` and update the cache. */
+						else // Otherwise, query the database using ``get_page_link()`` and update the cache.
 							{
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["login_welcome_page"]["page"] = $lwp;
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["login_welcome_page"]["time"] = time ();
 								$links["login_welcome_page"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["login_welcome_page"]["link"] = get_page_link ($lwp);
 								/**/
-								$cache_needs_updating = true; /* Flag for cache update. */
+								$cache_needs_updating = /* Flag for cache update. */ true;
 							}
-						/**/
 						if (isset ($mop_cache["page"], $mop_cache["time"], $mop_cache["link"]) && $mop_cache["page"] === $mop && $mop_cache["time"] >= strtotime ("-15 minutes") && $mop_cache["link"])
 							{
 								$links["membership_options_page"] = $mop_cache["link"];
 							}
-						else /* Otherwise, query the database using ``get_page_link()`` and update the cache. */
+						else // Otherwise, query the database using ``get_page_link()`` and update the cache.
 							{
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["membership_options_page"]["page"] = $mop;
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["membership_options_page"]["time"] = time ();
 								$links["membership_options_page"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["membership_options_page"]["link"] = get_page_link ($mop);
 								/**/
-								$cache_needs_updating = true; /* Flag for cache update. */
+								$cache_needs_updating = /* Flag for cache update. */ true;
 							}
-						/**/
 						if (isset ($fdlep_cache["page"], $fdlep_cache["time"], $fdlep_cache["link"]) && $fdlep_cache["page"] === $fdlep && $fdlep_cache["time"] >= strtotime ("-15 minutes") && $fdlep_cache["link"])
 							{
 								$links["file_download_limit_exceeded_page"] = $fdlep_cache["link"];
 							}
-						else /* Otherwise, query the database using ``get_page_link()`` and update the cache. */
+						else // Otherwise, query the database using ``get_page_link()`` and update the cache.
 							{
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["file_download_limit_exceeded_page"]["page"] = $fdlep;
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["file_download_limit_exceeded_page"]["time"] = time ();
 								$links["file_download_limit_exceeded_page"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["file_download_limit_exceeded_page"]["link"] = get_page_link ($fdlep);
 								/**/
-								$cache_needs_updating = true; /* Flag for cache update. */
+								$cache_needs_updating = /* Flag for cache update. */ true;
 							}
-						/**/
-						if ($cache_needs_updating) /* Cache is also reset dynamically during back-end option updates. */
+						if /* Cache is also reset dynamically during back-end option updates. */ ($cache_needs_updating)
 							{
 								update_option ("ws_plugin__s2member_cache", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]);
 							}
-						/**/
-						$scheme = (is_ssl ()) ? "https" : "http"; /* SSL mode? */
-						foreach ($links as &$link) /* Conversions for SSL and non-SSL mode. */
+						$scheme = /* SSL mode? */ (is_ssl ()) ? "https" : "http";
+						foreach /* Conversions for SSL and non-SSL mode. */ ($links as &$link)
 							$link = preg_replace ("/^https?\:\/\//i", $scheme . "://", $link);
 						/**/
 						return apply_filters ("ws_plugin__s2member_cached_page_links", $links, get_defined_vars ());

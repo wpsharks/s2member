@@ -45,12 +45,11 @@ jQuery(document).ready (function($)
 						if ($group.css ('display') === 'none')
 							$this.addClass ('open'), $ins.html ('-'), $group.show ();
 						/**/
-						else /* Else remove open class and hide group. */
+						else // Else remove open class and hide group.
 							$this.removeClass ('open'), $ins.html ('+'), $group.hide ();
 						/**/
 						return /* Return. */ false;
 					});
-				/**/
 				if /* These are the buttons for showing/hiding all groups. */ ($groups.length > 1 && index === 0)
 					{
 						$('<div class="ws-menu-page-groups-show">+</div>').insertBefore ($header).click (function()
@@ -61,12 +60,10 @@ jQuery(document).ready (function($)
 										/**/
 										$this.addClass ('open'), $ins.html ('-'), $group.show ();
 										/**/
-										return; /* Return. */
+										return; // Return.
 									});
-								/**/
 								return /* Return. */ false;
 							});
-						/**/
 						$('<div class="ws-menu-page-groups-hide">-</div>').insertBefore ($header).click (function()
 							{
 								$('div.ws-menu-page-group-header').each (function()
@@ -75,25 +72,21 @@ jQuery(document).ready (function($)
 										/**/
 										$this.removeClass ('open'), $ins.html ('+'), $group.hide ();
 										/**/
-										return; /* Return. */
+										return; // Return.
 									});
-								/**/
 								return /* Return. */ false;
 							});
 					}
-				/**/
 				if ($group.attr ('default-state') === 'open')
 					$header.trigger ('click');
 				/**/
-				return; /* Return. */
+				return; // Return.
 			});
-		/**/
 		if /* We only apply these special margins when there are multiple groups. */ ($groups.length > 1)
 			{
 				$('div.ws-menu-page-group-header:first').css ({'margin-right': '140px'});
 				$('div.ws-menu-page-group:first').css ({'margin-right': '145px'});
 			}
-		/**/
 		$('div.ws-menu-page-r-group-header').click (function()
 			{
 				var $this = $(this), $group = $this.next ('div.ws-menu-page-r-group');
@@ -101,15 +94,13 @@ jQuery(document).ready (function($)
 				if ($group.css ('display') === 'none')
 					$('ins', $this).html ('-'), $this.addClass ('open'), $group.show ();
 				/**/
-				else /* Otherwise, we hide this group. */
+				else // Otherwise, we hide this group.
 					{
 						$('ins', $this).html ('+'), $this.removeClass ('open');
 						$group.hide ();
 					}
-				/**/
 				return /* Return. */ false;
 			});
-		/**/
 		$('div.ws-menu-page-group-header:first, div.ws-menu-page-r-group-header:first').css ({'margin-top': '0'});
 		$('div.ws-menu-page-group > div.ws-menu-page-section:first-child > h3').css ({'margin-top': '0'});
 		$('div.ws-menu-page-readme > div.readme > div.section:last-child').css ({'border-bottom-width': '0'});
@@ -117,7 +108,7 @@ jQuery(document).ready (function($)
 		$('input.ws-menu-page-media-btn').filter ( /* Only those that have a rel attribute. */function()
 			{
 				return /* Must have rel targeting an input id. */ ($(this).attr ('rel')) ? true : false;
-			})/**/
+			})
 		.click ( /* Attach click events to media buttons with send_to_editor(). */function()
 			{
 				var $this = /* Record a reference to the media button here. */ $(this);
@@ -138,7 +129,7 @@ jQuery(document).ready (function($)
 								/**/
 								tb_remove /* Close. */ ();
 								/**/
-								return; /* Return. */
+								return; // Return.
 							}
 						else if /* Textarea? */ (rel && ($txt = $('textarea#' + rel)).length > 0)
 							{
@@ -152,15 +143,13 @@ jQuery(document).ready (function($)
 								/**/
 								tb_remove /* Close. */ ();
 								/**/
-								return; /* Return. */
+								return; // Return.
 							}
 					};
-				/**/
 				tb_show('', './media-upload.php?type=image&TB_iframe=true');
 				/**/
 				return /* Return. */ false;
 			});
-		/**/
 		$('form#ws-updates-form').submit (function()
 			{
 				var errors = /* Intialize string of errors. */ '';
@@ -183,7 +172,6 @@ jQuery(document).ready (function($)
 						/**/
 						return false;
 					}
-				/**/
 				return true;
 			});
 	});
