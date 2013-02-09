@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 					{
 						do_action ("ws_plugin__s2member_before_add_css", get_defined_vars ());
 						/**/
-						if (!is_admin ()) /* Not in the admin. */
+						if /* Not in the admin. */ (!is_admin ())
 							{
 								$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"];
 								/**/
@@ -49,10 +49,9 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 								/**/
 								do_action ("ws_plugin__s2member_during_add_css", get_defined_vars ());
 							}
-						/**/
 						do_action ("ws_plugin__s2member_after_add_css", get_defined_vars ());
 						/**/
-						return; /* Return for uniformity. */
+						return /* Return for uniformity. */;
 					}
 				/**
 				* Enqueues JS file for theme integration.
@@ -68,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 				*/
 				public static function add_js_w_globals ()
 					{
-						global $pagenow; /* Need this for comparisons. */
+						global /* Need this for comparisons. */ $pagenow;
 						/**/
 						do_action ("ws_plugin__s2member_before_add_js_w_globals", get_defined_vars ());
 						/**/
@@ -76,24 +75,22 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 							{
 								$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"];
 								/**/
-								if (is_user_logged_in ()) /* Separate version for logged-in Users/Members. */
+								if /* Separate version for logged-in Users/Members. */ (is_user_logged_in ())
 									{
-										$md5 = WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5; /* An MD5 hash based on global key => values. */
-										/* The MD5 hash allows the script to be cached in the browser until the globals happen to change. */
-										/* For instance, the global variables may change when a User who is logged-in changes their Profile. */
+										$md5 = /* An MD5 hash based on global key => values. */ WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5;
+										// The MD5 hash allows the script to be cached in the browser until the globals happen to change.
+										// For instance, the global variables may change when a User who is logged-in changes their Profile.
 										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=" . urlencode ($md5) . "&qcABC=1", array ("jquery", "password-strength-meter"), c_ws_plugin__s2member_utilities::ver_checksum ());
 									}
-								else /* Else if they are not logged in, we distinguish the JavaScript file by NOT including $md5. */
-									{ /* This essentially creates 2 versions of the script. One while logged in & another when not. */
+								else // Else if they are not logged in, we distinguish the JavaScript file by NOT including $md5.
+									{ // This essentially creates 2 versions of the script. One while logged in & another when not.
 										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=1&qcABC=1", array ("jquery", "password-strength-meter"), c_ws_plugin__s2member_utilities::ver_checksum ());
 									}
-								/**/
 								do_action ("ws_plugin__s2member_during_add_js_w_globals", get_defined_vars ());
 							}
-						/**/
 						do_action ("ws_plugin__s2member_after_add_js_w_globals", get_defined_vars ());
 						/**/
-						return; /* Return for uniformity. */
+						return /* Return for uniformity. */;
 					}
 			}
 	}

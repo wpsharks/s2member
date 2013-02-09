@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						/**/
 						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 						do_action ("ws_plugin__s2member_during_constants", get_defined_vars ());
-						unset ($__refs, $__v); /* Unset defined __refs, __v. */
+						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 						/**
 						* Current version of s2Member.
 						*
@@ -1586,7 +1586,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see http://codex.wordpress.org/Function_Reference/wp_login_url wp_login_url()
 						*/
 						if (!defined ("S2MEMBER_LOGIN_PAGE_URL"))
-							define ("S2MEMBER_LOGIN_PAGE_URL", ($c[] = (string)wp_login_url ())); /* Will not trigger `wp_nonce_tick()`, no worries in this case. */
+							define ("S2MEMBER_LOGIN_PAGE_URL", ($c[] = (string)wp_login_url /* Will not trigger `wp_nonce_tick()`, no worries in this case. */ ()));
 						/**
 						* Each Membership Level ( Label ); as configured by the site owner.
 						*
@@ -2393,7 +2393,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*/
 						do_action ("ws_plugin__s2member_after_constants", get_defined_vars ());
 						/**/
-						return; /* Return for uniformity. */
+						return /* Return for uniformity. */;
 					}
 			}
 	}

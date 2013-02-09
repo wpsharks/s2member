@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_check_activation"))
 				*
 				* @return null
 				*/
-				public static function check () /* Up-to-date? */
+				public static function check ()
 					{
 						if (!($v = get_option ("ws_plugin__s2member_activated_version")) || !version_compare ($v, WS_PLUGIN__S2MEMBER_VERSION, ">="))
 							{
@@ -51,8 +51,7 @@ if (!class_exists ("c_ws_plugin__s2member_check_activation"))
 							{
 								c_ws_plugin__s2member_installation::activate ("levels");
 							}
-						/**/
-						return; /* Return for uniformity. */
+						return /* Return for uniformity. */;
 					}
 			}
 	}

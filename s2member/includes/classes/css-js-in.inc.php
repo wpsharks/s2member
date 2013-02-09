@@ -43,7 +43,7 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 						/**/
 						if(!empty($_GET["ws_plugin__s2member_css"]))
 							{
-								status_header(200); /* 200 OK status. */
+								status_header /* 200 OK status. */(200);
 								/**/
 								header("Content-Type: text/css; charset=utf-8");
 								header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
@@ -62,9 +62,8 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 								/**/
 								do_action("ws_plugin__s2member_during_css", get_defined_vars());
 								/**/
-								exit(); /* Clean exit. */
+								exit /* Clean exit. */();
 							}
-						/**/
 						do_action("ws_plugin__s2member_after_css", get_defined_vars());
 					}
 				/**
@@ -85,7 +84,7 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 						/**/
 						if(!empty($_GET["ws_plugin__s2member_js_w_globals"]))
 							{
-								status_header(200); /* 200 OK status header. */
+								status_header /* 200 OK status header. */(200);
 								/**/
 								header("Content-Type: application/x-javascript; charset=utf-8");
 								header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
@@ -97,7 +96,7 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 								/**/
 								include_once dirname(dirname(__FILE__))."/jquery/jquery.sprintf/jquery.sprintf-min.js";
 								/**/
-								echo "\n"; /* Add a line break before writing JavaScript Globals to file. */
+								echo /* Add a line break before writing JavaScript Globals to file. */ "\n";
 								/**/
 								echo "var S2MEMBER_VERSION = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_VERSION)."',";
 								/**/
@@ -153,19 +152,16 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 										if(defined(($S2MEMBER_LEVELn_LABEL = "S2MEMBER_LEVEL".$n."_LABEL")))
 											echo $S2MEMBER_LEVELn_LABEL." = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(constant($S2MEMBER_LEVELn_LABEL))."',";
 									}
-								/**/
 								for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 									{
 										if(defined(($S2MEMBER_LEVELn_FILE_DOWNLOADS_ALLOWED = "S2MEMBER_LEVEL".$n."_FILE_DOWNLOADS_ALLOWED")))
 											echo $S2MEMBER_LEVELn_FILE_DOWNLOADS_ALLOWED." = ".constant($S2MEMBER_LEVELn_FILE_DOWNLOADS_ALLOWED).",";
 									}
-								/**/
 								for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 									{
 										if(defined(($S2MEMBER_LEVELn_FILE_DOWNLOADS_ALLOWED_DAYS = "S2MEMBER_LEVEL".$n."_FILE_DOWNLOADS_ALLOWED_DAYS")))
 											echo $S2MEMBER_LEVELn_FILE_DOWNLOADS_ALLOWED_DAYS." = ".constant($S2MEMBER_LEVELn_FILE_DOWNLOADS_ALLOWED_DAYS).",";
 									}
-								/**/
 								echo "S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS)."',";
 								/**/
 								echo "S2MEMBER_REG_EMAIL_FROM_NAME = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_REG_EMAIL_FROM_NAME)."',";
@@ -190,15 +186,14 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 								$u = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"];
 								$i = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images";
 								/**/
-								echo "\n"; /* Add a line break before inclusion. */
+								echo /* Add a line break before inclusion. */ "\n";
 								/**/
 								include_once dirname(dirname(__FILE__))."/s2member-min.js";
 								/**/
 								do_action("ws_plugin__s2member_during_js_w_globals", get_defined_vars());
 								/**/
-								exit(); /* Clean exit. */
+								exit /* Clean exit. */();
 							}
-						/**/
 						do_action("ws_plugin__s2member_after_js_w_globals", get_defined_vars());
 					}
 			}
