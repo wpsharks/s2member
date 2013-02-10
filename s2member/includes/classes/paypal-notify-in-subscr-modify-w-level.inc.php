@@ -125,6 +125,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 														update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 
 														c_ws_plugin__s2member_user_notes::clear_user_note_lines ($user_id, "/^Demoted by s2Member\:/");
+														c_ws_plugin__s2member_user_notes::clear_user_note_lines ($user_id, "/^Paid Subscr\. ID @ time of demotion\:/");
 
 														$paypal["s2member_log"][] = "s2Member Level/Capabilities updated on Subscription modification.";
 

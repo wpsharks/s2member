@@ -128,6 +128,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																		$eot_del_type = /* Set EOT/Del type. */ "auto-eot-cancellation-expiration-demotion";
 
 																		$custom = get_user_option ("s2member_custom", $user_id);
+																		$subscr_gateway = get_user_option ("s2member_subscr_gateway", $user_id);
 																		$subscr_id = get_user_option ("s2member_subscr_id", $user_id);
 																		$fields = get_user_option ("s2member_custom_fields", $user_id);
 																		$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id);
@@ -164,6 +165,9 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																		delete_user_option ($user_id, "s2member_file_download_access_log");
 
 																		c_ws_plugin__s2member_user_notes::append_user_notes ($user_id, "Demoted by s2Member: " . date ("D M j, Y g:i a T"));
+
+																		if($subscr_gateway && $subscr_id) // Also note the Paid Subscr. Gateway/ID so there is a reference left behind here.
+																			c_ws_plugin__s2member_user_notes::append_user_notes ($user_id, "Paid Subscr. ID @ time of demotion: ".$subscr_gateway." -› ".$subscr_id);
 
 																		if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"] && is_array ($cv = preg_split ("/\|/", $custom)))
 																			{

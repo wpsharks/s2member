@@ -133,6 +133,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																				delete_user_option($user_id, "s2member_file_download_access_log");
 
 																				c_ws_plugin__s2member_user_notes::append_user_notes($user_id, "Demoted by s2Member: ".date("D M j, Y g:i a T"));
+																				c_ws_plugin__s2member_user_notes::append_user_notes ($user_id, "Paid Subscr. ID @ time of demotion: ".$paypal["subscr_gateway"]." -› ".$paypal["subscr_id"]);
 
 																				$paypal["s2member_log"][] = "Member Level/Capabilities demoted to: ".ucwords(preg_replace("/_/", " ", $demotion_role)).".";
 

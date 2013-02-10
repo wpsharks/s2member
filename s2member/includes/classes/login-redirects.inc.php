@@ -48,6 +48,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 
 						if ($username && ((isset ($user) && is_object ($user)) || is_object ($user = new WP_User ($username))) && !empty ($user->ID) && ($user_id = $user->ID))
 							{
+								update_user_option ($user_id, "s2member_last_login_time", time());
+
 								if /* Have we got this yet? */ (!get_user_option ("s2member_registration_ip", $user_id))
 									update_user_option ($user_id, "s2member_registration_ip", $_SERVER["REMOTE_ADDR"]);
 

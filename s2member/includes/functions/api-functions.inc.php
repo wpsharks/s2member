@@ -2128,6 +2128,44 @@ if(!function_exists("s2member_total_unique_downloads_of"))
 			}
 	}
 /**
+ * Obtains the Last Login Time for the current User, and/or for a particular User.
+ *
+ * The Last Login Time, is the time at which the Username last logged into the site.
+ * There's nothing special about this. This simply returns a {@link http://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
+ *
+ * ———— Code Sample Using Function Parameters ————
+ * ```
+ * <!php
+ * if(s2member_last_login_time() <= strtotime("-30 days"))
+ * 	echo 'The current User last logged-in over 30 days ago.';
+ *
+ * else if(s2member_last_login_time(123) <= strtotime("-30 days"))
+ * 	echo 'User with ID #123 last logged-in over 30 days ago.';
+ * !>
+ * ```
+ * ———— Shortcode Equivalent ————
+ * ```
+ * [s2Get user_option="s2member_last_login_time" /] # Last Login Time.
+ * ```
+ *
+ * @package s2Member\API_Functions
+ * @since 130210
+ *
+ * @param int $user_id Optional. Defaults to the current User's ID.
+ * @return int A {@link http://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
+ * 	The Last Login Time, is the time at which the Username last logged into the site.
+ *    If the User has never logged into the site (or s2Member® has never recorded them logging in), this will return `0`.
+ *
+ * @see s2Member\API_Functions\get_user_field()
+ */
+if(!function_exists("s2member_last_login_time"))
+{
+	function s2member_last_login_time($user_id = FALSE)
+	{
+		return (int)get_user_option ("s2member_last_login_time", (int)$user_id);
+	}
+}
+/**
 * Obtains the Registration Time for the current User, and/or for a particular User.
 *
 * The Registration Time, is the time at which the Username was created for the account, that's it.
