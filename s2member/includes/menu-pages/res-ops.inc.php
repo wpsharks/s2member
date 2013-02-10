@@ -324,6 +324,25 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_query_level_access", get_defined_vars ());
 							}
 
+						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_conditionals", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+							{
+								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_conditionals", get_defined_vars ());
+
+								echo '<div class="ws-menu-page-group" title="Simple Shortcode Conditionals (protect only parts of your content)">' . "\n";
+
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-conditionals-section">' . "\n";
+								echo '<h3>Simple Shortcode Conditionals ( optional — to protect only parts of your content )</h3>' . "\n";
+								echo '<p>s2Member® makes it very simple to protect entire Posts/Pages/Categories/Tags/URIs/etc. This can be accomplished here in your WordPress® Dashboard, using one of the many tools made available on this page. Or, from your Post/Page editing station in WordPress®. We consider this to be point-and-click functionality ~ very easy.</p>'."\n";
+								echo '<p>s2Member® also makes it pretty simple to protect "parts" of a Post or Page. You can even get creative about what you display to certain Users/Members, based upon your own custom criteria. s2Member\'s Simple Shortcode Conditionals are the key to accomplishing this.</p>'."\n";
+								echo '<p>Please see this KB article to learn more: <a href="http://www.s2member.com/kb/simple-shortcode-conditionals/" target="_blank" rel="external">s2Member® Simple Shortcode Conditionals</a></p>' . "\n";
+								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_conditionals", get_defined_vars ());
+								echo '</div>' . "\n";
+
+								echo '</div>' . "\n";
+
+								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_conditionals", get_defined_vars ());
+							}
+
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_sp_access", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_sp_access", get_defined_vars ());
