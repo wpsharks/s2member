@@ -166,6 +166,8 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["login_redirection_override"] = "";
 				$default_options["membership_options_page"] = "";
 
+				$default_options["login_reg_design_enabled"] = "1";
+
 				$default_options["login_reg_background_color"] = "FFFFFF";
 				$default_options["login_reg_background_image"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images/bg.png";
 				$default_options["login_reg_background_image_repeat"] = "repeat";
@@ -419,6 +421,9 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 									$value = $default_options[$key];
 
 								else if($key === "membership_options_page" && (!is_string($value) || !is_numeric($value)))
+									$value = $default_options[$key];
+
+								else if($key === "login_reg_design_enabled" && (!is_string($value) || !is_numeric($value)))
 									$value = $default_options[$key];
 
 								else if($key === "login_reg_background_image" && !is_string($value) /* This is optional. */)

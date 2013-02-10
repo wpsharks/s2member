@@ -40,6 +40,9 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 				*/
 				public static function login_header_url($url = FALSE)
 					{
+						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_design_enabled"])
+							return $url; // Login/Registration Design disabled in this case.
+
 						do_action("ws_plugin__s2member_before_login_header_url", get_defined_vars());
 
 						$url = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_logo_url"];
@@ -59,6 +62,9 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 				*/
 				public static function login_header_title($title = FALSE)
 					{
+						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_design_enabled"])
+							return $title; // Login/Registration Design disabled in this case.
+
 						do_action("ws_plugin__s2member_before_login_header_title", get_defined_vars());
 
 						$title = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_logo_title"];
@@ -77,6 +83,9 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 				*/
 				public static function login_header_styles()
 					{
+						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_design_enabled"])
+							return; // Login/Registration Design disabled in this case.
+
 						$s = /* Initialize styles string here to give Hooks a chance. */ "";
 						$a = /* Initialize here to give Filters a chance. */ array();
 
@@ -155,6 +164,9 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 				*/
 				public static function login_footer_design()
 					{
+						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_design_enabled"])
+							return; // Login/Registration Design disabled in this case.
+
 						do_action("ws_plugin__s2member_before_login_footer_design", get_defined_vars());
 
 						if(($code = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_footer_design"]))

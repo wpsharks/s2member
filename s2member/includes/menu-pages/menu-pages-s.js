@@ -116,6 +116,18 @@ jQuery(document).ready(function($)
 
 					}).trigger /* Fire on ready too. */('change');
 
+				$('select#ws-plugin--s2member-login-reg-design-enabled').change(function()
+               {
+                  var $this = $(this), $loginRegDesign = $('div#ws-plugin--s2member-login-reg-design');
+
+                  if($this.val() === '0') // Disable this section.
+                     $(':input', $loginRegDesign).attr('disabled', 'disabled'), $loginRegDesign.css('opacity', '0.5'), $loginRegDesign.hide();
+
+                  else // Else we allow login/registration design.
+                     $(':input', $loginRegDesign).removeAttr('disabled'), $loginRegDesign.css('opacity', ''), $loginRegDesign.show();
+
+               }).trigger /* Fire on ready too. */('change');
+
 				if($('input#ws-plugin--s2member-custom-reg-fields').length && $('div#ws-plugin--s2member-custom-reg-field-configuration').length)
 					{
 						( /* Wrap these routines inside a function to keep variables within relative scope. */function()
