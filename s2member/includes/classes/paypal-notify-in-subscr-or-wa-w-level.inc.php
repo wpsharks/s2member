@@ -152,7 +152,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 
 																$paypal["s2member_log"][] = "s2Member Level/Capabilities updated w/ advanced update routines.";
 
-																c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($paypal["payer_email"], apply_filters ("ws_plugin__s2member_modification_email_sbj", _x ("Thank you! Your account has been updated.", "s2member-front", "s2member"), get_defined_vars ()), apply_filters ("ws_plugin__s2member_modification_email_msg", _x ("Thank you! You've been updated to:", "s2member-front", "s2member") . "\n" . $paypal["item_name"] . "\n\n" . _x ("Please log back in now.", "s2member-front", "s2member") . "\n" . wp_login_url (), get_defined_vars ()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=utf-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
+																c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($paypal["payer_email"], apply_filters ("ws_plugin__s2member_modification_email_sbj", _x ("Thank you! Your account has been updated.", "s2member-front", "s2member"), get_defined_vars ()), apply_filters ("ws_plugin__s2member_modification_email_msg", _x ("Thank you! You've been updated to:", "s2member-front", "s2member") . "\n" . $paypal["item_name"] . "\n\n" . _x ("Please log back in now.", "s2member-front", "s2member") . "\n" . wp_login_url (), get_defined_vars ()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
 
 																$paypal["s2member_log"][] = "Modification Confirmation Email sent to Customer, with a URL that provides them with a way to log back in.";
 
@@ -249,7 +249,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 																																if  /* Still have a ``$sbj`` and a ``$msg``? */($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
 
 																																	foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_notification_recipients"]) as $recipient)
-																																		wp_mail ($recipient, apply_filters ("ws_plugin__s2member_modification_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_modification_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=utf-8");
+																																		wp_mail ($recipient, apply_filters ("ws_plugin__s2member_modification_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_modification_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 																															}
 																		$paypal["s2member_log"][] = "Modification Notification Emails have been processed.";
 																	}
@@ -350,7 +350,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 																																												if (($rec = trim (preg_replace ("/%%(.+?)%%/i", "", $rec))) && ($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
 																																													{
 																																														foreach  /* Go through a possible list of recipients. */(c_ws_plugin__s2member_utils_strings::parse_emails ($rec) as $recipient)
-																																															c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($recipient, apply_filters ("ws_plugin__s2member_signup_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_signup_email_msg", $msg, get_defined_vars ()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=utf-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
+																																															c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($recipient, apply_filters ("ws_plugin__s2member_signup_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_signup_email_msg", $msg, get_defined_vars ()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
 
 																																														$paypal["s2member_log"][] = "Signup Confirmation Email sent to: " . $rec . ".";
 																																													}
@@ -414,7 +414,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 																								if  /* Still have a ``$sbj`` and a ``$msg``? */($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
 
 																									foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["signup_notification_recipients"]) as $recipient)
-																										wp_mail ($recipient, apply_filters ("ws_plugin__s2member_signup_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_signup_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=utf-8");
+																										wp_mail ($recipient, apply_filters ("ws_plugin__s2member_signup_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_signup_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 
 																$paypal["s2member_log"][] = "Signup Notification Emails have been processed.";
 															}
@@ -589,7 +589,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 																												if  /* Still have a ``$sbj`` and a ``$msg``? */($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
 
 																													foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["payment_notification_recipients"]) as $recipient)
-																														wp_mail ($recipient, apply_filters ("ws_plugin__s2member_payment_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_payment_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=utf-8");
+																														wp_mail ($recipient, apply_filters ("ws_plugin__s2member_payment_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_payment_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 																											}
 																				}
 														$paypal["s2member_log"][] = "Payment Notification Emails have been processed.";

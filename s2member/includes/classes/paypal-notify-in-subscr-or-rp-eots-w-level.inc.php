@@ -206,7 +206,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																														if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																															foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"]) as $recipient)
-																																wp_mail($recipient, apply_filters("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=utf-8");
+																																wp_mail($recipient, apply_filters("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=UTF-8");
 																													}
 
 																						$paypal["s2member_log"][] = "EOT/Deletion Notification Emails have been processed.";
@@ -406,7 +406,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																							if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																								foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_recipients"]) as $recipient)
-																									wp_mail($recipient, apply_filters("ws_plugin__s2member_ref_rev_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_ref_rev_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=utf-8");
+																									wp_mail($recipient, apply_filters("ws_plugin__s2member_ref_rev_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_ref_rev_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=UTF-8");
 																						}
 
 														$paypal["s2member_log"][] = "Refund/Reversal Notification Emails have been processed.";

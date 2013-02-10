@@ -76,8 +76,8 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
 										status_header /* Send a 503 error status header; temporarily unavailable. */(503);
 										wp_clear_auth_cookie /* Clear authorization cookies; we need to log them out now. */();
-										header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=utf-8");
-										eval /* End/clean any output buffers that may exist. */('while (@ob_end_clean ());');
+										header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=UTF-8");
+										while (@ob_end_clean ()); // Clean any existing output buffers.
 
 										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 										do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
@@ -95,8 +95,8 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
 										status_header /* Send a 503 error status header; temporarily unavailable. */(503);
 										wp_clear_auth_cookie /* Clear authorization cookies; we need to log them out now. */();
-										header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=utf-8");
-										eval /* End/clean any output buffers that may exist. */('while (@ob_end_clean ());');
+										header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=UTF-8");
+										while (@ob_end_clean ()); // Clean any existing output buffers.
 
 										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
 										do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
@@ -183,8 +183,8 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 						do_action("ws_plugin__s2member_before_delete_reset_specific_ip_restrictions_via_ajax", get_defined_vars());
 
 						status_header /* Send a 200 OK status header. */(200);
-						header /* Content-Type with UTF-8. */("Content-Type: text/plain; charset=utf-8");
-						eval /* End/clean all output buffers that may exist. */('while (@ob_end_clean ());');
+						header /* Content-Type with UTF-8. */("Content-Type: text/plain; charset=UTF-8");
+						while (@ob_end_clean ()); // Clean any existing output buffers.
 
 						if /* Check privileges. Ability to create Users? */(current_user_can("create_users"))
 
@@ -239,8 +239,8 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 						do_action("ws_plugin__s2member_before_delete_reset_all_ip_restrictions_via_ajax", get_defined_vars());
 
 						status_header /* Send a 200 OK status header. */(200);
-						header /* Content-Type with UTF-8. */("Content-Type: text/plain; charset=utf-8");
-						eval /* End/clean all output buffers that may exist. */('while (@ob_end_clean ());');
+						header /* Content-Type with UTF-8. */("Content-Type: text/plain; charset=UTF-8");
+						while (@ob_end_clean ()); // Clean any existing output buffers.
 
 						if /* Check privileges. Ability to create Users? */(current_user_can("create_users"))
 

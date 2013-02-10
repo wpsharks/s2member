@@ -235,7 +235,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																												if /* Still have a ``$sbj`` and a ``$msg``? */ ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
 
 																													foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"]) as $recipient)
-																														wp_mail ($recipient, apply_filters ("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=utf-8");
+																														wp_mail ($recipient, apply_filters ("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 																											}
 																				if /* Back on? */ ($email_configs_were_on)
 																					c_ws_plugin__s2member_email_configs::email_config ();

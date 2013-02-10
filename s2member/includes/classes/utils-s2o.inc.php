@@ -46,9 +46,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 										if (file_exists ($dir . "/wp-settings.php"))
 											return ($wp_dir = $dir);
 									}
-
-						header ("Content-Type: text/plain; charset=utf-8") . eval ('while (@ob_end_clean ());');
-						header ("HTTP/1.0 500 Error") . exit ("ERROR: s2Member® unable to locate WordPress® directory.");
+						header ("HTTP/1.0 500 Error");
+						header ("Content-Type: text/plain; charset=UTF-8");
+						while (@ob_end_clean ()); // Clean any existing output buffers.
+						exit ("ERROR: s2Member® unable to locate WordPress® directory.");
 					}
 				/*
 				* WordPress® settings, after ``SHORTINIT`` section.

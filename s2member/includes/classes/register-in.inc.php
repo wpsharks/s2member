@@ -43,7 +43,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 
 						if (!empty ($_GET["s2member_register"])) // If they're attempting to access the registration system.
 							{
-								eval('while (@ob_end_clean ());'); // First we end/clean any output buffers that may exist already.
+								while (@ob_end_clean ()); // Clean any existing output buffers.
 
 								$msg_503 = _x ('<strong>Your Link Expired:</strong><br />Please contact Support if you need assistance.', "s2member-front", "s2member");
 
@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 														if (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) /* Needed? */)
 															{
 																status_header(200); // Send a 200 OK status header.
-																header("Content-Type: text/html; charset=utf-8"); // Content-Type with UTF-8.
+																header("Content-Type: text/html; charset=UTF-8"); // Content-Type with UTF-8.
 
 																setcookie ("s2member_subscr_gateway", $_COOKIE["s2member_subscr_gateway"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_subscr_gateway", $_COOKIE["s2member_subscr_gateway"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
 																setcookie ("s2member_subscr_id", $_COOKIE["s2member_subscr_id"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_subscr_id", $_COOKIE["s2member_subscr_id"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
@@ -85,16 +85,16 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 																exit (); // Clean exit. The browser will now be redirected to ``$location``.
 															}
 														else
-															status_header(503) . header ("Content-Type: text/html; charset=utf-8") . exit ($msg_503);
+															status_header(503) . header ("Content-Type: text/html; charset=UTF-8") . exit ($msg_503);
 													}
 												else
-													status_header(503) . header ("Content-Type: text/html; charset=utf-8") . exit ($msg_503);
+													status_header(503) . header ("Content-Type: text/html; charset=UTF-8") . exit ($msg_503);
 											}
 										else
-											status_header(503) . header ("Content-Type: text/html; charset=utf-8") . exit ($msg_503);
+											status_header(503) . header ("Content-Type: text/html; charset=UTF-8") . exit ($msg_503);
 									}
 								else
-									status_header(503) . header ("Content-Type: text/html; charset=utf-8") . exit ($msg_503);
+									status_header(503) . header ("Content-Type: text/html; charset=UTF-8") . exit ($msg_503);
 							}
 
 						do_action ("ws_plugin__s2member_after_register", get_defined_vars ());

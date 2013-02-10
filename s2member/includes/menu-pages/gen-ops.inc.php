@@ -488,7 +488,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 							{
 								do_action ("ws_plugin__s2member_during_gen_ops_page_during_left_sections_before_open_registration", get_defined_vars ());
 
-								if (is_multisite () && is_main_site ()) /* A Multisite Network, and we're on the Main Site? */
+								if (is_multisite () && is_main_site ()) // A Multisite Network, and we're on the Main Site?
 									{
 										echo '<div class="ws-menu-page-group" title="Open Registration">' . "\n";
 
@@ -500,7 +500,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 										echo '</div>' . "\n";
 									}
-								else /* Else we display this section normally. No special considerations are required in this case. */
+								else // Else we display this section normally. No special considerations are required in this case.
 									{
 										echo '<div class="ws-menu-page-group" title="Open Registration">' . "\n";
 

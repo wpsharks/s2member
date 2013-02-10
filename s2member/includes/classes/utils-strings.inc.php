@@ -37,7 +37,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*
 				* @var array
 				*/
-				public static /* Array keys are actually regex patterns. */ $ampersand_entities = array("&amp;" => "&amp;", "&#0*38;" => "&#38;", "&#[xX]0*26;" => "&#x26;");
+				public static $ampersand_entities = array("&amp;" => "&amp;", "&#0*38;" => "&#38;", "&#[xX]0*26;" => "&#x26;");
 				/**
 				* Array of all quote entities *( and entities for quote variations )*.
 				*

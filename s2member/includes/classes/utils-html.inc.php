@@ -52,7 +52,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 						echo '<html xmlns="http://www.w3.org/1999/xhtml">' . "\n";
 						echo '<head>' . "\n";
 
-						echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' . "\n";
+						echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' . "\n";
 
 						echo '<script type="text/javascript" src="' . esc_attr (site_url ("/wp-includes/js/jquery/jquery.js?ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ()))) . '"></script>' . "\n";
 

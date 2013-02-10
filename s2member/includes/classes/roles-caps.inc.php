@@ -181,8 +181,8 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 						do_action("ws_plugin__s2member_before_update_roles_via_ajax", get_defined_vars());
 
 						status_header(200); // Send a 200 OK status header.
-						header("Content-Type: text/plain; charset=utf-8"); // Content-Type with UTF-8.
-						eval('while (@ob_end_clean ());'); // End/clean all output buffers that may exist.
+						header("Content-Type: text/plain; charset=UTF-8"); // Content-Type with UTF-8.
+						while (@ob_end_clean ()); // Clean any existing output buffers.
 
 						if(current_user_can("create_users")) // Check privileges. Ability to create Users?
 

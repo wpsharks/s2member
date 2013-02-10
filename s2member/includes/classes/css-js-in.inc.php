@@ -45,13 +45,13 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 							{
 								status_header /* 200 OK status. */(200);
 
-								header("Content-Type: text/css; charset=utf-8");
+								header("Content-Type: text/css; charset=UTF-8");
 								header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
 								header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 								header("Cache-Control: max-age=604800");
 								header("Pragma: public");
 
-								eval('while (@ob_end_clean ());');
+								while (@ob_end_clean ()); // Clean any existing output buffers.
 
 								$u = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"];
 								$i = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images";
@@ -86,13 +86,13 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 							{
 								status_header /* 200 OK status header. */(200);
 
-								header("Content-Type: application/x-javascript; charset=utf-8");
+								header("Content-Type: application/x-javascript; charset=UTF-8");
 								header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
 								header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 								header("Cache-Control: max-age=604800");
 								header("Pragma: public");
 
-								eval('while (@ob_end_clean ());');
+								while (@ob_end_clean ()); // Clean any existing output buffers.
 
 								include_once dirname(dirname(__FILE__))."/jquery/jquery.sprintf/jquery.sprintf-min.js";
 

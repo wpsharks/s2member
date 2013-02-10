@@ -44,8 +44,8 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 						if (!empty ($_GET["s2member_s_badge_status"]))
 							{
 								status_header (200); // Send a 200 OK status header.
-								header ("Content-Type: text/plain; charset=utf-8"); // Content-Type with UTF-8.
-								eval ('while (@ob_end_clean ());'); // End/clean all output buffers that may exist.
+								header ("Content-Type: text/plain; charset=UTF-8"); // Content-Type with UTF-8.
+								while (@ob_end_clean ()); // Clean any existing output buffers.
 
 								if ( /* Badge status API enabled? */$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["s_badge_status_enabled"])
 									{

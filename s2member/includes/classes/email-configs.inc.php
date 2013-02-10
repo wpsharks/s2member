@@ -239,7 +239,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 
 																																		if (($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) /* Still have a ``$sbj`` and a ``$msg``? */
 
-																																			c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($user->user_email, $sbj, $msg, "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=utf-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
+																																			c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($user->user_email, $sbj, $msg, "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
 																																	}
 																					}
 									}
@@ -306,7 +306,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 																																															if (($rec = trim (preg_replace ("/%%(.+?)%%/i", "", $rec))) && ($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
 																																																{
 																																																	foreach /* A possible list of recipients. */ (c_ws_plugin__s2member_utils_strings::parse_emails ($rec) as $recipient)
-																																																		wp_mail ($recipient, $sbj, $msg, "Content-Type: text/plain; charset=utf-8");
+																																																		wp_mail ($recipient, $sbj, $msg, "Content-Type: text/plain; charset=UTF-8");
 																																																}
 																																														}
 																																		}

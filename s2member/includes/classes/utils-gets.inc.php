@@ -307,7 +307,6 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 									if (!in_array ($singular_id, $all_singular_ids_not_conflicting))
 										unset ($singular_ids[$s]);
 							}
-
 						return (!empty ($singular_ids) && is_array ($singular_ids)) ? array_unique ($singular_ids) : array ();
 					}
 				/**

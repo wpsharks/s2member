@@ -154,7 +154,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														if ($aweber["wp_mail_response"] = wp_mail ($aweber["list_id"] . "@aweber.com", // AWeber® List ID converts to email address @aweber.com.
 														($aweber["wp_mail_sbj"] = apply_filters ("ws_plugin__s2member_aweber_sbj", "s2Member Subscription Request", get_defined_vars ())), // These Filters make it possible to customize these emails.
 														($aweber["wp_mail_msg"] = apply_filters ("ws_plugin__s2member_aweber_msg", "s2Member Subscription Request\ns2Member w/ PayPal Email ID\nAd Tracking: s2Member-" . ((is_multisite () && !is_main_site ()) ? $current_blog->domain . $current_blog->path : $_SERVER["HTTP_HOST"]) . "\nEMail Address: " . $email . "\nBuyer: " . $buyer . "\nFull Name: " . trim ($fname . " " . $lname) . "\nFirst Name: " . $fname . "\nLast Name: " . $lname . "\nIP Address: " . $ip . "\nUser ID: " . $user_id . "\nLogin: " . $login . $aweber["pass_inclusion"] . "\nRole: " . $role . "\nLevel: " . $level . "\nCCaps: " . $ccaps . "\n - end.", get_defined_vars ())),
-														($aweber["wp_mail_headers"] = "From: \"" . preg_replace ("/\"/", "", trim ($fname . " " . $lname)) . "\" <" . $email . ">" . (($aweber["bcc"]) ? "\r\nBcc: " . $aweber["bcc"] : "") . "\r\nContent-Type: text/plain; charset=utf-8")))
+														($aweber["wp_mail_headers"] = "From: \"" . preg_replace ("/\"/", "", trim ($fname . " " . $lname)) . "\" <" . $email . ">" . (($aweber["bcc"]) ? "\r\nBcc: " . $aweber["bcc"] : "") . "\r\nContent-Type: text/plain; charset=UTF-8")))
 															$aweber["wp_mail_success"] = $success = true; // Flag indicating that we DO have a successful processing of a new List; affects the function's overall return value.
 
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
@@ -271,7 +271,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 
 														if ($aweber["wp_mail_removal_response"] = wp_mail ($aweber["list_id"] . "@aweber.com", // AWeber® List ID converts to email address @aweber.com.
 														($aweber["wp_mail_removal_sbj"] = apply_filters ("ws_plugin__s2member_aweber_removal_sbj", "REMOVE#" . $email . "#s2Member#" . $aweber["list_id"], get_defined_vars ())), // Bug fix. AWeber® does not like dots ( possibly other chars ) in the Ad Tracking field. Now using just: `s2Member`.
-														($aweber["wp_mail_removal_msg"] = "REMOVE"), ($aweber["wp_mail_removal_headers"] = "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">" . (($aweber["removal_bcc"]) ? "\r\nBcc: " . $aweber["removal_bcc"] : "") . "\r\nContent-Type: text/plain; charset=utf-8")))
+														($aweber["wp_mail_removal_msg"] = "REMOVE"), ($aweber["wp_mail_removal_headers"] = "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">" . (($aweber["removal_bcc"]) ? "\r\nBcc: " . $aweber["removal_bcc"] : "") . "\r\nContent-Type: text/plain; charset=UTF-8")))
 															$aweber["wp_mail_removal_success"] = $removal_success = true; // Flag indicating that we DO have a successful removal; affects the function's overall return value.
 
 														c_ws_plugin__s2member_email_configs::email_config_release /* Release. */ ();

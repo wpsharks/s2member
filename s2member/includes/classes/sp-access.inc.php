@@ -70,10 +70,10 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 						do_action ("ws_plugin__s2member_before_sp_access_link_via_ajax", get_defined_vars ());
 
 						status_header (200); // Send a 200 OK status header.
-						header ("Content-Type: text/plain; charset=utf-8"); // Content-Type with UTF-8.
-						eval ('while (@ob_end_clean ());'); // End/clean all output buffers that may exist.
+						header ("Content-Type: text/plain; charset=UTF-8"); // Content-Type with UTF-8.
+						while (@ob_end_clean ()); // Clean any existing output buffers.
 
-						if (current_user_can ("create_users")) // Check priveledges as well. Ability to create Users?
+						if (current_user_can ("create_users")) // Check privileges as well. Ability to create Users?
 
 							if (!empty ($_POST["ws_plugin__s2member_sp_access_link_via_ajax"]) && is_string ($nonce = $_POST["ws_plugin__s2member_sp_access_link_via_ajax"]) && wp_verify_nonce ($nonce, "ws-plugin--s2member-sp-access-link-via-ajax"))
 
@@ -126,8 +126,9 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 								// Otherwise, authentication was NOT possible via link or session.
 								if (!$read_only && /* A Specific Post/Page Link? */ !empty ($_g["s2member_sp_access"]))
 									{
-										status_header (503) . header ("Content-Type: text/html; charset=utf-8");
-										eval ('while (@ob_end_clean ());'); // End/clean all output buffers that may exist.
+										status_header (503);
+										header ("Content-Type: text/html; charset=UTF-8");
+										while (@ob_end_clean ()); // Clean any existing output buffers.
 										exit (_x ('<strong>Your Link Expired:</strong><br />Please contact Support if you need assistance.', "s2member-front", "s2member"));
 									}
 								else // Else return false here.

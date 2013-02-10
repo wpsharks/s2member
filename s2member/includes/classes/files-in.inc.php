@@ -101,7 +101,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 											if(!$using_amazon_storage && !file_exists($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"]."/".$req["file_download"]))
 												{
 													if /* We only need this section when/if we're actually serving. */($serving)
-														status_header(404).header("Content-Type: text/html; charset=utf-8").eval('while (@ob_end_clean ());') #
+														status_header(404).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
 														.exit(_x('<strong>404: Sorry, file not found.</strong> Please contact Support for assistance.', "s2member-front", "s2member"));
 
 													else // Else return false.
@@ -111,7 +111,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 											else if($req["file_download_key"] && is_string($req["file_download_key"]) && !$valid_file_download_key)
 												{
 													if /* We only need this section when/if we're actually serving. */($serving)
-														status_header(503).header("Content-Type: text/html; charset=utf-8").eval('while (@ob_end_clean ());') #
+														status_header(503).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
 														.exit(_x('<strong>503 ( Invalid Key ):</strong> Sorry, your access to this file has expired. Please contact Support for assistance.', "s2member-front", "s2member"));
 
 													else // Else return false.
@@ -131,7 +131,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 													if((isset($file_downloads_enabled_by_site_owner, $min_level_4_downloads) && $file_downloads_enabled_by_site_owner === false) || ($file_downloads_enabled_by_site_owner = $min_level_4_downloads = c_ws_plugin__s2member_files::min_level_4_downloads()) === false)
 														{
 															if /* We only need this section when/if we're actually serving. */($serving)
-																status_header(503).header("Content-Type: text/html; charset=utf-8").eval('while (@ob_end_clean ());') #
+																status_header(503).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
 																.exit(_x('<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member -> Download Options -> Basic Download Restrictions</code>.', "s2member-front", "s2member"));
 
 															else // Else return false.
@@ -251,7 +251,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 											if(!$using_amazon_storage && !file_exists($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"]."/".$req["file_download"]))
 												{
 													if /* We only need this section when/if we're actually serving. */($serving)
-														status_header(404).header("Content-Type: text/html; charset=utf-8").eval('while (@ob_end_clean ());') #
+														status_header(404).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
 														.exit(_x('<strong>404: Sorry, file not found.</strong> Please contact Support for assistance.', "s2member-front", "s2member"));
 
 													else // Else return false.
@@ -480,7 +480,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 								}
 
 							else if /* We only need this section when/if we're actually serving. */($serving && $req["file_download"])
-								status_header(503).header("Content-Type: text/html; charset=utf-8").eval('while (@ob_end_clean ());') #
+								status_header(503).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
 								.exit(_x('<strong>503: Access denied.</strong> Invalid File Download specs.', "s2member-front", "s2member"));
 
 							else if /* We only need this section when/if we're creating a URL. */($creating)
@@ -570,8 +570,8 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 										header('WWW-Authenticate: Basic realm="'.c_ws_plugin__s2member_utils_strings::esc_dq(strip_tags(_x("Members Only", "s2member-front", "s2member"))).'"');
 
 										status_header /* Send an unauthorized 401 status header now. */(401);
-										header /* Content-Type with UTF-8. */("Content-Type: text/html; charset=utf-8");
-										eval /* End/clean any output buffers that may exist. */('while (@ob_end_clean ());');
+										header /* Content-Type with UTF-8. */("Content-Type: text/html; charset=UTF-8");
+										while (@ob_end_clean ()); // Clean any existing output buffers.
 
 										exit(_x('<strong>401:</strong> Sorry, access denied.', "s2member-front", "s2member"));
 									}

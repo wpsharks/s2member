@@ -39,7 +39,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 						echo '<tr class="ws-menu-page-table-tr">'."\n";
 						echo '<td class="ws-menu-page-table-l">'."\n";
 
-						if(is_multisite() && is_main_site()) /* These panels will ONLY be available on the Main Site; with Multisite Networking. */
+						if(is_multisite() && is_main_site()) // These panels will ONLY be available on the Main Site; with Multisite Networking.
 							{
 								echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">'."\n";
 								echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
@@ -162,14 +162,14 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 
 										echo '<td>'."\n";
 
-										if(defined("MULTISITE_FARM") && MULTISITE_FARM) /* Lock this down if a config option is set in /wp-config.php. */
+										if(defined("MULTISITE_FARM") && MULTISITE_FARM) // Lock this down if a config option is set in /wp-config.php.
 											{
 												echo '<select name="ws_plugin__s2member_mms_registration_file" id="ws-plugin--s2member-mms-registration-file" disabled="disabled">'."\n";
 												echo '<option value="wp-signup" selected="selected">Blog Farm ( I plan to offer both Membership &amp; Blog creation )</option>'."\n";
 												echo '</select><br />'."\n";
 												echo '<em class="ws-menu-page-hilite">This is now locked. Your <code>/wp-config.php</code> file says: <code>MULTISITE_FARM = true</code></em>.'."\n";
 											}
-										else /* Otherwise we can display these options normally. */
+										else // Otherwise we can display these options normally.
 											{
 												echo '<select name="ws_plugin__s2member_mms_registration_file" id="ws-plugin--s2member-mms-registration-file">'."\n";
 												echo '<option value="wp-login"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mms_registration_file"] === "wp-login") ? ' selected="selected"' : '').'>Membership Only ( I\'m NOT offering Blogs )</option>'."\n";
@@ -301,7 +301,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 
 								echo '</form>'."\n";
 							}
-						else /* Otherwise, we can display a simple notation; leading into Multisite Networking. */
+						else // Otherwise, we can display a simple notation; leading into Multisite Networking.
 							{
 								echo '<p style="margin-top:0;"><span class="ws-menu-page-hilite">Your WordPress® installation does not have Multisite Networking enabled.<br />Which is perfectly OK :-) Multisite Networking is 100% completely optional.</span></p>'."\n";
 								echo '<img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/large-icon.png" title="s2Member (a Membership management system for WordPress®)" alt="" style="float:right; margin:0 0 0 25px; border:0;" />'."\n";

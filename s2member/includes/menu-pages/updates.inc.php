@@ -33,7 +33,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages_updates"))
 							{
 								echo '<form id="ws-updates-form" action="http://websharks-inc.us1.list-manage1.com/subscribe/post?u=8f347da54d66b5298d13237d9&amp;id=19e9d213bc" method="post" target="_blank">'."\n";
 
-								if(!is_ssl() && /* Don't require remote connections when running on `localhost`. */ !c_ws_plugin__s2member_utils_conds::is_localhost())
+								if(!is_ssl() && !c_ws_plugin__s2member_utils_conds::is_localhost())
 									{
 										echo '<div class="ws-menu-page-r-group-header">'."\n";
 										echo '<ins class="open">-</ins>Latest News<em>!</em>'."\n";
@@ -65,7 +65,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages_updates"))
 								echo '<input type="text" aria-required="true" autocomplete="off" name="EMAIL" id="ws-updates-email" value="'.format_to_edit($user->user_email).'" />'."\n";
 								echo '</div>'."\n";
 
-								if(!is_ssl() && /* Don't require remote connections when running on `localhost`. */ !c_ws_plugin__s2member_utils_conds::is_localhost())
+								if(!is_ssl() && !c_ws_plugin__s2member_utils_conds::is_localhost())
 									{
 										echo '<div id="ws-updates-div-subs">'."\n";
 										echo '<script type="text/javascript" src="http://websharks-inc.us1.list-manage.com/subscriber-count?b=31&u=8c67d547-edf6-41c5-807d-2d2d0e6cffd1&id=19e9d213bc"></script>'."\n";

@@ -191,8 +191,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 								status_header (200); // Send a 200 OK status header.
-								header ("Content-Type: text/plain; charset=utf-8"); // Content-Type text/plain with UTF-8.
-								eval ('while (@ob_end_clean ());'); // End/clean all output buffers that may or may not exist.
+								header ("Content-Type: text/plain; charset=UTF-8"); // Content-Type text/plain with UTF-8.
+								while (@ob_end_clean ()); // Clean any existing output buffers.
 
 								exit (((!empty ($paypal["s2member_paypal_proxy_return_url"])) ? $paypal["s2member_paypal_proxy_return_url"] : ""));
 							}

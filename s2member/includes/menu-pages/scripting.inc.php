@@ -62,7 +62,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 							{
 								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_simple_way", get_defined_vars ());
 
-								if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) /* Two versions. */
+								if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 									{
 										echo '<div class="ws-menu-page-group" title="Simple/Shortcode Conditionals">' . "\n";
 
@@ -124,7 +124,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '</div>' . "\n";
 									}
-								else /* Otherwise, we can display the standardized version of this information. */
+								else // Otherwise, we can display the standardized version of this information.
 									{
 										echo '<div class="ws-menu-page-group" title="Simple/Shortcode Conditionals">' . "\n";
 
@@ -470,7 +470,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 							{
 								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_constants", get_defined_vars ());
 
-								if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) /* Two versions. */
+								if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 									{
 										echo '<div class="ws-menu-page-group" title="s2Get / s2Member API Constants">' . "\n";
 
@@ -696,7 +696,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '</div>' . "\n";
 									}
-								else /* Otherwise, we can display the standardized version of this information. */
+								else // Otherwise, we can display the standardized version of this information.
 									{
 										echo '<div class="ws-menu-page-group" title="s2Member PHP/API Constants">' . "\n";
 

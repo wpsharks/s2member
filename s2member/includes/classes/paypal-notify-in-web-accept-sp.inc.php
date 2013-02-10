@@ -111,7 +111,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 																																	if (($rec = trim (preg_replace ("/%%(.+?)%%/i", "", $rec))) && ($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
 																																		{
 																																			foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($rec) as $recipient) // Go through a possible list of recipients.
-																																				c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($recipient, apply_filters ("ws_plugin__s2member_sp_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_sp_email_msg", $msg, get_defined_vars ()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=utf-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
+																																				c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($recipient, apply_filters ("ws_plugin__s2member_sp_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_sp_email_msg", $msg, get_defined_vars ()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
 
 																																			$paypal["s2member_log"][] = "Specific Post/Page Confirmation Email sent to: " . $rec . ".";
 																																		}
@@ -175,7 +175,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 																						if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																							foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_recipients"]) as $recipient)
-																								wp_mail ($recipient, apply_filters ("ws_plugin__s2member_sp_sale_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_sp_sale_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=utf-8");
+																								wp_mail ($recipient, apply_filters ("ws_plugin__s2member_sp_sale_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_sp_sale_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 
 														$paypal["s2member_log"][] = "Specific Post/Page ~ Sale Notification Emails have been processed.";
 													}
