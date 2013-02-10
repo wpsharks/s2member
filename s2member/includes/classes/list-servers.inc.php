@@ -72,7 +72,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 					{
 						global /* For Multisite support. */ $current_site, $current_blog;
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_process_list_servers", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -171,7 +171,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 											}
 									}
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_process_list_servers", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -179,7 +179,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 									c_ws_plugin__s2member_email_configs::email_config ();
 							}
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_process_list_servers", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -211,7 +211,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 					{
 						global /* For Multisite support. */ $current_site, $current_blog;
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_process_list_server_removals", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -290,7 +290,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 											}
 									}
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_process_list_server_removals", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -298,7 +298,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 									c_ws_plugin__s2member_email_configs::email_config ();
 							}
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_process_list_server_removals", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -329,7 +329,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 						global /* For Multisite support. */ $current_site, $current_blog;
 						static $auto_processed = /* Process ONE time for each User. */ array ();
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_auto_process_list_server_removals", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -353,18 +353,18 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 
 												$transitioned = c_ws_plugin__s2member_list_servers::process_list_servers ($mod_new_role, c_ws_plugin__s2member_user_access::user_access_role_to_level ($mod_new_role), $user->user_login, false, $user->user_email, $user->first_name, $user->last_name, false, true, (($removed) ? false : true), $user->ID);
 
-												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action ("ws_plugin__s2member_during_auto_process_list_server_removal_transitions", get_defined_vars ());
 												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 											}
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_auto_process_list_server_removals", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
 							}
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_auto_process_list_server_removals", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

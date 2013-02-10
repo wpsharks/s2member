@@ -46,7 +46,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 						&& (!empty($paypal["item_number"]) && preg_match($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"]))
 						&& (!empty($paypal["subscr_id"])))
 							{
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_before_subscr_modify", get_defined_vars());
 								unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -83,7 +83,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 													{
 														$processing = $modifying = $during = /* Yes, we ARE processing this. */ true;
 
-														eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action("ws_plugin__s2member_during_paypal_return_during_before_subscr_modify", get_defined_vars());
 														do_action("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars(), "rtn-upgrade-downgrade", "modification", "s2member_level".$paypal["level"]);
 														unset /* Unset defined __refs, __v. */($__refs, $__v);
@@ -169,7 +169,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 																														}
 																							}
 															}
-														eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action("ws_plugin__s2member_during_paypal_return_during_subscr_modify", get_defined_vars());
 														unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -220,7 +220,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 											_x('<strong>Page Expired:</strong> Duplicate Return-Data.<br />Please contact Support if you need any assistance.', "s2member-front", "s2member"),
 											_x("Back To Home Page", "s2member-front", "s2member"), home_url("/"));
 									}
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_after_subscr_modify", get_defined_vars());
 								unset /* Unset defined __refs, __v. */($__refs, $__v);
 

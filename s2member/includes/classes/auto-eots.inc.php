@@ -105,7 +105,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 						@set_time_limit /* Make time for processing a larger userbase. */ (0);
 						@ini_set ("memory_limit", apply_filters ("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_auto_eot_system", get_defined_vars ());
 						unset  /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -136,7 +136,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																		$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role ("subscriber");
 																		$existing_role = c_ws_plugin__s2member_user_access::user_access_role ($user);
 
-																		eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																		do_action ("ws_plugin__s2member_during_auto_eot_system_during_before_demote", get_defined_vars ());
 																		do_action ("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars (), $eot_del_type, "modification", $demotion_role);
 																		do_action ("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "modification");
@@ -244,7 +244,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																				if /* Back on? */ ($email_configs_were_on)
 																					c_ws_plugin__s2member_email_configs::email_config ();
 																			}
-																		eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																		do_action ("ws_plugin__s2member_during_auto_eot_system_during_demote", get_defined_vars ());
 																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																	}
@@ -252,7 +252,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																	{
 																		$eot_del_type = $GLOBALS["ws_plugin__s2member_eot_del_type"] = "auto-eot-cancellation-expiration-deletion";
 
-																		eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																		do_action ("ws_plugin__s2member_during_auto_eot_system_during_before_delete", get_defined_vars ());
 																		do_action ("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "removal-deletion");
 																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -267,11 +267,11 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																			// This will automatically trigger `eot_del_notification_urls`
 																			wp_delete_user /* `c_ws_plugin__s2member_user_deletions::handle_user_deletions()` */ ($user_id);
 
-																		eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																		do_action ("ws_plugin__s2member_during_auto_eot_system_during_delete", get_defined_vars ());
 																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																	}
-																eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action ("ws_plugin__s2member_during_auto_eot_system", get_defined_vars ());
 																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 															}
@@ -282,7 +282,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 
 						c_ws_plugin__s2member_utils_logs::cleanup_expired_s2m_transients /* Cleanup. */ ();
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_auto_eot_system", get_defined_vars ());
 						unset  /* Unset defined __refs, __v. */($__refs, $__v);
 

@@ -43,7 +43,7 @@ if (!class_exists ("c_ws_plugin__s2member_brute_force"))
 				*/
 				public static function track_failed_logins ($username = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_track_failed_logins", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -76,7 +76,7 @@ if (!class_exists ("c_ws_plugin__s2member_brute_force"))
 				*/
 				public static function stop_brute_force_logins ($user = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_stop_brute_force_logins", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -91,7 +91,7 @@ if (!class_exists ("c_ws_plugin__s2member_brute_force"))
 									{
 										$errors = new WP_Error ("incorrect_password", sprintf (_x ("Max failed logins. Please wait %s and try again.", "s2member-front", "s2member"), $about));
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_stop_brute_force_logins", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}

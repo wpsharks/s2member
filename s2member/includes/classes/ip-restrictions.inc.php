@@ -41,7 +41,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 				*/
 				public static function ip_restrictions_ok($ip = FALSE, $restriction = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_ip_restrictions_ok", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -79,7 +79,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 										header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=UTF-8");
 										while (@ob_end_clean ()); // Clean any existing output buffers.
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -98,7 +98,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 										header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=UTF-8");
 										while (@ob_end_clean ()); // Clean any existing output buffers.
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -107,7 +107,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
 								else // OK, this looks legitimate. Apply Filters here and return true.
 									{
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action("ws_plugin__s2member_during_ip_restrictions_ok_yes", get_defined_vars());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -115,7 +115,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 									}
 							}
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_during_ip_restrictions_ok_yes", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

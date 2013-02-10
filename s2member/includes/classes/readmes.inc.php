@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 								$path = (file_exists ($dev_path)) ? $dev_path : $path;
 							}
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_parse_readme", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -211,7 +211,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 								$path = (file_exists ($dev_path)) ? $dev_path : $path;
 							}
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_parse_readme_value", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

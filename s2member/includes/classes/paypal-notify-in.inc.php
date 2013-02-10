@@ -78,7 +78,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 											{
 												$paypal["s2member_log"][] = "s2Member originating domain ( `\$_SERVER[\"HTTP_HOST\"]` ) validated.";
 
-												eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												if (!apply_filters ("ws_plugin__s2member_during_paypal_notify_conditionals", false, get_defined_vars ()))
 													{
 														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -186,7 +186,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 										if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
 											file_put_contents ($logs_dir . "/" . $log2, $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($paypal, true) . "\n\n", FILE_APPEND);
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_paypal_notify", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -197,7 +197,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								exit (((!empty ($paypal["s2member_paypal_proxy_return_url"])) ? $paypal["s2member_paypal_proxy_return_url"] : ""));
 							}
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_paypal_notify", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 					}

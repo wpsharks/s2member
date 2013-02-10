@@ -143,7 +143,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*/
 				public static function ms_nice_email_roles ($message = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_ms_nice_email_roles", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -187,7 +187,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*/
 				public static function new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user", "admin"))
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_new_user_notification", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

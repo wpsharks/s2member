@@ -43,7 +43,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*/
 				public static function generate_password ($password = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_generate_password", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -79,7 +79,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*/
 				public static function ms_validate_user_signup ($result = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_ms_validate_user_signup", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -90,7 +90,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 										if (c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog ($result["user_name"], $result["user_email"]))
 											$result["errors"] = new WP_Error ();
 
-									eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+									foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 									do_action ("ws_plugin__s2member_during_ms_validate_user_signup", get_defined_vars ());
 									unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 								}
@@ -150,7 +150,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 						global /* Multisite Networking. */ $current_site, $current_blog;
 						global $pagenow; // Need this to detect the current admin page.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_ms_process_signup_meta", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -191,7 +191,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*/
 				public static function ms_activate_existing_user ($_error = FALSE, $vars = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_ms_activate_existing_user", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -236,7 +236,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 					{
 						global $pagenow; // Need this to detect the current admin page.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_configure_user_on_ms_user_activation", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -275,7 +275,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*/
 				public static function configure_user_on_ms_blog_activation ($blog_id = FALSE, $user_id = FALSE, $password = FALSE, $title = FALSE, $meta = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_configure_user_on_ms_blog_activation", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -310,7 +310,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*/
 				public static function ms_register_existing_user ($errors = FALSE, $user_login = FALSE, $user_email = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_ms_register_existing_user", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -363,7 +363,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*/
 				public static function ms_create_existing_user ($user_login = FALSE, $user_email = FALSE, $user_pass = FALSE, $user_id = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_ms_create_existing_user", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -412,7 +412,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 						global $current_site, $current_blog; // Adds support for Multisite Networking.
 						static $email_config, $processed; // Static vars prevent duplicate processing.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_configure_user_registration", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -495,9 +495,8 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																	if (!empty ($_pmr["field_1"]) && preg_match ("/^(.+?) (.+)$/", (string)$_pmr["field_1"]))
 																		$lname = trim (preg_replace ("/^(.+?) (.+)$/", "$2", (string)$_pmr["field_1"]));
 
-																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"] && !$fname)
-																	if ($login) // Username and empty Last Name.
-																		eval ('$fname = trim ($login); $lname = "";');
+																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"] && !$fname && $login)
+																	{ $fname = trim ($login); $lname = ""; } // Username and empty Last Name.
 
 																$name = trim ($fname . " " . $lname); // Both names.
 
@@ -604,7 +603,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																if (!headers_sent ()) // Only if headers are NOT yet sent. Here we establish both Signup and Payment Tracking Cookies.
 																	@setcookie ("s2member_tracking", ($s2member_tracking = c_ws_plugin__s2member_utils_encryption::encrypt ($subscr_id)), time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . @setcookie ("s2member_tracking", $s2member_tracking, time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN) . ($_COOKIE["s2member_tracking"] = $s2member_tracking);
 
-																eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action ("ws_plugin__s2member_during_configure_user_registration_front_side_paid", get_defined_vars ());
 																do_action ("ws_plugin__s2member_during_configure_user_registration_front_side", get_defined_vars ());
 																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -663,9 +662,8 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																	if (!empty ($_pmr["field_1"]) && preg_match ("/^(.+?) (.+)$/", (string)$_pmr["field_1"]))
 																		$lname = trim (preg_replace ("/^(.+?) (.+)$/", "$2", (string)$_pmr["field_1"]));
 
-																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"] && !$fname)
-																	if ($login) // Username and empty Last Name.
-																		eval ('$fname = trim ($login); $lname = "";');
+																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"] && !$fname && $login)
+																	{ $fname = trim ($login); $lname = ""; } // Username and empty Last Name.
 
 																$name = trim ($fname . " " . $lname); // Both names.
 
@@ -751,7 +749,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 																	}
 
-																eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action ("ws_plugin__s2member_during_configure_user_registration_front_side_free", get_defined_vars ());
 																do_action ("ws_plugin__s2member_during_configure_user_registration_front_side", get_defined_vars ());
 																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -798,9 +796,8 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																	if (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_last_name"]))
 																		$lname = (string)$_pmr["ws_plugin__s2member_custom_reg_field_last_name"];
 
-																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"] && !$fname)
-																	if ($login) // Username and empty Last Name.
-																		eval ('$fname = trim ($login); $lname = "";');
+																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"] && !$fname && $login)
+																	{ $fname = trim ($login); $lname = ""; } // Username and empty Last Name.
 
 																$name = trim ($fname . " " . $lname); // Both names.
 
@@ -886,7 +883,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 																	}
 
-																eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action ("ws_plugin__s2member_during_configure_user_registration_admin_side", get_defined_vars ());
 																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 															}
@@ -1019,13 +1016,13 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		@setcookie ("s2member_item_number", "", time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . @setcookie ("s2member_item_number", "", time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
 																	}
 
-																eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action ("ws_plugin__s2member_during_configure_user_registration", get_defined_vars ());
 																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 															}
 													}
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_configure_user_registration", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

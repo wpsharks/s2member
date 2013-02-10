@@ -80,7 +80,7 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 						$s = /* Initialize styles string here to give Hooks a chance. */ "";
 						$a = /* Initialize here to give Filters a chance. */ array();
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_login_header_styles", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -130,7 +130,7 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 						$a = apply_filters("ws_plugin__s2member_login_header_styles_array_before_close", $a, get_defined_vars());
 						$a[] = /* Now close style tag. There are other Filters below. */ '</style>';
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_during_login_header_styles", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

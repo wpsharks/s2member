@@ -65,7 +65,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 				*/
 				public static function user_capabilities ($capabilities = FALSE, $caps_map = FALSE, $args = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_user_capabilities", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -93,7 +93,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 					{
 						global $user_id; // Available inside `/wp-admin/user-edit.php`.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_ms_allow_edits", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -121,7 +121,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 				*/
 				public static function hide_password_fields ($show = TRUE, $user = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_hide_password_fields", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						$paid_registration_times = ($user) ? get_user_option ("s2member_paid_registration_times", $user->ID) : array ();
 						$login_counter = ($user) ? (int)get_user_option ("s2member_login_counter") : -1;
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_during_constants", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 						/**

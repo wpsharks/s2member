@@ -42,7 +42,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_s_badge_in"))
 				*/
 				public static function sc_s_badge ($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_sc_s_badge", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

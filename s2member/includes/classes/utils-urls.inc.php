@@ -203,7 +203,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 								if(!empty($args["method"]) && strcasecmp((string)$args["method"], "DELETE") === 0 && version_compare(get_bloginfo("version"), "3.4", "<"))
 									add_filter("use_curl_transport", "__return_false", /* ID via priority. */ 111209554);
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_before_wp_remote_request", get_defined_vars());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

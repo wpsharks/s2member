@@ -43,7 +43,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 					{
 						global $pagenow; // The current admin page file name.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("_ws_plugin__s2member_before_admin_user_new_fields", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -57,13 +57,13 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 
 								$unfs .= '<table class="form-table">' . "\n";
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 								if (is_multisite ()) // Multisite Networking is currently lacking these fields; we pop them in.
 									{
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_first_name", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -72,11 +72,11 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 										$unfs .= '<td><input type="text" autocomplete="off" name="ws_plugin__s2member_user_new_first_name" id="ws-plugin--s2member-user-new-first-name" value="' . esc_attr ($_p["ws_plugin__s2member_user_new_first_name"]) . '" class="regular-text" /></td>' . "\n";
 										$unfs .= '</tr>' . "\n";
 
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_first_name", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_last_name", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -85,12 +85,12 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 										$unfs .= '<td><input type="text" autocomplete="off" name="ws_plugin__s2member_user_new_last_name" id="ws-plugin--s2member-user-new-last-name" value="' . esc_attr ($_p["ws_plugin__s2member_user_new_last_name"]) . '" class="regular-text" /></td>' . "\n";
 										$unfs .= '</tr>' . "\n";
 
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_last_name", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_subscr_gateway", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -103,11 +103,11 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								$unfs .= '</td>' . "\n";
 								$unfs .= '</tr>' . "\n";
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_subscr_gateway", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_subscr_id", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -116,11 +116,11 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								$unfs .= '<td><input type="text" autocomplete="off" name="ws_plugin__s2member_user_new_s2member_subscr_id" id="ws-plugin--s2member-user-new-s2member-subscr-id" value="' . format_to_edit ($_p["ws_plugin__s2member_user_new_s2member_subscr_id"]) . '" class="regular-text" /></td>' . "\n";
 								$unfs .= '</tr>' . "\n";
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_subscr_id", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_custom", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -129,11 +129,11 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								$unfs .= '<td><input type="text" autocomplete="off" name="ws_plugin__s2member_user_new_s2member_custom" id="ws-plugin--s2member-user-new-s2member-custom" value="' . format_to_edit ($_p["ws_plugin__s2member_user_new_s2member_custom"]) . '" class="regular-text" /></td>' . "\n";
 								$unfs .= '</tr>' . "\n";
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_custom", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_registration_ip", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -142,14 +142,14 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								$unfs .= '<td><input type="text" autocomplete="off" name="ws_plugin__s2member_user_new_s2member_registration_ip" id="ws-plugin--s2member-user-new-s2member-registration-ip" value="' . format_to_edit ($_p["ws_plugin__s2member_user_new_s2member_registration_ip"]) . '" class="regular-text" /></td>' . "\n";
 								$unfs .= '</tr>' . "\n";
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_registration_ip", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 								if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
 									// ^ Will change once Custom Capabilities are compatible with a Blog Farm.
 									{
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_ccaps", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -158,12 +158,12 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 										$unfs .= '<td><input type="text" autocomplete="off" name="ws_plugin__s2member_user_new_s2member_ccaps" id="ws-plugin--s2member-user-new-s2member-ccaps" value="' . format_to_edit ($_p["ws_plugin__s2member_user_new_s2member_ccaps"]) . '" class="regular-text" onkeyup="if(this.value.match(/[^a-z_0-9,]/)) this.value = jQuery.trim (jQuery.trim (this.value).replace (/[ \-]/g, \'_\').replace (/[^a-z_0-9,]/gi, \'\').toLowerCase ());" /></td>' . "\n";
 										$unfs .= '</tr>' . "\n";
 
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_ccaps", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_auto_eot_time", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -172,13 +172,13 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								$unfs .= '<td><input type="text" autocomplete="off" name="ws_plugin__s2member_user_new_s2member_auto_eot_time" id="ws-plugin--s2member-user-new-auto-eot-time" value="' . format_to_edit ($_p["ws_plugin__s2member_user_new_s2member_auto_eot_time"]) . '" class="regular-text" /></td>' . "\n";
 								$unfs .= '</tr>' . "\n";
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_auto_eot_time", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 								if (c_ws_plugin__s2member_list_servers::list_servers_integrated ()) // Only if integrated with s2Member.
 									{
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_opt_in", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -187,7 +187,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 										$unfs .= '<td><label><input type="checkbox" name="ws_plugin__s2member_user_new_opt_in" id="ws-plugin--s2member-user-new-opt-in" value="1"' . (($_p["ws_plugin__s2member_user_new_opt_in"]) ? ' checked="checked"' : '') . ' /> Yes, send a mailing list confirmation email to this new User.</label></td>' . "\n";
 										$unfs .= '</tr>' . "\n";
 
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_opt_in", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
@@ -201,13 +201,13 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 											$unfs .= '</td>' . "\n";
 											$unfs .= '</tr>' . "\n";
 
-											eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 											do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_custom_fields", get_defined_vars ());
 											unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 											foreach (json_decode ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 												{
-													eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+													foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 													do_action ("_ws_plugin__s2member_during_admin_user_new_fields_during_custom_fields_before", get_defined_vars ());
 													unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -216,7 +216,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 															$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
 															$field_id_class = preg_replace ("/_/", "-", $field_var);
 
-															eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+															foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 															if (apply_filters ("_ws_plugin__s2member_during_admin_user_new_fields_during_custom_fields_display", true, get_defined_vars ()))
 																{
 																	if (!empty ($field["section"]) && $field["section"] === "yes") // Starts a new section?
@@ -230,12 +230,12 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 														}
 
-													eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+													foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 													do_action ("_ws_plugin__s2member_during_admin_user_new_fields_during_custom_fields_after", get_defined_vars ());
 													unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 												}
 
-											eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 											do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_custom_fields", get_defined_vars ());
 											unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -246,7 +246,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 											$unfs .= '</tr>' . "\n";
 										}
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_before_notes", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -255,11 +255,11 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								$unfs .= '<td><textarea name="ws_plugin__s2member_user_new_s2member_notes" id="ws-plugin--s2member-user-new-s2member-notes" rows="5" wrap="off" spellcheck="false" style="width:99%;">' . format_to_edit ($_p["ws_plugin__s2member_user_new_s2member_notes"]) . '</textarea></td>' . "\n";
 								$unfs .= '</tr>' . "\n";
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after_notes", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("_ws_plugin__s2member_during_admin_user_new_fields_after", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -270,7 +270,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								$buffer = preg_replace ("/(\<\/table\>)(\s*)(\<p\s+class\s*\=\s*['\"]submit['\"]\s*\>)(\s*)(\<input\s+type\s*\=\s*['\"]submit['\"]\s+name\s*\=\s*['\"]createuser['\"])/", "$1$2\n" . $unfs . "$3$4$5", $buffer);
 							}
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("_ws_plugin__s2member_after_admin_user_new_fields", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

@@ -76,7 +76,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 					{
 						global $wpdb; // Need this global object reference.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_users_list_search", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -99,7 +99,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 									$query->query_where = apply_filters ("ws_plugin__s2member_before_users_list_search_where", $query->query_where, get_defined_vars ());
 								}
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_users_list_search", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -118,7 +118,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 				*/
 				public static function users_list_cols ($cols = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_users_list_cols", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -145,7 +145,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						$cols["s2member_login_counter"] = "# Of Logins";
 						$cols["s2member_last_login_time"] = "Last Login Time";
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_during_users_list_cols", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -169,7 +169,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						static $user, $last_user_id; // Used internally for optimization.
 						static $fields, $last_fields_id; // Used for optimization.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_users_list_display_cols", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

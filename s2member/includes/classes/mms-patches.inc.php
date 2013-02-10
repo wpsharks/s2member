@@ -42,7 +42,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 					{
 						global $pagenow; // Need access to this global var.
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_sync_mms_patches", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 				*/
 				public static function mms_patches ($display_notices = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_mms_patches", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

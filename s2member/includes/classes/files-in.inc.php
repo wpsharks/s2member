@@ -43,7 +43,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				*/
 				public static function check_file_download_access($create_file_download_url = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_file_download_access", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -101,9 +101,12 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 											if(!$using_amazon_storage && !file_exists($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"]."/".$req["file_download"]))
 												{
 													if /* We only need this section when/if we're actually serving. */($serving)
-														status_header(404).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
-														.exit(_x('<strong>404: Sorry, file not found.</strong> Please contact Support for assistance.', "s2member-front", "s2member"));
-
+													{
+														status_header(404);
+														header("Content-Type: text/html; charset=UTF-8");
+														while (@ob_end_clean ()); // Clean any existing output buffers.
+														exit(_x('<strong>404: Sorry, file not found.</strong> Please contact Support for assistance.', "s2member-front", "s2member"));
+													}
 													else // Else return false.
 														return false;
 												}
@@ -111,9 +114,12 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 											else if($req["file_download_key"] && is_string($req["file_download_key"]) && !$valid_file_download_key)
 												{
 													if /* We only need this section when/if we're actually serving. */($serving)
-														status_header(503).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
-														.exit(_x('<strong>503 ( Invalid Key ):</strong> Sorry, your access to this file has expired. Please contact Support for assistance.', "s2member-front", "s2member"));
-
+													{
+														status_header(503);
+														header("Content-Type: text/html; charset=UTF-8");
+														while (@ob_end_clean ()); // Clean any existing output buffers.
+														exit(_x('<strong>503 ( Invalid Key ):</strong> Sorry, your access to this file has expired. Please contact Support for assistance.', "s2member-front", "s2member"));
+													}
 													else // Else return false.
 														return false;
 												}
@@ -131,9 +137,12 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 													if((isset($file_downloads_enabled_by_site_owner, $min_level_4_downloads) && $file_downloads_enabled_by_site_owner === false) || ($file_downloads_enabled_by_site_owner = $min_level_4_downloads = c_ws_plugin__s2member_files::min_level_4_downloads()) === false)
 														{
 															if /* We only need this section when/if we're actually serving. */($serving)
-																status_header(503).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
-																.exit(_x('<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member -> Download Options -> Basic Download Restrictions</code>.', "s2member-front", "s2member"));
-
+															{
+																status_header(503);
+																header("Content-Type: text/html; charset=UTF-8");
+																while (@ob_end_clean ()); // Clean any existing output buffers.
+																exit(_x('<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member -> Download Options -> Basic Download Restrictions</code>.', "s2member-front", "s2member"));
+															}
 															else // Else return false.
 																return false;
 														}
@@ -251,9 +260,12 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 											if(!$using_amazon_storage && !file_exists($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"]."/".$req["file_download"]))
 												{
 													if /* We only need this section when/if we're actually serving. */($serving)
-														status_header(404).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
-														.exit(_x('<strong>404: Sorry, file not found.</strong> Please contact Support for assistance.', "s2member-front", "s2member"));
-
+													{
+														status_header(404);
+														header("Content-Type: text/html; charset=UTF-8");
+														while (@ob_end_clean ()); // Clean any existing output buffers.
+														exit(_x('<strong>404: Sorry, file not found.</strong> Please contact Support for assistance.', "s2member-front", "s2member"));
+													}
 													else // Else return false.
 														return false;
 												}
@@ -287,7 +299,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 											$disposition = (($inline) ? "inline" : "attachment")."; filename=\"".c_ws_plugin__s2member_utils_strings::esc_dq($basename)."\"; filename*=UTF-8''".rawurlencode($basename);
 											$length = (!$using_amazon_storage && $file) ? filesize($file) : -1;
 
-											eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 											do_action("ws_plugin__s2member_during_file_download_access", get_defined_vars());
 											unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -480,9 +492,12 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 								}
 
 							else if /* We only need this section when/if we're actually serving. */($serving && $req["file_download"])
-								status_header(503).header("Content-Type: text/html; charset=UTF-8").eval('while (@ob_end_clean ());') #
-								.exit(_x('<strong>503: Access denied.</strong> Invalid File Download specs.', "s2member-front", "s2member"));
-
+							{
+								status_header(503);
+								header("Content-Type: text/html; charset=UTF-8");
+								while (@ob_end_clean ()); // Clean any existing output buffers.
+								exit(_x('<strong>503: Access denied.</strong> Invalid File Download specs.', "s2member-front", "s2member"));
+							}
 							else if /* We only need this section when/if we're creating a URL. */($creating)
 								return false;
 
@@ -505,7 +520,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				*/
 				public static function create_file_download_url($config = FALSE, $get_streamer_array = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_create_file_download_url", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -519,7 +534,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 
 						if(($_url = c_ws_plugin__s2member_files_in::check_file_download_access /* Successfully created a URL to the file? */(($create_file_download_url = $config))))
 							{
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_create_file_download_url", get_defined_vars());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -555,7 +570,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				*/
 				public static function check_file_remote_authorization($user = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_check_file_remote_authorization", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -594,7 +609,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				*/
 				public static function check_file_download_key($file = FALSE, $key = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("_ws_plugin__s2member_before_check_file_download_key", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

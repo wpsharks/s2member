@@ -116,7 +116,7 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods_in"))
 														delete_user_option ($user_id, "s2member_custom_fields");
 												}
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_handle_profile_modifications", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

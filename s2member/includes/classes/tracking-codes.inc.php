@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_display_signup_tracking_codes", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -113,7 +113,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_display_modification_tracking_codes", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -165,7 +165,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_display_ccap_tracking_codes", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -213,7 +213,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_sp_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_display_sp_tracking_codes", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_return_templates"))
 				*/
 				public static function return_template ($template = FALSE, $response = FALSE, $continue_html = FALSE, $continue_link = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_return_template", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

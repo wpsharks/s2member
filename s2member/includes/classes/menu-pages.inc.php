@@ -57,7 +57,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 					{
 						$updated_all_options = false; // Initialize this to a value of false. Initializing this variable here makes it an available reference-variable to Hooks/Filters.
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_update_all_options", get_defined_vars()); // If you use this Hook, be sure to use ``wp_verify_nonce()``.
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -79,7 +79,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 
 								unset /* Unset these utility variables now. This prevents bleeding vars into Hooks/Filters that are of no use. */($key, $value);
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_update_all_options", get_defined_vars()); // If you use this Hook, be sure to use ``wp_verify_nonce()``.
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -119,7 +119,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 								$updated_all_options = /* Flag indicating this routine was processed successfully; and that all s2Member options have been updated successfully.*/ true;
 							}
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_after_update_all_options", get_defined_vars()); // If you use this Hook, be sure to use ``wp_verify_nonce()``.
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -270,7 +270,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 				*/
 				public static function _add_settings_link($actions = FALSE, $plugin_file = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("_ws_plugin__s2member_before_add_settings_link", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -279,7 +279,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 								$settings = '<a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-gen-ops")).'">Settings</a>';
 								array_unshift($actions, apply_filters("ws_plugin__s2member_add_settings_link", $settings, get_defined_vars()));
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("_ws_plugin__s2member_during_add_settings_link", get_defined_vars());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 							}

@@ -131,7 +131,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 					{
 						global $wpdb; // Global database object reference
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_check_register_access", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -167,7 +167,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 						global $wpdb; // Global database object reference
 						global /* For Multisite support. */ $current_site, $current_blog;
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_check_register_access", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

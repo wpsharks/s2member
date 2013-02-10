@@ -40,7 +40,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 				*/
 				public static function save_meta_boxes ($post_id = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_save_meta_boxes", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -73,7 +73,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 															for ($n = 0, $new_options = array (); $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 																$new_options = array_merge ($new_options, array ("ws_plugin__s2member_level" . $n . "_pages" => trim (implode (",", $pages[$n]))));
 
-															eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+															foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 															do_action ("ws_plugin__s2member_during_save_meta_boxes", get_defined_vars ());
 															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -99,7 +99,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 															for ($n = 0, $new_options = array (); $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 																$new_options = array_merge ($new_options, array ("ws_plugin__s2member_level" . $n . "_posts" => trim (implode (",", $posts[$n]))));
 
-															eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+															foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 															do_action ("ws_plugin__s2member_during_save_meta_boxes", get_defined_vars ());
 															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

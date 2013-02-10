@@ -40,7 +40,7 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 				*/
 				public static function extend_cron_schedules ($schedules = array ())
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_extend_cron_schedules", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

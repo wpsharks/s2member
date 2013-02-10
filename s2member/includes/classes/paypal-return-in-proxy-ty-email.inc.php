@@ -40,13 +40,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_ty_email"))
 					{
 						extract /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */($vars);
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_during_paypal_return_before_explicit_ty_email", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 						$paypal["s2member_log"][] = "Customer MUST wait for Email Confirmation — `proxy_use`: ( `ty-email` ).";
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_during_paypal_return_during_explicit_ty_email", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -64,7 +64,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_ty_email"))
 							   _x ('<strong>Thank you! ( you MUST check your email before proceeding ).</strong><br /><br />* Note: It can take <em>( up to 15 minutes )</em> for Email Confirmation with important details. If you don\'t receive email confirmation in the next 15 minutes, please contact Support.', "s2member-front", "s2member") . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"] || (c_ws_plugin__s2member_utils_conds::pro_is_installed () && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["pro_" . $paypal["subscr_gateway"] . "_sandbox"]))) ? '<br /><br />' . _x ('<strong>** Sandbox Mode **</strong> You may NOT receive this Email in Sandbox Mode. Sandbox addresses are usually bogus (for testing).', "s2member-front", "s2member") : ''),
 							   _x ("Back To Home Page", "s2member-front", "s2member"), home_url ("/"));
 						}
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_during_paypal_return_after_explicit_ty_email", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

@@ -151,7 +151,7 @@ if(!class_exists("c_ws_plugin__s2member_files"))
 				*/
 				public static function file_download_key($file = FALSE, $directive = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_file_download_key", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -188,7 +188,7 @@ if(!class_exists("c_ws_plugin__s2member_files"))
 				*/
 				public static function user_downloads($user = FALSE, $not_counting_this_particular_file = FALSE, $user_log = FALSE, $user_arc = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_user_downloads", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

@@ -42,7 +42,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 				*/
 				public static function sc_get_file($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_get_file", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -50,7 +50,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 
 						$attr = shortcode_atts(array("download" => "", "download_key" => "", "stream" => "", "inline" => "", "storage" => "", "remote" => "", "ssl" => "", "rewrite" => "", "rewrite_base" => "", "skip_confirmation" => "", "url_to_storage_source" => "", "count_against_user" => "", "check_user" => "", /* Shortcode-specifics » */ "get_streamer_json" => "", "get_streamer_array" => ""), $attr);
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_get_file_after_shortcode_atts", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -96,7 +96,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 				*/
 				public static function sc_get_stream($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_get_stream", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -105,7 +105,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 						$attr = shortcode_atts(array("download" => "", "download_key" => "", "stream" => "yes", "inline" => "yes", "storage" => "", "remote" => "", "ssl" => "", "rewrite" => "yes", "rewrite_base" => "", "skip_confirmation" => "", "url_to_storage_source" => "yes", "count_against_user" => "yes", "check_user" => "yes", /* Shortcode-specifics »» */ "file_download" => "", /* Configuration » */ "player" => "jwplayer-v6-rtmp", "player_id" => "s2-stream-".md5(uniqid("", TRUE)), "player_path" => "/jwplayer/jwplayer.js", "player_key" => "", "player_image" => "", "player_title" => "", /* Layout » */ "player_controls" => "yes", "player_height" => "270", "player_skin" => "", "player_stretching" => "uniform", "player_width" => "480", /* Playback » */ "player_autostart" => "no", "player_fallback" => "yes", "player_mute" => "no", "player_primary" => "flash", "player_repeat" => "no", "player_startparam" => "", /* Advanced option blocks » */ "player_option_blocks" => ""), $attr);
 						$attr["download"] = (!empty($attr["file_download"])) ? $attr["file_download"] : $attr["download"];
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_get_stream_after_shortcode_atts", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 

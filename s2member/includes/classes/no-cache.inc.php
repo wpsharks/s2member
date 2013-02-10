@@ -84,7 +84,7 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 					{
 						static $once; // We only need to set these constants once.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_no_cache_constants", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -164,7 +164,7 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 					{
 						static $once; // We only need to set these headers one time.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_no_cache_headers", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

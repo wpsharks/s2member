@@ -38,7 +38,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 				*/
 				public static function security_meta_box($post = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_security_meta_box", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

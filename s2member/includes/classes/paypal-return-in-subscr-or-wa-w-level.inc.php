@@ -47,7 +47,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 						&& (!empty($paypal["subscr_id"]) || (!empty($paypal["txn_id"]) && ($paypal["subscr_id"] = $paypal["txn_id"])))
 						&& (empty($paypal["payment_status"]) || empty($payment_status_issues) || !preg_match($payment_status_issues, $paypal["payment_status"])))
 							{
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_before_subscr_signup", get_defined_vars());
 								unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -109,7 +109,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 										*/
 										if(preg_match("/(referenc|associat|updat|upgrad)/i", $paypal["option_name1"]) && $paypal["option_selection1"])
 											{
-												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_before_subscr_signup_w_update_vars", get_defined_vars());
 												unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -121,7 +121,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 															{
 																$processing = $modifying = $during = /* Yes, we ARE processing this. */ true;
 
-																eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action("ws_plugin__s2member_during_paypal_return_during_before_subscr_signup_w_update_vars", get_defined_vars());
 																do_action("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars(), "rtn-upgrade-downgrade", "modification", "s2member_level".$paypal["level"]);
 																unset /* Unset defined __refs, __v. */($__refs, $__v);
@@ -216,7 +216,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 																																}
 																									}
 																	}
-																eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action("ws_plugin__s2member_during_paypal_return_during_subscr_signup_w_update_vars", get_defined_vars());
 																unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -256,7 +256,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 															_x('<strong>ERROR:</strong> Unable to modify Subscription.<br />Please contact Support for assistance.<br /><br />Could not get the existing User ID from the DB.', "s2member-front", "s2member"),
 															_x("Back To Home Page", "s2member-front", "s2member"), home_url("/"));
 													}
-												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_after_subscr_signup_w_update_vars", get_defined_vars());
 												unset /* Unset defined __refs, __v. */($__refs, $__v);
 											}
@@ -265,7 +265,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 										*/
 										else // Else this is a normal Subscription signup, we are not updating an existing Subscription.
 											{
-												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_before_subscr_signup_wo_update_vars", get_defined_vars());
 												unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -301,7 +301,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 																								set_transient("s2m_".md5("s2member_transient_signup_tracking_codes_".$paypal["subscr_id"]), $code, 43200);
 																							}
 													}
-												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_during_subscr_signup_wo_update_vars", get_defined_vars());
 												unset /* Unset defined __refs, __v. */($__refs, $__v);
 
@@ -351,7 +351,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 																	_x("Please Register Now ( Click Here )", "s2member-front", "s2member"), c_ws_plugin__s2member_utils_urls::wp_register_url());
 															}
 													}
-												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_after_subscr_signup_wo_update_vars", get_defined_vars());
 												unset /* Unset defined __refs, __v. */($__refs, $__v);
 											}
@@ -366,7 +366,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 											_x('<strong>Page Expired:</strong> Duplicate Return-Data.<br />Please contact Support if you need any assistance.', "s2member-front", "s2member"),
 											_x("Back To Home Page", "s2member-front", "s2member"), home_url("/"));
 									}
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_after_subscr_signup", get_defined_vars());
 								unset /* Unset defined __refs, __v. */($__refs, $__v);
 

@@ -42,7 +42,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 				*/
 				public static function enqueue_admin_notice ($notice = FALSE, $on_pages = FALSE, $error = FALSE, $time = FALSE, $dismiss = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_enqueue_admin_notice", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -52,7 +52,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 
 								array_push ($notices, array ("notice" => $notice, "on_pages" => $on_pages, "error" => $error, "time" => $time, "dismiss" => $dismiss));
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_enqueue_admin_notice", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -75,7 +75,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 				*/
 				public static function display_admin_notice ($notice = FALSE, $error = FALSE, $dismiss = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_display_admin_notice", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -135,7 +135,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 													{
 														if /* Time to show it? */ (strtotime ("now") >= (int)$notice["time"])
 															{
-																eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action ("ws_plugin__s2member_during_admin_notices_before_display", get_defined_vars ());
 																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -152,7 +152,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 										}
 								$notices = /* Re-index array. */array_merge ($notices);
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_admin_notices", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

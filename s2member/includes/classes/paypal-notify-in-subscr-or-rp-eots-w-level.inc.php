@@ -53,7 +53,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 						&& (!empty($paypal["item_name"]) || ($paypal["item_name"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_name($paypal)) || ($paypal["item_name"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_name", false, $paypal["subscr_id"])) || ($paypal["item_name"] = $_SERVER["HTTP_HOST"]))
 						&& (!empty($paypal["payer_email"]) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("payer_email", false, $paypal["subscr_id"])) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_email_with($paypal["subscr_id"]))))
 							{
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_before_subscr_eot", get_defined_vars());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -104,7 +104,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																				$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role("subscriber");
 																				$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
 
-																				eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																				foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																				do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_before_demote", get_defined_vars());
 																				do_action("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars(), $eot_del_type, "modification", $demotion_role);
 																				do_action("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars(), $eot_del_type, "modification");
@@ -213,7 +213,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																						$paypal["s2member_log"][] = "EOT/Deletion Notification Emails have been processed.";
 																					}
 
-																				eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																				foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																				do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_demote", get_defined_vars());
 																				unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																			}
@@ -225,7 +225,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																				$eot_del_type = $GLOBALS["ws_plugin__s2member_eot_del_type"] = // Configure EOT/Del type.
 																				($is_refund_or_reversal) ? "ipn-refund-reversal-deletion" : "ipn-cancellation-expiration-deletion";
 
-																				eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																				foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																				do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_before_delete", get_defined_vars());
 																				do_action("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars(), $eot_del_type, "removal-deletion");
 																				unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -245,12 +245,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 																				$paypal["s2member_log"][] = "EOT/Deletion Notification URLs have been processed.";
 
-																				eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																				foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																				do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delete", get_defined_vars());
 																				unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																			}
 
-																		eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																		do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot", get_defined_vars());
 																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																	}
@@ -264,7 +264,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																		$paypal["s2member_log"][] = "Auto-EOT is currently disabled. Skipping immediate EOT ( demote|delete ), for now.";
 																		$paypal["s2member_log"][] = "Recording the Auto-EOT Time for this Member's account: ".date("D M j, Y g:i a T", $auto_eot_time);
 
-																		eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																		do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_disabled", get_defined_vars());
 																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																	}
@@ -286,7 +286,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 																$paypal["s2member_log"][] = "Auto-EOT Time for this account ( delayed ), set to: ".date("D M j, Y g:i a T", $auto_eot_time);
 
-																eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delayed", get_defined_vars());
 																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 															}
@@ -413,7 +413,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 														$paypal["s2member_log"][] = "Refund/Reversal Notification Emails have been processed.";
 													}
 
-												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_refund_reversal", get_defined_vars());
 												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 											}
@@ -425,7 +425,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_after_subscr_eot", get_defined_vars());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

@@ -46,7 +46,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 						&& (!empty ($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"]))
 						&& (!empty ($paypal["subscr_id"])) && (!empty ($paypal["payer_email"])))
 							{
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_paypal_notify_before_subscr_modify", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -68,7 +68,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 										$paypal["regular_term"] = $paypal["period3"]; // This is just set to keep a standard; this way both initial_term & regular_term are available.
 										$paypal["recurring"] = ($paypal["recurring"]) ? $paypal["mc_amount3"] : "0"; // If non-recurring, this should be zero, otherwise Regular.
 
-										eval('$ipn_signup_vars = $paypal; unset($ipn_signup_vars["s2member_log"]);'); // Create array of IPN signup vars w/o s2member_log.
+										$ipn_signup_vars = $paypal; unset($ipn_signup_vars["s2member_log"]); // Create array of IPN signup vars w/o s2member_log.
 
 										if (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"])) && is_object ($user = new WP_User ($user_id)) && $user->ID)
 											{
@@ -76,7 +76,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 													{
 														$processing = $modifying = $during = true; // Yes, we ARE processing this.
 
-														eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action ("ws_plugin__s2member_during_paypal_notify_during_before_subscr_modify", get_defined_vars ());
 														do_action ("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars (), "ipn-upgrade-downgrade", "modification", "s2member_level" . $paypal["level"]);
 														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -265,7 +265,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 																							}
 															}
 
-														eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action ("ws_plugin__s2member_during_paypal_notify_during_subscr_modify", get_defined_vars ());
 														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 													}
@@ -282,7 +282,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_paypal_notify_after_subscr_modify", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

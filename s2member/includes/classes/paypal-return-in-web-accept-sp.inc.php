@@ -47,7 +47,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_web_accept_sp"))
 						&& (empty ($paypal["payment_status"]) || empty ($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
 						&& (!empty ($paypal["txn_id"])))
 							{
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_paypal_return_before_sp_access", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -84,7 +84,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_web_accept_sp"))
 																						set_transient ("s2m_" . md5 ("s2member_transient_sp_tracking_codes_" . $paypal["txn_id"]), $code, 43200);
 																					}
 													}
-												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action ("ws_plugin__s2member_during_paypal_return_during_sp_access", get_defined_vars ());
 												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -130,7 +130,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_web_accept_sp"))
 											_x ('<strong>Page Expired:</strong> Duplicate Return-Data.<br />Please contact Support if you need any assistance.', "s2member-front", "s2member"),
 											_x ("Back To Home Page", "s2member-front", "s2member"), home_url ("/"));
 									}
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_paypal_return_after_sp_access", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

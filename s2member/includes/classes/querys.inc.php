@@ -52,13 +52,13 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*/
 				public static function force_query_level_access(&$wp_query = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_force_query_level_access", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 						c_ws_plugin__s2member_querys::query_level_access($wp_query, true);
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_after_force_query_level_access", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -91,7 +91,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 						static $initial_query = true; // Tracks the initial query.
 						c_ws_plugin__s2member_querys::$current_wp_query = &$wp_query;
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_query_level_access", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -233,14 +233,14 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 														unset /* A little housekeeping here. Ditch these temporary variables. */($_pages);
 													}
 
-												eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_query_level_access", get_defined_vars());
 												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 											}
 									}
 							}
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_after_query_level_access", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -264,7 +264,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 					{
 						global $wpdb; // Need this global DB object reference here.
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("_ws_plugin__s2member_before_query_level_access_sys", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -277,12 +277,12 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 									$wp_query->set("post__not_in", array_unique(array_merge(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__not_in")), $s)));
 									$wp_query->set("post__in", array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get("post__in")), $s)));
 
-									eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+									foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 									do_action("_ws_plugin__s2member_during_query_level_access_sys", get_defined_vars());
 									unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 								}
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("_ws_plugin__s2member_after_query_level_access_sys", get_defined_vars());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

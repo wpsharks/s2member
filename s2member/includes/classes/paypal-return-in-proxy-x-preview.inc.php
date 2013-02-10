@@ -40,13 +40,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 					{
 						extract /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */($vars);
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_during_paypal_return_before_explicit_x_preview", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 						$paypal["s2member_log"][] = "Test preview of Return Page `proxy_use`: ( `x_preview` ).";
 
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_during_paypal_return_during_explicit_x_preview", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -64,7 +64,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 								sprintf (_x ('<strong>Thank you! ( this is a preview, no action necessary ).</strong><br /><br />* Note: each of your Customers are returned back to your site immediately after they complete checkout. This Return Page displays a message and instructions for the Customer. s2Member may change the message and instructions dynamically, based on what the Customer is actually doing <em>( i.e. based on the type of transaction that is taking place )</em>.<br /><br /><em>* With <a href="%s" target="_blank">s2Member Pro</a> installed, it is possible to customize this Return Page in various ways.</em>', "s2member-front", "s2member"), esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices"))),
 							   _x ("Continue ( Click Here )", "s2member-front", "s2member"), home_url ("/"));
 						}
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_during_paypal_return_after_explicit_x_preview", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

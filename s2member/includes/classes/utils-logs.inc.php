@@ -47,7 +47,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 									{
 										$max = apply_filters ("ws_plugin__s2member_oversize_log_file_bytes", 2097152, get_defined_vars ());
 
-										eval ('$log_files = scandir ($dir); shuffle($log_files); $counter = 1;');
+										$log_files = scandir ($dir); shuffle($log_files); $counter = 1;
 
 										foreach ($log_files as $file) // Go through each log file. Up to 25 files at a time.
 											{

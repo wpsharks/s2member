@@ -44,7 +44,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_express_checkout"))
 						&& (empty ($paypal["payment_status"]) || empty ($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
 						&& (!empty ($paypal["txn_id"])))
 							{
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_paypal_notify_before_express_checkout", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -57,7 +57,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_express_checkout"))
 										$paypal["s2member_log"][] = "The `txn_type` does not require any action on the part of s2Member.";
 										$paypal["s2member_log"][] = "s2Member Pro handles Express Checkout events on-site, with an IPN proxy.";
 
-										eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_paypal_notify_during_express_checkout", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
@@ -68,7 +68,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_express_checkout"))
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
 
-								eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_paypal_notify_after_express_checkout", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

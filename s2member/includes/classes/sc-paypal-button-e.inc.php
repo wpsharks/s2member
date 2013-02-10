@@ -42,7 +42,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 				*/
 				public static function sc_paypal_button_encryption ($code = FALSE, $vars = FALSE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_sc_paypal_button_encryption", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 							{
 								$cache = /* Are we caching? */ apply_filters ("ws_plugin__s2member_sc_paypal_button_encryption_cache", true, get_defined_vars ());
 
-								eval('$_code = $vars["_code"]; $attr = $vars["attr"];'); // Let's unpack ( i.e. use shorter references ) to these two important vars.
+								$_code = $vars["_code"]; $attr = $vars["attr"]; // Let's unpack ( i.e. use shorter references ) to these two important vars.
 
 								if ($cache && ($transient = "s2m_btn_" . md5 ($code . c_ws_plugin__s2member_utilities::ver_checksum ())) && ($cache = get_transient ($transient)))
 									$code = /* Great, so we can use the cached version here to save processing time. The MD5 hash uses ``$code`` and NOT ``$_code``. */ $cache;

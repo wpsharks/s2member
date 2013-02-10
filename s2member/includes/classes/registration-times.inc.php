@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 				*/
 				public static function synchronize_paid_reg_times ($user_id = FALSE, $role = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_synchronize_paid_reg_times", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -66,7 +66,7 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 				*/
 				public static function registration_time ($user_id = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_registration_time", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -91,7 +91,7 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 				*/
 				public static function paid_registration_time ($level = FALSE, $user_id = FALSE)
 					{
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_paid_registration_time", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

@@ -46,7 +46,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 						static $processed = array (); // No duplicate processing.
 						global $pagenow; // Need this to detect the current admin page.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_handle_ms_user_deletions", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -55,19 +55,19 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 								if (($s2says || (is_blog_admin () && $pagenow === "users.php")) && ($processed[$user_id] = true))
 									// Do NOT react on this globally. There are many routines that remove Users for different/minor reasons.
 									{
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_handle_ms_user_deletions_before", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 										c_ws_plugin__s2member_user_deletions::handle_user_deletions ($user_id); // Hand this over.
 
-										eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_handle_ms_user_deletions_after", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
 							}
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_handle_ms_user_deletions", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -89,7 +89,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 					{
 						static $processed = array (); // No duplicate processing.
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_handle_user_deletions", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
@@ -104,7 +104,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 								$fields = get_user_option ("s2member_custom_fields", $user_id); // Used in API Notifications.
 								$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); // In API Notifications.
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_handle_user_before_deletions", get_defined_vars ());
 								do_action ("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "removal-deletion");
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -209,12 +209,12 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 											c_ws_plugin__s2member_email_configs::email_config ();
 									}
 
-								eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_handle_user_deletions", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 							}
 
-						eval ('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_handle_user_deletions", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 

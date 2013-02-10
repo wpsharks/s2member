@@ -42,7 +42,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 				*/
 				public static function register_link_gen ($subscr_gateway = FALSE, $subscr_id = FALSE, $custom = FALSE, $item_number = FALSE, $shrink = TRUE)
 					{
-						eval('foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;');
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_register_link_gen", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
