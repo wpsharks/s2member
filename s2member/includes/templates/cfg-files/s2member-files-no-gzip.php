@@ -11,7 +11,8 @@ $ws_plugin__s2member_temp_s_base = (!empty ($base)) ? $base : c_ws_plugin__s2mem
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteBase <?php echo $ws_plugin__s2member_temp_s_base . "\n"; ?>
-	RewriteCond %{QUERY_STRING} (^|\?|&)s2member_file_download\=.+
+	RewriteCond %{QUERY_STRING} (^|\?|&)s2member_file_download\=.+ [OR]
+	RewriteCond %{QUERY_STRING} (^|\?|&)no-gzip\=1
 	RewriteRule .* - [E=no-gzip:1]
 </IfModule>
 

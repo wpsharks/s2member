@@ -48,10 +48,14 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_cookies_in"))
 
 								do_action ("ws_plugin__s2member_during_delete_tracking_cookie", get_defined_vars ());
 
-								@ini_set ("zlib.output_compression", 0); // Turn off.
+								@ini_set ("zlib.output_compression", 0);
+								if(function_exists("apache_setenv"))
+									@apache_setenv("no-gzip", "1");
 
 								status_header (200); // Send a 200 OK status header.
+
 								header ("Content-Type: image/png"); // Content-Type image/png for 1px transparency.
+
 								while (@ob_end_clean ()); // Clean any existing output buffers.
 
 								exit (file_get_contents (dirname (dirname (dirname (__FILE__))) . "/images/trans-1px.png"));
@@ -80,10 +84,14 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_cookies_in"))
 
 								do_action ("ws_plugin__s2member_during_delete_sp_tracking_cookie", get_defined_vars ());
 
-								@ini_set ("zlib.output_compression", 0); // Turn off.
+								@ini_set ("zlib.output_compression", 0);
+								if(function_exists("apache_setenv"))
+									@apache_setenv("no-gzip", "1");
 
 								status_header (200); // Send a 200 OK status header.
+
 								header ("Content-Type: image/png"); // Content-Type image/png for 1px transparency.
+
 								while (@ob_end_clean ()); // Clean any existing output buffers.
 
 								exit (file_get_contents (dirname (dirname (dirname (__FILE__))) . "/images/trans-1px.png"));

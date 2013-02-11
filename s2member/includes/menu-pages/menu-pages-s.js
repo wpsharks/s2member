@@ -43,6 +43,14 @@ jQuery(document).ready(function($)
 						return false;
 					});
 			}
+		if(location.href.match(/page\=ws-plugin--s2member-logs/))
+			{
+				$('textarea#ws-plugin--s2member-log-file-viewer').each(function()
+					{
+						var $this = $(this);
+						$this.css('height', ($this.prop('scrollHeight')+50)+'px');
+					});
+			}
 		if(location.href.match(/page\=ws-plugin--s2member-mms-ops/))
 			{
 				$('select#ws-plugin--s2member-mms-registration-file').change(function()

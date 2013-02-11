@@ -43,8 +43,14 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 
 						if (!empty ($_GET["s2member_s_badge_status"]))
 							{
-								status_header (200); // Send a 200 OK status header.
-								header ("Content-Type: text/plain; charset=UTF-8"); // Content-Type with UTF-8.
+								status_header (200); // Send a 200 OK status.
+
+								header ("Content-Type: text/plain; charset=UTF-8");
+
+								@ini_set("zlib.output_compression", 0);
+								if(function_exists("apache_setenv"))
+									@apache_setenv("no-gzip", "1");
+
 								while (@ob_end_clean ()); // Clean any existing output buffers.
 
 								if ( /* Badge status API enabled? */$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["s_badge_status_enabled"])

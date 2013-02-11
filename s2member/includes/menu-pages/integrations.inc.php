@@ -68,7 +68,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_integrations"))
 								echo '<h3>Protecting Content Introduced by bbPress®</h3>'."\n";
 								echo '<p>You can protect individual Forum Topics/Posts/Replies at different Levels with s2Member, or even with Custom Capabilities. Forum Topics/Posts/Replies are integrated by bbPress® internally as "Custom Post Types", which can be protected by s2Member either through Post Level Access Restrictions, or through URI Level Access Restrictions (recommended). If you choose to use Post Level Access Restrictions, please remember that s2Member will provide you with drop-down menus whenever you add or edit Forum Topics/Posts/Replies to make things easier for you.</p>'."\n";
 								echo '<p>Regarding s2Member\'s Post Level Access Restrictions with bbPress®. Before you decide to use Post Level Access Restrictions, please take a look at: <code>s2Member -› Restriction Options -› URI Access Restrictions</code> and consider the following limitations in the current release of s2Member. It is currently NOT possible to protect a Forum, and have all Topics inside that Forum protected automatically. In order to accomplish that, you\'ll need to use s2Member\'s URI Access Restrictions. Also, s2Member is currently NOT capable of protecting Topic Tags; but you can use URI Restrictions for these also.</p>'."\n";
-								do_action("ws_plugin__s2member_during_integrations_page_during_left_sections_during_api_easy_way", get_defined_vars());
+
+								do_action("ws_plugin__s2member_during_integrations_page_during_left_sections_during_bbpress", get_defined_vars());
 								echo '</div>'."\n";
 
 								echo '</div>'."\n";

@@ -152,67 +152,73 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 									add_menu_page("s2Member®", "s2Member®", "create_users", $menu, "c_ws_plugin__s2member_menu_pages::start_page", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images/brand-favicon.png");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_start_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member Quick-Start Guide", "Quick-Start Guide", "create_users", "ws-plugin--s2member-start", "c_ws_plugin__s2member_menu_pages::start_page");
+									add_submenu_page($menu, "s2Member® Quick-Start Guide", "Quick-Start Guide", "create_users", "ws-plugin--s2member-start", "c_ws_plugin__s2member_menu_pages::start_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_1", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_mms_ops_page", (!is_multisite() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member Multisite Configuration", "Multisite (Config)", "create_users", "ws-plugin--s2member-mms-ops", "c_ws_plugin__s2member_menu_pages::mms_ops_page");
+									add_submenu_page($menu, "s2Member® Multisite Configuration", "Multisite (Config)", "create_users", "ws-plugin--s2member-mms-ops", "c_ws_plugin__s2member_menu_pages::mms_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_gen_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member General Options", "General Options", "create_users", "ws-plugin--s2member-gen-ops", "c_ws_plugin__s2member_menu_pages::gen_ops_page");
+									add_submenu_page($menu, "s2Member® General Options", "General Options", "create_users", "ws-plugin--s2member-gen-ops", "c_ws_plugin__s2member_menu_pages::gen_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_res_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member Restriction Options", "Restriction Options", "create_users", "ws-plugin--s2member-res-ops", "c_ws_plugin__s2member_menu_pages::res_ops_page");
+									add_submenu_page($menu, "s2Member® Restriction Options", "Restriction Options", "create_users", "ws-plugin--s2member-res-ops", "c_ws_plugin__s2member_menu_pages::res_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_down_ops_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member Download Options", "Download Options", "create_users", "ws-plugin--s2member-down-ops", "c_ws_plugin__s2member_menu_pages::down_ops_page");
+									add_submenu_page($menu, "s2Member® Download Options", "Download Options", "create_users", "ws-plugin--s2member-down-ops", "c_ws_plugin__s2member_menu_pages::down_ops_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_2", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if /* Shortcut. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_new_user_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member / Add A Member", "Add A Member", "create_users", "user-new.php");
+									add_submenu_page($menu, "s2Member® / Add A Member", "Add A Member", "create_users", "user-new.php");
 
 								if /* Shortcut. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_browse_users_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member / Browse Members", "Browse Members", "create_users", "users.php");
+									add_submenu_page($menu, "s2Member® / Browse Members", "Browse Members", "create_users", "users.php");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_3", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member PayPal Options", "PayPal® Options", "create_users", "ws-plugin--s2member-paypal-ops", "c_ws_plugin__s2member_menu_pages::paypal_ops_page");
+									add_submenu_page($menu, "s2Member® PayPal Options", "PayPal® Options", "create_users", "ws-plugin--s2member-paypal-ops", "c_ws_plugin__s2member_menu_pages::paypal_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member PayPal® Buttons", "PayPal® Buttons", "create_users", "ws-plugin--s2member-paypal-buttons", "c_ws_plugin__s2member_menu_pages::paypal_buttons_page");
+									add_submenu_page($menu, "s2Member® PayPal® Buttons", "PayPal® Buttons", "create_users", "ws-plugin--s2member-paypal-buttons", "c_ws_plugin__s2member_menu_pages::paypal_buttons_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_4", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_trk_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member API / Tracking", "API / Tracking", "create_users", "ws-plugin--s2member-trk-ops", "c_ws_plugin__s2member_menu_pages::trk_ops_page");
+									add_submenu_page($menu, "s2Member® API / Tracking", "API / Tracking", "create_users", "ws-plugin--s2member-trk-ops", "c_ws_plugin__s2member_menu_pages::trk_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_els_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member API / List Servers", "API / List Servers", "create_users", "ws-plugin--s2member-els-ops", "c_ws_plugin__s2member_menu_pages::els_ops_page");
+									add_submenu_page($menu, "s2Member® API / List Servers", "API / List Servers", "create_users", "ws-plugin--s2member-els-ops", "c_ws_plugin__s2member_menu_pages::els_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_api_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member API / Notifications", "API / Notifications", "create_users", "ws-plugin--s2member-api-ops", "c_ws_plugin__s2member_menu_pages::api_ops_page");
+									add_submenu_page($menu, "s2Member® API / Notifications", "API / Notifications", "create_users", "ws-plugin--s2member-api-ops", "c_ws_plugin__s2member_menu_pages::api_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_scripting_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member API / Scripting", "API / Scripting", "create_users", "ws-plugin--s2member-scripting", "c_ws_plugin__s2member_menu_pages::scripting_page");
+									add_submenu_page($menu, "s2Member® API / Scripting", "API / Scripting", "create_users", "ws-plugin--s2member-scripting", "c_ws_plugin__s2member_menu_pages::scripting_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_5", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_integrations_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member / Other Integrations", "Other Integrations", "create_users", "ws-plugin--s2member-integrations", "c_ws_plugin__s2member_menu_pages::integrations_page");
+									add_submenu_page($menu, "s2Member® / Other Integrations", "Other Integrations", "create_users", "ws-plugin--s2member-integrations", "c_ws_plugin__s2member_menu_pages::integrations_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_6", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
+								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_logs_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
+									add_submenu_page($menu, "s2Member® Log Viewer", "Log Viewer", "create_users", "ws-plugin--s2member-logs", "c_ws_plugin__s2member_menu_pages::logs_page");
+
+								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_7", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
+									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
+
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_info_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member Information", "s2Member Info", "create_users", "ws-plugin--s2member-info", "c_ws_plugin__s2member_menu_pages::info_page");
+									add_submenu_page($menu, "s2Member® Information", "s2Member® Info", "create_users", "ws-plugin--s2member-info", "c_ws_plugin__s2member_menu_pages::info_page");
 
 								do_action("ws_plugin__s2member_during_add_admin_options_additional_pages", get_defined_vars());
 							}
@@ -343,6 +349,69 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						do_action("ws_plugin__s2member_after_add_admin_styles", get_defined_vars());
 
 						return /* Return for uniformity. */;
+					}
+				/**
+				 * Handles log file downloads.
+				 *
+				 * @package s2Member\Menu_Pages
+				 * @since 120310
+				 *
+				 * @return null
+				 */
+				public static function log_file_downloader()
+					{
+						if(!current_user_can("create_users")) return;
+
+						if(!empty($_GET["ws_plugin__s2member_download_log_file"]))
+						{
+							$logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
+
+							$log_file = esc_html((string)$_GET["ws_plugin__s2member_download_log_file"]);
+
+							if(file_exists($logs_dir."/".$log_file))
+								$log_file_contents = file_get_contents($logs_dir."/".$log_file);
+							else $log_file_contents = "";
+
+							@set_time_limit(0);
+							@ini_set("memory_limit", apply_filters("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
+
+							@ini_set("zlib.output_compression", 0);
+							if(function_exists("apache_setenv"))
+								@apache_setenv("no-gzip", "1");
+
+							while (@ob_end_clean ());
+
+							status_header(200); // 200 OK status header.
+
+							header("Content-Encoding: none");
+							header("Accept-Ranges: none");
+							header("Content-Type: text/plain; charset=UTF-8");
+							header("Content-Length: ".strlen($log_file_contents));
+							header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("-1 week"))." GMT");
+							header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+							header("Cache-Control: no-cache, must-revalidate, max-age=0");
+							header("Cache-Control: post-check=0, pre-check=0", false);
+							header("Pragma: no-cache");
+
+							header('Content-Disposition: attachment; filename="'.$log_file.'"');
+
+							exit($log_file_contents); // Log file.
+						}
+					}
+				/**
+				 * Enables logging.
+				 *
+				 * @package s2Member\Menu_Pages
+				 * @since 120310
+				 *
+				 * @return null
+				 */
+				public static function gateway_debug_logs_enable()
+					{
+						if(!current_user_can("create_users")) return;
+
+						if(!empty($_GET["ws_plugin__s2member_gateway_debug_logs_enable"]))
+							c_ws_plugin__s2member_menu_pages::update_all_options (array("ws_plugin__s2member_gateway_debug_logs" => "1"), true, false, false, false, false);
 					}
 				/**
 				* Builds and handles the Quick Start page.
@@ -644,6 +713,50 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						include_once dirname(dirname(__FILE__))."/menu-pages/integrations.inc.php";
 
 						do_action("ws_plugin__s2member_after_integrations_page", get_defined_vars());
+
+						return /* Return for uniformity. */;
+					}
+				/**
+				 * Builds and handles the Logs page.
+				 *
+				 * @package s2Member\Menu_Pages
+				 * @since 120310
+				 *
+				 * @return null
+				 */
+				public static function logs_page()
+					{
+						do_action("ws_plugin__s2member_before_logs_page", get_defined_vars());
+
+						$logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
+
+						if(!is_dir($logs_dir) && is_writable(dirname(c_ws_plugin__s2member_utils_dirs::strip_dir_app_data($logs_dir))))
+							mkdir($logs_dir, 0777, true).clearstatcache();
+
+						$htaccess = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]."/.htaccess";
+						$htaccess_contents = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir_htaccess"])));
+
+						if(is_dir($logs_dir) && is_writable($logs_dir) && !file_exists($htaccess))
+							file_put_contents($htaccess, $htaccess_contents).clearstatcache();
+
+						if /* If the security-enabled logs directory does not exist yet. */(!is_dir($logs_dir))
+							c_ws_plugin__s2member_admin_notices::display_admin_notice('The security-enabled logs directory (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)).'</code>) does not exist. Please create this directory manually &amp; make it writable (chmod 777).', true);
+
+						else if /* If the logs directory is not writable yet. */(!is_writable($logs_dir))
+							c_ws_plugin__s2member_admin_notices::display_admin_notice('Permissions error. The security-enabled logs directory (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)).'</code>) is not writable. Please make this directory writable (chmod 777).', true);
+
+						if /* If the .htaccess file has not been created yet. */(!file_exists($htaccess))
+							c_ws_plugin__s2member_admin_notices::display_admin_notice('The .htaccess protection file (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)).'</code>) does not exist. Please create this file manually. Inside your .htaccess file, add this:<br /><pre>'.esc_html($htaccess_contents).'</pre>', true);
+
+						else if /* Else if the .htaccess file does not offer the required protection. */(!preg_match("/deny from all/i", file_get_contents($htaccess)))
+							c_ws_plugin__s2member_admin_notices::display_admin_notice('Unprotected. The .htaccess protection file (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)).'</code>) does not contain <code>deny from all</code>. Inside your .htaccess file, add this:<br /><pre>'.esc_html($htaccess_contents).'</pre>', true);
+
+						if /* Logging disabled? */(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
+							c_ws_plugin__s2member_admin_notices::display_admin_notice('Logging is currently disabled by your configuration. <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_gateway_debug_logs_enable" => "1"))).'" onclick="if(!confirm(\'Enable logging... Press OK to confirm please.\')) return false;">Click here</a> if you wish to enable logging.', true);
+
+						include_once dirname(dirname(__FILE__))."/menu-pages/logs.inc.php";
+
+						do_action("ws_plugin__s2member_after_logs_page", get_defined_vars());
 
 						return /* Return for uniformity. */;
 					}

@@ -367,6 +367,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 													@ini_set("zlib.output_compression", 0);
 													if(function_exists("apache_setenv"))
 														@apache_setenv("no-gzip", "1");
+
 													while /* Cleans existing output buffers. */(@ob_end_clean());
 
 													if /* Requesting a specific byte range? */($range)
