@@ -239,6 +239,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 								$term_cycle = (strtoupper ($term_or_period_term) === "2 W") ? _x ("Bi-Weekly", "s2member-front", "s2member") : $term_cycle;
 								$term_cycle = (strtoupper ($term_or_period_term) === "2 M") ? _x ("Bi-Monthly", "s2member-front", "s2member") : $term_cycle;
 								$term_cycle = (strtoupper ($term_or_period_term) === "3 M") ? _x ("Quarterly", "s2member-front", "s2member") : $term_cycle;
+								$term_cycle = (strtoupper ($term_or_period_term) === "6 M") ? _x ("Semi-Yearly", "s2member-front", "s2member") : $term_cycle;
 							}
 						else if ($term_cycle_key && $directive === "singular") // singular = Day, Week, Month, Year, Lifetime.
 							{
@@ -252,7 +253,6 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 
 								$term_cycle = isset ($paypal_term_cycles[$term_cycle_key]) ? $paypal_term_cycles[$term_cycle_key] : false;
 							}
-
 						return (!empty ($term_cycle)) ? $term_cycle : false;
 					}
 				/**
@@ -279,7 +279,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						$cycle_singular = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "singular");
 						$cycle_plural = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "plural");
 
-						if ($recurring && in_array ($period_term, array ("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "1 Y")))
+						if ($recurring && in_array ($period_term, array ("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "6 M", "1 Y")))
 							$period_term = strtolower ($cycle_recurring); // Results in an "ly" ending.
 
 						else if ($recurring) // Otherwise, it's recurring; but NOT an "ly" ending.
@@ -320,7 +320,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						$cycle_singular = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "singular");
 						$cycle_plural = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "plural");
 
-						if ($recurring && in_array ($period_term, array ("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "1 Y")))
+						if ($recurring && in_array ($period_term, array ("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "6 M", "1 Y")))
 							$amount_period_term = number_format ($amount, 2, ".", "") . " / " . strtolower ($cycle_recurring);
 
 						else if ($recurring) // Otherwise, it's recurring; but NOT an "ly" ending.
