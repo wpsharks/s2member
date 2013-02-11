@@ -609,7 +609,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 								echo '<input type="button" value="Reset Roles/Capabilities" class="ws-menu-page-right ws-plugin--s2member-reset-roles-button" style="min-width:175px;" />' . "\n";
-								echo '<p>The button to the right, is a nifty tool, which allows you to reset s2Member\'s internal Roles and Capabilities that integrate with WordPress®. If you, or a developer working with you, has made attempts to alter the default <em>internal</em> Role/Capability sets that come with s2Member, and you need to reset them back to the way s2Member expects them to be, please use this tool. <em>Attn Developers: it is also possible lock-in your modified Roles/Capabilities with an s2Member Filter. Please see <a href="http://www.primothemes.com/forums/viewtopic.php?f=36&t=15420&p=45162#p45162" target="_blank" rel="external">this thread for details</a>.</em></p>' . "\n";
+								echo '<p>The button to the right, is a nifty tool, which allows you to reset s2Member\'s internal Roles and Capabilities that integrate with WordPress®. If you, or a developer working with you, has made attempts to alter the default <em>internal</em> Role/Capability sets that come with s2Member, and you need to reset them back to the way s2Member expects them to be, please use this tool. <em>Attn Developers: it is also possible lock-in your modified Roles/Capabilities with an s2Member Filter. Please see <a href="http://www.s2member.com/kb/roles-caps/#modifying-roles-caps" target="_blank" rel="external">this KB article for details</a>.</em></p>' . "\n";
 
 								echo '</div>' . "\n";
 
