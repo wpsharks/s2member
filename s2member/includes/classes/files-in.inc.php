@@ -782,9 +782,6 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				*
 				* @param str $string Input string/data, to be signed by this routine.
 				* @return str|bool An RSA-SHA1 signature for Amazon® CloudFront, else false on failure.
-				*
-				* @todo Double underscores *(i.e. base64 padding chars)* in the signature seem to cause issues for Amazon® CloudFront?
-				* 	See ticket: {@link https://forums.aws.amazon.com/thread.jspa?messageID=286182&#286182}
 				*/
 				public static function amazon_cf_rsa_sign($string = FALSE)
 					{
