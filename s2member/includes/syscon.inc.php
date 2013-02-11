@@ -7,7 +7,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -48,13 +48,13 @@ $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"] = /* Hard coded in at 4 Level
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["min_levels"] = /* A lower limit to protect the integrity of the s2Member software application. */ 1;
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["max_levels"] = /* Filterable. */ apply_filters("ws_plugin__s2member_max_levels", 100);
 /*
-Configure regular expression matches for Membership Access Item Numbers ( including those with only Custom Capabilities ).
+Configure regular expression matches for Membership Access Item Numbers (including those with only Custom Capabilities).
 */
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"] = "/^([1-9][0-9]*)(?:(?:\:((?:-all\+|\+-all|-all|\+)?[a-z_0-9,\+]*)?)?(?:\:([0-9]+ [A-Z])?)?)?$/";
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_wo_level_regex"] = "/^(\*)(?:(?:\:((?:-all\+|\+-all|-all|\+)?[a-z_0-9,\+]*)?)?(?:\:([0-9]+ [A-Z])?)?)?$/";
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_or_wo_level_regex"] = "/^([1-9][0-9]*|\*)(?:(?:\:((?:-all\+|\+-all|-all|\+)?[a-z_0-9,\+]*)?)?(?:\:([0-9]+ [A-Z])?)?)?$/";
 /*
-Configure regular expression match for Specific Post/Page Access Item Numbers ( all elements required here ).
+Configure regular expression match for Specific Post/Page Access Item Numbers (all elements required here).
 */
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["sp_access_item_number_regex"] = "/^(sp)(?:(?:\:([1-9][0-9,]*))(?:\:([1-9][0-9]*)))$/";
 /*
@@ -77,7 +77,7 @@ Configure the directory for logs protected by s2Member.
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"] = apply_filters("ws_plugin__s2member_logs_dir", dirname(dirname(__FILE__))."-logs".((stripos(PHP_OS, "win") === 0 && stripos($_SERVER["SERVER_SOFTWARE"], "apache") === false) ? "/app_data" : ""));
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir_htaccess"] = dirname(__FILE__)."/templates/cfg-files/s2member-logs.php";
 /*
-Configure the global reCaptcha ( www.websharks-inc.net / or any domain ). These public/private keys work on any installation.
+Configure the global reCaptcha (www.websharks-inc.net / or any domain). These public/private keys work on any installation.
 */
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["recaptcha"] = array("public_key" => "6LeCANsSAAAAAIIrlB3FrXe42mr0OSSZpT0pkpFK", "private_key" => "6LeCANsSAAAAAGBXMIKAirv6G4PmaGa-ORxdD-oZ", "lang" => _x("en", "s2member-front recaptcha-lang-code", "s2member"));
 /*
@@ -220,11 +220,11 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["sp_tracking_codes"] = "";
 
 				$default_options["signup_email_recipients"] = '"%%full_name%%" <%%payer_email%%>';
-				$default_options["signup_email_subject"] = _x("Congratulations! ( your membership has been approved )", "s2member-front", "s2member");
+				$default_options["signup_email_subject"] = _x("Congratulations! (your membership has been approved)", "s2member-front", "s2member");
 				$default_options["signup_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%! Your membership has been approved.\n\nIf you haven't already done so, the next step is to Register a Username.\n\nComplete your registration here:\n%%%%registration_url%%%%\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
 
 				$default_options["sp_email_recipients"] = '"%%full_name%%" <%%payer_email%%>';
-				$default_options["sp_email_subject"] = _x("Thank You! ( instructions for access )", "s2member-front", "s2member");
+				$default_options["sp_email_subject"] = _x("Thank You! (instructions for access)", "s2member-front", "s2member");
 				$default_options["sp_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%!\n\n%%%%item_name%%%%\n\nYour order can be retrieved here:\n%%%%sp_access_url%%%%\n( link expires in %%%%sp_access_exp%%%% )\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
 
 				$default_options["mailchimp_api_key"] = "";

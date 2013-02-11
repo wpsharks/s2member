@@ -1,10 +1,10 @@
 <?php
 /**
-* CSS/JS loading handlers for s2Member ( inner processing routines ).
+* CSS/JS loading handlers for s2Member (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 	{
 		/**
-		* CSS/JS loading handlers for s2Member ( inner processing routines ).
+		* CSS/JS loading handlers for s2Member (inner processing routines).
 		*
 		* @package s2Member\CSS_JS
 		* @since 3.5

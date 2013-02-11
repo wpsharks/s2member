@@ -1,10 +1,10 @@
 <?php
 /**
-* Shortcode `[s2Get /]` ( inner processing routines ).
+* Shortcode `[s2Get /]` (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_sc_gets_in"))
 	{
 		/**
-		* Shortcode `[s2Get /]` ( inner processing routines ).
+		* Shortcode `[s2Get /]` (inner processing routines).
 		*
 		* @package s2Member\s2Get
 		* @since 3.5

@@ -1,6 +1,6 @@
 <?php echo S2MEMBER_PAYPAL_API_SIGNATURE; ?>
 This may output something like: Akdfw392-AnhvhsdfjLSJSKdtFuAmHxW3iD1N3GoZuZ8Vr2ii
-( or whatever you have configured as your PayPal® API Signature )
+(or whatever you have configured as your PayPal® API Signature)
 
 ---- s2member Shortcode Equivalent ----
 

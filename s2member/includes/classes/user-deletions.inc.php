@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -95,7 +95,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 
 						if (empty ($processed[$user_id]) && ($processed[$user_id] = true)) // Safeguard this routine against duplicate processing.
 							{
-								$eot_del_type = // Configure EOT/Del type ( possibly through a global variable made available in other routines ).
+								$eot_del_type = // Configure EOT/Del type (possibly through a global variable made available in other routines).
 								(!empty ($GLOBALS["ws_plugin__s2member_eot_del_type"])) ? // Is the global available for use?
 								$GLOBALS["ws_plugin__s2member_eot_del_type"] : "user-removal-deletion"; // Else use default.
 
@@ -109,7 +109,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 								do_action ("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "removal-deletion");
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-								delete_user_option ($user_id, "s2member_custom"); // Remove User options ( for this Blog ).
+								delete_user_option ($user_id, "s2member_custom"); // Remove User options (for this Blog).
 								delete_user_option ($user_id, "s2member_subscr_id");
 								delete_user_option ($user_id, "s2member_subscr_gateway");
 
@@ -158,7 +158,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 										$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status ();
 										c_ws_plugin__s2member_email_configs::email_config_release ();
 
-										$msg = $sbj = "( s2Member / API Notification Email ) - EOT/Deletion";
+										$msg = $sbj = "(s2Member / API Notification Email) - EOT/Deletion";
 										$msg .= "\n\n"; // Spacing in the message body.
 
 										$msg .= "eot_del_type: %%eot_del_type%%\n";

@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routine ).
+* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 	{
 		/**
-		* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routine ).
+		* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
 		*
 		* @package s2Member\PayPal
 		* @since 110720
@@ -28,13 +28,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 		class c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level
 			{
 				/**
-				* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routine ).
+				* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
 				*
 				* @package s2Member\PayPal
 				* @since 110720
 				*
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_return_in::paypal_return()}.
-				* @return array|bool The original ``$paypal`` array passed in ( extracted ) from ``$vars``, or false when conditions do NOT apply.
+				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
@@ -142,7 +142,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 
 																		echo c_ws_plugin__s2member_return_templates::return_template ($paypal["subscr_gateway"],
 																			'<strong>' . _x ("Thank you! You now have access to:", "s2member-front", "s2member") . '<br /><em>' . esc_html ($paypal["item_name"]) . '</em></strong>',
-																			_x ("Please Log Back In ( Click Here )", "s2member-front", "s2member"), wp_login_url ());
+																			_x ("Please Log Back In (Click Here)", "s2member-front", "s2member"), wp_login_url ());
 																	}
 															}
 														else // Unable to add new Capabilities. The existing User ID is associated with an Administrator. Stopping here.

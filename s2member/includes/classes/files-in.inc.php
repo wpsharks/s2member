@@ -1,10 +1,10 @@
 <?php
 /**
-* File Download routines for s2Member ( inner processing routines ).
+* File Download routines for s2Member (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 if(!class_exists("c_ws_plugin__s2member_files_in"))
 	{
 		/**
-		* File Download routines for s2Member ( inner processing routines ).
+		* File Download routines for s2Member (inner processing routines).
 		*
 		* @package s2Member\Files
 		* @since 3.5
@@ -118,7 +118,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 														status_header(503);
 														header("Content-Type: text/html; charset=UTF-8");
 														while (@ob_end_clean ()); // Clean any existing output buffers.
-														exit(_x('<strong>503 ( Invalid Key ):</strong> Sorry, your access to this file has expired. Please contact Support for assistance.', "s2member-front", "s2member"));
+														exit(_x('<strong>503 (Invalid Key):</strong> Sorry, your access to this file has expired. Please contact Support for assistance.', "s2member-front", "s2member"));
 													}
 													else // Else return false.
 														return false;
@@ -782,7 +782,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @param str $string Input string/data, to be signed by this routine.
 				* @return str|bool An RSA-SHA1 signature for Amazon® CloudFront, else false on failure.
 				*
-				* @todo Double underscores *( i.e. base64 padding chars )* in the signature seem to cause issues for Amazon® CloudFront?
+				* @todo Double underscores *(i.e. base64 padding chars)* in the signature seem to cause issues for Amazon® CloudFront?
 				* 	See ticket: {@link https://forums.aws.amazon.com/thread.jspa?messageID=286182&#286182}
 				*/
 				public static function amazon_cf_rsa_sign($string = FALSE)

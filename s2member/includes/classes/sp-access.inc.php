@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				* @package s2Member\SP_Access
 				* @since 3.5
 				*
-				* @param str|int $sp_ids Comma-delimited list of Specific Post/Page IDs *( numerical )*.
+				* @param str|int $sp_ids Comma-delimited list of Specific Post/Page IDs *(numerical)*.
 				* @param int|str $hours Optional. A numeric expiration time for this link, in hours. Defaults to `72`.
 				* @param bool $shrink Optional. Defaults to true. If false, the raw link will NOT be processed by the tinyURL API.
 				* @return str|bool A Specific Post/Page Access Link, or false on failure.

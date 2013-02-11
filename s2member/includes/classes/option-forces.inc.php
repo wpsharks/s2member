@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -45,7 +45,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 						return apply_filters ("ws_plugin__s2member_force_default_role", ($default_role = "subscriber"), get_defined_vars ());
 					}
 				/**
-				* Forces a default Role for new Multisite registrations ( on the Main Site ) NOT tied to an incoming payment.
+				* Forces a default Role for new Multisite registrations (on the Main Site) NOT tied to an incoming payment.
 				*
 				* @package s2Member\Option_Forces
 				* @since 3.5
@@ -242,7 +242,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				* @since 3.5
 				*
 				* @attaches-to ``add_filter("bp_core_get_root_options");``
-				* @attaches-to ``add_filter("bp_core_get_site_options");`` **( before BuddyPress v1.5 )**.
+				* @attaches-to ``add_filter("bp_core_get_site_options");`` **(before BuddyPress v1.5)**.
 				*
 				* @param array $site_options Expects array of BuddyPress site options.
 				* @return array Site options array, after having been Filtered by this routine.

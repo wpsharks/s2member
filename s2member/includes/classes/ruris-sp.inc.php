@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's URI protection routines *( for specific URIs )*.
+* s2Member's URI protection routines *(for specific URIs)*.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_ruris_sp"))
 	{
 		/**
-		* s2Member's URI protection routines *( for specific URIs )*.
+		* s2Member's URI protection routines *(for specific URIs)*.
 		*
 		* @package s2Member\URIs
 		* @since 3.5
@@ -28,14 +28,14 @@ if (!class_exists ("c_ws_plugin__s2member_ruris_sp"))
 		class c_ws_plugin__s2member_ruris_sp
 			{
 				/**
-				* Handles URI Level Access *( for specific URIs )*.
+				* Handles URI Level Access *(for specific URIs)*.
 				*
 				* @package s2Member\URIs
 				* @since 3.5
 				*
 				* @param str $uri A URI, or a full URL is also fine.
 				* @param bool $check_user Test permissions against the current User? Defaults to true.
-				* @return null|array Non-empty array ( with details ) if access is denied, else null if access is allowed.
+				* @return null|array Non-empty array (with details) if access is denied, else null if access is allowed.
 				*/
 				public static function check_specific_ruri_level_access ($uri = FALSE, $check_user = TRUE)
 					{

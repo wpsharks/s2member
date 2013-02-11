@@ -1,10 +1,10 @@
 <?php
 /**
-* Shortcode `[s2If /]` ( inner processing routines ).
+* Shortcode `[s2If /]` (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 	{
 		/**
-		* Shortcode `[s2If /]` ( inner processing routines ).
+		* Shortcode `[s2If /]` (inner processing routines).
 		*
 		* @package s2Member\s2If
 		* @since 3.5
@@ -34,7 +34,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 				*
 				* Is Multisite Networking enabled? Please keep the following in mind.
 				* ``current_user_can()``, will ALWAYS return true for a Super Admin!
-				* 	*( this can be confusing when testing conditionals )*.
+				* 	*(this can be confusing when testing conditionals)*.
 				*
 				* If you're running a Multisite Blog Farm, you can Filter this array:
 				* 	`ws_plugin__s2member_sc_if_conditionals_blog_farm_safe`
@@ -92,9 +92,9 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 						do_action ("ws_plugin__s2member_before_sc_if_conditionals_after_conditional_logic", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						if ($conditional_logic === "AND") // This is the AND variation. This routine analyzes conditionals using AND logic ( the default behavior ).
+						if ($conditional_logic === "AND") // This is the AND variation. This routine analyzes conditionals using AND logic (the default behavior).
 							{
-								foreach ($attr as $attr_value) // This is the AND variation. This routine analyzes conditionals using AND logic ( the default behavior ).
+								foreach ($attr as $attr_value) // This is the AND variation. This routine analyzes conditionals using AND logic (the default behavior).
 									{
 										if (preg_match ("/^(\!?)(.+?)(\()(.*?)(\))$/", $attr_value, $m) && ($exclamation = $m[1]) !== "nill" && ($conditional = $m[2]) && ($attr_args = preg_replace ("/[\r\n\t\s ]/", "", $m[4])) !== "nill")
 											{
@@ -104,7 +104,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 															{
 																if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site () || in_array (strtolower ($conditional), $blog_farm_safe))
 																	{
-																		$test = ($exclamation) ? false : true; // If !exclamation ( false ) otherwise this defaults to true.
+																		$test = ($exclamation) ? false : true; // If !exclamation (false) otherwise this defaults to true.
 
 																		if (preg_match ("/^\{(.*?)\}$/", $attr_args)) // Single argument passed as an array.
 																			{
@@ -187,7 +187,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 															{
 																if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site () || in_array (strtolower ($conditional), $blog_farm_safe))
 																	{
-																		$test = ($exclamation) ? false : true; // If !exclamation ( false ) otherwise this defaults to true.
+																		$test = ($exclamation) ? false : true; // If !exclamation (false) otherwise this defaults to true.
 
 																		if (preg_match ("/^\{(.*?)\}$/", $attr_args)) // Single argument passed as an array.
 																			{

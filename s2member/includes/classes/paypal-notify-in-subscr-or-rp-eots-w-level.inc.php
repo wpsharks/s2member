@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's PayPal® IPN handler ( inner processing routine ).
+* s2Member's PayPal® IPN handler (inner processing routine).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level"))
 	{
 		/**
-		* s2Member's PayPal® IPN handler ( inner processing routine ).
+		* s2Member's PayPal® IPN handler (inner processing routine).
 		*
 		* @package s2Member\PayPal
 		* @since 110720
@@ -28,13 +28,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 		class c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level
 			{
 				/**
-				* s2Member's PayPal® IPN handler ( inner processing routine ).
+				* s2Member's PayPal® IPN handler (inner processing routine).
 				*
 				* @package s2Member\PayPal
 				* @since 110720
 				*
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_notify_in::paypal_notify()}.
-				* @return array|bool The original ``$paypal`` array passed in ( extracted ) from ``$vars``, or false when conditions do NOT apply.
+				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
@@ -163,7 +163,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 																				if($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
 																					{
-																						$msg = $sbj = "( s2Member / API Notification Email ) - EOT/Deletion";
+																						$msg = $sbj = "(s2Member / API Notification Email) - EOT/Deletion";
 																						$msg .= "\n\n"; // Spacing in the message body.
 
 																						$msg .= "eot_del_type: %%eot_del_type%%\n";
@@ -261,7 +261,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 																		update_user_option($user_id, "s2member_auto_eot_time", ($auto_eot_time = strtotime("now")));
 
-																		$paypal["s2member_log"][] = "Auto-EOT is currently disabled. Skipping immediate EOT ( demote|delete ), for now.";
+																		$paypal["s2member_log"][] = "Auto-EOT is currently disabled. Skipping immediate EOT (demote|delete), for now.";
 																		$paypal["s2member_log"][] = "Recording the Auto-EOT Time for this Member's account: ".date("D M j, Y g:i a T", $auto_eot_time);
 
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -270,7 +270,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																	}
 															}
 														else
-															$paypal["s2member_log"][] = "Unable to ( demote|delete ) Member. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
+															$paypal["s2member_log"][] = "Unable to (demote|delete) Member. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
 													}
 
 												else if($is_delayed_eot && !get_user_option("s2member_auto_eot_time", $user_id))
@@ -284,7 +284,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																Newer PayPal® accounts ( i.e. Subscription IDs starting with `I-`, will have their EOT triggered upon the last payment. */
 																update_user_option($user_id, "s2member_auto_eot_time", $auto_eot_time); // s2Member will follow-up on this later.
 
-																$paypal["s2member_log"][] = "Auto-EOT Time for this account ( delayed ), set to: ".date("D M j, Y g:i a T", $auto_eot_time);
+																$paypal["s2member_log"][] = "Auto-EOT Time for this account (delayed), set to: ".date("D M j, Y g:i a T", $auto_eot_time);
 
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delayed", get_defined_vars());
@@ -295,13 +295,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 													}
 
 												else if(!$is_refund_or_reversal || $is_delayed_eot)
-													$paypal["s2member_log"][] = "Skipping ( demote|delete ) Member, for now. An Auto-EOT Time is already set for this account. When an Auto-EOT Time has been recorded, s2Member will handle EOT ( demote|delete ) events using it's own Auto-EOT System - internally.";
+													$paypal["s2member_log"][] = "Skipping (demote|delete) Member, for now. An Auto-EOT Time is already set for this account. When an Auto-EOT Time has been recorded, s2Member will handle EOT (demote|delete) events using it's own Auto-EOT System - internally.";
 
 												else if($is_reversal)
-													$paypal["s2member_log"][] = "Skipping ( demote|delete ) Member. Your configuration dictates that s2Member should NOT take any immediate action on an EOT associated with a Chargeback Reversal. An s2Member API Notification will still be processed however.";
+													$paypal["s2member_log"][] = "Skipping (demote|delete) Member. Your configuration dictates that s2Member should NOT take any immediate action on an EOT associated with a Chargeback Reversal. An s2Member API Notification will still be processed however.";
 
 												else if($is_refund)
-													$paypal["s2member_log"][] = "Skipping ( demote|delete ) Member. Your configuration dictates that s2Member should NOT take any immediate action on an EOT associated with a Refund. An s2Member API Notification will still be processed however.";
+													$paypal["s2member_log"][] = "Skipping (demote|delete) Member. Your configuration dictates that s2Member should NOT take any immediate action on an EOT associated with a Refund. An s2Member API Notification will still be processed however.";
 											}
 										else if($is_delayed_eot) // Otherwise, we need to re-generate/store this IPN into a Transient Queue. Then re-process it on registration.
 											{
@@ -319,7 +319,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 											}
 
 										else
-											$paypal["s2member_log"][] = "Unable to ( demote|delete ) Member. Could not get the existing User ID from the DB. It's possible that it was ALREADY processed through another IPN, removed manually by a Site Administrator, or by s2Member's Auto-EOT Sys.";
+											$paypal["s2member_log"][] = "Unable to (demote|delete) Member. Could not get the existing User ID from the DB. It's possible that it was ALREADY processed through another IPN, removed manually by a Site Administrator, or by s2Member's Auto-EOT Sys.";
 										/*
 										Refunds and chargeback reversals. This is excluded from the processing check, because a Member *could* have already been (demoted|deleted).
 										In other words, s2Member sends `Refund/Reversal` Notifications ANYTIME a Refund/Reversal occurs; even if s2Member did not process it otherwise.
@@ -359,7 +359,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 												if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_recipients"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
 													{
-														$msg = $sbj = "( s2Member / API Notification Email ) - Refund/Reversal";
+														$msg = $sbj = "(s2Member / API Notification Email) - Refund/Reversal";
 														$msg .= "\n\n"; // Spacing in the message body.
 
 														$msg .= "subscr_id: %%subscr_id%%\n";

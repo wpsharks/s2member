@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -101,7 +101,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				* Calculate Auto-EOT Time, based on `user_id`, `period1`, `period3`, `last_payment_time`, or an optional `eotper`.
 				*
 				* Used by s2Member's built-in Auto-EOT System, and also by its IPN routines.
-				* `last_payment_time` can be forced w/ ``$lpt`` *( i.e. for delayed eots )*.
+				* `last_payment_time` can be forced w/ ``$lpt`` *(i.e. for delayed eots)*.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
@@ -258,7 +258,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				/**
 				* Converts a "Period Term", and Recurring flag.
 				*
-				* Returns a full Term explanation *( lowercase )*.
+				* Returns a full Term explanation *(lowercase)*.
 				* Example: `2 months`.
 				*
 				* @package s2Member\Utilities
@@ -266,7 +266,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				*
 				* @param str $period_term A "Period Term" combination.
 				* @param bool|int|str $recurring Defaults to false. If true, the ``$period_term`` is recurring. Can also be the string `0|1|BN`.
-				* @return str Verbose *( lowercase )* Period Term description *( i.e. `weekly`, `every 3 weeks`, `lifetime`, `3 months`, `1 month`, etc. )*.
+				* @return str Verbose *(lowercase)* Period Term description *( i.e. `weekly`, `every 3 weeks`, `lifetime`, `3 months`, `1 month`, etc. )*.
 				*
 				* @todo Add support here for fixed recurring payments configured through `rrt=""`.
 				*/
@@ -307,7 +307,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				* @param int|str $amount A numeric amount, usually in US dollars.
 				* @param str $period_term A "Period Term" combo, with space separation.
 				* @param bool|int|str $recurring Defaults to false. If true, the ``$period_term`` is recurring. Can also be the string `0|1|BN`.
-				* @return str Verbose *( lowercase )* Amount Period Term description *( i.e. `1.00`, `1.00 / monthly`, `1.00 every 3 months`, `1.00 for 1 month`, `1.00 for 3 months`, etc. )*.
+				* @return str Verbose *(lowercase)* Amount Period Term description *( i.e. `1.00`, `1.00 / monthly`, `1.00 every 3 months`, `1.00 for 1 month`, `1.00 for 3 months`, etc. )*.
 				*
 				* @todo Add support here for fixed recurring payments configured through `rrt=""`.
 				*/

@@ -1,4 +1,4 @@
-<!-- Identifies/Updates An Existing User/Member ( when/if applicable )  -->
+<!-- Identifies/Updates An Existing User/Member (when/if applicable)  -->
 <input type="hidden" name="on0" value="<?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON0; ?>" />
 <input type="hidden" name="os0" value="<?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS0; ?>" />
 <!-- Identifies The Customer's IP Address For Tracking -->

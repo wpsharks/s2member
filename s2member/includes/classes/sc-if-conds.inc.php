@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -34,7 +34,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds"))
 				*
 				* Is Multisite Networking enabled? Please keep the following in mind.
 				* ``current_user_can()``, will ALWAYS return true for a Super Admin!
-				* 	*( this can be confusing when testing conditionals )*.
+				* 	*(this can be confusing when testing conditionals)*.
 				*
 				* If you're running a Multisite Blog Farm, you can Filter this array:
 				* 	`ws_plugin__s2member_sc_if_conditionals_blog_farm_safe`

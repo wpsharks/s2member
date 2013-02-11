@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -73,7 +73,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages_updates"))
 									}
 
 								echo '<div id="ws-updates-div-priv">'."\n";
-								echo '( <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Privacy URI")).'" target="_blank">we DO respect your privacy</a> )'."\n";
+								echo '(<a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Privacy URI")).'" target="_blank">we DO respect your privacy</a>)'."\n";
 								echo '</div>'."\n";
 
 								echo '<div id="ws-updates-div-submit">'."\n";

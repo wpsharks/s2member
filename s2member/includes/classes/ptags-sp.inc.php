@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's Tag protection routines *( for specific Tags )*.
+* s2Member's Tag protection routines *(for specific Tags)*.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_ptags_sp"))
 	{
 		/**
-		* s2Member's Tag protection routines *( for specific Tags )*.
+		* s2Member's Tag protection routines *(for specific Tags)*.
 		*
 		* @package s2Member\Tags
 		* @since 3.5
@@ -28,14 +28,14 @@ if (!class_exists ("c_ws_plugin__s2member_ptags_sp"))
 		class c_ws_plugin__s2member_ptags_sp
 			{
 				/**
-				* Handles Tag Level Access *( for specific Tags )*.
+				* Handles Tag Level Access *(for specific Tags)*.
 				*
 				* @package s2Member\Tags
 				* @since 3.5
 				*
 				* @param int|str $_tag Numeric Tag ID, Tag Slug, or Tag Name.
 				* @param bool $check_user Test permissions against the current User? Defaults to true.
-				* @return null|array Non-empty array ( with details ) if access is denied, else null if access is allowed.
+				* @return null|array Non-empty array (with details) if access is denied, else null if access is allowed.
 				*/
 				public static function check_specific_ptag_level_access ($_tag = FALSE, $check_user = TRUE)
 					{

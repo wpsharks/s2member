@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -37,7 +37,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*/
 				public static $current_wp_query;
 				/**
-				* Forces query Filters *( on-demand )*.
+				* Forces query Filters *(on-demand)*.
 				*
 				* s2Member respects the query var: `suppress_filters`.
 				* If you need to make a query without it being Filtered, use  ``$wp_query->set ("suppress_filters", true);``.

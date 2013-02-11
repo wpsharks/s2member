@@ -1,4 +1,4 @@
-Copyright: © 2009 WebSharks, Inc. ( coded in the USA )
+Copyright: © 2009 WebSharks, Inc. (coded in the USA)
 <mailto:support@websharks-inc.com> <http://www.websharks-inc.com/>
 
 Released under the terms of the GNU General Public License.
@@ -25,7 +25,7 @@ Credits / Additional Acknowledgments:
 * Administration panel (videos icon) was provided by David Vignoni.
 	- LGPL License <http://www.iconfinder.com/search/?q=iconset%3Anuvola2>
 	- David Vignoni <http://www.icon-king.com/>
-	
+
 * PayPal® and its associated API, buttons & services have been integrated into this software via external hyperlinks.
   The files/services provided by PayPal® are not distributed with this software. They have their own terms & conditions.
 	- PayPal®, a 3rd party service, is powered by eBay, Inc. <http://www.paypal.com/>

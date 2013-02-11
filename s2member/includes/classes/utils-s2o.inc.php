@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -101,7 +101,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 						return false;
 					}
 				/**
-				* Escapes dollars signs ( for regex patterns ).
+				* Escapes dollars signs (for regex patterns).
 				*
 				* @package s2Member\Utilities
 				* @since 110917

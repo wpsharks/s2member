@@ -1,10 +1,10 @@
 <?php
 /**
-* Systematics *( for current page )*.
+* Systematics *(for current page)*.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_systematics"))
 	{
 		/**
-		* Systematics *( for current page )*.
+		* Systematics *(for current page)*.
 		*
 		* @package s2Member\Systematics
 		* @since 3.5
@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 							{
 								return ($is_s2_systematic = apply_filters ("ws_plugin__s2member_is_s2_systematic_use_page", true, get_defined_vars ()));
 							}
-						else // Otherwise, we return false ( it's NOT an s2Member® Systematic Use Page ).
+						else // Otherwise, we return false (it's NOT an s2Member® Systematic Use Page).
 							return ($is_s2_systematic = apply_filters ("ws_plugin__s2member_is_s2_systematic_use_page", false, get_defined_vars ()));
 					}
 				/**
@@ -96,7 +96,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
-						else // Otherwise, we return false ( it's NOT a WordPress® Systematic Use Page ).
+						else // Otherwise, we return false (it's NOT a WordPress® Systematic Use Page).
 							return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", false, get_defined_vars ()));
 					}
 				/**
@@ -146,7 +146,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 							{
 								return ($is_systematic = apply_filters ("ws_plugin__s2member_is_systematic_use_page", true, get_defined_vars ()));
 							}
-						else // Otherwise, we return false ( it's NOT a Systematic Use Page in any way ).
+						else // Otherwise, we return false (it's NOT a Systematic Use Page in any way).
 							return ($is_systematic = apply_filters ("ws_plugin__s2member_is_systematic_use_page", false, get_defined_vars ()));
 					}
 			}

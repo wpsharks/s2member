@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_security"))
 		class c_ws_plugin__s2member_security
 			{
 				/**
-				* s2Member's Security Gate ( protects WordPress® content ).
+				* s2Member's Security Gate (protects WordPress® content).
 				*
 				* @package s2Member\Security
 				* @since 3.5
@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_security"))
 						return /* Return for uniformity. */;
 					}
 				/**
-				* s2Member's Security Gate ( protects WordPress® queries ).
+				* s2Member's Security Gate (protects WordPress® queries).
 				*
 				* @package s2Member\Security
 				* @since 3.5

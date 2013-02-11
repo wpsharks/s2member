@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's Post protection routines *( for current Post )*.
+* s2Member's Post protection routines *(for current Post)*.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_posts"))
 	{
 		/**
-		* s2Member's Post protection routines *( for current Post )*.
+		* s2Member's Post protection routines *(for current Post)*.
 		*
 		* @package s2Member\Posts
 		* @since 3.5
@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_posts"))
 		class c_ws_plugin__s2member_posts
 			{
 				/**
-				* Handles Post Level Access permissions *( for current Post )*.
+				* Handles Post Level Access permissions *(for current Post)*.
 				*
 				* @package s2Member\Posts
 				* @since 3.5
@@ -54,7 +54,7 @@ if (!class_exists ("c_ws_plugin__s2member_posts"))
 
 										else if (!c_ws_plugin__s2member_systematics::is_systematic_use_page ()) // Do NOT protect Systematics. However, there is 1 exception above.
 											{
-												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Post Level restrictions ( including Custom Post Types ). Go through each Level.
+												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Post Level restrictions (including Custom Post Types). Go through each Level.
 													{
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"] === "all" && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 															c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("post", $post_id, "level", $n, $_SERVER["REQUEST_URI"]) . exit ();

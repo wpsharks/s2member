@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 				* @package s2Member\Admin_Notices
 				* @since 3.5
 				*
-				* @param str $notice String value of actual notice *( i.e. the message )*.
+				* @param str $notice String value of actual notice *(i.e. the message)*.
 				* @param str|array $on_pages Optional. Defaults to any page. String or array of pages to display this notice on.
 				* @param bool $error Optional. True if this notice is regarding an error. Defaults to false.
 				* @param int $time Optional. Unix timestamp indicating when this notice will be displayed.
@@ -68,7 +68,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 				* @package s2Member\Admin_Notices
 				* @since 3.5
 				*
-				* @param str $notice String value of actual notice *( i.e. the message )*.
+				* @param str $notice String value of actual notice *(i.e. the message)*.
 				* @param bool $error Optional. True if this notice is regarding an error. Defaults to false.
 				* @param bool $dismiss Optional. If true, the notice will be displayed with a dismissal link. Defaults to false.
 				* @return null

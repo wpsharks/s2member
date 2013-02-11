@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				*
 				* o On the Return URL / Thank-You Page, after returning from your Payment Gateway.
 				* o Otherwise, on the Registration Form, after returning from your Payment Gateway.
-				* o Otherwise, if possible, on the Login Form *( in the footer )* after Registration is completed.
+				* o Otherwise, if possible, on the Login Form *(in the footer)* after Registration is completed.
 				* o Otherwise, in the footer of your WordPress® theme, as soon as possible; or after the Customer's very first login.
 				*
 				* @package s2Member\Tracking
@@ -89,7 +89,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				* s2Member will display Tracking Codes in (1) of these 3 locations:
 				*
 				* o On the Return URL / Thank-You Page, after returning from your Payment Gateway.
-				* o Otherwise, if possible, on the Login Form *( in the footer )* after returning from your Payment Gateway.
+				* o Otherwise, if possible, on the Login Form *(in the footer)* after returning from your Payment Gateway.
 				* o Otherwise, in the footer of your WordPress® theme, as soon as possible; or after the Customer's next login.
 				*
 				* @package s2Member\Tracking
@@ -141,7 +141,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				* s2Member will display Tracking Codes in (1) of these 3 locations:
 				*
 				* o On the Return URL / Thank-You Page, after returning from your Payment Gateway.
-				* o Otherwise, if possible, on the Login Form *( in the footer )* after returning from your Payment Gateway.
+				* o Otherwise, if possible, on the Login Form *(in the footer)* after returning from your Payment Gateway.
 				* o Otherwise, in the footer of your WordPress® theme, as soon as possible; or after the Customer's next login.
 				*
 				* @package s2Member\Tracking

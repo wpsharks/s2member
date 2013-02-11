@@ -24,7 +24,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
  <input type="hidden" name="amount" value="0.01" />
  <!-- <?php echo _x ("Configures s2Member's Unique Invoice ID/Code", "s2member-admin", "s2member"); ?>  -->
  <input type="hidden" name="invoice" value="<?php echo "<?php echo S2MEMBER_VALUE_FOR_PP_INV(); ?>"; ?>" />
- <!-- <?php echo _x ("Associates Purchase With A User/Member ( when/if applicable )", "s2member-admin", "s2member"); ?> -->
+ <!-- <?php echo _x ("Associates Purchase With A User/Member (when/if applicable)", "s2member-admin", "s2member"); ?> -->
  <input type="hidden" name="on0" value="<?php echo "<?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON0; ?>"; ?>" />
  <input type="hidden" name="os0" value="<?php echo "<?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS0; ?>"; ?>" />
  <!-- <?php echo _x ("Identifies The Customer's IP Address For Tracking", "s2member-admin", "s2member"); ?> -->

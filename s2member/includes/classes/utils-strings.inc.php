@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -30,7 +30,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				/**
 				* Array of all ampersand entities.
 				*
-				* Array keys are actually regex patterns *( very useful )*.
+				* Array keys are actually regex patterns *(very useful)*.
 				*
 				* @package s2Member\Utilities
 				* @since 111106
@@ -39,9 +39,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*/
 				public static $ampersand_entities = array("&amp;" => "&amp;", "&#0*38;" => "&#38;", "&#[xX]0*26;" => "&#x26;");
 				/**
-				* Array of all quote entities *( and entities for quote variations )*.
+				* Array of all quote entities *(and entities for quote variations)*.
 				*
-				* Array keys are actually regex patterns *( very useful )*.
+				* Array keys are actually regex patterns *(very useful)*.
 				*
 				* @package s2Member\Utilities
 				* @since 111106

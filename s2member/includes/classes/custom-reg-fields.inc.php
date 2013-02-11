@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -435,7 +435,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 								echo '<p>'."\n";
 
 								echo '<label for="ws-plugin--s2member-custom-reg-field-user-pass1" title="'.esc_attr(_x("Please type your Password twice to confirm.", "s2member-front", "s2member")).'">'."\n";
-								echo '<span>'._x("Password ( please type it twice )", "s2member-front", "s2member").' *</span><br />'."\n";
+								echo '<span>'._x("Password (please type it twice)", "s2member-front", "s2member").' *</span><br />'."\n";
 								echo '<input type="password" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_user_pass1" id="ws-plugin--s2member-custom-reg-field-user-pass1" class="ws-plugin--s2member-custom-reg-field" value="'.format_to_edit($_p["ws_plugin__s2member_custom_reg_field_user_pass1"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 								echo '</label>'."\n";
 

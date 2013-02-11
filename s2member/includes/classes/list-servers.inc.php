@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -66,7 +66,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				*
 				* @todo Integrate {@link https://labs.aweber.com/docs/php-library-walkthrough AWeber's API}.
 				* @todo Add a separate option for mail debugging; or consolidate?
-				* @todo Integrate AWeber® API ( much like the MailChimp® API ).
+				* @todo Integrate AWeber® API (much like the MailChimp® API).
 				*/
 				public static function process_list_servers ($role = FALSE, $level = FALSE, $login = FALSE, $pass = FALSE, $email = FALSE, $fname = FALSE, $lname = FALSE, $ip = FALSE, $opt_in = FALSE, $double_opt_in = TRUE, $user_id = FALSE)
 					{
@@ -86,9 +86,9 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"]) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_mailchimp_list_ids"]))
 									{
 										if /* Include the MailChimp® API Class here. */ (!class_exists ("NC_MCAPI"))
-											include_once /* MailChimp® API ( no-conflict version ). */ dirname (dirname (__FILE__)) . "/externals/mailchimp/nc-mcapi.inc.php";
+											include_once /* MailChimp® API (no-conflict version). */ dirname (dirname (__FILE__)) . "/externals/mailchimp/nc-mcapi.inc.php";
 
-										$mcapi = /* MailChimp® API ( no-conflict ). */ new NC_MCAPI ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"], true);
+										$mcapi = /* MailChimp® API (no-conflict). */ new NC_MCAPI ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"], true);
 
 										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_mailchimp_list_ids"]) as $mailchimp_list)
 											{
@@ -117,13 +117,13 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 
 														if ($mailchimp["api_response"] = $mcapi->{$mailchimp["api_method"]}($mailchimp["list_id"], $email, // See: `http://apidocs.mailchimp.com/` for full details.
 														($mailchimp["api_merge_array"] = apply_filters ("ws_plugin__s2member_mailchimp_merge_array", $mailchimp["merge_array"], get_defined_vars ())), // Configured merge array above.
-														($mailchimp["api_email_type"] = apply_filters ("ws_plugin__s2member_mailchimp_email_type", "html", get_defined_vars ())), // Type of email to receive ( i.e. html,text,mobile ).
+														($mailchimp["api_email_type"] = apply_filters ("ws_plugin__s2member_mailchimp_email_type", "html", get_defined_vars ())), // Type of email to receive (i.e. html,text,mobile).
 														($mailchimp["api_double_optin"] = apply_filters ("ws_plugin__s2member_mailchimp_double_optin", $double_opt_in, get_defined_vars ())), // Abuse of this may cause account suspension.
 														($mailchimp["api_update_existing"] = apply_filters ("ws_plugin__s2member_mailchimp_update_existing", false, get_defined_vars ())), // Existing subscribers should be updated with this?
-														($mailchimp["api_replace_interests"] = apply_filters ("ws_plugin__s2member_mailchimp_replace_interests", true, get_defined_vars ())), // Replace interest groups? ( only if provided ).
+														($mailchimp["api_replace_interests"] = apply_filters ("ws_plugin__s2member_mailchimp_replace_interests", true, get_defined_vars ())), // Replace interest groups? (only if provided).
 														($mailchimp["api_send_welcome"] = apply_filters ("ws_plugin__s2member_mailchimp_send_welcome", false, get_defined_vars ())))) // See documentation. This is a weird option.
 															$mailchimp["api_success"] = $success = true; // Flag indicating that we DO have a successful processing of a new List; affects the function's overall return value.
-														$mailchimp["api_properties"] = $mcapi; // Include API instance too; as it contains some additional information after each method is processed ( need this in the logs ).
+														$mailchimp["api_properties"] = $mcapi; // Include API instance too; as it contains some additional information after each method is processed (need this in the logs).
 
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
 														$logm = c_ws_plugin__s2member_utilities::mem_details ();
@@ -205,7 +205,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				*
 				* @todo Integrate {@link https://labs.aweber.com/docs/php-library-walkthrough AWeber's API}.
 				* @todo Add a separate option for mail debugging; or consolidate?
-				* @todo Integrate AWeber® API ( much like the MailChimp® API ).
+				* @todo Integrate AWeber® API (much like the MailChimp® API).
 				*/
 				public static function process_list_server_removals ($role = FALSE, $level = FALSE, $login = FALSE, $pass = FALSE, $email = FALSE, $fname = FALSE, $lname = FALSE, $ip = FALSE, $opt_out = FALSE, $user_id = FALSE)
 					{
@@ -225,9 +225,9 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"]) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_mailchimp_list_ids"]))
 									{
 										if /* Include the MailChimp® API Class here. */ (!class_exists ("NC_MCAPI"))
-											include_once /* MailChimp® API ( no-conflict version ). */ dirname (dirname (__FILE__)) . "/externals/mailchimp/nc-mcapi.inc.php";
+											include_once /* MailChimp® API (no-conflict version). */ dirname (dirname (__FILE__)) . "/externals/mailchimp/nc-mcapi.inc.php";
 
-										$mcapi = /* MailChimp® API ( no-conflict ). */ new NC_MCAPI ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"], true);
+										$mcapi = /* MailChimp® API (no-conflict). */ new NC_MCAPI ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"], true);
 
 										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_mailchimp_list_ids"]) as $mailchimp_list)
 											{
@@ -240,7 +240,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														($mailchimp["api_removal_send_goodbye"] = apply_filters ("ws_plugin__s2member_mailchimp_removal_send_goodbye", false, get_defined_vars ())), // Send goodbye letter?
 														($mailchimp["api_removal_send_notify"] = apply_filters ("ws_plugin__s2member_mailchimp_removal_send_notify", false, get_defined_vars ())))) // Send notification?
 															$mailchimp["api_removal_success"] = $removal_success = true; // Flag indicating that we DO have a successful removal; affects the function's overall return value.
-														$mailchimp["api_removal_properties"] = $mcapi; // Include API instance too; as it contains some additional information after each method is processed ( need this in the logs ).
+														$mailchimp["api_removal_properties"] = $mcapi; // Include API instance too; as it contains some additional information after each method is processed (need this in the logs).
 
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
 														$logm = c_ws_plugin__s2member_utilities::mem_details ();
@@ -270,7 +270,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 															// The `From:` address MUST match AWeber account. See: <http://www.aweber.com/faq/questions/62/Can+I+Unsubscribe+People+Via+Email%3F>.
 
 														if ($aweber["wp_mail_removal_response"] = wp_mail ($aweber["list_id"] . "@aweber.com", // AWeber® List ID converts to email address @aweber.com.
-														($aweber["wp_mail_removal_sbj"] = apply_filters ("ws_plugin__s2member_aweber_removal_sbj", "REMOVE#" . $email . "#s2Member#" . $aweber["list_id"], get_defined_vars ())), // Bug fix. AWeber® does not like dots ( possibly other chars ) in the Ad Tracking field. Now using just: `s2Member`.
+														($aweber["wp_mail_removal_sbj"] = apply_filters ("ws_plugin__s2member_aweber_removal_sbj", "REMOVE#" . $email . "#s2Member#" . $aweber["list_id"], get_defined_vars ())), // Bug fix. AWeber® does not like dots (possibly other chars) in the Ad Tracking field. Now using just: `s2Member`.
 														($aweber["wp_mail_removal_msg"] = "REMOVE"), ($aweber["wp_mail_removal_headers"] = "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">" . (($aweber["removal_bcc"]) ? "\r\nBcc: " . $aweber["removal_bcc"] : "") . "\r\nContent-Type: text/plain; charset=UTF-8")))
 															$aweber["wp_mail_removal_success"] = $removal_success = true; // Flag indicating that we DO have a successful removal; affects the function's overall return value.
 
@@ -318,8 +318,8 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				* @param int|str $user_id Required. A WordPress® User ID, numeric string or integer.
 				* @param array $vars Required. An array of defined variables passed by the calling Hook.
 				* @param str $event Required. A specific event that triggered this call from the Action Hook.
-				* @param str $event_spec Required. A specific event specification *( a broader classification )*.
-				* @param str $mod_new_role Required if ``$event_spec === "modification"`` ( but can be empty ). Role the User is being modified to.
+				* @param str $event_spec Required. A specific event specification *(a broader classification)*.
+				* @param str $mod_new_role Required if ``$event_spec === "modification"`` (but can be empty). Role the User is being modified to.
 				* @param str $mod_new_user Optional. If ``$event_spec === "modification"``, the new User object with current details.
 				* @param str $mod_old_user Optional. If ``$event_spec === "modification"``, the old/previous User obj with old details.
 				* @return null This function does not have a return value.
@@ -337,19 +337,19 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 
 						if (c_ws_plugin__s2member_list_servers::list_servers_integrated () && $user_id && is_numeric ($user_id) && !in_array ($user_id, $auto_processed) && is_array ($vars) && is_string ($event = (string)$event) && is_string ($event_spec = (string)$event_spec) && (c_ws_plugin__s2member_utils_arrays::in_regex_array ($event, $custom_reg_auto_op_outs) || c_ws_plugin__s2member_utils_arrays::in_regex_array ($event_spec, $custom_reg_auto_op_outs)) && is_object ($user = $_user = new WP_User ($user_id)) && !empty ($user->ID))
 							{
-								$mod_new_role = ($event_spec === "modification" && $mod_new_role && is_string ($mod_new_role)) ? $mod_new_role : /* Might be empty ( i.e. they now have NO Role ). */ false;
+								$mod_new_role = ($event_spec === "modification" && $mod_new_role && is_string ($mod_new_role)) ? $mod_new_role : /* Might be empty (i.e. they now have NO Role). */ false;
 								$mod_new_user = ($event_spec === "modification" && $mod_new_user && is_object ($mod_new_user) && !empty ($mod_new_user->ID) && $mod_new_user->ID === $_user->ID) ? $mod_new_user : false;
 								$mod_old_user = ($event_spec === "modification" && $mod_old_user && is_object ($mod_old_user) && !empty ($mod_old_user->ID) && $mod_old_user->ID === $_user->ID) ? $mod_old_user : false;
 
 								$user = ($event_spec === "modification" && $mod_old_user) ? $mod_old_user : $_user; // Now, should we switch over to the old/previous User object ``$mod_old_user`` here? Or, should we use the one pulled by this routine with the User's ID?
 
-								if (($event_spec !== "modification" || ($event_spec === "modification" && /* Might be empty ( i.e. they now have NO Role ). */ (string)$mod_new_role !== c_ws_plugin__s2member_user_access::user_access_role ($user) && strtotime ($user->user_registered) < strtotime ("-10 seconds") && ($event !== "user-role-change" || ($event === "user-role-change" && !empty ($vars["_p"]["ws_plugin__s2member_custom_reg_auto_opt_out_transitions"]))))) && ($auto_processed[$user->ID] = true))
+								if (($event_spec !== "modification" || ($event_spec === "modification" && /* Might be empty (i.e. they now have NO Role). */ (string)$mod_new_role !== c_ws_plugin__s2member_user_access::user_access_role ($user) && strtotime ($user->user_registered) < strtotime ("-10 seconds") && ($event !== "user-role-change" || ($event === "user-role-change" && !empty ($vars["_p"]["ws_plugin__s2member_custom_reg_auto_opt_out_transitions"]))))) && ($auto_processed[$user->ID] = true))
 									{
 										$removed = c_ws_plugin__s2member_list_servers::process_list_server_removals (c_ws_plugin__s2member_user_access::user_access_role ($user), c_ws_plugin__s2member_user_access::user_access_level ($user), $user->user_login, false, $user->user_email, $user->first_name, $user->last_name, false, true, $user->ID);
 
 										if ($event_spec === "modification" && $mod_new_role && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_auto_opt_out_transitions"] === "2" || ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_auto_opt_out_transitions"] === "1" && $removed)) /* Transitoning User/Member to different list(s)? */)
 											{
-												$user = ($event_spec === "modification" && $mod_new_user) ? $mod_new_user : $_user; // Now, should we switch over to a new/current User object ``$mod_new_user`` here? ( which may contain newly updated details ). Or, should we simply use the User object pulled by this routine with the User's ID?
+												$user = ($event_spec === "modification" && $mod_new_user) ? $mod_new_user : $_user; // Now, should we switch over to a new/current User object ``$mod_new_user`` here? (which may contain newly updated details). Or, should we simply use the User object pulled by this routine with the User's ID?
 
 												$transitioned = c_ws_plugin__s2member_list_servers::process_list_servers ($mod_new_role, c_ws_plugin__s2member_user_access::user_access_role_to_level ($mod_new_role), $user->user_login, false, $user->user_email, $user->first_name, $user->last_name, false, true, (($removed) ? false : true), $user->ID);
 

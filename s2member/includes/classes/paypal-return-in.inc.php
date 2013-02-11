@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routines ).
+* s2Member's PayPal® Auto-Return/PDT handler (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 	{
 		/**
-		* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routines ).
+		* s2Member's PayPal® Auto-Return/PDT handler (inner processing routines).
 		*
 		* @package s2Member\PayPal
 		* @since 3.5
@@ -136,27 +136,27 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 											_x ("Back To Home Page", "s2member-front", "s2member"), home_url ("/"));
 									}
 								/*
-								Add RTN proxy ( when available ) to the ``$paypal`` array.
+								Add RTN proxy (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_proxy"]))
 									$paypal["s2member_paypal_proxy"] = $_GET["s2member_paypal_proxy"];
 								/*
-								Add IPN proxy use vars ( when available ) to the ``$paypal`` array.
+								Add IPN proxy use vars (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_proxy_use"]))
 									$paypal["s2member_paypal_proxy_use"] = $_GET["s2member_paypal_proxy_use"];
 								/*
-								Also add RTN proxy self-verification ( when available ) to the ``$paypal`` array.
+								Also add RTN proxy self-verification (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_proxy_verification"]))
 									$paypal["s2member_paypal_proxy_verification"] = $_GET["s2member_paypal_proxy_verification"];
 								/*
-								Also add RTN success redirection URL ( when available ) to the ``$paypal`` array.
+								Also add RTN success redirection URL (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_return_success"]))
 									$paypal["s2member_paypal_return_success"] = $_GET["s2member_paypal_return_success"];
 								/*
-								Also add RTN t and r Attributes ( when available ) to the ``$paypal`` array.
+								Also add RTN t and r Attributes (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_return_tra"]))
 									$paypal["s2member_paypal_return_tra"] = $_GET["s2member_paypal_return_tra"];

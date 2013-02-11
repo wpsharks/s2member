@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -71,7 +71,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 								foreach /* Find all keys contained within ``$new_options`` matching `^ws_plugin__s2member_`. */($new_options as $key => $value)
 									if /* A relevant ``$new_options`` key matching `^ws_plugin__s2member_`? */(strpos($key, "ws_plugin__s2member_") === 0)
 
-										if /* s2Member is now configured ( according to these options )? */($key === "ws_plugin__s2member_configured")
+										if /* s2Member is now configured (according to these options)? */($key === "ws_plugin__s2member_configured")
 											($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["configured"] = $value).update_option("ws_plugin__s2member_configured", $value);
 
 										else if(!is_array($value) || (is_array($value) && /* Updating an array? */ array_shift($value) === "update-signal"))
@@ -86,7 +86,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 								$options = ws_plugin__s2member_configure_options_and_their_defaults(($options = array_merge($options, array("options_version" => (string)($options["options_version"] + 0.001)))));
 								update_option("ws_plugin__s2member_options", $options).((is_multisite() && is_main_site()) ? update_site_option("ws_plugin__s2member_options", $options) : null).update_option("ws_plugin__s2member_cache", array());
 
-								if($update_other === true || in_array("auto_eot_system", (array)$update_other)) // Handle the Auto-EOT System now ( enable/disable ).
+								if($update_other === true || in_array("auto_eot_system", (array)$update_other)) // Handle the Auto-EOT System now (enable/disable).
 									($options["auto_eot_system_enabled"] == 1) ? c_ws_plugin__s2member_auto_eots::add_auto_eot_system() : c_ws_plugin__s2member_auto_eots::delete_auto_eot_system();
 
 								if(($display_notices === true || in_array("success", (array)$display_notices)) && ($notice = '<strong>Options saved.'.(($request_refresh) ? ' Please <a href="'.esc_attr($_SERVER["REQUEST_URI"]).'">refresh</a>.' : '').'</strong>'))
@@ -100,16 +100,16 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 										if($options["login_welcome_page"] && $options["login_welcome_page"] === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is the same as your Membership Options Page. Please correct this. See: <code>s2Member -> General Options -> Login Welcome Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
-										if($options["membership_options_page"] && (string)get_option("page_on_front") === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Home Page ( i.e. static page ) for WordPress®. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress® -> Reading Options</code>. Or change: <code>s2Member -> General Options -> Membership Options Page</code>.'))
+										if($options["membership_options_page"] && (string)get_option("page_on_front") === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Home Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress® -> Reading Options</code>. Or change: <code>s2Member -> General Options -> Membership Options Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
-										if($options["login_welcome_page"] && (string)get_option("page_on_front") === $options["login_welcome_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Home Page ( i.e. static page ) for WordPress®. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress® -> Reading Options</code>. Or change: <code>s2Member -> General Options -> Login Welcome Page</code>.'))
+										if($options["login_welcome_page"] && (string)get_option("page_on_front") === $options["login_welcome_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Home Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress® -> Reading Options</code>. Or change: <code>s2Member -> General Options -> Login Welcome Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
-										if($options["membership_options_page"] && (string)get_option("page_for_posts") === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Posts Page ( i.e. static page ) for WordPress®. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress® -> Reading Options</code>. Or change: <code>s2Member -> General Options -> Membership Options Page</code>.'))
+										if($options["membership_options_page"] && (string)get_option("page_for_posts") === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Posts Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress® -> Reading Options</code>. Or change: <code>s2Member -> General Options -> Membership Options Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
-										if($options["login_welcome_page"] && (string)get_option("page_for_posts") === $options["login_welcome_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Posts Page ( i.e. static page ) for WordPress®. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress® -> Reading Options</code>. Or change: <code>s2Member -> General Options -> Login Welcome Page</code>.'))
+										if($options["login_welcome_page"] && (string)get_option("page_for_posts") === $options["login_welcome_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Posts Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress® -> Reading Options</code>. Or change: <code>s2Member -> General Options -> Login Welcome Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
 										if($options["file_download_limit_exceeded_page"] && $options["file_download_limit_exceeded_page"] === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Download Limit Exceeded Page is the same as your Membership Options Page. Please correct this. See: <code>s2Member -> Download Options</code>.'))
@@ -244,7 +244,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 
 								add_menu_page("s2Member®", "s2Member®", "create_users", $menu, "c_ws_plugin__s2member_menu_pages::mms_ops_page", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images/brand-favicon.png");
 
-								add_submenu_page($menu, "s2Member Multisite ( Configuration )", "Multisite (Config)", "create_users", "ws-plugin--s2member-mms-ops", "c_ws_plugin__s2member_menu_pages::mms_ops_page");
+								add_submenu_page($menu, "s2Member Multisite (Configuration)", "Multisite (Config)", "create_users", "ws-plugin--s2member-mms-ops", "c_ws_plugin__s2member_menu_pages::mms_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_network_admin_options_add_info_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
 									add_submenu_page($menu, "s2Member Information", "s2Member Info", "create_users", "ws-plugin--s2member-info", "c_ws_plugin__s2member_menu_pages::info_page");
@@ -451,16 +451,16 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						if /* Logging enabled? */($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
 							{
 								if /* If the security-enabled logs directory does not exist yet. */(!is_dir($logs_dir))
-									c_ws_plugin__s2member_admin_notices::display_admin_notice('The security-enabled logs directory ( <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)).'</code> ) does not exist. Please create this directory manually &amp; make it writable ( chmod 777 ).', true);
+									c_ws_plugin__s2member_admin_notices::display_admin_notice('The security-enabled logs directory (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)).'</code>) does not exist. Please create this directory manually &amp; make it writable (chmod 777).', true);
 
 								else if /* If the logs directory is not writable yet. */(!is_writable($logs_dir))
-									c_ws_plugin__s2member_admin_notices::display_admin_notice('Permissions error. The security-enabled logs directory ( <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)).'</code> ) is not writable. Please make this directory writable ( chmod 777 ).', true);
+									c_ws_plugin__s2member_admin_notices::display_admin_notice('Permissions error. The security-enabled logs directory (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)).'</code>) is not writable. Please make this directory writable (chmod 777).', true);
 
 								if /* If the .htaccess file has not been created yet. */(!file_exists($htaccess))
-									c_ws_plugin__s2member_admin_notices::display_admin_notice('The .htaccess protection file ( <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)).'</code> ) does not exist. Please create this file manually. Inside your .htaccess file, add this:<br /><pre>'.esc_html($htaccess_contents).'</pre>', true);
+									c_ws_plugin__s2member_admin_notices::display_admin_notice('The .htaccess protection file (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)).'</code>) does not exist. Please create this file manually. Inside your .htaccess file, add this:<br /><pre>'.esc_html($htaccess_contents).'</pre>', true);
 
 								else if /* Else if the .htaccess file does not offer the required protection. */(!preg_match("/deny from all/i", file_get_contents($htaccess)))
-									c_ws_plugin__s2member_admin_notices::display_admin_notice('Unprotected. The .htaccess protection file ( <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)).'</code> ) does not contain <code>deny from all</code>. Inside your .htaccess file, add this:<br /><pre>'.esc_html($htaccess_contents).'</pre>', true);
+									c_ws_plugin__s2member_admin_notices::display_admin_notice('Unprotected. The .htaccess protection file (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)).'</code>) does not contain <code>deny from all</code>. Inside your .htaccess file, add this:<br /><pre>'.esc_html($htaccess_contents).'</pre>', true);
 							}
 
 						include_once dirname(dirname(__FILE__))."/menu-pages/paypal-ops.inc.php";

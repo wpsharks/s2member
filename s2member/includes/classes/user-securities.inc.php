@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -58,7 +58,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 				* @param array $caps_map An array of Capabilities mapped out by the ``map_meta_cap`` function.
 				* @param array $args Array of arguments originally passed through the ``has_cap()`` function.
 				* 	However, WordPress® modifies this array of arguments in the following way.
-				* 	Argument `[0]` is the Capability test string itself *( this is normal )*.
+				* 	Argument `[0]` is the Capability test string itself *(this is normal)*.
 				* 	Argument `[1]` is added by WordPress®; it's the ID of the User.
 				* 	Other arguments starting from array index `[2]` are normal.
 				* @return array An array of Capabilities.

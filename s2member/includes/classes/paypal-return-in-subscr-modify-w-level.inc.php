@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routine ).
+* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level"))
 	{
 		/**
-		* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routine ).
+		* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
 		*
 		* @package s2Member\PayPal
 		* @since 110720
@@ -28,13 +28,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 		class c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level
 			{
 				/**
-				* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routine ).
+				* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
 				*
 				* @package s2Member\PayPal
 				* @since 110720
 				*
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_return_in::paypal_return()}.
-				* @return array|bool The original ``$paypal`` array passed in ( extracted ) from ``$vars``, or false when conditions do NOT apply.
+				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
@@ -60,7 +60,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 										$paypal["ip"] = (!$paypal["ip"] && preg_match("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
 										$paypal["ip"] = (!$paypal["ip"] && $_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : $paypal["ip"];
 
-										$paypal["period1"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" ( zero days ). */ "0 D";
+										$paypal["period1"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" (zero days). */ "0 D";
 										$paypal["mc_amount1"] = (strlen($paypal["mc_amount1"]) && $paypal["mc_amount1"] > 0) ? $paypal["mc_amount1"] : "0.00";
 
 										if /* Conversions for Lifetime & Fixed-Term sales. */(preg_match("/^web_accept$/i", $paypal["txn_type"]))
@@ -69,7 +69,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 												$paypal["mc_amount3"] = /* The "Buy Now" amount is the full gross. */ $paypal["mc_gross"];
 											}
 
-										$paypal["initial_term"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" ( zero days ). */ "0 D";
+										$paypal["initial_term"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" (zero days). */ "0 D";
 										$paypal["initial"] = (strlen($paypal["mc_amount1"]) && preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["mc_amount1"] : $paypal["mc_amount3"];
 										$paypal["regular"] = /* This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal®. */ $paypal["mc_amount3"];
 										$paypal["regular_term"] = /* This is just set to keep a standard; this way both initial_term & regular_term are available. */ $paypal["period3"];
@@ -185,7 +185,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 
 																echo c_ws_plugin__s2member_return_templates::return_template($paypal["subscr_gateway"],
 																	'<strong>'._x("Thank you! You've been updated to:", "s2member-front", "s2member").'<br /><em>'.esc_html($paypal["item_name"]).'</em></strong>',
-																	_x("Please Log Back In ( Click Here )", "s2member-front", "s2member"), wp_login_url());
+																	_x("Please Log Back In (Click Here)", "s2member-front", "s2member"), wp_login_url());
 															}
 													}
 												else // Else, unable to modify Subscription. The existing User ID is associated with an Administrator. Stopping here.

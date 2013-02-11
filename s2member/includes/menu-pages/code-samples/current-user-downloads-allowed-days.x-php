@@ -1,6 +1,6 @@
 <?php echo S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS; ?>
-This will output the number of days ( the period ) in which stats are being kept.
-( users are allowed to download X number of files every X number of days )
+This will output the number of days (the period) in which stats are being kept.
+(users are allowed to download X number of files every X number of days)
 
 ---- s2member Shortcode Equivalent ----
 

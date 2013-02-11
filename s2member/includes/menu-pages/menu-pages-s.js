@@ -3,7 +3,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -24,7 +24,7 @@ jQuery(document).ready(function($)
 				$('input.ws-plugin--s2member-update-roles-button, input.ws-plugin--s2member-reset-roles-button').click(function()
 					{
 						var $this = /* Save $(this) into $this. */ $(this);
-						$this.val /* Indicate loading status ( please wait ). */('one moment please ...');
+						$this.val /* Indicate loading status (please wait). */('one moment please ...');
 
 						var levels = '<?php echo (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; ?>';
 						var resetUpdate = ($this.hasClass('ws-plugin--s2member-reset-roles-button')) ? 'Reset' : 'Update';
@@ -142,18 +142,18 @@ jQuery(document).ready(function($)
 								fieldDefaults = {section: 'no', sectitle: '', id: '', label: '', type: 'text', deflt: '', options: '', expected: '', required: 'yes', levels: 'all', editable: 'yes', classes: '', styles: '', attrs: ''};
 
 								for(i = 0; i < fields.length; i++)
-									fields[i] = /* Extend, based on defaults ( for future proofing ). */ $.extend(true, {
+									fields[i] = /* Extend, based on defaults (for future proofing). */ $.extend(true, {
 									}, fieldDefaults, fields[i]);
 
 								tools = '<div id="ws-plugin--s2member-custom-reg-field-configuration-tools"></div>', table = '<table id="ws-plugin--s2member-custom-reg-field-configuration-table"></table>';
 
-								$configuration.html /* Add tools div & table div to configuration div ( i.e. div#ws-plugin--s2member-custom-reg-field-configuration ). */(tools+table);
+								$configuration.html /* Add tools div & table div to configuration div (i.e. div#ws-plugin--s2member-custom-reg-field-configuration). */(tools+table);
 
 								$tools = $('div#ws-plugin--s2member-custom-reg-field-configuration-tools'), $table = $('table#ws-plugin--s2member-custom-reg-field-configuration-table');
 
 								ws_plugin__s2member_customRegFieldSectionChange = function(select)
 									{
-										var section = /* Current selection ( no|yes, selected by site owner ). */ $(select).val();
+										var section = /* Current selection (no|yes, selected by site owner). */ $(select).val();
 
 										var sectitle_trs = 'tr.ws-plugin--s2member-custom-reg-field-configuration-tools-form-sectitle';
 
@@ -161,7 +161,7 @@ jQuery(document).ready(function($)
 									};
 								ws_plugin__s2member_customRegFieldTypeChange = /* Handle change events here. */ function(select)
 									{
-										var type = /* Current selection ( type of Field, selected by site owner ). */ $(select).val();
+										var type = /* Current selection (type of Field, selected by site owner). */ $(select).val();
 
 										var deflt_trs = 'tr.ws-plugin--s2member-custom-reg-field-configuration-tools-form-deflt', options_trs = 'tr.ws-plugin--s2member-custom-reg-field-configuration-tools-form-options', expected_trs = 'tr.ws-plugin--s2member-custom-reg-field-configuration-tools-form-expected';
 
@@ -309,22 +309,22 @@ jQuery(document).ready(function($)
 											}
 										else if(!field.levels.match(/^(all|[0-9,]+)$/))
 											{
-												errors.push('Applicable Levels:\nShould be comma-delimited Levels, or just type: all.\n( examples: 0,1,2,3,4 or type the word: all )');
+												errors.push('Applicable Levels:\nShould be comma-delimited Levels, or just type: all.\n(examples: 0,1,2,3,4 or type the word: all)');
 											}
 
 										if(field.classes && field.classes.match(/[^a-z 0-9 _ \-]/i))
 											{
-												errors.push('CSS Classes:\nContains invalid characters. Please try again.\n( only: alphanumerics, underscores, hyphens, spaces )');
+												errors.push('CSS Classes:\nContains invalid characters. Please try again.\n(only: alphanumerics, underscores, hyphens, spaces)');
 											}
 
 										if(field.styles && field.styles.match(/["\=\>\<]/))
 											{
-												errors.push('CSS Styles:\nContains invalid characters. Please try again.\n( do NOT use these characters: = " < > )');
+												errors.push('CSS Styles:\nContains invalid characters. Please try again.\n(do NOT use these characters: = " < >)');
 											}
 
 										if(field.attrs && field.attrs.match(/[\>\<]/))
 											{
-												errors.push('Other Attributes:\nContains invalid characters. Please try again.\n( do NOT use these characters: < > )');
+												errors.push('Other Attributes:\nContains invalid characters. Please try again.\n(do NOT use these characters: < >)');
 											}
 
 										if /* Errors? */(errors.length > 0)
@@ -345,7 +345,7 @@ jQuery(document).ready(function($)
 									};
 								var fieldTypeDesc = function(type)
 									{
-										var types = {text: 'Text ( single line )', textarea: 'Textarea ( multi-line )', select: 'Select Menu ( drop-down )', selects: 'Select Menu ( multi-option )', checkbox: 'Checkbox ( single )', pre_checkbox: 'Checkbox ( pre-checked )', checkboxes: 'Checkboxes ( multi-option )', radios: 'Radio Buttons ( multi-option )'};
+										var types = {text: 'Text (single line)', textarea: 'Textarea (multi-line)', select: 'Select Menu (drop-down)', selects: 'Select Menu (multi-option)', checkbox: 'Checkbox (single)', pre_checkbox: 'Checkbox (pre-checked)', checkboxes: 'Checkboxes (multi-option)', radios: 'Radio Buttons (multi-option)'};
 
 										if(typeof types[type] === 'string')
 											return types[type];
@@ -387,8 +387,8 @@ jQuery(document).ready(function($)
 												form += '<tr class="ws-plugin--s2member-custom-reg-field-configuration-tools-form-section">';
 												form += '<td colspan="2">';
 												form += '<select property="section" id="ws-plugin--s2member-custom-reg-field-configuration-tools-form-section" onchange="ws_plugin__s2member_customRegFieldSectionChange(this);">';
-												form += '<option value="no"'+((field.section === 'no') ? ' selected="selected"' : '')+'">No ( this Field flows normally )</option>';
-												form += '<option value="yes"'+((field.section === 'yes') ? ' selected="selected"' : '')+'">Yes ( this Field begins a new section )</option>';
+												form += '<option value="no"'+((field.section === 'no') ? ' selected="selected"' : '')+'">No (this Field flows normally)</option>';
+												form += '<option value="yes"'+((field.section === 'yes') ? ' selected="selected"' : '')+'">Yes (this Field begins a new section)</option>';
 												form += '</select><br />';
 												form += '<small>Optional. Allows Fields to be grouped into sections.</small>';
 												form += '</td>';
@@ -398,7 +398,7 @@ jQuery(document).ready(function($)
 
 												form += '<tr class="ws-plugin--s2member-custom-reg-field-configuration-tools-form-sectitle ws-plugin--s2member-custom-reg-field-configuration-tools-form-section"'+((field.section === 'yes') ? '' : ' style="display:none;"')+'>';
 												form += '<td colspan="2">';
-												form += 'Title for this new section? ( optional )<br />';
+												form += 'Title for this new section? (optional)<br />';
 												form += '<input type="text" property="sectitle" autocomplete="off" id="ws-plugin--s2member-custom-reg-field-configuration-tools-form-sectitle" value="'+esc_attr(field.sectitle)+'" /><br />';
 												form += '<small>If empty, a simple divider will be used by default.</small>';
 												form += '</td>';
@@ -470,8 +470,8 @@ jQuery(document).ready(function($)
 												form += '<tr class="ws-plugin--s2member-custom-reg-field-configuration-tools-form-required">';
 												form += '<td colspan="2">';
 												form += '<select property="required" id="ws-plugin--s2member-custom-reg-field-configuration-tools-form-required">';
-												form += '<option value="yes"'+((field.required === 'yes') ? ' selected="selected"' : '')+'">Yes ( required )</option>';
-												form += '<option value="no"'+((field.required === 'no') ? ' selected="selected"' : '')+'">No ( optional )</option>';
+												form += '<option value="yes"'+((field.required === 'yes') ? ' selected="selected"' : '')+'">Yes (required)</option>';
+												form += '<option value="no"'+((field.required === 'no') ? ' selected="selected"' : '')+'">No (optional)</option>';
 												form += '</select><br />';
 												form += '<small>If <code>yes</code>, only Users/Members will be "required" to enter this field.</small><br />';
 												form += '<small>* Administrators are exempt from this requirement.</small>';
@@ -482,7 +482,7 @@ jQuery(document).ready(function($)
 
 												form += '<tr class="ws-plugin--s2member-custom-reg-field-configuration-tools-form-deflt"'+((field.type.match(/^(text|textarea)$/)) ? '' : ' style="display:none;"')+'>';
 												form += '<td colspan="2">';
-												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-deflt">Default Text Value: ( optional )</label>';
+												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-deflt">Default Text Value: (optional)</label>';
 												form += '</td>';
 												form += '</tr>';
 
@@ -497,7 +497,7 @@ jQuery(document).ready(function($)
 
 												form += '<tr class="ws-plugin--s2member-custom-reg-field-configuration-tools-form-options"'+((field.type.match(/^(select|selects|checkboxes|radios)$/)) ? '' : ' style="display:none;"')+'>';
 												form += '<td colspan="2">';
-												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-options">Option Configuration File: * ( one option per line )</label><br />';
+												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-options">Option Configuration File: * (one option per line)</label><br />';
 												form += '<small>Use a pipe <code>|</code> delimited format: <code>option value|option label</code></small>';
 												form += '</td>';
 												form += '</tr>';
@@ -529,20 +529,20 @@ jQuery(document).ready(function($)
 												form += '<option disabled="disabled"></option>';
 
 												form += '<optgroup label="Specific Input Types">';
-												form += '<option value="numeric-wp-commas"'+((field.expected === 'numeric-wp-commas') ? ' selected="selected"' : '')+'">Numeric ( with or without decimals, commas allowed )</option>';
-												form += '<option value="numeric"'+((field.expected === 'numeric') ? ' selected="selected"' : '')+'">Numeric ( with or without decimals, no commas )</option>';
-												form += '<option value="integer"'+((field.expected === 'integer') ? ' selected="selected"' : '')+'">Integer ( whole number, without any decimals )</option>';
-												form += '<option value="integer-gt-0"'+((field.expected === 'integer-gt-0') ? ' selected="selected"' : '')+'">Integer > 0 ( whole number, no decimals, greater than 0 )</option>';
-												form += '<option value="float"'+((field.expected === 'float') ? ' selected="selected"' : '')+'">Float ( floating point number, decimals required )</option>';
-												form += '<option value="float-gt-0"'+((field.expected === 'float-gt-0') ? ' selected="selected"' : '')+'">Float > 0 ( floating point number, decimals required, greater than 0 )</option>';
-												form += '<option value="date"'+((field.expected === 'date') ? ' selected="selected"' : '')+'">Date ( required date format: dd/mm/yyyy )</option>';
-												form += '<option value="email"'+((field.expected === 'email') ? ' selected="selected"' : '')+'">Email ( require valid email )</option>';
-												form += '<option value="url"'+((field.expected === 'url') ? ' selected="selected"' : '')+'">Full URL ( starting with http or https )</option>';
-												form += '<option value="domain"'+((field.expected === 'domain') ? ' selected="selected"' : '')+'">Domain Name ( domain name only, without http )</option>';
-												form += '<option value="phone"'+((field.expected === 'phone') ? ' selected="selected"' : '')+'">Phone # ( 10 digits w/possible hyphens,spaces,brackets )</option>';
-												form += '<option value="uszip"'+((field.expected === 'uszip') ? ' selected="selected"' : '')+'">US Zipcode ( 5-9 digits w/possible hyphen )</option>';
-												form += '<option value="cazip"'+((field.expected === 'cazip') ? ' selected="selected"' : '')+'">Canadian Zipcode ( 6 alpha-numerics w/possible space )</option>';
-												form += '<option value="uczip"'+((field.expected === 'uczip') ? ' selected="selected"' : '')+'">US/Canadian Zipcode ( either a US or Canadian zipcode )</option>';
+												form += '<option value="numeric-wp-commas"'+((field.expected === 'numeric-wp-commas') ? ' selected="selected"' : '')+'">Numeric (with or without decimals, commas allowed)</option>';
+												form += '<option value="numeric"'+((field.expected === 'numeric') ? ' selected="selected"' : '')+'">Numeric (with or without decimals, no commas)</option>';
+												form += '<option value="integer"'+((field.expected === 'integer') ? ' selected="selected"' : '')+'">Integer (whole number, without any decimals)</option>';
+												form += '<option value="integer-gt-0"'+((field.expected === 'integer-gt-0') ? ' selected="selected"' : '')+'">Integer > 0 (whole number, no decimals, greater than 0)</option>';
+												form += '<option value="float"'+((field.expected === 'float') ? ' selected="selected"' : '')+'">Float (floating point number, decimals required)</option>';
+												form += '<option value="float-gt-0"'+((field.expected === 'float-gt-0') ? ' selected="selected"' : '')+'">Float > 0 (floating point number, decimals required, greater than 0)</option>';
+												form += '<option value="date"'+((field.expected === 'date') ? ' selected="selected"' : '')+'">Date (required date format: dd/mm/yyyy)</option>';
+												form += '<option value="email"'+((field.expected === 'email') ? ' selected="selected"' : '')+'">Email (require valid email)</option>';
+												form += '<option value="url"'+((field.expected === 'url') ? ' selected="selected"' : '')+'">Full URL (starting with http or https)</option>';
+												form += '<option value="domain"'+((field.expected === 'domain') ? ' selected="selected"' : '')+'">Domain Name (domain name only, without http)</option>';
+												form += '<option value="phone"'+((field.expected === 'phone') ? ' selected="selected"' : '')+'">Phone # (10 digits w/possible hyphens,spaces,brackets)</option>';
+												form += '<option value="uszip"'+((field.expected === 'uszip') ? ' selected="selected"' : '')+'">US Zipcode (5-9 digits w/possible hyphen)</option>';
+												form += '<option value="cazip"'+((field.expected === 'cazip') ? ' selected="selected"' : '')+'">Canadian Zipcode (6 alpha-numerics w/possible space)</option>';
+												form += '<option value="uczip"'+((field.expected === 'uczip') ? ' selected="selected"' : '')+'">US/Canadian Zipcode (either a US or Canadian zipcode)</option>';
 												form += '</optgroup>';
 
 												form += '<option disabled="disabled"></option>';
@@ -648,11 +648,11 @@ jQuery(document).ready(function($)
 												form += '<tr class="ws-plugin--s2member-custom-reg-field-configuration-tools-form-editable">';
 												form += '<td colspan="2">';
 												form += '<select property="editable" id="ws-plugin--s2member-custom-reg-field-configuration-tools-form-editable">';
-												form += '<option value="yes"'+((field.editable === 'yes') ? ' selected="selected"' : '')+'">Yes ( editable )</option>';
-												form += '<option value="no"'+((field.editable === 'no') ? ' selected="selected"' : '')+'">No ( uneditable after registration )</option>';
-												form += '<option value="no-invisible"'+((field.editable === 'no-invisible') ? ' selected="selected"' : '')+'">No ( uneditable &amp; totally invisible after registration )</option>';
-												form += '<option value="no-always-invisible"'+((field.editable === 'no-always-invisible') ? ' selected="selected"' : '')+'">No ( uneditable &amp; totally invisible, both during &amp; after registration )</option>';
-												form += '<option value="yes-invisible"'+((field.editable === 'yes-invisible') ? ' selected="selected"' : '')+'">Yes ( editable after registration / invisible during registration )</option>';
+												form += '<option value="yes"'+((field.editable === 'yes') ? ' selected="selected"' : '')+'">Yes (editable)</option>';
+												form += '<option value="no"'+((field.editable === 'no') ? ' selected="selected"' : '')+'">No (uneditable after registration)</option>';
+												form += '<option value="no-invisible"'+((field.editable === 'no-invisible') ? ' selected="selected"' : '')+'">No (uneditable &amp; totally invisible after registration)</option>';
+												form += '<option value="no-always-invisible"'+((field.editable === 'no-always-invisible') ? ' selected="selected"' : '')+'">No (uneditable &amp; totally invisible, both during &amp; after registration)</option>';
+												form += '<option value="yes-invisible"'+((field.editable === 'yes-invisible') ? ' selected="selected"' : '')+'">Yes (editable after registration / invisible during registration)</option>';
 												form += '</select><br />';
 												form += '<small>If <code>No</code>, this field will be un-editable after registration.</small><br />';
 												form += '<small>* Administrators are exempt from this.</small>';
@@ -663,7 +663,7 @@ jQuery(document).ready(function($)
 
 												form += '<tr class="ws-plugin--s2member-custom-reg-field-configuration-tools-form-classes">';
 												form += '<td colspan="2">';
-												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-classes">CSS Classes: ( optional )</label>';
+												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-classes">CSS Classes: (optional)</label>';
 												form += '</td>';
 												form += '</tr>';
 
@@ -678,7 +678,7 @@ jQuery(document).ready(function($)
 
 												form += '<tr class="ws-plugin--s2member-custom-reg-field-configuration-tools-form-styles">';
 												form += '<td colspan="2">';
-												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-styles">CSS Styles: ( optional )</label>';
+												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-styles">CSS Styles: (optional)</label>';
 												form += '</td>';
 												form += '</tr>';
 
@@ -693,7 +693,7 @@ jQuery(document).ready(function($)
 
 												form += '<tr class="ws-plugin--s2member-custom-reg-field-configuration-tools-form-attrs">';
 												form += '<td colspan="2">';
-												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-attrs">Other Attributes: ( optional )</label>';
+												form += '<label for="ws-plugin--s2member-custom-reg-field-configuration-tools-form-attrs">Other Attributes: (optional)</label>';
 												form += '</td>';
 												form += '</tr>';
 
@@ -777,7 +777,7 @@ jQuery(document).ready(function($)
 				$('input#ws-plugin--s2member-brute-force-restrictions-reset-button').click(function()
 					{
 						var $this = /* Save $(this) into $this. */ $(this);
-						$this.val /* Indicate loading status ( please wait ). */('one moment please ...');
+						$this.val /* Indicate loading status (please wait). */('one moment please ...');
 
 						$.post(ajaxurl, {action: 'ws_plugin__s2member_delete_reset_all_ip_restrictions_via_ajax', ws_plugin__s2member_delete_reset_all_ip_restrictions_via_ajax: '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (wp_create_nonce ("ws-plugin--s2member-delete-reset-all-ip-restrictions-via-ajax")); ?>'}, function(response)
 							{
@@ -789,7 +789,7 @@ jQuery(document).ready(function($)
 				$('input#ws-plugin--s2member-ip-restrictions-reset-button').click(function()
 					{
 						var $this = /* Save $(this) into $this. */ $(this);
-						$this.val /* Indicate loading status ( please wait ). */('one moment please ...');
+						$this.val /* Indicate loading status (please wait). */('one moment please ...');
 
 						$.post(ajaxurl, {action: 'ws_plugin__s2member_delete_reset_all_ip_restrictions_via_ajax', ws_plugin__s2member_delete_reset_all_ip_restrictions_via_ajax: '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (wp_create_nonce ("ws-plugin--s2member-delete-reset-all-ip-restrictions-via-ajax")); ?>'}, function(response)
 							{
@@ -939,7 +939,7 @@ jQuery(document).ready(function($)
 						var cCaps = $.trim($.trim($('input#ws-plugin--s2member-'+button+'-ccaps').val()).replace(/^(-all|-al|-a|-)[;,]*/gi, '').replace(/[ \-]/g, '_').replace(/[^a-z_0-9,]/gi, '').toLowerCase());
 						cCaps = ($.trim($('input#ws-plugin--s2member-'+button+'-ccaps').val()).match(/^(-all|-al|-a|-)[;,]*/i)) ? ((cCaps) ? '-all,' : '-all')+cCaps.toLowerCase() : cCaps.toLowerCase();
 
-						trialPeriod = /* Lifetime ( 1-L-BN ) and Buy Now ( BN ) access is absolutely NOT compatible w/ Trial Periods. */ (regRecur === 'BN') ? '0' : trialPeriod;
+						trialPeriod = /* Lifetime (1-L-BN) and Buy Now ( BN ) access is absolutely NOT compatible w/ Trial Periods. */ (regRecur === 'BN') ? '0' : trialPeriod;
 						trialAmount = /* Validate Trial Amount. */ (!trialAmount || isNaN(trialAmount) || trialAmount < 0.01 || trialPeriod <= 0) ? '0' : trialAmount;
 
 						var levelCcapsPer = (regRecur === 'BN' && regTerm !== 'L') ? level+':'+cCaps+':'+regPeriod+' '+regTerm : level+':'+cCaps;

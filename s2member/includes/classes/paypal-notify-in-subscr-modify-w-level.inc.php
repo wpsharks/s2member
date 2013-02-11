@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's PayPal® IPN handler ( inner processing routine ).
+* s2Member's PayPal® IPN handler (inner processing routine).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level"))
 	{
 		/**
-		* s2Member's PayPal® IPN handler ( inner processing routine ).
+		* s2Member's PayPal® IPN handler (inner processing routine).
 		*
 		* @package s2Member\PayPal
 		* @since 110720
@@ -28,13 +28,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 		class c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 			{
 				/**
-				* s2Member's PayPal® IPN handler ( inner processing routine ).
+				* s2Member's PayPal® IPN handler (inner processing routine).
 				*
 				* @package s2Member\PayPal
 				* @since 110720
 				*
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_notify_in::paypal_notify()}.
-				* @return array|bool The original ``$paypal`` array passed in ( extracted ) from ``$vars``, or false when conditions do NOT apply.
+				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
@@ -59,10 +59,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
 
-										$paypal["period1"] = (preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : "0 D"; // Defaults to "0 D" ( zero days ).
+										$paypal["period1"] = (preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : "0 D"; // Defaults to "0 D" (zero days).
 										$paypal["mc_amount1"] = (strlen ($paypal["mc_amount1"]) && $paypal["mc_amount1"] > 0) ? $paypal["mc_amount1"] : "0.00"; // "0.00".
 
-										$paypal["initial_term"] = (preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : "0 D"; // Defaults to "0 D" ( zero days ).
+										$paypal["initial_term"] = (preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : "0 D"; // Defaults to "0 D" (zero days).
 										$paypal["initial"] = (strlen ($paypal["mc_amount1"]) && preg_match ("/^[1-9]/", $paypal["period1"])) ? $paypal["mc_amount1"] : $paypal["mc_amount3"];
 										$paypal["regular"] = $paypal["mc_amount3"]; // This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal®.
 										$paypal["regular_term"] = $paypal["period3"]; // This is just set to keep a standard; this way both initial_term & regular_term are available.
@@ -166,7 +166,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 
 														if ($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_notification_recipients"] && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
 															{
-																$msg = $sbj = "( s2Member / API Notification Email ) - Modification";
+																$msg = $sbj = "(s2Member / API Notification Email) - Modification";
 																$msg .= "\n\n"; // Spacing in the message body.
 
 																$msg .= "subscr_id: %%subscr_id%%\n";

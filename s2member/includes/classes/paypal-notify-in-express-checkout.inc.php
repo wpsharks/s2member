@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's PayPal® IPN handler ( inner processing routine ).
+* s2Member's PayPal® IPN handler (inner processing routine).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_express_checkout"))
 	{
 		/**
-		* s2Member's PayPal® IPN handler ( inner processing routine ).
+		* s2Member's PayPal® IPN handler (inner processing routine).
 		*
 		* @package s2Member\PayPal
 		* @since 110720
@@ -28,13 +28,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_express_checkout"))
 		class c_ws_plugin__s2member_paypal_notify_in_express_checkout
 			{
 				/**
-				* s2Member's PayPal® IPN handler ( inner processing routine ).
+				* s2Member's PayPal® IPN handler (inner processing routine).
 				*
 				* @package s2Member\PayPal
 				* @since 110720
 				*
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_notify_in::paypal_notify()}.
-				* @return array|bool The original ``$paypal`` array passed in ( extracted ) from ``$vars``, or false when conditions do NOT apply.
+				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
 				*/
 				public static function cp ($vars = array ()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{

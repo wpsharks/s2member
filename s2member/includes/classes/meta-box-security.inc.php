@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -65,9 +65,9 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 												for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 													echo ($pages[$n] !== array("all")) ? // Protecting `all` Pages, of any kind?
 													((!in_array("all-pages", $posts[$n])) // Protecting Posts of type: `page` ( i.e. `all-pages` )?
-													? '<option value="'.$n.'"'.((in_array($page_id, $pages[$n])) ? ' selected="selected"' : '').'>'.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Require Highest Level #'.$n : 'Require Level #'.$n.' ( or higher )').'</option>'."\n"
-													: '<option value="" disabled="disabled">Level #'.$n.' ( already protects "all" Posts of this type )</option>'."\n")
-													: '<option value="" disabled="disabled">Level #'.$n.' ( already protects "all" Pages )</option>'."\n";
+													? '<option value="'.$n.'"'.((in_array($page_id, $pages[$n])) ? ' selected="selected"' : '').'>'.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Require Highest Level #'.$n : 'Require Level #'.$n.' (or higher)').'</option>'."\n"
+													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Posts of this type)</option>'."\n")
+													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Pages)</option>'."\n";
 
 												echo '</select><br /><small>* see: <code>Restriction Options -> Pages</code></small>'."\n";
 
@@ -82,16 +82,16 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 											}
 
 										else if($page_id == $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
-											echo 'This Page is your:<br /><strong>Membership Options Page</strong><br />( always publicly available )';
+											echo 'This Page is your:<br /><strong>Membership Options Page</strong><br />(always publicly available)';
 
 										else if($page_id == $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"])
-											echo 'This Page is your:<br /><strong>Login Welcome Page</strong><br />( automatically guarded by s2Member )';
+											echo 'This Page is your:<br /><strong>Login Welcome Page</strong><br />(automatically guarded by s2Member)';
 
 										else if($page_id == $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"])
-											echo 'This Page is your:<br /><strong>Download Limit Exceeded Page</strong><br />( automatically guarded by s2Member )';
+											echo 'This Page is your:<br /><strong>Download Limit Exceeded Page</strong><br />(automatically guarded by s2Member)';
 
 										else if(in_array($page_id, preg_split("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"])))
-											echo 'This Page is a:<br /><strong>Specific Post/Page for sale</strong><br />( already guarded by s2Member )';
+											echo 'This Page is a:<br /><strong>Specific Post/Page for sale</strong><br />(already guarded by s2Member)';
 									}
 								else // Otherwise, we assume this is a Post, or possibly a Custom Post Type. It's NOT a Page.
 									{
@@ -111,9 +111,9 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 												for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 													echo ($posts[$n] !== array("all")) ? // Protecting `all` Posts, of any kind?
 													((!in_array("all-".$post->post_type."s", $posts[$n])) // Protecting Posts `all-[of-this-type]` ( don't forget plural `s` )?
-													? '<option value="'.$n.'"'.((in_array($post_id, $posts[$n])) ? ' selected="selected"' : '').'>'.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Require Highest Level #'.$n : 'Require Level #'.$n.' ( or higher )').'</option>'."\n"
-													: '<option value="" disabled="disabled">Level #'.$n.' ( already protects "all" Posts of this type )</option>'."\n")
-													: '<option value="" disabled="disabled">Level #'.$n.' ( already protects "all" Posts )</option>'."\n";
+													? '<option value="'.$n.'"'.((in_array($post_id, $posts[$n])) ? ' selected="selected"' : '').'>'.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Require Highest Level #'.$n : 'Require Level #'.$n.' (or higher)').'</option>'."\n"
+													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Posts of this type)</option>'."\n")
+													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Posts)</option>'."\n";
 
 												echo '</select><br /><small>* see: <code>Restriction Options -> Posts</code></small>'."\n";
 
@@ -128,7 +128,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 											}
 
 										else if(in_array($post_id, preg_split("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"])))
-											echo 'This Post is a:<br /><strong>Specific Post/Page for sale</strong><br />( already guarded by s2Member )';
+											echo 'This Post is a:<br /><strong>Specific Post/Page for sale</strong><br />(already guarded by s2Member)';
 									}
 							}
 

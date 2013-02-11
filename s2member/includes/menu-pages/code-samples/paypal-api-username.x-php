@@ -1,6 +1,6 @@
 <?php echo S2MEMBER_PAYPAL_API_USERNAME; ?>
 This may output something like: example-pro_api1.example.com
-( or whatever you have configured as your PayPal® API Username )
+(or whatever you have configured as your PayPal® API Username)
 
 ---- s2member Shortcode Equivalent ----
 

@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -52,7 +52,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				/**
 				* Obtains Custom String for an existing Member, referenced by a Subscr. or Transaction ID.
 				*
-				* A second lookup parameter can be provided as well *( optional )*.
+				* A second lookup parameter can be provided as well *(optional)*.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
@@ -83,7 +83,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				/**
 				* Obtains the User ID for an existing Member, referenced by a Subscr. or Transaction ID.
 				*
-				* A second lookup parameter can be provided as well *( optional )*.
+				* A second lookup parameter can be provided as well *(optional)*.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
@@ -112,7 +112,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				/**
 				* Obtains the Email Address for an existing Member, referenced by a Subscr. or Transaction ID.
 				*
-				* A second lookup parameter can be provided as well *( optional )*.
+				* A second lookup parameter can be provided as well *(optional)*.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
@@ -190,7 +190,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 						return /* Otherwise, return false. */ false;
 					}
 				/**
-				* Obtains a User's Paid Subscr. ID *( if available )*; otherwise their WP User ID.
+				* Obtains a User's Paid Subscr. ID *(if available)*; otherwise their WP User ID.
 				*
 				* If ``$user`` IS passed in, this function will return data from a specific ``$user``, or fail if not possible.
 				* If ``$user`` is NOT passed in, check the current User/Member.
@@ -208,7 +208,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 							{
 								return /* The ``$user`` was passed in but is NOT an object; or nobody is logged in. */ false;
 							}
-						else // Else return Paid Subscr. ID ( if available ), otherwise return their WP database User ID.
+						else // Else return Paid Subscr. ID (if available), otherwise return their WP database User ID.
 							return ($subscr_id = get_user_option ("s2member_subscr_id", $user->ID)) ? $subscr_id : $user->ID;
 					}
 				/**
@@ -244,7 +244,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				* @param str $user_login A User's Username.
 				* @param str $user_email A User's Email Address.
 				* @param int|str $blog_id A numeric WordPress® Blog ID.
-				* @return int|bool If exists *( but not on Blog )*, a WordPress® User ID, else false.
+				* @return int|bool If exists *(but not on Blog)*, a WordPress® User ID, else false.
 				*/
 				public static function ms_user_login_email_exists_but_not_on_blog ($user_login = FALSE, $user_email = FALSE, $blog_id = FALSE)
 					{
@@ -267,7 +267,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				* @param str $user_login A User's Username.
 				* @param str $user_email A User's Email Address.
 				* @param int|str $blog_id A numeric WordPress® Blog ID.
-				* @return int|bool If exists *( but not on Blog )*, a WordPress® User ID, else false.
+				* @return int|bool If exists *(but not on Blog)*, a WordPress® User ID, else false.
 				*/
 				public static function ms_user_login_email_can_join_blog ($user_login = FALSE, $user_email = FALSE, $blog_id = FALSE)
 					{
@@ -294,11 +294,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 					{
 						global /* Global database object reference. */ $wpdb;
 
-						$current_user = /* Current User's object ( used when/if `$user_id` is empty ). */ wp_get_current_user ();
+						$current_user = /* Current User's object (used when/if `$user_id` is empty). */ wp_get_current_user ();
 
 						if (is_object ($user = ($user_id) ? new WP_User ($user_id) : $current_user) && !empty ($user->ID) && ($user_id = $user->ID))
 							{
-								if  /* Immediate User object property? ( most likely ) */(isset ($user->$field_id))
+								if  /* Immediate User object property? (most likely) */(isset ($user->$field_id))
 									return $user->$field_id;
 
 								else if /* Also try the data object property. */ (isset ($user->data->$field_id))

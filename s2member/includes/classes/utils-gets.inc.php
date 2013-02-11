@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -35,7 +35,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				*
 				* @uses {@link http://codex.wordpress.org/Function_Reference/get_all_category_ids get_all_category_ids()}
 				*
-				* @return array Unique array of all Category IDs *( as integers )*.
+				* @return array Unique array of all Category IDs *(as integers)*.
 				*/
 				public static function get_all_category_ids ()
 					{
@@ -51,7 +51,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @since 3.5
 				*
 				* @param int|str $parent_category A numeric Category ID.
-				* @return array Unique array of all Category IDs *( as integers )* in ``$parent_category``.
+				* @return array Unique array of all Category IDs *(as integers)* in ``$parent_category``.
 				*/
 				public static function get_all_child_category_ids ($parent_category = FALSE)
 					{
@@ -67,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @return array Unique array of all Tag IDs *( as integers )*.
+				* @return array Unique array of all Tag IDs *(as integers)*.
 				*/
 				public static function get_all_tag_ids ()
 					{
@@ -83,7 +83,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @since 111101
 				*
 				* @param str $tags Tag slugs/names/IDs; comma-delimited.
-				* @return array Unique array of Tag IDs *( as integers )*. With Tag slugs/names converted to IDs.
+				* @return array Unique array of Tag IDs *(as integers)*. With Tag slugs/names converted to IDs.
 				*/
 				public static function get_tags_converted_to_ids ($tags = FALSE)
 					{
@@ -92,7 +92,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 								if (($tag = trim ($tag)) && is_numeric ($tag)) // Force integers.
 									$tag_ids[] = ($tag_id = (int)$tag); // Force integer values here.
 
-								else if ($tag && is_string /* A string ( i.e. a tag name or a tag slug )? */ ($tag))
+								else if ($tag && is_string /* A string (i.e. a tag name or a tag slug)? */ ($tag))
 									{
 										if (is_object ($term = get_term_by ("name", $tag, "post_tag")))
 											$tag_ids[] = (int)$term->term_id;
@@ -111,7 +111,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				*
 				* @param str $post_type Optional. If provided, return all Post IDs of a specific Post Type.
 				* 	Otherwise, return all Post IDs that are NOT of these Post Types: `page|attachment|nav_menu_item|revision`.
-				* @return array Unique array of all Post IDs *( as integers )*, including Custom Post Types; or all Post IDs of a specific Post Type.
+				* @return array Unique array of all Post IDs *(as integers)*, including Custom Post Types; or all Post IDs of a specific Post Type.
 				*/
 				public static function get_all_post_ids ($post_type = FALSE)
 					{
@@ -128,7 +128,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @return array Unique array of all Page IDs *( as integers )*.
+				* @return array Unique array of all Page IDs *(as integers)*.
 				*/
 				public static function get_all_page_ids ()
 					{
@@ -145,7 +145,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @package s2Member\Utilities
 				* @since 111101
 				*
-				* @return array Unique array of all Singular IDs *( as integers )* that require Custom Capabilities.
+				* @return array Unique array of all Singular IDs *(as integers)* that require Custom Capabilities.
 				*/
 				public static function get_all_singular_ids_with_ccaps ()
 					{
@@ -166,7 +166,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @since 111101
 				*
 				* @param obj $user Optional. A `WP_User` object. If this is a valid `WP_User` object, test against this ``$user``, else all are unavailable.
-				* @return array Unique array of all Singular IDs *( as integers )* NOT available to ``$user``, due to Custom Capability Restrictions.
+				* @return array Unique array of all Singular IDs *(as integers)* NOT available to ``$user``, due to Custom Capability Restrictions.
 				*/
 				public static function get_unavailable_singular_ids_with_ccaps ($user = FALSE)
 					{
@@ -199,7 +199,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @param bool $exclude_conflicts Optional. Defaults to false. If true, return ONLY those which are NOT in conflict with any other Restriction Types.
 				* 	The ``$exclude_conflicts`` argument should be used whenever we introduce a list of option values to a site owner. Helping them avoid mishaps.
 				* 	Please note, the ``$exclude_conflicts`` argument implements a resource-intensive processing routine.
-				* @return array Unique array of all Singular IDs *( as integers )* that require Specific Post/Page Access.
+				* @return array Unique array of all Singular IDs *(as integers)* that require Specific Post/Page Access.
 				*/
 				public static function get_all_singular_ids_with_sp ($exclude_conflicts = FALSE)
 					{
@@ -291,7 +291,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @param bool $exclude_conflicts Optional. Defaults to false. If true, return ONLY those which are NOT in conflict with any other Restriction Types.
 				* 	The ``$exclude_conflicts`` argument should be used whenever we introduce a list of option values to a site owner. Helping them avoid mishaps.
 				* 	Please note, the ``$exclude_conflicts`` argument implements a resource-intensive processing routine.
-				* @return array Unique array of all Singular IDs *( as integers )* NOT available to current Visitor, due to Specific Post/Page Restrictions.
+				* @return array Unique array of all Singular IDs *(as integers)* NOT available to current Visitor, due to Specific Post/Page Restrictions.
 				*/
 				public static function get_unavailable_singular_ids_with_sp ($exclude_conflicts = FALSE)
 					{
@@ -345,7 +345,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @since 110912
 				*
 				* @param array $terms Required. An array of term IDs.
-				* @return array Unique array of all Singular IDs *( as integers )* within the ``$terms`` passed through this function.
+				* @return array Unique array of all Singular IDs *(as integers)* within the ``$terms`` passed through this function.
 				*/
 				public static function get_singular_ids_in_terms ($terms = FALSE)
 					{

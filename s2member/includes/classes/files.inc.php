@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -92,7 +92,7 @@ if(!class_exists("c_ws_plugin__s2member_files"))
 						return c_ws_plugin__s2member_files_in::amazon_cf_auto_configure_distros();
 					}
 				/**
-				* Determines the max period ( in days ), for Download Access.
+				* Determines the max period (in days), for Download Access.
 				*
 				* @package s2Member\Files
 				* @since 3.5
@@ -178,9 +178,9 @@ if(!class_exists("c_ws_plugin__s2member_files"))
 				*
 				* @param obj $user Optional. A `WP_User` object. Defaults to the current User's object.
 				* @param str $not_counting_this_particular_file Optional. If you want to exclude a particular file,
-				* 	relative to the `/s2member-files/` directory, or relative to the root of your Amazon® S3 Bucket *( when applicable )*.
-				* @param array $user_log Optional. Prevents another database connection *( i.e. the User's log does not need to be pulled again )*.
-				* @param array $user_arc Optional. Prevents another database connection *( i.e. the User's archive does not need to be pulled again )*.
+				* 	relative to the `/s2member-files/` directory, or relative to the root of your Amazon® S3 Bucket *(when applicable)*.
+				* @param array $user_log Optional. Prevents another database connection *(i.e. the User's log does not need to be pulled again)*.
+				* @param array $user_arc Optional. Prevents another database connection *(i.e. the User's archive does not need to be pulled again)*.
 				* @return array An array with the following elements... File Downloads allowed for this User: (int)`allowed`, Download Period for this User in days: (int)`allowed_days`, Files downloaded by this User in the current Period: (int)`currently`, log of all Files downloaded in the current Period, with file names/dates: (array)`log`, archive of all Files downloaded in prior Periods, with file names/dates: (array)`archive`.
 				*
 				* @note Calculations returned by this function do NOT include File Downloads that were accessed with an Advanced File Download Key.
@@ -227,8 +227,8 @@ if(!class_exists("c_ws_plugin__s2member_files"))
 				* @package s2Member\Files
 				* @since 111026
 				*
-				* @param str $file Required. Location of the file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon® S3 Bucket *( when applicable )*.
-				* @param str|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *( i.e among all Users/Members )*.
+				* @param str $file Required. Location of the file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon® S3 Bucket *(when applicable)*.
+				* @param str|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
 				* @param bool $check_archives_too Optional. Defaults to true. When true, s2Member checks its File Download Archive too, instead of ONLY looking at Files downloaded in the current Period. Period is based on your Basic Download Restrictions setting of allowed days across various Levels of Membership, for each respective User/Member. Or, if ``$user_id`` is specified, based solely on a specific User's `allowed_days`, configured in your Basic Download Restrictions, at the User's current Membership Level.
 				* @return int The total for this particular ``$file``, based on configuration of function arguments.
 				*
@@ -262,8 +262,8 @@ if(!class_exists("c_ws_plugin__s2member_files"))
 				* @package s2Member\Files
 				* @since 111026
 				*
-				* @param str $file Required. Location of the file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon® S3 Bucket *( when applicable )*.
-				* @param str|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *( i.e among all Users/Members )*.
+				* @param str $file Required. Location of the file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon® S3 Bucket *(when applicable)*.
+				* @param str|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
 				* @param bool $check_archives_too Optional. Defaults to true. When true, s2Member checks its File Download Archive too, instead of ONLY looking at Files downloaded in the current Period. Period is based on your Basic Download Restrictions setting of allowed days across various Levels of Membership, for each respective User/Member. Or, if ``$user_id`` is specified, based solely on a specific User's `allowed_days`, configured in your Basic Download Restrictions, at the User's current Membership Level.
 				* @return int The total for this particular ``$file``, based on configuration of function arguments.
 				*
@@ -284,7 +284,7 @@ if(!class_exists("c_ws_plugin__s2member_files"))
 												foreach($la_entries as $la_entry /* Go through all of the entries in each result ``$r``; collecting `counter` values. */)
 													if(!empty($la_entry["file"]) && $la_entry["file"] === $file && /* Back compatibility. Is `counter` even set? */ (!empty($la_entry["counter"]) || ($la_entry["counter"] = 1)))
 														{
-															$total = (!empty($total)) ? /* Only count `1` here ( i.e. unique downloads ). */ $total + 1 : 1;
+															$total = (!empty($total)) ? /* Only count `1` here (i.e. unique downloads). */ $total + 1 : 1;
 															break /* Break now. No need to continue looping; ``$file`` found in these entries. */;
 														}
 									}

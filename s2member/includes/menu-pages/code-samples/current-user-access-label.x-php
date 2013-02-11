@@ -1,6 +1,6 @@
 <?php echo S2MEMBER_CURRENT_USER_ACCESS_LABEL; ?>
 This may output something like: Gold Member
-( or whatever Label you've configured for their Membership Level )
+(or whatever Label you've configured for their Membership Level)
 
 ---- s2member Shortcode Equivalent ----
 

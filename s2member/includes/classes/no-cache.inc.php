@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -143,7 +143,7 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 						return true; // Always return true.
 					}
 				/**
-				* Sends Cache-Control ( no-cache ) headers.
+				* Sends Cache-Control (no-cache) headers.
 				*
 				* Disallow browser caching if the ``$no_cache`` parameter is passed in as ``true``, by other routines.
 				* Disallow browser caching when/if no-cache Constants are set by {@link s2Member\No_Cache\c_ws_plugin__s2member_no_cache::no_cache_constants()},

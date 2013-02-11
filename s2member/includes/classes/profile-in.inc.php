@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member Stand-Alone Profile page ( inner processing routines ).
+* s2Member Stand-Alone Profile page (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_profile_in"))
 	{
 		/**
-		* s2Member Stand-Alone Profile page ( inner processing routines ).
+		* s2Member Stand-Alone Profile page (inner processing routines).
 		*
 		* @package s2Member\Profiles
 		* @since 3.5
@@ -75,7 +75,7 @@ if (!class_exists ("c_ws_plugin__s2member_profile_in"))
 												echo '<tr>' . "\n";
 												echo '<td>' . "\n";
 												echo '<label for="ws-plugin--s2member-profile-login">' . "\n";
-												echo '<strong>' . _x ("Username", "s2member-front", "s2member") . ' *</strong> <small>' . _x ("( cannot be changed )", "s2member-front", "s2member") . '</small><br />' . "\n";
+												echo '<strong>' . _x ("Username", "s2member-front", "s2member") . ' *</strong> <small>' . _x ("(cannot be changed)", "s2member-front", "s2member") . '</small><br />' . "\n";
 												echo '<input type="text" aria-required="true" maxlength="60" autocomplete="off" name="ws_plugin__s2member_profile_login" id="ws-plugin--s2member-profile-login" class="ws-plugin--s2member-profile-field" value="' . format_to_edit ($user->user_login) . '" disabled="disabled" />' . "\n";
 												echo '</label>' . "\n";
 												echo '</td>' . "\n";
@@ -231,7 +231,7 @@ if (!class_exists ("c_ws_plugin__s2member_profile_in"))
 												echo '<td>' . "\n";
 
 												echo '<label for="ws-plugin--s2member-profile-password1" title="' . esc_attr (_x ("Please type your Password twice to confirm.", "s2member-front", "s2member")) . '">' . "\n";
-												echo '<strong>' . _x ("New Password?", "s2member-front", "s2member") . '</strong> <em>' . _x ("( please type it twice )", "s2member-front", "s2member") . '</em><br />' . "\n";
+												echo '<strong>' . _x ("New Password?", "s2member-front", "s2member") . '</strong> <em>' . _x ("(please type it twice)", "s2member-front", "s2member") . '</em><br />' . "\n";
 												echo '<em>' . _x ("Only if changing password, otherwise leave blank.", "s2member-front", "s2member") . '</em><br />' . "\n";
 												echo '<input type="password" maxlength="100" autocomplete="off" name="ws_plugin__s2member_profile_password1" id="ws-plugin--s2member-profile-password1" class="ws-plugin--s2member-profile-field" value="" tabindex="' . esc_attr (($tabindex = $tabindex + 10)) . '"' . (($user->user_login === "demo") ? ' disabled="disabled"' : '') . ' />' . "\n";
 												echo '</label>' . "\n";

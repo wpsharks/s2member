@@ -1,6 +1,6 @@
 <?php echo S2MEMBER_CURRENT_USER_EMAIL; ?>
 This may output something like: johnsmith@example.com
-( or whatever their email address is )
+(or whatever their email address is)
 
 ---- s2member Shortcode Equivalent ----
 

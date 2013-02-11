@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's Category protection routines *( for specific Categories )*.
+* s2Member's Category protection routines *(for specific Categories)*.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_catgs_sp"))
 	{
 		/**
-		* s2Member's Category protection routines *( for specific Categories )*.
+		* s2Member's Category protection routines *(for specific Categories)*.
 		*
 		* @package s2Member\Categories
 		* @since 3.5
@@ -28,14 +28,14 @@ if (!class_exists ("c_ws_plugin__s2member_catgs_sp"))
 		class c_ws_plugin__s2member_catgs_sp
 			{
 				/**
-				* Handles Category Level Access *( for specific Categories )*.
+				* Handles Category Level Access *(for specific Categories)*.
 				*
 				* @package s2Member\Categories
 				* @since 3.5
 				*
 				* @param int|str $cat_id Numeric Category ID.
 				* @param bool $check_user Test permissions against the current User? Defaults to true.
-				* @return null|array Non-empty array ( with details ) if access is denied, else null if access is allowed.
+				* @return null|array Non-empty array (with details) if access is denied, else null if access is allowed.
 				*/
 				public static function check_specific_catg_level_access ($cat_id = FALSE, $check_user = TRUE)
 					{

@@ -1,10 +1,10 @@
 <?php
 /**
-* Menu page for the s2Member plugin ( Integrations page ).
+* Menu page for the s2Member plugin (Integrations page).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 if(!class_exists("c_ws_plugin__s2member_menu_page_integrations"))
 	{
 		/**
-		* Menu page for the s2Member plugin ( Integrations page ).
+		* Menu page for the s2Member plugin (Integrations page).
 		*
 		* @package s2Member\Menu_Pages
 		* @since 110531
@@ -45,10 +45,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_integrations"))
 							{
 								do_action("ws_plugin__s2member_during_integrations_page_during_left_sections_before_bbpress", get_defined_vars());
 
-								echo '<div class="ws-menu-page-group" title="bbPress® Plugin Integration ( 2.0+ plugin version )" default-state="open">'."\n";
+								echo '<div class="ws-menu-page-group" title="bbPress® Plugin Integration (2.0+ plugin version)" default-state="open">'."\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-bbpress-section">'."\n";
-								echo '<h3>bbPress® Plugin Integration ( easy peasy )</h3>'."\n";
+								echo '<h3>bbPress® Plugin Integration (easy peasy)</h3>'."\n";
 								echo '<input type="button" value="Update Roles/Capabilities" class="ws-menu-page-right ws-plugin--s2member-update-roles-button" style="min-width:175px;" />'."\n";
 								echo '<p>The plugin version of <a href="http://www.s2member.com/bbpress-plugin" target="_blank" rel="external">bbPress® 2.0+</a> integrates seamlessly with WordPress®. If bbPress® was already installed when you activated s2Member, your s2Member Roles/Capabilities are already configured to work in harmony with bbPress®. If you didn\'t, you can simply click the "Update Roles/Capabilities" button here. That\'s all it takes. Once your Roles/Capbilities are updated, s2Member and bbPress® are fully integrated with each other.</p>'."\n";
 

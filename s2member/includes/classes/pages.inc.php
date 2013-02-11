@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's Page protection routines *( for current Page )*.
+* s2Member's Page protection routines *(for current Page)*.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_pages"))
 	{
 		/**
-		* s2Member's Page protection routines *( for current Page )*.
+		* s2Member's Page protection routines *(for current Page)*.
 		*
 		* @package s2Member\Pages
 		* @since 3.5
@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 		class c_ws_plugin__s2member_pages
 			{
 				/**
-				* Handles Page Level Access permissions *( for current Page )*.
+				* Handles Page Level Access permissions *(for current Page)*.
 				*
 				* @package s2Member\Pages
 				* @since 3.5
@@ -74,7 +74,7 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 
 												if (has_tag ()) // Here we take a look to see if this Page has any Tags. If so, we need to run the full set of routines against Tags also.
 													{
-														for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Tag Level restrictions ( possibly through Page Tagger ). Go through each Level.
+														for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Tag Level restrictions (possibly through Page Tagger). Go through each Level.
 															{
 																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ptags"] === "all" && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 																	c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"], "ptag") . exit ();

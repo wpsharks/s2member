@@ -1,5 +1,5 @@
 <?php echo S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS; ?>
-This may output something like: 120 ( 120 days is approx 4 months )
+This may output something like: 120 (120 days is approx 4 months)
 
 In this example, the longer they've been a "paying" Member, the more they get.
 

@@ -8,7 +8,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -38,8 +38,8 @@ if (!function_exists ("ws_plugin__s2member_classes"))
 		*/
 		function ws_plugin__s2member_classes ($class = FALSE)
 			{
-				static /* Holds the classes directory location ( location is optimized with a static var ). */ $c;
-				static /* All possible dir & sub-directory locations ( with a static var ). */ $c_class_dirs;
+				static /* Holds the classes directory location (location is optimized with a static var). */ $c;
+				static /* All possible dir & sub-directory locations (with a static var). */ $c_class_dirs;
 
 				if (strpos ($class, "c_ws_plugin__s2member_") === 0 && strpos ($class, "c_ws_plugin__s2member_pro_") === false)
 					{

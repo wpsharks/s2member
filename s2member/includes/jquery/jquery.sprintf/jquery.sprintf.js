@@ -11,7 +11,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -45,7 +45,7 @@
 				    var a = arguments,
 				        i = 0,
 				        format = a[i++];
-				
+
 				    // pad()
 				    var pad = function (str, len, chr, leftJustify) {
 				        if (!chr) {
@@ -54,7 +54,7 @@
 				        var padding = (str.length >= len) ? '' : Array(1 + len - str.length >>> 0).join(chr);
 				        return leftJustify ? str + padding : padding + str;
 				    };
-				
+
 				    // justify()
 				    var justify = function (value, prefix, leftJustify, minWidth, zeroPad, customPadChar) {
 				        var diff = minWidth - value.length;
@@ -67,7 +67,7 @@
 				        }
 				        return value;
 				    };
-				
+
 				    // formatBaseX()
 				    var formatBaseX = function (value, base, prefix, leftJustify, minWidth, precision, zeroPad) {
 				        // Note: casts negative numbers to positive ones
@@ -80,7 +80,7 @@
 				        value = prefix + pad(number.toString(base), precision || 0, '0', false);
 				        return justify(value, prefix, leftJustify, minWidth, zeroPad);
 				    };
-				
+
 				    // formatString()
 				    var formatString = function (value, leftJustify, minWidth, precision, zeroPad, customPadChar) {
 				        if (precision != null) {
@@ -88,7 +88,7 @@
 				        }
 				        return justify(value, '', leftJustify, minWidth, zeroPad, customPadChar);
 				    };
-				
+
 				    // doFormat()
 				    var doFormat = function (substring, valueIndex, flags, minWidth, _, precision, type) {
 				        var number;
@@ -96,11 +96,11 @@
 				        var method;
 				        var textTransform;
 				        var value;
-				
+
 				        if (substring == '%%') {
 				            return '%';
 				        }
-				
+
 				        // parse flags
 				        var leftJustify = false,
 				            positivePrefix = '',
@@ -130,7 +130,7 @@
 				                break;
 				            }
 				        }
-				
+
 				        // parameters may be null, undefined, empty-string or real valued
 				        // we want to ignore null, undefined and empty-string values
 				        if (!minWidth) {
@@ -142,17 +142,17 @@
 				        } else {
 				            minWidth = +minWidth;
 				        }
-				
+
 				        // Note: undocumented perl feature:
 				        if (minWidth < 0) {
 				            minWidth = -minWidth;
 				            leftJustify = true;
 				        }
-				
+
 				        if (!isFinite(minWidth)) {
 				            throw new Error('sprintf: (minimum-)width must be finite');
 				        }
-				
+
 				        if (!precision) {
 				            precision = 'fFeE'.indexOf(type) > -1 ? 6 : (type == 'd') ? 0 : undefined;
 				        } else if (precision == '*') {
@@ -162,10 +162,10 @@
 				        } else {
 				            precision = +precision;
 				        }
-				
+
 				        // grab value using valueIndex if required?
 				        value = valueIndex ? a[valueIndex.slice(0, -1)] : a[i++];
-				
+
 				        switch (type) {
 				        case 's':
 				            return formatString(String(value), leftJustify, minWidth, precision, zeroPad, customPadChar);
@@ -203,7 +203,7 @@
 				            return substring;
 				        }
 				    };
-				
+
 				    return format.replace(regex, doFormat);
 				};
 			}

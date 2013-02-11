@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routine ).
+* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 	{
 		/**
-		* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routine ).
+		* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
 		*
 		* @package s2Member\PayPal
 		* @since 110720
@@ -28,13 +28,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 		class c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level
 			{
 				/**
-				* s2Member's PayPal® Auto-Return/PDT handler ( inner processing routine ).
+				* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
 				*
 				* @package s2Member\PayPal
 				* @since 110720
 				*
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_return_in::paypal_return()}.
-				* @return array|bool The original ``$paypal`` array passed in ( extracted ) from ``$vars``, or false when conditions do NOT apply.
+				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
@@ -76,7 +76,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 
 												$paypal["recurring"] = ($tra["rr"] === "1") ? "1" : "0";
 
-												$paypal["initial_term"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" ( zero days ). */ "0 D";
+												$paypal["initial_term"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" (zero days). */ "0 D";
 												$paypal["initial"] = (strlen($paypal["mc_amount1"]) && preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["mc_amount1"] : $paypal["mc_amount3"];
 												$paypal["regular"] = /* This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal®. */ $paypal["mc_amount3"];
 												$paypal["regular_term"] = /* This is just set to keep a standard; this way both initial_term & regular_term are available. */ $paypal["period3"];
@@ -88,7 +88,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 											{
 												$tracking_properties = /* Yes, these tracking properties ARE being set here. */ true;
 
-												$paypal["period1"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" ( zero days ). */ "0 D";
+												$paypal["period1"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" (zero days). */ "0 D";
 												$paypal["mc_amount1"] = (strlen($paypal["mc_amount1"]) && $paypal["mc_amount1"] > 0) ? $paypal["mc_amount1"] : "0.00";
 
 												if(preg_match("/^web_accept$/i", $paypal["txn_type"]) /* Conversions for Lifetime & Fixed-Term sales. */)
@@ -96,7 +96,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 														$paypal["period3"] = ($paypal["eotper"]) ? $paypal["eotper"] : /* 1 Lifetime. */ "1 L";
 														$paypal["mc_amount3"] = /* The "Buy Now" amount is the full gross. */ $paypal["mc_gross"];
 													}
-												$paypal["initial_term"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" ( zero days ). */ "0 D";
+												$paypal["initial_term"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" (zero days). */ "0 D";
 												$paypal["initial"] = (strlen($paypal["mc_amount1"]) && preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["mc_amount1"] : $paypal["mc_amount3"];
 												$paypal["regular"] = /* This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal®. */ $paypal["mc_amount3"];
 												$paypal["regular_term"] = /* This is just set to keep a standard; this way both initial_term & regular_term are available. */ $paypal["period3"];
@@ -105,7 +105,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 												$ipn_signup_vars = $paypal; /* Create array of wouldbe IPN signup vars w/o s2member_log. */ unset($ipn_signup_vars["s2member_log"]);
 											}
 										/*
-										New Subscription with advanced update vars ( option_name1, option_selection1 )? Used in Subscr. Modifications.
+										New Subscription with advanced update vars (option_name1, option_selection1)? Used in Subscr. Modifications.
 										*/
 										if(preg_match("/(referenc|associat|updat|upgrad)/i", $paypal["option_name1"]) && $paypal["option_selection1"])
 											{
@@ -167,7 +167,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 																		// Don't update this in the return routine. Leave this for the IPN routine.
 																		// EOT Times might be extended, and we don't want the IPN routine to extend an already-extended EOT Time.
 																		$eot_time = c_ws_plugin__s2member_utils_time::auto_eot_time("", "", "", $paypal["eotper"], "", get_user_option("s2member_auto_eot_time", $user_id));
-																		$paypal["s2member_log"][] = "Automatic EOT ( End Of Term ) Time will be set to: ".date("D M j, Y g:i:s a T", $eot_time).".";
+																		$paypal["s2member_log"][] = "Automatic EOT (End Of Term) Time will be set to: ".date("D M j, Y g:i:s a T", $eot_time).".";
 																	}
 																else // Otherwise, we need to clear the Auto-EOT Time.
 																	delete_user_option($user_id, "s2member_auto_eot_time");
@@ -232,7 +232,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 
 																		echo c_ws_plugin__s2member_return_templates::return_template($paypal["subscr_gateway"],
 																			'<strong>'._x("Thank you! You've been updated to:", "s2member-front", "s2member").'<br /><em>'.esc_html($paypal["item_name"]).'</em></strong>',
-																			_x("Please Log Back In ( Click Here )", "s2member-front", "s2member"), wp_login_url());
+																			_x("Please Log Back In (Click Here)", "s2member-front", "s2member"), wp_login_url());
 																	}
 															}
 														else // Unable to modify Subscription. The existing User ID is associated with an Administrator. Stopping here.
@@ -325,7 +325,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 
 																echo c_ws_plugin__s2member_return_templates::return_template($paypal["subscr_gateway"],
 																	_x('<strong>Thank you! Your account has been approved.<br />The next step is to Register a Username for immediate access.</strong>', "s2member-front", "s2member"),
-																	_x("Please Register Now ( Click Here )", "s2member-front", "s2member"), c_ws_plugin__s2member_utils_urls::wp_signup_url());
+																	_x("Please Register Now (Click Here)", "s2member-front", "s2member"), c_ws_plugin__s2member_utils_urls::wp_signup_url());
 															}
 													}
 												else // Otherwise, this is NOT a Multisite install. Or it is, but the Super Administrator is NOT selling Blog creation.
@@ -348,7 +348,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 
 																echo c_ws_plugin__s2member_return_templates::return_template($paypal["subscr_gateway"],
 																	_x('<strong>Thank you! Your account has been approved.<br />The next step is to Register a Username for immediate access.</strong>', "s2member-front", "s2member"),
-																	_x("Please Register Now ( Click Here )", "s2member-front", "s2member"), c_ws_plugin__s2member_utils_urls::wp_register_url());
+																	_x("Please Register Now (Click Here)", "s2member-front", "s2member"), c_ws_plugin__s2member_utils_urls::wp_register_url());
 															}
 													}
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;

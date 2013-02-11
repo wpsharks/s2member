@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -53,7 +53,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				*
 				* @param str $string A string of data to encrypt.
 				* @param str $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-				* @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *( recommended )*.
+				* @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *(recommended)*.
 				* @return str Encrypted string.
 				*/
 				public static function encrypt ($string = FALSE, $key = FALSE, $w_md5_cs = TRUE)
@@ -122,7 +122,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				*
 				* @param str $string A string of data to encrypt.
 				* @param str $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-				* @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *( recommended )*.
+				* @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *(recommended)*.
 				* @return str Encrypted string.
 				*/
 				public static function xencrypt ($string = FALSE, $key = FALSE, $w_md5_cs = TRUE)

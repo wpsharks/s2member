@@ -1,10 +1,10 @@
 <?php
 /**
-* Shortcode `[s2Member-PayPal-Button]` ( inner processing routines ).
+* Shortcode `[s2Member-PayPal-Button]` (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 	{
 		/**
-		* Shortcode `[s2Member-PayPal-Button]` ( inner processing routines ).
+		* Shortcode `[s2Member-PayPal-Button]` (inner processing routines).
 		*
 		* @package s2Member\PayPal
 		* @since 3.5
@@ -218,7 +218,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 								$success_return_tra = array ("ta" => $attr["ta"], "tp" => $attr["tp"], "tt" => $attr["tt"], "ra" => $attr["ra"], "rp" => $attr["rp"], "rt" => $attr["rt"], "rr" => $attr["rr"], "rrt" => $attr["rrt"], "rra" => $attr["rra"], "invoice" => $paypal_invoice_input_value, "checksum" => md5 ($paypal_invoice_input_value . $_SERVER["REMOTE_ADDR"] . $attr["level_ccaps_eotper"]));
 
-								$success_return_url = /* s2Member handles this all by itself. However, it can be Filtered ( see below ). */ site_url ("/?s2member_paypal_return=1");
+								$success_return_url = /* s2Member handles this all by itself. However, it can be Filtered (see below). */ site_url ("/?s2member_paypal_return=1");
 								$success_return_url = add_query_arg ("s2member_paypal_return_tra", urlencode (c_ws_plugin__s2member_utils_encryption::encrypt (serialize ($success_return_tra))), $success_return_url);
 								$success_return_url = apply_filters ("ws_plugin__s2member_during_sc_paypal_button_success_return_url", $success_return_url, get_defined_vars ());
 

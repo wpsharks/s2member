@@ -1,10 +1,10 @@
 <?php
 /**
-* Shortcode `[s2Member-PayPal-Button]` ( encryption sub-routines ).
+* Shortcode `[s2Member-PayPal-Button]` (encryption sub-routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 	{
 		/**
-		* Shortcode `[s2Member-PayPal-Button]` ( encryption sub-routines ).
+		* Shortcode `[s2Member-PayPal-Button]` (encryption sub-routines).
 		*
 		* @package s2Member\PayPal
 		* @since 3.5
@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 				*
 				* @param str $code The PayPal® Button Code before encryption.
 				* @param array $vars An array of defined variables in the scope of the calling Filter.
-				* @return str The Resulting PayPal® Button Code *( possibly encrypted, depending on configuration )*.
+				* @return str The Resulting PayPal® Button Code *(possibly encrypted, depending on configuration)*.
 				*/
 				public static function sc_paypal_button_encryption ($code = FALSE, $vars = FALSE)
 					{
@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 							{
 								$cache = /* Are we caching? */ apply_filters ("ws_plugin__s2member_sc_paypal_button_encryption_cache", true, get_defined_vars ());
 
-								$_code = $vars["_code"]; $attr = $vars["attr"]; // Let's unpack ( i.e. use shorter references ) to these two important vars.
+								$_code = $vars["_code"]; $attr = $vars["attr"]; // Let's unpack (i.e. use shorter references) to these two important vars.
 
 								if ($cache && ($transient = "s2m_btn_" . md5 ($code . c_ws_plugin__s2member_utilities::ver_checksum ())) && ($cache = get_transient ($transient)))
 									$code = /* Great, so we can use the cached version here to save processing time. The MD5 hash uses ``$code`` and NOT ``$_code``. */ $cache;

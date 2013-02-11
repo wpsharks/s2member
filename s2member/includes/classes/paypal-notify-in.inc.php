@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's PayPal® IPN handler ( inner processing routines ).
+* s2Member's PayPal® IPN handler (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 	{
 		/**
-		* s2Member's PayPal® IPN handler ( inner processing routines ).
+		* s2Member's PayPal® IPN handler (inner processing routines).
 		*
 		* @package s2Member\PayPal
 		* @since 3.5
@@ -31,7 +31,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 				* Handles PayPal® IPN processing.
 				*
 				* These same routines also handle s2Member Pro/PayPal® Pro operations;
-				* giving you the ability *( as needed )* to Hook into these routines using
+				* giving you the ability *(as needed)* to Hook into these routines using
 				* WordPress® Hooks/Filters; as seen in the source code below.
 				*
 				* Please do NOT modify the source code directly.
@@ -157,17 +157,17 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								if ($email_configs_were_on) // Back on?
 									c_ws_plugin__s2member_email_configs::email_config ();
 								/*
-								Add IPN proxy ( when available ) to the ``$paypal`` array.
+								Add IPN proxy (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_proxy"]))
 									$paypal["s2member_paypal_proxy"] = $_GET["s2member_paypal_proxy"];
 								/*
-								Add IPN proxy use vars ( when available ) to the ``$paypal`` array.
+								Add IPN proxy use vars (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_proxy_use"]))
 									$paypal["s2member_paypal_proxy_use"] = $_GET["s2member_paypal_proxy_use"];
 								/*
-								Also add IPN proxy self-verification ( when available ) to the ``$paypal`` array.
+								Also add IPN proxy self-verification (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_proxy_verification"]))
 									$paypal["s2member_paypal_proxy_verification"] = $_GET["s2member_paypal_proxy_verification"];

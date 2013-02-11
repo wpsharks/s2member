@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -45,7 +45,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 						return ob_get_clean ();
 					}
 				/**
-				* Buffers ( gets ) function output.
+				* Buffers (gets) function output.
 				*
 				* A variable length of additional arguments are possible.
 				* Additional parameters get passed into the ``$function``.
@@ -96,10 +96,10 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 						$checksum .= (c_ws_plugin__s2member_utils_conds::pro_is_installed ()) ? "-" . WS_PLUGIN__S2MEMBER_PRO_VERSION : ""; // Pro version string?
 						$checksum .= "-" . abs (crc32 ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["checksum"] . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["options_checksum"] . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["options_version"]));
 
-						return $checksum; // ( i.e. version-pro version-checksum )
+						return $checksum; // (i.e. version-pro version-checksum)
 					}
 				/**
-				* String with all version details *( for PHP, WordPress®, s2Member, and Pro )*.
+				* String with all version details *(for PHP, WordPress®, s2Member, and Pro)*.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5

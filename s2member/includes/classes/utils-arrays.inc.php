@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -51,7 +51,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 						return $array;
 					}
 				/**
-				* Searches an array *( or even a multi-dimensional array )* using a regular expression match against array values.
+				* Searches an array *(or even a multi-dimensional array)* using a regular expression match against array values.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 							return false;
 					}
 				/**
-				* Searches an array *( or even a multi-dimensional array )* of regular expressions, to match against a string value.
+				* Searches an array *(or even a multi-dimensional array)* of regular expressions, to match against a string value.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
@@ -114,7 +114,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 							return false;
 					}
 				/**
-				* Removes all null values from an array *( or even a multi-dimensional array )*.
+				* Removes all null values from an array *(or even a multi-dimensional array)*.
 				*
 				* @package s2Member\Utilities
 				* @since 111101
@@ -137,7 +137,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 						return $array;
 					}
 				/**
-				* Removes all 0-byte strings from an array *( or even a multi-dimensional array )*.
+				* Removes all 0-byte strings from an array *(or even a multi-dimensional array)*.
 				*
 				* @package s2Member\Utilities
 				* @since 111216
@@ -160,7 +160,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 						return $array;
 					}
 				/**
-				* Forces string values on each array value *( also supports multi-dimensional arrays )*.
+				* Forces string values on each array value *(also supports multi-dimensional arrays)*.
 				*
 				* @package s2Member\Utilities
 				* @since 111101
@@ -183,7 +183,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 						return $array;
 					}
 				/**
-				* Forces integer values on each array value *( also supports multi-dimensional arrays )*.
+				* Forces integer values on each array value *(also supports multi-dimensional arrays)*.
 				*
 				* @package s2Member\Utilities
 				* @since 111101
@@ -206,7 +206,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 						return $array;
 					}
 				/**
-				* Sorts arrays *( also supports multi-dimensional arrays )* by key, low to high.
+				* Sorts arrays *(also supports multi-dimensional arrays)* by key, low to high.
 				*
 				* @package s2Member\Utilities
 				* @since 111205

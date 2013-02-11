@@ -1,10 +1,10 @@
 <?php
 /**
-* Menu page for the s2Member plugin ( s2Member Info page ).
+* Menu page for the s2Member plugin (s2Member Info page).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_menu_page_info"))
 	{
 		/**
-		* Menu page for the s2Member plugin ( s2Member Info page ).
+		* Menu page for the s2Member plugin (s2Member Info page).
 		*
 		* @package s2Member\Menu_Pages
 		* @since 110531

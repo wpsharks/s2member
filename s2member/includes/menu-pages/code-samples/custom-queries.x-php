@@ -7,7 +7,7 @@ attach_s2member_query_filters();
 			the_post();
 		/*
 		Protected content will be excluded automatically.
-		( based on the current User/Member status )
+		(based on the current User/Member status)
 		*/
 		endwhile;
 	endif;

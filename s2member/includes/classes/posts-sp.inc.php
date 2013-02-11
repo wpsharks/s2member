@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's Post protection routines *( for specific Posts )*.
+* s2Member's Post protection routines *(for specific Posts)*.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_posts_sp"))
 	{
 		/**
-		* s2Member's Post protection routines *( for specific Posts )*.
+		* s2Member's Post protection routines *(for specific Posts)*.
 		*
 		* @package s2Member\Posts
 		* @since 3.5
@@ -28,14 +28,14 @@ if (!class_exists ("c_ws_plugin__s2member_posts_sp"))
 		class c_ws_plugin__s2member_posts_sp
 			{
 				/**
-				* Handles Post Level Access *( for specific Posts )*.
+				* Handles Post Level Access *(for specific Posts)*.
 				*
 				* @package s2Member\Posts
 				* @since 3.5
 				*
 				* @param int|str $post_id Numeric Post ID.
 				* @param bool $check_user Test permissions against the current User? Defaults to true.
-				* @return null|array Non-empty array ( with details ) if access is denied, else null if access is allowed.
+				* @return null|array Non-empty array (with details) if access is denied, else null if access is allowed.
 				*/
 				public static function check_specific_post_level_access ($post_id = FALSE, $check_user = TRUE)
 					{
@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_posts_sp"))
 
 										else if (!c_ws_plugin__s2member_systematics_sp::is_systematic_use_specific_page ($post_id, $post_uri)) // Never restrict Systematics. However, there is 1 exception above.
 											{
-												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Post Level restrictions ( including Custom Post Types ). Go through each Level.
+												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Post Level restrictions (including Custom Post Types). Go through each Level.
 													{
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"] === "all" && (!$check_user || !$user || !$user->has_cap ("access_s2member_level" . $n)))
 															return apply_filters ("ws_plugin__s2member_check_specific_post_level_access", array ("s2member_level_req" => $n), get_defined_vars ());

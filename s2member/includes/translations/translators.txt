@@ -4,7 +4,7 @@ s2Member and s2Member Pro are now equipped with support for front-end translatio
 
 Please note, this is but our first step toward internationalizing s2Member and s2Member Pro. Look for further updates/improvements to come in the future.
 
-Like WordPress® itself, we chose to use the GNU `gettext` localization framework to provide localization infrastructure for s2Member®. GNU `gettext` is a mature, widely used framework for modular translation of software, and is the *de facto* standard for localization in the open source/free software realm. If you'd like to translate s2Member and/or s2Member Pro, please use the POT file found inside `/s2member/includes/translations/s2member.pot`, which contains all translation entries for both the s2Member Framework *( i.e. the free version )*, and also for s2Member Pro.
+Like WordPress® itself, we chose to use the GNU `gettext` localization framework to provide localization infrastructure for s2Member®. GNU `gettext` is a mature, widely used framework for modular translation of software, and is the *de facto* standard for localization in the open source/free software realm. If you'd like to translate s2Member and/or s2Member Pro, please use the POT file found inside `/s2member/includes/translations/s2member.pot`, which contains all translation entries for both the s2Member Framework *(i.e. the free version)*, and also for s2Member Pro.
 
 The file: `/s2member/includes/translations/s2member.pot` will be updated with each new release of s2Member.
 

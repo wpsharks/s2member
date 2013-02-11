@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -30,9 +30,9 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects_r"))
 				/**
 				* Handles completely empty ``login_redirect`` values.
 				*
-				* Some plugins ( most notably BuddyPress v1.5 ) have a nasty habit of sending an empty ``$_REQUEST["redirect_to"]`` input field with login widgets.
+				* Some plugins (most notably BuddyPress v1.5) have a nasty habit of sending an empty ``$_REQUEST["redirect_to"]`` input field with login widgets.
 				* In the case of BuddyPress, it's own Filter against `login_redirect` will deal with empty values. However, since s2Member removes all Filters
-				* against `login_redirect` ( for compatibility ), we NEED this simple routine to check empty values, and default them to ``admin_url()``.
+				* against `login_redirect` (for compatibility), we NEED this simple routine to check empty values, and default them to ``admin_url()``.
 				*
 				* @attaches-to ``add_filter("login_redirect");``
 				*

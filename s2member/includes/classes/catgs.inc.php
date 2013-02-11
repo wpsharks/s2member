@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's Category protection routines *( for current page )*.
+* s2Member's Category protection routines *(for current page)*.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_catgs"))
 	{
 		/**
-		* s2Member's Category protection routines *( for current page )*.
+		* s2Member's Category protection routines *(for current page)*.
 		*
 		* @package s2Member\Categories
 		* @since 3.5
@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_catgs"))
 		class c_ws_plugin__s2member_catgs
 			{
 				/**
-				* Handles Category Level Access *( for current page )*.
+				* Handles Category Level Access *(for current page)*.
 				*
 				* @package s2Member\Categories
 				* @since 3.5

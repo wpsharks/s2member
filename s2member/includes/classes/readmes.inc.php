@@ -4,7 +4,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -176,7 +176,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 				* @package s2Member\Readmes
 				* @since 3.5
 				*
-				* @param str $str A string *( i.e. the specs section )*.
+				* @param str $str A string *(i.e. the specs section)*.
 				* @return str Parsed specs. With HTML markup for list item display.
 				*/
 				public static function _parse_readme_specs ($str = FALSE)
@@ -195,7 +195,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 				* @package s2Member\Readmes
 				* @since 3.5
 				*
-				* @param str $key A key *( within the specs section )*.
+				* @param str $key A key *(within the specs section)*.
 				* @param str $specific_path Optional. Path to a specific readme file to parse. Defaults to that of the software itself.
 				* 	When/if a readme-dev.txt file is available, that will be used instead of the default readme.txt.
 				* @return str|bool The value of the key, else false if not found.

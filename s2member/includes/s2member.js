@@ -6,7 +6,7 @@
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -31,7 +31,7 @@ jQuery(document).ready (function($)
 							{
 								var c = '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("— Confirm File Download —", "s2member-front", "s2member")); ?>' + '\n\n';
 								c += $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`ve downloaded %s protected %s in the last %s.", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY, ((S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("file", "s2member-front", "s2member")); ?>' : '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("files", "s2member-front", "s2member")); ?>'), ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("24 hours", "s2member-front", "s2member")); ?>' : $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("%s days", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS))) + '\n\n';
-								c += (S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`re entitled to UNLIMITED downloads though ( so, no worries ).", "s2member-front", "s2member")); ?>' : $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`re entitled to %s unique %s %s.", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED, ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("download", "s2member-front", "s2member")); ?>' : '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("downloads", "s2member-front", "s2member")); ?>'), ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("each day", "s2member-front", "s2member")); ?>' : $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("every %s-day period", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS)));
+								c += (S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`re entitled to UNLIMITED downloads though (so, no worries).", "s2member-front", "s2member")); ?>' : $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("You`re entitled to %s unique %s %s.", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED, ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("download", "s2member-front", "s2member")); ?>' : '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("downloads", "s2member-front", "s2member")); ?>'), ((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS === 1) ? '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("each day", "s2member-front", "s2member")); ?>' : $.sprintf ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("every %s-day period", "s2member-front", "s2member")); ?>', S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS)));
 
 								if ((this.href.match (/s2member[_\-]skip[_\-]confirmation/i) && !this.href.match (/s2member[_\-]skip[_\-]confirmation[\=\-](0|no|false)/i)) || confirm(c))
 									{
@@ -367,31 +367,31 @@ jQuery(document).ready (function($)
 								{
 									if (expected === 'numeric-wp-commas' && (!value.match (/^[0-9\.,]+$/) || isNaN(value.replace (/,/g, ''))))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be numeric ( with or without decimals, commas allowed ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be numeric (with or without decimals, commas allowed).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'numeric' && (!value.match (/^[0-9\.]+$/) || isNaN(value)))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be numeric ( with or without decimals, no commas ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be numeric (with or without decimals, no commas).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'integer' && (!value.match (/^[0-9]+$/) || isNaN(value)))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be an integer ( a whole number, without any decimals ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be an integer (a whole number, without any decimals).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'integer-gt-0' && (!value.match (/^[0-9]+$/) || isNaN(value) || value <= 0))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be an integer > 0 ( whole number, no decimals, greater than 0 ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be an integer > 0 (whole number, no decimals, greater than 0).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'float' && (!value.match (/^[0-9\.]+$/) || !value.match (/[0-9]/) || !value.match (/\./) || isNaN(value)))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a float ( floating point number, decimals required ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a float (floating point number, decimals required).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'float-gt-0' && (!value.match (/^[0-9\.]+$/) || !value.match (/[0-9]/) || !value.match (/\./) || isNaN(value) || value <= 0))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a float > 0 ( floating point number, decimals required, greater than 0 ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a float > 0 (floating point number, decimals required, greater than 0).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'date' && !value.match (/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a date ( required date format: dd/mm/yyyy ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a date (required date format: dd/mm/yyyy).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'email' && !value.match (/^([a-z_~0-9\+\-]+)(((\.?)([a-z_~0-9\+\-]+))*)(@)([a-z0-9]+)(((-*)([a-z0-9]+))*)(((\.)([a-z0-9]+)(((-*)([a-z0-9]+))*))*)(\.)([a-z]{2,6})$/i))
 										{
@@ -403,27 +403,27 @@ jQuery(document).ready (function($)
 										}
 									else if (expected === 'url' && !value.match (/^http(s?)\:\/\/(.{5,})$/i))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a full URL ( starting with http or https ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a full URL (starting with http or https).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'domain' && !value.match (/^([a-z0-9]+)(((-*)([a-z0-9]+))*)(((\.)([a-z0-9]+)(((-*)([a-z0-9]+))*))*)(\.)([a-z]{2,6})$/i))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a domain name ( domain name only, without http ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a domain name (domain name only, without http).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'phone' && (!value.match (/^[0-9 \(\)\-]+$/) || value.replace (/[^0-9]/g, '').length !== 10))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a phone # ( 10 digits w/possible hyphens,spaces,brackets ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a phone # (10 digits w/possible hyphens,spaces,brackets).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'uszip' && !value.match (/^[0-9]{5}(-[0-9]{4})?$/))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a US zipcode ( 5-9 digits w/possible hyphen ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a US zipcode (5-9 digits w/possible hyphen).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'cazip' && !value.match (/^[0-9A-Z]{3}( ?)[0-9A-Z]{3}$/i))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a Canadian zipcode ( 6 alpha-numerics w/possible space ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a Canadian zipcode (6 alpha-numerics w/possible space).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected === 'uczip' && !value.match (/^[0-9]{5}(-[0-9]{4})?$/) && !value.match (/^[0-9A-Z]{3}( ?)[0-9A-Z]{3}$/i))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a zipcode ( either a US or Canadian zipcode ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a zipcode (either a US or Canadian zipcode).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected.match (/^alphanumerics-spaces-punctuation-([0-9]+)(-e)?$/) && !value.match (/^[a-z 0-9,\.\/\?\:;"'\{\}\[\]\|\\\+\=_\-\(\)\*&\^%\$#@\!`~]+$/i))
 										{
@@ -435,15 +435,15 @@ jQuery(document).ready (function($)
 										}
 									else if (expected.match (/^alphanumerics-punctuation-([0-9]+)(-e)?$/) && !value.match (/^[a-z0-9,\.\/\?\:;"'\{\}\[\]\|\\\+\=_\-\(\)\*&\^%\$#@\!`~]+$/i))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Please use alphanumerics & punctuation only ( no spaces ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Please use alphanumerics & punctuation only (no spaces).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected.match (/^alphanumerics-([0-9]+)(-e)?$/) && !value.match (/^[a-z0-9]+$/i))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Please use alphanumerics only ( no spaces/punctuation ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Please use alphanumerics only (no spaces/punctuation).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected.match (/^alphabetics-([0-9]+)(-e)?$/) && !value.match (/^[a-z]+$/i))
 										{
-											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Please use alphabetics only ( no digits/spaces/punctuation ).", "s2member-front", "s2member")); ?>';
+											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Please use alphabetics only (no digits/spaces/punctuation).", "s2member-front", "s2member")); ?>';
 										}
 									else if (expected.match (/^numerics-([0-9]+)(-e)?$/) && !value.match (/^[0-9]+$/i))
 										{
@@ -469,7 +469,7 @@ jQuery(document).ready (function($)
 			{
 				if /* This function expects a valid jQuery object. */ ($obj instanceof jQuery)
 					{
-						if /* Resets back to originalText value ( also clears interval ). */ (reset)
+						if /* Resets back to originalText value (also clears interval). */ (reset)
 							{
 								clearInterval(ws_plugin__s2member_animateProcessingConfig.interval);
 

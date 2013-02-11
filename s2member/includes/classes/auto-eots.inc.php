@@ -1,10 +1,10 @@
 <?php
 /**
-* s2Member's Auto-EOT System *( EOT = End Of Term )*.
+* s2Member's Auto-EOT System *(EOT = End Of Term)*.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* ( coded in the USA )
+* (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
 * You should have received a copy of the GNU General Public License,
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 	{
 		/**
-		* s2Member's Auto-EOT System *( EOT = End Of Term )*.
+		* s2Member's Auto-EOT System *(EOT = End Of Term)*.
 		*
 		* @package s2Member\Auto_EOT_System
 		* @since 3.5
@@ -78,10 +78,10 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 							}
 					}
 				/**
-				* Processed by WP_Cron; this handles Auto-EOTs *( EOT = End Of Term )*.
+				* Processed by WP_Cron; this handles Auto-EOTs *(EOT = End Of Term)*.
 				*
 				* If you have a HUGE userbase, increase the max EOTs per process.
-				* But NOTE, this runs ``$per_process`` *( per Blog )* on a Multisite Network.
+				* But NOTE, this runs ``$per_process`` *(per Blog)* on a Multisite Network.
 				* To increase, use: ``add_filter ("ws_plugin__s2member_auto_eot_system_per_process");``.
 				*
 				* This function makes an important Hook available: `ws_plugin__s2member_after_auto_eot_system`.
@@ -195,7 +195,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																				$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status ();
 																				c_ws_plugin__s2member_email_configs::email_config_release ();
 
-																				$msg = $sbj = "( s2Member / API Notification Email ) - EOT/Deletion";
+																				$msg = $sbj = "(s2Member / API Notification Email) - EOT/Deletion";
 																				$msg .=  /* Spacing in the message body. */"\n\n";
 
 																				$msg .= "eot_del_type: %%eot_del_type%%\n";
