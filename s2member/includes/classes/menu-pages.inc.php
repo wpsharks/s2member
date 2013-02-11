@@ -399,6 +399,30 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						}
 					}
 				/**
+				 * Archives existing log files and starts fresh with new logs.
+				 *
+				 * @package s2Member\Menu_Pages
+				 * @since 120310
+				 *
+				 * @return null
+				 */
+				public static function archive_logs_start_fresh()
+					{
+						if(!current_user_can("create_users")) return;
+
+						if(!empty($_GET["ws_plugin__s2member_logs_archive_start_fresh"]))
+							{
+								if(is_dir($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
+									foreach(scandir($logs_dir) as $log_file) // Archive existing log files here.
+										{
+											if(preg_match("/\.log$/", $log_file) && !preg_match("/-ARCHIVED-/", $log_file))
+												if(is_file ($log_dir_file = $logs_dir . "/" . $log_file) && is_writable($log_dir_file))
+													rename ($log_dir_file, preg_replace ("/\.log$/i", "", $log_dir_file) . "-ARCHIVED-" . date ("m-d-Y") . "-" . time () . ".log");
+										}
+								wp_redirect(admin_url("/admin.php?page=ws-plugin--s2member-logs")).exit();
+							}
+					}
+				/**
 				 * Enables logging.
 				 *
 				 * @package s2Member\Menu_Pages
@@ -411,7 +435,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						if(!current_user_can("create_users")) return;
 
 						if(!empty($_GET["ws_plugin__s2member_gateway_debug_logs_enable"]))
-							c_ws_plugin__s2member_menu_pages::update_all_options (array("ws_plugin__s2member_gateway_debug_logs" => "1"), true, false, false, false, false);
+							{
+								c_ws_plugin__s2member_menu_pages::update_all_options (array("ws_plugin__s2member_gateway_debug_logs" => "1"), true, false, false, false, false);
+								wp_redirect(admin_url("/admin.php?page=ws-plugin--s2member-logs")).exit();
+							}
 					}
 				/**
 				* Builds and handles the Quick Start page.
