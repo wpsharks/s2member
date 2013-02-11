@@ -229,7 +229,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 
 						else if ($col === "s2member_last_login_time")
 						{
-							if(($v = get_user_option ("s2member_last_login_time", $user_id)))
+							if(($time = get_user_option ("s2member_last_login_time", $user_id)))
 							{
 								$time = strtotime (get_date_from_gmt (date ("Y-m-d H:i:s", $time)));
 								$val = esc_html(date ("D M jS, Y", $time)." @ precisely " . date ("g:i a", $time));
