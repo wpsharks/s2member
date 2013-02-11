@@ -125,6 +125,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 															$mailchimp["api_success"] = $success = true; // Flag indicating that we DO have a successful processing of a new List; affects the function's overall return value.
 														$mailchimp["api_properties"] = $mcapi; // Include API instance too; as it contains some additional information after each method is processed (need this in the logs).
 
+														$logt = c_ws_plugin__s2member_utilities::time_details ();
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
 														$logm = c_ws_plugin__s2member_utilities::mem_details ();
 														$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . $_SERVER["HTTP_USER_AGENT"];
@@ -134,7 +135,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
 															if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
 																if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
-																	file_put_contents ($logs_dir . "/" . $log2, $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($mailchimp, true) . "\n\n", FILE_APPEND);
+																	file_put_contents ($logs_dir . "/" . $log2, $logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($mailchimp, true) . "\n\n", FILE_APPEND);
 													}
 											}
 									}
@@ -157,6 +158,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														($aweber["wp_mail_headers"] = "From: \"" . preg_replace ("/\"/", "", trim ($fname . " " . $lname)) . "\" <" . $email . ">" . (($aweber["bcc"]) ? "\r\nBcc: " . $aweber["bcc"] : "") . "\r\nContent-Type: text/plain; charset=UTF-8")))
 															$aweber["wp_mail_success"] = $success = true; // Flag indicating that we DO have a successful processing of a new List; affects the function's overall return value.
 
+														$logt = c_ws_plugin__s2member_utilities::time_details ();
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
 														$logm = c_ws_plugin__s2member_utilities::mem_details ();
 														$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . $_SERVER["HTTP_USER_AGENT"];
@@ -166,7 +168,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
 															if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
 																if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
-																	file_put_contents ($logs_dir . "/" . $log2, $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($aweber, true) . "\n\n", FILE_APPEND);
+																	file_put_contents ($logs_dir . "/" . $log2, $logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($aweber, true) . "\n\n", FILE_APPEND);
 													}
 											}
 									}
@@ -242,6 +244,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 															$mailchimp["api_removal_success"] = $removal_success = true; // Flag indicating that we DO have a successful removal; affects the function's overall return value.
 														$mailchimp["api_removal_properties"] = $mcapi; // Include API instance too; as it contains some additional information after each method is processed (need this in the logs).
 
+														$logt = c_ws_plugin__s2member_utilities::time_details ();
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
 														$logm = c_ws_plugin__s2member_utilities::mem_details ();
 														$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . $_SERVER["HTTP_USER_AGENT"];
@@ -251,7 +254,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
 															if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
 																if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
-																	file_put_contents ($logs_dir . "/" . $log2, $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($mailchimp, true) . "\n\n", FILE_APPEND);
+																	file_put_contents ($logs_dir . "/" . $log2, $logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($mailchimp, true) . "\n\n", FILE_APPEND);
 													}
 											}
 									}
@@ -276,6 +279,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 
 														c_ws_plugin__s2member_email_configs::email_config_release /* Release. */ ();
 
+														$logt = c_ws_plugin__s2member_utilities::time_details ();
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
 														$logm = c_ws_plugin__s2member_utilities::mem_details ();
 														$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . $_SERVER["HTTP_USER_AGENT"];
@@ -285,7 +289,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
 															if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
 																if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
-																	file_put_contents ($logs_dir . "/" . $log2, $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($aweber, true) . "\n\n", FILE_APPEND);
+																	file_put_contents ($logs_dir . "/" . $log2, $logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($aweber, true) . "\n\n", FILE_APPEND);
 													}
 											}
 									}

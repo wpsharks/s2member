@@ -99,6 +99,21 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 						return $checksum; // (i.e. version-pro version-checksum)
 					}
 				/**
+				 * String with current time details.
+				 *
+				 * @package s2Member\Utilities
+				 * @since 130210
+				 *
+				 * @return str String with time representation (in UTC time).
+				 */
+				public static function time_details ()
+					{
+						$time = time(); // The time at this very moment.
+						$details = date ("D M jS, Y", $time)." @ precisely " . date ("g:i a e", $time);
+
+						return $details; // Return all details.
+					}
+				/**
 				* String with all version details *(for PHP, WordPress®, s2Member, and Pro)*.
 				*
 				* @package s2Member\Utilities

@@ -187,6 +187,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								else // Else, generate an error messsage - so something is reported back to the Customer.
 									$response["__error"] = _x("Error. Please contact Support for assistance.", "s2member-front", "s2member");
 							}
+						$logt = c_ws_plugin__s2member_utilities::time_details ();
 						$logv = c_ws_plugin__s2member_utilities::ver_details();
 						$logm = c_ws_plugin__s2member_utilities::mem_details();
 						$log4 = $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]."\nUser-Agent: ".$_SERVER["HTTP_USER_AGENT"];
@@ -201,7 +202,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								if(is_writable($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files())
 									if(($log = "-------- Input vars: ( ".$input_time." ) --------\n".var_export($post_vars, true)."\n"))
 										if(($log .= "-------- Output string/vars: ( ".$output_time." ) --------\n".$nvp."\n".var_export($response, true)))
-											file_put_contents($logs_dir."/".$log2, $logv."\n".$logm."\n".$log4."\n".$log."\n\n", FILE_APPEND);
+											file_put_contents($logs_dir."/".$log2, $logt . "\n" . $logv."\n".$logm."\n".$log4."\n".$log."\n\n", FILE_APPEND);
 
 						return apply_filters("ws_plugin__s2member_paypal_api_response", c_ws_plugin__s2member_paypal_utilities::_paypal_api_response_filters($response), get_defined_vars());
 					}
@@ -320,6 +321,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								else $response["__error"] = _x("Error. Please contact Support for assistance.", "s2member-front", "s2member");
 							}
 
+						$logt = c_ws_plugin__s2member_utilities::time_details ();
 						$logv = c_ws_plugin__s2member_utilities::ver_details();
 						$logm = c_ws_plugin__s2member_utilities::mem_details();
 						$log4 = $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]."\nUser-Agent: ".$_SERVER["HTTP_USER_AGENT"];
@@ -334,7 +336,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								if(is_writable($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files())
 									if(($log = "-------- Input vars: ( ".$input_time." ) --------\n".$nvp_post_vars."\n".var_export($post_vars, true)."\n"))
 										if(($log .= "-------- Output string/vars: ( ".$output_time." ) --------\n".$nvp."\n".var_export($response, true)))
-											file_put_contents($logs_dir."/".$log2, $logv."\n".$logm."\n".$log4."\n".$log."\n\n", FILE_APPEND);
+											file_put_contents($logs_dir."/".$log2, $logt . "\n" . $logv."\n".$logm."\n".$log4."\n".$log."\n\n", FILE_APPEND);
 
 						return apply_filters("ws_plugin__s2member_paypal_payflow_api_response", c_ws_plugin__s2member_paypal_utilities::_paypal_payflow_api_response_filters($response), get_defined_vars());
 					}
