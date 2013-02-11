@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 						do_action ("ws_plugin__s2member_during_paypal_buttons_page_before_left_sections", get_defined_vars ());
 
-						for ($n = 1; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++) /* Starting with Level #1 here. */
+						for ($n = 1; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++) // Starting with Level #1 here.
 							{
 								if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_level" . $n . "_buttons") && apply_filters ($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons, true, get_defined_vars ()))
 									{
@@ -193,7 +193,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%level%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ("1")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%level_label%% /", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level1_label"])), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($_SERVER["HTTP_HOST"])), $ws_plugin__s2member_temp_s);
-								$ws_plugin__s2member_temp_s = preg_replace ("/\/]$/", 'modify="1" /]', $ws_plugin__s2member_temp_s); /* Adds modify="1" to the end of the Shortcode. */
+								$ws_plugin__s2member_temp_s = preg_replace ("/\/]$/", 'modify="1" /]', $ws_plugin__s2member_temp_s); // Adds modify="1" to the end of the Shortcode.
 								echo '<input type="text" autocomplete="off" id="ws-plugin--s2member-modification-shortcode" value="' . format_to_edit ($ws_plugin__s2member_temp_s) . '" onclick="this.select ();" style="font-family:Consolas, monospace; width:99%;" />' . "\n";
 
 								echo '<div' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '><br />' . "\n";

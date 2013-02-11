@@ -66,7 +66,7 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 							{
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"])
 									{
-										c_ws_plugin__s2member_auto_eots::auto_eot_system (); /* Process. */
+										c_ws_plugin__s2member_auto_eots::auto_eot_system (); // Process.
 
 										do_action ("ws_plugin__s2member_during_auto_eot_system_via_cron", get_defined_vars ());
 									}

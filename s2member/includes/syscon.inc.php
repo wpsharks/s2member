@@ -302,7 +302,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 
 				$default_options = apply_filters("ws_plugin__s2member_default_options", $default_options);
 
-				unset($n, $v, $l); /* Unset/cleanup these working variables from the routines above. */
+				unset($n, $v, $l); // Unset/cleanup these working variables from the routines above.
 				/*
 				Here they are merged. User options will overwrite some or all default values.
 				*/

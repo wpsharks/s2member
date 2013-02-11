@@ -8,7 +8,7 @@ detach_s2member_query_filters();
 
 			if(!is_permitted_by_s2member())
 				continue;
-			/* Skip it. The current User/Member has NO access. */
+			// Skip it. The current User/Member has NO access.
 
 		endwhile;
 	endif;

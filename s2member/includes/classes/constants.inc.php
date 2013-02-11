@@ -1466,7 +1466,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see `Dashboard -› s2Member -› General Options -› Membership Options Page`
 						*/
 						if (!defined ("S2MEMBER_MEMBERSHIP_OPTIONS_PAGE_URL"))
-							define ("S2MEMBER_MEMBERSHIP_OPTIONS_PAGE_URL", ($c[] = (string)$links["membership_options_page"])); /* Signup page. */
+							define ("S2MEMBER_MEMBERSHIP_OPTIONS_PAGE_URL", ($c[] = (string)$links["membership_options_page"])); // Signup page.
 						/**
 						* The URL, which leads to the Login Welcome Page; as configured by the site owner.
 						*
@@ -1546,7 +1546,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see http://codex.wordpress.org/Function_Reference/wp_logout_url wp_logout_url()
 						*/
 						if (!defined ("S2MEMBER_LOGOUT_PAGE_URL"))
-							define ("S2MEMBER_LOGOUT_PAGE_URL", ($c[] = (string)wp_logout_url ())); /* This triggers `wp_nonce_tick()`; watch out for dynamic changes. */
+							define ("S2MEMBER_LOGOUT_PAGE_URL", ($c[] = (string)wp_logout_url ())); // This triggers `wp_nonce_tick()`; watch out for dynamic changes.
 						/**
 						* The URL, where a User can log into their account.
 						*

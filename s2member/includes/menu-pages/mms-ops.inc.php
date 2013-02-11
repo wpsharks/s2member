@@ -81,7 +81,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 												echo '</select><br />'."\n";
 												echo '<em class="ws-menu-page-hilite">This is now locked. Your <code>/wp-config.php</code> file says: <code>DISALLOW_FILE_MODS = true</code></em>.'."\n";
 											}
-										else /* Otherwise we can display these options. */
+										else // Otherwise we can display these options.
 											{
 												echo '<select name="ws_plugin__s2member_mms_auto_patch" id="ws-plugin--s2member-mms-auto-patch">'."\n";
 												echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mms_auto_patch"]) ? ' selected="selected"' : '').'>Yes (automatically patch WordPress®)</option>'."\n";

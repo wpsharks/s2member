@@ -469,7 +469,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 								file_put_contents(($rsa_sha1_sig_file = $temp_dir."/".md5(uniqid("", true)."rsa-sha1-sig").".tmp"), "");
 
 								@shell_exec($esa($openssl)." sha1 -sign ".$esa($private_key_file)." -out ".$esa($rsa_sha1_sig_file)." ".$esa($string_file));
-								$signature = // Do NOT trim here. */ file_get_contents($rsa_sha1_sig_file); /* Was the signature was written?
+								$signature = /* Do NOT trim here. */ file_get_contents($rsa_sha1_sig_file); // Was the signature was written?
 								unlink($rsa_sha1_sig_file).unlink($private_key_file).unlink($string_file); // Cleanup.
 							}
 						return (!empty($signature)) ? $signature : false;

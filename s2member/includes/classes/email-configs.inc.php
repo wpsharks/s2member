@@ -165,10 +165,10 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*/
 				public static function email_filter ($array = FALSE)
 					{
-						if (isset ($array["to"]) && !empty ($array["to"])) /* Filter list of recipients? */
-							/* Reduces `"Name" <email>`, to just an email address *(for best cross-platform compatibility across various MTAs)*. */
-							/* Also works around bug in PHP versions prior to fix in 5.2.11. See bug report: <https://bugs.php.net/bug.php?id=28038>. */
-							/* Also supplements WordPress®. WordPress® currently does NOT support semicolon `;` delimitation, s2Member does. */
+						if (isset ($array["to"]) && !empty ($array["to"])) // Filter list of recipients?
+							// Reduces `"Name" <email>`, to just an email address *(for best cross-platform compatibility across various MTAs)*.
+							// Also works around bug in PHP versions prior to fix in 5.2.11. See bug report: <https://bugs.php.net/bug.php?id=28038>.
+							// Also supplements WordPress®. WordPress® currently does NOT support semicolon `;` delimitation, s2Member does.
 							$array["to"] = implode (",", c_ws_plugin__s2member_utils_strings::parse_emails ($array["to"]));
 
 						return apply_filters ("ws_plugin__s2member_after_email_filter", $array, get_defined_vars ());
@@ -237,7 +237,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 																																				if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
 																																					break;
 
-																																		if (($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) /* Still have a ``$sbj`` and a ``$msg``? */
+																																		if (($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																																			c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($user->user_email, $sbj, $msg, "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
 																																	}

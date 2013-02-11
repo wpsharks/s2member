@@ -69,9 +69,9 @@ through the `/style.css` file for your WordPress® theme.
 div#content > div.mu_register,
 div#content > div.mu_register h2
 	{
-		margin: 0; /* Get rid of margins. */
-		padding: 0; /* Get rid of padding. */
-		width: 100%; /* Expand to 100%. */
+		margin: /* Get rid of margins. */ 0;
+		padding: /* Get rid of padding. */ 0;
+		width: /* Expand to 100%. */ 100%;
 	}
 div#content > div.mu_register > form#setupform input[type="text"],
 div#content > div.mu_register > form#setupform input[type="email"],
@@ -80,9 +80,9 @@ div#content > div.mu_register > form#setupform input[type="submit"],
 div#content > div.mu_register > form#setupform textarea,
 div#content > div.mu_register > form#setupform select
 	{
-		width: 100%; /* 100% does not work across all browsers. */
-		width: 98% !ie<8; /* 100% does not work in IE browsers < 8. */
-		box-sizing: border-box; /* Make all fields behave the same. */
+		width: /* 100% does not work across all browsers. */ 100%;
+		width: /* 100% does not work in IE browsers < 8. */ 98% !ie<8;
+		box-sizing: /* Make all fields behave the same. */ border-box;
 		-ms-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
@@ -97,15 +97,15 @@ div#content > div.mu_register > form#setupform input[type="radio"]
 	}
 div#content > div.mu_register > form#setupform input[type="submit"]
 	{
-		width: 100% !ie<8; /* This width required in IE < 8. */
+		width: /* This width required in IE < 8. */ 100% !ie<8;
 	}
 div#content > div.mu_register > form#setupform p.submit
 	{
-		margin-bottom: 0; /* Remove bottom margin. */
+		margin-bottom: /* Remove bottom margin. */ 0;
 	}
 div#content > div.mu_register > form#setupform select
 	{
-		width: 99.5% !ie<8; /* Required in IE < 8. */
+		width: /* Required in IE < 8. */ 99.5% !ie<8;
 	}
 div#content > div.mu_register > form#setupform label
 	{
@@ -263,7 +263,7 @@ form#ws-plugin--s2member-profile table
 form#ws-plugin--s2member-profile table td
 	{
 		padding: 7px 0 7px 0;
-		border: 0; /* Tweak 2010 theme. */
+		border: /* Tweak 2010 theme. */ 0;
 	}
 form#ws-plugin--s2member-profile input[type="text"],
 form#ws-plugin--s2member-profile input[type="password"],
@@ -271,10 +271,10 @@ form#ws-plugin--s2member-profile input[type="submit"],
 form#ws-plugin--s2member-profile textarea,
 form#ws-plugin--s2member-profile select
 	{
-		margin: 0; /* Tweak. Zeros out margins in 2010 theme. */
-		width: 100%; /* 100% does not work across all browsers. */
-		width: 98% !ie<8; /* 100% does not work in IE browsers < 8. */
-		box-sizing: border-box; /* Make all fields behave the same. */
+		margin: /* Tweak. Zeros out margins in 2010 theme. */ 0;
+		width: /* 100% does not work across all browsers. */ 100%;
+		width: /* 100% does not work in IE browsers < 8. */ 98% !ie<8;
+		box-sizing: /* Make all fields behave the same. */ border-box;
 		-ms-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
@@ -287,11 +287,11 @@ form#ws-plugin--s2member-profile input[type="radio"]
 	}
 form#ws-plugin--s2member-profile input[type="submit"]
 	{
-		width: 100% !ie<8; /* This width required in IE < 8. */
+		width: /* This width required in IE < 8. */ 100% !ie<8;
 	}
 form#ws-plugin--s2member-profile select
 	{
-		width: 99.5% !ie<8; /* Required in IE < 8. */
+		width: /* Required in IE < 8. */ 99.5% !ie<8;
 	}
 form#ws-plugin--s2member-profile label
 	{
@@ -363,9 +363,9 @@ body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section inp
 body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section textarea,
 body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section select
 	{
-		width: 100%; /* 100% does not work across all browsers. */
-		width: 98% !ie<8; /* 100% does not work in IE browsers < 8. */
-		box-sizing: border-box; /* Make all fields behave the same. */
+		width: /* 100% does not work across all browsers. */ 100%;
+		width: /* 100% does not work in IE browsers < 8. */ 98% !ie<8;
+		box-sizing: /* Make all fields behave the same. */ border-box;
 		-ms-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
@@ -378,7 +378,7 @@ body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section inp
 	}
 body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section select
 	{
-		width: 99.5% !ie<8; /* Required in IE < 8. */
+		width: /* Required in IE < 8. */ 99.5% !ie<8;
 	}
 body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section label.ws-plugin--s2member-custom-reg-field-op-l
 	{
@@ -417,9 +417,9 @@ body.logged-in.profile.profile-edit form input.ws-plugin--s2member-profile-field
 body.logged-in.profile.profile-edit form textarea.ws-plugin--s2member-profile-field-4bp,
 body.logged-in.profile.profile-edit form select.ws-plugin--s2member-profile-field-4bp
 	{
-		width: 100%; /* 100% does not work across all browsers. */
-		width: 98% !ie<8; /* 100% does not work in IE browsers < 8. */
-		box-sizing: border-box; /* Make all fields behave the same. */
+		width: /* 100% does not work across all browsers. */ 100%;
+		width: /* 100% does not work in IE browsers < 8. */ 98% !ie<8;
+		box-sizing: /* Make all fields behave the same. */ border-box;
 		-ms-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
@@ -432,7 +432,7 @@ body.logged-in.profile.profile-edit form input.ws-plugin--s2member-profile-field
 	}
 body.logged-in.profile.profile-edit form select.ws-plugin--s2member-profile-field-4bp
 	{
-		width: 99.5% !ie<8; /* Required in IE < 8. */
+		width: /* Required in IE < 8. */ 99.5% !ie<8;
 	}
 body.logged-in.profile.profile-edit form label.ws-plugin--s2member-custom-reg-field-op-l
 	{

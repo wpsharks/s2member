@@ -11,13 +11,13 @@ $s2_jw_config["mp4_video_file_name"] = "video.mp4"; // Name of your MP4 test fil
 	jwplayer('jw-container').setup({
 			playlist:
 				[{
-					sources: /* List all available sources. */
+					sources: // List all available sources.
 						[
 							{type: 'mp4', file: '/wp-content/plugins/s2member-files/s2member-file-inline/<?php echo $s2_jw_config["mp4_video_file_name"]; ?>'}
-								/* Shortcode equivalent: [s2File rewrite="yes" inline="yes" download="<?php echo $s2_jw_config["mp4_video_file_name"]; ?>" /] */
+								// Shortcode equivalent: [s2File rewrite="yes" inline="yes" download="<?php echo $s2_jw_config["mp4_video_file_name"]; ?>" /]
 						]
 				}],
 			primary: 'flash' /* Try Flash® first, fallback on HTML5 or direct download of MP4 file. */,
-			width: 480, height: 270 /* Set video dimensions for all sources. */
+			width: 480, height: 270 // Set video dimensions for all sources.
 		});
 </script>

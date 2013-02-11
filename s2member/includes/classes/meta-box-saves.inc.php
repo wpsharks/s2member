@@ -124,7 +124,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 
 											else // Otherwise, we assume this is a Post, or possibly a Custom Post Type. It's NOT a Page.
 												{
-													if (isset ($_p["ws_plugin__s2member_security_meta_box_ccaps"])) /* CAN be empty. */
+													if (isset ($_p["ws_plugin__s2member_security_meta_box_ccaps"])) // CAN be empty.
 														{
 															$ccaps_req = trim (strtolower ($_p["ws_plugin__s2member_security_meta_box_ccaps"]), ",");
 															$ccaps_req = trim (preg_replace ("/[^a-z_0-9,]/", "", $ccaps_req), ",");

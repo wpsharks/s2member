@@ -331,16 +331,16 @@ table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > 
 table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > textarea,
 table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > select
 	{
-		width: 100%; /* 100% does not work across all browsers. */
-		width: 98% !ie<8; /* 100% does not work in IE browsers < 8. */
-		box-sizing: border-box; /* Make all fields behave the same. */
+		width: /* 100% does not work across all browsers. */ 100%;
+		width: /* 100% does not work in IE browsers < 8. */ 98% !ie<8;
+		box-sizing: /* Make all fields behave the same. */ border-box;
 		-ms-box-sizing: border-box;
 		-moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
 	}
 table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > select
 	{
-		width: 99.5% !ie<8; /* Required in IE < 8. */
+		width: /* Required in IE < 8. */ 99.5% !ie<8;
 	}
 table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > textarea
 	{

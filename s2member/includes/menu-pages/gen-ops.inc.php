@@ -1013,7 +1013,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 								echo '<td>' . "\n";
 								echo '<input type="hidden" name="ws_plugin__s2member_custom_reg_fields" id="ws-plugin--s2member-custom-reg-fields" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"]) . '" />' . "\n";
-								echo '<div id="ws-plugin--s2member-custom-reg-field-configuration"></div>' . "\n"; /* This is filled by JavaScript routines. */
+								echo '<div id="ws-plugin--s2member-custom-reg-field-configuration"></div>' . "\n"; // This is filled by JavaScript routines.
 								echo '</td>' . "\n";
 
 								echo '</tr>' . "\n";

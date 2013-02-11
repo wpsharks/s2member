@@ -87,13 +87,13 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 									}
 								if ($uses_nodes && $wp_admin_bar->get_node /* We have this node? */ ("wp-logo"))
 									$wp_admin_bar->remove_node /* Ditch this node. */ ("wp-logo");
-								/* ------- */
+								// -------
 								if (!$uses_nodes && isset /* Have this item? */ ($wp_admin_bar->menu->{"dashboard"}))
 									unset /* Ditch this item. */ ($wp_admin_bar->menu->{"dashboard"});
 
 								if (!$uses_nodes && isset /* Have this item? */ ($wp_admin_bar->menu->{"my-blogs"}))
 									unset /* Ditch this item. */ ($wp_admin_bar->menu->{"my-blogs"});
-								/* ------- */
+								// -------
 								if ($uses_nodes && $wp_admin_bar->get_node /* We have this node? */ ("my-sites"))
 									$wp_admin_bar->remove_node /* Ditch this node. */ ("my-sites");
 							}
@@ -111,7 +111,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 
 									if ($uses_nodes && $wp_admin_bar->get_node /* We have this node? */ ("edit-profile"))
 										$wp_admin_bar->add_node /* Update this node. */ (array ("id" => "edit-profile", "href" => $lwp));
-									/* ------- */
+									// -------
 									if (!$uses_nodes && isset /* Have this item? */ ($wp_admin_bar->menu->{"my-account"}["href"]))
 										$wp_admin_bar->menu->{"my-account"}["href"] = /* Update this item. */ $lwp;
 
@@ -120,7 +120,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 
 									if (!$uses_nodes && isset /* Have this item? */ ($wp_admin_bar->menu->{"my-account"}["children"]->{"user-info"}["href"]))
 										$wp_admin_bar->menu->{"my-account"}["children"]->{"user-info"}["href"] = /* Update this item. */ $lwp;
-									/* ------- */
+									// -------
 									if (!$uses_nodes && isset /* Have this item? */ ($wp_admin_bar->menu->{"my-account-with-avatar"}["href"]))
 										$wp_admin_bar->menu->{"my-account-with-avatar"}["href"] = /* Update this item. */ $lwp;
 

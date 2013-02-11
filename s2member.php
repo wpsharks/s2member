@@ -155,7 +155,7 @@ if(version_compare(PHP_VERSION, WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION, ">=") && ve
 /*
 Else NOT compatible. Do we need admin compatibility errors now?
 */
-else if(is_admin()) /* Admin compatibility errors. */
+else if(is_admin()) // Admin compatibility errors.
 	{
 		if(!version_compare(PHP_VERSION, WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION, ">="))
 			{

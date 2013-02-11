@@ -305,7 +305,7 @@ jQuery(document).ready(function($)
 														if(!(options[i] = $.trim(options[i])).match(/^([^\|]*)(\|)([^\|]*)(\|default)?$/))
 															{
 																errors.push('Option Configuration File:\nInvalid configuration at line #'+(i+1)+'.');
-																break; /* Break now. There could potentially be lots of lines with errors. */
+																break; // Break now. There could potentially be lots of lines with errors.
 															}
 													}
 												field.options = /* Clean up. */ $.trim(options.join('\n'));
@@ -755,7 +755,7 @@ jQuery(document).ready(function($)
 											{
 												for(i = 0; i < fields.length; i++)
 													{
-														html += '<tr class="'+esc_attr((eo = (eo === 'o') ? 'e' : 'o'))+((fields[i].section === 'yes') ? ' s' : '')+' ws-plugin--s2member-custom-reg-field-configuration-table-row-'+i+'">'; /* Odd/even + row identifier. */
+														html += '<tr class="'+esc_attr((eo = (eo === 'o') ? 'e' : 'o'))+((fields[i].section === 'yes') ? ' s' : '')+' ws-plugin--s2member-custom-reg-field-configuration-table-row-'+i+'">'; // Odd/even + row identifier.
 														html += '<td nowrap="nowrap"><a class="ws-plugin--s2member-custom-reg-field-configuration-move-up" href="#" onclick="ws_plugin__s2member_customRegFieldMoveUp('+i+'); return false;"></a><a class="ws-plugin--s2member-custom-reg-field-configuration-move-down" href="#" onclick="ws_plugin__s2member_customRegFieldMoveDown('+i+'); return false;"></a></td>';
 														html += '<td nowrap="nowrap">'+esc_html(fieldTypeDesc(fields[i].type))+'</td>';
 														html += '<td nowrap="nowrap">'+esc_html(fields[i].id)+'</td>';
@@ -765,7 +765,7 @@ jQuery(document).ready(function($)
 														html += '</tr>';
 													}
 											}
-										else /* Otherwise, there are no fields configured yet. */
+										else // Otherwise, there are no fields configured yet.
 											{
 												html += /* There are no fields yet. */ '<tr>';
 												html += '<td colspan="6">No Custom Fields are configured.</td>';

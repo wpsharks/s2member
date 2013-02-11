@@ -40,10 +40,10 @@ jQuery(document).ready (function($)
 
 										return /* Allow. */ true;
 									}
-								else /* Disallow. */
+								else // Disallow.
 									return false;
 							}
-						else /* Allow. */
+						else // Allow.
 							return true;
 					});
 			}
@@ -473,10 +473,10 @@ jQuery(document).ready (function($)
 							{
 								clearInterval(ws_plugin__s2member_animateProcessingConfig.interval);
 
-								if (ws_plugin__s2member_animateProcessingConfig.originalText) /* ? */
+								if (ws_plugin__s2member_animateProcessingConfig.originalText)
 									$obj.val (ws_plugin__s2member_animateProcessingConfig.originalText);
 
-								return; /* No need to proceed any further. */
+								return; // No need to proceed any further.
 							}
 
 						$obj.first ().each ( /* Interval routine configured here. */function()
@@ -493,7 +493,7 @@ jQuery(document).ready (function($)
 											{
 												if (i + 1 <= dots.length - 1)
 													i = i + 1, dir = 'r';
-												else /* Switch direction. */
+												else // Switch direction.
 													i = i - 1, dir = 'l';
 											}
 
@@ -501,7 +501,7 @@ jQuery(document).ready (function($)
 											{
 												if (i - 1 >= 0)
 													i = i - 1, dir = 'l';
-												else /* Switch direction. */
+												else // Switch direction.
 													i = i + 1, dir = 'r';
 											}
 
