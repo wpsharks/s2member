@@ -89,7 +89,7 @@ msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:135
 msgctxt "s2member-front"
-msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member -> Download Options -> Basic Download Restrictions</code>."
+msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member -› Download Options -› Basic Download Restrictions</code>."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:483
@@ -2429,7 +2429,7 @@ msgctxt "s2member-front"
 msgid ""
 "ERROR: Unable to verify POST vars. Please contact Support for assistance.\n"
 "\n"
-"This is most likely related to an invalid AliPay® configuration. If you are the site owner, please check: s2Member -> AliPay® Options."
+"This is most likely related to an invalid AliPay® configuration. If you are the site owner, please check: s2Member -› AliPay® Options."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-cancellation-in.inc.php:115
@@ -3491,7 +3491,7 @@ msgctxt "s2member-front"
 msgid ""
 "ERROR: Unable to verify POST vars. Please contact Support for assistance.\n"
 "\n"
-"This is most likely related to an invalid ClickBank® configuration. If you are the site owner, please check: s2Member -> ClickBank® Options."
+"This is most likely related to an invalid ClickBank® configuration. If you are the site owner, please check: s2Member -› ClickBank® Options."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/clickbank/clickbank-utilities.inc.php:167

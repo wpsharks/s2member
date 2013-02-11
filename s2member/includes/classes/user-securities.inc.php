@@ -108,7 +108,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 				*
 				* Demo accounts *( where the Username MUST be "demo" )*, will NOT be allowed to change their Password.
 				* Any other restrictions you need to impose must be done through custom programming, using s2Member's Conditionals.
-				* 	See `s2Member -> API Scripting`.
+				* 	See `s2Member -› API Scripting`.
 				*
 				* @package s2Member\User_Securities
 				* @since 3.5

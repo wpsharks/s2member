@@ -53,7 +53,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 
 								$unfs = '<div style="margin:25px 0 25px 0; height:1px; line-height:1px; background:#CCCCCC;"></div>' . "\n";
 
-								$unfs .= '<h3 style="position:relative;"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/images/large-icon.png" title="s2Member ( a Membership management system for WordPress® )" alt="" style="position:absolute; top:-15px; right:0; border:0;" />s2Member Configuration &amp; Profile Fields' . ((is_multisite ()) ? ' (for this Blog)' : '') . '</h3>' . "\n";
+								$unfs .= '<h3 style="position:relative;"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/images/large-icon.png" title="s2Member (a Membership management system for WordPress®)" alt="" style="position:absolute; top:-15px; right:0; border:0;" />s2Member Configuration &amp; Profile Fields' . ((is_multisite ()) ? ' (for this Blog)' : '') . '</h3>' . "\n";
 
 								$unfs .= '<table class="form-table">' . "\n";
 
@@ -154,7 +154,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 										$unfs .= '<tr>' . "\n";
-										$unfs .= '<th><label for="ws-plugin--s2member-user-new-s2member-ccaps">Custom Capabilities:</label> <a href="#" onclick="alert(\'Optional. This is VERY advanced.\\nSee: s2Member -> API Scripting -> Custom Capabilities.' . ((is_multisite ()) ? '\\n\\nCustom Capabilities are assigned on a per-Blog basis. So having a set of Custom Capabilities for one Blog, and having NO Custom Capabilities on another Blog - is very common. This is how permissions are designed to work.' : '') . '\'); return false;" tabindex="-1">[?]</a></th>' . "\n";
+										$unfs .= '<th><label for="ws-plugin--s2member-user-new-s2member-ccaps">Custom Capabilities:</label> <a href="#" onclick="alert(\'Optional. This is VERY advanced.\\nSee: s2Member -› API Scripting -› Custom Capabilities.' . ((is_multisite ()) ? '\\n\\nCustom Capabilities are assigned on a per-Blog basis. So having a set of Custom Capabilities for one Blog, and having NO Custom Capabilities on another Blog - is very common. This is how permissions are designed to work.' : '') . '\'); return false;" tabindex="-1">[?]</a></th>' . "\n";
 										$unfs .= '<td><input type="text" autocomplete="off" name="ws_plugin__s2member_user_new_s2member_ccaps" id="ws-plugin--s2member-user-new-s2member-ccaps" value="' . format_to_edit ($_p["ws_plugin__s2member_user_new_s2member_ccaps"]) . '" class="regular-text" onkeyup="if(this.value.match(/[^a-z_0-9,]/)) this.value = jQuery.trim (jQuery.trim (this.value).replace (/[ \-]/g, \'_\').replace (/[^a-z_0-9,]/gi, \'\').toLowerCase ());" /></td>' . "\n";
 										$unfs .= '</tr>' . "\n";
 

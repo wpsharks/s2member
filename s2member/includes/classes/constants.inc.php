@@ -1050,7 +1050,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS
 						*
-						* @see `Dashboard -> s2Member -> Download Options`
+						* @see `Dashboard -› s2Member -› Download Options`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED"))
 							define ("S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED", ($c[] = (int)$file_downloads["allowed"]));
@@ -1104,7 +1104,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS
 						*
-						* @see `Dashboard -> s2Member -> Download Options`
+						* @see `Dashboard -› s2Member -› Download Options`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED"))
 							define ("S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED", ($c[] = (($file_downloads["allowed"] >= 999999999) ? true : false)));
@@ -1149,7 +1149,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS
 						*
-						* @see `Dashboard -> s2Member -> Download Options`
+						* @see `Dashboard -› s2Member -› Download Options`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY"))
 							define ("S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY", ($c[] = (int)$file_downloads["currently"]));
@@ -1194,7 +1194,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS
 						*
-						* @see `Dashboard -> s2Member -> Download Options`
+						* @see `Dashboard -› s2Member -› Download Options`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS"))
 							define ("S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS", ($c[] = (int)$file_downloads["allowed_days"]));
@@ -1249,7 +1249,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS
 						*
-						* @see `Dashboard -> s2Member -> Download Options`
+						* @see `Dashboard -› s2Member -› Download Options`
 						*/
 						if (!defined ("S2MEMBER_FILE_DOWNLOAD_LIMIT_EXCEEDED_PAGE_ID"))
 							define ("S2MEMBER_FILE_DOWNLOAD_LIMIT_EXCEEDED_PAGE_ID", ($c[] = (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"]));
@@ -1289,7 +1289,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL
 						*
-						* @see `Dashboard -> s2Member -> General Options -> Membership Options Page`
+						* @see `Dashboard -› s2Member -› General Options -› Membership Options Page`
 						*/
 						if (!defined ("S2MEMBER_MEMBERSHIP_OPTIONS_PAGE_ID"))
 							define ("S2MEMBER_MEMBERSHIP_OPTIONS_PAGE_ID", ($c[] = (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"]));
@@ -1329,7 +1329,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL
 						*
-						* @see `Dashboard -> s2Member -> General Options -> Login Welcome Page`
+						* @see `Dashboard -› s2Member -› General Options -› Login Welcome Page`
 						*/
 						if (!defined ("S2MEMBER_LOGIN_WELCOME_PAGE_ID"))
 							define ("S2MEMBER_LOGIN_WELCOME_PAGE_ID", ($c[] = (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]));
@@ -1368,7 +1368,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_LIMIT_EXCEEDED_PAGE_ID
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_LIMIT_EXCEEDED_PAGE_URL
 						*
-						* @see `Dashboard -> s2Member -> General Options -> Profile Modifications`
+						* @see `Dashboard -› s2Member -› General Options -› Profile Modifications`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL"))
 							define ("S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL", ($c[] = (string)site_url ("/?s2member_profile=1")));
@@ -1423,7 +1423,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS
 						*
-						* @see `Dashboard -> s2Member -> Download Options`
+						* @see `Dashboard -› s2Member -› Download Options`
 						*/
 						if (!defined ("S2MEMBER_FILE_DOWNLOAD_LIMIT_EXCEEDED_PAGE_URL"))
 							define ("S2MEMBER_FILE_DOWNLOAD_LIMIT_EXCEEDED_PAGE_URL", ($c[] = (string)$links["file_download_limit_exceeded_page"]));
@@ -1463,7 +1463,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL
 						*
-						* @see `Dashboard -> s2Member -> General Options -> Membership Options Page`
+						* @see `Dashboard -› s2Member -› General Options -› Membership Options Page`
 						*/
 						if (!defined ("S2MEMBER_MEMBERSHIP_OPTIONS_PAGE_URL"))
 							define ("S2MEMBER_MEMBERSHIP_OPTIONS_PAGE_URL", ($c[] = (string)$links["membership_options_page"])); /* Signup page. */
@@ -1503,7 +1503,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL
 						*
-						* @see `Dashboard -> s2Member -> General Options -> Login Welcome Page`
+						* @see `Dashboard -› s2Member -› General Options -› Login Welcome Page`
 						*/
 						if (!defined ("S2MEMBER_LOGIN_WELCOME_PAGE_URL"))
 							define ("S2MEMBER_LOGIN_WELCOME_PAGE_URL", ($c[] = (($login_redirection_url) ? (string)$login_redirection_url : (string)$links["login_welcome_page"])));
@@ -1625,7 +1625,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see http://codex.wordpress.org/Function_Reference/wp_get_current_user wp_get_current_user()
 						*
-						* @see `Dashboard -> s2Member -> General Options -> Membership Level (Labels)`
+						* @see `Dashboard -› s2Member -› General Options -› Membership Level (Labels)`
 						*/
 						for ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 							{
@@ -1677,7 +1677,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS
 						*
-						* @see `Dashboard -> s2Member -> Download Options`
+						* @see `Dashboard -› s2Member -› Download Options`
 						*/
 						for ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 							{
@@ -1730,7 +1730,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS
 						*
-						* @see `Dashboard -> s2Member -> Download Options`
+						* @see `Dashboard -› s2Member -› Download Options`
 						*/
 						for ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 							{
@@ -1774,7 +1774,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see s2Member\API_Constants\S2MEMBER_LEVELn_FILE_DOWNLOADS_ALLOWED
 						* @see s2Member\API_Constants\S2MEMBER_LEVELn_FILE_DOWNLOADS_ALLOWED_DAYS
 						*
-						* @see `Dashboard -> s2Member -> Download Options`
+						* @see `Dashboard -› s2Member -› Download Options`
 						*/
 						if (!defined ("S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS"))
 							define ("S2MEMBER_FILE_DOWNLOAD_INLINE_EXTENSIONS", ($c[] = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_inline_extensions"]));
@@ -1801,7 +1801,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_REG_EMAIL_FROM_EMAIL
 						*
-						* @see `Dashboard -> s2Member -> General Options`
+						* @see `Dashboard -› s2Member -› General Options`
 						*/
 						if (!defined ("S2MEMBER_REG_EMAIL_FROM_NAME"))
 							define ("S2MEMBER_REG_EMAIL_FROM_NAME", ($c[] = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]));
@@ -1828,7 +1828,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_REG_EMAIL_FROM_NAME
 						*
-						* @see `Dashboard -> s2Member -> General Options`
+						* @see `Dashboard -› s2Member -› General Options`
 						*/
 						if (!defined ("S2MEMBER_REG_EMAIL_FROM_EMAIL"))
 							define ("S2MEMBER_REG_EMAIL_FROM_EMAIL", ($c[] = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"]));
@@ -1856,7 +1856,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_RETURN_URL
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_PDT_IDENTITY_TOKEN
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Options -> IPN Integration`
+						* @see `Dashboard -› s2Member -› PayPal® Options -› IPN Integration`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_NOTIFY_URL"))
 							define ("S2MEMBER_PAYPAL_NOTIFY_URL", ($c[] = (string)site_url ("/?s2member_paypal_notify=1")));
@@ -1884,7 +1884,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_NOTIFY_URL
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_PDT_IDENTITY_TOKEN
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Options -> Auto-Return/PDT Integration`
+						* @see `Dashboard -› s2Member -› PayPal® Options -› Auto-Return/PDT Integration`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_RETURN_URL"))
 							define ("S2MEMBER_PAYPAL_RETURN_URL", ($c[] = (string)site_url ("/?s2member_paypal_return=1")));
@@ -1913,7 +1913,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_PASSWORD
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_SIGNATURE
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Options -> Account Details`
+						* @see `Dashboard -› s2Member -› PayPal® Options -› Account Details`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_BUSINESS"))
 							define ("S2MEMBER_PAYPAL_BUSINESS", ($c[] = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"]));
@@ -1943,7 +1943,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_ENDPOINT
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Options -> Account Details`
+						* @see `Dashboard -› s2Member -› PayPal® Options -› Account Details`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_ENDPOINT"))
 							define ("S2MEMBER_PAYPAL_ENDPOINT", ($c[] = (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")));
@@ -1973,7 +1973,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_ENDPOINT
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Options -> Account Details`
+						* @see `Dashboard -› s2Member -› PayPal® Options -› Account Details`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_API_ENDPOINT"))
 							define ("S2MEMBER_PAYPAL_API_ENDPOINT", ($c[] = (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "api-3t.sandbox.paypal.com" : "api-3t.paypal.com")));
@@ -2001,7 +2001,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_PASSWORD
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_SIGNATURE
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Options -> Account Details`
+						* @see `Dashboard -› s2Member -› PayPal® Options -› Account Details`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_API_USERNAME"))
 							define ("S2MEMBER_PAYPAL_API_USERNAME", ($c[] = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"]));
@@ -2029,7 +2029,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_USERNAME
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_SIGNATURE
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Options -> Account Details`
+						* @see `Dashboard -› s2Member -› PayPal® Options -› Account Details`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_API_PASSWORD"))
 							define ("S2MEMBER_PAYPAL_API_PASSWORD", ($c[] = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"]));
@@ -2057,7 +2057,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_USERNAME
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_PASSWORD
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Options -> Account Details`
+						* @see `Dashboard -› s2Member -› PayPal® Options -› Account Details`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_API_SIGNATURE"))
 							define ("S2MEMBER_PAYPAL_API_SIGNATURE", ($c[] = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"]));
@@ -2084,7 +2084,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_RETURN_URL
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_NOTIFY_URL
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Options -> Auto-Return/PDT Integration`
+						* @see `Dashboard -› s2Member -› PayPal® Options -› Auto-Return/PDT Integration`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_PDT_IDENTITY_TOKEN"))
 							define ("S2MEMBER_PAYPAL_PDT_IDENTITY_TOKEN", ($c[] = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_identity_token"]));
@@ -2144,7 +2144,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Functions\s2member_value_for_pp_inv()
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Buttons`
+						* @see `Dashboard -› s2Member -› PayPal® Buttons`
 						*/
 						if (!defined ("S2MEMBER_VALUE_FOR_PP_INV"))
 							define ("S2MEMBER_VALUE_FOR_PP_INV", uniqid () . "~" . S2MEMBER_CURRENT_USER_IP);
@@ -2202,7 +2202,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS0
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Buttons`
+						* @see `Dashboard -› s2Member -› PayPal® Buttons`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON0"))
 							define ("S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON0", ($c[] = ((S2MEMBER_CURRENT_USER_SUBSCR_OR_WP_ID) ? "Referencing Customer ID" : "Originating Domain")));
@@ -2260,7 +2260,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON0
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Buttons`
+						* @see `Dashboard -› s2Member -› PayPal® Buttons`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS0"))
 							define ("S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS0", ($c[] = ((S2MEMBER_CURRENT_USER_SUBSCR_OR_WP_ID) ? S2MEMBER_CURRENT_USER_SUBSCR_OR_WP_ID : (string)$_SERVER["HTTP_HOST"])));
@@ -2315,7 +2315,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Buttons`
+						* @see `Dashboard -› s2Member -› PayPal® Buttons`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1"))
 							define ("S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1", ($c[] = "Customer IP Address" /* Via $_SERVER["REMOTE_ADDR"] below. */));
@@ -2370,7 +2370,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1
 						*
-						* @see `Dashboard -> s2Member -> PayPal® Buttons`
+						* @see `Dashboard -› s2Member -› PayPal® Buttons`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1"))
 							define ("S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1", ($c[] = (string)$_SERVER["REMOTE_ADDR"]));

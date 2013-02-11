@@ -788,11 +788,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 
 																$opt_in = (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_opt_in"])) ? true : false;
 
-																if (!($fname = $user->first_name)) // `Users -> Add New`.
+																if (!($fname = $user->first_name)) // `Users -› Add New`.
 																	if (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_first_name"]))
 																		$fname = (string)$_pmr["ws_plugin__s2member_custom_reg_field_first_name"];
 
-																if (!($lname = $user->last_name)) // `Users -> Add New`.
+																if (!($lname = $user->last_name)) // `Users -› Add New`.
 																	if (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_last_name"]))
 																		$lname = (string)$_pmr["ws_plugin__s2member_custom_reg_field_last_name"];
 
@@ -805,7 +805,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																	if (!empty ($GLOBALS["ws_plugin__s2member_generate_password_return"]))
 																		$pass = (string)$GLOBALS["ws_plugin__s2member_generate_password_return"];
 
-																if (!$pass) // Also try the `Users -> Add New` form.
+																if (!$pass) // Also try the `Users -› Add New` form.
 																	if (!empty ($_pmr["pass1"])) // Field in `/user-new.php`.
 																		$pass = (string)$_pmr["pass1"];
 

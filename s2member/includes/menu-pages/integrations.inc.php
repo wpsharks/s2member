@@ -51,6 +51,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_integrations"))
 								echo '<h3>bbPress® Plugin Integration (easy peasy)</h3>'."\n";
 								echo '<input type="button" value="Update Roles/Capabilities" class="ws-menu-page-right ws-plugin--s2member-update-roles-button" style="min-width:175px;" />'."\n";
 								echo '<p>The plugin version of <a href="http://www.s2member.com/bbpress-plugin" target="_blank" rel="external">bbPress® 2.0+</a> integrates seamlessly with WordPress®. If bbPress® was already installed when you activated s2Member, your s2Member Roles/Capabilities are already configured to work in harmony with bbPress®. If you didn\'t, you can simply click the "Update Roles/Capabilities" button here. That\'s all it takes. Once your Roles/Capbilities are updated, s2Member and bbPress® are fully integrated with each other.</p>'."\n";
+								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/roles-caps/#s2-roles-caps" target="_blank" rel="external">s2Member® Roles/Capabilities (Including <strong>bbPress®</strong> Support)</a>.</p>'."\n";
 
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
 
@@ -66,7 +67,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_integrations"))
 
 								echo '<h3>Protecting Content Introduced by bbPress®</h3>'."\n";
 								echo '<p>You can protect individual Forum Topics/Posts/Replies at different Levels with s2Member, or even with Custom Capabilities. Forum Topics/Posts/Replies are integrated by bbPress® internally as "Custom Post Types", which can be protected by s2Member either through Post Level Access Restrictions, or through URI Level Access Restrictions (recommended). If you choose to use Post Level Access Restrictions, please remember that s2Member will provide you with drop-down menus whenever you add or edit Forum Topics/Posts/Replies to make things easier for you.</p>'."\n";
-								echo '<p>Regarding s2Member\'s Post Level Access Restrictions with bbPress®. Before you decide to use Post Level Access Restrictions, please take a look at: <code>s2Member -> Restriction Options -> URI Access Restrictions</code> and consider the following limitations in the current release of s2Member. It is currently NOT possible to protect a Forum, and have all Topics inside that Forum protected automatically. In order to accomplish that, you\'ll need to use s2Member\'s URI Access Restrictions. Also, s2Member is currently NOT capable of protecting Topic Tags; but you can use URI Restrictions for these also.</p>'."\n";
+								echo '<p>Regarding s2Member\'s Post Level Access Restrictions with bbPress®. Before you decide to use Post Level Access Restrictions, please take a look at: <code>s2Member -› Restriction Options -› URI Access Restrictions</code> and consider the following limitations in the current release of s2Member. It is currently NOT possible to protect a Forum, and have all Topics inside that Forum protected automatically. In order to accomplish that, you\'ll need to use s2Member\'s URI Access Restrictions. Also, s2Member is currently NOT capable of protecting Topic Tags; but you can use URI Restrictions for these also.</p>'."\n";
 								do_action("ws_plugin__s2member_during_integrations_page_during_left_sections_during_api_easy_way", get_defined_vars());
 								echo '</div>'."\n";
 

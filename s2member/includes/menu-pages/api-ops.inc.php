@@ -189,7 +189,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
-								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
+								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -› General Options -› Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
@@ -295,7 +295,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
-								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
+								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -› General Options -› Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
@@ -352,7 +352,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-modification-notifications-section">' . "\n";
 								echo '<h3>Modification Notification URLs (optional)</h3>' . "\n";
-								echo '<p>If you use affiliate software, or have back-office routines that need to be notified each time a new Subscription is created by an "existing" User/Member, or an "existing" Member modifies their paid Subscription terms, you\'ll want to read this section. This is marked `Modification`, because the URLs that you list below, will be notified each time an "existing" User/Member <em>(even if they are/were a Free Subscriber)</em> signs up for a paid Subscription <em>( i.e. a Modification takes place against an existing account within WordPress® )</em>, or an "existing" Member modifies their paid Subscription terms <em>( again, a Modification takes places against an existing account within WordPress® )</em>. Depending on your fee structure, this may include a first Initial Payment that establishes their Subscription, or it may not.</p>' . "\n";
+								echo '<p>If you use affiliate software, or have back-office routines that need to be notified each time a new Subscription is created by an "existing" User/Member, or an "existing" Member modifies their paid Subscription terms, you\'ll want to read this section. This is marked `Modification`, because the URLs that you list below, will be notified each time an "existing" User/Member <em>(even if they are/were a Free Subscriber)</em> signs up for a paid Subscription <em>(i.e. a Modification takes place against an existing account within WordPress®)</em>, or an "existing" Member modifies their paid Subscription terms <em>(again, a Modification takes places against an existing account within WordPress®)</em>. Depending on your fee structure, this may include a first Initial Payment that establishes their Subscription, or it may not.</p>' . "\n";
 								echo '<p>Modification Notifications are sent right after a Member signs up and/or modifies billing terms successfully through your Payment Gateway, regardless of whether any money has actually been transacted initially. In other words, this Notification is triggered, even if you provided them with a 100% Free Trial Period <em>(e.g. no money is being transacted intially)</em>.</p>' . "\n";
 								echo '<p>This Notification will NOT be processed for Free Subscribers that register without going through your Payment Gateway at all. This Notification will NOT be processed for "new" Users/Members <em>(see: Signup Notifications for that scenario)</em>.' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' And, this Notification will NOT be processed for Independent Custom Capability purchases <em>(see: Payment Notifications for that scenario)</em>.') . '</p>' . "\n";
 								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Modification Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
@@ -404,7 +404,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
-								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
+								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -› General Options -› Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
@@ -503,7 +503,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
-								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
+								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -› General Options -› Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
@@ -604,7 +604,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
-								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
+								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -› General Options -› Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
@@ -706,7 +706,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
-								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -> General Options -> Registration/Profile Fields</em>.</li>' . "\n";
+								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -› General Options -› Registration/Profile Fields</em>.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";

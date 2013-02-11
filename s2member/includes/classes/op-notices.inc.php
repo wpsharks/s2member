@@ -45,7 +45,7 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 
 						if (is_blog_admin () && $pagenow === "options-general.php" && !isset ($_GET["page"]) && !is_multisite ()) // Multisite does NOT provide these options.
 							{
-								$notice = "<em>* Note: The s2Member plugin has control over two options on this page.<br /><code>Allow Open Registration = " . esc_html (get_option ("users_can_register")) . "</code>, and <code>Default Role = " . esc_html (get_option ("default_role")) . "</code>.<br />For further details, see: <code>s2Member -> General Options -> Open Registration</code>.";
+								$notice = "<em>* Note: The s2Member plugin has control over two options on this page.<br /><code>Allow Open Registration = " . esc_html (get_option ("users_can_register")) . "</code>, and <code>Default Role = " . esc_html (get_option ("default_role")) . "</code>.<br />For further details, see: <code>s2Member -› General Options -› Open Registration</code>.";
 
 								$js = '<script type="text/javascript">';
 								$js .= "jQuery('input#users_can_register, select#default_role').attr('disabled', 'disabled');";
@@ -78,7 +78,7 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 
 						if (is_multisite () && is_network_admin () && in_array ($pagenow, array ("settings.php")) && !isset ($_GET["page"]))
 							{
-								$notice = "<em>* Note: The s2Member plugin has control over two options on this page.<br /><code>Allow Open Registration = " . esc_html (get_site_option ("registration")) . "</code> and <code>Add New Users = " . esc_html (get_site_option ("add_new_users")) . "</code>.<br />Please check: <code>s2Member -> Multisite (Config)</code>.";
+								$notice = "<em>* Note: The s2Member plugin has control over two options on this page.<br /><code>Allow Open Registration = " . esc_html (get_site_option ("registration")) . "</code> and <code>Add New Users = " . esc_html (get_site_option ("add_new_users")) . "</code>.<br />Please check: <code>s2Member -› Multisite (Config)</code>.";
 
 								$js = '<script type="text/javascript">';
 								$js .= "jQuery('input[name=registration], input#add_new_users').attr('disabled', 'disabled');";

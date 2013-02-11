@@ -1664,7 +1664,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							'message' => sprintf(
 								self::i18n(
 									'Although NOT required, %1$s recommends that your WordPress® installation be configured with a matching HOST name.'.
-									' This can be changed in the Dashboard, under: <code>WordPress -> Settings -> General -> WordPress/Site URLs</code>.'.
+									' This can be changed in the Dashboard, under: <code>WordPress -› Settings -› General -› WordPress/Site URLs</code>.'.
 									' Your current configuration does NOT match: <code>%2$s</code>'
 								), htmlspecialchars($plugin_name), htmlspecialchars($current_host_name)
 							)
@@ -1981,7 +1981,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 
 			#if(basename($root_dir) === '')
 			#	foreach($checksums as $_key => $_value)
-			#		file_put_contents('manifest-server.txt', $_key.' -> '.$_value."\n", FILE_APPEND);
+			#		file_put_contents('manifest-server.txt', $_key.' -› '.$_value."\n", FILE_APPEND);
 
 			return md5(implode('', $checksums));
 		}
