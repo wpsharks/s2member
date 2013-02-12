@@ -494,7 +494,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 								if(is_dir($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
 									foreach(scandir($logs_dir) as $log_file) // Archive existing log files here.
 										{
-											if(preg_match("/\.log$/", $log_file) && !preg_match("/-ARCHIVED-/", $log_file))
+											if(preg_match("/\.log$/", $log_file) && stripos($log_file, "-ARCHIVED-") === FALSE)
 												if(is_file ($log_dir_file = $logs_dir . "/" . $log_file) && is_writable($log_dir_file))
 													rename ($log_dir_file, preg_replace ("/\.log$/i", "", $log_dir_file) . "-ARCHIVED-" . date ("m-d-Y") . "-" . time () . ".log");
 										}
