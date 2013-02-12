@@ -361,6 +361,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 				public static function log_file_downloader()
 					{
 						if(!current_user_can("create_users")) return;
+						if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
+							return; // We do NOT provide this functionality on Child Blogs of a Blog Farm Network.
 
 						if(!empty($_GET["ws_plugin__s2member_download_log_file"]))
 						{
@@ -399,6 +401,81 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						}
 					}
 				/**
+				 * Handles log file downloads (in ZIP format).
+				 *
+				 * @package s2Member\Menu_Pages
+				 * @since 120310
+				 *
+				 * @return null
+				 */
+				public static function logs_zip_downloader()
+				{
+					if(!current_user_can("create_users")) return;
+					if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
+						return; // We do NOT provide this functionality on Child Blogs of a Blog Farm Network.
+
+					if(!empty($_GET["ws_plugin__s2member_logs_download_zip"]))
+					{
+						$logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
+						$s2member_logs_zip = $logs_dir."/".$_SERVER["HTTP_HOST"]."--s2member-logs.zip";
+
+						if(is_dir($logs_dir)) // Do we have a logs directory?
+						{
+							include_once ABSPATH . "wp-admin/includes/class-pclzip.php";
+
+							if(file_exists($s2member_logs_zip) && is_writable($s2member_logs_zip))
+								unlink($s2member_logs_zip);
+
+							$archive = new PclZip($s2member_logs_zip);
+							$archive->create($logs_dir, PCLZIP_OPT_REMOVE_ALL_PATH);
+						}
+
+						if(file_exists($s2member_logs_zip))
+							$s2member_logs_zip_size = filesize($s2member_logs_zip);
+						else $s2member_logs_zip_size = 0;
+
+						@set_time_limit(0);
+						@ini_set("memory_limit", apply_filters("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
+
+						@ini_set("zlib.output_compression", 0);
+						if(function_exists("apache_setenv"))
+							@apache_setenv("no-gzip", "1");
+
+						while (@ob_end_clean ());
+
+						status_header(200); // 200 OK status header.
+
+						header("Content-Encoding: none");
+						header("Accept-Ranges: none");
+						header("Content-Type: application/zip");
+						header("Content-Length: ".$s2member_logs_zip_size);
+						header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("-1 week"))." GMT");
+						header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+						header("Cache-Control: no-cache, must-revalidate, max-age=0");
+						header("Cache-Control: post-check=0, pre-check=0", false);
+						header("Pragma: no-cache");
+
+						header('Content-Disposition: attachment; filename="'.basename($s2member_logs_zip).'"');
+
+						if($s2member_logs_zip_size && is_resource($resource = fopen($s2member_logs_zip, "rb")))
+						{
+							$_bytes_to_read = $s2member_logs_zip_size; // Total bytes we need to read for this file.
+
+							$chunk_size = apply_filters("ws_plugin__s2member_file_downloads_chunk_size", 2097152, get_defined_vars());
+
+							while /* We have bytes to read here. */($_bytes_to_read)
+							{
+								$_bytes_to_read -= ($_reading = ($_bytes_to_read > $chunk_size) ? $chunk_size : $_bytes_to_read);
+								echo /* Serve file in chunks (default chunk size is 2MB). */ fread($resource, $_reading);
+								flush /* Flush each chunk to the browser as it is served (avoids high memory consumption). */();
+							}
+							fclose /* Close file resource handle. */($resource);
+							unset /* Housekeeping. */($_bytes_to_read, $_reading);
+						}
+						exit; // Clean exit after serving file.
+					}
+				}
+				/**
 				 * Archives existing log files and starts fresh with new logs.
 				 *
 				 * @package s2Member\Menu_Pages
@@ -409,6 +486,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 				public static function archive_logs_start_fresh()
 					{
 						if(!current_user_can("create_users")) return;
+						if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
+							return; // We do NOT provide this functionality on Child Blogs of a Blog Farm Network.
 
 						if(!empty($_GET["ws_plugin__s2member_logs_archive_start_fresh"]))
 							{
@@ -433,6 +512,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 				public static function gateway_debug_logs_enable()
 					{
 						if(!current_user_can("create_users")) return;
+						if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
+							return; // We do NOT provide this functionality on Child Blogs of a Blog Farm Network.
 
 						if(!empty($_GET["ws_plugin__s2member_gateway_debug_logs_enable"]))
 							{

@@ -53,6 +53,7 @@ add_action("init", "c_ws_plugin__s2member_login_redirects_r::remove_login_redire
 add_action("admin_init", "c_ws_plugin__s2member_menu_pages::gateway_debug_logs_enable");
 add_action("admin_init", "c_ws_plugin__s2member_menu_pages::archive_logs_start_fresh");
 add_action("admin_init", "c_ws_plugin__s2member_menu_pages::log_file_downloader");
+add_action("admin_init", "c_ws_plugin__s2member_menu_pages::logs_zip_downloader");
 
 add_action("pre_get_posts", "c_ws_plugin__s2member_security::security_gate_query", 100);
 

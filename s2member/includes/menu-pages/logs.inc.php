@@ -52,24 +52,48 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-logs-section">'."\n";
 								echo '<h3>s2Member® Log Files (for Debugging Purposes)</h3>'."\n";
 								echo '<input type="button" value="Archive All Log Files (Start Fresh)" class="ws-menu-page-right ws-plugin--s2member-archive-logs-start-fresh-button" style="min-width:200px;" onclick="if(!confirm(\'Archive all existing log files and start fresh?\n\nPlease click OK to confirm.\')) return false; location.href = \''.esc_attr(add_query_arg(array('ws_plugin__s2member_logs_archive_start_fresh' => 'yes'))).'\';" />'."\n";
+								echo '<input type="button" value="Download All Log Files (Zip File)" class="ws-menu-page-right ws-plugin--s2member-logs-download-zip-button" style="clear:right; min-width:200px;" onclick="location.href = \''.esc_attr(add_query_arg(array('ws_plugin__s2member_logs_download_zip' => 'yes'))).'\';" />'."\n";
 								echo '<p><span class="ws-menu-page-hilite">s2Member® keeps a log of ALL of its communication with Payment Gateways. If you are having trouble, please review your log files below.</span></p>'."\n";
-								echo '<p><strong>Debugging Tips —</strong> &nbsp;&nbsp; It is normal to see a few errors in your log files. This is because s2Member® logs ALL of its communication with Payment Gateways. Everything — not just successes. With that in mind, there will be some failures that s2Member® expects (to a certain extent); and s2Member® deals with these gracefully. What you\'re looking for here, are things that jump right out at you as being a major issue. Generally speaking, it is best to run test transactions for yourself. Then review the log file entries pertaining to your transaction. Does s2Member® report any major issues? If so, please read through any details that s2Member® provides in the log file. If you need assistance, please <a href="http://www.s2member.com/quick-s.php" target="_blank" rel="external">search our forums</a> for answers to common questions.</p>'."\n";
-								echo '<p style="font-style:italic;">s2Member® log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code>. Any log files that contain the word <code>ARCHIVED</code> in their name, are files that reached a size of more than 2MB — so s2Member® archived them automatically. Archived log file names will also contain the date/time they were archived by s2Member®. These archived files typically contain much older (and possibly outdated) log entries.</p>'."\n";
-								echo '<p><strong>Please note —</strong> it is normal to have a <code>paypay-ipn|rtn.log</code> file at all times. Ultimately, all Payment Gateway integrations supported by s2Member® pass through it\'s core PayPal® processor; even if you\'ve integrated with another Payment Gateway. If you are having trouble, and you don\'t find any errors in your Payment Gateway log file, please check the <code>paypay-ipn|rtn.log</code> files too.</p>'."\n";
+								echo '<p><strong>Debugging Tips:</strong> &nbsp;&nbsp; It is normal to see a few errors in your log files. This is because s2Member® logs ALL of its communication with Payment Gateways. Everything — not just successes. With that in mind, there will be some failures that s2Member® expects (to a certain extent); and s2Member® deals with these gracefully. What you\'re looking for here, are things that jump right out at you as being a major issue (e.g. when s2Member® makes a point of providing details to you in a log entry about problems that should be corrected).</p>'."\n";
+								echo '<p><strong>Test Transaction Tips:</strong> &nbsp;&nbsp; Generally speaking, it is best to run test transactions for yourself. Then review the log file entries pertaining to your transaction. Does s2Member® report any major issues? If so, please read through any details that s2Member® provides in the log file. If you need assistance, please <a href="http://www.s2member.com/quick-s.php" target="_blank" rel="external">search our forums</a> for answers to common questions.</p>'."\n";
+								echo '<p><strong>Important Note:</strong> &nbsp;&nbsp; It is normal to have a <code>paypay-ipn.log</code> and/or a <code>paypay-rtn.log</code> file at all times. Ultimately, all Payment Gateway integrations supported by s2Member® pass through it\'s core PayPal® processors; even if you\'ve integrated with another Payment Gateway. If you are having trouble, and you don\'t find any errors in your Payment Gateway log files, please check the <code>paypay-ipn.log</code> and <code>paypay-rtn.log</code> files too. Regarding s2Member® Pro Forms... If you\'ve integrated s2Member® Pro Forms, you will NOT have a <code>paypay-rtn.log</code> file, because that particular processor is not used with Pro Form integrations. However, you will have a <code>paypay-ipn.log</code> file, and you will need to make a point of inspecting this file to ensure there were no post-processing issues.</p>'."\n";
+								echo '<p style="font-style:italic;"><strong>Archived Log Files:</strong> &nbsp;&nbsp; All s2Member® log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code>. Any log files that contain the word <code>ARCHIVED</code> in their name, are files that reached a size of more than 2MB, so s2Member® archived them automatically to prevent any single log file from becoming too large. Archived log file names will also contain the date/time they were archived by s2Member®. These archived log files typically contain much older (and possibly outdated) log entries.</p>'."\n";
 
 								$log_file_options = ""; // Initialize to an empty string.
-								$current_log_file = (!empty($_POST["ws_plugin__s2member_log_file"])) ? esc_html($_POST["ws_plugin__s2member_log_file"]) : "";
+								$view_log_file = (!empty($_POST["ws_plugin__s2member_log_file"])) ? esc_html($_POST["ws_plugin__s2member_log_file"]) : "";
 								$logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
 
-								if(is_dir($logs_dir))
-									foreach(scandir($logs_dir) as $log_file)
-										{
-											if(preg_match("/\.log$/", $log_file))
-												$log_file_options .= '<option value="'.esc_attr($log_file).'"'.(($current_log_file === $log_file) ? ' style="font-weight:bold;" selected="selected"' : '').'>'.esc_html($log_file).'</option>';
-										}
-								if(!$log_file_options)
-									$log_file_options .= '<option value="">— No log files available yet. —</option>';
-								else $log_file_options = '<option value="">— Choose a Log File to View —</option>'.$log_file_options;
+								if(is_dir($logs_dir)) // Do we have a logs directory on this installation?
+								{
+									$log_files = scandir($logs_dir); sort($log_files, SORT_STRING);
+
+									$log_file_options .= '<optgroup label="Current Log Files">';
+									foreach($log_files as $log_file) // Build options for each current log file.
+									{
+										if(preg_match("/\.log$/", $log_file) && stripos($log_file, "-ARCHIVED-") === FALSE)
+											$log_file_options .= '<option data-type="current" value="'.esc_attr($log_file).'"'.(($view_log_file === $log_file) ? ' style="font-weight:bold;" selected="selected"' : '').'>'.esc_html($log_file).'</option>';
+									}
+									$log_file_options .= '</optgroup>';
+
+									if(stripos($log_file_options, '<option data-type="current"') === FALSE)
+										$log_file_options .= '<option value="" disabled="disabled">— No current log files yet. —</option>';
+
+									$log_file_options .= '<option value="" disabled="disabled"></option>';
+
+									$log_file_options .= '<optgroup label="Archived Log Files">';
+									foreach($log_files as $log_file) // Build options for each ARCHIVED log file.
+									{
+										if(preg_match("/\.log$/", $log_file) && stripos($log_file, "-ARCHIVED-") !== FALSE)
+											$log_file_options .= '<option data-type="archived" value="'.esc_attr($log_file).'"'.(($view_log_file === $log_file) ? ' style="font-weight:bold;" selected="selected"' : '').'>'.esc_html($log_file).'</option>';
+									}
+									$log_file_options .= '</optgroup>';
+
+									if(stripos($log_file_options, '<option data-type="archived"') === FALSE)
+										$log_file_options .= '<option value="" disabled="disabled">— No log files archived yet. —</option>';
+								}
+								$log_file_options = '<option value="">— Choose a Log File to View —</option>'.
+															'<option value="" disabled="disabled"></option>'.
+								                     $log_file_options;
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -95,24 +119,24 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 								echo '<td>' . "\n";
 
-								if($current_log_file && file_exists($logs_dir."/".$current_log_file) && filesize($logs_dir."/".$current_log_file))
+								if($view_log_file && file_exists($logs_dir."/".$view_log_file) && filesize($logs_dir."/".$view_log_file))
 									{
-										echo '<p style="float:left; text-align:left;"><strong>Currently viewing log file:</strong> <a href="'.esc_attr(add_query_arg(array('ws_plugin__s2member_download_log_file' => $current_log_file))).'">'.esc_html($current_log_file).'</a></p>'."\n";
-										echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array('ws_plugin__s2member_download_log_file' => $current_log_file))).'"><strong>download this log file</strong></a> ]</p>'."\n";
+										echo '<p style="float:left; text-align:left;"><strong>Currently viewing log file:</strong> <a href="'.esc_attr(add_query_arg(array('ws_plugin__s2member_download_log_file' => $view_log_file))).'">'.esc_html($view_log_file).'</a></p>'."\n";
+										echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array('ws_plugin__s2member_download_log_file' => $view_log_file))).'"><strong>download this log file</strong></a> ]</p>'."\n";
 
-										echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="100" wrap="on" spellcheck="false" style="font-family:monospace;">'.esc_html(file_get_contents($logs_dir."/".$current_log_file)).'</textarea>' . "\n";
+										echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="100" wrap="on" spellcheck="false" style="font-family:monospace;">'.esc_html(file_get_contents($logs_dir."/".$view_log_file)).'</textarea>' . "\n";
 
-										echo '<p style="float:left; text-align:left;"><strong>Currently viewing log file:</strong> <a href="'.esc_attr(add_query_arg(array('ws_plugin__s2member_download_log_file' => $current_log_file))).'">'.esc_html($current_log_file).'</a></p>'."\n";
-										echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array('ws_plugin__s2member_download_log_file' => $current_log_file))).'"><strong>download this log file</strong></a> ]</p>'."\n";
+										echo '<p style="float:left; text-align:left;"><strong>Currently viewing log file:</strong> <a href="'.esc_attr(add_query_arg(array('ws_plugin__s2member_download_log_file' => $view_log_file))).'">'.esc_html($view_log_file).'</a></p>'."\n";
+										echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array('ws_plugin__s2member_download_log_file' => $view_log_file))).'"><strong>download this log file</strong></a> ]</p>'."\n";
 									}
-								else if($current_log_file && file_exists($logs_dir."/".$current_log_file))
-									echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="100" wrap="on" spellcheck="false" style="font-family:monospace;">— empty at this time —</textarea>' . "\n";
+								else if($view_log_file && file_exists($logs_dir."/".$view_log_file))
+									echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="100" wrap="on" spellcheck="false" style="font-family:monospace; font-style:italic;">— Empty at this time —</textarea>' . "\n";
 
-								else if($current_log_file && !file_exists($logs_dir."/".$current_log_file))
-									echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="100" wrap="on" spellcheck="false" style="font-family:monospace;">— file no longer exists —</textarea>' . "\n";
+								else if($view_log_file && !file_exists($logs_dir."/".$view_log_file))
+									echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="100" wrap="on" spellcheck="false" style="font-family:monospace; font-style:italic;">— File no longer exists —</textarea>' . "\n";
 
 								else // Display an empty textarea in this default scenario.
-									echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="100" wrap="on" spellcheck="false" style="font-family:monospace;"></textarea>' . "\n";
+									echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="100" wrap="on" spellcheck="false" style="font-family:monospace; font-style:italic;"></textarea>' . "\n";
 
 								echo '</td>' . "\n";
 
