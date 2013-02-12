@@ -51,14 +51,13 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 									{
 										$_p = (!empty ($_POST)) ? c_ws_plugin__s2member_utils_strings::trim_deep (stripslashes_deep ($_POST)) : array ();
 
-										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
-											if (($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level ("auto-detection", "registration")) || ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_opt_in"] && c_ws_plugin__s2member_list_servers::list_servers_integrated ()))
-												if (($close_section_container = true))
-													{
-														echo '<div id="ws-plugin--s2member-custom-reg-fields-4bp-section" class="ws-plugin--s2member-custom-reg-fields-4bp-section register-section">' . "\n";
-														echo '<div id="ws-plugin--s2member-custom-reg-fields-4bp-container" class="ws-plugin--s2member-custom-reg-fields-4bp-container">' . "\n";
-														echo '<input type="hidden" name="ws_plugin__s2member_registration" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-registration")) . '" />' . "\n";
-													}
+										if (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"] && ($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level ("auto-detection", "registration"))) || ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_opt_in"] && c_ws_plugin__s2member_list_servers::list_servers_integrated ()))
+											if (($close_section_container = true))
+												{
+													echo '<div id="ws-plugin--s2member-custom-reg-fields-4bp-section" class="ws-plugin--s2member-custom-reg-fields-4bp-section register-section">' . "\n";
+													echo '<div id="ws-plugin--s2member-custom-reg-fields-4bp-container" class="ws-plugin--s2member-custom-reg-fields-4bp-container">' . "\n";
+													echo '<input type="hidden" name="ws_plugin__s2member_registration" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-registration")) . '" />' . "\n";
+												}
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action ("ws_plugin__s2member_during_custom_registration_fields_4bp_before", get_defined_vars ());
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
