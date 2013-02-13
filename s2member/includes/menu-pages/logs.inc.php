@@ -41,6 +41,41 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 						do_action("ws_plugin__s2member_during_logs_page_before_left_sections", get_defined_vars());
 
+						if (apply_filters ("ws_plugin__s2member_during_logs_page_during_left_sections_display_help", true, get_defined_vars ()))
+						{
+							do_action ("ws_plugin__s2member_during_logs_page_during_left_sections_before_help", get_defined_vars ());
+
+							echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member®">' . "\n";
+
+							echo '<div class="ws-menu-page-section ws-plugin--s2member-help">' . "\n";
+							echo '<h3>Getting Help w/ s2Member® (Troubleshooting)</h3>' . "\n";
+							echo '<p>s2Member® is pretty easy to setup and install initially. Most of the official documentation is right here in your Dashboard (i.e. there is a lot of inline documentation built into the software). That being said, it CAN take some time to master everything there is to know about s2Member\'s advanced features. If you need assistance with s2Member®, please search the <a href="http://www.s2member.com/kb/" target="_blank" rel="external">s2Member® Knowledge Base</a>, <a href="http://www.s2member.com/videos/" target="_blank" rel="external">Video Tutorials</a>, <a href="http://www.s2member.com/forums/" target="_blank" rel="external">Forums</a> and <a href="http://www.s2member.com/codex/" target="_blank" rel="external">Codex</a>. If you are planning to do something creative with s2Member®, you might want to <a href="http://jobs.wordpress.net" target="_blank" rel="external">hire a freelance developer</a> to assist you.</p>' . "\n";
+							echo '<p><strong>See also:</strong> <a href="http://www.s2member.com/kb/common-troubleshooting-tips/" target="_blank" rel="external">s2Member® Troubleshooting Guide</a> (please read this first if you\'re having trouble).</p>'."\n";
+
+							echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+							echo '<h3>Testing Server Compatibility</h3>'."\n";
+							echo '<p>Please download the <a href="http://www.s2member.com/r/server-check-tool/">s2Member® Server Scanner</a>. Unzip, upload via FTP; then open in a browser for a full report.</p>'."\n";
+
+							echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+							echo '<h3>Troubleshooting Payment Gateway Integrations</h3>'."\n";
+							echo '<p>Please use the s2Member® Log Viewer (below). Log files can be very helpful.</p>'."\n";
+
+							echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+							echo '<h3>Search s2Member® KB Articles, Forums, Codex and more<em>!</em></h3>'."\n";
+							echo '<form method="get" action="http://www.s2member.com/quick-s.php" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';">'."\n";
+							echo '<p><input type="text" name="q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /><input type="submit" value="Search" /></p>'."\n";
+							echo '</form>'."\n";
+
+							do_action ("ws_plugin__s2member_during_logs_page_during_left_sections_during_help", get_defined_vars ());
+							echo '</div>' . "\n";
+							echo '</div>' . "\n";
+
+							do_action ("ws_plugin__s2member_during_logs_page_during_left_sections_after_help", get_defined_vars ());
+						}
+
 						if(apply_filters("ws_plugin__s2member_during_logs_page_during_left_sections_display_log_settings", true, get_defined_vars()))
 							{
 								do_action("ws_plugin__s2member_during_logs_page_during_left_sections_before_log_settings", get_defined_vars());
@@ -117,9 +152,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 							echo '<p><span class="ws-menu-page-hilite">s2Member® keeps a log of ALL of its communication with Payment Gateways. If you are having trouble, please review your log files below.</span></p>'."\n";
 
-							echo '<h3>Debugging Tools/Tips &amp; Other Important Details (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-debugging-tips-details\').toggle(); return false;" class="ws-dotted-link">click here to toggle</a>)</h3>'."\n";
+							echo '<h3>Debugging Tools/Tips &amp; Other Important Details (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-debugging-tips-details\').toggle(); return false;" class="ws-dotted-link">click here to toggle</a>)</h3>'."\n";
 
-							echo '<div id="ws-plugin--s2member-paypal-debugging-tips-details" style="display:none;">'."\n";
+							echo '<div id="ws-plugin--s2member-debugging-tips-details" style="display:none;">'."\n";
+
+							echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 							echo '<form method="post" onsubmit="if(!confirm(\'Archive all existing log files?\n\nAll of your current log files will be archived (e.g. they will simply be renamed with an ARCHIVED tag &amp; date in their file name); and new log files will be created automatically the next time s2Member® logs something on your installation.\n\nPlease click OK to confirm this action.\')) return false;">'."\n";
 							echo '<input type="hidden" name="ws_plugin__s2member_logs_archive_start_fresh" value="'.esc_attr(wp_create_nonce ("ws-plugin--s2member-logs-archive-start-fresh")).'" />'."\n";
@@ -137,45 +174,28 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 							echo '</form>'."\n";
 
 							echo '<p><strong>Debugging Tips:</strong> &nbsp;&nbsp; It is normal to see a few errors in your log files. This is because s2Member® logs ALL of its communication with Payment Gateways. Everything — not just successes. With that in mind, there will be some failures that s2Member® expects (to a certain extent); and s2Member® deals with these gracefully. What you\'re looking for here, are things that jump right out at you as being a major issue (e.g. when s2Member® makes a point of providing details to you in a log entry about problems that should be corrected on your installation). Please read carefully.</p>'."\n";
-							echo '<p><strong>Test Transaction Tips:</strong> &nbsp;&nbsp; Generally speaking, it is best to run test transactions for yourself. Then review the log file entries pertaining to your transaction. Does s2Member® report any major issues? If so, please read through any details that s2Member® provides in the log file. If you need assistance, please <a href="http://www.s2member.com/quick-s.php" target="_blank" rel="external">search s2Member.com</a> for answers to common questions.</p>'."\n";
+							echo '<p><strong>Test Transaction Tips:</strong> &nbsp;&nbsp; Generally speaking, it is best to run test transactions for yourself. Be sure to run your final test transactions against a live Payment Gateway that is NOT in Sandbox/Test Mode (<a href="#" onclick="alert(\'While some Payment Gateways make it possible for you to run test transactions in Sandbox/Test Mode, these are NOT a reliable way to test s2Member®.\n\nOften times (particularly with PayPal®) Sandbox/Test mode behaves somewhat differently — often with buggy behavior. This can really create frustration for site owners. Therefore, it is always a good idea to run low dollar test transactions against a live Payment Gateway.\n\nAlso, please be sure that you are NOT logged in as an Administrator when running test transactions. For most test transactions, you will want to be completely logged out of your site before completing checkout (just a new Customer would be). If you are testing an upgrade or downgrade (where you DO need to be logged-in), please do NOT attempt this under an Administrative account. s2Member® will NOT upgrade/downgrade Administrative accounts — for security purposes.\'); return false;">click here for details</a>). After running test transactions, please review the log file entries pertaining to your transaction. Does s2Member® report any major issues? If so, please read through any details that s2Member® provides in the log file. If you need assistance, please <a href="http://www.s2member.com/quick-s.php" target="_blank" rel="external">search s2Member.com</a> for answers to common questions.</p>'."\n";
 							echo '<p><strong>s2 Core Processors:</strong> &nbsp;&nbsp; It is normal to have a <code>paypay-ipn.log</code> and/or a <code>paypay-rtn.log</code> file at all times. Ultimately, all Payment Gateway integrations supported by s2Member® pass through it\'s core PayPal® processors; even if you\'ve integrated with another Payment Gateway. If you are having trouble, and you don\'t find any errors in your Payment Gateway log files, please check the <code>paypay-ipn.log</code> and <code>paypay-rtn.log</code> files too. Regarding s2Member® Pro Forms... If you\'ve integrated s2Member® Pro Forms, you will NOT have a <code>paypay-rtn.log</code> file, because that particular processor is not used with Pro Form integrations. However, you will have a <code>paypay-ipn.log</code> file, and you will need to make a point of inspecting this file to ensure there were no post-processing issues.</p>'."\n";
 							echo '<p><strong>s2 HTTP API Logs:</strong> &nbsp;&nbsp; If s2Member® is not behaving as expected, and you cannot find errors anywhere in your Payment Gateway log files (or with any core PayPal® processors), please review your <code>s2-http-api-debug.log</code> file too. Look for any HTTP connections where s2Member® is getting <code>403</code>, <code>404</code>, <code>503</code> errors from your server. This can sometimes happen due to <a href="http://www.s2member.com/kb/mod-security-random-503-403-errors/" target="_blank" rel="external">paranoid Mod Security configurations</a>, and it may require you to contact your hosting company for assistance.</p>'."\n";
 							echo '<p style="font-style:italic;"><strong>Archived Log Files:</strong> &nbsp;&nbsp; All s2Member® log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code>. Any log files that contain the word <code>ARCHIVED</code> in their name, are files that reached a size of more than 2MB, so s2Member® archived them automatically to prevent any single log file from becoming too large. Archived log file names will also contain the date/time they were archived by s2Member®. These archived log files typically contain much older (and possibly outdated) log entries.</p>'."\n";
 
+							echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+							echo '<h3>s2Member® Log File Descriptions (for ALL possible log file names)</h3>'."\n";
+
+							echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+							echo '<ul>'."\n";
+							foreach(c_ws_plugin__s2member_utils_logs::$log_file_descriptions as $_k => $_v)
+								echo '<li style="font-family:\'Georgia\', serif;"><code><strong>'.esc_html(preg_replace('/^\/|\/$/', '', $_k)).'.log</strong></code> &nbsp;&nbsp; '.esc_html($_v["long"]).'</li>'."\n";
+							unset($_k, $_v); // Housekeeping.
+							echo '</ul>'."\n";
+
+							echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
 							echo '</div>'."\n";
 
 							do_action("ws_plugin__s2member_during_logs_page_during_left_sections_during_logs", get_defined_vars());
-
-							$log_file_descriptions = array // Array keys are regex patterns matching their associated log file names.
-							(
-								'/paypal-api/' => array('short' => 'PayPal® API communication.', 'long' => 'This log file records all communication between s2Member® and PayPal® APIs. Such as PayPal® Button Encryption and PayPal® Pro API calls that process transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/paypal-payflow-api/' => array('short' => 'PayPal® (PayFlow Edition) API communication.', 'long' => 'This log file records all communication between s2Member® and the PayPal® (PayFlow Edition) APIs. Only applicable if you operate a PayPal® Payments Pro (PayFlow Edition) account. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/paypal-ipn/' => array('short' => 'Core PayPal® IPN and post-processing handler.', 'long' => 'This log file records all communication between s2Member® and the PayPal® IPN service. Also logs all post-processing routines from other Payment Gateway integrations, where s2Member® translates its communication with other Payment Gateways into a format it\'s core PayPal® processing routines can understand. All transactions pass through s2Member\'s core PayPal® processor and they will be logged in this file. Including transactions processed via s2Member® Pro Forms; for all Payment Gateway integrations.'),
-								'/paypal-rtn/' => array('short' => 'Core PayPal® PDT/Auto-Return communication.', 'long' => 'This log file records all communication between s2Member® and the PayPal® PDT Auto-Return system (i.e. routines that help s2Member® process Thank-You pages). Also logs all Auto-Return routines from other Payment Gateway integrations (those implemented via Payment Buttons), where s2Member® translates its communication with other Payment Gateways into a format it\'s core PayPal® processing routines can understand. Not used in s2Member® Pro Form integrations however.'),
-
-								'/authnet-api/' => array('short' => 'Authorize.Net API communication.', 'long' => 'This log file records all communication between s2Member® and Authorize.Net APIs (for both AIM and ARB integrations).'),
-								'/authnet-arb/' => array('short' => 'Authorize.Net ARB Subscription status checks.', 'long' => 'This log file records s2Member\'s Authorize.Net ARB Subscription status checks. s2Member® polls the ARB service periodically to check the status of existing Members (e.g. to see if billing is still active or not).'),
-								'/authnet-ipn/' => array('short' => 'Authorize.Net Silent Post/IPN communication.', 'long' => 'This log file records the Silent Post/IPN data Authorize.Net sends to s2Member® with details regarding new transactions.'),
-
-								'/alipay-ipn/' => array('short' => 'AliPay® IPN communication.', 'long' => 'This log file records the IPN data AliPay® sends to s2Member® with details regarding new transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/alipay-rtn/' => array('short' => 'AliPay® Auto-Return communication.', 'long' => 'This log file records the Auto-Return data AliPay® sends to s2Member® with details regarding new transactions (i.e. logs routines that help s2Member® process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
-
-								'/clickbank-ipn/' => array('short' => 'ClickBank® IPN communication.', 'long' => 'This log file records the IPN data ClickBank® sends to s2Member® with details regarding new transactions, cancellations, expirations, etc. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/clickbank-rtn/' => array('short' => 'ClickBank® Auto-Return communication.', 'long' => 'This log file records the Auto-Return data ClickBank® sends to s2Member® with details regarding new transactions (i.e. logs routines that help s2Member® process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
-
-								'/google-ipn/' => array('short' => 'Google® Callback/IPN communication.', 'long' => 'This log file records the Callback/IPN data Google® sends to s2Member® with details regarding new transactions, cancellations, expirations, etc. See also: paypal-ipn.log (s2Member\'s core processor).'),
-
-								'/ccbill-ipn/' => array('short' => 'ccBill® Bg Post/IPN communication.', 'long' => 'This log file records the Bg Post/IPN data ccBill® sends to s2Member® with details regarding new transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/ccbill-rtn/' => array('short' => 'ccBill® Auto-Return communication.', 'long' => 'This log file records the Auto-Return data ccBill® sends to s2Member® with details regarding new transactions (i.e. logs routines that help s2Member® process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
-								'/ccbill-dl-ipn/' => array('short' => 'ccBill® Datalink Subscription status checks.', 'long' => 'This log file records s2Member\'s ccBill® Datalink Subscription status checks that may result in actions taken by s2Member®. s2Member® polls the ccBill® Datalink service periodically to check the status of existing Members (e.g. to see if billing is still active or not).'),
-								'/ccbill-dl/' => array('short' => 'ccBill® Datalink collections.', 'long' => 'This log file records s2Member\'s ccBill® Datalink connections. s2Member® polls the ccBill® Datalink service periodically to obtain information about existing Users/Members.'),
-
-								'/mailchimp-api/' => array('short' => 'MailChimp® API communication.', 'long' => 'This log file records all of s2Member\'s with MailChimp® APIs.'),
-								'/aweber-api/' => array('short' => 'AWeber® API communication.', 'long' => 'This log file records all of s2Member\'s with AWeber® APIs.'),
-
-								'/s2-http-api-debug/' => array('short' => 'All outgoing HTTP connections related to s2Member®.', 'long' => 'This log file records all outgoing WP_Http connections that are specifically related to s2Member®.'),
-								'/wp-http-api-debug/' => array('short' => 'All outgoing WordPress® HTTP connections.', 'long' => 'This log file records all outgoing HTTP connections processed by the WP_Http class. This includes everything processed by WordPress®; even things unrelated to s2Member®.'),
-							);
 
 							$log_file_options = ""; // Initialize to an empty string.
 							$view_log_file = (!empty($_POST["ws_plugin__s2member_log_file"])) ? esc_html($_POST["ws_plugin__s2member_log_file"]) : "";
@@ -190,7 +210,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								{
 									$_log_file_description = array("short" => "No description available.", "long" => "No description available.");
 
-									foreach($log_file_descriptions as $_k => $_v)
+									foreach(c_ws_plugin__s2member_utils_logs::$log_file_descriptions as $_k => $_v)
 										if(preg_match($_k, $_log_file))
 										{
 											$_log_file_description = $_v;
@@ -254,7 +274,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 							{
 								$_log_file_description = array("short" => "", "long" => "");
 
-								foreach($log_file_descriptions as $_k => $_v)
+								foreach(c_ws_plugin__s2member_utils_logs::$log_file_descriptions as $_k => $_v)
 									if(preg_match($_k, $view_log_file))
 									{
 										$_log_file_description = $_v;
@@ -266,22 +286,24 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 									echo '<p style="clear:both; width:80%; font-family:\'Georgia\', serif; font-style:italic;"><strong>Description for <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'">'.esc_html($view_log_file).'</a></strong>: '.esc_html($_log_file_description["long"]).'</p>'."\n";
 								unset($_log_file_description); // Just a little housekeeping here.
 
-								echo '<p style="float:left; text-align:left;"><strong>Currently viewing log file:</strong> <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'">'.esc_html($view_log_file).'</a></p>'."\n";
-								echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'"><strong>download this log file</strong></a> ]</p>'."\n";
+								echo '<p style="float:left; text-align:left;"><strong>Viewing:</strong> <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'">'.esc_html($view_log_file).'</a> (log entries oldest to newest)</p>'."\n";
+								echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'"><strong>download file</strong></a> ]</p>'."\n";
+								echo '<p style="margin-right:10px; float:right; text-align:right;"><a href="#" class="ws-plugin--s2member-log-file-viewport-toggle" style="text-decoration:none;">&#8659; expand viewport &#8659;</a></p>'."\n";
 
-								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="font-family:monospace;">'.esc_html(file_get_contents($logs_dir."/".$view_log_file)).'</textarea>' . "\n";
+								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 8px #000000; background:#EEEEEE; color:#000000; overflow-y:scroll; font-family:\'Consolas\', \'Monaco\', monospace;">'.esc_html(file_get_contents($logs_dir."/".$view_log_file)).'</textarea>' . "\n";
 
-								echo '<p style="float:left; text-align:left;"><strong>Currently viewing log file:</strong> <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'">'.esc_html($view_log_file).'</a></p>'."\n";
-								echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'"><strong>download this log file</strong></a> ]</p>'."\n";
+								echo '<p style="float:left; text-align:left;"><strong>Viewing:</strong> <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'">'.esc_html($view_log_file).'</a> (log entries oldest to newest)</p>'."\n";
+								echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'"><strong>download file</strong></a> ]</p>'."\n";
+								echo '<p style="margin-right:10px; float:right; text-align:right;"><a href="#" class="ws-plugin--s2member-log-file-viewport-toggle" style="text-decoration:none;">&#8659; expand viewport &#8659;</a></p>'."\n";
 							}
 							else if($view_log_file && file_exists($logs_dir."/".$view_log_file))
-								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="font-family:monospace; font-style:italic;">— Empty at this time —</textarea>' . "\n";
+								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 8px #000000; background:#EEEEEE; color:#000000; overflow-y:scroll; font-family:\'Consolas\', \'Monaco\', monospace; font-style:italic;">— Empty at this time —</textarea>' . "\n";
 
 							else if($view_log_file && !file_exists($logs_dir."/".$view_log_file))
-								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="font-family:monospace; font-style:italic;">— File no longer exists —</textarea>' . "\n";
+								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 8px #000000; background:#EEEEEE; color:#000000; overflow-y:scroll; font-family:\'Consolas\', \'Monaco\', monospace; font-style:italic;">— File no longer exists —</textarea>' . "\n";
 
 							else // Display an empty textarea in this default scenario.
-								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="font-family:monospace; font-style:italic;"></textarea>' . "\n";
+								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 8px #000000; background:#EEEEEE; color:#000000; overflow-y:scroll; font-family:\'Consolas\', \'Monaco\', monospace; font-style:italic;"></textarea>' . "\n";
 
 							echo '</td>' . "\n";
 
@@ -295,41 +317,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 							echo '</div>'."\n";
 
 							do_action("ws_plugin__s2member_during_logs_page_during_left_sections_after_logs", get_defined_vars());
-						}
-
-						if (apply_filters ("ws_plugin__s2member_during_logs_page_during_left_sections_display_help", true, get_defined_vars ()))
-						{
-							do_action ("ws_plugin__s2member_during_logs_page_during_left_sections_before_help", get_defined_vars ());
-
-							echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member®" default-state="open">' . "\n";
-
-							echo '<div class="ws-menu-page-section ws-plugin--s2member-help">' . "\n";
-							echo '<h3>Getting Help w/ s2Member® (Troubleshooting)</h3>' . "\n";
-							echo '<p>s2Member® is pretty easy to setup and install initially. Most of the official documentation is right here in your Dashboard (i.e. there is a lot of inline documentation built into the software). That being said, it CAN take some time to master everything there is to know about s2Member\'s advanced features. If you need assistance with s2Member®, please search the <a href="http://www.s2member.com/kb/" target="_blank" rel="external">s2Member® Knowledge Base</a>, <a href="http://www.s2member.com/videos/" target="_blank" rel="external">Video Tutorials</a>, <a href="http://www.s2member.com/forums/" target="_blank" rel="external">Forums</a> and <a href="http://www.s2member.com/codex/" target="_blank" rel="external">Codex</a>. If you are planning to do something creative with s2Member®, you might want to <a href="http://jobs.wordpress.net" target="_blank" rel="external">hire a freelance developer</a> to assist you.</p>' . "\n";
-							echo '<p><strong>See also:</strong> <a href="http://www.s2member.com/kb/common-troubleshooting-tips/" target="_blank" rel="external">s2Member® Troubleshooting Guide</a> (please read this first if you\'re having trouble).</p>'."\n";
-
-							echo '<div class="ws-menu-page-hr"></div>' . "\n";
-
-							echo '<h3>Testing Server Compatibility</h3>'."\n";
-							echo '<p>Please download the <a href="http://www.s2member.com/r/server-check-tool/">s2Member® Server Scanner</a>. Unzip, upload via FTP; then open in a browser for a full report.</p>'."\n";
-
-							echo '<div class="ws-menu-page-hr"></div>' . "\n";
-
-							echo '<h3>Troubleshooting Payment Gateway Integrations</h3>'."\n";
-							echo '<p>Please use the s2Member® Log Viewer (above). Log files can be very helpful.</p>'."\n";
-
-							echo '<div class="ws-menu-page-hr"></div>' . "\n";
-
-							echo '<h3>Search s2Member® KB Articles, Forums, Codex and more<em>!</em></h3>'."\n";
-							echo '<form method="get" action="http://www.s2member.com/quick-s.php" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';">'."\n";
-							echo '<p><input type="text" name="q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /><input type="submit" value="Search" /></p>'."\n";
-							echo '</form>'."\n";
-
-							do_action ("ws_plugin__s2member_during_logs_page_during_left_sections_during_help", get_defined_vars ());
-							echo '</div>' . "\n";
-							echo '</div>' . "\n";
-
-							do_action ("ws_plugin__s2member_during_logs_page_during_left_sections_after_help", get_defined_vars ());
 						}
 
 						do_action("ws_plugin__s2member_during_logs_page_after_left_sections", get_defined_vars());

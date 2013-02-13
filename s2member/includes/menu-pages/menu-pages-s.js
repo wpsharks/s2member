@@ -50,10 +50,26 @@ jQuery(document).ready(function($)
 						var $this = $(this), thisChecked = (this.checked) ? true : false;
 						if(thisChecked) $('input#ws-plugin--s2member-gateway-debug-logs-1').attr('checked', 'checked');
 					});
-				$('textarea#ws-plugin--s2member-log-file-viewer').each(function()
+				var $toggles = $('a.ws-plugin--s2member-log-file-viewport-toggle'); $toggles.click(function()
 					{
-						var $this = $(this);
-						$this.css('height', ($this.prop('scrollHeight')+50)+'px');
+						$('textarea#ws-plugin--s2member-log-file-viewer').each(function()
+                      {
+                         var $viewer = $(this); // There is only one viewer.
+
+	                      if($viewer.attr('data-state') !== 'expanded') // Not expanded yet?
+		                      {
+			                      $viewer.css({'height': ($viewer.prop('scrollHeight')+50)+'px', 'overflow-y':'auto'});
+			                      $toggles.html('&#8657; normalize viewport &#10073;');
+			                      $viewer.attr('data-state', 'expanded');
+		                      }
+                         else // Already expanded. We need to toggle it back to a normalized state in this case.
+		                      {
+			                      $viewer.css({'height': 'auto', 'overflow-y':'scroll'});
+			                      $toggles.html('&#8659; expand viewport &#8659;');
+			                      $viewer.attr('data-state', 'scrolling');
+	                         }
+                      });
+						return false; // Prevents location.hash jumps.
 					});
 			}
 		if(location.href.match(/page\=ws-plugin--s2member-mms-ops/))

@@ -1,7 +1,7 @@
 === s2Member® Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 130207
-Stable tag: 130207
+Version: 130213
+Stable tag: 130213
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -92,12 +92,12 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130212 =
+= v130213 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
 
-= v130212 =
+= v130213 =
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member Pro) **Compatibility (Issue #13)** PayPal® Payments Pro, PayPal® Payments Pro (Payflow Edition), and Authorize.Net. s2Member® Pro now supports a recurring interval of Semi-Yearly (e.g. charges occur every six months). This has always been possible by manipulating Shortcode Attribues, but it's now officially supported by Pro Form Generators in your Dashboard — which come with s2Member® Pro.
 * (s2Member Pro) **Compatibility (Issue #13)** ClickBank® Recurring Products. ClickBank® has started allowing a Weekly recurring interval and stopped allowing Yearly. s2Member® has been updated in this release to support a Weekly recurring interval with ClickBank®; and to remove the Yearly option in the ClickBank® Button Generator.
