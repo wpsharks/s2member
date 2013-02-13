@@ -75,13 +75,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 															$paypal["s2member_log"][] = "Specific Post/Page ~ Sale associated with User ID: " . $user_id . ".";
 														}
 
-												$sbj = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($sp_access_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_GET["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_GET["s2member_paypal_proxy_use"])) ? "pro_" : "") . "sp_email_subject"]);
+												$sbj = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($sp_access_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_REQUEST["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_REQUEST["s2member_paypal_proxy_use"])) ? "pro_" : "") . "sp_email_subject"]);
 												$sbj = preg_replace ("/%%sp_access_exp%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (c_ws_plugin__s2member_utils_time::approx_time_difference (time (), strtotime ("+" . $paypal["hours"] . " hours"))), $sbj);
 
-												$msg = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($sp_access_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_GET["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_GET["s2member_paypal_proxy_use"])) ? "pro_" : "") . "sp_email_message"]);
+												$msg = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($sp_access_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_REQUEST["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_REQUEST["s2member_paypal_proxy_use"])) ? "pro_" : "") . "sp_email_message"]);
 												$msg = preg_replace ("/%%sp_access_exp%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (c_ws_plugin__s2member_utils_time::approx_time_difference (time (), strtotime ("+" . $paypal["hours"] . " hours"))), $msg);
 
-												$rec = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($sp_access_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_GET["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_GET["s2member_paypal_proxy_use"])) ? "pro_" : "") . "sp_email_recipients"]);
+												$rec = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($sp_access_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_REQUEST["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_REQUEST["s2member_paypal_proxy_use"])) ? "pro_" : "") . "sp_email_recipients"]);
 												$rec = preg_replace ("/%%sp_access_exp%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (c_ws_plugin__s2member_utils_time::approx_time_difference (time (), strtotime ("+" . $paypal["hours"] . " hours"))), $rec);
 
 												if (($rec = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $rec)) && ($rec = preg_replace ("/%%txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["txn_id"]), $rec)))
@@ -180,7 +180,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 														$paypal["s2member_log"][] = "Specific Post/Page ~ Sale Notification Emails have been processed.";
 													}
 
-												if ($processing && $_GET["s2member_paypal_proxy"] && ($url = $_GET["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
+												if ($processing && $_REQUEST["s2member_paypal_proxy"] && ($url = $_REQUEST["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
 													{
 														if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)) && ($url = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (rawurlencode ($sp_access_url)), $url)))
 															if (($url = preg_replace ("/%%sp_access_exp%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (c_ws_plugin__s2member_utils_time::approx_time_difference (time (), strtotime ("+" . $paypal["hours"] . " hours")))), $url)))

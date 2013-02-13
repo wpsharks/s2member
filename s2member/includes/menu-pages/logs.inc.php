@@ -69,7 +69,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 								echo '<td>'."\n";
 								echo '<input type="radio" name="ws_plugin__s2member_gateway_debug_logs" id="ws-plugin--s2member-gateway-debug-logs-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_gateway_debug_logs" id="ws-plugin--s2member-gateway-debug-logs-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-1">Yes, enable debugging w/ API, IPN &amp; Return Page logging (and List Server API logs too).</label><br />'."\n";
-								echo '<em>This enables logging overall. Includes API, IPN and Return Page logging. Also logs any List Server integrations.</em>'."\n";
+								echo '<em>This enables logging overall. Includes s2Member® HTTP, API, IPN and Return Page logging. Also logs any List Server integrations.</em>'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -86,7 +86,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 								echo '<td>'."\n";
 								echo '<input type="radio" name="ws_plugin__s2member_gateway_debug_logs_extensive" id="ws-plugin--s2member-gateway-debug-logs-extensive-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs_extensive"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-extensive-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_gateway_debug_logs_extensive" id="ws-plugin--s2member-gateway-debug-logs-extensive-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs_extensive"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-extensive-1">Yes, enable debugging w/ HTTP connection logging for ALL of WordPress®.</label><br />'."\n";
-								echo '<em>This enables HTTP connection logging for ALL of WordPress® (quite extensive).<br />* Creates the additional log file: <code>http-api-debug.log</code><br />* Please disable this once you go live.</em>'."\n";
+								echo '<em>This enables HTTP connection logging for ALL of WordPress® (quite extensive).<br />* Creates the additional log file: <code>wp-http-api-debug.log</code><br />* This should NEVER be enabled on a live site.</em>'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";

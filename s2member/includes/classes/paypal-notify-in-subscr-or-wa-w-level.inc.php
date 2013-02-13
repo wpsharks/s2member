@@ -311,9 +311,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 													{
 														$processing = $during =  /* Yes, we ARE processing this. */true;
 
-														$sbj = preg_replace ("/%%registration_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($registration_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_GET["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_GET["s2member_paypal_proxy_use"])) ? "pro_" : "") . "signup_email_subject"]);
-														$msg = preg_replace ("/%%registration_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($registration_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_GET["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_GET["s2member_paypal_proxy_use"])) ? "pro_" : "") . "signup_email_message"]);
-														$rec = preg_replace ("/%%registration_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($registration_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_GET["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_GET["s2member_paypal_proxy_use"])) ? "pro_" : "") . "signup_email_recipients"]);
+														$sbj = preg_replace ("/%%registration_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($registration_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_REQUEST["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_REQUEST["s2member_paypal_proxy_use"])) ? "pro_" : "") . "signup_email_subject"]);
+														$msg = preg_replace ("/%%registration_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($registration_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_REQUEST["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_REQUEST["s2member_paypal_proxy_use"])) ? "pro_" : "") . "signup_email_message"]);
+														$rec = preg_replace ("/%%registration_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($registration_url), $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][(($_REQUEST["s2member_paypal_proxy"] && preg_match ("/pro-emails/", $_REQUEST["s2member_paypal_proxy_use"])) ? "pro_" : "") . "signup_email_recipients"]);
 
 														if (($rec = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $rec)) && ($rec = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["subscr_id"]), $rec)))
 															if (($rec = preg_replace ("/%%initial%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["initial"]), $rec)) && ($rec = preg_replace ("/%%regular%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["regular"]), $rec)))
@@ -446,7 +446,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 												do_action ("ws_plugin__s2member_during_paypal_notify_after_subscr_signup_wo_update_vars", get_defined_vars ());
 												unset  /* Unset defined __refs, __v. */($__refs, $__v);
 											}
-										if ($processing && $_GET["s2member_paypal_proxy"] && ($url = $_GET["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
+										if ($processing && $_REQUEST["s2member_paypal_proxy"] && ($url = $_REQUEST["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
 											{
 												if (($user_id && is_object ($user) && $user->ID) || (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"], $paypal["option_selection1"])) && is_object ($user = new WP_User ($user_id)) && $user->ID))
 													{
@@ -483,7 +483,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 												$paypal["s2member_log"][] = "Subscr. Return ( `modification=" . (int)$modifying . "` ), a Proxy Return URL is ready.";
 											}
 										if ($processing // Process a payment now? Special cases for web_accept and/or Proxy requests with `subscr-signup-as-subscr-payment`.
-										&& (preg_match ("/^web_accept$/i", $paypal["txn_type"]) || ($_GET["s2member_paypal_proxy"] && preg_match ("/subscr-signup-as-subscr-payment/", $_GET["s2member_paypal_proxy_use"]) && $paypal["txn_id"] && $paypal["mc_gross"] > 0))
+										&& (preg_match ("/^web_accept$/i", $paypal["txn_type"]) || ($_REQUEST["s2member_paypal_proxy"] && preg_match ("/subscr-signup-as-subscr-payment/", $_REQUEST["s2member_paypal_proxy_use"]) && $paypal["txn_id"] && $paypal["mc_gross"] > 0))
 										&& (($user_id && is_object ($user) && $user->ID) || (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"], $paypal["option_selection1"])) && is_object ($user = new WP_User ($user_id)) && $user->ID)))
 											{
 												$paypal["s2member_log"][] = "User exists. Handling `payment` for Subscription via ( `" . ((preg_match ("/^web_accept$/i", $paypal["txn_type"])) ? "web_accept" : "subscr-signup-as-subscr-payment") . "` ).";
@@ -597,7 +597,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 													}
 											}
 										else if ($processing // Process a payment now? Special cases for web_accept and/or Proxy requests with `subscr-signup-as-subscr-payment`.
-										&& (preg_match ("/^web_accept$/i", $paypal["txn_type"]) || ($_GET["s2member_paypal_proxy"] && preg_match ("/subscr-signup-as-subscr-payment/", $_GET["s2member_paypal_proxy_use"]) && $paypal["txn_id"] && $paypal["mc_gross"] > 0)))
+										&& (preg_match ("/^web_accept$/i", $paypal["txn_type"]) || ($_REQUEST["s2member_paypal_proxy"] && preg_match ("/subscr-signup-as-subscr-payment/", $_REQUEST["s2member_paypal_proxy_use"]) && $paypal["txn_id"] && $paypal["mc_gross"] > 0)))
 											{
 												$paypal["s2member_log"][] = "Storing `payment` for Subscription via ( `" . ((preg_match ("/^web_accept$/i", $paypal["txn_type"])) ? "web_accept" : "subscr-signup-as-subscr-payment") . "` ).";
 

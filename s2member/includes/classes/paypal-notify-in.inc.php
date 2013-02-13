@@ -53,7 +53,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 
 						do_action ("ws_plugin__s2member_before_paypal_notify", get_defined_vars ());
 
-						if (!empty ($_GET["s2member_paypal_notify"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !empty ($_GET["s2member_paypal_proxy"])))
+						if (!empty ($_GET["s2member_paypal_notify"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !empty ($_REQUEST["s2member_paypal_proxy"])))
 							{
 								@ignore_user_abort (true); // Important. Continue processing even if/when the connection is broken by the sending party.
 
@@ -69,7 +69,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 
 										$payment_status_issues = "/^(failed|denied|expired|refunded|partially_refunded|reversed|reversal|canceled_reversal|voided)$/i";
 
-										$paypal["subscr_gateway"] = (!empty ($_GET["s2member_paypal_proxy"])) ? esc_html (trim (stripslashes ($_GET["s2member_paypal_proxy"]))) : "paypal";
+										$paypal["subscr_gateway"] = (!empty ($_REQUEST["s2member_paypal_proxy"])) ? esc_html (trim (stripslashes ($_REQUEST["s2member_paypal_proxy"]))) : "paypal";
 
 										if (empty ($paypal["custom"]) && !empty ($paypal["recurring_payment_id"])) // Lookup on Recurring Profiles?
 											$paypal["custom"] = c_ws_plugin__s2member_utils_users::get_user_custom_with ($paypal["recurring_payment_id"]);
@@ -159,18 +159,18 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								/*
 								Add IPN proxy (when available) to the ``$paypal`` array.
 								*/
-								if (!empty ($_GET["s2member_paypal_proxy"]))
-									$paypal["s2member_paypal_proxy"] = $_GET["s2member_paypal_proxy"];
+								if (!empty ($_REQUEST["s2member_paypal_proxy"]))
+									$paypal["s2member_paypal_proxy"] = $_REQUEST["s2member_paypal_proxy"];
 								/*
 								Add IPN proxy use vars (when available) to the ``$paypal`` array.
 								*/
-								if (!empty ($_GET["s2member_paypal_proxy_use"]))
-									$paypal["s2member_paypal_proxy_use"] = $_GET["s2member_paypal_proxy_use"];
+								if (!empty ($_REQUEST["s2member_paypal_proxy_use"]))
+									$paypal["s2member_paypal_proxy_use"] = $_REQUEST["s2member_paypal_proxy_use"];
 								/*
 								Also add IPN proxy self-verification (when available) to the ``$paypal`` array.
 								*/
-								if (!empty ($_GET["s2member_paypal_proxy_verification"]))
-									$paypal["s2member_paypal_proxy_verification"] = $_GET["s2member_paypal_proxy_verification"];
+								if (!empty ($_REQUEST["s2member_paypal_proxy_verification"]))
+									$paypal["s2member_paypal_proxy_verification"] = $_REQUEST["s2member_paypal_proxy_verification"];
 								/*
 								If debugging/logging is enabled; we need to append ``$paypal`` to the log file.
 									Logging now supports Multisite Networking as well.
