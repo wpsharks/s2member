@@ -245,17 +245,64 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_after_reg_before_checkout", get_defined_vars ());
 							}
 
+						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_help", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+							{
+								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_before_help", get_defined_vars ());
+
+								echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member®">' . "\n";
+
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-help">' . "\n";
+								echo '<h3>Getting Help w/ s2Member® (Troubleshooting)</h3>' . "\n";
+								echo '<p>s2Member® is pretty easy to setup and install initially. Most of the official documentation is right here in your Dashboard (i.e. there is a lot of inline documentation built into the software). That being said, it CAN take some time to master everything there is to know about s2Member\'s advanced features. If you need assistance with s2Member®, please search the <a href="http://www.s2member.com/kb/" target="_blank" rel="external">s2Member® Knowledge Base</a>, <a href="http://www.s2member.com/videos/" target="_blank" rel="external">Video Tutorials</a>, <a href="http://www.s2member.com/forums/" target="_blank" rel="external">Forums</a> and <a href="http://www.s2member.com/codex/" target="_blank" rel="external">Codex</a>. If you are planning to do something creative with s2Member®, you might want to <a href="http://jobs.wordpress.net" target="_blank" rel="external">hire a freelance developer</a> to assist you.</p>' . "\n";
+								echo '<p><strong>See also:</strong> <a href="http://www.s2member.com/kb/common-troubleshooting-tips/" target="_blank" rel="external">s2Member® Troubleshooting Guide</a> (please read this first if you\'re having trouble).</p>'."\n";
+
+								echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+								echo '<h3>Troubleshooting Payment Gateway Integrations</h3>'."\n";
+								echo '<p>Please use s2Member\'s <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Viewer</a>. Log files can be very helpful.</p>'."\n";
+
+								echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+								echo '<h3>Search s2Member® KB Articles, Forums, Codex and more<em>!</em></h3>'."\n";
+								echo '<form method="get" action="http://www.s2member.com/quick-s.php" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';">'."\n";
+								echo '<p><input type="text" name="q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /><input type="submit" value="Search" /></p>'."\n";
+								echo '</form>'."\n";
+
+								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_during_help", get_defined_vars ());
+								echo '</div>' . "\n";
+								echo '</div>' . "\n";
+
+								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_after_help", get_defined_vars ());
+							}
+
+						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_themes", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+							{
+								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_before_themes", get_defined_vars ());
+
+								echo '<div class="ws-menu-page-group" title="Choosing The Perfect WordPress® Theme">' . "\n";
+
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-themes">' . "\n";
+								echo '<h3>Choosing The Perfect WordPress® Theme</h3>' . "\n";
+								echo '<p>We recommend <a href="http://www.s2member.com/r/themeforest/" target="_blank" rel="external">ThemeForest™</a>. This is a great place to find the perfect theme for your installation of WordPress® — at VERY affordable prices.</p>' . "\n";
+								echo '<p>s2Member® is compatible with just about any WordPress® theme. However, we highly recommend a particular theme that has served our clients very well. See: <a href="http://www.s2member.com/r/themeforest-infocus-theme/" target="_blank" rel="external">inFocus™ for WordPress®</a>. Developed by MySiteMyWay™. We use a slightly modified version of inFocus™ @ <a href="http://www.s2member.com/" target="_blank" rel="external">s2Member.com</a>.</p>' . "\n";
+								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_during_themes", get_defined_vars ());
+								echo '</div>' . "\n";
+								echo '</div>' . "\n";
+
+								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_after_themes", get_defined_vars ());
+							}
+
 						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_pro", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_before_pro", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Upgrading to s2Member® Pro (Recommended)" default-state="open">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Upgrading to s2Member® Pro<em>!</em>">' . "\n";
 
-								echo '<div class="ws-menu-page-section ws-plugin--s2member-reg-before-pro">' . "\n";
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-pro">' . "\n";
 								echo '<h3>s2Member® Pro — Professional Membership Management (a recommended upgrade)</h3>' . "\n";
-								echo '<p>s2Member® Pro comes pre-integrated with additional payment gateways. PayPal® Pro integration is the most popular, allowing your site to accept Visa, MasterCard, Amex, Discover, Maestro/Solo (from UK shoppers). Customers never leave your site! s2Member® Pro Forms also support PayPal® Express Checkout; for customers who prefer to pay with PayPal®.</p>' . "\n";
-								echo '<p>Enjoy the financial benefits of on-site credit card processing with s2Member\'s PayPal® Pro Forms, PayPal® Pro Form Generators, Authorize.Net® AIM/ARB integrations (also w/ Pro Forms), Google® Checkout, ClickBank®, advanced User Import/Export tools, Pro Form Coupon Codes, Pro Login Widgets (plus Profile Summary) and other enhancements; such as support for UNLIMITED Membership Levels and custom Thank-You pages. <strong>Learn more here:</strong> <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Module / Prices")) . '" target="_blank" rel="external">s2Member® Pro</a> (the best membership plugin for WordPress®).</p>'."\n";
-								echo '<p><strong>See also:</strong> <a href="http://www.s2member.com/pro/" target="_blank" rel="external">s2Member® Pro Features</a> (definitely worth the inexpensive upgrade).</p>'."\n";
+								echo '<p>Among other things, s2Member® Pro comes pre-integrated with additional payment gateways. PayPal® Pro integration is by far the most popular. It allows your site to accept Visa®, MasterCard®, Amex®, Discover® and even Maestro/Solo (from UK shoppers). Customers never leave your site! s2Member® Pro Forms also support PayPal® Express Checkout; for customers who actually prefer to pay with PayPal®.</p>' . "\n";
+								echo '<p>With s2Member® Pro you\'ll enjoy the financial benefits of on-site credit card processing via s2Member\'s PayPal® Pro Forms, PayPal® Pro Form Generators, and even Authorize.Net® AIM/ARB integrations (also w/ Pro Forms). It is also easy to integrate with Google® Checkout, ClickBank® and/or ccBill® (which is primarily for adult payment processing). s2Member® Pro comes with advanced User Import/Export tools, Pro Form Coupon Codes, Pro Login Widgets (plus Profile Summary) and other enhancements; such as support for <strong>UNLIMITED</strong> Membership Levels and custom Thank-You pages.</p>'."\n";
+								echo '<p><strong>Learn more here:</strong> <a href="http://www.s2member.com/pro/" target="_blank" rel="external">s2Member® Pro Features</a> (definitely worth the <strong>inexpensive</strong> upgrade).</p>'."\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/pro-forms/" target="_blank" rel="external">s2Member® Pro Forms</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_during_pro", get_defined_vars ());
 								echo '</div>' . "\n";

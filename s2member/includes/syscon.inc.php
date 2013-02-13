@@ -125,6 +125,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["options_version"] = "1.0";
 
 				$default_options["gateway_debug_logs"] = "1";
+				$default_options["gateway_debug_logs_extensive"] = "0";
 
 				$default_options["sec_encryption_key"] = "";
 				$default_options["sec_encryption_key_history"] = array();
@@ -345,7 +346,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 								else if($key === "options_version" && (!is_string($value) || !is_numeric($value)))
 									$value = $default_options[$key];
 
-								else if($key === "gateway_debug_logs" && (!is_string($value) || !is_numeric($value)))
+								else if(preg_match("/^gateway_debug_logs|gateway_debug_logs_extensive/", $key) && (!is_string($value) || !is_numeric($value)))
 									$value = $default_options[$key];
 
 								else if($key === "sec_encryption_key" && (!is_string($value) || !strlen($value)))

@@ -45,6 +45,11 @@ jQuery(document).ready(function($)
 			}
 		if(location.href.match(/page\=ws-plugin--s2member-logs/))
 			{
+				$('input#ws-plugin--s2member-gateway-debug-logs-extensive-1').click(function()
+					{
+						var $this = $(this), thisChecked = (this.checked) ? true : false;
+						if(thisChecked) $('input#ws-plugin--s2member-gateway-debug-logs-1').attr('checked', 'checked');
+					});
 				$('textarea#ws-plugin--s2member-log-file-viewer').each(function()
 					{
 						var $this = $(this);

@@ -115,7 +115,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 										if($options["file_download_limit_exceeded_page"] && $options["file_download_limit_exceeded_page"] === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Download Limit Exceeded Page is the same as your Membership Options Page. Please correct this. See: <code>s2Member -› Download Options</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 									}
-
 								$updated_all_options = /* Flag indicating this routine was processed successfully; and that all s2Member options have been updated successfully.*/ true;
 							}
 
@@ -212,7 +211,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_logs_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member® Log Viewer", "s2 Log Viewer", "create_users", "ws-plugin--s2member-logs", "c_ws_plugin__s2member_menu_pages::logs_page");
+									add_submenu_page($menu, "s2Member® Logs", "Log Files (Debug)", "create_users", "ws-plugin--s2member-logs", "c_ws_plugin__s2member_menu_pages::logs_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_7", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
@@ -364,41 +363,40 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
 							return; // We do NOT provide this functionality on Child Blogs of a Blog Farm Network.
 
-						if(!empty($_GET["ws_plugin__s2member_download_log_file"]))
-						{
-							$logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
+						if(!empty($_GET["ws_plugin__s2member_download_log_file"]) && is_string($log_file = $_GET["ws_plugin__s2member_download_log_file"]) && strpos($log_file, "..") === false && strpos(basename($log_file), ".") !== 0)
+							if(!empty($_GET["ws_plugin__s2member_download_log_file_v"]) && is_string($nonce = $_GET["ws_plugin__s2member_download_log_file_v"]) && wp_verify_nonce($nonce, "ws-plugin--s2member-download-log-file-v"))
+								{
+									$logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
 
-							$log_file = esc_html((string)$_GET["ws_plugin__s2member_download_log_file"]);
+									if(file_exists($logs_dir."/".$log_file))
+										$log_file_contents = file_get_contents($logs_dir."/".$log_file);
+									else $log_file_contents = "";
 
-							if(file_exists($logs_dir."/".$log_file))
-								$log_file_contents = file_get_contents($logs_dir."/".$log_file);
-							else $log_file_contents = "";
+									@set_time_limit(0);
+									@ini_set("memory_limit", apply_filters("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
 
-							@set_time_limit(0);
-							@ini_set("memory_limit", apply_filters("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
+									@ini_set("zlib.output_compression", 0);
+									if(function_exists("apache_setenv"))
+										@apache_setenv("no-gzip", "1");
 
-							@ini_set("zlib.output_compression", 0);
-							if(function_exists("apache_setenv"))
-								@apache_setenv("no-gzip", "1");
+									while (@ob_end_clean ());
 
-							while (@ob_end_clean ());
+									status_header(200); // 200 OK status header.
 
-							status_header(200); // 200 OK status header.
+									header("Content-Encoding: none");
+									header("Accept-Ranges: none");
+									header("Content-Type: text/plain; charset=UTF-8");
+									header("Content-Length: ".strlen($log_file_contents));
+									header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("-1 week"))." GMT");
+									header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+									header("Cache-Control: no-cache, must-revalidate, max-age=0");
+									header("Cache-Control: post-check=0, pre-check=0", false);
+									header("Pragma: no-cache");
 
-							header("Content-Encoding: none");
-							header("Accept-Ranges: none");
-							header("Content-Type: text/plain; charset=UTF-8");
-							header("Content-Length: ".strlen($log_file_contents));
-							header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("-1 week"))." GMT");
-							header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-							header("Cache-Control: no-cache, must-revalidate, max-age=0");
-							header("Cache-Control: post-check=0, pre-check=0", false);
-							header("Pragma: no-cache");
+									header('Content-Disposition: attachment; filename="'.$log_file.'"');
 
-							header('Content-Disposition: attachment; filename="'.$log_file.'"');
-
-							exit($log_file_contents); // Log file.
-						}
+									exit($log_file_contents); // Log file.
+								}
 					}
 				/**
 				 * Handles log file downloads (in ZIP format).
@@ -414,66 +412,66 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 					if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
 						return; // We do NOT provide this functionality on Child Blogs of a Blog Farm Network.
 
-					if(!empty($_GET["ws_plugin__s2member_logs_download_zip"]))
-					{
-						$logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
-						$s2member_logs_zip = $logs_dir."/".$_SERVER["HTTP_HOST"]."--s2member-logs.zip";
-
-						if(is_dir($logs_dir)) // Do we have a logs directory?
+					if(!empty($_POST["ws_plugin__s2member_logs_download_zip"]) && is_string($nonce = $_POST["ws_plugin__s2member_logs_download_zip"]) && wp_verify_nonce($nonce, "ws-plugin--s2member-logs-download-zip"))
 						{
-							include_once ABSPATH . "wp-admin/includes/class-pclzip.php";
+							$logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
+							$s2member_logs_zip = $logs_dir."/".$_SERVER["HTTP_HOST"]."--s2member-logs.zip";
 
-							if(file_exists($s2member_logs_zip) && is_writable($s2member_logs_zip))
-								unlink($s2member_logs_zip);
+							if(is_dir($logs_dir)) // Do we have a logs directory?
+								{
+									include_once ABSPATH . "wp-admin/includes/class-pclzip.php";
 
-							$archive = new PclZip($s2member_logs_zip);
-							$archive->create($logs_dir, PCLZIP_OPT_REMOVE_ALL_PATH);
+									if(file_exists($s2member_logs_zip) && is_writable($s2member_logs_zip))
+										unlink($s2member_logs_zip);
+
+									$archive = new PclZip($s2member_logs_zip);
+									$archive->create($logs_dir, PCLZIP_OPT_REMOVE_ALL_PATH);
+								}
+
+							if(file_exists($s2member_logs_zip))
+								$s2member_logs_zip_size = filesize($s2member_logs_zip);
+							else $s2member_logs_zip_size = 0;
+
+							@set_time_limit(0);
+							@ini_set("memory_limit", apply_filters("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
+
+							@ini_set("zlib.output_compression", 0);
+							if(function_exists("apache_setenv"))
+								@apache_setenv("no-gzip", "1");
+
+							while (@ob_end_clean ());
+
+							status_header(200); // 200 OK status header.
+
+							header("Content-Encoding: none");
+							header("Accept-Ranges: none");
+							header("Content-Type: application/zip");
+							header("Content-Length: ".$s2member_logs_zip_size);
+							header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("-1 week"))." GMT");
+							header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+							header("Cache-Control: no-cache, must-revalidate, max-age=0");
+							header("Cache-Control: post-check=0, pre-check=0", false);
+							header("Pragma: no-cache");
+
+							header('Content-Disposition: attachment; filename="'.basename($s2member_logs_zip).'"');
+
+							if($s2member_logs_zip_size && is_resource($resource = fopen($s2member_logs_zip, "rb")))
+								{
+									$_bytes_to_read = $s2member_logs_zip_size; // Total bytes we need to read for this file.
+
+									$chunk_size = apply_filters("ws_plugin__s2member_file_downloads_chunk_size", 2097152, get_defined_vars());
+
+									while /* We have bytes to read here. */($_bytes_to_read)
+										{
+											$_bytes_to_read -= ($_reading = ($_bytes_to_read > $chunk_size) ? $chunk_size : $_bytes_to_read);
+											echo /* Serve file in chunks (default chunk size is 2MB). */ fread($resource, $_reading);
+											flush /* Flush each chunk to the browser as it is served (avoids high memory consumption). */();
+										}
+									fclose /* Close file resource handle. */($resource);
+									unset /* Housekeeping. */($_bytes_to_read, $_reading);
+								}
+							exit; // Clean exit after serving file.
 						}
-
-						if(file_exists($s2member_logs_zip))
-							$s2member_logs_zip_size = filesize($s2member_logs_zip);
-						else $s2member_logs_zip_size = 0;
-
-						@set_time_limit(0);
-						@ini_set("memory_limit", apply_filters("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
-
-						@ini_set("zlib.output_compression", 0);
-						if(function_exists("apache_setenv"))
-							@apache_setenv("no-gzip", "1");
-
-						while (@ob_end_clean ());
-
-						status_header(200); // 200 OK status header.
-
-						header("Content-Encoding: none");
-						header("Accept-Ranges: none");
-						header("Content-Type: application/zip");
-						header("Content-Length: ".$s2member_logs_zip_size);
-						header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("-1 week"))." GMT");
-						header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
-						header("Cache-Control: no-cache, must-revalidate, max-age=0");
-						header("Cache-Control: post-check=0, pre-check=0", false);
-						header("Pragma: no-cache");
-
-						header('Content-Disposition: attachment; filename="'.basename($s2member_logs_zip).'"');
-
-						if($s2member_logs_zip_size && is_resource($resource = fopen($s2member_logs_zip, "rb")))
-						{
-							$_bytes_to_read = $s2member_logs_zip_size; // Total bytes we need to read for this file.
-
-							$chunk_size = apply_filters("ws_plugin__s2member_file_downloads_chunk_size", 2097152, get_defined_vars());
-
-							while /* We have bytes to read here. */($_bytes_to_read)
-							{
-								$_bytes_to_read -= ($_reading = ($_bytes_to_read > $chunk_size) ? $chunk_size : $_bytes_to_read);
-								echo /* Serve file in chunks (default chunk size is 2MB). */ fread($resource, $_reading);
-								flush /* Flush each chunk to the browser as it is served (avoids high memory consumption). */();
-							}
-							fclose /* Close file resource handle. */($resource);
-							unset /* Housekeeping. */($_bytes_to_read, $_reading);
-						}
-						exit; // Clean exit after serving file.
-					}
 				}
 				/**
 				 * Archives existing log files and starts fresh with new logs.
@@ -489,36 +487,48 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
 							return; // We do NOT provide this functionality on Child Blogs of a Blog Farm Network.
 
-						if(!empty($_GET["ws_plugin__s2member_logs_archive_start_fresh"]))
+						if(!empty($_POST["ws_plugin__s2member_logs_archive_start_fresh"]) && is_string($nonce = $_POST["ws_plugin__s2member_logs_archive_start_fresh"]) && wp_verify_nonce($nonce, "ws-plugin--s2member-logs-archive-start-fresh"))
 							{
 								if(is_dir($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
 									foreach(scandir($logs_dir) as $log_file) // Archive existing log files here.
 										{
 											if(preg_match("/\.log$/", $log_file) && stripos($log_file, "-ARCHIVED-") === FALSE)
 												if(is_file ($log_dir_file = $logs_dir . "/" . $log_file) && is_writable($log_dir_file))
-													rename ($log_dir_file, preg_replace ("/\.log$/i", "", $log_dir_file) . "-ARCHIVED-" . date ("m-d-Y") . "-" . time () . ".log");
+													if(!rename ($log_dir_file, preg_replace ("/\.log$/i", "", $log_dir_file) . "-ARCHIVED-" . date ("m-d-Y") . "-" . time () . ".log"))
+														$error = true;
 										}
-								wp_redirect(admin_url("/admin.php?page=ws-plugin--s2member-logs")).exit();
+								if(!empty($error))
+									c_ws_plugin__s2member_admin_notices::display_admin_notice("Unknown error when attempting to archive log files. Please check directory permissions.", true);
+								else c_ws_plugin__s2member_admin_notices::display_admin_notice("All log files have been archived succesfully.");
 							}
 					}
+
 				/**
-				 * Enables logging.
+				 * Deletes existing log files and starts fresh with new logs.
 				 *
 				 * @package s2Member\Menu_Pages
-				 * @since 120310
+				 * @since 120312
 				 *
 				 * @return null
 				 */
-				public static function gateway_debug_logs_enable()
+				public static function delete_logs_start_fresh()
 					{
 						if(!current_user_can("create_users")) return;
 						if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
 							return; // We do NOT provide this functionality on Child Blogs of a Blog Farm Network.
 
-						if(!empty($_GET["ws_plugin__s2member_gateway_debug_logs_enable"]))
+						if(!empty($_POST["ws_plugin__s2member_logs_delete_start_fresh"]) && is_string($nonce = $_POST["ws_plugin__s2member_logs_delete_start_fresh"]) && wp_verify_nonce($nonce, "ws-plugin--s2member-logs-delete-start-fresh"))
 							{
-								c_ws_plugin__s2member_menu_pages::update_all_options (array("ws_plugin__s2member_gateway_debug_logs" => "1"), true, false, false, false, false);
-								wp_redirect(admin_url("/admin.php?page=ws-plugin--s2member-logs")).exit();
+								if(is_dir($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
+									foreach(scandir($logs_dir) as $log_file) // Delete existing log files here.
+										{
+											if(preg_match("/\.log$/", $log_file))
+												if(is_file ($log_dir_file = $logs_dir . "/" . $log_file) && is_writable($log_dir_file))
+													if(!unlink($log_dir_file)) $error = true;
+										}
+								if(!empty($error))
+									c_ws_plugin__s2member_admin_notices::display_admin_notice("Unknown error when attempting to delete log files. Please check directory permissions.", true);
+								else c_ws_plugin__s2member_admin_notices::display_admin_notice("All log files have been deleted succesfully.");
 							}
 					}
 				/**
@@ -836,6 +846,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 					{
 						do_action("ws_plugin__s2member_before_logs_page", get_defined_vars());
 
+						c_ws_plugin__s2member_menu_pages::update_all_options();
+						c_ws_plugin__s2member_menu_pages::archive_logs_start_fresh();
+						c_ws_plugin__s2member_menu_pages::delete_logs_start_fresh();
+
 						$logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
 
 						if(!is_dir($logs_dir) && is_writable(dirname(c_ws_plugin__s2member_utils_dirs::strip_dir_app_data($logs_dir))))
@@ -860,7 +874,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 							c_ws_plugin__s2member_admin_notices::display_admin_notice('Unprotected. The .htaccess protection file (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)).'</code>) does not contain <code>deny from all</code>. Inside your .htaccess file, add this:<br /><pre>'.esc_html($htaccess_contents).'</pre>', true);
 
 						if /* Logging disabled? */(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
-							c_ws_plugin__s2member_admin_notices::display_admin_notice('Logging is currently disabled by your configuration. <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_gateway_debug_logs_enable" => "1"))).'" onclick="if(!confirm(\'Enable logging... Press OK to confirm please.\')) return false;">Click here</a> if you wish to enable logging.', true);
+							c_ws_plugin__s2member_admin_notices::display_admin_notice('Logging is currently disabled by your configuration.', true);
 
 						include_once dirname(dirname(__FILE__))."/menu-pages/logs.inc.php";
 

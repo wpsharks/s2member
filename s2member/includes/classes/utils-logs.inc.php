@@ -28,6 +28,45 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 		class c_ws_plugin__s2member_utils_logs
 			{
 				/**
+				 * Archives all HTTP communication (if enabled).
+				 *
+				 * @package s2Member\Utilities
+				 * @since 120212
+				 *
+				 * @return bool True if we DID attempt to log an HTTP connection; else false if extensive logging is disabled.
+				 */
+				public static function http_api_debug ($response = NULL, $state = NULL, $class = NULL, $args = NULL, $url = NULL)
+					{
+						if (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
+							return false; // Logging is NOT enabled in this case.
+
+						if (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs_extensive"])
+							return false; // Extensive logging is NOT enabled in this case.
+
+						global /* For Multisite support. */ $current_site, $current_blog;
+
+						$http_api_debug = array(
+							'state'           => $state,
+							'transport_class' => $class,
+							'args'            => $args,
+							'url'             => $url,
+							'response'        => $response
+						);
+
+						$logt = c_ws_plugin__s2member_utilities::time_details ();
+						$logv = c_ws_plugin__s2member_utilities::ver_details ();
+						$logm = c_ws_plugin__s2member_utilities::mem_details ();
+						$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . $_SERVER["HTTP_USER_AGENT"];
+						$log4 = (is_multisite () && !is_main_site ()) ? ($_log4 = $current_blog->domain . $current_blog->path) . "\n" . $log4 : $log4;
+						$log2 = (is_multisite () && !is_main_site ()) ? "http-api-debug-4-" . trim (preg_replace ("/[^a-z0-9]/i", "-", $_log4), "-") . ".log" : "http-api-debug.log";
+
+						if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
+							if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
+								file_put_contents ($logs_dir . "/" . $log2, "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($http_api_debug, true) . "\n\n", FILE_APPEND);
+
+						return true; // Indicating we DID attempt to log this HTTP connection.
+					}
+				/**
 				* Archives logs to prevent HUGE files from building up over time.
 				*
 				* This routine is staggered to conserve resources.

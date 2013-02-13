@@ -50,8 +50,6 @@ add_action("init", "c_ws_plugin__s2member_labels::config_label_translations", 10
 
 add_action("init", "c_ws_plugin__s2member_login_redirects_r::remove_login_redirect_filters", 11);
 
-add_action("admin_init", "c_ws_plugin__s2member_menu_pages::gateway_debug_logs_enable");
-add_action("admin_init", "c_ws_plugin__s2member_menu_pages::archive_logs_start_fresh");
 add_action("admin_init", "c_ws_plugin__s2member_menu_pages::log_file_downloader");
 add_action("admin_init", "c_ws_plugin__s2member_menu_pages::logs_zip_downloader");
 
@@ -173,6 +171,8 @@ add_filter("ws_plugin__s2member_content_redirect_status", "c_ws_plugin__s2member
 
 add_filter("bbp_get_caps_for_role", "c_ws_plugin__s2member_roles_caps::bbp_dynamic_role_caps", 10, 2);
 add_action("bbp_activation", "c_ws_plugin__s2member_roles_caps::config_roles", 11);
+
+add_action("http_api_debug", "c_ws_plugin__s2member_utils_logs::http_api_debug", 1000, 5);
 /*
 Register the activation | de-activation routines.
 */
