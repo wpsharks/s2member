@@ -148,33 +148,33 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 							$log_file_descriptions = array // Array keys are regex patterns matching their associated log file names.
 							(
-								'/paypal-api/' => array('short' => 'PayPal® API communication.', 'long' => 'Records all communication between s2Member® and PayPal® APIs. Such as PayPal® Button Encryption and PayPal® Pro API calls that process transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/paypal-payflow-api/' => array('short' => 'PayPal® (PayFlow Edition) API communication.', 'long' => 'Records all communication between s2Member® and the PayPal® (PayFlow Edition) APIs. Only applicable if you operate a PayPal® Payments Pro (PayFlow Edition) account. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/paypal-ipn/' => array('short' => 'Core PayPal® IPN and post-processing handler.', 'long' => 'Records all communication between s2Member® and the PayPal® IPN service. Also logs all post-processing routines from other Payment Gateway integrations, where s2Member® translates its communication with other Payment Gateways into a format it\'s core PayPal® processing routines can understand. All transactions pass through s2Member\'s core PayPal® processor and they will be logged in this file. Including transactions processed via s2Member® Pro Forms; for all Payment Gateway integrations.'),
-								'/paypal-rtn/' => array('short' => 'Core PayPal® PDT/Auto-Return communication.', 'long' => 'Records all communication between s2Member® and the PayPal® PDT Auto-Return system (i.e. routines that help s2Member® process Thank-You pages). Also logs all Auto-Return routines from other Payment Gateway integrations (those implemented via Payment Buttons), where s2Member® translates its communication with other Payment Gateways into a format it\'s core PayPal® processing routines can understand. Not used in s2Member® Pro Form integrations however.'),
+								'/paypal-api/' => array('short' => 'PayPal® API communication.', 'long' => 'This log file records all communication between s2Member® and PayPal® APIs. Such as PayPal® Button Encryption and PayPal® Pro API calls that process transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),
+								'/paypal-payflow-api/' => array('short' => 'PayPal® (PayFlow Edition) API communication.', 'long' => 'This log file records all communication between s2Member® and the PayPal® (PayFlow Edition) APIs. Only applicable if you operate a PayPal® Payments Pro (PayFlow Edition) account. See also: paypal-ipn.log (s2Member\'s core processor).'),
+								'/paypal-ipn/' => array('short' => 'Core PayPal® IPN and post-processing handler.', 'long' => 'This log file records all communication between s2Member® and the PayPal® IPN service. Also logs all post-processing routines from other Payment Gateway integrations, where s2Member® translates its communication with other Payment Gateways into a format it\'s core PayPal® processing routines can understand. All transactions pass through s2Member\'s core PayPal® processor and they will be logged in this file. Including transactions processed via s2Member® Pro Forms; for all Payment Gateway integrations.'),
+								'/paypal-rtn/' => array('short' => 'Core PayPal® PDT/Auto-Return communication.', 'long' => 'This log file records all communication between s2Member® and the PayPal® PDT Auto-Return system (i.e. routines that help s2Member® process Thank-You pages). Also logs all Auto-Return routines from other Payment Gateway integrations (those implemented via Payment Buttons), where s2Member® translates its communication with other Payment Gateways into a format it\'s core PayPal® processing routines can understand. Not used in s2Member® Pro Form integrations however.'),
 
-								'/authnet-api/' => array('short' => 'Authorize.Net API communication.', 'long' => 'Records all communication between s2Member® and Authorize.Net APIs (for both AIM and ARB integrations).'),
-								'/authnet-arb/' => array('short' => 'Authorize.Net ARB Subscription status checks.', 'long' => 'Records s2Member\'s Authorize.Net ARB Subscription status checks. s2Member® polls the ARB service periodically to check the status of existing Members (e.g. to see if billing is still active or not).'),
-								'/authnet-ipn/' => array('short' => 'Authorize.Net Silent Post/IPN communication.', 'long' => 'Records the Silent Post/IPN data Authorize.Net sends to s2Member® with details regarding new transactions.'),
+								'/authnet-api/' => array('short' => 'Authorize.Net API communication.', 'long' => 'This log file records all communication between s2Member® and Authorize.Net APIs (for both AIM and ARB integrations).'),
+								'/authnet-arb/' => array('short' => 'Authorize.Net ARB Subscription status checks.', 'long' => 'This log file records s2Member\'s Authorize.Net ARB Subscription status checks. s2Member® polls the ARB service periodically to check the status of existing Members (e.g. to see if billing is still active or not).'),
+								'/authnet-ipn/' => array('short' => 'Authorize.Net Silent Post/IPN communication.', 'long' => 'This log file records the Silent Post/IPN data Authorize.Net sends to s2Member® with details regarding new transactions.'),
 
-								'/alipay-ipn/' => array('short' => 'AliPay® IPN communication.', 'long' => 'Records the IPN data AliPay® sends to s2Member® with details regarding new transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/alipay-rtn/' => array('short' => 'AliPay® Auto-Return communication.', 'long' => 'Records the Auto-Return data AliPay® sends to s2Member® with details regarding new transactions (i.e. logs routines that help s2Member® process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
+								'/alipay-ipn/' => array('short' => 'AliPay® IPN communication.', 'long' => 'This log file records the IPN data AliPay® sends to s2Member® with details regarding new transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),
+								'/alipay-rtn/' => array('short' => 'AliPay® Auto-Return communication.', 'long' => 'This log file records the Auto-Return data AliPay® sends to s2Member® with details regarding new transactions (i.e. logs routines that help s2Member® process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
 
-								'/clickbank-ipn/' => array('short' => 'ClickBank® IPN communication.', 'long' => 'Records the IPN data ClickBank® sends to s2Member® with details regarding new transactions, cancellations, expirations, etc. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/clickbank-rtn/' => array('short' => 'ClickBank® Auto-Return communication.', 'long' => 'Records the Auto-Return data ClickBank® sends to s2Member® with details regarding new transactions (i.e. logs routines that help s2Member® process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
+								'/clickbank-ipn/' => array('short' => 'ClickBank® IPN communication.', 'long' => 'This log file records the IPN data ClickBank® sends to s2Member® with details regarding new transactions, cancellations, expirations, etc. See also: paypal-ipn.log (s2Member\'s core processor).'),
+								'/clickbank-rtn/' => array('short' => 'ClickBank® Auto-Return communication.', 'long' => 'This log file records the Auto-Return data ClickBank® sends to s2Member® with details regarding new transactions (i.e. logs routines that help s2Member® process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
 
-								'/google-ipn/' => array('short' => 'Google® Callback/IPN communication.', 'long' => 'Records the Callback/IPN data Google® sends to s2Member® with details regarding new transactions, cancellations, expirations, etc. See also: paypal-ipn.log (s2Member\'s core processor).'),
+								'/google-ipn/' => array('short' => 'Google® Callback/IPN communication.', 'long' => 'This log file records the Callback/IPN data Google® sends to s2Member® with details regarding new transactions, cancellations, expirations, etc. See also: paypal-ipn.log (s2Member\'s core processor).'),
 
-								'/ccbill-ipn/' => array('short' => 'ccBill® Bg Post/IPN communication.', 'long' => 'Records the Bg Post/IPN data ccBill® sends to s2Member® with details regarding new transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),
-								'/ccbill-rtn/' => array('short' => 'ccBill® Auto-Return communication.', 'long' => 'Records the Auto-Return data ccBill® sends to s2Member® with details regarding new transactions (i.e. logs routines that help s2Member® process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
-								'/ccbill-dl-ipn/' => array('short' => 'ccBill® Datalink Subscription status checks.', 'long' => 'Records s2Member\'s ccBill® Datalink Subscription status checks that may result in actions taken by s2Member®. s2Member® polls the ccBill® Datalink service periodically to check the status of existing Members (e.g. to see if billing is still active or not).'),
-								'/ccbill-dl/' => array('short' => 'ccBill® Datalink collections.', 'long' => 'Records s2Member\'s ccBill® Datalink connections. s2Member® polls the ccBill® Datalink service periodically to obtain information about existing Users/Members.'),
+								'/ccbill-ipn/' => array('short' => 'ccBill® Bg Post/IPN communication.', 'long' => 'This log file records the Bg Post/IPN data ccBill® sends to s2Member® with details regarding new transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),
+								'/ccbill-rtn/' => array('short' => 'ccBill® Auto-Return communication.', 'long' => 'This log file records the Auto-Return data ccBill® sends to s2Member® with details regarding new transactions (i.e. logs routines that help s2Member® process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
+								'/ccbill-dl-ipn/' => array('short' => 'ccBill® Datalink Subscription status checks.', 'long' => 'This log file records s2Member\'s ccBill® Datalink Subscription status checks that may result in actions taken by s2Member®. s2Member® polls the ccBill® Datalink service periodically to check the status of existing Members (e.g. to see if billing is still active or not).'),
+								'/ccbill-dl/' => array('short' => 'ccBill® Datalink collections.', 'long' => 'This log file records s2Member\'s ccBill® Datalink connections. s2Member® polls the ccBill® Datalink service periodically to obtain information about existing Users/Members.'),
 
-								'/mailchimp-api/' => array('short' => 'MailChimp® API communication.', 'long' => 'Records all of s2Member\'s with MailChimp® APIs.'),
-								'/aweber-api/' => array('short' => 'AWeber® API communication.', 'long' => 'Records all of s2Member\'s with AWeber® APIs.'),
+								'/mailchimp-api/' => array('short' => 'MailChimp® API communication.', 'long' => 'This log file records all of s2Member\'s with MailChimp® APIs.'),
+								'/aweber-api/' => array('short' => 'AWeber® API communication.', 'long' => 'This log file records all of s2Member\'s with AWeber® APIs.'),
 
-								'/s2-http-api-debug/' => array('short' => 'All outgoing HTTP connections related to s2Member®.', 'long' => 'Records all outgoing WP_Http connections that are related to s2Member®.'),
-								'/wp-http-api-debug/' => array('short' => 'All outgoing WordPress® HTTP connections.', 'long' => 'Records all outgoing HTTP connections processed by the WP_Http class. This includes everything processed by WordPress®; even things unrelated to s2Member®.'),
+								'/s2-http-api-debug/' => array('short' => 'All outgoing HTTP connections related to s2Member®.', 'long' => 'This log file records all outgoing WP_Http connections that are specifically related to s2Member®.'),
+								'/wp-http-api-debug/' => array('short' => 'All outgoing WordPress® HTTP connections.', 'long' => 'This log file records all outgoing HTTP connections processed by the WP_Http class. This includes everything processed by WordPress®; even things unrelated to s2Member®.'),
 							);
 
 							$log_file_options = ""; // Initialize to an empty string.
@@ -186,19 +186,22 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								$log_files = scandir($logs_dir); sort($log_files, SORT_STRING);
 
 								$log_file_options .= '<optgroup label="Current Log Files">';
-								foreach($log_files as $log_file) // Build options for each current log file.
+								foreach($log_files as $_log_file) // Build options for each current log file.
 								{
-									$log_file_description = array("short" => "No description available.", "long" => "No description available.");
+									$_log_file_description = array("short" => "No description available.", "long" => "No description available.");
 
 									foreach($log_file_descriptions as $_k => $_v)
-										if(preg_match($_k, $log_file))
+										if(preg_match($_k, $_log_file))
 										{
-											$log_file_description = $_v;
+											$_log_file_description = $_v;
 											break; // Stop here.
 										}
-									if(preg_match("/\.log$/", $log_file) && stripos($log_file, "-ARCHIVED-") === FALSE)
-										$log_file_options .= '<option data-type="current" title="'.esc_attr($log_file_description["long"]).'" value="'.esc_attr($log_file).'"'.(($view_log_file === $log_file) ? ' style="font-weight:bold;" selected="selected"' : '').'>'.esc_html($log_file).' — '.esc_html($log_file_description["short"]).'</option>';
+									unset($_k, $_v); // Housekeeping.
+
+									if(preg_match("/\.log$/", $_log_file) && stripos($_log_file, "-ARCHIVED-") === FALSE)
+										$log_file_options .= '<option data-type="current" title="'.esc_attr($_log_file_description["long"]).'" value="'.esc_attr($_log_file).'"'.(($view_log_file === $_log_file) ? ' style="font-weight:bold;" selected="selected"' : '').'>'.esc_html($_log_file).' — '.esc_html($_log_file_description["short"]).'</option>';
 								}
+								unset($_log_file_description, $_log_file); // Housekeeping.
 								$log_file_options .= '</optgroup>';
 
 								if(stripos($log_file_options, '<option data-type="current"') === FALSE)
@@ -207,10 +210,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								$log_file_options .= '<option value="" disabled="disabled"></option>';
 
 								$log_file_options .= '<optgroup label="Archived Log Files">';
-								foreach($log_files as $log_file) // Build options for each ARCHIVED log file.
+								foreach($log_files as $_log_file) // Build options for each ARCHIVED log file.
 								{
-									if(preg_match("/\.log$/", $log_file) && stripos($log_file, "-ARCHIVED-") !== FALSE)
-										$log_file_options .= '<option data-type="archived" value="'.esc_attr($log_file).'"'.(($view_log_file === $log_file) ? ' style="font-weight:bold;" selected="selected"' : '').'>'.esc_html($log_file).'</option>';
+									if(preg_match("/\.log$/", $_log_file) && stripos($_log_file, "-ARCHIVED-") !== FALSE)
+										$log_file_options .= '<option data-type="archived" value="'.esc_attr($_log_file).'"'.(($view_log_file === $_log_file) ? ' style="font-weight:bold;" selected="selected"' : '').'>'.esc_html($_log_file).'</option>';
 								}
 								$log_file_options .= '</optgroup>';
 
@@ -249,6 +252,20 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 							if($view_log_file && file_exists($logs_dir."/".$view_log_file) && filesize($logs_dir."/".$view_log_file))
 							{
+								$_log_file_description = array("short" => "", "long" => "");
+
+								foreach($log_file_descriptions as $_k => $_v)
+									if(preg_match($_k, $view_log_file))
+									{
+										$_log_file_description = $_v;
+										break; // Stop here.
+									}
+								unset($_k, $_v); // Housekeeping.
+
+								if(!empty($_log_file_description["long"])) // Do we have a description that we can display here?
+									echo '<p style="clear:both; width:80%; font-family:\'Georgia\', serif; font-style:italic;"><strong>Description for <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'">'.esc_html($view_log_file).'</a></strong>: '.esc_html($_log_file_description["long"]).'</p>'."\n";
+								unset($_log_file_description); // Just a little housekeeping here.
+
 								echo '<p style="float:left; text-align:left;"><strong>Currently viewing log file:</strong> <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'">'.esc_html($view_log_file).'</a></p>'."\n";
 								echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'"><strong>download this log file</strong></a> ]</p>'."\n";
 
