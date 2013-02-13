@@ -40,7 +40,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 						if (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
 							return; // Logging is NOT enabled in this case.
 
-						$is_s2member = (strpos($url, "s2member") !== false) ? true : false;
+						$is_s2member = (!empty($args["s2member"]) || strpos($url, "s2member") !== false) ? true : false;
 
 						if (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs_extensive"] && !$is_s2member)
 							return; // Extensive logging is NOT enabled in this case.

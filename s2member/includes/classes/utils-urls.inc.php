@@ -193,6 +193,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 						if($url && /* We MUST have a valid full URL (string) before we do anything in this routine. */ is_string($url))
 							{
 								$args = /* Force array, and disable SSL verification. */ (!is_array($args)) ? array(): $args;
+
+								$args["s2member"] = WS_PLUGIN__S2MEMBER_VERSION; // Indicates this is an s2Member® connection.
+
 								$args["sslverify"] = (!isset($args["sslverify"])) ? /* Off. */ false : $args["sslverify"];
 
 								$args["httpversion"] = (!isset($args["httpversion"])) ? "1.1" : $args["httpversion"];
