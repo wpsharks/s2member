@@ -20,7 +20,7 @@ Tested up to: 3.6-alpha
 Requires at least: 3.2
 
 Copyright: © 2009 WebSharks, Inc.
-License: GNU General Public License
+License: GNU General Public License v2 or later.
 Contributors: WebSharks
 
 Author: s2Member® / WebSharks, Inc.
