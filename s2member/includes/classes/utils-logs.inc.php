@@ -59,8 +59,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 						'/ccbill-dl-ipn/' => array('short' => 'ccBill® Datalink Subscription status checks.', 'long' => 'This log file records s2Member\'s ccBill® Datalink Subscription status checks that may result in actions taken by s2Member®. s2Member® polls the ccBill® Datalink service periodically to check the status of existing Members (e.g. to see if billing is still active or not).'),
 						'/ccbill-dl/' => array('short' => 'ccBill® Datalink collections.', 'long' => 'This log file records s2Member\'s ccBill® Datalink connections. s2Member® polls the ccBill® Datalink service periodically to obtain information about existing Users/Members.'),
 
-						'/mailchimp-api/' => array('short' => 'MailChimp® API communication.', 'long' => 'This log file records all of s2Member\'s with MailChimp® APIs.'),
-						'/aweber-api/' => array('short' => 'AWeber® API communication.', 'long' => 'This log file records all of s2Member\'s with AWeber® APIs.'),
+						'/mailchimp-api/' => array('short' => 'MailChimp® API communication.', 'long' => 'This log file records all of s2Member\'s communication with MailChimp® APIs.'),
+						'/aweber-api/' => array('short' => 'AWeber® API communication.', 'long' => 'This log file records all of s2Member\'s communication with AWeber® APIs.'),
 
 						'/s2-http-api-debug/' => array('short' => 'All outgoing HTTP connections related to s2Member®.', 'long' => 'This log file records all outgoing WP_Http connections that are specifically related to s2Member®. This log file can be extremely helpful. It includes technical details about remote HTTP connections that are not available in other log files.'),
 						'/wp-http-api-debug/' => array('short' => 'All outgoing WordPress® HTTP connections.', 'long' => 'This log file records all outgoing HTTP connections processed by the WP_Http class. This includes everything processed by WordPress®; even things unrelated to s2Member®. This log file can be extremely helpful. It includes technical details about remote HTTP connections that are not available in other log files.'),
