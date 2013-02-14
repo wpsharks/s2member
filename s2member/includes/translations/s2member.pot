@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: s2Member® Framework 130207\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2013-02-13 13:54:53+00:00\n"
+"POT-Creation-Date: 2013-02-14 14:01:57+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1205,10 +1205,10 @@ msgstr ""
 
 #: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:80
 #: s2member/includes/s2member.js:87 s2member/includes/s2member.js:94
-#: s2member/includes/s2member.js:130 s2member/includes/s2member.js:184
-#: s2member/includes/s2member.js:191 s2member/includes/s2member.js:198
-#: s2member/includes/s2member.js:230 s2member/includes/s2member.js:262
-#: s2member/includes/s2member.js:289
+#: s2member/includes/s2member.js:130 s2member/includes/s2member.js:185
+#: s2member/includes/s2member.js:192 s2member/includes/s2member.js:199
+#: s2member/includes/s2member.js:231 s2member/includes/s2member.js:263
+#: s2member/includes/s2member.js:290
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:63
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:70
@@ -1244,7 +1244,7 @@ msgid "— Oops, you missed something: —"
 msgstr ""
 
 #: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:87
-#: s2member/includes/s2member.js:191
+#: s2member/includes/s2member.js:192
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:236
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:685
@@ -1256,7 +1256,7 @@ msgid "Passwords do not match up. Please try again."
 msgstr ""
 
 #: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:94
-#: s2member/includes/s2member.js:198
+#: s2member/includes/s2member.js:199
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:243
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:692
@@ -1267,173 +1267,173 @@ msgctxt "s2member-front"
 msgid "Password MUST be at least 6 characters. Please try again."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:344
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:345
 msgctxt "s2member-front"
 msgid "Please check at least one of the boxes."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:349
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:350
 msgctxt "s2member-front"
 msgid "Required. This box must be checked."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:355
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:356
 msgctxt "s2member-front"
 msgid "Please select one of the options."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:360
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:361
 msgctxt "s2member-front"
 msgid "Please select at least one of the options."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:364
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:365
 msgctxt "s2member-front"
 msgid "This is a required field, please try again."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:370
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:371
 msgctxt "s2member-front"
 msgid "Must be numeric (with or without decimals, commas allowed)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:374
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:375
 msgctxt "s2member-front"
 msgid "Must be numeric (with or without decimals, no commas)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:378
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:379
 msgctxt "s2member-front"
 msgid "Must be an integer (a whole number, without any decimals)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:382
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:383
 msgctxt "s2member-front"
 msgid "Must be an integer > 0 (whole number, no decimals, greater than 0)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:386
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:387
 msgctxt "s2member-front"
 msgid "Must be a float (floating point number, decimals required)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:390
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:391
 msgctxt "s2member-front"
 msgid "Must be a float > 0 (floating point number, decimals required, greater than 0)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:394
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:395
 msgctxt "s2member-front"
 msgid "Must be a date (required date format: dd/mm/yyyy)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:398
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:399
 msgctxt "s2member-front"
 msgid "Must be a valid email address."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:402
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:403
 msgctxt "s2member-front"
 msgid ""
 "Please use a personal email address.\n"
 "Addresses like <%s@> are problematic."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:406
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:407
 msgctxt "s2member-front"
 msgid "Must be a full URL (starting with http or https)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:410
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:411
 msgctxt "s2member-front"
 msgid "Must be a domain name (domain name only, without http)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:414
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:415
 msgctxt "s2member-front"
 msgid "Must be a phone # (10 digits w/possible hyphens,spaces,brackets)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:418
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:419
 msgctxt "s2member-front"
 msgid "Must be a US zipcode (5-9 digits w/possible hyphen)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:422
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:423
 msgctxt "s2member-front"
 msgid "Must be a Canadian zipcode (6 alpha-numerics w/possible space)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:426
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:427
 msgctxt "s2member-front"
 msgid "Must be a zipcode (either a US or Canadian zipcode)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:430
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:431
 msgctxt "s2member-front"
 msgid "Please use alphanumerics, spaces & punctuation only."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:434
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:435
 msgctxt "s2member-front"
 msgid "Please use alphanumerics & spaces only."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:438
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:439
 msgctxt "s2member-front"
 msgid "Please use alphanumerics & punctuation only (no spaces)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:442
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:443
 msgctxt "s2member-front"
 msgid "Please use alphanumerics only (no spaces/punctuation)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:446
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:447
 msgctxt "s2member-front"
 msgid "Please use alphabetics only (no digits/spaces/punctuation)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:450
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:451
 msgctxt "s2member-front"
 msgid "Please use numeric digits only."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:457
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
 msgctxt "s2member-front"
 msgid "Must be exactly %s %s."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:457
-#: s2member/includes/s2member.js:460
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
+#: s2member/includes/s2member.js:461
 msgctxt "s2member-front"
 msgid "digit"
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:457
-#: s2member/includes/s2member.js:460
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
+#: s2member/includes/s2member.js:461
 msgctxt "s2member-front"
 msgid "digits"
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:457
-#: s2member/includes/s2member.js:460
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
+#: s2member/includes/s2member.js:461
 msgctxt "s2member-front"
 msgid "character"
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:457
-#: s2member/includes/s2member.js:460
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
+#: s2member/includes/s2member.js:461
 msgctxt "s2member-front"
 msgid "characters"
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:460
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:461
 msgctxt "s2member-front"
 msgid "Must be at least %s %s."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:513
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:514
 msgctxt "s2member-front"
 msgid "Processing"
 msgstr ""
@@ -2471,70 +2471,70 @@ msgctxt "s2member-front"
 msgid "You're <strong>NOT</strong> logged in."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:250
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:583
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:289
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:603
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:342
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:676
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:428
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:857
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:251
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:586
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:290
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:606
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:343
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:679
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:429
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:860
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been updated.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">log back in</a> now."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:450
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:700
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:446
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:751
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:829
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:691
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1010
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:452
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:704
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:448
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:755
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:517
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:833
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1014
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">login</a>."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:459
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:483
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:709
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:730
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:461
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:485
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:713
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:734
 #: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:124
 #: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:141
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:455
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:476
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:760
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:781
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:524
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:545
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:838
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:859
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:700
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:721
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1019
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1040
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:457
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:478
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:764
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:785
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:547
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:842
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:863
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:702
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:723
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1023
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1044
 #: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:124
 #: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:141
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> A slight problem. Please contact Support for assistance."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:474
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:721
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:467
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:772
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:536
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:850
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:712
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1031
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:476
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:725
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:469
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:776
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:538
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:854
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:714
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1035
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; You'll receive an email momentarily."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:741
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:792
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:870
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1051
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:745
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:796
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:874
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1055
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:138
 msgctxt "s2member-front"
 msgid "<strong>Unknown error.</strong> Please contact Support for assistance."
@@ -3328,14 +3328,14 @@ msgctxt "s2member-front"
 msgid "Unknown form submission type. Please contact Support."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:164
-#: s2member-pro/includes/classes/gateways/paypal/paypal-sp-checkout-in.inc.php:281
+#: s2member-pro/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:165
+#: s2member-pro/includes/classes/gateways/paypal/paypal-sp-checkout-in.inc.php:282
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your purchase has been approved.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">click here</a> to proceed."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:171
-#: s2member-pro/includes/classes/gateways/paypal/paypal-sp-checkout-in.inc.php:288
+#: s2member-pro/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:172
+#: s2member-pro/includes/classes/gateways/paypal/paypal-sp-checkout-in.inc.php:289
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> Unable to generate Access Link. Please contact Support for assistance."
 msgstr ""
@@ -3474,9 +3474,9 @@ msgid "%1$s ~ ORIGINALLY: %2$s"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1061
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1065
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1064
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:672
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:676
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:675
 msgctxt "s2member-front"
 msgid "<div>Sorry, your Coupon is N/A, invalid or expired.</div>"
 msgstr ""
@@ -3596,12 +3596,12 @@ msgctxt "s2member-front"
 msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal®</a> to cancel your Subscription."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:301
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:615
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:354
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:445
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:869
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:302
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:618
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:355
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:691
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:446
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:872
 msgctxt "s2member-front"
 msgid "<strong>Sorry.</strong> Your account is pending other changes. Please try again in 15 minutes."
 msgstr ""

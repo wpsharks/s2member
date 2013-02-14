@@ -1,7 +1,7 @@
 === s2Member® Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 130213
-Stable tag: 130213
+Version: 130214
+Stable tag: 130214
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -17,7 +17,7 @@ Google® Checkout Compatible: yes w/s2Member® Pro
 ClickBank® Compatible: yes w/s2Member® Pro
 
 Tested up to: 3.6-alpha
-Requires at least: 3.2
+Requires at least: 3.3
 
 Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License v2 or later.
@@ -92,10 +92,20 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130213 =
+= v130214 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v130214 =
+* **(Maintenance Release) Upgrade immediately.**
+* (s2Member/s2Member Pro) **Log Viewer (Issue #16)** Additional log file descriptions have been added to the Dashboard, along with some other UI enhancements in this section.
+* (s2Member/s2Member Pro) **Bug Fix (Issue #18)** Usernames consisting of all numeric values were not always being redirected to the Login Welcome Page upon logging in, even when s2Member® was configured to do so. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/subscribers-not-taken-to-welcome-page/page/2/#post-41663).
+* (s2Member Pro) **Coupon Codes (Issue #19)** Adding new Replacement Codes: `%%full_coupon_code%%`, `%%coupon_code%%` and `%%coupon_affiliate_id%%`. These are now available in all API Tracking Codes, in all Custom Return URLs for Pro Forms, and in most API Notifications.
+* (s2Member Pro) **Coupon Codes (Issue #19)** Deprecating the `%%affiliate_id%%` Replacement Code for tracking Affiliate Coupon Codes in favor of `%%coupon_affiliate_id%%`.
+* (s2Member/s2Member Pro) **Last Login Time** Improving readability of Last Login Time in list of Users/Members.
+* (s2Member/s2Member Pro) **Compatibility** Improving support for WordPress® v3.6-alpha with respect to `tabindex` values on `/wp-login.php`.
+* (s2Member/s2Member Pro) **Compatibility** Bumping minimum WordPress® requirement from v3.2 up to v3.3. Starting with this release, s2Member® is no longer compatible with the much older WordPress® v3.2.
 
 = v130213 =
 * **(Maintenance Release) Upgrade immediately.**

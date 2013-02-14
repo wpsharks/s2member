@@ -210,7 +210,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 			global $wp_version; // Global made available by WordPress®.
 
 			$php_version_required = '5.2'; // Required PHP version.
-			$wp_version_required  = '3.2'; // Required WordPress® version.
+			$wp_version_required  = '3.3'; // Required WordPress® version.
 
 			// Look for possible filtration against this routine.
 
