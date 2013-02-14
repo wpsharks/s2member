@@ -140,7 +140,8 @@ jQuery(document).ready (function($)
 
 		if (location.href.match (/\/wp-login\.php/))
 			{
-				$('input#user_login').attr('tabindex', '10'), $('input#user_email').attr('tabindex', '20');
+				$('div#login > form#registerform input#user_login').attr('tabindex', '10');
+				$('div#login > form#registerform input#user_email').attr('tabindex', '20');
 				$('div#login > form#registerform input#wp-submit').attr ('tabindex', '1000');
 
 				$('input#ws-plugin--s2member-custom-reg-field-user-pass1, input#ws-plugin--s2member-custom-reg-field-user-pass2').keyup (function()
