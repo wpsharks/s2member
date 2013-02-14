@@ -102,7 +102,7 @@ add_action("bp_after_signup_profile_fields", "c_ws_plugin__s2member_custom_reg_f
 add_action("bp_after_profile_field_content", "c_ws_plugin__s2member_custom_reg_fields_4bp::custom_profile_fields_4bp");
 add_action("bp_profile_field_item", "c_ws_plugin__s2member_custom_reg_fields_4bp::custom_profile_field_items_4bp");
 
-add_action("wp_login", "c_ws_plugin__s2member_login_redirects::login_redirect");
+add_action("wp_login", "c_ws_plugin__s2member_login_redirects::login_redirect", 10, 2);
 add_action("login_head", "c_ws_plugin__s2member_login_customizations::login_header_styles");
 add_filter("login_headerurl", "c_ws_plugin__s2member_login_customizations::login_header_url");
 add_filter("login_headertitle", "c_ws_plugin__s2member_login_customizations::login_header_title");

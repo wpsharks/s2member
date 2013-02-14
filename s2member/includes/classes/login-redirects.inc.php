@@ -35,18 +35,17 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 				*
 				* @attaches-to ``add_action("wp_login");``
 				*
-				* @param str $username Expects Username to be passed in by the Action Hook.
+				* @param str $username Expects Username.
+				* @param WP_User $user Expects a WP_User object instance.
 				* @return null Or exits script execution after a redirection takes place.
 				*/
-				public static function login_redirect ($username = FALSE)
+				public static function login_redirect ($username = FALSE, $user = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_login_redirect", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						$username = (!$username && is_object ($user = wp_get_current_user ()) && !empty ($user->user_login)) ? strtolower ($user->user_login) : strtolower ($username);
-
-						if ($username && ((isset ($user) && is_object ($user)) || is_object ($user = new WP_User ($username))) && !empty ($user->ID) && ($user_id = $user->ID))
+						if (is_string($username) && $username && is_object ($user) && !empty ($user->ID) && ($user_id = $user->ID))
 							{
 								update_user_option ($user_id, "s2member_last_login_time", time());
 
