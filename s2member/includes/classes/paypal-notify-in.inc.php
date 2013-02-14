@@ -71,6 +71,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 
 										$paypal["subscr_gateway"] = (!empty ($_REQUEST["s2member_paypal_proxy"])) ? esc_html (trim (stripslashes ($_REQUEST["s2member_paypal_proxy"]))) : "paypal";
 
+										$coupon = (!empty($_REQUEST["s2member_paypal_proxy_coupon"]) && is_array($_REQUEST["s2member_paypal_proxy_coupon"])) ? stripslashes_deep($_REQUEST["s2member_paypal_proxy_coupon"]) : array();
+										$coupon = (isset($coupon["full_coupon_code"], $coupon["coupon_code"], $coupon["affiliate_id"]) && is_string($coupon["full_coupon_code"]) && is_string($coupon["coupon_code"]) && is_string($coupon["affiliate_id"])) ? $coupon : array("full_coupon_code" => "", "coupon_code" => "", "affiliate_id" => "");
+
 										if (empty ($paypal["custom"]) && !empty ($paypal["recurring_payment_id"])) // Lookup on Recurring Profiles?
 											$paypal["custom"] = c_ws_plugin__s2member_utils_users::get_user_custom_with ($paypal["recurring_payment_id"]);
 
@@ -166,6 +169,11 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								*/
 								if (!empty ($_REQUEST["s2member_paypal_proxy_use"]))
 									$paypal["s2member_paypal_proxy_use"] = $_REQUEST["s2member_paypal_proxy_use"];
+								/*
+								Add IPN proxy coupon vars (when available) to the ``$paypal`` array.
+								*/
+								if (!empty ($_REQUEST["s2member_paypal_proxy_coupon"]))
+									$paypal["s2member_paypal_proxy_coupon"] = $_REQUEST["s2member_paypal_proxy_coupon"];
 								/*
 								Also add IPN proxy self-verification (when available) to the ``$paypal`` array.
 								*/
