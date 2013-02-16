@@ -62,6 +62,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 						'/mailchimp-api/' => array('short' => 'MailChimp® API communication.', 'long' => 'This log file records all of s2Member\'s communication with MailChimp® APIs.'),
 						'/aweber-api/' => array('short' => 'AWeber® API communication.', 'long' => 'This log file records all of s2Member\'s communication with AWeber® APIs.'),
 
+						'/reg-handler/' => array('short' => 'User registrations processed by s2Member®.', 'long' => 'This log file records all User/Member registrations processed by s2Member® (either directly or indirectly). This includes both free and paid registrations. It also logs registrations that occur as a result of new Users/Members being created from the Dashboard by a site owner. It also includes registrations that occur through the s2Member® Pro Remote Operations API.'),
+
 						'/s2-http-api-debug/' => array('short' => 'All outgoing HTTP connections related to s2Member®.', 'long' => 'This log file records all outgoing WP_Http connections that are specifically related to s2Member®. This log file can be extremely helpful. It includes technical details about remote HTTP connections that are not available in other log files.'),
 						'/wp-http-api-debug/' => array('short' => 'All outgoing WordPress® HTTP connections.', 'long' => 'This log file records all outgoing HTTP connections processed by the WP_Http class. This includes everything processed by WordPress®; even things unrelated to s2Member®. This log file can be extremely helpful. It includes technical details about remote HTTP connections that are not available in other log files.'),
 					);
