@@ -75,7 +75,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 								$ccaps = array (); // Initializes $ccaps array.
 
 								foreach ($user->allcaps as $cap => $cap_enabled)
-									if (preg_match ("/^access_s2member_ccap_/", $cap))
+									if (preg_match ("/^access_s2member_ccap_/", $cap) && $cap_enabled)
 										$ccaps[] = preg_replace ("/^access_s2member_ccap_/", "", $cap);
 
 								return apply_filters ("ws_plugin__s2member_user_access_ccaps", $ccaps, get_defined_vars ());

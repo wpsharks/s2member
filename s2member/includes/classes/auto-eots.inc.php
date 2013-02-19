@@ -145,9 +145,10 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																		if  /* Only if NOT the existing Role. */($existing_role !== $demotion_role)
 																			$user->set_role /* Give User the demotion Role. */ ($demotion_role);
 
-																		foreach ($user->allcaps as $cap => $cap_enabled)
-																			if (preg_match ("/^access_s2member_ccap_/", $cap))
-																				$user->remove_cap ($ccap = $cap);
+																		if(apply_filters("ws_plugin__s2member_remove_ccaps_during_eot_events", true, get_defined_vars()))
+																			foreach ($user->allcaps as $cap => $cap_enabled)
+																				if (preg_match ("/^access_s2member_ccap_/", $cap))
+																					$user->remove_cap ($ccap = $cap);
 
 																		delete_user_option ($user_id, "s2member_custom");
 																		delete_user_option ($user_id, "s2member_subscr_id");
