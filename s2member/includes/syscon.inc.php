@@ -282,15 +282,16 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["amazon_cf_files_distro_streaming_dname"] = "";
 				$default_options["amazon_cf_files_distros_auto_config_status"] = "";
 
-				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)$default_options["level".$n."_ruris"] = "";
-
-				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)$default_options["level".$n."_catgs"] = "";
-
-				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)$default_options["level".$n."_ptags"] = "";
-
-				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)$default_options["level".$n."_posts"] = "";
-
-				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)$default_options["level".$n."_pages"] = "";
+				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+					$default_options["level".$n."_ruris"] = "";
+				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+					$default_options["level".$n."_catgs"] = "";
+				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+					$default_options["level".$n."_ptags"] = "";
+				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+					$default_options["level".$n."_posts"] = "";
+				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+					$default_options["level".$n."_pages"] = "";
 
 				$default_options["specific_ids"] = "";
 
@@ -298,6 +299,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["membership_eot_behavior"] = "demote";
 				$default_options["eot_time_ext_behavior"] = "extend";
 				$default_options["auto_eot_system_enabled"] = "1";
+				$default_options["eot_grace_time"] = "86400";
 
 				$default_options["wp_footer_code"] = "";
 
@@ -533,6 +535,9 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 									$value = $default_options[$key];
 
 								else if($key === "auto_eot_system_enabled" && (!is_string($value) || !is_numeric($value)))
+									$value = $default_options[$key];
+
+								else if($key === "eot_grace_time" && (!is_string($value) || !is_numeric($value)))
 									$value = $default_options[$key];
 
 								else if($key === "wp_footer_code" && (!is_string($value) || !strlen($value)))
