@@ -299,6 +299,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["membership_eot_behavior"] = "demote";
 				$default_options["eot_time_ext_behavior"] = "extend";
 				$default_options["auto_eot_system_enabled"] = "1";
+				$default_options["eots_remove_ccaps"] = "1";
 				$default_options["eot_grace_time"] = "86400";
 
 				$default_options["wp_footer_code"] = "";
@@ -534,10 +535,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 								else if($key === "eot_time_ext_behavior" && (!is_string($value) || !preg_match("/^(?:extend|reset)$/", $value)))
 									$value = $default_options[$key];
 
-								else if($key === "auto_eot_system_enabled" && (!is_string($value) || !is_numeric($value)))
-									$value = $default_options[$key];
-
-								else if($key === "eot_grace_time" && (!is_string($value) || !is_numeric($value)))
+								else if(preg_match("/^(?:auto_eot_system_enabled|eot_grace_time|eots_remove_ccaps)$/", $key) && (!is_string($value) || !is_numeric($value)))
 									$value = $default_options[$key];
 
 								else if($key === "wp_footer_code" && (!is_string($value) || !strlen($value)))
