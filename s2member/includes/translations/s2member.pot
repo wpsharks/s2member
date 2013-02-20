@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the s2Member® Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: s2Member® Framework 130207\n"
+"Project-Id-Version: s2Member® Framework 130220\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2013-02-14 14:01:57+00:00\n"
+"POT-Creation-Date: 2013-02-20 13:06:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -810,8 +810,8 @@ msgstr ""
 #: s2member/includes/templates/buttons/paypal-checkout-button.php:46
 #: s2member/includes/templates/buttons/paypal-sp-checkout-button.php:34
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:266
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:509
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:267
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:511
 msgctxt "s2member-front paypal-button-lang-code"
 msgid "en_US"
 msgstr ""
@@ -1016,93 +1016,93 @@ msgid_plural "%s years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: s2member/includes/classes/utils-time.inc.php:235
+#: s2member/includes/classes/utils-time.inc.php:233
 msgctxt "s2member-front"
 msgid "Daily"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:235
+#: s2member/includes/classes/utils-time.inc.php:233
 msgctxt "s2member-front"
 msgid "Weekly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:235
+#: s2member/includes/classes/utils-time.inc.php:233
 msgctxt "s2member-front"
 msgid "Monthly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:235
+#: s2member/includes/classes/utils-time.inc.php:233
 msgctxt "s2member-front"
 msgid "Yearly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:235
-#: s2member/includes/classes/utils-time.inc.php:246
+#: s2member/includes/classes/utils-time.inc.php:233
+#: s2member/includes/classes/utils-time.inc.php:244
 msgctxt "s2member-front"
 msgid "Lifetime"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:239
+#: s2member/includes/classes/utils-time.inc.php:237
 msgctxt "s2member-front"
 msgid "Bi-Weekly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:240
+#: s2member/includes/classes/utils-time.inc.php:238
 msgctxt "s2member-front"
 msgid "Bi-Monthly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:241
+#: s2member/includes/classes/utils-time.inc.php:239
 msgctxt "s2member-front"
 msgid "Quarterly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:242
+#: s2member/includes/classes/utils-time.inc.php:240
 msgctxt "s2member-front"
 msgid "Semi-Yearly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:246
+#: s2member/includes/classes/utils-time.inc.php:244
 msgctxt "s2member-front"
 msgid "Day"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:246
+#: s2member/includes/classes/utils-time.inc.php:244
 msgctxt "s2member-front"
 msgid "Week"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:246
+#: s2member/includes/classes/utils-time.inc.php:244
 msgctxt "s2member-front"
 msgid "Month"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:246
+#: s2member/includes/classes/utils-time.inc.php:244
 msgctxt "s2member-front"
 msgid "Year"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:252
+#: s2member/includes/classes/utils-time.inc.php:250
 msgctxt "s2member-front"
 msgid "Days"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:252
+#: s2member/includes/classes/utils-time.inc.php:250
 msgctxt "s2member-front"
 msgid "Weeks"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:252
+#: s2member/includes/classes/utils-time.inc.php:250
 msgctxt "s2member-front"
 msgid "Months"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:252
+#: s2member/includes/classes/utils-time.inc.php:250
 msgctxt "s2member-front"
 msgid "Years"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:252
+#: s2member/includes/classes/utils-time.inc.php:250
 msgctxt "s2member-front"
 msgid "Lifetimes"
 msgstr ""
@@ -1110,15 +1110,15 @@ msgstr ""
 #. translators: Each cycle ( i.e. `each day/week/month` or `every 2
 #. days/weeks/months`, etc. ). Cycles are translated elsewhere.
 
-#: s2member/includes/classes/utils-time.inc.php:287
-#: s2member/includes/classes/utils-time.inc.php:328
+#: s2member/includes/classes/utils-time.inc.php:285
+#: s2member/includes/classes/utils-time.inc.php:326
 msgctxt "s2member-front"
 msgid "each %2$s"
 msgid_plural "every %1$s %3$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: s2member/includes/classes/utils-time.inc.php:290
+#: s2member/includes/classes/utils-time.inc.php:288
 msgctxt "s2member-front"
 msgid "lifetime"
 msgstr ""
@@ -1126,7 +1126,7 @@ msgstr ""
 #. translators: Membership cycle ( i.e. `1 day/week/month` or `2
 #. days/weeks/months`, etc. ). Most of this is translated elsewhere.
 
-#: s2member/includes/classes/utils-time.inc.php:294
+#: s2member/includes/classes/utils-time.inc.php:292
 msgctxt "s2member-front"
 msgid "%1$s %2$s"
 msgid_plural "%1$s %3$s"
@@ -1136,7 +1136,7 @@ msgstr[1] ""
 #. translators: Cycle ( i.e. `for 1 day/week/month` or `for 2
 #. days/weeks/months`, etc. ). Most of this is translated elsewhere.
 
-#: s2member/includes/classes/utils-time.inc.php:335
+#: s2member/includes/classes/utils-time.inc.php:333
 msgctxt "s2member-front"
 msgid "for %1$s %2$s"
 msgid_plural "for %1$s %3$s"
@@ -1233,12 +1233,12 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:236
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:243
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:250
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:485
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:492
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:748
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:755
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:762
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:769
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:486
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:493
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:750
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:757
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:764
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:771
 msgctxt "s2member-front"
 msgid "— Oops, you missed something: —"
 msgstr ""
@@ -1250,7 +1250,7 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:685
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:236
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:755
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:757
 msgctxt "s2member-front"
 msgid "Passwords do not match up. Please try again."
 msgstr ""
@@ -1262,7 +1262,7 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:692
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:243
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:762
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:764
 msgctxt "s2member-front"
 msgid "Password MUST be at least 6 characters. Please try again."
 msgstr ""
@@ -2546,18 +2546,18 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:474
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:663
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:116
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:223
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:354
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:473
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:661
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:224
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:356
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:476
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:665
 msgctxt "s2member-front"
 msgid "Security Code"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:187
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:630
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:191
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:629
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:192
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:633
 msgctxt "s2member-front"
 msgid "Additional Info"
 msgstr ""
@@ -2565,9 +2565,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:320
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:441
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:594
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:323
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:442
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:595
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
 msgctxt "s2member-front"
 msgid "Visa®"
 msgstr ""
@@ -2575,9 +2575,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:320
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:441
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:594
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:323
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:442
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:595
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
 msgctxt "s2member-front"
 msgid "MasterCard®"
 msgstr ""
@@ -2585,9 +2585,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:320
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:441
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:594
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:323
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:442
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:595
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
 msgctxt "s2member-front"
 msgid "Discover®"
 msgstr ""
@@ -2595,9 +2595,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:320
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:441
 #: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:594
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:323
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:442
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:595
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
 msgctxt "s2member-front"
 msgid "American Express®"
 msgstr ""
@@ -3606,28 +3606,28 @@ msgctxt "s2member-front"
 msgid "<strong>Sorry.</strong> Your account is pending other changes. Please try again in 15 minutes."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:323
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:442
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:595
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
 msgctxt "s2member-front"
 msgid "Maestro®"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:323
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:442
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:595
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
 msgctxt "s2member-front"
 msgid "Solo®"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:442
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:595
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
 msgctxt "s2member-front"
 msgid "PayPal®"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:517
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:706
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:711
 msgctxt "s2member-front"
 msgid "We Accept PayPal®"
 msgstr ""
@@ -3798,8 +3798,8 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:70
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:164
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:250
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:492
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:769
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:493
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:771
 msgctxt "s2member-front"
 msgid "Security Code missing. Please try again."
 msgstr ""
@@ -3818,8 +3818,8 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:299
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:507
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:302
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:545
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:303
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:547
 msgctxt "s2member-front"
 msgid "Calculating Sales Tax..."
 msgstr ""
@@ -3828,8 +3828,8 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:299
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:507
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:302
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:545
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:303
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:547
 msgctxt "s2member-front"
 msgid "calculating sales tax..."
 msgstr ""
@@ -3838,8 +3838,8 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:310
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:518
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:313
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:556
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:314
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:558
 msgctxt "s2member-front"
 msgid "<strong>Sales Tax%s:</strong> %s<br /><strong>— Total%s:</strong> %s"
 msgstr ""
@@ -3848,8 +3848,8 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:310
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:518
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:313
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:556
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:314
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:558
 msgctxt "s2member-front"
 msgid "Today"
 msgstr ""
@@ -3857,7 +3857,7 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:580
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:618
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:620
 #: s2member-pro/includes/templates/forms/authnet-checkout-form.php:47
 #: s2member-pro/includes/templates/forms/authnet-registration-form.php:28
 #: s2member-pro/includes/templates/forms/paypal-checkout-form.php:47
@@ -3869,16 +3869,16 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:581
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:619
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:621
 msgctxt "s2member-front"
 msgid "Your Profile"
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:265
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:266
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:508
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:509
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:267
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:510
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:511
 #: s2member-pro/includes/templates/forms/authnet-cancellation-form.php:34
 #: s2member-pro/includes/templates/forms/authnet-checkout-form.php:178
 #: s2member-pro/includes/templates/forms/authnet-registration-form.php:79

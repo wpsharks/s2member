@@ -1,7 +1,7 @@
 === s2Member® Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 130214
-Stable tag: 130214
+Version: 130220
+Stable tag: 130220
 
 SSL Compatible: yes
 bbPress® Compatible: yes
