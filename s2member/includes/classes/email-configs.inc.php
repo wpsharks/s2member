@@ -252,8 +252,14 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 																																													break;
 
 																																										if (($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
-
-																																											c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($user->user_email, apply_filters("ws_plugin__s2member_welcome_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_welcome_email_msg", $msg, get_defined_vars()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
+																																											{
+																																												if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
+																																													{
+																																														$sbj = c_ws_plugin__s2member_utilities::evl($sbj, get_defined_vars());
+																																														$msg = c_ws_plugin__s2member_utilities::evl($msg, get_defined_vars());
+																																													}
+																																												c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($user->user_email, apply_filters("ws_plugin__s2member_welcome_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_welcome_email_msg", $msg, get_defined_vars()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
+																																											}
 																																									}
 																													}
 									}
@@ -337,8 +343,14 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 
 																																																											if (($rec = trim (preg_replace ("/%%(.+?)%%/i", "", $rec))) && ($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
 																																																												{
-																																																													foreach /* A possible list of recipients. */ (c_ws_plugin__s2member_utils_strings::parse_emails ($rec) as $recipient)
-																																																														wp_mail ($recipient, apply_filters("ws_plugin__s2member_admin_new_user_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_admin_new_user_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=UTF-8");
+																																																													if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
+																																																														{
+																																																															$rec = c_ws_plugin__s2member_utilities::evl($rec, get_defined_vars());
+																																																															$sbj = c_ws_plugin__s2member_utilities::evl($sbj, get_defined_vars());
+																																																															$msg = c_ws_plugin__s2member_utilities::evl($msg, get_defined_vars());
+																																																														}
+																																																													foreach /* A possible list of recipients. */ (c_ws_plugin__s2member_utils_strings::parse_emails ($_rec) as $recipient)
+																																																															wp_mail ($recipient, apply_filters("ws_plugin__s2member_admin_new_user_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_admin_new_user_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=UTF-8");
 																																																												}
 																																																										}
 																																														}

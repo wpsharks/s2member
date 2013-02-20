@@ -483,6 +483,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 								echo '<em>(The campaign (i.e. christmas-promo) could be referenced using <code>%%cv1%%</code>)</em><br />'."\n";
 								echo '<code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|christmas-promo"</code>'."\n";
 
+								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ?
+									'<div class="ws-menu-page-hr"></div>' . "\n".
+									'<p style="margin:0;"><strong>PHP Code:</strong> It is also possible to use PHP tags — optional (for developers). If you use PHP tags, please run a test email with <code>&lt;?php print_r(get_defined_vars()); ?&gt;</code>. This will give you a full list of all PHP variables available to you in this email. The <code>$paypal</code> variable is the most important one. It contains all of the <code>$_POST</code> variables received from PayPal\'s IPN service — or from an s2Member® Pro Form integration (e.g. <code>$paypal["item_number"]</code>, <code>$paypal["item_name"]</code>, etc). Please note that all Replacement Codes will be parsed first, and then any PHP tags that you\'ve included. Also, please remember that emails are sent in plain text format.</p>'."\n"
+									: '';
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -581,6 +585,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 								echo '<em>(The campaign (i.e. christmas-promo) could be referenced using <code>%%cv1%%</code>)</em><br />'."\n";
 								echo '<code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|christmas-promo"</code>'."\n";
 
+								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ?
+									'<div class="ws-menu-page-hr"></div>' . "\n".
+									'<p style="margin:0;"><strong>PHP Code:</strong> It is also possible to use PHP tags — optional (for developers). If you use PHP tags, please run a test email with <code>&lt;?php print_r(get_defined_vars()); ?&gt;</code>. This will give you a full list of all PHP variables available to you in this email. The <code>$paypal</code> variable is the most important one. It contains all of the <code>$_POST</code> variables received from PayPal\'s IPN service — or from an s2Member® Pro Form integration (e.g. <code>$paypal["item_number"]</code>, <code>$paypal["item_name"]</code>, etc). Please note that all Replacement Codes will be parsed first, and then any PHP tags that you\'ve included. Also, please remember that emails are sent in plain text format.</p>'."\n"
+									: '';
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";

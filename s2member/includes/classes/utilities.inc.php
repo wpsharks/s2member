@@ -36,8 +36,11 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @param str $code A string of data, possibly with embedded PHP code.
 				* @return str Output after PHP evaluation.
 				*/
-				public static function evl ($code = FALSE)
+				public static function evl ($code = FALSE, $vars = array())
 					{
+						if(is_array($vars) && !empty($vars))
+							extract($vars, EXTR_PREFIX_SAME, '_extract_');
+
 						ob_start (); // Output buffer.
 
 						eval ("?>" . trim ($code));

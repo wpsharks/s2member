@@ -92,10 +92,20 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130214 =
+= v130220 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v130220 =
+* (s2Member Pro) **Feature Enhancement/User Exportation (Issue #33)** Adding support for UTF-8 BOM in CSV User export files. Now a configurable option during User/Member Exportation.
+* (s2Member/s2Member Pro) **Feature Enhancement/Emails (Issue #21)** Adding additional Replacement Codes for New User Email Notifications (for both the User/Member Notification and also for the Administrator Notification). The following Replacement Codes are now possible: `%%role%%`, `%%label%%`, `%%level%%`, `%%ccaps%%`. Also adding four new Filters for developers. These include: `ws_plugin__s2member_welcome_email_sbj`, `ws_plugin__s2member_welcome_email_msg`, `ws_plugin__s2member_admin_new_user_email_sbj`, `ws_plugin__s2member_admin_new_user_email_msg`. See `Dashboard -› General Options -›  Email Configuration` for further details.
+* (s2Member/s2Member Pro) **Feature Enhancement/Emails (Issue #30)** Adding support for PHP tags in the following emails: New User Notification, Administrative New User Notification, Signup Confirmation Email, Specific Post/Page Confirmation Email. See the relevant sections in your Dashboard for further details. Such as: `s2Member® -› General Options -› Email Configuration` and `s2Member® -› PayPal® Options -› Signup Confirmation Email`.
+* (s2Member/s2Member Pro) **Feature Enhancement/Shortcodes (Issue #23)** Adding support for the `lang=""` Attribute in PayPal Buttons, PayPal Pro Forms, and in Google Checkout Buttons. This is a bit different from the existing `lc=""` value. The `lc=""` value controls the interface at PayPal, while the `lang=""` value controls the language of the Standard and/or Express Checkout Button itself (with respect to s2Member®). For further details, please see: `Dashboard -› PayPal Buttons (or Pro Forms) -› Shortcode Attributes (Explained)`.
+* (s2Member/s2Member Pro) **Bug Fix** Fixing bug in User Access Package. Now checking if `$cap_enabled` also is `TRUE`; just in case another plugin or hack file attempts to disable Custom Capabilities without removing them. Not likely, but we can support this easily with a quick update in this release. Note... this has no impact on s2Member's existing functionality. Custom Capabilities continue to work just as they always have.
+* (s2Member/s2Member Pro) **Feature Enhancement/Logging** Adding new logger. Logs to file `reg-handler.log`. Includes all User/Member registrations handled by s2Member® (either directly or indirectly). Only if logging is enabled. For further details, please check your Dashboard here: `s2Member® -› Log Files (Debug)`.
+* (s2Member/s2Member Pro) **Feature Enhancement/EOTs (Issue #29)** Adding UI option for EOT Grace Time. For further details, please see: `Dashboard -› PayPal Options -› Automatic EOT Behavior`. Also adding a new Filter for developers: `ws_plugin__s2member_eot_grace_time`.
+* (s2Member/s2Member Pro) **Feature Enhancement/EOTs** Adding UI option for EOT Custom Capability Removal. For further details, please see: `Dashboard -› PayPal Options -› Automatic EOT Behavior`. Also adding a new Filter for developers: `ws_plugin__s2member_remove_ccaps_during_eot_events`.
 
 = v130214 =
 * **(Maintenance Release) Upgrade immediately.**
