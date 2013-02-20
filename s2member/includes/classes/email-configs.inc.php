@@ -200,48 +200,62 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 									{
 										$fields = get_user_option ("s2member_custom_fields", $user_id);
 										$cv = preg_split ("/\|/", get_user_option ("s2member_custom", $user_id));
+
+										$role = c_ws_plugin__s2member_user_access::user_access_role($user);
+										$label = c_ws_plugin__s2member_user_access::user_access_label($user);
+										$level = c_ws_plugin__s2member_user_access::user_access_level($user);
+										$ccaps = implode(",", c_ws_plugin__s2member_user_access::user_access_ccaps($user));
+
 										$user_full_name = trim ($user->first_name . " " . $user->last_name);
 										$user_ip = $_SERVER["REMOTE_ADDR"];
 
 										if (($sbj = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_email_subject"]))
 											if (($sbj = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $sbj)))
 												if (($sbj = preg_replace ("/%%wp_login_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (wp_login_url ()), $sbj)))
-													if (($sbj = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name), $sbj)))
-														if (($sbj = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name), $sbj)))
-															if (($sbj = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name), $sbj)))
-																if (($sbj = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $sbj)))
-																	if (($sbj = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $sbj)))
-																		if (($sbj = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $sbj)))
-																			if (($sbj = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $sbj)))
-																				if (($sbj = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $sbj)))
-																					{
-																						if (is_array ($fields) && !empty ($fields))
-																							foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
-																								if (!($sbj = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $sbj)))
-																									break;
+													if (($sbj = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($role), $sbj)))
+														if (($sbj = preg_replace ("/%%label%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($label), $sbj)))
+															if (($sbj = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($level), $sbj)))
+																if (($sbj = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($ccaps), $sbj)))
+																	if (($sbj = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name), $sbj)))
+																		if (($sbj = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name), $sbj)))
+																			if (($sbj = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name), $sbj)))
+																				if (($sbj = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $sbj)))
+																					if (($sbj = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $sbj)))
+																						if (($sbj = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $sbj)))
+																							if (($sbj = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $sbj)))
+																								if (($sbj = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $sbj)))
+																									{
+																										if (is_array ($fields) && !empty ($fields))
+																											foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
+																												if (!($sbj = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $sbj)))
+																													break;
 
-																						if (($msg = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_email_message"]))
-																							if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)))
-																								if (($msg = preg_replace ("/%%wp_login_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (wp_login_url ()), $msg)))
-																									if (($msg = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name), $msg)))
-																										if (($msg = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name), $msg)))
-																											if (($msg = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name), $msg)))
-																												if (($msg = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $msg)))
-																													if (($msg = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $msg)))
-																														if (($msg = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $msg)))
-																															if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $msg)))
-																																if (($msg = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $msg)))
-																																	{
-																																		if (is_array ($fields) && !empty ($fields))
-																																			foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
-																																				if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
-																																					break;
+																										if (($msg = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_email_message"]))
+																											if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)))
+																												if (($msg = preg_replace ("/%%wp_login_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (wp_login_url ()), $msg)))
+																													if (($msg = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($role), $msg)))
+																														if (($msg = preg_replace ("/%%label%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($label), $msg)))
+																															if (($msg = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($level), $msg)))
+																																if (($msg = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($ccaps), $msg)))
+																																	if (($msg = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name), $msg)))
+																																		if (($msg = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name), $msg)))
+																																			if (($msg = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name), $msg)))
+																																				if (($msg = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $msg)))
+																																					if (($msg = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $msg)))
+																																						if (($msg = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $msg)))
+																																							if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $msg)))
+																																								if (($msg = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $msg)))
+																																									{
+																																										if (is_array ($fields) && !empty ($fields))
+																																											foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
+																																												if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
+																																													break;
 
-																																		if (($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
+																																										if (($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
-																																			c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($user->user_email, $sbj, $msg, "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
-																																	}
-																					}
+																																											c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($user->user_email, apply_filters("ws_plugin__s2member_welcome_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_welcome_email_msg", $msg, get_defined_vars()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
+																																									}
+																													}
 									}
 
 								if /* Send Admin(s) a notification? */ (in_array ("admin", $notify))
@@ -249,70 +263,87 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 										{
 											$fields = get_user_option ("s2member_custom_fields", $user_id);
 											$cv = preg_split ("/\|/", get_user_option ("s2member_custom", $user_id));
+
+											$role = c_ws_plugin__s2member_user_access::user_access_role($user);
+											$label = c_ws_plugin__s2member_user_access::user_access_label($user);
+											$level = c_ws_plugin__s2member_user_access::user_access_level($user);
+											$ccaps = implode(",", c_ws_plugin__s2member_user_access::user_access_ccaps($user));
+
 											$user_full_name = trim ($user->first_name . " " . $user->last_name);
 											$user_ip = $_SERVER["REMOTE_ADDR"];
 
 											if (($rec = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_recipients"]))
 												if (($rec = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $rec)))
 													if (($rec = preg_replace ("/%%wp_login_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (wp_login_url ()), $rec)))
-														if (($rec = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name)), $rec)))
-															if (($rec = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name)), $rec)))
-																if (($rec = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name)), $rec)))
-																	if (($rec = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $rec)))
-																		if (($rec = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $rec)))
-																			if (($rec = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $rec)))
-																				if (($rec = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $rec)))
-																					if (($rec = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $rec)))
-																						{
-																							if (is_array ($fields) && !empty ($fields))
-																								foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
-																									if (!($rec = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $rec)))
-																										break;
+														if (($rec = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($role), $rec)))
+															if (($rec = preg_replace ("/%%label%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($label), $rec)))
+																if (($rec = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($level), $rec)))
+																	if (($rec = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($ccaps), $rec)))
+																		if (($rec = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name)), $rec)))
+																			if (($rec = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name)), $rec)))
+																				if (($rec = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_dq (c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name)), $rec)))
+																					if (($rec = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $rec)))
+																						if (($rec = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $rec)))
+																							if (($rec = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $rec)))
+																								if (($rec = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $rec)))
+																									if (($rec = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $rec)))
+																										{
+																											if (is_array ($fields) && !empty ($fields))
+																												foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
+																													if (!($rec = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $rec)))
+																														break;
 
-																							if (($sbj = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_subject"]))
-																								if (($sbj = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $sbj)))
-																									if (($sbj = preg_replace ("/%%wp_login_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (wp_login_url ()), $sbj)))
-																										if (($sbj = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name), $sbj)))
-																											if (($sbj = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name), $sbj)))
-																												if (($sbj = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name), $sbj)))
-																													if (($sbj = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $sbj)))
-																														if (($sbj = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $sbj)))
-																															if (($sbj = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $sbj)))
-																																if (($sbj = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $sbj)))
-																																	if (($sbj = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $sbj)))
-																																		{
-																																			if (is_array ($fields) && !empty ($fields))
-																																				foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
-																																					if (!($sbj = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $sbj)))
-																																						break;
+																											if (($sbj = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_subject"]))
+																												if (($sbj = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $sbj)))
+																													if (($sbj = preg_replace ("/%%wp_login_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (wp_login_url ()), $sbj)))
+																														if (($sbj = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($role), $sbj)))
+																															if (($sbj = preg_replace ("/%%label%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($label), $sbj)))
+																																if (($sbj = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($level), $sbj)))
+																																	if (($sbj = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($ccaps), $sbj)))
+																																		if (($sbj = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name), $sbj)))
+																																			if (($sbj = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name), $sbj)))
+																																				if (($sbj = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name), $sbj)))
+																																					if (($sbj = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $sbj)))
+																																						if (($sbj = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $sbj)))
+																																							if (($sbj = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $sbj)))
+																																								if (($sbj = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $sbj)))
+																																									if (($sbj = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $sbj)))
+																																										{
+																																											if (is_array ($fields) && !empty ($fields))
+																																												foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
+																																													if (!($sbj = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $sbj)))
+																																														break;
 
-																																			if (($msg = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_message"]))
-																																				if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)))
-																																					if (($msg = preg_replace ("/%%wp_login_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (wp_login_url ()), $msg)))
-																																						if (($msg = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name), $msg)))
-																																							if (($msg = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name), $msg)))
-																																								if (($msg = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name), $msg)))
-																																									if (($msg = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $msg)))
-																																										if (($msg = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $msg)))
-																																											if (($msg = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $msg)))
-																																												if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $msg)))
-																																													if (($msg = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $msg)))
-																																														{
-																																															if (is_array ($fields) && !empty ($fields))
-																																																foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
-																																																	if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
-																																																		break;
+																																											if (($msg = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_message"]))
+																																												if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)))
+																																													if (($msg = preg_replace ("/%%wp_login_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (wp_login_url ()), $msg)))
+																																														if (($msg = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($role), $msg)))
+																																															if (($msg = preg_replace ("/%%label%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($label), $msg)))
+																																																if (($msg = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($level), $msg)))
+																																																	if (($msg = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($ccaps), $msg)))
+																																																		if (($msg = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->first_name), $msg)))
+																																																			if (($msg = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->last_name), $msg)))
+																																																				if (($msg = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_full_name), $msg)))
+																																																					if (($msg = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_email), $msg)))
+																																																						if (($msg = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user->user_login), $msg)))
+																																																							if (($msg = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_pass), $msg)))
+																																																								if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ip), $msg)))
+																																																									if (($msg = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $msg)))
+																																																										{
+																																																											if (is_array ($fields) && !empty ($fields))
+																																																												foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
+																																																													if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
+																																																														break;
 
-																																															if (($rec = trim (preg_replace ("/%%(.+?)%%/i", "", $rec))) && ($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
-																																																{
-																																																	foreach /* A possible list of recipients. */ (c_ws_plugin__s2member_utils_strings::parse_emails ($rec) as $recipient)
-																																																		wp_mail ($recipient, $sbj, $msg, "Content-Type: text/plain; charset=UTF-8");
-																																																}
+																																																											if (($rec = trim (preg_replace ("/%%(.+?)%%/i", "", $rec))) && ($sbj = trim (preg_replace ("/%%(.+?)%%/i", "", $sbj))) && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
+																																																												{
+																																																													foreach /* A possible list of recipients. */ (c_ws_plugin__s2member_utils_strings::parse_emails ($rec) as $recipient)
+																																																														wp_mail ($recipient, apply_filters("ws_plugin__s2member_admin_new_user_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_admin_new_user_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=UTF-8");
+																																																												}
+																																																										}
 																																														}
 																																		}
-																						}
 										}
-
 								if /* Back on? */ ($email_configs_were_on)
 									c_ws_plugin__s2member_email_configs::email_config ();
 

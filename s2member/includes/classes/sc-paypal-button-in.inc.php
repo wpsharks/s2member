@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 						$attr = /* Force array. Trim quote entities. */ c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr);
 
-						$attr = shortcode_atts (apply_filters ("ws_plugin__s2member_sc_paypal_button_default_attrs", array ("ids" => "0", "exp" => "72", "level" => "1", "ccaps" => "", "desc" => "", "ps" => "paypal", "lc" => "", "cc" => "USD", "dg" => "0", "ns" => "1", "custom" => $_SERVER["HTTP_HOST"], "ta" => "0", "tp" => "0", "tt" => "D", "ra" => "0.01", "rp" => "1", "rt" => "M", "rr" => "1", "rrt" => "", "rra" => "1", "modify" => "0", "cancel" => "0", "sp" => "0", "image" => "default", "output" => "button"), get_defined_vars ()), $attr);
+						$attr = shortcode_atts (apply_filters ("ws_plugin__s2member_sc_paypal_button_default_attrs", array ("ids" => "0", "exp" => "72", "level" => "1", "ccaps" => "", "desc" => "", "ps" => "paypal", "lc" => "", "lang" => "", "cc" => "USD", "dg" => "0", "ns" => "1", "custom" => $_SERVER["HTTP_HOST"], "ta" => "0", "tp" => "0", "tt" => "D", "ra" => "0.01", "rp" => "1", "rt" => "M", "rr" => "1", "rrt" => "", "rra" => "1", "modify" => "0", "cancel" => "0", "sp" => "0", "image" => "default", "output" => "button"), get_defined_vars ()), $attr);
 
 						$attr["modify"] = ($attr["modify"] === "1" && (!is_user_logged_in () || !get_user_option ("s2member_subscr_id")) && $attr["tp"]) ? "0" : $attr["modify"];
 
@@ -69,7 +69,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 						if /* Cancellation Buttons. */ ($attr["cancel"])
 							{
-								$default_image = "https://www.paypal.com/" . _x ("en_US", "s2member-front paypal-button-lang-code", "s2member") . "/i/btn/btn_unsubscribe_LG.gif";
+								$default_image = "https://www.paypal.com/" . (($attr["lang"]) ? $attr["lang"] : _x ("en_US", "s2member-front paypal-button-lang-code", "s2member")) . "/i/btn/btn_unsubscribe_LG.gif";
 
 								$code = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-cancellation-button.php")));
 								$code = preg_replace ("/%%images%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"] . "/images")), $code);
@@ -92,7 +92,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 							}
 						else if /* Specific Post/Page Buttons. */ ($attr["sp"])
 							{
-								$default_image = "https://www.paypal.com/" . _x ("en_US", "s2member-front paypal-button-lang-code", "s2member") . "/i/btn/btn_xpressCheckout.gif";
+								$default_image = "https://www.paypal.com/" . (($attr["lang"]) ? $attr["lang"] : _x ("en_US", "s2member-front paypal-button-lang-code", "s2member")) . "/i/btn/btn_xpressCheckout.gif";
 
 								$paypal_on0_input_value = ($referencing = c_ws_plugin__s2member_utils_users::get_user_subscr_or_wp_id ()) ? "Referencing Customer ID" : "Originating Domain";
 								$paypal_os0_input_value = /* Current User's Paid Subscr. ID, or WP® User ID, or domain. */ ($referencing) ? $referencing : $_SERVER["HTTP_HOST"];
@@ -146,7 +146,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 							}
 						else if /* Independent Custom Capabilities. */ ($attr["level"] === "*")
 							{
-								$default_image = "https://www.paypal.com/" . _x ("en_US", "s2member-front paypal-button-lang-code", "s2member") . "/i/btn/btn_xpressCheckout.gif";
+								$default_image = "https://www.paypal.com/" . (($attr["lang"]) ? $attr["lang"] : _x ("en_US", "s2member-front paypal-button-lang-code", "s2member")) . "/i/btn/btn_xpressCheckout.gif";
 
 								$paypal_on0_input_value = ($referencing = c_ws_plugin__s2member_utils_users::get_user_subscr_or_wp_id ()) ? "Referencing Customer ID" : "Originating Domain";
 								$paypal_os0_input_value = /* Current User's Paid Subscr. ID, or WP® User ID, or domain. */ ($referencing) ? $referencing : $_SERVER["HTTP_HOST"];
@@ -201,7 +201,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 							}
 						else // Otherwise, we'll process this Button normally, using Membership routines.
 							{
-								$default_image = "https://www.paypal.com/" . _x ("en_US", "s2member-front paypal-button-lang-code", "s2member") . "/i/btn/btn_xpressCheckout.gif";
+								$default_image = "https://www.paypal.com/" . (($attr["lang"]) ? $attr["lang"] : _x ("en_US", "s2member-front paypal-button-lang-code", "s2member")) . "/i/btn/btn_xpressCheckout.gif";
 
 								$paypal_on0_input_value = ($referencing = c_ws_plugin__s2member_utils_users::get_user_subscr_or_wp_id ()) ? "Referencing Customer ID" : "Originating Domain";
 								$paypal_os0_input_value = /* Current User's Paid Subscr. ID, or WP® User ID, or domain. */ ($referencing) ? $referencing : $_SERVER["HTTP_HOST"];
@@ -281,7 +281,6 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								($attr["modify"]) ? do_action ("ws_plugin__s2member_during_sc_paypal_modification_button", get_defined_vars ()) : do_action ("ws_plugin__s2member_during_sc_paypal_button", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 							}
-
 						$code = c_ws_plugin__s2member_sc_paypal_button_e::sc_paypal_button_encryption ($code, get_defined_vars ());
 
 						return apply_filters ("ws_plugin__s2member_sc_paypal_button", $code, get_defined_vars ());

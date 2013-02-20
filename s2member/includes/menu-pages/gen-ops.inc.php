@@ -346,6 +346,10 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 								echo 'Message Body used in the email sent to new Users/Members.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
 								echo '<ul>' . "\n";
+								echo '<li><code>%%role%%</code> = The Role ID <code>(subscriber, s2member_level[0-9]+, administrator, editor, author, contributor)</code>.</li>' . "\n";
+								echo '<li><code>%%label%%</code> = The Role ID Label <code>(Subscriber, s2Member Level 1, s2Member Level 2; or your own custom Labels — if configured)</code>.</li>' . "\n";
+								echo '<li><code>%%level%%</code> = The Level number <code>(0, 1, 2, 3, 4)</code>. (<em>deprecated, no longer recommended; use <code>%%role%%</code></em>)</li>' . "\n";
+								echo '<li><code>%%ccaps%%</code> = Custom Capabilities. Ex: <code>music,videos,free_gift</code> (<em>in comma-delimited format</em>).</li>' . "\n";
 								echo '<li><code>%%user_first_name%%</code> = The First Name of the Member who registered their Username.</li>' . "\n";
 								echo '<li><code>%%user_last_name%%</code> = The Last Name of the Member who registered their Username.</li>' . "\n";
 								echo '<li><code>%%user_full_name%%</code> = The Full Name (First &amp; Last) of the Member who registered their Username.</li>' . "\n";
@@ -441,6 +445,10 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 								echo 'Message Body used in the email notification sent to Administrator.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
 								echo '<ul>' . "\n";
+								echo '<li><code>%%role%%</code> = The Role ID <code>(subscriber, s2member_level[0-9]+, administrator, editor, author, contributor)</code>.</li>' . "\n";
+								echo '<li><code>%%label%%</code> = The Role ID Label <code>(Subscriber, s2Member Level 1, s2Member Level 2; or your own custom Labels — if configured)</code>.</li>' . "\n";
+								echo '<li><code>%%level%%</code> = The Level number <code>(0, 1, 2, 3, 4)</code>. (<em>deprecated, no longer recommended; use <code>%%role%%</code></em>)</li>' . "\n";
+								echo '<li><code>%%ccaps%%</code> = Custom Capabilities. Ex: <code>music,videos,free_gift</code> (<em>in comma-delimited format</em>).</li>' . "\n";
 								echo '<li><code>%%user_first_name%%</code> = The First Name of the Member who registered their Username.</li>' . "\n";
 								echo '<li><code>%%user_last_name%%</code> = The Last Name of the Member who registered their Username.</li>' . "\n";
 								echo '<li><code>%%user_full_name%%</code> = The Full Name (First &amp; Last) of the Member who registered their Username.</li>' . "\n";
