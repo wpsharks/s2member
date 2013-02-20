@@ -162,7 +162,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 																						$paypal["s2member_log"][] = "EOT/Deletion Notification URLs have been processed.";
 																					}
-
 																				if($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
 																					{
 																						$msg = $sbj = "(s2Member / API Notification Email) - EOT/Deletion";
@@ -214,12 +213,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 																						$paypal["s2member_log"][] = "EOT/Deletion Notification Emails have been processed.";
 																					}
-
 																				foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																				do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_demote", get_defined_vars());
 																				unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																			}
-
 																		else if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "delete")
 																			{
 																				$processing = $during = true; // Yes, we ARE processing this.
@@ -251,19 +248,17 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																				do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delete", get_defined_vars());
 																				unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																			}
-
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																		do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot", get_defined_vars());
 																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 																	}
-
 																else // Otherwise, treat this as if it were a cancellation. EOTs are currently disabled.
 																	{
 																		$processing = $during = true; // Yes, we ARE processing this.
 
 																		update_user_option($user_id, "s2member_auto_eot_time", ($auto_eot_time = strtotime("now")));
 
-																		$paypal["s2member_log"][] = "Auto-EOT is currently disabled. Skipping immediate EOT (demote|delete), for now.";
+																		$paypal["s2member_log"][] = "Auto-EOT is currently disabled. Skipping EOT (demote|delete), for now.";
 																		$paypal["s2member_log"][] = "Recording the Auto-EOT Time for this Member's account: ".date("D M j, Y g:i a T", $auto_eot_time);
 
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -274,7 +269,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 														else
 															$paypal["s2member_log"][] = "Unable to (demote|delete) Member. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
 													}
-
 												else if($is_delayed_eot && !get_user_option("s2member_auto_eot_time", $user_id))
 													{
 														if(!$user->has_cap("administrator")) // Do NOT process this routine on Administrators.
@@ -295,7 +289,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 														else
 															$paypal["s2member_log"][] = "Ignoring Delayed EOT. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
 													}
-
 												else if(!$is_refund_or_reversal || $is_delayed_eot)
 													$paypal["s2member_log"][] = "Skipping (demote|delete) Member, for now. An Auto-EOT Time is already set for this account. When an Auto-EOT Time has been recorded, s2Member will handle EOT (demote|delete) events using it's own Auto-EOT System - internally.";
 
@@ -319,9 +312,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 												set_transient("s2m_".md5("s2member_transient_ipn_subscr_eot_".$paypal["subscr_id"]), $ipn, 43200);
 											}
-
-										else
-											$paypal["s2member_log"][] = "Unable to (demote|delete) Member. Could not get the existing User ID from the DB. It's possible that it was ALREADY processed through another IPN, removed manually by a Site Administrator, or by s2Member's Auto-EOT Sys.";
+										else $paypal["s2member_log"][] = "Unable to (demote|delete) Member. Could not get the existing User ID from the DB. It's possible that it was ALREADY processed through another IPN, removed manually by a Site Administrator, or by s2Member's Auto-EOT Sys.";
 										/*
 										Refunds and chargeback reversals. This is excluded from the processing check, because a Member *could* have already been (demoted|deleted).
 										In other words, s2Member sends `Refund/Reversal` Notifications ANYTIME a Refund/Reversal occurs; even if s2Member did not process it otherwise.
@@ -358,7 +349,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 														$paypal["s2member_log"][] = "Refund/Reversal Notification URLs have been processed.";
 													}
-
 												if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_recipients"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
 													{
 														$msg = $sbj = "(s2Member / API Notification Email) - Refund/Reversal";
@@ -414,7 +404,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 														$paypal["s2member_log"][] = "Refund/Reversal Notification Emails have been processed.";
 													}
-
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_refund_reversal", get_defined_vars());
 												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -426,7 +415,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as a type of EOT.";
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
-
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_after_subscr_eot", get_defined_vars());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
