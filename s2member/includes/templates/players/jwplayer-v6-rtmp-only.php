@@ -6,38 +6,40 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 <div id="%%player_id%%"></div>
 <script type="text/javascript" src="%%player_path%%"></script>
 <script type="text/javascript">
-
 	if(typeof jwplayer.key !== 'string' || !jwplayer.key)
 		jwplayer.key = '%%player_key%%';
 
-	jwplayer('%%player_id%%').setup({
-	
+	jwplayer('%%player_id%%').setup
+		({
 			playlist:
 				[{
+					title: '%%player_title%%',
 					image: '%%player_image%%',
-					
+
+					mediaid: '%%player_mediaid%%',
+					description: '%%player_description%%',
+
+					captions: %%player_captions%%,
+
 					sources: // Available sources.
 						[
 							{file: '%%streamer%%/%%prefix%%%%file%%'}
 						]
 				}],
-			
-			title: '%%player_title%%',
-			
+
 			controls: %%player_controls%%,
 			height: %%player_height%%,
 			skin: '%%player_skin%%',
 			stretching: '%%player_stretching%%',
 			width: %%player_width%%,
-			
+
 			autostart: %%player_autostart%%,
 			fallback: %%player_fallback%%,
 			mute: %%player_mute%%,
 			primary: '%%player_primary%%',
 			repeat: %%player_repeat%%,
 			startparam: '%%player_startparam%%',
-			
+
 			%%player_option_blocks%%
 		});
-
 </script>

@@ -102,7 +102,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 
 						$attr = /* Force array; trim quote entities. */ c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr);
 
-						$attr = shortcode_atts(array("download" => "", "download_key" => "", "stream" => "yes", "inline" => "yes", "storage" => "", "remote" => "", "ssl" => "", "rewrite" => "yes", "rewrite_base" => "", "skip_confirmation" => "", "url_to_storage_source" => "yes", "count_against_user" => "yes", "check_user" => "yes", /* Shortcode-specifics »» */ "file_download" => "", /* Configuration » */ "player" => "jwplayer-v6-rtmp", "player_id" => "s2-stream-".md5(uniqid("", TRUE)), "player_path" => "/jwplayer/jwplayer.js", "player_key" => "", "player_image" => "", "player_title" => "", /* Layout » */ "player_controls" => "yes", "player_height" => "270", "player_skin" => "", "player_stretching" => "uniform", "player_width" => "480", /* Playback » */ "player_autostart" => "no", "player_fallback" => "yes", "player_mute" => "no", "player_primary" => "flash", "player_repeat" => "no", "player_startparam" => "", /* Advanced option blocks » */ "player_option_blocks" => ""), $attr);
+						$attr = shortcode_atts(array("download" => "", "download_key" => "", "stream" => "yes", "inline" => "yes", "storage" => "", "remote" => "", "ssl" => "", "rewrite" => "yes", "rewrite_base" => "", "skip_confirmation" => "", "url_to_storage_source" => "yes", "count_against_user" => "yes", "check_user" => "yes", /* Shortcode-specifics »» */ "file_download" => "", /* Configuration » */ "player" => "jwplayer-v6-rtmp", "player_id" => "s2-stream-".md5(uniqid("", TRUE)), "player_path" => "/jwplayer/jwplayer.js", "player_key" => "", "player_title" => "", "player_image" => "", "player_mediaid" => "", "player_description" => "", "player_captions" => "", /* Layout » */ "player_controls" => "yes", "player_height" => "270", "player_skin" => "", "player_stretching" => "uniform", "player_width" => "480", /* Playback » */ "player_autostart" => "no", "player_fallback" => "yes", "player_mute" => "no", "player_primary" => "flash", "player_repeat" => "no", "player_startparam" => "", /* Advanced option blocks » */ "player_option_blocks" => ""), $attr);
 						$attr["download"] = (!empty($attr["file_download"])) ? $attr["file_download"] : $attr["download"];
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -136,8 +136,15 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 												$get = preg_replace("/%%player_path%%/", $attr["player_path"], $get);
 												$get = preg_replace("/%%player_key%%/", $attr["player_key"], $get);
 
-												$get = preg_replace("/%%player_image%%/", $attr["player_image"], $get);
 												$get = preg_replace("/%%player_title%%/", $attr["player_title"], $get);
+												$get = preg_replace("/%%player_image%%/", $attr["player_image"], $get);
+
+												$get = preg_replace("/%%player_mediaid%%/", $attr["player_mediaid"], $get);
+												$get = preg_replace("/%%player_description%%/", $attr["player_description"], $get);
+
+												if(($attr["player_captions"] = c_ws_plugin__s2member_utils_strings::trim($attr["player_captions"], null, "[]")))
+													$get = preg_replace("/%%player_captions%%/", "[".((strpos($attr["player_captions"], ":") !== false) ? $attr["player_captions"] : base64_decode($attr["player_captions"]))."]", $get);
+												else $get = preg_replace("/%%player_captions%%/", "[]", $get);
 
 												$get = preg_replace("/%%player_controls%%/", ((filter_var($attr["player_controls"], FILTER_VALIDATE_BOOLEAN)) ? "true" : "false"), $get);
 												$get = preg_replace("/%%player_height%%/", (integer)$attr["player_height"], $get);

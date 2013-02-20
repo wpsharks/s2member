@@ -106,6 +106,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Feature Enhancement/Logging** Adding new logger. Logs to file `reg-handler.log`. Includes all User/Member registrations handled by s2Member® (either directly or indirectly). Only if logging is enabled. For further details, please check your Dashboard here: `s2Member® -› Log Files (Debug)`.
 * (s2Member/s2Member Pro) **Feature Enhancement/EOTs (Issue #29)** Adding UI option for EOT Grace Time. For further details, please see: `Dashboard -› PayPal Options -› Automatic EOT Behavior`. Also adding a new Filter for developers: `ws_plugin__s2member_eot_grace_time`.
 * (s2Member/s2Member Pro) **Feature Enhancement/EOTs** Adding UI option for EOT Custom Capability Removal. For further details, please see: `Dashboard -› PayPal Options -› Automatic EOT Behavior`. Also adding a new Filter for developers: `ws_plugin__s2member_remove_ccaps_during_eot_events`.
+* (s2Member/s2Member Pro) **Feature Enhancement/s2Stream Shortcode (Issue #32)** Adding additional support for JW Player™ Captions, Titles, Descriptions, and Media IDs (i.e. `player_title=""`, `player_description=""`, `player_mediaid=""`, `player_captions=""`). Please check the Shortcode Attributes tab in [this KB article](http://www.s2member.com/kb/jwplayer-s2stream-shortcodes/#using-s2stream-shortcodes) for further details.
 
 = v130214 =
 * **(Maintenance Release) Upgrade immediately.**
