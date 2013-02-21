@@ -66,7 +66,7 @@ jQuery(document).ready (function($)
 
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
-								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
+								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/---[0-9]+$/g, '');
 
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().children ('strong').first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
@@ -116,7 +116,7 @@ jQuery(document).ready (function($)
 
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
-								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
+								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/---[0-9]+$/g, '');
 
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
@@ -163,7 +163,7 @@ jQuery(document).ready (function($)
 
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
-								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
+								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/---[0-9]+$/g, '');
 
 								if /* No for="" attribute on these fields. */ ($.inArray (id, ['user_login', 'user_email', 'captcha_code']) !== -1)
 									{
@@ -217,7 +217,7 @@ jQuery(document).ready (function($)
 
 						$(':input[id^="ws-plugin--s2member-profile-"]', context).each ( /* Go through them all together. */function()
 							{
-								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
+								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/---[0-9]+$/g, '');
 
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
@@ -249,7 +249,7 @@ jQuery(document).ready (function($)
 
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
-								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
+								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/---[0-9]+$/g, '');
 
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
@@ -276,7 +276,7 @@ jQuery(document).ready (function($)
 
 						$(':input', context).each ( /* Go through them all together. */function()
 							{
-								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/-[0-9]+$/g, '');
+								var id = /* Remove numeric suffixes. */ $.trim ($(this).attr ('id')).replace (/---[0-9]+$/g, '');
 
 								if (id && (label = $.trim ($('label[for="' + id + '"]', context).first ().text ().replace (/[\r\n\t]+/g, ' '))))
 									{
