@@ -98,7 +98,8 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 == Changelog ==
 
 = v130221 =
-* (s2Member/s2Member Pro) **Bug Fix (Issue #41)** Custom Registration/Profile Fields with an ID that ended with `-[0-9]+` was failing JavaScript validation due to a parsing issue. Fixed in this release.
+* (s2Member/s2Member Pro) **Bug Fix (Issue #41)** Custom Registration/Profile Fields with an ID that ended with `-[0-9]+` or `_[0-9]+` was failing JavaScript validation due to a parsing issue. Fixed in this release.
+* (s2Member/s2Member Pro) **Bug Fix (Issue #43)** A bug first introduced in the last release of s2Member® v130220 was preventing Administrative New User Notifications from being sent by s2Member®. Fixed in this release.
 
 = v130220 =
 * (s2Member Pro) **Feature Enhancement/User Exportation (Issue #33)** Adding support for UTF-8 BOM in CSV User export files. Now a configurable option during User/Member Exportation.
