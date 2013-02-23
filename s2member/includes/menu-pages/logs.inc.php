@@ -84,6 +84,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-log-settings-section">'."\n";
 
 								echo '<h3>s2Member® Logging Configuration (for Debugging Purposes)</h3>'."\n";
+								echo '<p><strong class="ws-menu-page-error">WARNING:</strong> Log files may contain sensitive information. Please do <strong>NOT</strong> share information from log entries in any open forum.</p>';
 								do_action("ws_plugin__s2member_during_logs_page_during_left_sections_during_log_settings", get_defined_vars());
 
 								echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">' . "\n";
@@ -150,7 +151,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 							echo '<div class="ws-menu-page-section ws-plugin--s2member-logs-section">'."\n";
 							echo '<h3>s2Member® Log Viewer (for Debugging Purposes)</h3>'."\n";
 
-							echo '<p><span class="ws-menu-page-hilite">s2Member® keeps a log of ALL of its communication with Payment Gateways. If you are having trouble, please review your log files below.</span></p>'."\n";
+							echo '<p style="margin-bottom:0;"><span class="ws-menu-page-hilite">s2Member® keeps a log of ALL of its communication with Payment Gateways. If you are having trouble, please review your log files below.</span></p>'."\n";
+							echo '<p style="margin-top:0;"><strong class="ws-menu-page-error">WARNING:</strong> Log files may contain sensitive information. Please do <strong>NOT</strong> share information from log entries in any open forum.</p>';
 
 							echo '<h3>Debugging Tools/Tips &amp; Other Important Details (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-debugging-tips-details\').toggle(); return false;" class="ws-dotted-link">click here to toggle</a>)</h3>'."\n";
 
