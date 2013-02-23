@@ -945,6 +945,66 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 			$fopen_url_possible          = ($ini_get_possible && filter_var(ini_get('allow_url_fopen'), FILTER_VALIDATE_BOOLEAN)) ? TRUE : FALSE;
 			$fopen_url_over_ssl_possible = ($fopen_url_possible && extension_loaded('openssl')) ? TRUE : FALSE;
 
+			$curl_over_ssl_test_success                 = $fopen_url_over_ssl_test_success = FALSE;
+			$curl_fopen_ssl_test_url                    = 'https://www.websharks-inc.com/robots.txt';
+			$curl_fopen_ssl_test_url_return_string_frag = 'user-agent';
+
+			$curl_localhost_test_success                      = $fopen_url_localhost_test_success = FALSE;
+			$curl_fopen_localhost_test_url                    = 'http://'.$_SERVER['HTTP_HOST'];
+			$curl_fopen_localhost_test_url_return_string_frag = 'html';
+
+			if($curl_possible && $curl_over_ssl_possible)
+			{
+				if(is_resource($_curl_test_resource = curl_init()))
+				{
+					curl_setopt_array(
+						$_curl_test_resource, array(
+						                           CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 5,
+						                           CURLOPT_URL            => $curl_fopen_ssl_test_url, CURLOPT_RETURNTRANSFER => TRUE,
+						                           CURLOPT_FAILONERROR    => TRUE, CURLOPT_FORBID_REUSE => TRUE, CURLOPT_SSL_VERIFYPEER => FALSE
+						                      )
+					);
+					if(stripos((string)curl_exec($_curl_test_resource), $curl_fopen_ssl_test_url_return_string_frag) !== FALSE)
+						$curl_over_ssl_test_success = TRUE;
+
+					curl_close($_curl_test_resource);
+				}
+				unset($_curl_test_resource); // Housekeeping.
+
+				if(is_resource($_curl_test_resource = curl_init()))
+				{
+					curl_setopt_array(
+						$_curl_test_resource, array(
+						                           CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 5,
+						                           CURLOPT_URL            => $curl_fopen_localhost_test_url, CURLOPT_RETURNTRANSFER => TRUE,
+						                           CURLOPT_FAILONERROR    => TRUE, CURLOPT_FORBID_REUSE => TRUE, CURLOPT_SSL_VERIFYPEER => FALSE
+						                      )
+					);
+					if(stripos((string)curl_exec($_curl_test_resource), $curl_fopen_localhost_test_url_return_string_frag) !== FALSE)
+						$curl_localhost_test_success = TRUE;
+
+					curl_close($_curl_test_resource);
+				}
+				unset($_curl_test_resource); // Housekeeping.
+			}
+
+			if($fopen_url_possible && $fopen_url_over_ssl_possible)
+			{
+				if(is_resource($_fopen_test_resource = stream_context_create(array('http' => array('timeout' => 5.0, 'ignore_errors' => FALSE)))))
+				{
+					if(stripos((string)file_get_contents($curl_fopen_ssl_test_url, NULL, $_fopen_test_resource), $curl_fopen_ssl_test_url_return_string_frag) !== FALSE)
+						$fopen_url_over_ssl_test_success = TRUE;
+				}
+				unset($_fopen_test_resource); // Housekeeping.
+
+				if(is_resource($_fopen_test_resource = stream_context_create(array('http' => array('timeout' => 5.0, 'ignore_errors' => FALSE)))))
+				{
+					if(stripos((string)file_get_contents($curl_fopen_localhost_test_url, NULL, $_fopen_test_resource), $curl_fopen_localhost_test_url_return_string_frag) !== FALSE)
+						$fopen_url_localhost_test_success = TRUE;
+				}
+				unset($_fopen_test_resource); // Housekeeping.
+			}
+
 			if(!$curl_possible && !$fopen_url_possible) // Must have one of these available (cURL or streams via `fopen()`).
 			{
 				$errors[] = array(
@@ -959,7 +1019,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					)
 				);
 			}
-			else if(!$curl_over_ssl_possible && !$fopen_url_over_ssl_possible)
+			else if(!$curl_over_ssl_possible && !$fopen_url_over_ssl_possible) // Must have one of these available (cURL or streams via `fopen()`).
 			{
 				$errors[] = array(
 					'title'   => self::i18n('cURL Extension / Or <code>fopen()</code> URL'),
@@ -973,29 +1033,100 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					)
 				);
 			}
+			else if(!$curl_over_ssl_test_success && !$fopen_url_over_ssl_test_success) // A connection test must succeed over HTTPS.
+			{
+				$errors[] = array(
+					'title'   => self::i18n('cURL Extension / Or <code>fopen()</code> URL'),
+					'message' => sprintf(
+						self::i18n(
+							'One or more HTTPS connection tests failed when connecting to:<br />'.
+							'<code>%1$s</code><br /><br />'.
+
+							'In order to run %2$s, your installation of PHP needs one of the following...<br />'.
+							'&bull; Either the <a href="http://php.net/manual/en/book.curl.php" target="_blank" rel="xlink">cURL extension</a> for remote communication via PHP (plus the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a>).<br />'.
+							'&bull; Or, set: <code>allow_url_fopen = on</code> in your <a href="http://php.net/manual/en/filesystem.configuration.php" target="_blank" rel="xlink">php.ini</a> file (and enable the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a>).<br />'.
+							'Please consult with your web hosting company about this message. See also: <a href="http://wordpress.org/hosting/" target="_blank" rel="xlink">WordPress recommended hosting platforms</a>.'
+						), htmlspecialchars($curl_fopen_ssl_test_url), htmlspecialchars($plugin_name)
+					)
+				);
+			}
+			else if(!$curl_localhost_test_success && !$fopen_url_localhost_test_success) // A localhost connection test must succeed also.
+			{
+				$errors[] = array(
+					'title'   => self::i18n('cURL Extension / Or <code>fopen()</code> URL'),
+					'message' => sprintf(
+						self::i18n(
+							'One or more HTTP connection tests failed against localhost.<br />'.
+							'Cannot connect to self over HTTP — possible DNS resolution issue.<br />'.
+							'Can\'t connect to: <code>%1$s</code><br /><br />'.
+
+							'In order to run %2$s, your installation of PHP needs one of the following...<br />'.
+							'&bull; Either the <a href="http://php.net/manual/en/book.curl.php" target="_blank" rel="xlink">cURL extension</a> for remote communication via PHP (plus the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a>).<br />'.
+							'&bull; Or, set: <code>allow_url_fopen = on</code> in your <a href="http://php.net/manual/en/filesystem.configuration.php" target="_blank" rel="xlink">php.ini</a> file (and enable the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a>).<br />'.
+							'Please consult with your web hosting company about this message. See also: <a href="http://wordpress.org/hosting/" target="_blank" rel="xlink">WordPress recommended hosting platforms</a>.'
+						), htmlspecialchars($curl_fopen_localhost_test_url), htmlspecialchars($plugin_name)
+					)
+				);
+			}
 			else // Pass on this check.
 			{
 				if($curl_possible && $curl_over_ssl_possible)
 				{
 					$passes[] = array(
-						'title'   => self::i18n('cURL Extension With SSL Support'),
+						'title'   => self::i18n('cURL Extension w/ SSL Support'),
 						'message' => sprintf(
 							self::i18n(
 								'The <a href="http://php.net/manual/en/book.curl.php" target="_blank" rel="xlink">cURL extension</a> for remote communication via PHP is available (and the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a> is enabled).'
 							), NULL
 						)
 					);
+					if($curl_over_ssl_test_success)
+						$passes[] = array(
+							'title'   => self::i18n('cURL Extension w/ SSL Support (connection test)'),
+							'message' => sprintf(
+								self::i18n(
+									'The <a href="http://php.net/manual/en/book.curl.php" target="_blank" rel="xlink">cURL extension</a> for remote communication via PHP is available (and the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a> is enabled). Test HTTPS connection to: <code>%1$s</code> succeeded.'
+								), htmlspecialchars($curl_fopen_ssl_test_url)
+							)
+						);
+					if($curl_localhost_test_success)
+						$passes[] = array(
+							'title'   => self::i18n('cURL Extension (localhost connection test)'),
+							'message' => sprintf(
+								self::i18n(
+									'The <a href="http://php.net/manual/en/book.curl.php" target="_blank" rel="xlink">cURL extension</a> for remote communication via PHP is available (and the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a> is enabled). Test HTTP connection to localhost: <code>%1$s</code> succeeded.'
+								), htmlspecialchars($curl_fopen_localhost_test_url)
+							)
+						);
 				}
 				if($fopen_url_possible && $fopen_url_over_ssl_possible)
 				{
 					$passes[] = array(
-						'title'   => self::i18n('INI <code>fopen()</code> URL With SSL Support'),
+						'title'   => self::i18n('INI <code>fopen()</code> URL w/ SSL Support'),
 						'message' => sprintf(
 							self::i18n(
 								'The setting <code>allow_url_fopen</code> is <code>on</code> in your <a href="http://php.net/manual/en/filesystem.configuration.php" target="_blank" rel="xlink">php.ini</a> file (and the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a> is enabled).'
 							), NULL
 						)
 					);
+					if($fopen_url_over_ssl_test_success)
+						$passes[] = array(
+							'title'   => self::i18n('INI <code>fopen()</code> URL w/ SSL Support (connection test)'),
+							'message' => sprintf(
+								self::i18n(
+									'The setting <code>allow_url_fopen</code> is <code>on</code> in your <a href="http://php.net/manual/en/filesystem.configuration.php" target="_blank" rel="xlink">php.ini</a> file (and the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a> is enabled). Test HTTPS connection to: <code>%1$s</code> succeeded.'
+								), htmlspecialchars($curl_fopen_ssl_test_url)
+							)
+						);
+					if($fopen_url_localhost_test_success)
+						$passes[] = array(
+							'title'   => self::i18n('INI <code>fopen()</code> URL (localhost connection test)'),
+							'message' => sprintf(
+								self::i18n(
+									'The setting <code>allow_url_fopen</code> is <code>on</code> in your <a href="http://php.net/manual/en/filesystem.configuration.php" target="_blank" rel="xlink">php.ini</a> file (and the <a href="http://php.net/manual/en/book.openssl.php" target="_blank" rel="xlink">OpenSSL extension for PHP</a> is enabled). Test HTTP connection to localhost: <code>%1$s</code> succeeded.'
+								), htmlspecialchars($curl_fopen_localhost_test_url)
+							)
+						);
 				}
 			}
 
@@ -1664,7 +1795,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							'message' => sprintf(
 								self::i18n(
 									'Although NOT required, %1$s recommends that your WordPress® installation be configured with a matching HOST name.'.
-									' This can be changed in the Dashboard, under: <code>WordPress -› Settings -› General -› WordPress/Site URLs</code>.'.
+									' This can be changed in the Dashboard, under: <code>WordPress -> Settings -> General -> WordPress/Site URLs</code>.'.
 									' Your current configuration does NOT match: <code>%2$s</code>'
 								), htmlspecialchars($plugin_name), htmlspecialchars($current_host_name)
 							)
@@ -1981,7 +2112,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 
 			#if(basename($root_dir) === '')
 			#	foreach($checksums as $_key => $_value)
-			#		file_put_contents('manifest-server.txt', $_key.' -› '.$_value."\n", FILE_APPEND);
+			#		file_put_contents('manifest-server.txt', $_key.' -> '.$_value."\n", FILE_APPEND);
 
 			return md5(implode('', $checksums));
 		}
@@ -2738,7 +2869,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 			{
 				for($_dir = $_dirname, $__i = 0; $__i < $_i; $__i++)
 					$_dir = dirname($_dir);
-
+				/**/
 				if(file_exists($_dir."/wp-load.php"))
 					return $_dir."/wp-load.php";
 			}
