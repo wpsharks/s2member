@@ -124,9 +124,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 
 										$paypal["s2member_log"][] = "Unable to verify \$_POST vars. This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility.";
 										$paypal["s2member_log"][] = "Please make sure that you configure a PayPal® PDT Identity Token for your installation of s2Member®. See: `s2Member -› PayPal® Options -› PayPal® PDT/Auto-Return Integration`.";
-										$paypal["s2member_log"][] = "If you're absolutely SURE that your configuration is valid, you may want to run some tests on your server, just to be sure \$_POST variables are populated, and that your server is able to connect/communicate with your Payment Gateway over an HTTPS connection.";
-										$paypal["s2member_log"][] = "s2Member uses the `WP_Http` class for remote connections; which will try to use `cURL` first, and then fall back on the `FOPEN` method when `cURL` is not available. On a Windows® server, you may have to disable your `cURL` extension; and instead, set `allow_url_fopen = yes` in your php.ini file. The `cURL` extension (usually) does NOT support SSL connections on a Windows® server.";
-										$paypal["s2member_log"][] = "Please see this thread: `http://www.s2member.com/forums/topic/ideal-server-configuration-for-s2member/` for details regarding the ideal server configuration for s2Member.";
+										$paypal["s2member_log"][] = "See also, this KB article: `http://www.s2member.com/kb/server-scanner/`. We suggest that you run the s2Member® Server Scanner.";
 										$paypal["s2member_log"][] = /* Recording _POST + _GET vars for analysis and debugging. */ var_export ($_REQUEST, true);
 
 										$paypal["s2member_log"][] = "Redirecting Customer to the Home Page (after displaying an error message).";
