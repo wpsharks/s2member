@@ -364,7 +364,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 								else if($key === "max_ip_restriction" && (!is_string($value) || !is_numeric($value) || $value < 0 || $value > 100))
 									$value = $default_options[$key];
 
-								else if($key === "max_ip_restriction_time" && (!is_string($value) || !is_numeric($value) || $value < 900 || $value > 31556926))
+								else if($key === "max_ip_restriction_time" && (!is_string($value) || !is_numeric($value) || $value < 300 || $value > 31556926))
 									$value = $default_options[$key];
 
 								else if($key === "max_failed_login_attempts" && (!is_string($value) || !is_numeric($value) || $value < 0 || $value > 100))
