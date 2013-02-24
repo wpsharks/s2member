@@ -81,7 +81,7 @@ You can learn more about s2Member® at [s2Member.com](http://www.s2member.com/).
 **NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled in [our own support forums](http://www.s2member.com/forums/).
 
 = Please check the following s2Member® resources: =
-* s2Member FAQs: http://www.s2member.com/faqs/
+* s2Member® FAQs: http://www.s2member.com/faqs/
 * Knowledge Base: http://www.s2member.com/kb/
 * Video Tutorials: http://www.s2member.com/videos/
 * Support Forums: http://www.s2member.com/forums/
