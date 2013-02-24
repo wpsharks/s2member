@@ -42,10 +42,10 @@ Pro Module / Auto-Update URL: http://www.s2member.com/
 PayPal Pro Integration: http://www.s2member.com/videos/ED70D90C6749DA3D/
 Professional Installation URI: http://www.s2member.com/professional-installation/
 
-Description: s2Member®, a powerful (free) membership plugin for WordPress®. Protect/secure members only content with roles/capabilities.
+Description: s2Member®, a powerful (free) membership plugin for WordPress®. Protect/secure members only content with Roles/Capabilities.
 Tags: s2, s2member, s2 member, membership, users, user, members, member, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, paypal pro, pay pal, authorize, authorize.net, google checkout, clickbank, click bank, buddypress, buddy press, bbpress, bb press, shopping cart, cart, checkout, ecommerce
 
-s2Member®, a powerful (free) membership plugin for WordPress®. Protect/secure members only content with roles/capabilities.
+s2Member®, a powerful (free) membership plugin for WordPress®. Protect/secure members only content with Roles/Capabilities.
 
 == Installation ==
 
