@@ -143,7 +143,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 										echo '<td>'."\n";
 										echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_level'.$n.'_aweber_list_ids" id="ws-plugin--s2member-level'.$n.'-aweber-list-ids" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_aweber_list_ids"]).'" /><br />'."\n";
 										echo 'New '.(($n === 0) ? 'Free Subscribers' : 'Level #'.$n.' Members').' will be subscribed to these List IDs.<br />'."\n";
-										echo 'Ex: <code>mylist, anotherlist</code> — See also: <a href="https://help.aweber.com/entries/21696463-Can-I-Add-Subscribers-to-More-Than-One-List-At-Once-" target="_blank" rel="external">Automation Rules</a> (recommended).'."\n";
+										echo 'Ex: <code>mylist, anotherlist</code> — See also: <a href="https://help.aweber.com/entries/21696463-Can-I-Add-Subscribers-to-More-Than-One-List-At-Once-" target="_blank" rel="external">Automation Rules</a>'."\n";
 										echo '</td>'."\n";
 
 										echo '</tr>'."\n";
