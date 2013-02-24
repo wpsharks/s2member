@@ -54,7 +54,7 @@ s2Member® — a powerful (free) membership plugin for WordPress®. Protect memb
 = s2Member® is very easy to install (instructions) =
 1. Upload the `/s2member` folder to your `/wp-content/plugins/` directory.
 2. Activate the plugin through the `Plugins` menu in WordPress®.
-3. Navigate to the `s2Member Options` panel for configuration details.
+3. Navigate to the `s2Member® Options` panel for configuration details.
 
 = See Also (s2Member.com) =
 [Detailed installation/upgrade instructions](http://www.s2member.com/framework/#!s2_tab_jump=s2-framework-install-update).
