@@ -135,6 +135,8 @@
 *.gtar binary
 *.tgz binary
 *.gz binary
+*.phar binary
+*.phar.php binary
 
 # Binary Files
 *.bin binary
