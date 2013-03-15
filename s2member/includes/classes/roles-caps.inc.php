@@ -117,16 +117,17 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 				public static function bbp_dynamic_role_caps($caps = FALSE, $role = FALSE)
 					{
 						if(function_exists("bbp_get_dynamic_roles") && $role !== bbp_get_blocked_role())
-							{
-								$caps = array_merge($caps, array("read" => true, "level_0" => true));
-								$caps = array_merge($caps, array("access_s2member_level0" => true));
-
-								if(in_array($role, array(bbp_get_keymaster_role(), bbp_get_moderator_role()), TRUE))
-									{
-										for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
-											$caps = array_merge($caps, array("access_s2member_level".$n => true));
-									}
-							}
+							if(!did_action("bbp_deactivation") && !did_action("bbp_uninstall"))
+								{
+									$caps = array_merge($caps, array("read" => true, "level_0" => true));
+									$caps = array_merge($caps, array("access_s2member_level0" => true));
+	
+									if(in_array($role, array(bbp_get_keymaster_role(), bbp_get_moderator_role()), TRUE))
+										{
+											for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+												$caps = array_merge($caps, array("access_s2member_level".$n => true));
+										}
+								}
 						return /* Dynamic capabilities. */ $caps;
 					}
 				/**
