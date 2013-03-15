@@ -90,6 +90,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_custom' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_custom_fields' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_notes' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
+									$query->query_where .= /* Includes first/last name. */ " OR (`" . $wpdb->usermeta . "`.`meta_key` LIKE '%_name' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= " OR `user_login` LIKE '" . $s . "' OR `user_nicename` LIKE '" . $s . "' OR `user_email` LIKE '" . $s . "' OR `user_url` LIKE '" . $s . "' OR `display_name` LIKE '" . $s . "'";
 									$query->query_where .= apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_after", "", get_defined_vars ()) . ")"; // Leaving room for additional searches here.
 									$query->query_where .= " AND `" . $wpdb->users . "`.`ID` IN(SELECT DISTINCT(`user_id`) FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "capabilities'" .
