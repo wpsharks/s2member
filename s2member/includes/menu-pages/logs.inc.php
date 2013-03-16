@@ -88,6 +88,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
 								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems that occur during processing. Enable logging here, and then view your log files below; in the s2Member® Log Viewer.</span></p>'."\n";
 								echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
+								echo '<p style="font-size:110%; margin-bottom:0;"><span>Regarding s2Member® Security Badges. If debug logging is enabled, your site will NOT qualify for an s2Member® Security Badge until you disable logging (and you must ALSO download, and then delete any existing log files). For further details, please see KB Article: <a href="http://www.s2member.com/kb/security-badges/" target="_blank" rel="external">s2Member® Security Badges</a>.</span></p>'."\n";
 								echo '</div>'."\n";
 								
 								echo '<div class="ws-menu-page-hr"></div>'."\n";

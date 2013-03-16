@@ -53,9 +53,9 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 
 								while (@ob_end_clean ()); // Clean any existing output buffers.
 
-								if ( /* Badge status API enabled? */$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["s_badge_status_enabled"])
+								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["s_badge_status_enabled"])
 									{
-										if ( /* Valid key? */strlen ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) >= 56)
+										if (strlen ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) >= 56)
 											{
 												if (defined ("AUTH_KEY") && strlen (AUTH_KEY) >= 60 && stripos (AUTH_KEY, "unique phrase") === false)
 													if (defined ("SECURE_AUTH_KEY") && strlen (SECURE_AUTH_KEY) >= 60 && stripos (SECURE_AUTH_KEY, "unique phrase") === false)
@@ -71,11 +71,14 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 																							{
 																								if (defined ("DB_USER") && DB_USER && defined ("DB_PASSWORD") && DB_PASSWORD && DB_USER !== DB_PASSWORD)
 																									{
-																										if (!apply_filters ("ws_plugin__s2member_disable_all_ip_restrictions", false, get_defined_vars ()))
-																											if ( /* Enabled by site owner? */$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"])
+																										if (!apply_filters ("ws_plugin__s2member_disable_all_ip_restrictions", false, get_defined_vars ()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"])
+																											if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_failed_login_attempts"])
 																												{
-																													if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_failed_login_attempts"])
-																														exit ("1"); // OK good. Things look pretty secure here.
+																													if ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"] && !glob($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"].'/*'))
+																														|| $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"] !== $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["default_logs_dir"])
+																														{
+																															exit ("1"); // OK good. Things look pretty secure here.
+																														}
 																												}
 																									}
 																							}

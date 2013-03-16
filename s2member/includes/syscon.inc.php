@@ -68,13 +68,15 @@ $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["streaming_file_extns"] = array_unique(
 /*
 Configure directory and .htaccess for files protected by s2Member.
 */
-$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"] = apply_filters("ws_plugin__s2member_files_dir", dirname(dirname(__FILE__))."-files".((stripos(PHP_OS, "win") === 0 && stripos($_SERVER["SERVER_SOFTWARE"], "apache") === false) ? "/app_data" : ""));
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["default_files_dir"] = dirname(dirname(__FILE__))."-files".((stripos(PHP_OS, "win") === 0 && stripos($_SERVER["SERVER_SOFTWARE"], "apache") === false) ? "/app_data" : "");
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"] = apply_filters("ws_plugin__s2member_files_dir", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["default_files_dir"]);
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_no_gzip_htaccess"] = dirname(__FILE__)."/templates/cfg-files/s2member-files-no-gzip.php";
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir_htaccess"] = dirname(__FILE__)."/templates/cfg-files/s2member-files.php";
 /*
 Configure the directory for logs protected by s2Member.
 */
-$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"] = apply_filters("ws_plugin__s2member_logs_dir", dirname(dirname(__FILE__))."-logs".((stripos(PHP_OS, "win") === 0 && stripos($_SERVER["SERVER_SOFTWARE"], "apache") === false) ? "/app_data" : ""));
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["default_logs_dir"] = dirname(dirname(__FILE__))."-logs".((stripos(PHP_OS, "win") === 0 && stripos($_SERVER["SERVER_SOFTWARE"], "apache") === false) ? "/app_data" : "");
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"] = apply_filters("ws_plugin__s2member_logs_dir", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["default_logs_dir"]);
 $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir_htaccess"] = dirname(__FILE__)."/templates/cfg-files/s2member-logs.php";
 /*
 Configure the global reCaptcha (www.websharks-inc.net / or any domain). These public/private keys work on any installation.

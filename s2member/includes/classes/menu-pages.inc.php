@@ -874,7 +874,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 							c_ws_plugin__s2member_admin_notices::display_admin_notice('Unprotected. The .htaccess protection file (<code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)).'</code>) does not contain <code>deny from all</code>. Inside your .htaccess file, add this:<br /><pre>'.esc_html($htaccess_contents).'</pre>', true);
 
 						if /* Logging disabled? */(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
-							c_ws_plugin__s2member_admin_notices::display_admin_notice('Logging is currently disabled by your configuration.', true);
+							c_ws_plugin__s2member_admin_notices::display_admin_notice('Logging is currently disabled by your configuration.');
 
 						include_once dirname(dirname(__FILE__))."/menu-pages/logs.inc.php";
 
