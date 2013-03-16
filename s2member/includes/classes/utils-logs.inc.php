@@ -104,14 +104,22 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 						$log4 = (is_multisite () && !is_main_site ()) ? ($_log4 = $current_blog->domain . $current_blog->path) . "\n" . $log4 : $log4;
 						$log2 = (is_multisite () && !is_main_site ()) ? "http-api-debug-4-" . trim (preg_replace ("/[^a-z0-9]/i", "-", $_log4), "-") . ".log" : "http-api-debug.log";
 
+						$http_api_debug_conceal_private_info = c_ws_plugin__s2member_utils_logs::conceal_private_info(var_export ($http_api_debug, true));
+
 						if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
 							if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
 							{
 								if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs_extensive"])
-									file_put_contents ($logs_dir . "/wp-" . $log2, "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($http_api_debug, true) . "\n\n", FILE_APPEND);
+									file_put_contents ($logs_dir . "/wp-" . $log2,
+									                   "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" .
+									                     $http_api_debug_conceal_private_info . "\n\n",
+									                   FILE_APPEND);
 
 								if($is_s2member) // Log s2Member® HTTP connections separately.
-									file_put_contents ($logs_dir . "/s2-" . $log2, "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($http_api_debug, true) . "\n\n", FILE_APPEND);
+									file_put_contents ($logs_dir . "/s2-" . $log2,
+									                   "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" .
+									                     $http_api_debug_conceal_private_info . "\n\n",
+									                   FILE_APPEND);
 							}
 					}
 				/**
@@ -180,6 +188,34 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 									}
 							}
 						return true;
+					}
+
+				/**
+				* Attempts to conceal private details in log entries.
+				*
+				* @package s2Member\Utilities
+				* @since 130315
+				*
+				* @param string $log_entry The log entry we need to conceal private details in.
+				* @return string Filtered string with some data X'd out :-)
+				*/
+				public static function conceal_private_info($log_entry)
+					{
+						$log_entry = preg_replace('/\b([3456][0-9]{10,11})([0-9]{4})\b/', 'xxxxxxxxxxxx'.'$2', (string)$log_entry);
+
+						$log_entry = preg_replace('/(\'.*pass_?(?:word)?(?:[0-9]+)?\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/pass'.'$3', $log_entry);
+						$log_entry = preg_replace('/([&?][^&]*pass_?(?:word)?(?:[0-9]+)?\=)([^&]+)/', '$1'.'xxxxxxxx/pass', $log_entry);
+
+						$log_entry = preg_replace('/(\'api_?(?:key|secret)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/api/key/sec'.'$3', $log_entry);
+						$log_entry = preg_replace('/([&?][^&]api_?(?:key|secret)\=)([^&]+)/', '$1'.'xxxxxxxx/api/key/sec', $log_entry);
+
+						$log_entry = preg_replace('/(\'(?:PWD|SIGNATURE)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/PWD/SIG'.'$3', $log_entry);
+						$log_entry = preg_replace('/([&?][^&](?:PWD|SIGNATURE)\=)([^&]+)/', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
+
+						$log_entry = preg_replace('/(\'(?:x_login|x_tran_key)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/key/tran'.'$3', $log_entry);
+						$log_entry = preg_replace('/([&?][^&](?:x_login|x_tran_key)\=)([^&]+)/', '$1'.'xxxxxxxx/key/tran', $log_entry);
+
+						return $log_entry;
 					}
 			}
 	}

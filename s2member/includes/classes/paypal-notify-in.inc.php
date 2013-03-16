@@ -189,7 +189,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
 									if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
 										if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
-											file_put_contents ($logs_dir . "/" . $log2, "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" . var_export ($paypal, true) . "\n\n", FILE_APPEND);
+											file_put_contents ($logs_dir . "/" . $log2,
+											                   "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" .
+											                                            c_ws_plugin__s2member_utils_logs::conceal_private_info(var_export ($paypal, true)) . "\n\n",
+											                   FILE_APPEND);
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_paypal_notify", get_defined_vars ());

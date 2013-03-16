@@ -191,6 +191,16 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 										echo '</td>'."\n";
 
 										echo '</tr>'."\n";
+										echo '<tr>'."\n";
+
+										echo '<td>'."\n";
+										echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
+										echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems during payment processing. See: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Files (Debug)</a>.</span></p>'."\n";
+										echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
+										echo '</div>'."\n";
+										echo '</td>'."\n";
+
+										echo '</tr>'."\n";
 									}
 
 								echo '</tbody>'."\n";

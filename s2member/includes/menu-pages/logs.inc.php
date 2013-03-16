@@ -84,7 +84,14 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-log-settings-section">'."\n";
 
 								echo '<h3>s2Member® Logging Configuration (for Debugging Purposes)</h3>'."\n";
-								echo '<p><strong class="ws-menu-page-error">WARNING:</strong> Log files may contain sensitive information. Please do <strong>NOT</strong> share information from log entries in any open forum.</p>';
+								
+								echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
+								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems that occur during processing. Enable logging here, and then view your log files below; in the s2Member® Log Viewer.</span></p>'."\n";
+								echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
+								echo '</div>'."\n";
+								
+								echo '<div class="ws-menu-page-hr"></div>'."\n";
+								
 								do_action("ws_plugin__s2member_during_logs_page_during_left_sections_during_log_settings", get_defined_vars());
 
 								echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">' . "\n";
@@ -106,7 +113,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								echo '<td>'."\n";
 								echo '<input type="radio" name="ws_plugin__s2member_gateway_debug_logs" id="ws-plugin--s2member-gateway-debug-logs-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_gateway_debug_logs" id="ws-plugin--s2member-gateway-debug-logs-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-1">Yes, enable debugging w/ HTTP, API, IPN &amp; Return Page logging (and List Server API logs too).</label><br />'."\n";
 								echo '<em>This enables logging overall. Includes s2Member® HTTP, API, IPN and Return Page logging. Also logs any List Server integrations.</em><br />'."\n";
-								echo '<em>The log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code></em>'."\n";
+								echo '<em>* Use only for debugging. This should NEVER be enabled on a live site.<br />* The log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code></em>'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -149,11 +156,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 							echo '<div class="ws-menu-page-group" title="s2Member® Log Viewer (for Debugging Purposes)" default-state="open">'."\n";
 
 							echo '<div class="ws-menu-page-section ws-plugin--s2member-logs-section">'."\n";
-							echo '<h3>s2Member® Log Viewer (for Debugging Purposes)</h3>'."\n";
-
-							echo '<p style="margin-bottom:0;"><span class="ws-menu-page-hilite">s2Member® keeps a log of ALL of its communication with Payment Gateways. If you are having trouble, please review your log files below.</span></p>'."\n";
-							echo '<p style="margin-top:0;"><strong class="ws-menu-page-error">WARNING:</strong> Log files may contain sensitive information. Please do <strong>NOT</strong> share information from log entries in any open forum.</p>';
-
 							echo '<h3>Debugging Tools/Tips &amp; Other Important Details (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-debugging-tips-details\').toggle(); return false;" class="ws-dotted-link">click here to toggle</a>)</h3>'."\n";
 
 							echo '<div id="ws-plugin--s2member-debugging-tips-details" style="display:none;">'."\n";

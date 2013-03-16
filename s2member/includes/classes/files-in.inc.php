@@ -326,6 +326,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 													$_url_e_key = ($key) ? c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($key)) : "";
 													$_url_e_storage = ($storage) ? c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($storage)) : "";
 													$_url_e_file = c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($req["file_download"]));
+													$_url_e_file = str_ireplace("%2F", "/", $_url_e_file);
 
 													$url = ($rewrite_base) ? rtrim($rewrite_base, "/") : rtrim($rewrite_base_guess, "/");
 													$url .= (isset($req["file_download_key"])) ? (($key && $_url_e_key) ? "/s2member-file-download-key-".$_url_e_key : "") : "";
@@ -346,6 +347,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 													$_url_e_key = ($key) ? c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($key)) : "";
 													$_url_e_storage = ($storage) ? c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($storage)) : "";
 													$_url_e_file = c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($req["file_download"]));
+													$_url_e_file = str_ireplace("%2F", "/", $_url_e_file);
 
 													$url = (isset($req["file_download_key"])) ? (($key && $_url_e_key) ? "&s2member_file_download_key=".$_url_e_key : "") : "";
 													$url .= (isset($req["file_stream"])) ? (($stream) ? "&s2member_file_stream=yes" : "&s2member_file_stream=no") : "";
@@ -658,6 +660,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 					{
 						$file = /* Trim / force string. */ trim((string)$file, "/");
 						$url_e_file = c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($file));
+						$url_e_file = str_ireplace("%2F", "/", $_url_e_file);
 
 						foreach($GLOBALS["WS_PLUGIN__"]["s2member"]["o"] as $option => $option_value)
 							if(preg_match("/^amazon_s3_files_/", $option) && ($option = preg_replace("/^amazon_s3_files_/", "", $option)))
@@ -807,6 +810,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 					{
 						$file = /* Trim & force string. */ trim((string)$file, "/");
 						$url_e_file = c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($file));
+						$url_e_file = str_ireplace("%2F", "/", $_url_e_file);
 
 						foreach($GLOBALS["WS_PLUGIN__"]["s2member"]["o"] as $option => $option_value)
 							if(preg_match("/^amazon_cf_files_/", $option) && ($option = preg_replace("/^amazon_cf_files_/", "", $option)))
