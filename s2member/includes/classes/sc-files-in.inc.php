@@ -147,10 +147,10 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 												else $get = preg_replace("/%%player_captions%%/", "[]", $get);
 
 												$get = preg_replace("/%%player_controls%%/", ((filter_var($attr["player_controls"], FILTER_VALIDATE_BOOLEAN)) ? "true" : "false"), $get);
-												$get = preg_replace("/%%player_height%%/", (integer)$attr["player_height"], $get);
+												$get = preg_replace("/%%player_height%%/", $attr["player_height"], $get);
 												$get = preg_replace("/%%player_skin%%/", $attr["player_skin"], $get);
 												$get = preg_replace("/%%player_stretching%%/", $attr["player_stretching"], $get);
-												$get = preg_replace("/%%player_width%%/", (integer)$attr["player_width"], $get);
+												$get = preg_replace("/%%player_width%%/", $attr["player_width"], $get);
 
 												$get = preg_replace("/%%player_autostart%%/", ((filter_var($attr["player_autostart"], FILTER_VALIDATE_BOOLEAN)) ? "true" : "false"), $get);
 												$get = preg_replace("/%%player_fallback%%/", ((filter_var($attr["player_fallback"], FILTER_VALIDATE_BOOLEAN)) ? "true" : "false"), $get);

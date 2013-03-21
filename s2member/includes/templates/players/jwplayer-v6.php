@@ -3,7 +3,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
 ?>
 
-<div id="%%player_id%%"></div>
+<div id="%%player_id%%" class="s2member-jwplayer-v6"></div>
 <script type="text/javascript" src="%%player_path%%"></script>
 <script type="text/javascript">
 	if(typeof jwplayer.key !== 'string' || !jwplayer.key)
