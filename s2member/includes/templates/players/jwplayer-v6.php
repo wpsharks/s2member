@@ -28,10 +28,10 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 				}],
 
 			controls: %%player_controls%%,
-			height: %%player_height%%,
 			skin: '%%player_skin%%',
 			stretching: '%%player_stretching%%',
 			width: %%player_width%%,
+			height: %%player_height%%,
 
 			autostart: %%player_autostart%%,
 			fallback: %%player_fallback%%,
