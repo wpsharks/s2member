@@ -106,7 +106,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Debug Logging (WebSharks/Private#69)** Logging now disabled by default. New log recommendation/warning notices updated throughout all menu pages for s2Member®.
 * (s2Member/s2Member Pro) **Debug Logging (WebSharks/Private#69)** Logging must now be disabled (and the logs directory must be non-existent or empty) for an s2Member® Security Badge to go green. There is only one way to bypass this security check. See KB Article: [s2Member® Security Badges](http://www.s2member.com/kb/security-badges/). Notices are displayed on activation of this version to warn site owners about this change.
 * (s2Member/s2Member Pro) **JW Player (WebSharks/Private#121)** Adding CSS `class` attribute to all JW Player template files used in conjunction with the `s2Stream` shortcode. New CSS class name: `s2member-jwplayer-v6`.
-* (s2Member/s2Member Pro) **JW Player (WebSharks/Private#121)** Adding support for percentage-based width/height values in `width="" height=""` attributes of an s2Stream shortcode that generates a JW Player. Example: `width="100%"`.
+* (s2Member/s2Member Pro) **JW Player (WebSharks/Private#121)** Adding support for percentage-based width/height values in `player_width="" player_height=""` attributes of an s2Stream shortcode that generates a JW Player. Example: `player_width="100%"`.
 
 = v130221 =
 * (s2Member/s2Member Pro) **Bug Fix (Issue #41)** Custom Registration/Profile Fields with an ID that ended with `-[0-9]+` or `_[0-9]+` was failing JavaScript validation due to a parsing issue. Fixed in this release.
