@@ -126,7 +126,6 @@
 *.iso binary
 *.jar binary
 *.phar binary
-*.phar.php binary
 *.rar binary
 *.tar binary
 *.tgz binary

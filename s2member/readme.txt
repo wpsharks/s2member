@@ -92,10 +92,21 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130221 =
+= v130404 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v130404 =
+* (s2Member Pro) **Compatibility (WebSharks/Private#108)** Updating s2Member® Pro's integration with Authorize.Net to allow charges up to `$99,999.00` (formerly `$10,000.00`).
+* (s2Member/s2Member Pro) **User Searches (WebSharks/Private#91)** Updating `pre_user_query` filter to include `first_name/last_name` (instead of only the `display_name`).
+* (s2Member/s2Member Pro) **bbPress Integration (WebSharks/Private#88)** Updating bbPress Role/Cap filter to exclude itself during bbPress deactivation. This was causing a loss of the `read` Capability inadvertently.
+* (s2Member/s2Member Pro) **PayPal® 20% Rule (WebSharks/Private#100)** Removing mention of the PayPal® 20% rule/limitation in the inline documentation. We confirmed with PayPal this ridiculous rule no longer applies to PayPal Standard Buttons.
+* (s2Member/s2Member Pro) **File Downloads (WebSharks/Private#73)** Fixed bug related to `%2F` in file download URLs leading to a `ccap` directory.
+* (s2Member/s2Member Pro) **Debug Logging (WebSharks/Private#69)** Logging now disabled by default. New log recommendation/warning notices updated throughout all menu pages for s2Member®.
+* (s2Member/s2Member Pro) **Debug Logging (WebSharks/Private#69)** Logging must now be disabled (and the logs directory must be non-existent or empty) for an s2Member® Security Badge to go green. There is only one way to bypass this security check. See KB Article: [s2Member® Security Badges](http://www.s2member.com/kb/security-badges/). Notices are displayed on activation of this version to warn site owners about this change.
+* (s2Member/s2Member Pro) **JW Player (WebSharks/Private#121)** Adding CSS `class` attribute to all JW Player template files used in conjunction with the `s2Stream` shortcode. New CSS class name: `s2member-jwplayer-v6`.
+* (s2Member/s2Member Pro) **JW Player (WebSharks/Private#121)** Adding support for percentage-based width/height values in `width="" height=""` attributes of an s2Stream shortcode that generates a JW Player. Example: `width="100%"`.
 
 = v130221 =
 * (s2Member/s2Member Pro) **Bug Fix (Issue #41)** Custom Registration/Profile Fields with an ID that ended with `-[0-9]+` or `_[0-9]+` was failing JavaScript validation due to a parsing issue. Fixed in this release.
