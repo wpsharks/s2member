@@ -174,6 +174,35 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 						return apply_filters ("ws_plugin__s2member_after_email_filter", $array, get_defined_vars ());
 					}
 				/**
+				* Resets a User/Member password and resends the New User Notification email message (to the User/Member only).
+				*
+				* @package s2Member\Email_Configs
+				* @since 110707
+				*
+				* @param str|int $user_id A numeric WordPress® User ID.
+				* @param str $user_pass Optional. A plain text version of the User's password.
+				* 	If omitted, a new password will be generated automatically.
+				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.
+					This defaults to a value of `array('user')`. We notify the User/Member only (and NOT the administrator).
+				* @return bool True if all required parameters are supplied, else false.
+				*/
+				public static function reset_pass_resend_new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user"))
+					{
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
+						do_action ("ws_plugin__s2member_before_reset_pass_resend_new_user_notification", get_defined_vars ());
+						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
+						if ($user_id && ($user = new WP_User ($user_id)) && !empty ($user->ID) && ($user_id = $user->ID) && is_array ($notify) && !empty ($notify))
+							{
+								$user_pass = (is_string($user_pass) && $user_pass) ? $user_pass : wp_generate_password();
+								
+								wp_set_password($user_pass, $user_id);
+								
+								$return = c_ws_plugin__s2member_email_configs::new_user_notification($user_id, $user_pass, $notify);
+							}
+						return apply_filters ("ws_plugin__s2member_reset_pass_resend_new_user_notification", ((!empty($return)) ? true : false), get_defined_vars ());
+					}
+				/**
 				* Handles new User/Member notifications.
 				*
 				* @package s2Member\Email_Configs
