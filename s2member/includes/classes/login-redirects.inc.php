@@ -47,8 +47,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 						do_action ("ws_plugin__s2member_before_ms_wp_authenticate_user", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 						
-						if($user_or_wp_error instanceof WP_User && $user->ID && !in_array(get_current_blog_id(), array_keys(get_blogs_of_user($user->ID)), TRUE))
-							$user_or_wp_error = new WP_Error('invalid_username', __('<strong>ERROR</strong>: Invalid username for this site.'));
+						if(is_a($user_or_wp_error, "WP_User") && ($user = $user_or_wp_error) && $user->ID && !is_super_admin($user->ID) && !in_array(get_current_blog_id(), array_keys(get_blogs_of_user($user->ID)), TRUE))
+							$user_or_wp_error = new WP_Error("invalid_username", _x("<strong>ERROR</strong>: Invalid username for this site.", "s2member-front", "s2member"));
 
 						return apply_filters ("ws_plugin__s2member_ms_wp_authenticate_user", $user_or_wp_error, get_defined_vars ());
 					}
