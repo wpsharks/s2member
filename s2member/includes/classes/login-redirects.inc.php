@@ -27,6 +27,31 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 		*/
 		class c_ws_plugin__s2member_login_redirects
 			{
+			
+				/**
+				* Assists in multisite User authentication.
+				*
+				* @package s2Member\Login_Redirects
+				* @since 130405
+				*
+				* @attaches-to ``add_filter("wp_authenticate_user");``
+				*
+				* @param WP_User|WP_Error Expects either a WP_User or WP_Error object passed in by the Filter.
+				* @return WP_User|WP_Error WP_User or WP_Error object (if there was a problem).
+				*/
+				public static function ms_wp_authenticate_user ($user_or_wp_error = FALSE)
+					{
+						if(!is_multisite()) return $user_or_wp_error;
+
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
+						do_action ("ws_plugin__s2member_before_ms_wp_authenticate_user", get_defined_vars ());
+						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						
+						if($user_or_wp_error instanceof WP_User && $user->ID && !in_array(get_current_blog_id(), array_keys(get_blogs_of_user($user->ID)), TRUE))
+							$user_or_wp_error = new WP_Error('invalid_username', __('<strong>ERROR</strong>: Invalid username for this site.'));
+
+						return apply_filters ("ws_plugin__s2member_ms_wp_authenticate_user", $user_or_wp_error, get_defined_vars ());
+					}
 				/**
 				* Handles login redirections.
 				*

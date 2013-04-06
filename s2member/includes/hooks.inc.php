@@ -67,6 +67,7 @@ add_action("wp_print_scripts", "c_ws_plugin__s2member_css_js_themes::add_js_w_gl
 
 add_action("wp_login_failed", "c_ws_plugin__s2member_brute_force::track_failed_logins");
 add_filter("authenticate", "c_ws_plugin__s2member_brute_force::stop_brute_force_logins", 100);
+add_filter("wp_authenticate_user", "c_ws_plugin__s2member_login_redirects::ms_wp_authenticate_user", 100, 1);
 
 add_action("delete_user", "c_ws_plugin__s2member_user_deletions::handle_user_deletions");
 add_action("wpmu_delete_user", "c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions");
