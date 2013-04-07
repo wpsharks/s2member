@@ -1,7 +1,7 @@
 === s2Member® Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 130404
-Stable tag: 130404
+Version: 130406
+Stable tag: 130406
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -99,7 +99,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 = v130406 =
 * (s2Member/s2Member Pro) **Multisite Networks (WebSharks/Private#145)** Bug fix on Multisite Networks related to User deletions and subsequent logins on child blogs. For further details, please see [this thread](http://www.s2member.com/forums/topic/deleted-users-can-log-in/#post-46738).
-* (s2Member/s2Member Pro) **New Feature (WebSharks/Private#59)** It is now possible to Edit a User in the Dashboard and check a box to have the User's password reset, and an email message sent automatically to the User/Member with a copy of the Username/Password.
+* (s2Member Pro) **New Feature (WebSharks/Private#59)** It is now possible to Edit a User in the Dashboard and check a box to have the User's password reset, and an email message sent automatically to the User/Member with a copy of the Username/Password. This requires s2Member® Pro.
 * (s2Member Pro) **API Functions (WebSharks/Private#158)** New PayPal® Pro API Functions (`s2member_pro_paypal_rbp_for_user`, `s2member_pro_paypal_rbp_times_for_user`). These are for developers. For further details, please see [this article](http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/) in the s2Member® Codex.
 * (s2Member Pro) **API Functions (WebSharks/Private#158)** New PayPal® Pro (PayFlow® Edition) API Functions (`s2member_pro_payflow_rbp_for_user`, `s2member_pro_payflow_rbp_times_for_user`). These are for developers. For further details, please see [this article](http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/) in the s2Member® Codex.
 
