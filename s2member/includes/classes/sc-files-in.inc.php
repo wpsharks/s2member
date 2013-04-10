@@ -121,12 +121,15 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 							{
 								$_get = c_ws_plugin__s2member_files::create_file_download_url($config, TRUE);
 
-								if(is_array($_get) && !empty($_get) && $attr["player"] && file_exists(dirname(dirname(__FILE__))."/templates/players/".$attr["player"].".php") && $attr["player_id"] && $attr["player_path"])
+								if(is_array($_get) && !empty($_get) && $attr["player"] && file_exists($template = dirname(dirname(__FILE__))."/templates/players/".$attr["player"].".php") && $attr["player_id"] && $attr["player_path"])
 									{
+										$template = (file_exists(TEMPLATEPATH."/".basename($template))) ? TEMPLATEPATH."/".basename($template) : $template;
+										$template = (file_exists(WP_CONTENT_DIR."/".basename($template))) ? WP_CONTENT_DIR."/".basename($template) : $template;
+
 										if(strpos($attr["player"], "jwplayer-v6") === 0)
 											{
-												$get = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents(dirname(dirname(__FILE__))."/templates/players/".$attr["player"].".php")));
-
+												$get = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($template)));
+												
 												$get = preg_replace("/%%streamer%%/", $_get["streamer"], $get);
 												$get = preg_replace("/%%prefix%%/", $_get["prefix"], $get);
 												$get = preg_replace("/%%file%%/", $_get["file"], $get);

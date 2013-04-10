@@ -132,7 +132,7 @@ if(version_compare(PHP_VERSION, WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION, ">=") && ve
 		/*
 		Load a possible Pro module, if/when available.
 		*/
-		if(apply_filters("ws_plugin__s2member_load_pro", true) && is_file(dirname(__FILE__)."-pro/pro-module.php"))
+		if(apply_filters("ws_plugin__s2member_load_pro", true) && file_exists(dirname(__FILE__)."-pro/pro-module.php"))
 			{
 				include_once dirname(__FILE__)."-pro/pro-module.php";
 				if(is_dir(WP_PLUGIN_DIR."/codestyling-localization") && !is_dir(dirname(__FILE__)."/s2member-pro") && function_exists("symlink"))
