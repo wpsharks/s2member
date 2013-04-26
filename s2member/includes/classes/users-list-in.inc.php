@@ -182,12 +182,12 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action("ws_plugin__s2member_during_users_list_edit_cols_before_reset_pass_resend", get_defined_vars());
 														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
-				
+
 														echo '<tr>'."\n";
 														echo '<th><label for="ws-plugin--s2member-profile-reset-pass-resend">Reset Password &amp; Resend Welcome Email Message:</label> <a href="#" onclick="alert(\'Checking this box will tell s2Member® to reset this User\\\'s password and then reprocess the New User Email Notification message against this User\\\'s account. This way they\\\'ll get an email message with their Username/Password.\\n\\nThis can be helpful in cases where a User/Member missed the original email message for some reason.\\n\\nThe User\\\'s password is reset to a new auto-generated password by default. However, you can provide a custom password by entering a new password of your choosing in the field above — provided by WordPress® itself.\\n\\nIt is also possible to customize the New User Email Notification message with s2Member®. Please see: `Dashboard -› s2Member® -› General Options -› Email Configuration -› New User Notifications`.\'); return false;" tabindex="-1">[?]</a></th>'."\n";
 														echo '<td><label><input type="checkbox" name="ws_plugin__s2member_profile_reset_pass_resend" id="ws-plugin--s2member-profile-reset-pass-resend" value="1" /> Yes, reset password &amp; resend welcome email message to this User.</label></td>'."\n";
 														echo '</tr>'."\n";
-				
+
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action("ws_plugin__s2member_during_users_list_edit_cols_after_reset_pass_resend", get_defined_vars());
 														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -500,9 +500,9 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 
 												if /* Delete/reset IP Restrictions? */(!empty($_p["ws_plugin__s2member_profile_ip_restrictions"]))
 													c_ws_plugin__s2member_ip_restrictions::delete_reset_specific_ip_restrictions(strtolower($user->user_login));
-													
+
 												if /* Reset password & resend email notification? */ (!empty($_p["ws_plugin__s2member_profile_reset_pass_resend"]) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
-													c_ws_plugin__s2member_email_configs::reset_pass_resend_new_user_notification($user_id, ((!empty($_p["pass1"])) ? $_p["pass1"] : ""));
+													c_ws_plugin__s2member_email_configs::reset_pass_resend_new_user_notification($user_id, ((!empty($_p["pass1"])) ? $_p["pass1"] : ""), array("user"), $user->user_email);
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_users_list_update_cols", get_defined_vars());

@@ -183,10 +183,11 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @param str $user_pass Optional. A plain text version of the User's password.
 				* 	If omitted, a new password will be generated automatically.
 				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.
-					This defaults to a value of `array('user')`. We notify the User/Member only (and NOT the administrator).
+				*  This defaults to a value of `array('user')`. We notify the User/Member only (and NOT the administrator).
+				* @param str $user_email Optional. This defaults to the user's currently configured email address.
 				* @return bool True if all required parameters are supplied, else false.
 				*/
-				public static function reset_pass_resend_new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user"))
+				public static function reset_pass_resend_new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user"), $user_email = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_reset_pass_resend_new_user_notification", get_defined_vars ());
@@ -195,10 +196,10 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 						if ($user_id && ($user = new WP_User ($user_id)) && !empty ($user->ID) && ($user_id = $user->ID) && is_array ($notify) && !empty ($notify))
 							{
 								$user_pass = (is_string($user_pass) && $user_pass) ? $user_pass : wp_generate_password();
-								
+
 								wp_set_password($user_pass, $user_id);
-								
-								$return = c_ws_plugin__s2member_email_configs::new_user_notification($user_id, $user_pass, $notify);
+
+								$return = c_ws_plugin__s2member_email_configs::new_user_notification($user_id, $user_pass, $notify, $user_email);
 							}
 						return apply_filters ("ws_plugin__s2member_reset_pass_resend_new_user_notification", ((!empty($return)) ? true : false), get_defined_vars ());
 					}
@@ -212,9 +213,10 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @param str $user_pass Optional. A plain text version of the User's password.
 				* 	If omitted, only the administrative notification will be sent.
 				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.
+				* @param str $user_email Optional. This defaults to the user's currently configured email address.
 				* @return bool True if all required parameters are supplied, else false.
 				*/
-				public static function new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user", "admin"))
+				public static function new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user", "admin"), $user_email = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_new_user_notification", get_defined_vars ());
@@ -235,6 +237,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 										$level = c_ws_plugin__s2member_user_access::user_access_level($user);
 										$ccaps = implode(",", c_ws_plugin__s2member_user_access::user_access_ccaps($user));
 
+										$user->user_email = ($user_email) ? $user_email : $user->user_email;
 										$user_full_name = trim ($user->first_name . " " . $user->last_name);
 										$user_ip = $_SERVER["REMOTE_ADDR"];
 
@@ -304,6 +307,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 											$level = c_ws_plugin__s2member_user_access::user_access_level($user);
 											$ccaps = implode(",", c_ws_plugin__s2member_user_access::user_access_ccaps($user));
 
+											$user->user_email = ($user_email) ? $user_email : $user->user_email;
 											$user_full_name = trim ($user->first_name . " " . $user->last_name);
 											$user_ip = $_SERVER["REMOTE_ADDR"];
 
