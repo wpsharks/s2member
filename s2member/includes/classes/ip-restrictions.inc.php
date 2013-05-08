@@ -122,6 +122,40 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 						return apply_filters("ws_plugin__s2member_ip_restrictions_ok", true, get_defined_vars());
 					}
 				/**
+				 * Queries Transients for specific IP Restrictions at or above max allowable.
+				 *
+				 * @package s2Member\IP_Restrictions
+				 * @since 130407
+				 *
+				 * @param str $restriction Unique IP Restriction name/identifier. Such as Username, or a unique access code.
+				 * @return bool TRUE if at or above max allowable IPs; else FALSE.
+				 */
+				public static function specific_ip_restriction_at_or_above_max($restriction = FALSE)
+					{
+						do_action("ws_plugin__s2member_before_specific_ip_restriction_at_or_above_max", get_defined_vars());
+
+						if(apply_filters("ws_plugin__s2member_disable_all_ip_restrictions", false, get_defined_vars())
+							|| apply_filters("ws_plugin__s2member_disable_specific_ip_restriction", false, get_defined_vars())
+							|| !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"])
+							return false; // No IP Restrictions in this case.
+
+						$prefix = /* s2Member Transient prefix for all IP Restrictions. Allows s2Member to find these easily. */ "s2m_ipr_";
+						$transient_entries = $prefix.md5("s2member_ip_restrictions_".(string)$restriction."_entries");
+
+						// If you add Filters, use a string compatible with PHP's strtotime() function.
+						$concurrency = apply_filters("ws_plugin__s2member_ip_restrictions__concurrency_time_per_ip", "30 days");
+
+						$entries = (is_array($entries = get_transient($transient_entries))) ? $entries : array();
+
+						foreach /* Auto-expire entries, based on time. */($entries as $_entry => $_time)
+							if /* Based on time. */($_time < strtotime("-".$concurrency))
+								unset /* Unset this entry value. */($entries[$_entry]);
+
+						$at_or_above_max = (count($entries) >= $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"]);
+
+						return apply_filters("ws_plugin__s2member_specific_ip_restriction_at_or_above_max", $at_or_above_max, get_defined_vars());
+					}
+				/**
 				* Queries Transients for specific IP Restrictions associated with a security breach.
 				*
 				* @package s2Member\IP_Restrictions
@@ -138,7 +172,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 						$transient_security_breach = $prefix.md5("s2member_ip_restrictions_".(string)$restriction."_security_breach");
 						$breached_security = $associated_with_security_breach = (get_transient($transient_security_breach)) ? true : false;
 
-						return apply_filters("ws_plugin__s2member_before_specific_ip_restriction_breached_security", $breached_security, get_defined_vars());
+						return apply_filters("ws_plugin__s2member_specific_ip_restriction_breached_security", $breached_security, get_defined_vars());
 					}
 				/**
 				* Resets/deletes specific IP Restrictions.
