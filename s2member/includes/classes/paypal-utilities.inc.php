@@ -283,7 +283,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$post_vars = apply_filters("ws_plugin__s2member_paypal_payflow_api_post_vars", $post_vars, get_defined_vars());
 						$post_vars = (is_array($post_vars)) ? $post_vars : array();
 
-						$post_vars["VERBOSITY"] = "MEDIUM";
+						$post_vars["VERBOSITY"] = "HIGH";
 						$post_vars["USER"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_username"];
 						$post_vars["PARTNER"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_partner"];
 						$post_vars["VENDOR"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_vendor"];
@@ -363,16 +363,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						do_action("_ws_plugin__s2member_before_paypal_payflow_api_response_filters", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
-						if(!empty($response["__error"]) && !empty($response["L_ERRORCODE0"]))
+						if(!empty($response["__error"]) && !empty($response["HOSTCODE"]))
 							{
-								if((int)$response["L_ERRORCODE0"] === 10422)
-									$response["__error"] = sprintf(_x("Error #%s. Transaction declined. Please use an alternate funding source.", "s2member-front", "s2member"), $response["L_ERRORCODE0"]);
-
-								else if((int)$response["L_ERRORCODE0"] === 10435)
-									$response["__error"] = sprintf(_x("Error #%s. Transaction declined. Express Checkout was NOT confirmed.", "s2member-front", "s2member"), $response["L_ERRORCODE0"]);
-
-								else if((int)$response["L_ERRORCODE0"] === 10417)
-									$response["__error"] = sprintf(_x("Error #%s. Transaction declined. Please use an alternate funding source.", "s2member-front", "s2member"), $response["L_ERRORCODE0"]);
+								if((int)$response["HOSTCODE"] === 11452)
+									$response["__error"] .= _x(" Please contact PayPal Merchant Technical Support (www.paypal.com/mts) and request `Recurring Billing` service, and also ask to have `Reference Transactions` enabled for Recurring Billing via Express Checkout.", "s2member-front", "s2member");
 							}
 
 						return /* Filters already applied with: ``ws_plugin__s2member_paypal_payflow_api_response``. */ $response;
@@ -392,7 +386,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$value = (string)$value;
 						$value = preg_replace('/"/', "'", $value);
 
-						if(($key === "DESC" || $key === "BA_DESC" #
+						if(($key === "DESC" || $key === "ORDERDESC" || $key === "BA_DESC" || $key === "BA_CUSTOM" #
 						|| preg_match("/^L_NAME[0-9]+$/", $key) || preg_match("/^PAYMENTREQUEST_[0-9]+_DESC$/", $key) || preg_match("/^PAYMENTREQUEST_[0-9]+_NAME[0-9]+$/", $key) #
 						|| preg_match("/^L_BILLINGAGREEMENTDESCRIPTION[0-9]+$/", $key)) && strlen($value) > 60)
 							$value = substr($value, 0, 57)."...";
