@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: s2Member® Framework 130406\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2013-04-07 00:38:06+00:00\n"
+"POT-Creation-Date: 2013-05-11 07:15:51+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -676,14 +676,11 @@ msgstr ""
 
 #: s2member/includes/classes/paypal-utilities.inc.php:232
 #: s2member/includes/classes/paypal-utilities.inc.php:238
-#: s2member/includes/classes/paypal-utilities.inc.php:369
-#: s2member/includes/classes/paypal-utilities.inc.php:375
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Please use an alternate funding source."
 msgstr ""
 
 #: s2member/includes/classes/paypal-utilities.inc.php:235
-#: s2member/includes/classes/paypal-utilities.inc.php:372
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Express Checkout was NOT confirmed."
 msgstr ""
@@ -709,6 +706,11 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:326
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s."
+msgstr ""
+
+#: s2member/includes/classes/paypal-utilities.inc.php:369
+msgctxt "s2member-front"
+msgid " Please contact PayPal Merchant Technical Support (www.paypal.com/mts) and request `Recurring Billing` service, and also ask to have `Reference Transactions` enabled for Recurring Billing via Express Checkout."
 msgstr ""
 
 #: s2member/includes/classes/profile-in.inc.php:78
@@ -1678,7 +1680,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:7
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:7
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:7
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:7
 msgctxt "s2member-admin"
 msgid "Daily (recurring charge, for ongoing access)"
@@ -1687,7 +1688,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:8
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:7
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:8
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:8
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:7
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:8
 msgctxt "s2member-admin"
 msgid "Weekly (recurring charge, for ongoing access)"
@@ -1696,7 +1697,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:9
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:8
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:9
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:9
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:8
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:9
 msgctxt "s2member-admin"
 msgid "Bi-Weekly (recurring charge, for ongoing access)"
@@ -1706,7 +1707,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:9
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:7
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:10
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:10
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:9
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:10
 msgctxt "s2member-admin"
 msgid "Monthly (recurring charge, for ongoing access)"
@@ -1725,7 +1726,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:11
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:9
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:12
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:11
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:10
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:12
 msgctxt "s2member-admin"
 msgid "Quarterly (recurring charge, for ongoing access)"
@@ -1733,7 +1734,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:13
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:12
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:12
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:11
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:13
 msgctxt "s2member-admin"
 msgid "Semi-Yearly (recurring charge, for ongoing access)"
@@ -1742,7 +1743,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:14
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:13
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:13
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:13
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:12
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:14
 msgctxt "s2member-admin"
 msgid "Yearly (recurring charge, for ongoing access)"
@@ -1750,7 +1751,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:20
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:19
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:19
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:18
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:20
 msgctxt "s2member-admin"
 msgid "One Time (for 1 day access, non-recurring)"
@@ -1758,7 +1759,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:21
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:20
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:20
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:19
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:21
 msgctxt "s2member-admin"
 msgid "One Time (for 2 day access, non-recurring)"
@@ -1766,7 +1767,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:22
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:21
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:21
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:20
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:22
 msgctxt "s2member-admin"
 msgid "One Time (for 3 day access, non-recurring)"
@@ -1774,7 +1775,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:23
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:22
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:22
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:21
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:23
 msgctxt "s2member-admin"
 msgid "One Time (for 4 day access, non-recurring)"
@@ -1782,7 +1783,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:24
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:23
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:23
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:22
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:24
 msgctxt "s2member-admin"
 msgid "One Time (for 5 day access, non-recurring)"
@@ -1790,7 +1791,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:25
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:24
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:24
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:23
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:25
 msgctxt "s2member-admin"
 msgid "One Time (for 6 day access, non-recurring)"
@@ -1799,7 +1800,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:27
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:19
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:26
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:26
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:25
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:27
 msgctxt "s2member-admin"
 msgid "One Time (for 1 week access, non-recurring)"
@@ -1808,7 +1809,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:28
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:20
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:27
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:27
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:26
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:28
 msgctxt "s2member-admin"
 msgid "One Time (for 2 week access, non-recurring)"
@@ -1817,7 +1818,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:29
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:21
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:28
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:28
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:27
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:29
 msgctxt "s2member-admin"
 msgid "One Time (for 3 week access, non-recurring)"
@@ -1826,7 +1827,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:31
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:23
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:30
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:30
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:29
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:31
 msgctxt "s2member-admin"
 msgid "One Time (for 1 month access, non-recurring)"
@@ -1835,7 +1836,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:32
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:24
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:31
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:31
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:30
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:32
 msgctxt "s2member-admin"
 msgid "One Time (for 2 month access, non-recurring)"
@@ -1844,7 +1845,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:33
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:25
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:32
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:32
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:31
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:33
 msgctxt "s2member-admin"
 msgid "One Time (for 3 month access, non-recurring)"
@@ -1853,7 +1854,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:34
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:26
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:33
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:33
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:32
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:34
 msgctxt "s2member-admin"
 msgid "One Time (for 4 month access, non-recurring)"
@@ -1862,7 +1863,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:35
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:27
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:34
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:34
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:33
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:35
 msgctxt "s2member-admin"
 msgid "One Time (for 5 month access, non-recurring)"
@@ -1871,7 +1872,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:36
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:28
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:35
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:35
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:34
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:36
 msgctxt "s2member-admin"
 msgid "One Time (for 6 month access, non-recurring)"
@@ -1880,7 +1881,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:38
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:30
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:37
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:37
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:36
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:38
 msgctxt "s2member-admin"
 msgid "One Time (for 1 year access, non-recurring)"
@@ -1889,7 +1890,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:44
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:36
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:43
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:43
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:42
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:44
 msgctxt "s2member-admin"
 msgid "One Time (for 1 day access, non-recurring, no trial)"
@@ -1899,7 +1900,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:37
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:15
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:44
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:44
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:43
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:45
 msgctxt "s2member-admin"
 msgid "One Time (for 2 day access, non-recurring, no trial)"
@@ -1909,7 +1910,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:38
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:16
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:45
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:45
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:44
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:46
 msgctxt "s2member-admin"
 msgid "One Time (for 3 day access, non-recurring, no trial)"
@@ -1919,7 +1920,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:39
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:17
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:46
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:46
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:45
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:47
 msgctxt "s2member-admin"
 msgid "One Time (for 4 day access, non-recurring, no trial)"
@@ -1929,7 +1930,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:40
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:18
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:47
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:47
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:46
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:48
 msgctxt "s2member-admin"
 msgid "One Time (for 5 day access, non-recurring, no trial)"
@@ -1939,7 +1940,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:41
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:19
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:48
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:48
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:47
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:49
 msgctxt "s2member-admin"
 msgid "One Time (for 6 day access, non-recurring, no trial)"
@@ -1949,7 +1950,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:43
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:21
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:50
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:50
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:49
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:51
 msgctxt "s2member-admin"
 msgid "One Time (for 1 week access, non-recurring, no trial)"
@@ -1959,7 +1960,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:44
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:22
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:51
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:51
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:50
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:52
 msgctxt "s2member-admin"
 msgid "One Time (for 2 week access, non-recurring, no trial)"
@@ -1969,7 +1970,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:45
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:23
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:52
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:52
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:51
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:53
 msgctxt "s2member-admin"
 msgid "One Time (for 3 week access, non-recurring, no trial)"
@@ -1979,7 +1980,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:47
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:25
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:54
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:54
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:53
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:55
 msgctxt "s2member-admin"
 msgid "One Time (for 1 month access, non-recurring, no trial)"
@@ -1989,7 +1990,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:48
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:26
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:55
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:55
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:54
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:56
 msgctxt "s2member-admin"
 msgid "One Time (for 2 month access, non-recurring, no trial)"
@@ -1999,7 +2000,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:49
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:27
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:56
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:56
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:55
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:57
 msgctxt "s2member-admin"
 msgid "One Time (for 3 month access, non-recurring, no trial)"
@@ -2009,7 +2010,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:50
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:28
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:57
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:57
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:56
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:58
 msgctxt "s2member-admin"
 msgid "One Time (for 4 month access, non-recurring, no trial)"
@@ -2019,7 +2020,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:51
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:29
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:58
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:58
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:57
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:59
 msgctxt "s2member-admin"
 msgid "One Time (for 5 month access, non-recurring, no trial)"
@@ -2029,7 +2030,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:52
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:30
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:59
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:59
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:58
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:60
 msgctxt "s2member-admin"
 msgid "One Time (for 6 month access, non-recurring, no trial)"
@@ -2039,7 +2040,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:54
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:32
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:61
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:61
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:60
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:62
 msgctxt "s2member-admin"
 msgid "One Time (for 1 year access, non-recurring, no trial)"
@@ -2048,7 +2049,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:63
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:55
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:62
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:62
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:61
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:63
 msgctxt "s2member-admin"
 msgid "One Time (for 2 year access, non-recurring, no trial)"
@@ -2057,7 +2058,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:64
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:56
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:63
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:63
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:62
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:64
 msgctxt "s2member-admin"
 msgid "One Time (for 3 year access, non-recurring, no trial)"
@@ -2066,7 +2067,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:65
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:57
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:64
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:64
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:63
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:65
 msgctxt "s2member-admin"
 msgid "One Time (for 4 year access, non-recurring, no trial)"
@@ -2075,7 +2076,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:66
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:58
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:65
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:65
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:64
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:66
 msgctxt "s2member-admin"
 msgid "One Time (for 5 year access, non-recurring, no trial)"
@@ -2084,7 +2085,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:68
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:60
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:67
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:67
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:66
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:68
 msgctxt "s2member-admin"
 msgid "One Time (for lifetime access, non-recurring, no trial)"
@@ -2459,9 +2460,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-in.inc.php:127
 #: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-in.inc.php:139
 #: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-in.inc.php:147
-#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:124
-#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:136
-#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:144
+#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:120
+#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:132
+#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:140
 msgctxt "s2member-front"
 msgid "<strong>Billing terminated.</strong> Your account has been cancelled."
 msgstr ""
@@ -2469,87 +2470,87 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-cancellation-in.inc.php:148
 #: s2member-pro/includes/classes/gateways/authnet/authnet-update-in.inc.php:133
 #: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-in.inc.php:155
-#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:152
+#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:148
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-in.inc.php:150
-#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:147
+#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:143
 msgctxt "s2member-front"
 msgid "You're <strong>NOT</strong> logged in."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:251
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:586
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:290
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:606
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:343
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:679
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:429
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:860
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:255
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:594
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:291
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:607
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:354
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:689
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:430
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:861
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been updated.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">log back in</a> now."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:452
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:704
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:448
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:755
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:517
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:833
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:693
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1014
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:459
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:713
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:449
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:756
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:529
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:841
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:694
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1015
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">login</a>."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:461
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:485
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:713
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:734
-#: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:124
-#: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:141
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:457
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:478
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:764
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:785
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:526
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:547
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:842
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:863
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:702
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:723
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1023
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1044
-#: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:124
-#: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:141
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:468
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:492
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:722
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:743
+#: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:125
+#: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:142
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:458
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:479
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:765
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:786
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:538
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:559
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:850
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:871
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:703
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:724
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1024
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1045
+#: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:125
+#: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:142
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> A slight problem. Please contact Support for assistance."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:476
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:725
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:469
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:776
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:538
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:854
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:714
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1035
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:483
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:734
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:470
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:777
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:550
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:862
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:715
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1036
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; You'll receive an email momentarily."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:745
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:796
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:874
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1055
-#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:138
+#: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:754
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:797
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:882
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1056
+#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:134
 msgctxt "s2member-front"
 msgid "<strong>Unknown error.</strong> Please contact Support for assistance."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:112
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:220
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:353
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:474
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:663
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:111
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:219
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:352
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:473
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:662
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:116
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:224
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:356
@@ -2559,17 +2560,17 @@ msgctxt "s2member-front"
 msgid "Security Code"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:187
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:630
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:186
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:629
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:192
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:633
 msgctxt "s2member-front"
 msgid "Additional Info"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:320
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:441
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:594
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:319
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:440
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:593
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
@@ -2577,9 +2578,9 @@ msgctxt "s2member-front"
 msgid "Visa®"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:320
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:441
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:594
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:319
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:440
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:593
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
@@ -2587,9 +2588,9 @@ msgctxt "s2member-front"
 msgid "MasterCard®"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:320
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:441
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:594
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:319
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:440
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:593
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
@@ -2597,9 +2598,9 @@ msgctxt "s2member-front"
 msgid "Discover®"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:320
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:441
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:594
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:319
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:440
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:593
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:325
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:445
 #: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:599
@@ -2607,14 +2608,14 @@ msgctxt "s2member-front"
 msgid "American Express®"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:117
-#: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:117
+#: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:118
+#: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:118
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Please <a href=\"%s\" rel=\"nofollow\">login</a>."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:134
-#: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:134
+#: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:135
+#: s2member-pro/includes/classes/gateways/paypal/paypal-registration-in.inc.php:135
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> You'll receive an email momentarily."
 msgstr ""
@@ -3330,13 +3331,13 @@ msgctxt "s2member-front"
 msgid "Unknown form submission type. Please contact Support."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:165
+#: s2member-pro/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:166
 #: s2member-pro/includes/classes/gateways/paypal/paypal-sp-checkout-in.inc.php:282
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your purchase has been approved.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">click here</a> to proceed."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:172
+#: s2member-pro/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:173
 #: s2member-pro/includes/classes/gateways/paypal/paypal-sp-checkout-in.inc.php:289
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> Unable to generate Access Link. Please contact Support for assistance."
@@ -3351,7 +3352,7 @@ msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-update-in.inc.php:119
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-in.inc.php:128
-#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:132
+#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:128
 msgctxt "s2member-front"
 msgid "<strong>Unable to update.</strong> You have NO recurring fees. Or, your billing profile is no longer active. Please contact Support if you need assistance."
 msgstr ""
@@ -3364,14 +3365,14 @@ msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:666
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:809
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:271
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:414
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:295
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:438
 msgctxt "s2member-front percentage-symbol"
 msgid "%"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:808
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:413
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:437
 msgctxt "s2member-front"
 msgid " + tax"
 msgstr ""
@@ -3382,12 +3383,12 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:940
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1000
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1015
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:458
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:510
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:523
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:545
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:605
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:620
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:482
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:534
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:547
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:569
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:629
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:644
 msgctxt "s2member-front"
 msgid "COUPON %s off. (Now: %s)"
 msgstr ""
@@ -3398,12 +3399,12 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:941
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1001
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1016
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:459
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:511
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:524
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:546
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:606
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:621
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:483
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:535
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:548
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:570
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:630
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:645
 msgctxt "s2member-front"
 msgid "<div>Coupon: <strong>%s off</strong>. (Now: <strong>%s</strong>)</div>"
 msgstr ""
@@ -3414,12 +3415,12 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:955
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:970
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:985
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:471
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:484
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:497
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:560
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:575
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:590
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:495
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:508
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:521
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:584
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:599
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:614
 msgctxt "s2member-front"
 msgid "COUPON %s off. (Now: %s, then %s)"
 msgstr ""
@@ -3430,38 +3431,38 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:956
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:971
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:986
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:472
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:485
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:498
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:561
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:576
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:591
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:496
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:509
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:522
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:585
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:600
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:615
 msgctxt "s2member-front"
 msgid "<div>Coupon: <strong>%s off</strong>. (Now: <strong>%s, then %s</strong>)</div>"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:923
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1020
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:528
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:625
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:552
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:649
 msgctxt "s2member-front"
 msgid "<div>Sorry, your Coupon is not applicable.</div>"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1024
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:629
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:653
 msgctxt "s2member-front"
 msgid "<div>Coupon: <strong>%s0.00 off</strong>.</div>"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1028
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:633
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:657
 msgctxt "s2member-front"
 msgid "<div>Sorry, your Coupon cannot be applied to this particular purchase.</div>"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1032
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:637
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:661
 msgctxt "s2member-front"
 msgid "<div>Sorry, your Coupon <strong>expired</strong>: <em>%s</em>.</div>"
 msgstr ""
@@ -3470,15 +3471,15 @@ msgstr ""
 #. is original description.
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1038
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:643
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:667
 msgctxt "s2member-front"
 msgid "%1$s ~ ORIGINALLY: %2$s"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1067
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1070
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:672
-#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:675
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:696
+#: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:699
 msgctxt "s2member-front"
 msgid "<div>Sorry, your Coupon is N/A, invalid or expired.</div>"
 msgstr ""
@@ -3499,7 +3500,7 @@ msgid ""
 "This is most likely related to an invalid ClickBank® configuration. If you are the site owner, please check: s2Member -› ClickBank® Options."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/clickbank/clickbank-utilities.inc.php:167
+#: s2member-pro/includes/classes/gateways/clickbank/clickbank-utilities.inc.php:168
 msgctxt "s2member-front"
 msgid "<strong>Reminder:</strong> Purchases at this site will appear on your credit card or bank statement as: <code>ClickBank®</code> or <code>CLKBANK*COM</code>."
 msgstr ""
@@ -3584,7 +3585,6 @@ msgid "Cancel at any time to avoid charges."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-in.inc.php:123
-#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:120
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:247
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:263
 msgctxt "s2member-front"
@@ -3592,18 +3592,16 @@ msgid "<strong>Unable to cancel at this time.</strong> Your account is pending o
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-in.inc.php:135
-#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:132
+#: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:128
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:257
 msgctxt "s2member-front"
 msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal®</a> to cancel your Subscription."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:302
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:618
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:355
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:691
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:446
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:872
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:303
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:619
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:447
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:873
 msgctxt "s2member-front"
 msgid "<strong>Sorry.</strong> Your account is pending other changes. Please try again in 15 minutes."
 msgstr ""
@@ -3661,7 +3659,7 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-in.inc.php:132
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-in.inc.php:136
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:76
-#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:136
+#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:132
 msgctxt "s2member-front"
 msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal®</a> to update your billing information."
 msgstr ""
@@ -3669,7 +3667,6 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:286
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:305
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-in.inc.php:124
-#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:128
 msgctxt "s2member-front"
 msgid "<strong>Unable to update at this time.</strong> Your account is pending other changes. Please try again in 15 minutes."
 msgstr ""
@@ -3723,7 +3720,7 @@ msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:513
 msgctxt "s2member-admin"
-msgid "Invalid Payflow® form configuration. Invalid \"rt, rp, rr\" attributes. Payflow® supports a specific set of recurring intervals. Pro Forms can be configured to charge: daily, weekly, bi-weekly, monthly, quarterly, semi-yearly or yearly. Any other combination results in this error. This is a Payflow® limitation."
+msgid "Invalid Payflow® form configuration. Invalid \"rt, rp, rr\" attributes. Payflow® supports a specific set of recurring intervals. Pro Forms can be configured to charge: weekly, bi-weekly, monthly, quarterly, semi-yearly or yearly. Any other combination results in this error. This is a Payflow® limitation."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:516
@@ -3741,7 +3738,7 @@ msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rr, rra\" attributes. When \"rr\" (Regular Recurring) is 0 or 1, \"rra\" (Recurring Retry Attempts) must be >= 0."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:142
+#: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:138
 msgctxt "s2member-front"
 msgid "<strong>No Subscr. ID.</strong> Please contact Support for assistance."
 msgstr ""
@@ -4498,14 +4495,14 @@ msgid "Google® (Subscriptions)"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:6
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:18
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:17
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:6
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:19
 msgctxt "s2member-admin"
 msgid "PayPal® Pro (Subscriptions)"
 msgstr ""
 
-#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:42
+#: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:41
 #: s2member-pro/includes/templates/options/paypal-membership-ccap-terms.php:6
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:43
 msgctxt "s2member-admin"
