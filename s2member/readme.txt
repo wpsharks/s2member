@@ -92,10 +92,39 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130406 =
+= v130510 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v130510 =
+* (s2Member Pro) **Authorize.Net UK (and Other Currencies) (#104)** Adding support for Authorize.Net UK and other currencies too. s2Member Pro now officially supports Authorize.Net UK Edition. It is now possible to change your Authorize.Net Pro Form Shortcode Attribute `cc="USD"` to one of these values: `cc="USD"`, or `cc="CAD"` or `cc="EUR"` or `cc="GBP"`. For further details, please see: `Dashboard -› Authorize.Net Pro Forms -› Shortcode Attributes (Explained)`.
+* (s2Member Pro) **ClickBank Skins (#227)** Adding support for the `cbskin=""` Shortcode Attribute. For further details, please see: `Dashboard -› ClickBank Buttons -› Shortcode Attributes (Explained)`.
+* (s2Member Pro) **ClickBank PitchPlus Upsell Flows (#227)** Adding support for ClickBank PitchPlus Upsell Flows via new Shortcode Attributes: `cbfid=""`, `cbur=""`, `cbf="auto"`. s2Member Pro now officially supports ClickBank PitchPlus Upsell Flows. We support PitchPlus Basic and PitchPlus Advanced too. For further details, please see: `Dashboard -› ClickBank Buttons -› Shortcode Attributes (Explained)`.
+* (s2Member/s2Member Pro) **Codestyling Localization** Adding automatic symlink creator for improved compatibility with the CodeStyling Localization plugin. A symlink is created automatically whenever the CodeStyling Localization plugin is installed, and s2Member® Pro is installed as well. The symlink allows the CodeStyling Localization plugin to scan files from the s2Member® Pro directory too; instead of only scanning the s2Member® Framework directory. s2Member and s2Member Pro are now both compatible with the Codestyling Localization plugin (optional).
+* (s2Member/s2Member Pro) **Custom Templates w/ s2Stream Shortcode** Adding support for custom templates to be used in conjunction with the `s2Stream` Shortcode. It is now possible to take the default player templates from `/s2member/includes/templates/players/` and put these files inside your own WordPress® theme directory (or inside the `/wp-content/` directory). s2Member will automatically find your template files in these locations. Your custom template files will then be used instead of the built-in defaults.
+* (s2Member/s2Member Pro) **Bug Fix (#59)** Resending a password to a User from the Dashboard (while changing the User's email address at the same time); resulted in the email being sent to the previous email address instead of the new one. Fixed in this release.
+* (s2Member/s2Member Pro) **Bug Fix (#216)** Removing `-MultiViews` from s2Member's `.htaccess` file in the `/s2member-files/` directory. This improves compatibility with some Apache installations that simply have `AllowOverride All`; because `All` may not include `MultiViews` in some versions of Apache.
+* (s2Member/s2Member Pro) **IP Restrictions (#149)** In the Dashboard, we now report if a User is at (or above) max allowable IPs; instead of reporting only if they have actually triggered an internal security breach (which times out quickly in most cases). Fixed in this release.
+* (s2Member/s2Member Pro) **Enhancing JW Player Integration (#251)** Adding support for s2Stream Shortcode Attribute `player_aspectratio="12:5"` (as one example). See also [this post](http://www.longtailvideo.com/blog/32697/new-in-jw-player-responsive-design) at Longtail Video.
+* (s2Member Pro) **Updating Payflow Integration (#193)** Removing DAILY `D` option for Payflow Recurring Billing. No longer supported by Payflow. However, s2Member will let a `D` value slip by Shortcode Attribute validation in case a site owner has arranged for this to become available against their Payflow account somehow; and to remain backward compatible with previous versions of s2Member Pro. Moving forward, it is NO longer possible to bill customers on a daily basis with PayPal Payments Pro (Payflow Edition). This is a PayPal limitation.
+* (s2Member Pro) **Updating Payflow Integration w/ Payflow Bug Workaround (#193)** Updating Payflow integration to support Billing Agreement IDs (aka: `BAID` values) when working together with Payflow Express Checkout APIs (and where a site owner is charging on a recurring basis).
+
+ This improvement also allows s2Member to work around a Payflow bug where `BILLINGTYPE=RecurringPayments` results in error `#7 (Invalid/Expired TOKEN)` whenever Payflow attempts to rebill a customer. s2Member now sets `BILLINGTYPE=RecurringBilling`; and we pass `BAID=B-xxxxxx` instead of passing `TOKEN=xxxxxx`.
+
+ Site owners also need to [contact PayPal MTS](http://www.paypal.com/mts) and ask to have `Reference Transactions` (free) enabled for `Recurring Billing` service. ~ However, you ONLY need `Recurring Billing` service and `Reference Transactions` enabled IF you're operating a PayPal Payments Pro (Payflow Edition) account; and only IF you're charging customers on a recurring basis.
+
+ All of these changes related to Payflow (as detailed in this changelog entry), impact only ONE specific scenario.
+ - You have a PayPal Payments Pro (Payflow Edition) account.
+ - You charge your customers on a recurring basis.
+ - A customer chooses PayPal as their billing method during checkout.
+ 
+ No other part of s2Member's integration with Payflow was modified in this release.
+
+ For further details, please see [this thread](http://www.s2member.com/forums/topic/paypal-expired-security-token/page/2/) (or monitor the [s2Member KB](http://www.s2member.com/kb/) for new articles on this subject).
+* (s2Member Pro) **Payflow API Docs**  Updating `s2m-pro-extras.zip` to include the latest versions of the PayPal Pro (Payflow Edition) APIs. s2Member Pro customers can download this optional ZIP file from their My Account page at s2Member.com. These are extras only, they are NOT part of the s2Member application.
+* (s2Member Pro) **Google Checkout Bug Fix (#214)**  Updating s2Member's Google Checkout integration to properly support the `rrt` Shortcode Attribute. Fixed in this release. For further details please see [this thread](http://www.s2member.com/forums/topic/google-recurring-problem/#post-48218).
+* (s2Member Pro) **Username Validation (#246)** Now forcing user input (during Pro Form registration) to lowercase on Multisite Networks to prevent unnecessary validation errors during checkout (saving a customer time). Also, s2Member now validates a customer's Username before it is passed through `sanitize_user()` (a core WordPress® function). This prevents confusion for a customer where certain characters were stripped out automatically, causing them problems when attempting to log in for the first time (e.g. the customer thinks their Username is `john~doe`; when it is actually `johndoe` because WordPress (when running a Multisite Network) removes anything that is NOT `a-z0-9 _.-@` (and s2Member removes whitespace as well).
 
 = v130406 =
 * (s2Member/s2Member Pro) **Multisite Networks (#145)** Bug fix on Multisite Networks related to User deletions and subsequent logins on child blogs. For further details, please see [this thread](http://www.s2member.com/forums/topic/deleted-users-can-log-in/#post-46738).
