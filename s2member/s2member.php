@@ -137,8 +137,9 @@ if(version_compare(PHP_VERSION, WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION, ">=") && ve
 				include_once dirname(__FILE__)."-pro/pro-module.php";
 				if(is_dir(WP_PLUGIN_DIR."/codestyling-localization") && !is_dir(dirname(__FILE__)."/s2member-pro") && function_exists("symlink"))
 					{
-						@symlink(dirname(__FILE__)."-pro", dirname(__FILE__)."/s2member-pro"); // For CS localization compatibility.
-						@chmod(dirname(__FILE__)."/s2member-pro", 0755);
+					// Removing this for now. It causes problems during upgrades.
+						//@symlink(dirname(__FILE__)."-pro", dirname(__FILE__)."/s2member-pro"); // For CS localization compatibility.
+						//@chmod(dirname(__FILE__)."/s2member-pro", 0755);
 					}
 			}
 		/*
