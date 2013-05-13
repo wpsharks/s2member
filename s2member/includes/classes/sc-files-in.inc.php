@@ -151,7 +151,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 
 												$get = preg_replace("/%%player_controls%%/", ((filter_var($attr["player_controls"], FILTER_VALIDATE_BOOLEAN)) ? "true" : "false"), $get);
 												$get = preg_replace("/%%player_width%%/", ((strpos($attr["player_width"], "%") !== FALSE) ? "'".$attr["player_width"]."'" : (integer)$attr["player_width"]), $get);
-												$get = preg_replace("/%%player_height%%/", ($attr["player_aspectratio"]) ? "" : ((strpos($attr["player_height"], "%") !== FALSE) ? "'".$attr["player_height"]."'" : (integer)$attr["player_height"])), $get);
+												$get = preg_replace("/%%player_height%%/", (($attr["player_aspectratio"]) ? "''" : ((strpos($attr["player_height"], "%") !== FALSE) ? "'".$attr["player_height"]."'" : (integer)$attr["player_height"])), $get);
 												$get = preg_replace("/%%player_aspectratio%%/", $attr["player_aspectratio"], $get);
 												$get = preg_replace("/%%player_skin%%/", $attr["player_skin"], $get);
 												$get = preg_replace("/%%player_stretching%%/", $attr["player_stretching"], $get);

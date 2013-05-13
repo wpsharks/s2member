@@ -171,7 +171,7 @@ if(!class_exists("c_ws_plugin__s2member_installation"))
 								c_ws_plugin__s2member_roles_caps::unlink_roles /* Unlink Roles/Caps. */();
 
 								c_ws_plugin__s2member_files::remove_no_gzip_from_root_htaccess /* Remove GZIP exclusions. */();
-
+								
 								if(is_dir($files_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"]))
 									{
 										if(file_exists($htaccess = $files_dir."/.htaccess"))

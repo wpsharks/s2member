@@ -33,7 +33,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 			stretching: '%%player_stretching%%',
 			width: %%player_width%%,
 			height: %%player_height%%,
-			aspectratio: %%player_aspectratio%%,
+			aspectratio: '%%player_aspectratio%%',
 
 			autostart: %%player_autostart%%,
 			fallback: %%player_fallback%%,
