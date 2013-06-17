@@ -101,6 +101,16 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **s2Stream Shortcode Bug Fix (#256)** Fixing a bug first introduced in the previous release where we added support for `player_aspectratio`. This quick update corrects the PHP parse error at line #154 of `sc-files-in.inc.php`. It also corrects the behavior of the `player_height=""` and `player_aspectratio=""` Shortcode Attributes for the `s2Stream` Shortcode. Many thanks to everyone that reported this bug.
 * (s2Member Pro) **Codestyling Localization** Removing symlink creator for Codestyleing Localization compatibility. There have been some reports of problems during WordPress® automatic upgrades (when/if the symlink exists). Until we can find a way to avoid this, we're disabling the automatic symlink generator. If you're running the Codestyling Localization plugin together with s2Member Pro, you will need to create the symlink yourself if you want to make s2Member fully compatible. Please create a symlink here: `/wp-content/plugins/s2member/s2member-pro` that points to the s2Member Pro directory: `/wp-content/plugins/s2member-pro`. See notes in previous changelog for further details on this.
 
+ **IMPORTANT NOTE:** If you upgraded previously to v130510 (and you ran the Codestyling Localization plugin together with s2Member® v130510 — at any time); please delete this symlink via FTP: `/wp-content/plugins/s2member/s2member-pro`. Please do this BEFORE attempting an automatic upgrade via WordPress®.
+ 
+ If you missed this note and you've already attempted an automatic upgrade, you will have trouble. Here's how to correct the problem.
+ 
+ 1. Log into your site via FTP and delete these two directories manually.
+  `/wp-content/plugins/s2member` and `/wp-content/plugins/s2member-pro`.
+ 
+ 2. Now, please follow the [instructions here](http://www.s2member.com/pro/#!s2_tab_jump=s2-pro-install-update) to upgrade s2Member® Pro manually.
+
+
 = v130510 =
 * (s2Member Pro) **Authorize.Net UK (and Other Currencies) (#104)** Adding support for Authorize.Net UK and other currencies too. s2Member Pro now officially supports Authorize.Net UK Edition. It is now possible to change your Authorize.Net Pro Form Shortcode Attribute `cc="USD"` to one of these values: `cc="USD"`, or `cc="CAD"` or `cc="EUR"` or `cc="GBP"`. For further details, please see: `Dashboard -› Authorize.Net Pro Forms -› Shortcode Attributes (Explained)`.
 * (s2Member Pro) **ClickBank Skins (#227)** Adding support for the `cbskin=""` Shortcode Attribute. For further details, please see: `Dashboard -› ClickBank Buttons -› Shortcode Attributes (Explained)`.

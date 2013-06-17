@@ -51,14 +51,11 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
                 /* Flag indicating that we ARE processing this IP Restriction. Useful in Hooks/Filters. */ && ($processing = true))
             {
 					 /* Allow overriding the default 503 message with a template */
-					 $custom_template = (file_exists (TEMPLATEPATH . "/" . "s2-ip-restrictions.php")) ? TEMPLATEPATH . "/" . "s2-ip-restrictions.php" : false;
-					 $custom_template = (file_exists (TEMPLATEPATH . "/" . "s2-ip-restrictions.html")) ? TEMPLATEPATH . "/" . "s2-ip-restrictions.html" : $custom_template;
-
-					 $custom_template = (file_exists (WP_CONTENT_DIR . "/" . "s2-ip-restrictions.php")) ? WP_CONTENT_DIR . "/" . "s2-ip-restrictions.php" :  $custom_template;
-					 $custom_template = (file_exists (WP_CONTENT_DIR . "/" . "s2-ip-restrictions.html")) ? WP_CONTENT_DIR . "/" . "s2-ip-restrictions.html" : $custom_template;
+					 $custom_template = (file_exists (TEMPLATEPATH . "/" . "ip-restrictions.php")) ? TEMPLATEPATH . "/" . "ip-restrictions.php" : false;
+					 $custom_template = (file_exists (WP_CONTENT_DIR . "/" . "ip-restrictions.php")) ? WP_CONTENT_DIR . "/" . "ip-restrictions.php" :  $custom_template;
 
 					 $msg_503 = trim(file_get_contents((($custom_template) ? $custom_template : dirname(dirname(dirname(dirname(__FILE__))))."/templates/errors/ip-restrictions.php")));
-					 	$msg_503 = trim(((!$custom_template || !is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? c_ws_plugin__s2member_utilities::evl($msg_503) : $msg_503));
+					 $msg_503 = trim(((!$custom_template || !is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? c_ws_plugin__s2member_utilities::evl($msg_503) : $msg_503));
 
                 $prefix = /* s2Member Transient prefix for all IP Restrictions. Allows s2Member to find these easily. */ "s2m_ipr_";
 
