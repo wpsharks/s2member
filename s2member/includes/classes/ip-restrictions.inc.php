@@ -50,15 +50,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
                 /* And enabled by site owner? */ && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"] /* And a valid ``$restriction``? */ && $restriction && is_string($restriction)
                 /* Flag indicating that we ARE processing this IP Restriction. Useful in Hooks/Filters. */ && ($processing = true))
             {
-					 /* Allow overriding the default 503 message with a template */
-					 $custom_template = (file_exists (TEMPLATEPATH . "/" . "ip-restrictions.php")) ? TEMPLATEPATH . "/" . "ip-restrictions.php" : false;
-					 $custom_template = (file_exists (WP_CONTENT_DIR . "/" . "ip-restrictions.php")) ? WP_CONTENT_DIR . "/" . "ip-restrictions.php" :  $custom_template;
-
-					 $msg_503 = trim(file_get_contents((($custom_template) ? $custom_template : dirname(dirname(__FILE__))."/templates/errors/ip-restrictions.php")));
-					 $msg_503 = trim(((!$custom_template || !is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? c_ws_plugin__s2member_utilities::evl($msg_503) : $msg_503));
-
-                $prefix = /* s2Member Transient prefix for all IP Restrictions. Allows s2Member to find these easily. */ "s2m_ipr_";
-
+                $prefix = /* s2Member Transient prefix for all IP Restrictions. */ "s2m_ipr_";
                 $transient_entries = $prefix.md5("s2member_ip_restrictions_".$restriction."_entries");
                 $transient_security_breach = $prefix.md5("s2member_ip_restrictions_".$restriction."_security_breach");
 
@@ -84,11 +76,17 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
                     header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=UTF-8");
                     while (@ob_end_clean ()); // Clean any existing output buffers.
 
+                    $custom_template = (file_exists (TEMPLATEPATH . "/" . "ip-restrictions.php")) ? TEMPLATEPATH . "/" . "ip-restrictions.php" : false;
+                    $custom_template = (file_exists (WP_CONTENT_DIR . "/" . "ip-restrictions.php")) ? WP_CONTENT_DIR . "/" . "ip-restrictions.php" :  $custom_template;
+
+                    $msg_503 = trim(file_get_contents((($custom_template) ? $custom_template : dirname(dirname(__FILE__))."/templates/errors/ip-restrictions.php")));
+                    $msg_503 = trim(((!$custom_template || !is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? c_ws_plugin__s2member_utilities::evl($msg_503) : $msg_503));
+
                     foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
                     do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
                     unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-                    exit /* Clean exit with 503 error message. */($msg_503);
+					exit /* Clean exit with 503 error message. */($msg_503);
                 }
 
                 else if(count($entries) > $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"])
@@ -102,6 +100,12 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
                     wp_clear_auth_cookie /* Clear authorization cookies; we need to log them out now. */();
                     header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=UTF-8");
                     while (@ob_end_clean ()); // Clean any existing output buffers.
+
+                    $custom_template = (file_exists (TEMPLATEPATH . "/" . "ip-restrictions.php")) ? TEMPLATEPATH . "/" . "ip-restrictions.php" : false;
+                    $custom_template = (file_exists (WP_CONTENT_DIR . "/" . "ip-restrictions.php")) ? WP_CONTENT_DIR . "/" . "ip-restrictions.php" :  $custom_template;
+
+                    $msg_503 = trim(file_get_contents((($custom_template) ? $custom_template : dirname(dirname(__FILE__))."/templates/errors/ip-restrictions.php")));
+                    $msg_503 = trim(((!$custom_template || !is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? c_ws_plugin__s2member_utilities::evl($msg_503) : $msg_503));
 
                     foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
                     do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
