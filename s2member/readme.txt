@@ -92,22 +92,29 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130513 =
+= v130617 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v130617 =
+* (s2Member/s2Member Pro) **IP Restrictions (#148)** It is now possible to introduce a custom template file that controls the error message displayed when/if a user breaches security by exceeding your maximum unique IP addresses; as configured under `s2Member -› Restriction Options -› Unique IP Restrictions`. If you would like to use a custom template for this message, please copy the default template file from `/s2member/includes/templates/errors/ip-restrictions.php` and place this file into your active WordPress® theme directory (or into the `/wp-content/` directory if you prefer). s2Member will automatically find your custom template in one of these locations; and s2Member will use your custom template instead of the built-in default.
+* (s2Member Pro) **Bug Fix (#302)** Updating Authorize.Net Pro Form Generator to support max days of `365` instead of `7`.
+* (s2Member Pro) **Amazon S3 Secret Access Keys (#321)** Updating UI configuration panel to better explain what a Secret Access Key is; and adding a note about Secret Access Keys for Amazon S3 integration. Amazon® is deprecating Secret Access Keys, but they ARE still required for digitally signed URLs. This update changes nothing in s2Member's functionality. It simply adds some additional detail to a configuration field that will assist site owners integrating s2Member w/ Amazon S3 for the first time.
+* (s2Member/s2Member Pro) **Translations (#317)** Updating `/s2member/includes/translations/translations.txt` (README file). Adding blurp about fuzzy translation entries in existing PO files that translate s2Member. This contains some additional tips on how to update existing PO files upon each release of s2Member and/or s2Member Pro.
+* (s2Member/s2Member Pro) **Bug Fix (#321)** Fixing bug in `/s2member/includes/templates/cfg-files/s2-cross-xml.php` for S3 Buckets (resulting in `crossdomain.xml`). This file contained a parse error and was causing some problems for site owners integrating Adobe Flash content served via Amazon S3. Fixed in this release.
 
 = v130513 =
 * (s2Member/s2Member Pro) **s2Stream Shortcode Bug Fix (#256)** Fixing a bug first introduced in the previous release where we added support for `player_aspectratio`. This quick update corrects the PHP parse error at line #154 of `sc-files-in.inc.php`. It also corrects the behavior of the `player_height=""` and `player_aspectratio=""` Shortcode Attributes for the `s2Stream` Shortcode. Many thanks to everyone that reported this bug.
 * (s2Member Pro) **Codestyling Localization** Removing symlink creator for Codestyleing Localization compatibility. There have been some reports of problems during WordPress® automatic upgrades (when/if the symlink exists). Until we can find a way to avoid this, we're disabling the automatic symlink generator. If you're running the Codestyling Localization plugin together with s2Member Pro, you will need to create the symlink yourself if you want to make s2Member fully compatible. Please create a symlink here: `/wp-content/plugins/s2member/s2member-pro` that points to the s2Member Pro directory: `/wp-content/plugins/s2member-pro`. See notes in previous changelog for further details on this.
 
  **IMPORTANT NOTE:** If you upgraded previously to v130510 (and you ran the Codestyling Localization plugin together with s2Member® v130510 — at any time); please delete this symlink via FTP: `/wp-content/plugins/s2member/s2member-pro`. Please do this BEFORE attempting an automatic upgrade via WordPress®.
- 
+
  If you missed this note and you've already attempted an automatic upgrade, you will have trouble. Here's how to correct the problem.
- 
+
  1. Log into your site via FTP and delete these two directories manually.
   `/wp-content/plugins/s2member` and `/wp-content/plugins/s2member-pro`.
- 
+
  2. Now, please follow the [instructions here](http://www.s2member.com/pro/#!s2_tab_jump=s2-pro-install-update) to upgrade s2Member® Pro manually.
 
 
@@ -132,7 +139,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
  - You have a PayPal Payments Pro (Payflow Edition) account.
  - You charge your customers on a recurring basis.
  - A customer chooses PayPal as their billing method during checkout.
- 
+
  No other part of s2Member's integration with Payflow was modified in this release.
 
  For further details, please see [this thread](http://www.s2member.com/forums/topic/paypal-expired-security-token/page/2/) (or monitor the [s2Member KB](http://www.s2member.com/kb/) for new articles on this subject).
