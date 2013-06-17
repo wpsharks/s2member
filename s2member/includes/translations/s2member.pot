@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: s2Member® Framework 130513\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2013-05-13 20:44:42+00:00\n"
+"POT-Creation-Date: 2013-06-17 23:30:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -494,11 +494,6 @@ msgctxt "s2member-admin"
 msgid "Unable to create Amazon® CloudFront Distro. Invalid Distro type."
 msgstr ""
 
-#: s2member/includes/classes/ip-restrictions.inc.php:53
-msgctxt "s2member-front"
-msgid "<strong>503: Service Temporarily Unavailable</strong><br />Too many IP addresses accessing one secure area<em>!</em><br />Please contact Support if you need assistance."
-msgstr ""
-
 #: s2member/includes/classes/login-redirects.inc.php:51
 msgctxt "s2member-front"
 msgid "<strong>ERROR</strong>: Invalid username for this site."
@@ -817,8 +812,8 @@ msgstr ""
 #: s2member/includes/templates/buttons/paypal-checkout-button.php:46
 #: s2member/includes/templates/buttons/paypal-sp-checkout-button.php:34
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:267
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:511
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:270
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:514
 msgctxt "s2member-front paypal-button-lang-code"
 msgid "en_US"
 msgstr ""
@@ -1217,35 +1212,35 @@ msgstr ""
 #: s2member/includes/s2member.js:231 s2member/includes/s2member.js:263
 #: s2member/includes/s2member.js:290
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:63
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:70
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:157
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:164
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:229
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:236
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:243
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:250
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:450
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:457
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:678
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:685
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:692
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:699
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:66
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:73
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:160
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:167
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:232
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:239
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:246
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:253
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:453
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:460
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:681
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:688
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:695
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:702
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:63
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:70
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:157
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:164
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:229
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:236
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:243
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:250
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:486
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:493
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:750
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:757
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:764
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:771
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:66
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:73
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:160
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:167
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:232
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:239
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:246
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:253
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:489
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:496
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:753
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:760
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:767
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:774
 msgctxt "s2member-front"
 msgid "— Oops, you missed something: —"
 msgstr ""
@@ -1253,11 +1248,11 @@ msgstr ""
 #: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:87
 #: s2member/includes/s2member.js:192
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:236
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:685
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:239
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:688
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:236
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:757
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:239
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:760
 msgctxt "s2member-front"
 msgid "Passwords do not match up. Please try again."
 msgstr ""
@@ -1265,11 +1260,11 @@ msgstr ""
 #: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:94
 #: s2member/includes/s2member.js:199
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:243
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:692
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:246
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:695
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:243
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:764
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:246
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:767
 msgctxt "s2member-front"
 msgid "Password MUST be at least 6 characters. Please try again."
 msgstr ""
@@ -1648,6 +1643,16 @@ msgstr ""
 #: s2member/includes/templates/buttons/paypal-checkout-button.php:34
 msgctxt "s2member-admin"
 msgid "Customizes Prices, Payments & Billing Cycle"
+msgstr ""
+
+#: s2member/includes/templates/errors/ip-restrictions.php:10
+msgctxt "s2member-front"
+msgid "503: Service Temporarily Unavailable"
+msgstr ""
+
+#: s2member/includes/templates/errors/ip-restrictions.php:13
+msgctxt "s2member-front"
+msgid "<strong>503: Service Temporarily Unavailable</strong><br />Too many IP addresses accessing one secure area<em>!</em><br />Please contact Support if you need assistance."
 msgstr ""
 
 #: s2member/includes/templates/options/paypal-currencies.php:6
@@ -3799,75 +3804,75 @@ msgid "My Profile Summary"
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:70
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:164
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:250
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:457
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:699
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:73
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:167
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:253
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:460
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:702
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:70
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:164
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:250
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:493
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:771
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:73
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:167
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:253
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:496
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:774
 msgctxt "s2member-front"
 msgid "Security Code missing. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:139
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:432
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:660
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:142
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:435
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:663
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:139
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:142
 msgctxt "s2member-front"
 msgid "Please choose a Billing Method."
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:299
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:507
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:302
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:510
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:303
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:547
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:306
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:550
 msgctxt "s2member-front"
 msgid "Calculating Sales Tax..."
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:299
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:507
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:302
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:510
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:303
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:547
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:306
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:550
 msgctxt "s2member-front"
 msgid "calculating sales tax..."
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:310
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:518
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:313
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:521
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:314
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:558
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:317
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:561
 msgctxt "s2member-front"
 msgid "<strong>Sales Tax%s:</strong> %s<br /><strong>— Total%s:</strong> %s"
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:310
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:518
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:313
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:521
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:314
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:558
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:317
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:561
 msgctxt "s2member-front"
 msgid "Today"
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:580
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:583
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:620
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:623
 #: s2member-pro/includes/templates/forms/authnet-checkout-form.php:47
 #: s2member-pro/includes/templates/forms/authnet-registration-form.php:28
 #: s2member-pro/includes/templates/forms/paypal-checkout-form.php:47
@@ -3877,27 +3882,27 @@ msgid "Create Profile"
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:581
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:584
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:621
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:624
 msgctxt "s2member-front"
 msgid "Your Profile"
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:266
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:267
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:510
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:511
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:269
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:270
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:513
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:514
 #: s2member-pro/includes/templates/forms/authnet-cancellation-form.php:34
 #: s2member-pro/includes/templates/forms/authnet-checkout-form.php:178
 #: s2member-pro/includes/templates/forms/authnet-registration-form.php:79
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:160
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:159
 #: s2member-pro/includes/templates/forms/authnet-update-form.php:110
 #: s2member-pro/includes/templates/forms/paypal-cancellation-form.php:34
 #: s2member-pro/includes/templates/forms/paypal-checkout-form.php:178
 #: s2member-pro/includes/templates/forms/paypal-registration-form.php:79
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:160
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:159
 #: s2member-pro/includes/templates/forms/paypal-update-form.php:110
 msgctxt "s2member-front"
 msgid "Submit Form"
