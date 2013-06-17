@@ -300,7 +300,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_files_access_key" id="ws-plugin--s2member-amazon-s3-files-access-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_access_key"]).'" /><br />'."\n";
-								echo 'See: <code>Amazon® Web Services Account -› Security Credentials -› Access Credentials</code>.'."\n";
+								echo 'See: <code>Amazon® Web Services Account -› Security Credentials -› Access Keys</code>.'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -317,7 +317,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_files_secret_key" id="ws-plugin--s2member-amazon-s3-files-secret-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_secret_key"]).'" /><br />'."\n";
-								echo 'See: <code>Amazon® Web Services Account -› Security Credentials -› Access Credentials</code>.'."\n";
+								echo 'See: <code>Amazon® Web Services Account -› Security Credentials -› Access Keys (leading to: Legacy Security Credentials)</code>.<br />'."\n";
+								echo 'Amazon® is deprecating Secret Access Keys, but they ARE still required for digitally signed URLs.'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
