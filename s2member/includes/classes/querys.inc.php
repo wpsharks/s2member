@@ -119,7 +119,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 													if(in_array("wp_get_nav_menu_items", ($callers = (isset($callers) ? $callers : c_ws_plugin__s2member_utilities::callers()))))
 														add_filter("wp_get_nav_menu_items", "c_ws_plugin__s2member_querys::_query_level_access_navs", 100);
 
-												if($suppressing_filters !== "n/a" && (in_array("all", $o) || in_array("page-widgets", $o)))
+												if($suppressing_filters !== "n/a" && (in_array("all", $o) || in_array("pages", $o)))
 													add_filter("wp_list_pages_excludes", "c_ws_plugin__s2member_querys::_query_level_access_list_pages", 100);
 
 												if((is_user_logged_in() && is_object($user = wp_get_current_user()) && !empty($user->ID) && ($user_id = $user->ID)) || !($user = false))
@@ -376,7 +376,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 						return apply_filters("_ws_plugin__s2member_is_admin_ajax_search", false, get_defined_vars());
 					}
 				/**
-				* Filters WordPress® Page Widget pages
+				* Filters WordPress® Page queries that use wp_list_pages()
 				*
 				* @package s2Member\Queries
 				* @since 130617
