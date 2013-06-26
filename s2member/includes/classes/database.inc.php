@@ -12,7 +12,7 @@
 * If not, see: {@link http://www.gnu.org/licenses/}.
 *
 * @package s2Member\Database
-* @since 3.5
+* @since 130625
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
@@ -23,7 +23,7 @@ if (!class_exists ("c_ws_plugin__s2member_database"))
 		* Database routines.
 		*
 		* @package s2Member\Database
-		* @since 3.5
+		* @since 130625
 		*/
 		class c_ws_plugin__s2member_database
 			{
