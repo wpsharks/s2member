@@ -36,16 +36,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 				*/
 				public static function wp_dir ($starting_dir = FALSE, $alt_starting_dir = FALSE)
 					{
-						foreach (array ($starting_dir, $alt_starting_dir) as $directory)
-							if ($directory && is_string ($directory) && is_dir ($directory))
-								for ($i = 0, $dir = $directory; $i <= 20; $i++)
-									{
-										for ($one_dir_up = 0; $one_dir_up < $i; $one_dir_up++)
-											$dir = dirname ($dir);
-
-										if (file_exists ($dir . "/wp-settings.php"))
-											return ($wp_dir = $dir);
-									}
+						foreach(array($starting_dir, $alt_starting_dir) as $directory)
+							if($directory && is_string($directory) && is_dir($directory))
+								for($i = 0, $dir = $directory; $i <= 20; $i++, $dir = dirname($dir))
+									if(file_exists($dir."/wp-settings.php"))
+										return ($wp_dir = $dir);
+							
 						header ("HTTP/1.0 500 Error");
 						header ("Content-Type: text/plain; charset=UTF-8");
 						while (@ob_end_clean ()); // Clean any existing output buffers.
