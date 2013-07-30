@@ -135,7 +135,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 
 																delete_user_option ($user_id, "s2member_file_download_access_log");
 
-																if (preg_match ("/^web_accept$/i", $paypal["txn_type"]) && $paypal["eotper"])
+																if ((preg_match ("/^web_accept$/i", $paypal["txn_type"]) || ($paypal["initial"] <= 0 && $paypal["regular"] <= 0)) && $paypal["eotper"])
 																	{
 																		update_user_option ($user_id, "s2member_auto_eot_time", // Set exclusively by the IPN handler; to avoid duplicate extensions.
 																		($eot_time = c_ws_plugin__s2member_utils_time::auto_eot_time ("", "", "", $paypal["eotper"], "", get_user_option ("s2member_auto_eot_time", $user_id))));

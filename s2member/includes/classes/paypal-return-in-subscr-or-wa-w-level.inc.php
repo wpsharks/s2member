@@ -162,7 +162,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 
 																delete_user_option($user_id, "s2member_file_download_access_log");
 
-																if(preg_match("/^web_accept$/i", $paypal["txn_type"]) && $paypal["eotper"])
+																if((preg_match ("/^web_accept$/i", $paypal["txn_type"]) || ($paypal["initial"] <= 0 && $paypal["regular"] <= 0)) && $paypal["eotper"])
 																	{
 																		// Don't update this in the return routine. Leave this for the IPN routine.
 																		// EOT Times might be extended, and we don't want the IPN routine to extend an already-extended EOT Time.
