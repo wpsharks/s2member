@@ -83,23 +83,24 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						if (isset ($query->query_vars) && !is_network_admin ()) // NOT in Network admin panels.
 							if (is_array ($qv = $query->query_vars) && ($s = trim ($qv["search"], "* \t\n\r\0\x0B")) && ($s = "%" . esc_sql (like_escape ($s)) . "%"))
 								{
-									$query->query_from = " FROM `" . $wpdb->users . "` INNER JOIN `" . $wpdb->usermeta . "` ON `" . $wpdb->users . "`.`ID` = `" . $wpdb->usermeta . "`.`user_id`";
-
-									$query->query_where = " WHERE '1' = '1' AND (" . apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_before", "", get_defined_vars ());
+									$query->query_fields = "SQL_CALC_FOUND_ROWS DISTINCT(`" . $wpdb->users . "`.`ID`)";
+									$query->query_from = " FROM `" . $wpdb->users . "`, `" . $wpdb->usermeta . "`"; // Include meta table also.
+									$query->query_where = " WHERE `" . $wpdb->users . "`.`ID` = `" . $wpdb->usermeta . "`.`user_id`"; // Join w/ meta table.
+									$query->query_where .= " AND (" . apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_before", "", get_defined_vars ());
 									$query->query_where .= " (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_custom' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_custom_fields' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_notes' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
-									$query->query_where .= /* Includes first/last name. */ " OR (`" . $wpdb->usermeta . "`.`meta_key` LIKE '%_name' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
-									$query->query_where .= " OR `user_login` LIKE '" . $s . "' OR `user_nicename` LIKE '" . $s . "' OR `user_email` LIKE '" . $s . "' OR `user_url` LIKE '" . $s . "' OR `display_name` LIKE '" . $s . "'";
+									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` LIKE '%_name' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
+									$query->query_where .= " OR (`" . $wpdb->users . "`.`user_login` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_nicename` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`display_name` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_email` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_url` LIKE '" . $s . "')";
 									$query->query_where .= apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_after", "", get_defined_vars ()) . ")"; // Leaving room for additional searches here.
-									$query->query_where .= " AND `" . $wpdb->users . "`.`ID` IN(SELECT DISTINCT(`user_id`) FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "capabilities'" .
-									(($qv["role"]) ? " AND `meta_value` LIKE '%" . esc_sql (like_escape ($qv["role"])) . "%'" : "") . ")";
+
+									if(is_multisite()) // On a Multisite Network we need to make sure we're searching only users w/ capabilities on this blog.
+										$query->query_where .= " AND `" . $wpdb->users . "`.`ID` IN(SELECT DISTINCT(`user_id`) FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "capabilities'";
 
 									$query->query_from = apply_filters ("ws_plugin__s2member_before_users_list_search_from", $query->query_from, get_defined_vars ());
 									$query->query_where = apply_filters ("ws_plugin__s2member_before_users_list_search_where", $query->query_where, get_defined_vars ());
 								}
-
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_users_list_search", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);

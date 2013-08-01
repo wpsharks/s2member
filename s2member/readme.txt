@@ -92,10 +92,22 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130617 =
+= v130731 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v130731 =
+* (s2Member Pro) **New Feature; Checkout Options (#403)** s2Member® Pro now supports "Checkout Options". It is now possible to build dropdown menus offering your customers a variety of options using a Single Pro Form. This is accomplished quite easily using Shortcodes. For full details and examples, please check this section of your Dashboard in the latest release. See: `s2Member® -› PayPal® Pro Forms -› Wrapping Multiple Shortcodes as "Checkout Options"`. NOTE: this works for PayPal® Pro Forms, and ALSO for Authorize.Net Pro Forms.
+* (s2Member Pro) **Free Checkout (#403)** It is now possible to offer a 100% free checkout experience using any of s2Member's Pro Form Shortcodes. In previous releases of s2Member® it was not possible to set the `ra=""` Attribute to a zero dollar amount. Now it is! This works for PayPal® Pro Forms, and also for Authorize.Net Pro Forms.
+* (s2Member Pro) **100% Off Coupons (#403)** It is now possible to offer a 100% off coupon. This works for PayPal® Pro Forms, and also for Authorize.Net Pro Forms. See: `s2Member® -› Pro Coupon Codes` for details and examples.
+* (s2Member Pro) **Expiration Date Dropdowns (#428)** This release improves all s2Member® Pro Form templates by adding dropdown menus for the customer's credit card expiration month/year instead of the simple text input field used in previous releases.
+* (s2Member/s2Member Pro) **MySQL Wait Timeout (#349)** s2Member now automatically increases the MySQL `wait_timeout` to `300` seconds during s2Member processing routines. Reason for increase: should any 3rd party service API result in unexpected connection timeouts (such as PayPal, Authorize.Net, Amazon, MailChimp, AWeber, etc); this may cause a delay that could potentially exceed the default `wait_timeout` of `30` seconds on the MySQL resource handle that is global to all of WordPress. Increasing `wait_timeout` before transaction processing will decrease the chance of failure after a timeout is exceeded. Among other things, this resolves an elusive bug where there are mysterious 404 errors after checkout under the right scenario (e.g. when an unexpected timeout occurs). This may also resolve problems associated w/ some mysterious reports where emails were not sent during s2Member's attempt to complete post-processing of a transaction (and/or where other portions of post-processing failed under rare circumstances).
+* (s2Member/s2Member Pro) **Alternative Views (#300)** This release gives s2Member® the ability to hide protected content in widgets that list protected WordPress® Pages. This is a new Alternative View in the Dashboard. See: `s2Member® -› Restriction Options -› Alternative Views` for further details please.
+* (s2Member/s2Member Pro) **Documentation Update (#350)** Subtle improvements to the built-in documentation pertaining to s2Member's Automatic List Transitioning feature in the Dashboard. See: `s2Member® -› API/List Servers -› Automatic Unsubscribes` for further details please.
+* (s2Member/s2Member Pro) **Bug Fix (#387)** In s2Member® Only mode, a recursive scan for the WordPress® `/wp-load.php` file was failing somtimes when/if a custom directory was configured for plugins. Fixed in this release. See [this thread](http://www.s2member.com/forums/topic/problem-with-wordpress-folder-search-code/) for further details.
+* (s2Member/s2Member Pro) **Bug Fix (#418)** Fixed incorrect pagination of user search results in the Dashboard.
+* (s2Member/s2Member Pro) **Bug Fix (#418)** Fixed slow query against user searches in the Dashboard.
 
 = v130617 =
 * (s2Member/s2Member Pro) **IP Restrictions (#148)** It is now possible to introduce a custom template file that controls the error message displayed when/if a user breaches security by exceeding your maximum unique IP addresses; as configured under `s2Member -› Restriction Options -› Unique IP Restrictions`. If you would like to use a custom template for this message, please copy the default template file from `/s2member/includes/templates/errors/ip-restrictions.php` and place this file into your active WordPress® theme directory (or into the `/wp-content/` directory if you prefer). s2Member will automatically find your custom template in one of these locations; and s2Member will use your custom template instead of the built-in default.
