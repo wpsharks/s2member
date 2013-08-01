@@ -1,7 +1,7 @@
 === s2Member® Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 130731
-Stable tag: 130731
+Version: 130801
+Stable tag: 130801
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -92,10 +92,13 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130731 =
+= v130801 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v130801 =
+* (s2Member Pro) **New Feature; Checkout Options (#403)** Revision 2. Updating documentation on this new feature to prevent conufusion for site owners. s2Member® Pro now supports "Checkout Options". It is now possible to build dropdown menus offering your customers a variety of options using a Single Pro Form. This is accomplished quite easily using Shortcodes. For full details and examples, please check this section of your Dashboard in the latest release. See: `s2Member® -› PayPal® Pro Forms -› Wrapping Multiple Shortcodes as "Checkout Options"`. NOTE: this works for PayPal® Pro Forms, and ALSO for Authorize.Net Pro Forms.
 
 = v130731 =
 * (s2Member Pro) **New Feature; Checkout Options (#403)** s2Member® Pro now supports "Checkout Options". It is now possible to build dropdown menus offering your customers a variety of options using a Single Pro Form. This is accomplished quite easily using Shortcodes. For full details and examples, please check this section of your Dashboard in the latest release. See: `s2Member® -› PayPal® Pro Forms -› Wrapping Multiple Shortcodes as "Checkout Options"`. NOTE: this works for PayPal® Pro Forms, and ALSO for Authorize.Net Pro Forms.
