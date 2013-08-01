@@ -87,12 +87,13 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 									$query->query_from = " FROM `" . $wpdb->users . "`, `" . $wpdb->usermeta . "`"; // Include meta table also.
 									$query->query_where = " WHERE `" . $wpdb->users . "`.`ID` = `" . $wpdb->usermeta . "`.`user_id`"; // Join w/ meta table.
 									$query->query_where .= " AND (" . apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_before", "", get_defined_vars ());
-									$query->query_where .= " (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
+									$query->query_where .= " (`" . $wpdb->users . "`.`user_login` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_nicename` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`display_name` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_email` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_url` LIKE '" . $s . "')";
+									$query->query_where .= " OR ((`" . $wpdb->usermeta . "`.`meta_key` = 'first_name' OR `" . $wpdb->usermeta . "`.`meta_key` = 'last_name') AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
+									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_custom' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_custom_fields' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
-									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_notes' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
-									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` LIKE '%_name' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
-									$query->query_where .= " OR (`" . $wpdb->users . "`.`user_login` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_nicename` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`display_name` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_email` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_url` LIKE '" . $s . "')";
+									if(apply_filters("ws_plugin__s2member_users_list_search_admin_notes", false, get_defined_vars())) // Off by default; this can get very slow on large sites.
+										$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_notes' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_after", "", get_defined_vars ()) . ")"; // Leaving room for additional searches here.
 
 									if(is_multisite()) // On a Multisite Network we need to make sure we're searching only users w/ capabilities on this blog.

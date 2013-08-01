@@ -108,6 +108,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Bug Fix (#387)** In s2Member® Only mode, a recursive scan for the WordPress® `/wp-load.php` file was failing somtimes when/if a custom directory was configured for plugins. Fixed in this release. See [this thread](http://www.s2member.com/forums/topic/problem-with-wordpress-folder-search-code/) for further details.
 * (s2Member/s2Member Pro) **Bug Fix (#418)** Fixed incorrect pagination of user search results in the Dashboard.
 * (s2Member/s2Member Pro) **Bug Fix (#418)** Fixed slow query against user searches in the Dashboard.
+* (s2Member/s2Member Pro) **Bug Fix (#418)** Fixed incorrect result totals under some rare scenarios in user search results.
 
 = v130617 =
 * (s2Member/s2Member Pro) **IP Restrictions (#148)** It is now possible to introduce a custom template file that controls the error message displayed when/if a user breaches security by exceeding your maximum unique IP addresses; as configured under `s2Member -› Restriction Options -› Unique IP Restrictions`. If you would like to use a custom template for this message, please copy the default template file from `/s2member/includes/templates/errors/ip-restrictions.php` and place this file into your active WordPress® theme directory (or into the `/wp-content/` directory if you prefer). s2Member will automatically find your custom template in one of these locations; and s2Member will use your custom template instead of the built-in default.
