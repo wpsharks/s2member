@@ -721,6 +721,42 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_gzip_conflicts", get_defined_vars());
 							}
 
+						if (apply_filters ("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_custom_capability_files", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+							{
+								do_action ("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_custom_capability_files", get_defined_vars ());
+
+								echo '<div class="ws-menu-page-group" title="Custom Capability &amp; Member Level Files">' . "\n";
+
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-custom-capability-files-section">' . "\n";
+								echo '<h3>Restricting Files, Based On Custom Capabilities</h3>' . "\n";
+								echo '<p>If you\'re NOT familiar with Custom Capabilities yet, please read: <code>Dashboard -› s2Member® -› API Scripting -› Custom Capability Packages</code>. Once you understand the basic concept of Custom Capabilities &amp; Protected File Downloads, you\'ll see that (by default) s2Member does NOT handle File Download Protection with respect to Custom Capabilities. That\'s where Custom Capability Sub-directories come in.</p>' . "\n";
+								echo '<p>You can create Custom Capability Sub-directories under: <code>' . esc_html (c_ws_plugin__s2member_utils_dirs::doc_root_path ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '</code>. For instance, if you have a Custom Capability <code>music</code>, you can place protected files that should ONLY be accessible to Members with <code>access_s2member_ccap_music</code>, inside: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-ccap-music/</code>. Some examples are provided below.</p>' . "\n";
+								do_action ("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_custom_capability_files", get_defined_vars ());
+
+								echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+								echo '<p><strong>Custom Capabilities:</strong> (music,videos)</p>' . "\n";
+								echo '<p>Sub-Directory: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-ccap-music</code><br />Sub-Directory: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-ccap-videos</code></p>' . "\n";
+								echo '<p>Protected File: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-ccap-music/file.mp3</code><br />Protected File: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-ccap-videos/file.avi</code></p>' . "\n";
+								echo '<p>Now, here are some link examples, using Custom Capability Sub-directories:</p>' . "\n";
+								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/ccap-file-downloads.x-php")) . '</p>' . "\n";
+								echo '<p><em>These links will ONLY work for Members who are logged-in, with the proper Capabilities.</em></p>' . "\n";
+
+								echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+								echo '<p><strong>Membership Levels:</strong> (this also works fine)</p>' . "\n";
+								echo '<p>Sub-Directory: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level0</code><br />Sub-Directory: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level1</code><br />Sub-Directory: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level2</code><br />Sub-Directory: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level3</code><br />Sub-Directory: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level4</code></p>' . "\n";
+								echo '<p>Protected File: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level0/tiger.doc</code><br />Protected File: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level1/zebra.pdf</code><br />Protected File: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level2/elephant.doc</code><br />Protected File: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level3/rhino.pdf</code><br />Protected File: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-level4/lion.doc</code></p>' . "\n";
+								echo '<p>Now, here are some link examples, using Member Level Sub-directories:</p>' . "\n";
+								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/level-file-downloads.x-php")) . '</p>' . "\n";
+								echo '<p><em>These links will ONLY work for Members who are logged-in, with an adequate Membership Level.</em></p>' . "\n";
+								echo '</div>' . "\n";
+
+								echo '</div>' . "\n";
+
+								do_action ("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_custom_capability_files", get_defined_vars ());
+							}
+
 						do_action("ws_plugin__s2member_during_down_ops_page_after_left_sections", get_defined_vars());
 
 						echo '<div class="ws-menu-page-hr"></div>'."\n";
