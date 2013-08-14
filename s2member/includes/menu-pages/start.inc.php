@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								echo '<div class="ws-menu-page-group" title="Video Tutorials" style="padding-top:5px;">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-registration-process-section">' . "\n";
-								echo '<p><embed type="application/x-shockwave-flash" src="//www.youtube.com/p/A40AFC154461862E?version=3&hd=1&fs=1&rel=0" width="100%" height="550" allowscriptaccess="always" allowfullscreen="true"></embed></p>' . "\n";
+								echo '<p><iframe src="//www.youtube.com/embed/videoseries?list=PLA40AFC154461862E" width="100%" height="550" frameborder="0" allowfullscreen></iframe></p>' . "\n";
 								do_action ("ws_plugin__s2member_during_start_page_during_left_sections_during_video_tutorials", get_defined_vars ());
 								echo '</div>' . "\n";
 
