@@ -89,15 +89,15 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 									$query->query_where .= " AND (" . apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_before", "", get_defined_vars ());
 									$query->query_where .= " (`" . $wpdb->users . "`.`user_login` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_nicename` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`display_name` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_email` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_url` LIKE '" . $s . "')";
 									$query->query_where .= " OR ((`" . $wpdb->usermeta . "`.`meta_key` = 'first_name' OR `" . $wpdb->usermeta . "`.`meta_key` = 'last_name') AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
-									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
-									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_custom' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
-									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_custom_fields' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
+									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->base_prefix . "s2member_subscr_id' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
+									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->base_prefix . "s2member_custom' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
+									$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->base_prefix . "s2member_custom_fields' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									if(apply_filters("ws_plugin__s2member_users_list_search_admin_notes", false, get_defined_vars())) // Off by default; this can get very slow on large sites.
-										$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->prefix . "s2member_notes' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
+										$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->base_prefix . "s2member_notes' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 									$query->query_where .= apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_after", "", get_defined_vars ()) . ")"; // Leaving room for additional searches here.
 
 									if(is_multisite()) // On a Multisite Network we need to make sure we're searching only users w/ capabilities on this blog.
-										$query->query_where .= " AND `" . $wpdb->users . "`.`ID` IN(SELECT DISTINCT(`user_id`) FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "capabilities'";
+										$query->query_where .= " AND `" . $wpdb->users . "`.`ID` IN(SELECT DISTINCT(`user_id`) FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "capabilities')";
 
 									$query->query_from = apply_filters ("ws_plugin__s2member_before_users_list_search_from", $query->query_from, get_defined_vars ());
 									$query->query_where = apply_filters ("ws_plugin__s2member_before_users_list_search_where", $query->query_where, get_defined_vars ());
