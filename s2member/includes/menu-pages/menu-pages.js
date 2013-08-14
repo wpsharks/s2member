@@ -36,7 +36,7 @@ jQuery(document).ready (function($)
 
 				var $header = $('<div class="ws-menu-page-group-header">' + ins + title + '</div>');
 
-				$header.css /* Stack them sequentially, top to bottom. */ ({'z-index': 100 - index});
+				$header.css /* Stack them sequentially, top to bottom. */ ({'z-index': 1});
 
 				$header.insertBefore ($group), $group.hide (), $header.click (function()
 					{
