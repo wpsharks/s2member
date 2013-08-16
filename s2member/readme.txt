@@ -38,7 +38,7 @@ Video Tutorials: http://www.s2member.com/videos/
 Knowledge Base: http://www.s2member.com/kb/
 Pro Module / Home Page: http://www.s2member.com/
 Pro Module / Prices: http://www.s2member.com/prices/
-Pro Module / Auto-Update URL: http://www.s2member.com/
+Pro Module / Auto-Update URL: https://www.s2member.com/
 PayPal Pro Integration: http://www.s2member.com/videos/ED70D90C6749DA3D/
 Professional Installation URI: http://www.s2member.com/professional-installation/
 
