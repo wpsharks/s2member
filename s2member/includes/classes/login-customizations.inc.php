@@ -134,7 +134,10 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 						$a[] = 'div#login form#registerform p#reg_passmail { font-style:italic'.$i.'; }';
 
 						if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"])
-							$a[] = 'p#reg_passmail { display:none'.$i.'; }';
+							$a[] = 'div#login form#registerform p#reg_passmail { display:none'.$i.'; }';
+
+						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_footer_backtoblog"])
+							$a[] = 'div#login p#backtoblog { display:none'.$i.'; }';
 
 						$a = apply_filters("ws_plugin__s2member_login_header_styles_array_before_close", $a, get_defined_vars());
 						$a[] = /* Now close style tag. There are other Filters below. */ '</style>';

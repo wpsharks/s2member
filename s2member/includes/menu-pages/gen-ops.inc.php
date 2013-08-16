@@ -963,6 +963,25 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 								echo '<tbody>' . "\n";
 								echo '<tr>' . "\n";
 
+								echo '<th>' . "\n";
+								echo '<label for="ws-plugin--s2member-login-reg-footer-backtoblog">' . "\n";
+								echo 'Display [Back to Home Page] Link At Bottom?' . "\n";
+								echo '</label>' . "\n";
+								echo '</th>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<td>' . "\n";
+								echo '<select name="ws_plugin__s2member_login_reg_footer_backtoblog" id="ws-plugin--s2member-login-reg-footer-backtoblog">' . "\n";
+								echo '<option value="1"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_footer_backtoblog"]) ? ' selected="selected"' : '') . '>Yes, display link at bottom pointing visitors back to the home page</option>' . "\n";
+								echo '<option value="0"' . ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_footer_backtoblog"]) ? ' selected="selected"' : '') . '>No, hide this link (I\'ll create my own custom footer w/ the details I prefer)</option>' . "\n";
+								echo '</select>' . "\n";
+								echo '</td>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
 								echo '<td>' . "\n";
 								echo '<h3 style="margin:0;">Footer Design (i.e. Bottom)</h3>' . "\n";
 								echo '<p style="margin:0;">This field accepts raw HTML' . ((!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? ' (and/or PHP)' : '') . ' code.</p>' . "\n";
