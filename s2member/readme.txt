@@ -92,10 +92,18 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130802 =
+= v130816 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v130816 =
+* (s2Member Pro) **Compatibility, ClickBank (#467)** Improving support for ClickBank PitchPlus Upsell Flows. Please see [this thread](http://www.s2member.com/forums/topic/clickbank-buttons-not-working/#post-55725) for further details.
+* (s2Member/s2Member Pro) **User Search on Multisite Networks (#468)** User search functionality was partially broken for Child Blogs in a Multisite Network after some improvements were implemented in s2Member® v130731. The issue has now been corrected in this release for Multisite Networks. For further details, please see [this thread](http://www.s2member.com/forums/topic/user-search-no-longer-working/#post-55778).
+* (s2Member/s2Member Pro) **Z-Index in Menu Pages (#461)** Stacking order against a WordPress® installation running a Dashboard with a collapsed sidebar menu (left side) was causing some UI problems. Fixed in this release.
+* (s2Member/s2Member Pro) **SSL Compatibility (#437)** Adding a new option in the `s2Member® -› General Options -› Login Welcome Page` section. The default value for this new option is always `yes`. However, the default functionality can be turned off (if you prefer). This new option allows site owners to better integrate with a core WordPress® feature commonly referred to as `FORCE_SSL_LOGIN` and/or `FORCE_SSL_ADMIN`. This new feature can be used, or not. It is intended mainly for site owners running w/ `FORCE_SSL_LOGIN` and/or `FORCE_SSL_ADMIN`.
+* (s2Member/s2Member Pro) **Login/Registration Design Option (#437)** Adding a new option in the `s2Member® -› General Options -› Login/Registration Design` section. This new option (found at the bottom of `s2Member® -› General Options -› Login/Registration Design`) allows a site owner to show/hide the `Back To Home Page` link at the bottom of the default WordPress® Login/Registration system. This can be useful for site owners running w/ `FORCE_SSL_LOGIN` and/or `FORCE_SSL_ADMIN`; where they would prefer NOT to link customers back to the main site under a default HTTPS link; but rather, create their own link and gain better control over this area of their site.
+* (s2Member/s2Member Pro) **Videos (#467)** Updating internal documentation found in `Dashboard -› s2Member® -› Quick-Start`. Specifically, the video player here was integrated with an older version of the YouTube® API and was not working properly. Fixed in this release.
 
 = v130802 =
 * (s2Member Pro) **Compatibility, WordPress® v3.6** Updating s2Member® Pro Form templates and their underlying CSS. This update improves their appearance against the Twenty Thirteen theme that comes with WordPress® v3.6. Specifically, some of the Pro Form buttons were a little out of place in this new default theme. Fixed in this release.
