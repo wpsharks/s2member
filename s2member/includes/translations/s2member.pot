@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the s2Member® Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: s2Member® Framework 130801\n"
+"Project-Id-Version: s2Member® Framework 130802\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2013-08-02 09:54:27+00:00\n"
+"POT-Creation-Date: 2013-08-16 07:10:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1450,12 +1450,12 @@ msgctxt "s2member-front"
 msgid "Yes, I want to receive updates via email."
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:200
+#: s2member/includes/syscon.inc.php:202
 msgctxt "s2member-front"
 msgid "[%s] Username/Password"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:201
+#: s2member/includes/syscon.inc.php:203
 msgctxt "s2member-front"
 msgid ""
 "Your Username/Password for:\n"
@@ -1466,12 +1466,12 @@ msgid ""
 "%%%%wp_login_url%%%%"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:204
+#: s2member/includes/syscon.inc.php:206
 msgctxt "s2member-front"
 msgid "[%s] New User Registration"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:205
+#: s2member/includes/syscon.inc.php:207
 msgctxt "s2member-front"
 msgid ""
 "New User Registration on your site:\n"
@@ -1483,12 +1483,12 @@ msgid ""
 "IP Address: %%%%user_ip%%%%"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:226 s2member-pro/includes/syscon.inc.php:94
+#: s2member/includes/syscon.inc.php:228 s2member-pro/includes/syscon.inc.php:94
 msgctxt "s2member-front"
 msgid "Congratulations! (your membership has been approved)"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:227
+#: s2member/includes/syscon.inc.php:229
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your membership has been approved.\n"
@@ -1504,12 +1504,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:230 s2member-pro/includes/syscon.inc.php:98
+#: s2member/includes/syscon.inc.php:232 s2member-pro/includes/syscon.inc.php:98
 msgctxt "s2member-front"
 msgid "Thank You! (instructions for access)"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:231
+#: s2member/includes/syscon.inc.php:233
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%!\n"
@@ -1526,32 +1526,32 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:259
+#: s2member/includes/syscon.inc.php:261
 msgctxt "s2member-front"
 msgid "Free Subscriber"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:259
+#: s2member/includes/syscon.inc.php:261
 msgctxt "s2member-front"
 msgid "Bronze Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:259
+#: s2member/includes/syscon.inc.php:261
 msgctxt "s2member-front"
 msgid "Silver Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:259
+#: s2member/includes/syscon.inc.php:261
 msgctxt "s2member-front"
 msgid "Gold Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:259
+#: s2member/includes/syscon.inc.php:261
 msgctxt "s2member-front"
 msgid "Platinum Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:259
+#: s2member/includes/syscon.inc.php:261
 msgctxt "s2member-front"
 msgid "Level %s Member"
 msgstr ""
@@ -2484,8 +2484,8 @@ msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:288
 #: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:626
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:330
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:653
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:332
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:655
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:388
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:722
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:469
@@ -2496,8 +2496,8 @@ msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:492
 #: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:743
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:490
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:806
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:492
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:808
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:561
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:874
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:737
@@ -2512,10 +2512,10 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:773
 #: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:125
 #: s2member-pro/includes/classes/gateways/authnet/authnet-registration-in.inc.php:142
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:499
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:520
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:815
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:836
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:501
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:522
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:817
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:838
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:570
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:591
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:883
@@ -2532,8 +2532,8 @@ msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:516
 #: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:764
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:511
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:827
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:513
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:829
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:582
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:895
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:758
@@ -2543,7 +2543,7 @@ msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; 
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:784
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:847
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:849
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:915
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1101
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:137
@@ -3727,8 +3727,8 @@ msgctxt "s2member-front"
 msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal®</a> to cancel your Subscription."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:342
-#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:665
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:344
+#: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:667
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:486
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:918
 msgctxt "s2member-front"
