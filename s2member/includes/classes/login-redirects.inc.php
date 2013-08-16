@@ -27,7 +27,7 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 		*/
 		class c_ws_plugin__s2member_login_redirects
 			{
-			
+
 				/**
 				* Assists in multisite User authentication.
 				*
@@ -46,7 +46,7 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_ms_wp_authenticate_user", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
-						
+
 						if(is_a($user_or_wp_error, "WP_User") && ($user = $user_or_wp_error) && $user->ID && !is_super_admin($user->ID) && !in_array(get_current_blog_id(), array_keys(get_blogs_of_user($user->ID)), TRUE))
 							$user_or_wp_error = new WP_Error("invalid_username", _x("<strong>ERROR</strong>: Invalid username for this site.", "s2member-front", "s2member"));
 
@@ -98,16 +98,18 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 												do_action ("ws_plugin__s2member_during_login_redirect", get_defined_vars ());
 												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-												if /* Is this a string? */ ($redirect && is_string ($redirect))
-													wp_redirect /* Dynamic URL introduced by a Filter? */ ($redirect);
+												if($redirect && is_string ($redirect)) $redirect = $redirect; // Custom?
 
 												else if ($redirection_url = c_ws_plugin__s2member_login_redirects::login_redirection_url ($user))
-													wp_redirect /* Special Redirection URL configured with s2Member. */ ($redirection_url);
+													$redirect = $redirection_url; // Special redirection URL (overrides LWP).
 
 												else // Else we use the Login Welcome Page configured for s2Member.
-													wp_redirect (get_page_link ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]));
+													$redirect = get_page_link ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]);
 
-												exit /* Clean exit. */ ();
+												if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"])
+													$redirect = preg_replace("/^https\:\/\//i", "http://", $redirect);
+
+												wp_redirect($redirect).exit();
 											}
 									}
 							}

@@ -1183,9 +1183,51 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 								foreach (($ws_plugin__s2member_temp_a = array_merge ((array)get_pages ())) as $ws_plugin__s2member_temp_o)
 									echo '<option value="' . esc_attr ($ws_plugin__s2member_temp_o->ID) . '"' . ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"] && $ws_plugin__s2member_temp_o->ID == $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]) ? ' selected="selected"' : '') . '>' . esc_html ($ws_plugin__s2member_temp_o->post_title) . '</option>' . "\n";
 								echo '</select><br />' . "\n";
-								echo 'Please choose a Page to be used as the first page Members will see after logging in. This Page can contain anything you like. We recommend the following title: <code>Welcome To Our Members Area</code>.<br /><br />' . "\n";
-								echo '&darr; Or, you may configure a Special Redirection URL, if you prefer. You\'ll need to type in the full URL, starting with: <code>http://</code>. <em>A few <a href="#" onclick="alert(\'Replacement Codes:\\n\\n%%current_user_login%% = The current User\\\'s Username, lowercase.\\n%%current_user_id%% = The current User\\\'s ID.\\n%%current_user_level%% = The current User\\\'s s2Member Level.\\n%%current_user_role%% = The current User\\\'s WordPress® Role.' . ((!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '\\n%%current_user_ccaps%% = The current User\\\'s Custom Capabilities.' : '') . '\\n%%current_user_logins%% = Number of times the current User has logged in.\\n\\nFor example, if you\\\'re using BuddyPress, and you want to redirect Members to their BuddyPress Profile page after logging in, you would setup a Special Redirection URL, like this: ' . site_url ("/members/%%current_user_login%%/profile/") . '\\n\\nOr ... using %%current_user_level%%, you could have a separate Login Welcome Page for each Membership Level that you plan to offer. BuddyPress not required.\'); return false;">Replacement Codes</a> are also supported here.</em>' . "\n";
+								echo 'Please choose a Page to be used as the first page Members will see after logging in. This Page can contain anything you like. We recommend the following title: <code>Welcome To Our Members Area</code>.' . "\n";
+								echo '</td>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<th>' . "\n";
+								echo '<label for="ws-plugin--s2member-login-redirection-override">' . "\n";
+								echo 'Or, a Special Redirection URL?' . "\n";
+								echo '</label>' . "\n";
+								echo '</th>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<td>' . "\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_login_redirection_override" id="ws-plugin--s2member-login-redirection-override" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"]) . '" /><br />' . "\n";
+								echo 'Or, you may configure a Special Redirection URL, if you prefer. You\'ll need to type in the full URL, starting with: <code>http://</code>. <em>A few <a href="#" onclick="alert(\'Replacement Codes:\\n\\n%%current_user_login%% = The current User\\\'s Username, lowercase.\\n%%current_user_id%% = The current User\\\'s ID.\\n%%current_user_level%% = The current User\\\'s s2Member Level.\\n%%current_user_role%% = The current User\\\'s WordPress® Role.' . ((!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '\\n%%current_user_ccaps%% = The current User\\\'s Custom Capabilities.' : '') . '\\n%%current_user_logins%% = Number of times the current User has logged in.\\n\\nFor example, if you\\\'re using BuddyPress, and you want to redirect Members to their BuddyPress Profile page after logging in, you would setup a Special Redirection URL, like this: ' . site_url ("/members/%%current_user_login%%/profile/") . '\\n\\nOr ... using %%current_user_level%%, you could have a separate Login Welcome Page for each Membership Level that you plan to offer. BuddyPress not required.\'); return false;">Replacement Codes</a> are also supported here.</em>' . "\n";
+								echo '</td>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '</tbody>' . "\n";
+								echo '</table>' . "\n";
+
+								echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+								echo '<table class="form-table" style="margin-top:0;">' . "\n";
+								echo '<tbody>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<th>' . "\n";
+								echo '<label for="ws-plugin--s2member-login-redirection-always-http">' . "\n";
+								echo 'Always Redirect non-Administrative Users (after login) using HTTP?' . "\n";
+								echo '</label>' . "\n";
+								echo '</th>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<td>' . "\n";
+								echo '<select name="ws_plugin__s2member_login_redirection_always_http" id="ws-plugin--s2member-login-redirection-always-http">' . "\n";
+								echo '<option value="0"' . ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"]) ? ' selected="selected"' : '') . '>No, do NOT modify (use WordPress® default behavior; e.g. detect URL scheme automatically)</option>' . "\n";
+								echo '<option value="1"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"]) ? ' selected="selected"' : '') . '>Yes, always redirect non-administrative users to non-SSL version (e.g. always use http://)</option>' . "\n";
+								echo '</select><br />' . "\n";
+								echo 'Recommended setting: <code>Yes</code>. This is compatible w/ <a href="http://codex.wordpress.org/Administration_Over_SSL" target="_blank" rel="external"><code>FORCE_SSL_LOGIN</code></a> and/or <a href="http://codex.wordpress.org/Administration_Over_SSL" target="_blank" rel="external"><code>FORCE_SSL_ADMIN</code></a>.' . "\n";
 								echo '</td>' . "\n";
 
 								echo '</tr>' . "\n";
