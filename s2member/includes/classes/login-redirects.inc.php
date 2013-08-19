@@ -88,6 +88,13 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 								if (($ok = true) && !is_super_admin ($user_id) && $username !== "demo" && !$disable_login_ip_restrictions)
 									$ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok ($_SERVER["REMOTE_ADDR"], $username);
 
+								if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"]) // Alter value of `redirect_to`?
+									if(!empty ($_REQUEST["redirect_to"]) && is_string ($_REQUEST["redirect_to"]) && strpos($_REQUEST["redirect_to"], "wp-admin") === FALSE)
+										{
+											$_REQUEST["redirect_to"] = preg_replace("/^https\:\/\//i", "http://", $_REQUEST["redirect_to"]);
+											if(stripos($_REQUEST["redirect_to"], "http://") !== 0) // Force an absolute URL in this case.
+												$_REQUEST["redirect_to"] = home_url($_REQUEST["redirect_to"], "http");
+										}
 								if (($redirect = apply_filters ("ws_plugin__s2member_login_redirect", (($user->has_cap ("edit_posts")) ? false : true), get_defined_vars ())))
 									{
 										$obey_redirect_to = apply_filters ("ws_plugin__s2member_obey_login_redirect_to", /* By default, we obey this. */ true, get_defined_vars ());
@@ -107,13 +114,15 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 													$redirect = get_page_link ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]);
 
 												if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"])
-													$redirect = preg_replace("/^https\:\/\//i", "http://", $redirect);
-
+													{
+														$redirect = preg_replace("/^https\:\/\//i", "http://", $redirect);
+														if(stripos($redirect, "http://") !== 0) // Force an absolute URL in this case.
+															$redirect = home_url($redirect, "http");
+													}
 												wp_redirect($redirect).exit();
 											}
 									}
 							}
-
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_login_redirect", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
