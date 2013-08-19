@@ -160,7 +160,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 											{
 												$gen = '<input type="checkbox" value="1"';
 												$gen .= (((string)$_value) ? ' checked="checked"' : '');
-												$gen .= $common.' /><label for="'.esc_attr($_id_prefix.$field_id_class).'" style="display:inline !important; margin:0 !important;">'.$field["label"].'</label>';
+												$gen .= $common.' /> <label for="'.esc_attr($_id_prefix.$field_id_class).'" style="display:inline !important; margin:0 !important;">'.$field["label"].'</label>';
 											}
 									}
 								else if($field["type"] === "pre_checkbox" && !empty($field["label"]))
@@ -172,7 +172,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 											{
 												$gen = '<input type="checkbox" value="1"';
 												$gen .= ((!$_submission || (string)$_value) ? ' checked="checked"' : '');
-												$gen .= $common.' /><label for="'.esc_attr($_id_prefix.$field_id_class).'" style="display:inline !important; margin:0 !important;">'.$field["label"].'</label>';
+												$gen .= $common.' /> <label for="'.esc_attr($_id_prefix.$field_id_class).'" style="display:inline !important; margin:0 !important;">'.$field["label"].'</label>';
 											}
 									}
 								else if($field["type"] === "checkboxes" && !empty($field["options"]))
@@ -203,7 +203,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 														$gen .= ($i > 0) ? $sep : ''; // Separators can be filtered above.
 														$gen .= '<input type="checkbox" value="'.esc_attr($option_value).'"';
 														$gen .= ((($option_default && !$_submission) || in_array($option_value, (array)$_value)) ? ' checked="checked"' : '');
-														$gen .= $common_i.' /><label for="'.esc_attr($_id_prefix.$field_id_class."-".$i).'" class="'.esc_attr($opl).'" style="display:inline !important; margin:0 !important;">'.$option_label.'</label>';
+														$gen .= $common_i.' /> <label for="'.esc_attr($_id_prefix.$field_id_class."-".$i).'" class="'.esc_attr($opl).'" style="display:inline !important; margin:0 !important;">'.$option_label.'</label>';
 													}
 											}
 									}
@@ -235,7 +235,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 														$gen .= ($i > 0) ? $sep : ''; // Separators can be filtered above.
 														$gen .= '<input type="radio" value="'.esc_attr($option_value).'"';
 														$gen .= ((($option_default && !$_submission) || $option_value === (string)$_value) ? ' checked="checked"' : '');
-														$gen .= $common_i.' /><label for="'.esc_attr($_id_prefix.$field_id_class."-".$i).'" class="'.esc_attr($opl).'" style="display:inline !important; margin:0 !important;">'.$option_label.'</label>';
+														$gen .= $common_i.' /> <label for="'.esc_attr($_id_prefix.$field_id_class."-".$i).'" class="'.esc_attr($opl).'" style="display:inline !important; margin:0 !important;">'.$option_label.'</label>';
 													}
 											}
 									}
