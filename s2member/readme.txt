@@ -379,10 +379,6 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Compatibility**. Minor updates for compatibility with the coming release of WordPress® v3.4.
 * (s2Member Pro) **Bug fix**. Broken link in UI leading to: `s2m-pro-extras.zip`. Corrected in this release.
 
-= v120301 =
-* (s2Member Pro) **ClickBank**. Bug fix in call to `http_build_query()` related to `arg_separator`. This affected installations of PHP with something other than a default INI value for argument separators. Fixed in this release for better compatibility.
-* (s2Member/s2Member Pro) **File downloads**. Bug fix in s2Member's handling of the `"file_storage"` parameter to API Function `s2member_file_download_url()`. Fixed in this release.
-
-= v120219 - 1.0 =
+= v120301 - 1.0 =
 * ... trimmed away at v111220.
 * Initial release: v1.0.
