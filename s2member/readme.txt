@@ -383,29 +383,6 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member Pro) **ClickBank**. Bug fix in call to `http_build_query()` related to `arg_separator`. This affected installations of PHP with something other than a default INI value for argument separators. Fixed in this release for better compatibility.
 * (s2Member/s2Member Pro) **File downloads**. Bug fix in s2Member's handling of the `"file_storage"` parameter to API Function `s2member_file_download_url()`. Fixed in this release.
 
-= v120219 =
-* (s2Member) **File downloads**. s2Member's `.htaccess` rules updated to also support older versions of the Apache 1.x series. However, we still recommend that you run s2Member® with Apache 2.0 or higher. Or, with another modern web server that's Apache-compatible, such as [LiteSpeed](http://litespeedtech.com/).
-* (s2Member) **Link updates**. Some of the documentation built into the s2Member® plugin contained links which were outdated after our recent move to the new [s2Member.com](http://www.s2member.com/). These links have now been updated within the plugin.
-* (s2Member) **New video tutorial**. [s2Member® Intros, Framework and Pro](http://www.s2member.com/videos/85E41C40550808C2/)
-* (s2Member) **New video tutorial**. [s2Member® File Downloads, Complete Series / From Basics On Up](http://www.s2member.com/videos/7547A199A4385310/)
-* (s2Member) **New video tutorial**. [s2Member® File Downloads, Amazon S3/CloudFront/JW Player](http://www.s2member.com/videos/BD496E5F2CCAB12A/)
-* (s2Member) **New video tutorial**. [s2Member® File Downloads, Remote Auth/Podcasting](http://www.s2member.com/videos/71F49478D6983A9C/)
-* (s2Member) **New video tutorial**. [s2Member® File Downloads, GZIP Conflicts?](http://www.s2member.com/videos/038A4033A8D2A2EB/)
-* (s2Member) **New video tutorial**. [s2Member®, Using The PayPal Sandbox](http://www.s2member.com/videos/A7AEF89D281A75A0/)
-
-= v120213 =
-* (s2Member) **File downloads**. GZIP conflicts can now been resolved for file downloads. s2Member now introduces an `.htaccess` rewrite rule, which is automatically installed during activation and/or a future upgrade of the s2Member® Framework plugin. These rewrite rules are installed into your root `.htaccess` file for WordPress (if it's writable). If your `.htaccess` file is not writable, you will get a warning in your `s2Member -› Download Options` panel.
-
- For further details, please check your Dashboard under: `s2Member -› Download Options -› Preventing GZIP Conflicts`. Or see [this KB article](http://www.s2member.com/kb/resolving-problems-with-file-downloads/).
-* (s2Member) **Optimization**. Slow query w/ memory issues during activation on a Multisite Network with over 30K Users/Members. Fixed in this release.
-* (s2Member) **Compatibility**. Litespeed web server compatibility added to all areas of s2Member. A few `mod_rewrite` tweaks were needed. Fixed in this release.
-* (s2Member) **Bug fix**. Automatic list transitioning issue, which was affected by Payment Button integrations where s2Member's Auto-Return handler was getting in the way. Fixed in this release.
-* (s2Member/s2Member Pro) **Bug fix.** Due to an issue that once existed in releases of s2Member prior to v110927, s2Member's Auto EOT System was sometimes failing to succeed in cases where no IPN Signup Vars could be found (but only for Members who originally joined under a release of s2Member prior to v110927). s2Member v120213 resolves this elusive bug with a built-in workaround (i.e. a built-in default value in the code), specifically for this scenario.
-* (s2Member Pro) **Bug fix.** If Membership Levels were changed with s2Member Pro via `/wp-config.php` using `define("MEMBERSHIP_LEVELS", 1)` or similar; s2Member was failing to cleanup all unused Capabilities in the `wp_user_roles` array, which may have been associated with previously used Membership Levels. This had no harmful side effects, but it was a bug nevertheless. Upgrading to the latest installation of s2Member automatically cleans up any Capabilities this bug left behind. New installations of s2Member will not be affected by this at all.
-* (s2Member/s2Member Pro) **Routine maintenance.** Overall review of the codebase, security review, general code cleanup and maintenance.
-* (s2Member) **New website.** A new website has been launched for s2Member. Please see: [s2Member.com](http://www.s2member.com/)
-* **Coming soon.** Work continues on the next generation of s2Member®.
-
-= v111220 - 1.0 =
+= v120219 - 1.0 =
 * ... trimmed away at v111220.
 * Initial release: v1.0.
