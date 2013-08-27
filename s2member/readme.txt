@@ -1,4 +1,4 @@
-=== s2Member® Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
+=== s2Member Framework - Free plugin to help you make money ===
 
 Version: 130816
 Stable tag: 130816
