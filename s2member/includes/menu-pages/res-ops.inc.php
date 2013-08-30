@@ -45,6 +45,9 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 
 						do_action ("ws_plugin__s2member_during_res_ops_page_before_left_sections", get_defined_vars ());
 
+						// Set global - defaults to TRUE
+						if ( ! isset( $GLOBALS["WS_PLUGIN__"]["wp_show_ids"] ) )
+							$GLOBALS["WS_PLUGIN__"]["wp_show_ids"] = true;
 						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_post_level_access", true, get_defined_vars ()))
 							{
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_post_level_access", get_defined_vars ());
