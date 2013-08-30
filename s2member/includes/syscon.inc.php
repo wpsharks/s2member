@@ -26,7 +26,7 @@ $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir"] = plugin_dir_path( dirname( __FI
 /*
 Determine the base directory name.
 */
-$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_base"] = basename(dirname(dirname(__FILE__)));
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_base"] = basename( plugin_dir_path( dirname( __FILE__ ) ) );
 /*
 Determine the full URL to the directory this plugin resides in.
 */
