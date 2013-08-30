@@ -30,7 +30,7 @@ $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_base"] = basename( plugin_dir_path
 /*
 Determine the full URL to the directory this plugin resides in.
 */
-$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"] = dirname( plugins_url( basename( __FILE__ ), dirname( __FILE__ ) ) );
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"] = plugins_url( '', dirname( __FILE__ ) );
 /*
 Determine full URL to the s2Member-only file that loads WordPress® with only s2Member active.
 */
