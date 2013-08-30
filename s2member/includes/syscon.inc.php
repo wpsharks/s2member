@@ -22,7 +22,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 /*
 Determine the directory.
 */
-$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir"] = dirname(dirname(__FILE__));
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir"] = plugin_dir_path( dirname( __FILE__ ) );
 /*
 Determine the base directory name.
 */
