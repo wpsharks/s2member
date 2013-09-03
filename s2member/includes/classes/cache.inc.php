@@ -54,6 +54,8 @@ if (!class_exists ("c_ws_plugin__s2member_cache"))
 
 						$links = array ("login_welcome_page" => "", "membership_options_page" => "", "file_download_limit_exceeded_page" => "");
 
+						// Defaults to no update
+						$cache_needs_updating = false;
 						if (isset ($lwp_cache["page"], $lwp_cache["time"], $lwp_cache["link"]) && $lwp_cache["page"] === $lwp && $lwp_cache["time"] >= strtotime ("-15 minutes") && $lwp_cache["link"])
 							{
 								$links["login_welcome_page"] = $lwp_cache["link"];

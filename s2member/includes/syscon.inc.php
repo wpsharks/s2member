@@ -22,17 +22,15 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 /*
 Determine the directory.
 */
-$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir"] = dirname(dirname(__FILE__));
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir"] = plugin_dir_path( dirname( __FILE__ ) );
 /*
 Determine the base directory name.
 */
-$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_base"] = basename(dirname(dirname(__FILE__)));
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_base"] = basename( plugin_dir_path( dirname( __FILE__ ) ) );
 /*
 Determine the full URL to the directory this plugin resides in.
 */
-$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"] = ( /* Have to assume plugins dir? */stripos(__FILE__, WP_CONTENT_DIR) !== 0) ?
-plugins_url("/".basename(dirname(dirname(__FILE__)))) : // Otherwise, this gives it a chance to live anywhere in the content dir.
-content_url(preg_replace("/^(.*?)\/".preg_quote(basename(WP_CONTENT_DIR), "/")."/", "", str_replace(DIRECTORY_SEPARATOR, "/", dirname(dirname(__FILE__)))));
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"] = plugins_url( '', dirname( __FILE__ ) );
 /*
 Determine full URL to the s2Member-only file that loads WordPress® with only s2Member active.
 */
