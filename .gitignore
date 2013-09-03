@@ -40,6 +40,9 @@ Icon?
 !Icons
 ._*
 
+# Amazon Web Services
+.elasticbeanstalk/
+
 # Others
 /s2member-pro/
 /s2m-pro-extras/
