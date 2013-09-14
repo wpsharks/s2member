@@ -32,7 +32,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 						echo '<div class="wrap ws-menu-page">'."\n";
 
 						echo '<div id="icon-plugins" class="icon32"><br /></div>'."\n";
-						echo '<h2>s2Member® Multisite (Configuration)</h2>'."\n";
+						echo '<h2>s2Member Multisite (Configuration)</h2>'."\n";
 
 						echo '<table class="ws-menu-page-table">'."\n";
 						echo '<tbody class="ws-menu-page-table-tbody">'."\n";
@@ -51,11 +51,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 									{
 										do_action("ws_plugin__s2member_during_mms_ops_page_during_left_sections_before_mms_patches", get_defined_vars());
 
-										echo '<div class="ws-menu-page-group" title="Multisite WordPress® Patches" default-state="open">'."\n";
+										echo '<div class="ws-menu-page-group" title="Multisite WordPress Patches" default-state="open">'."\n";
 
 										echo '<div class="ws-menu-page-section ws-plugin--s2member-mms-patches-section">'."\n";
-										echo '<img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/small-icon.png" title="s2Member (a Membership management system for WordPress®)" alt="" style="float:right; margin:0 0 0 25px; border:0;" />'."\n";
-										echo '<h3>Multisite WordPress® Patches (required for compatiblity)</h3>'."\n";
+										echo '<img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/small-icon.png" title="s2Member (a Membership management system for WordPress)" alt="" style="float:right; margin:0 0 0 25px; border:0;" />'."\n";
+										echo '<h3>Multisite WordPress Patches (required for compatiblity)</h3>'."\n";
 										echo '<p>In order for s2Member to function properly in a Multisite environment, you MUST implement four patches. One goes into your <code>/wp-login.php</code> file, one into <code>/wp-includes/load.php</code>, one into <code>/wp-includes/ms-functions.php</code>, and another into <code>/wp-admin/user-new.php</code>. Please use the automatic patcher below. All you do is check the box &amp; click Save.</p>'."\n";
 										do_action("ws_plugin__s2member_during_mms_ops_page_during_left_sections_during_mms_patches", get_defined_vars());
 
@@ -77,17 +77,17 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 										if(defined("DISALLOW_FILE_MODS") && DISALLOW_FILE_MODS)
 											{
 												echo '<select name="ws_plugin__s2member_mms_auto_patch" id="ws-plugin--s2member-mms-auto-patch" disabled="disabled">'."\n";
-												echo '<option value="0" selected="selected">No (I\'ll patch WordPress® myself)</option>'."\n";
+												echo '<option value="0" selected="selected">No (I\'ll patch WordPress myself)</option>'."\n";
 												echo '</select><br />'."\n";
 												echo '<em class="ws-menu-page-hilite">This is now locked. Your <code>/wp-config.php</code> file says: <code>DISALLOW_FILE_MODS = true</code></em>.'."\n";
 											}
 										else // Otherwise we can display these options.
 											{
 												echo '<select name="ws_plugin__s2member_mms_auto_patch" id="ws-plugin--s2member-mms-auto-patch">'."\n";
-												echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mms_auto_patch"]) ? ' selected="selected"' : '').'>Yes (automatically patch WordPress®)</option>'."\n";
-												echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mms_auto_patch"]) ? ' selected="selected"' : '').'>No (I\'ll patch WordPress® myself)</option>'."\n";
+												echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mms_auto_patch"]) ? ' selected="selected"' : '').'>Yes (automatically patch WordPress)</option>'."\n";
+												echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mms_auto_patch"]) ? ' selected="selected"' : '').'>No (I\'ll patch WordPress myself)</option>'."\n";
 												echo '</select><br />'."\n";
-												echo '<em class="ws-menu-page-hilite">These files MUST be patched, each time you upgrade the WordPress® core. If you set this option to <code>Yes (Patch Automatically)</code>, s2Member will patch your installation now, and also in the future, should you upgrade to newer version. That way, you won\'t need to patch manually each time WordPress® is upgraded.</em>'."\n";
+												echo '<em class="ws-menu-page-hilite">These files MUST be patched, each time you upgrade the WordPress core. If you set this option to <code>Yes (Patch Automatically)</code>, s2Member will patch your installation now, and also in the future, should you upgrade to newer version. That way, you won\'t need to patch manually each time WordPress is upgraded.</em>'."\n";
 											}
 
 										echo '</td>'."\n";
@@ -109,7 +109,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 										echo '<p>'.c_ws_plugin__s2member_utils_strings::highlight_php(file_get_contents(dirname(__FILE__)."/code-samples/mms-patch-user-new.x-php")).'</p>'."\n";
 										echo '<p><strong>Patch #4</strong> ( /wp-includes/ms-functions.php )</p>'."\n";
 										echo '<p>'.c_ws_plugin__s2member_utils_strings::highlight_php(file_get_contents(dirname(__FILE__)."/code-samples/mms-patch-ms-functions.x-php")).'</p>'."\n";
-										echo '<p><em class="ws-menu-page-hilite">Don\'t forget to patch these files again, each time you upgrade the WordPress® core.</em></p>'."\n";
+										echo '<p><em class="ws-menu-page-hilite">Don\'t forget to patch these files again, each time you upgrade the WordPress core.</em></p>'."\n";
 										echo '</div>'."\n";
 										echo '</div>'."\n";
 										echo '</div>'."\n";
@@ -126,12 +126,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 										echo '<div class="ws-menu-page-group" title="Multisite Registration Configuration" default-state="open">'."\n";
 
 										echo '<div class="ws-menu-page-section ws-plugin--s2member-mms-registration-section">'."\n";
-										echo '<img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/large-icon.png" title="s2Member (a Membership management system for WordPress®)" alt="" style="float:right; margin:0 0 0 25px; border:0;" />'."\n";
+										echo '<img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/large-icon.png" title="s2Member (a Membership management system for WordPress)" alt="" style="float:right; margin:0 0 0 25px; border:0;" />'."\n";
 										echo '<h3>Multisite Registration (Main Site Configuration)</h3>'."\n";
 										echo '<p>s2Member supports Free Subscribers <em>(at Level #0)</em>, and several Primary Roles created by the s2Member plugin (<em> i.e. s2Member Levels 1-4, or up to the number of configured Levels )</em>. If you want your visitors to be capable of registering absolutely free, you will want to "allow" Open Registration. Whenever a visitor registers without paying, they\'ll automatically become a Free Subscriber, at Level #0.</p>'."\n";
 										echo '<p><strong>Running A Multisite Blog Farm?</strong> With Multisite Networking enabled, your Main Site could ALSO offer a Customer access to create a Blog of their own <em>(optional)</em>, where a Customer becomes a "Member" of your Main Site, and also a Blog Owner/Administrator of at least one other Blog on your Network. With s2Member installed <em>(Network wide)</em>, each of your Blog Owners could offer Membership too, using a single copy of the s2Member plugin, which is a great selling point<em>!</em> We refer to this type of installation as a Multisite Blog Farm.</p>'."\n";
 										echo '<p>Multisite Networking makes a new Registration Form available <em>(driven by your theme)</em>; which we refer to as: <code>/wp-signup.php</code>. If, and only if, you\'re planning to offer Blogs, you MUST use <a href="'.esc_attr(c_ws_plugin__s2member_utils_urls::wp_signup_url()).'" target="_blank" rel="external" onclick="alert(\'s2Member will now open your Multisite Registration Form.\\n* s2Member makes this form available to logged-in Super Administrators, at all times (for testing purposes), regardless of configuration.'.((c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '\\n\\nBuddyPress: * BuddyPress will use its own Registration Form. Please note, you will probably be redirected away from the BuddyPress Registration Form ( '.c_ws_plugin__s2member_utils_strings::esc_js_sq(c_ws_plugin__s2member_utils_urls::bp_register_url()).' ), because you\\\'re ALREADY logged-in. Please log out before testing BuddyPress registration.' : '').'\');">/wp-signup.php</a>, instead of using the Standard Login/Registration Form. In a Multisite installation, we refer to the Standard Login/Registration Form, as: <a href="'.esc_attr(c_ws_plugin__s2member_utils_urls::wp_register_url()).'" target="_blank" rel="external" onclick="alert(\'s2Member will now open your Standard Registration Form.\\n* s2Member makes this form available to logged-in Administrators, at all times (for testing purposes), regardless of configuration.'.((c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '\\n\\nBuddyPress: * BuddyPress will use its own Registration Form. Please note, you will probably be redirected away from the BuddyPress Registration Form ( '.c_ws_plugin__s2member_utils_strings::esc_js_sq(c_ws_plugin__s2member_utils_urls::bp_register_url()).' ), because you\\\'re ALREADY logged-in. Please log out before testing BuddyPress registration.' : '').'\');">/wp-login.php?action=register</a>. If you\'re planning to offer Membership Access only, and NOT Blogs, you can simply use the <a href="'.esc_attr(c_ws_plugin__s2member_utils_urls::wp_register_url()).'" target="_blank" rel="external" onclick="alert(\'s2Member will now open your Standard Registration Form.\\n* s2Member makes this form available to logged-in Administrators, at all times (for testing purposes), regardless of configuration.'.((c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '\\n\\nBuddyPress: * BuddyPress will use its own Registration Form. Please note, you will probably be redirected away from the BuddyPress Registration Form ( '.c_ws_plugin__s2member_utils_strings::esc_js_sq(c_ws_plugin__s2member_utils_urls::bp_register_url()).' ), because you\\\'re ALREADY logged-in. Please log out before testing BuddyPress registration.' : '').'\');">Standard Login/Registration Form</a>, which is easily customized through <code>s2Member -› General Options -› Login/Registration Design</code>.</p>'."\n";
-										echo '<p>In either case, s2Member Pro Forms are possible too. If you\'ve purchased s2Member Pro, you could use Pro Forms instead of these WordPress® defaults. That being said, even with s2Member Pro Forms, if you are offering Blogs, you will still need to facilitate the actual creation of each Blog through <code>/wp-signup.php</code>. In other words, Customers can register through s2Member Pro Forms, and even checkout. But when it comes time to setup a new Blog, you will need to redirect your Customer to <code>/wp-signup.php</code>, while they are logged-in. This will allow them to create a new Blog on your Network. That is, if they are allowed to <em>(based on your configuration below)</em>.</p>'."\n";
+										echo '<p>In either case, s2Member Pro Forms are possible too. If you\'ve purchased s2Member Pro, you could use Pro Forms instead of these WordPress defaults. That being said, even with s2Member Pro Forms, if you are offering Blogs, you will still need to facilitate the actual creation of each Blog through <code>/wp-signup.php</code>. In other words, Customers can register through s2Member Pro Forms, and even checkout. But when it comes time to setup a new Blog, you will need to redirect your Customer to <code>/wp-signup.php</code>, while they are logged-in. This will allow them to create a new Blog on your Network. That is, if they are allowed to <em>(based on your configuration below)</em>.</p>'."\n";
 										echo (c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '<p><em><strong>BuddyPress:</strong> BuddyPress will use its own Registration Form, powered by your theme.<br />(BuddyPress can handle both Membership and Blog creation in its integration)<br />(<a href="'.esc_attr(c_ws_plugin__s2member_utils_urls::bp_register_url()).'" target="_blank" rel="external" onclick="alert(\'s2Member will now open your BuddyPress Registration Form.\\n* However, you will probably be redirected away from this BuddyPress Registration Form ( '.c_ws_plugin__s2member_utils_strings::esc_js_sq(c_ws_plugin__s2member_utils_urls::bp_register_url()).' ), because you\\\'re ALREADY logged-in. Please log out before testing BuddyPress registration.\');">'.esc_html(c_ws_plugin__s2member_utils_urls::bp_register_url()).'</a>)</em></p>'."\n" : '';
 										do_action("ws_plugin__s2member_during_mms_ops_page_during_left_sections_during_mms_registration", get_defined_vars());
 
@@ -303,8 +303,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 							}
 						else // Otherwise, we can display a simple notation; leading into Multisite Networking.
 							{
-								echo '<p style="margin-top:0;"><span class="ws-menu-page-hilite">Your WordPress® installation does not have Multisite Networking enabled.<br />Which is perfectly OK :-) Multisite Networking is 100% completely optional.</span></p>'."\n";
-								echo '<img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/large-icon.png" title="s2Member (a Membership management system for WordPress®)" alt="" style="float:right; margin:0 0 0 25px; border:0;" />'."\n";
+								echo '<p style="margin-top:0;"><span class="ws-menu-page-hilite">Your WordPress installation does not have Multisite Networking enabled.<br />Which is perfectly OK :-) Multisite Networking is 100% completely optional.</span></p>'."\n";
+								echo '<img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/large-icon.png" title="s2Member (a Membership management system for WordPress)" alt="" style="float:right; margin:0 0 0 25px; border:0;" />'."\n";
 
 								if(file_exists($ws_plugin__s2member_temp = dirname(dirname(dirname(__FILE__)))."/readme-ms.txt"))
 									{

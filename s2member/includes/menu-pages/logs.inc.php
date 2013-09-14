@@ -32,7 +32,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 						echo '<div class="wrap ws-menu-page">'."\n";
 
 						echo '<div id="icon-plugins" class="icon32"><br /></div>'."\n";
-						echo '<h2>s2Member® Logs (for Debugging Purposes)</h2>'."\n";
+						echo '<h2>s2Member Logs (for Debugging Purposes)</h2>'."\n";
 
 						echo '<table class="ws-menu-page-table">'."\n";
 						echo '<tbody class="ws-menu-page-table-tbody">'."\n";
@@ -45,26 +45,26 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 						{
 							do_action ("ws_plugin__s2member_during_logs_page_during_left_sections_before_help", get_defined_vars ());
 
-							echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member®">' . "\n";
+							echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member">' . "\n";
 
 							echo '<div class="ws-menu-page-section ws-plugin--s2member-help">' . "\n";
-							echo '<h3>Getting Help w/ s2Member® (Troubleshooting)</h3>' . "\n";
-							echo '<p>s2Member® is pretty easy to setup and install initially. Most of the official documentation is right here in your Dashboard (i.e. there is a lot of inline documentation built into the software). That being said, it CAN take some time to master everything there is to know about s2Member\'s advanced features. If you need assistance with s2Member®, please search the <a href="http://www.s2member.com/kb/" target="_blank" rel="external">s2Member® Knowledge Base</a>, <a href="http://www.s2member.com/videos/" target="_blank" rel="external">Video Tutorials</a>, <a href="http://www.s2member.com/forums/" target="_blank" rel="external">Forums</a> and <a href="http://www.s2member.com/codex/" target="_blank" rel="external">Codex</a>. If you are planning to do something creative with s2Member®, you might want to <a href="http://jobs.wordpress.net" target="_blank" rel="external">hire a freelance developer</a> to assist you.</p>' . "\n";
-							echo '<p><strong>See also:</strong> <a href="http://www.s2member.com/kb/common-troubleshooting-tips/" target="_blank" rel="external">s2Member® Troubleshooting Guide</a> (please read this first if you\'re having trouble).</p>'."\n";
+							echo '<h3>Getting Help w/ s2Member (Troubleshooting)</h3>' . "\n";
+							echo '<p>s2Member is pretty easy to setup and install initially. Most of the official documentation is right here in your Dashboard (i.e. there is a lot of inline documentation built into the software). That being said, it CAN take some time to master everything there is to know about s2Member\'s advanced features. If you need assistance with s2Member, please search the <a href="http://www.s2member.com/kb/" target="_blank" rel="external">s2Member Knowledge Base</a>, <a href="http://www.s2member.com/videos/" target="_blank" rel="external">Video Tutorials</a>, <a href="http://www.s2member.com/forums/" target="_blank" rel="external">Forums</a> and <a href="http://www.s2member.com/codex/" target="_blank" rel="external">Codex</a>. If you are planning to do something creative with s2Member, you might want to <a href="http://jobs.wordpress.net" target="_blank" rel="external">hire a freelance developer</a> to assist you.</p>' . "\n";
+							echo '<p><strong>See also:</strong> <a href="http://www.s2member.com/kb/common-troubleshooting-tips/" target="_blank" rel="external">s2Member Troubleshooting Guide</a> (please read this first if you\'re having trouble).</p>'."\n";
 
 							echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 							echo '<h3>Testing Server Compatibility</h3>'."\n";
-							echo '<p>Please download the <a href="http://www.s2member.com/r/server-check-tool/">s2Member® Server Scanner</a>. Unzip, upload via FTP; then open in a browser for a full report.</p>'."\n";
+							echo '<p>Please download the <a href="http://www.s2member.com/r/server-check-tool/">s2Member Server Scanner</a>. Unzip, upload via FTP; then open in a browser for a full report.</p>'."\n";
 
 							echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 							echo '<h3>Troubleshooting Payment Gateway Integrations</h3>'."\n";
-							echo '<p>Please use the s2Member® Log Viewer (below). Log files can be very helpful.</p>'."\n";
+							echo '<p>Please use the s2Member Log Viewer (below). Log files can be very helpful.</p>'."\n";
 
 							echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-							echo '<h3>Search s2Member® KB Articles, Forums, Codex and more<em>!</em></h3>'."\n";
+							echo '<h3>Search s2Member KB Articles, Forums, Codex and more<em>!</em></h3>'."\n";
 							echo '<form method="get" action="http://www.s2member.com/quick-s.php" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';">'."\n";
 							echo '<p><input type="text" name="q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /><input type="submit" value="Search" /></p>'."\n";
 							echo '</form>'."\n";
@@ -83,12 +83,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								echo '<div class="ws-menu-page-group" title="Logging Configuration (for Debugging)">'."\n";
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-log-settings-section">'."\n";
 
-								echo '<h3>s2Member® Logging Configuration (for Debugging Purposes)</h3>'."\n";
+								echo '<h3>s2Member Logging Configuration (for Debugging Purposes)</h3>'."\n";
 
 								echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
-								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems that occur during processing. Enable logging here, and then view your log files below; in the s2Member® Log Viewer.</span></p>'."\n";
+								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems that occur during processing. Enable logging here, and then view your log files below; in the s2Member Log Viewer.</span></p>'."\n";
 								echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
-								echo '<p style="font-size:110%; margin-bottom:0;"><span>Regarding s2Member® Security Badges. If debug logging is enabled, your site will NOT qualify for an s2Member® Security Badge until you disable logging (and you must ALSO download, and then delete any existing log files). For further details, please see KB Article: <a href="http://www.s2member.com/kb/security-badges/" target="_blank" rel="external">s2Member® Security Badges</a>.</span></p>'."\n";
+								echo '<p style="font-size:110%; margin-bottom:0;"><span>Regarding s2Member Security Badges. If debug logging is enabled, your site will NOT qualify for an s2Member Security Badge until you disable logging (and you must ALSO download, and then delete any existing log files). For further details, please see KB Article: <a href="http://www.s2member.com/kb/security-badges/" target="_blank" rel="external">s2Member Security Badges</a>.</span></p>'."\n";
 								echo '</div>'."\n";
 
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
@@ -113,7 +113,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 								echo '<td>'."\n";
 								echo '<input type="radio" name="ws_plugin__s2member_gateway_debug_logs" id="ws-plugin--s2member-gateway-debug-logs-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_gateway_debug_logs" id="ws-plugin--s2member-gateway-debug-logs-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-1">Yes, enable debugging w/ HTTP, API, IPN &amp; Return Page logging (and List Server API logs too).</label><br />'."\n";
-								echo '<em>This enables logging overall. Includes s2Member® HTTP, API, IPN and Return Page logging. Also logs any List Server integrations.</em><br />'."\n";
+								echo '<em>This enables logging overall. Includes s2Member HTTP, API, IPN and Return Page logging. Also logs any List Server integrations.</em><br />'."\n";
 								echo '<em>* Use only for debugging. This should NEVER be enabled on a live site.<br />* The log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code></em>'."\n";
 								echo '</td>'."\n";
 
@@ -130,8 +130,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								echo '<tr>'."\n";
 
 								echo '<td>'."\n";
-								echo '<input type="radio" name="ws_plugin__s2member_gateway_debug_logs_extensive" id="ws-plugin--s2member-gateway-debug-logs-extensive-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs_extensive"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-extensive-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_gateway_debug_logs_extensive" id="ws-plugin--s2member-gateway-debug-logs-extensive-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs_extensive"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-extensive-1">Yes, enable debugging w/ HTTP connection logging for ALL of WordPress®.</label><br />'."\n";
-								echo '<em>This enables HTTP connection logging for ALL of WordPress® (quite extensive).<br />* Use only for debugging. This should NEVER be enabled on a live site.<br />* Creates the additional log file: <code>wp-http-api-debug.log</code></em>'."\n";
+								echo '<input type="radio" name="ws_plugin__s2member_gateway_debug_logs_extensive" id="ws-plugin--s2member-gateway-debug-logs-extensive-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs_extensive"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-extensive-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_gateway_debug_logs_extensive" id="ws-plugin--s2member-gateway-debug-logs-extensive-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs_extensive"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-extensive-1">Yes, enable debugging w/ HTTP connection logging for ALL of WordPress.</label><br />'."\n";
+								echo '<em>This enables HTTP connection logging for ALL of WordPress (quite extensive).<br />* Use only for debugging. This should NEVER be enabled on a live site.<br />* Creates the additional log file: <code>wp-http-api-debug.log</code></em>'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -154,7 +154,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 						{
 							do_action("ws_plugin__s2member_during_logs_page_during_left_sections_before_logs", get_defined_vars());
 
-							echo '<div class="ws-menu-page-group" title="s2Member® Log Viewer (for Debugging Purposes)" default-state="open">'."\n";
+							echo '<div class="ws-menu-page-group" title="s2Member Log Viewer (for Debugging Purposes)" default-state="open">'."\n";
 
 							echo '<div class="ws-menu-page-section ws-plugin--s2member-logs-section">'."\n";
 							echo '<h3>Debugging Tools/Tips &amp; Other Important Details (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-debugging-tips-details\').toggle(); return false;" class="ws-dotted-link">click here to toggle</a>)</h3>'."\n";
@@ -163,7 +163,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 							echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-							echo '<form method="post" onsubmit="if(!confirm(\'Archive all existing log files?\n\nAll of your current log files will be archived (e.g. they will simply be renamed with an ARCHIVED tag &amp; date in their file name); and new log files will be created automatically the next time s2Member® logs something on your installation.\n\nPlease click OK to confirm this action.\')) return false;">'."\n";
+							echo '<form method="post" onsubmit="if(!confirm(\'Archive all existing log files?\n\nAll of your current log files will be archived (e.g. they will simply be renamed with an ARCHIVED tag &amp; date in their file name); and new log files will be created automatically the next time s2Member logs something on your installation.\n\nPlease click OK to confirm this action.\')) return false;">'."\n";
 							echo '<input type="hidden" name="ws_plugin__s2member_logs_archive_start_fresh" value="'.esc_attr(wp_create_nonce ("ws-plugin--s2member-logs-archive-start-fresh")).'" />'."\n";
 							echo '<input type="submit" value="Archive All Current Log Files" class="ws-menu-page-right ws-plugin--s2member-archive-logs-start-fresh-button" style="clear:right; min-width:200px;" />'."\n";
 							echo '</form>'."\n";
@@ -178,15 +178,15 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 							echo '<input type="submit" value="Download All Log Files (Zip File)" class="ws-menu-page-right ws-plugin--s2member-logs-download-zip-button" style="clear:right; min-width:200px;" />'."\n";
 							echo '</form>'."\n";
 
-							echo '<p><strong>Debugging Tips:</strong> &nbsp;&nbsp; It is normal to see a few errors in your log files. This is because s2Member® logs ALL of its communication with Payment Gateways. Everything — not just successes. With that in mind, there will be some failures that s2Member® expects (to a certain extent); and s2Member® deals with these gracefully. What you\'re looking for here, are things that jump right out at you as being a major issue (e.g. when s2Member® makes a point of providing details to you in a log entry about problems that should be corrected on your installation). Please read carefully.</p>'."\n";
-							echo '<p><strong>Test Transaction Tips:</strong> &nbsp;&nbsp; Generally speaking, it is best to run test transactions for yourself. Be sure to run your final test transactions against a live Payment Gateway that is NOT in Sandbox/Test Mode (<a href="#" onclick="alert(\'While some Payment Gateways make it possible for you to run test transactions in Sandbox/Test Mode, these are NOT a reliable way to test s2Member®.\n\nOften times (particularly with PayPal®) Sandbox/Test mode behaves somewhat differently — often with buggy behavior. This can really create frustration for site owners. Therefore, it is always a good idea to run low dollar test transactions against a live Payment Gateway.\n\nAlso, please be sure that you are NOT logged in as an Administrator when running test transactions. For most test transactions, you will want to be completely logged out of your site before completing checkout (just a new Customer would be). If you are testing an upgrade or downgrade (where you DO need to be logged-in), please do NOT attempt this under an Administrative account. s2Member® will NOT upgrade/downgrade Administrative accounts — for security purposes.\'); return false;">click here for details</a>). After running test transactions, please review the log file entries pertaining to your transaction. Does s2Member® report any major issues? If so, please read through any details that s2Member® provides in the log file. If you need assistance, please <a href="http://www.s2member.com/quick-s.php" target="_blank" rel="external">search s2Member.com</a> for answers to common questions.</p>'."\n";
-							echo '<p><strong>s2 Core Processors:</strong> &nbsp;&nbsp; It is normal to have a <code>paypay-ipn.log</code> and/or a <code>paypay-rtn.log</code> file at all times. Ultimately, all Payment Gateway integrations supported by s2Member® pass through it\'s core PayPal® processors; even if you\'ve integrated with another Payment Gateway. If you are having trouble, and you don\'t find any errors in your Payment Gateway log files, please check the <code>paypay-ipn.log</code> and <code>paypay-rtn.log</code> files too. Regarding s2Member® Pro Forms... If you\'ve integrated s2Member® Pro Forms, you will NOT have a <code>paypay-rtn.log</code> file, because that particular processor is not used with Pro Form integrations. However, you will have a <code>paypay-ipn.log</code> file, and you will need to make a point of inspecting this file to ensure there were no post-processing issues.</p>'."\n";
-							echo '<p><strong>s2 HTTP API Logs:</strong> &nbsp;&nbsp; If s2Member® is not behaving as expected, and you cannot find errors anywhere in your Payment Gateway log files (or with any core PayPal® processors), please review your <code>s2-http-api-debug.log</code> file too. Look for any HTTP connections where s2Member® is getting <code>403</code>, <code>404</code>, <code>503</code> errors from your server. This can sometimes happen due to <a href="http://www.s2member.com/kb/mod-security-random-503-403-errors/" target="_blank" rel="external">paranoid Mod Security configurations</a>, and it may require you to contact your hosting company for assistance.</p>'."\n";
-							echo '<p style="font-style:italic;"><strong>Archived Log Files:</strong> &nbsp;&nbsp; All s2Member® log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code>. Any log files that contain the word <code>ARCHIVED</code> in their name, are files that reached a size of more than 2MB, so s2Member® archived them automatically to prevent any single log file from becoming too large. Archived log file names will also contain the date/time they were archived by s2Member®. These archived log files typically contain much older (and possibly outdated) log entries.</p>'."\n";
+							echo '<p><strong>Debugging Tips:</strong> &nbsp;&nbsp; It is normal to see a few errors in your log files. This is because s2Member logs ALL of its communication with Payment Gateways. Everything — not just successes. With that in mind, there will be some failures that s2Member expects (to a certain extent); and s2Member deals with these gracefully. What you\'re looking for here, are things that jump right out at you as being a major issue (e.g. when s2Member makes a point of providing details to you in a log entry about problems that should be corrected on your installation). Please read carefully.</p>'."\n";
+							echo '<p><strong>Test Transaction Tips:</strong> &nbsp;&nbsp; Generally speaking, it is best to run test transactions for yourself. Be sure to run your final test transactions against a live Payment Gateway that is NOT in Sandbox/Test Mode (<a href="#" onclick="alert(\'While some Payment Gateways make it possible for you to run test transactions in Sandbox/Test Mode, these are NOT a reliable way to test s2Member.\n\nOften times (particularly with PayPal) Sandbox/Test mode behaves somewhat differently — often with buggy behavior. This can really create frustration for site owners. Therefore, it is always a good idea to run low dollar test transactions against a live Payment Gateway.\n\nAlso, please be sure that you are NOT logged in as an Administrator when running test transactions. For most test transactions, you will want to be completely logged out of your site before completing checkout (just a new Customer would be). If you are testing an upgrade or downgrade (where you DO need to be logged-in), please do NOT attempt this under an Administrative account. s2Member will NOT upgrade/downgrade Administrative accounts — for security purposes.\'); return false;">click here for details</a>). After running test transactions, please review the log file entries pertaining to your transaction. Does s2Member report any major issues? If so, please read through any details that s2Member provides in the log file. If you need assistance, please <a href="http://www.s2member.com/quick-s.php" target="_blank" rel="external">search s2Member.com</a> for answers to common questions.</p>'."\n";
+							echo '<p><strong>s2 Core Processors:</strong> &nbsp;&nbsp; It is normal to have a <code>paypay-ipn.log</code> and/or a <code>paypay-rtn.log</code> file at all times. Ultimately, all Payment Gateway integrations supported by s2Member pass through it\'s core PayPal processors; even if you\'ve integrated with another Payment Gateway. If you are having trouble, and you don\'t find any errors in your Payment Gateway log files, please check the <code>paypay-ipn.log</code> and <code>paypay-rtn.log</code> files too. Regarding s2Member Pro Forms... If you\'ve integrated s2Member Pro Forms, you will NOT have a <code>paypay-rtn.log</code> file, because that particular processor is not used with Pro Form integrations. However, you will have a <code>paypay-ipn.log</code> file, and you will need to make a point of inspecting this file to ensure there were no post-processing issues.</p>'."\n";
+							echo '<p><strong>s2 HTTP API Logs:</strong> &nbsp;&nbsp; If s2Member is not behaving as expected, and you cannot find errors anywhere in your Payment Gateway log files (or with any core PayPal processors), please review your <code>s2-http-api-debug.log</code> file too. Look for any HTTP connections where s2Member is getting <code>403</code>, <code>404</code>, <code>503</code> errors from your server. This can sometimes happen due to <a href="http://www.s2member.com/kb/mod-security-random-503-403-errors/" target="_blank" rel="external">paranoid Mod Security configurations</a>, and it may require you to contact your hosting company for assistance.</p>'."\n";
+							echo '<p style="font-style:italic;"><strong>Archived Log Files:</strong> &nbsp;&nbsp; All s2Member log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code>. Any log files that contain the word <code>ARCHIVED</code> in their name, are files that reached a size of more than 2MB, so s2Member archived them automatically to prevent any single log file from becoming too large. Archived log file names will also contain the date/time they were archived by s2Member. These archived log files typically contain much older (and possibly outdated) log entries.</p>'."\n";
 
 							echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-							echo '<h3>s2Member® Log File Descriptions (for ALL possible log file names)</h3>'."\n";
+							echo '<h3>s2Member Log File Descriptions (for ALL possible log file names)</h3>'."\n";
 
 							echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
