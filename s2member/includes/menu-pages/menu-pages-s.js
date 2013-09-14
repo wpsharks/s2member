@@ -19,7 +19,7 @@ jQuery(document).ready(function($)
 			{
 				return String(str).replace(/"/g, '&quot;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
 			};
-		if(location.href.match /* Any & all s2Member® pages. */(/page\=ws-plugin--s2member/))
+		if(location.href.match /* Any & all s2Member pages. */(/page\=ws-plugin--s2member/))
 			{
 				$('input.ws-plugin--s2member-update-roles-button, input.ws-plugin--s2member-reset-roles-button').click(function()
 					{
@@ -873,12 +873,12 @@ jQuery(document).ready(function($)
 
 						if(autoConfigDistrosStatusValue === 'configured' && ((visiblePrivateKeyIdPrevConfigValue && visiblePrivateKeyIdValue !== visiblePrivateKeyIdPrevConfigValue) || (hiddenPrivateKeyPrevConfigValue && hiddenPrivateKeyValue !== hiddenPrivateKeyPrevConfigValue)))
 							{
-								alert('s2Member will need to delete and re-configure your Amazon® CloudFront distributions if you change this. When you\'re done editing, click (Save All Changes) below.');
+								alert('s2Member will need to delete and re-configure your Amazon CloudFront distributions if you change this. When you\'re done editing, click (Save All Changes) below.');
 								$autoConfigDistros.attr /* Forcibly check. */('checked', 'checked');
 							}
 						else if(autoConfigDistrosStatusValue !== 'configured' && visiblePrivateKeyIdValue && hiddenPrivateKeyValue)
 							{
-								alert('s2Member will need to auto-configure your Amazon® CloudFront distributions for you. When you\'re done editing, click (Save All Changes) below.');
+								alert('s2Member will need to auto-configure your Amazon CloudFront distributions for you. When you\'re done editing, click (Save All Changes) below.');
 								$autoConfigDistros.attr /* Forcibly check. */('checked', 'checked');
 							}
 					};
@@ -937,7 +937,7 @@ jQuery(document).ready(function($)
 						if /* Only if there is a problem with the actual values; because this causes interruptions. */(value.match(/[^a-z_0-9,]/))
 							this.value = _all+$.trim($.trim(value).replace(/[ \-]/g, '_').replace(/[^a-z_0-9,]/gi, '').toLowerCase());
 					});
-				ws_plugin__s2member_paypalButtonGenerate = /* Handles PayPal® Button Generation. */ function(button)
+				ws_plugin__s2member_paypalButtonGenerate = /* Handles PayPal Button Generation. */ function(button)
 					{
 						var shortCodeTemplate = '[s2Member-PayPal-Button %%attrs%% image="default" output="button" /]', shortCodeTemplateAttrs = '', labels = {};
 
@@ -1064,7 +1064,7 @@ jQuery(document).ready(function($)
 							});
 						return false;
 					};
-				ws_plugin__s2member_paypalCcapButtonGenerate = /* Handles PayPal® Button Generation for Independent Capabilities. */ function()
+				ws_plugin__s2member_paypalCcapButtonGenerate = /* Handles PayPal Button Generation for Independent Capabilities. */ function()
 					{
 						var shortCodeTemplate = '[s2Member-PayPal-Button %%attrs%% image="default" output="button" /]', shortCodeTemplateAttrs = '';
 
@@ -1133,7 +1133,7 @@ jQuery(document).ready(function($)
 							});
 						return false;
 					};
-				ws_plugin__s2member_paypalSpButtonGenerate = /* Handles PayPal® Button Generation for Specific Post/Page Access. */ function()
+				ws_plugin__s2member_paypalSpButtonGenerate = /* Handles PayPal Button Generation for Specific Post/Page Access. */ function()
 					{
 						var shortCodeTemplate = '[s2Member-PayPal-Button %%attrs%% image="default" output="button" /]', shortCodeTemplateAttrs = '';
 
@@ -1193,7 +1193,7 @@ jQuery(document).ready(function($)
 
 						$('div#ws-plugin--s2member-sp-button-prev').html(code.val().replace(/\<form/, '<form target="_blank"').replace(/\<\?php echo S2MEMBER_VALUE_FOR_PP_INV\(\); \?\>/g, Math.round(new Date().getTime())+'~<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr ($_SERVER["REMOTE_ADDR"])); ?>').replace(/\<\?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_(ON0|OS0|ON1|OS1); \?\>/g, ''));
 
-						alert('Your Button has been generated.\nPlease copy/paste the Shortcode into your WordPress® Editor.');
+						alert('Your Button has been generated.\nPlease copy/paste the Shortcode into your WordPress Editor.');
 
 						shortCode.each( /* Focus and select the Shortcode. */function()
 							{
@@ -1201,7 +1201,7 @@ jQuery(document).ready(function($)
 							});
 						return false;
 					};
-				ws_plugin__s2member_paypalRegLinkGenerate = /* Handles PayPal® Link Generation. */ function()
+				ws_plugin__s2member_paypalRegLinkGenerate = /* Handles PayPal Link Generation. */ function()
 					{
 						var level = $('select#ws-plugin--s2member-reg-link-level').val().replace(/[^0-9]/g, '');
 						var subscrID = $.trim($('input#ws-plugin--s2member-reg-link-subscr-id').val());
@@ -1234,7 +1234,7 @@ jQuery(document).ready(function($)
 							});
 						return false;
 					};
-				ws_plugin__s2member_paypalSpLinkGenerate = /* Handles PayPal® Link Generation. */ function()
+				ws_plugin__s2member_paypalSpLinkGenerate = /* Handles PayPal Link Generation. */ function()
 					{
 						var leading = $('select#ws-plugin--s2member-sp-link-leading-id').val().replace(/[^0-9]/g, '');
 						var additionals = $('select#ws-plugin--s2member-sp-link-additional-ids').val() || [];

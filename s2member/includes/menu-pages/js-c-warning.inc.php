@@ -30,8 +30,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_pages_js_c_warning"))
 				public function __construct ()
 					{
 						echo '<p style="margin-top:0;"><strong>Dashboard JavaScript Conflict</strong></p>' . "\n";
-						echo '<p>Something is conflicting with the jQuery JavaScript framework, which s2Member® uses; causing this warning to be visible to you.</p>' . "\n";
-						echo '<p style="margin-bottom:0;">Please deactivate one other plugin at a time until you find the culprit. Or, in Firefox®, see <code>Tools -› Error Console</code>.</p>';
+						echo '<p>Something is conflicting with the jQuery JavaScript framework, which s2Member uses; causing this warning to be visible to you.</p>' . "\n";
+						echo '<p style="margin-bottom:0;">Please deactivate one other plugin at a time until you find the culprit. Or, in Firefox, see <code>Tools -› Error Console</code>.</p>';
 					}
 			}
 	}
