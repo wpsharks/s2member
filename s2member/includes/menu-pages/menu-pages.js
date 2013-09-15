@@ -4,7 +4,7 @@
 * This is the development version of the code.
 * Which ultimately produces menu-pages-min.js.
 *
-* This file is included with all WordPress® themes/plugins by WebSharks, Inc.
+* This file is included with all WordPress themes/plugins by WebSharks, Inc.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}

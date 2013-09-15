@@ -32,7 +32,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 						echo '<div class="wrap ws-menu-page">'."\n";
 
 						echo '<div id="icon-plugins" class="icon32"><br /></div>'."\n";
-						echo '<h2>s2Member® API / List Servers</h2>'."\n";
+						echo '<h2>s2Member API / List Servers</h2>'."\n";
 
 						echo '<table class="ws-menu-page-table">'."\n";
 						echo '<tbody class="ws-menu-page-table-tbody">'."\n";
@@ -48,13 +48,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 							{
 								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_before_mailchimp", get_defined_vars());
 
-								echo '<div class="ws-menu-page-group" title="MailChimp® Integration">'."\n";
+								echo '<div class="ws-menu-page-group" title="MailChimp Integration">'."\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-mailchimp-section">'."\n";
 								echo '<a href="http://www.s2member.com/mailchimp" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/mailchimp-stamp.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
-								echo '<h3>MailChimp® List Server Integration (optional)</h3>'."\n";
-								echo '<p>s2Member can be integrated with MailChimp®. MailChimp® is an email marketing service. MailChimp® makes it easy to send email newsletters to your Customers, manage your MailChimp® subscriber lists, and track campaign performance. Although s2Member can be integrated with almost ANY list server, we highly recommend MailChimp®; because of their <a href="http://www.s2member.com/mailchimp-api-docs" target="_blank" rel="external">powerful API for MailChimp® services</a>. In future versions of s2Member, we plan to build additional features into s2Member that work with, and extend, MailChimp® services.</p>'."\n";
-								echo '<p>For now, we\'ve covered the basics. You can have your Members automatically subscribed to your MailChimp® marketing lists <em>(e.g. newsletters / auto-responders)</em>. You\'ll need a <a href="http://www.s2member.com/mailchimp" target="_blank" rel="external">MailChimp® account</a>, a <a href="http://www.s2member.com/mailchimp-api-key" target="_blank" rel="external">MailChimp® API Key</a>, and your <a href="#" onclick="alert(\'To obtain your MailChimp® List ID(s), log into your MailChimp® account and click the Lists tab. Now click the (View) button, for the List(s) you want to integrate with s2Member. Then, click the (Settings) link. At the bottom of the (Settings) page, for each list; you\\\'ll find a Unique List ID.\'); return false;">MailChimp® List IDs</a>.</p>'."\n";
+								echo '<h3>MailChimp List Server Integration (optional)</h3>'."\n";
+								echo '<p>s2Member can be integrated with MailChimp. MailChimp is an email marketing service. MailChimp makes it easy to send email newsletters to your Customers, manage your MailChimp subscriber lists, and track campaign performance. Although s2Member can be integrated with almost ANY list server, we highly recommend MailChimp; because of their <a href="http://www.s2member.com/mailchimp-api-docs" target="_blank" rel="external">powerful API for MailChimp services</a>. In future versions of s2Member, we plan to build additional features into s2Member that work with, and extend, MailChimp services.</p>'."\n";
+								echo '<p>For now, we\'ve covered the basics. You can have your Members automatically subscribed to your MailChimp marketing lists <em>(e.g. newsletters / auto-responders)</em>. You\'ll need a <a href="http://www.s2member.com/mailchimp" target="_blank" rel="external">MailChimp account</a>, a <a href="http://www.s2member.com/mailchimp-api-key" target="_blank" rel="external">MailChimp API Key</a>, and your <a href="#" onclick="alert(\'To obtain your MailChimp List ID(s), log into your MailChimp account and click the Lists tab. Now click the (View) button, for the List(s) you want to integrate with s2Member. Then, click the (Settings) link. At the bottom of the (Settings) page, for each list; you\\\'ll find a Unique List ID.\'); return false;">MailChimp List IDs</a>.</p>'."\n";
 								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_during_mailchimp", get_defined_vars());
 
 								echo '<table class="form-table">'."\n";
@@ -63,7 +63,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 								echo '<th>'."\n";
 								echo '<label for="ws-plugin--s2member-mailchimp-api-key">'."\n";
-								echo 'MailChimp® API Key:'."\n";
+								echo 'MailChimp API Key:'."\n";
 								echo '</label>'."\n";
 								echo '</th>'."\n";
 
@@ -72,7 +72,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_mailchimp_api_key" id="ws-plugin--s2member-mailchimp-api-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"]).'" /><br />'."\n";
-								echo 'Once you have a MailChimp® account, you\'ll need to <a href="http://www.s2member.com/mailchimp-api-key" target="_blank" rel="external">add an API Key</a>.'."\n";
+								echo 'Once you have a MailChimp account, you\'ll need to <a href="http://www.s2member.com/mailchimp-api-key" target="_blank" rel="external">add an API Key</a>.'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -102,14 +102,14 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 								echo '</tbody>'."\n";
 								echo '</table>'."\n";
-								
+
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
-								
+
 								echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
-								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems during MailChimp® processing. See: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Files (Debug)</a>.</span></p>'."\n";
+								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems during MailChimp processing. See: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Files (Debug)</a>.</span></p>'."\n";
 								echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
 								echo '</div>'."\n";
-								
+
 								echo '</div>'."\n";
 
 								echo '</div>'."\n";
@@ -121,15 +121,15 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 							{
 								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_before_aweber", get_defined_vars());
 
-								echo '<div class="ws-menu-page-group" title="AWeber® Integration">'."\n";
+								echo '<div class="ws-menu-page-group" title="AWeber Integration">'."\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-aweber-section">'."\n";
 								echo '<a href="http://www.s2member.com/aweber" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/aweber-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
-								echo '<h3>AWeber® List Server Integration (optional)</h3>'."\n";
-								echo '<p>s2Member can be integrated with AWeber®. AWeber® is an email marketing service. Whether you\'re looking to get your first email campaign off the ground, or you\'re a seasoned veteran who wants to dig into advanced tools like detailed email web analytics, activity based segmentation, geo-targeting and broadcast split-testing, AWeber\'s got just what you need to make email marketing work for you.</p>'."\n";
-								echo '<p>You can have your Members automatically subscribed to your AWeber® marketing lists <em>(e.g. newsletters / auto-responders)</em>. You\'ll need an <a href="http://www.s2member.com/aweber" target="_blank" rel="external">AWeber® account</a> and your <a href="#" onclick="alert(\'To obtain your AWeber® List ID(s), log into your AWeber® account. Click on the Lists tab. On that page you\\\'ll find a Unique List ID associated with each of your lists. AWeber® sometimes refers to this as a List Name instead of a List ID.\'); return false;">AWeber® List IDs</a>. You will ALSO need to configure a <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">Custom Email Parser</a> inside your AWeber® account.</p>'."\n";
-								echo '<p>Log into AWeber®, and go to <em>My Lists -› Email Parser</em>. If you like, choose the PayPal® Parser <em>(even if you\'re not using PayPal® as your Payment Gateway)</em>. You can safely ignore the additional instructions they provide. s2Member just needs the PayPal® box checked, and that\'s all. Or, even better, integrate <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">s2Member\'s Custom Email Parser</a> for AWeber, which <strong>will improve reliability</strong> and flexibility.</p>'."\n";
-								echo '<p><em><strong>AWeber® Tip:</strong> If you want your Members to be subscribed to multiple AWeber® List IDs at the same time, instead of comma-delimiting those List IDs here; we suggest a single List ID in your s2Member® integration; then use <a href="https://help.aweber.com/entries/21696463-Can-I-Add-Subscribers-to-More-Than-One-List-At-Once-" target="_blank" rel="external">AWeber® Automation Rules</a> for this. Automation Rules can also reduce the number of email confirmation notices that Members receive.</em></p>'."\n";
+								echo '<h3>AWeber List Server Integration (optional)</h3>'."\n";
+								echo '<p>s2Member can be integrated with AWeber. AWeber is an email marketing service. Whether you\'re looking to get your first email campaign off the ground, or you\'re a seasoned veteran who wants to dig into advanced tools like detailed email web analytics, activity based segmentation, geo-targeting and broadcast split-testing, AWeber\'s got just what you need to make email marketing work for you.</p>'."\n";
+								echo '<p>You can have your Members automatically subscribed to your AWeber marketing lists <em>(e.g. newsletters / auto-responders)</em>. You\'ll need an <a href="http://www.s2member.com/aweber" target="_blank" rel="external">AWeber account</a> and your <a href="#" onclick="alert(\'To obtain your AWeber List ID(s), log into your AWeber account. Click on the Lists tab. On that page you\\\'ll find a Unique List ID associated with each of your lists. AWeber sometimes refers to this as a List Name instead of a List ID.\'); return false;">AWeber List IDs</a>. You will ALSO need to configure a <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">Custom Email Parser</a> inside your AWeber account.</p>'."\n";
+								echo '<p>Log into AWeber, and go to <em>My Lists -› Email Parser</em>. If you like, choose the PayPal Parser <em>(even if you\'re not using PayPal as your Payment Gateway)</em>. You can safely ignore the additional instructions they provide. s2Member just needs the PayPal box checked, and that\'s all. Or, even better, integrate <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">s2Member\'s Custom Email Parser</a> for AWeber, which <strong>will improve reliability</strong> and flexibility.</p>'."\n";
+								echo '<p><em><strong>AWeber Tip:</strong> If you want your Members to be subscribed to multiple AWeber List IDs at the same time, instead of comma-delimiting those List IDs here; we suggest a single List ID in your s2Member integration; then use <a href="https://help.aweber.com/entries/21696463-Can-I-Add-Subscribers-to-More-Than-One-List-At-Once-" target="_blank" rel="external">AWeber Automation Rules</a> for this. Automation Rules can also reduce the number of email confirmation notices that Members receive.</em></p>'."\n";
 								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_during_aweber", get_defined_vars());
 
 								echo '<table class="form-table">'."\n";
@@ -159,14 +159,14 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 								echo '</tbody>'."\n";
 								echo '</table>'."\n";
-								
+
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
-								
+
 								echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
-								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems during AWeber® processing. See: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Files (Debug)</a>.</span></p>'."\n";
+								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems during AWeber processing. See: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Files (Debug)</a>.</span></p>'."\n";
 								echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
 								echo '</div>'."\n";
-								
+
 								echo '</div>'."\n";
 
 								echo '</div>'."\n";
@@ -243,7 +243,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-opt-out-section">'."\n";
 								echo '<h3>Automate Un-Subscribe/Opt-Out Removals (optional)</h3>'."\n";
 								echo '<p>s2Member can automatically <em>(and silently)</em> remove Users/Members from the List Servers you\'ve configured above. s2Member is also capable of automating this, based on your own personal configuration preferences. Below, you can choose which Events you consider grounds for List Removal. It is also important to point out that s2Member will ONLY remove Users/Members from the Lists you\'ve configured at the Level the User/Member is or was at during the time of the Event. For example, if a Level #1 Member is deleted, they will ONLY be removed from the List(s) you\'ve configured at Level #1. If an account is upgraded from Level #1 to Level #2, they will ONLY be removed from the List(s) you\'ve configured at Level #1. Of course, all of this is based on the configuration below.</p>'."\n";
-								echo '<p><em><strong>*Regarding AWeber®*</strong> these will NOT work for AWeber® until you <a href="http://www.s2member.com/aweber-notification-email" target="_blank" rel="external">add a Notification Email</a> to your AWeber® account matching the "EMail From Address" configured in <code>s2Member -› General Options -› EMail Configuration</code>. Which is currently set to: <code>'.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"]).'</code>. This is a required step if you want s2Member to be authenticated when it emails List Removal requests to AWeber®.</em></p>'."\n";
+								echo '<p><em><strong>*Regarding AWeber*</strong> these will NOT work for AWeber until you <a href="http://www.s2member.com/aweber-notification-email" target="_blank" rel="external">add a Notification Email</a> to your AWeber account matching the "EMail From Address" configured in <code>s2Member -› General Options -› EMail Configuration</code>. Which is currently set to: <code>'.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"]).'</code>. This is a required step if you want s2Member to be authenticated when it emails List Removal requests to AWeber.</em></p>'."\n";
 								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_during_opt_out", get_defined_vars());
 
 								echo '<table class="form-table">'."\n";
@@ -287,7 +287,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 								echo '</select><br />'."\n";
 								echo '<em><strong>*Transitions*</strong> When/if s2Member automatically removes a Member from Lists at their current Level# (based on your configuration in the previous section), this setting tells s2Member that it should <strong>also</strong> transition the Member to any Lists you\'ve configured at the new Access Level# (i.e. Role) they are being changed to. For example, if a Member is demoted from Level #1 to Level #0, do you want s2Member to add them to the Level #0 List(s) after it removes them from the Level #1 List(s)?</em><br /><br />'."\n";
 								echo '<em><strong>*If removed from a previous list, or NOT?*</strong> You can choose your preference above. When/if s2Member automatically transitions a mailing list subscriber, it will first try to remove the subscriber from a previous mailing list. If s2Member is able to remove the subscriber from a previous list before the transition takes place, s2Member will then make an attempt (based on your configuration) to transition the subscriber to a new/different list silently (e.g. without a new confirmation email being sent out). If s2Member is NOT able to remove a subscriber from a previous list, it can - (if configured to do so), still transition a subscriber to a new list, by sending the subscriber a new email confirmation letter (e.g. this is NOT silent, because you absolutely NEED the subscriber\'s permission in this case).</em><br /><br />'."\n";
-								echo '<em><strong>*Seamless with MailChimp®*</strong> If enabled, Automatic List Transitions work seamlessly with MailChimp®. Automatic List Transitions also work with AWeber®, but AWeber® will ALWAYS send the User/Member a new confirmation email, asking them to confirm changes to their mailing list subscription with you. Work is underway to improve this aspect of s2Member\'s integration with AWeber® in a future release. Ideally, a Customer would be transitioned silently behind the scene with AWeber® too, when appropriate.</em>'."\n";
+								echo '<em><strong>*Seamless with MailChimp*</strong> If enabled, Automatic List Transitions work seamlessly with MailChimp. Automatic List Transitions also work with AWeber, but AWeber will ALWAYS send the User/Member a new confirmation email, asking them to confirm changes to their mailing list subscription with you. Work is underway to improve this aspect of s2Member\'s integration with AWeber in a future release. Ideally, a Customer would be transitioned silently behind the scene with AWeber too, when appropriate.</em>'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";

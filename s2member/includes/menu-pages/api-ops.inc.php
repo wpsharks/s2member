@@ -32,7 +32,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 						echo '<div class="wrap ws-menu-page">' . "\n";
 
 						echo '<div id="icon-plugins" class="icon32"><br /></div>' . "\n";
-						echo '<h2>s2Member® API / Notifications</h2>' . "\n";
+						echo '<h2>s2Member API / Notifications</h2>' . "\n";
 
 						echo '<table class="ws-menu-page-table">' . "\n";
 						echo '<tbody class="ws-menu-page-table-tbody">' . "\n";
@@ -55,7 +55,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<h3>Signup Notification URLs (optional)</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever a new Subscription is created, you\'ll want to read this section. This is marked `Signup`, because the URLs that you list below, will be notified each time a "new", "paying" Member signs up. Depending on your fee structure, this may include a payment that establishes their Subscription, or it may not. This Notification will only be triggered once for each Member. Signup Notifications are sent right after a "new", "paying" Member signs up successfully through your Payment Gateway, regardless of whether any money has actually been transacted. In other words, this Notification is triggered anytime a "new", "paying" Member signs up through your Payment Gateway, even if you provided them with something for free <em>(e.g. even if no money is being transacted)</em>.</p>' . "\n";
 								echo '<p>This Notification will NOT be processed for Free Subscribers that register without going through your Payment Gateway at all (e.g. they simply register on-site; and there is no checkout whatsoever). This Notification will NOT be processed when an "existing" User/Member pays for a new Subscription <em>(see: Modification Notifications for that scenario)</em>.' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' And, this Notification will NOT be processed on Buy Now transactions for Independent Custom Capabilities <em>(see: Payment Notifications for that scenario)</em>.') . '</p>' . "\n";
-								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Signup Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
+								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Signup Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_signup_notifications", get_defined_vars ());
 
@@ -95,7 +95,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
-									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member® Pro Forms):</strong>' . "\n";
+									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
 									echo '<ul>' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
@@ -156,8 +156,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-registration-notifications-section">' . "\n";
 								echo '<h3>Registration Notification URLs (optional)</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever a "new" Member is created, you\'ll want to read this section. This is marked `Registration`, because the URLs that you list below, will be notified each time a "new" Member registers a Username. This is usually triggered right after a `Signup` Notification; at the point in which a "new" Member successfully completes the Registration form, and they are assigned a Username.</p>' . "\n";
-								echo '<p>This Notification is ALSO triggered whenever you create a "new" User inside your WordPress® Dashboard.</p>' . "\n";
-								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Registration Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
+								echo '<p>This Notification is ALSO triggered whenever you create a "new" User inside your WordPress Dashboard.</p>' . "\n";
+								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Registration Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_registration_notifications", get_defined_vars ());
 
@@ -191,7 +191,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_login%%</code> = The Username the Member selected during registration.</li>' . "\n";
 								echo '<li><code>%%user_pass%%</code> = The Password selected or generated during registration.</li>' . "\n";
 								echo '<li><code>%%user_ip%%</code> = The User\'s IP Address, detected via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
-								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID generated during registration.</li>' . "\n";
+								echo '<li><code>%%user_id%%</code> = A unique WordPress User ID generated during registration.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
@@ -259,7 +259,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever payment transactions <em>(including Recurring Payments)</em> take place, you\'ll want to read this section. This is marked `Payment`, because the URLs that you list below, will be notified each time an actual payment occurs. Depending on your fee structure, this may include a first Initial Payment that establishes a Subscription. But more importantly, this will be triggered on all future payments that are received for the lifetime of the Subscription.</p>' . "\n";
 								echo '<p>So, unlike the `Signup` Notification, `Payment` Notifications take place whenever actual payments are received, instead of just once after signup is completed. If a payment is required during signup <em>(i.e. no Free Trial is being offered)</em>, a Signup Notification will be triggered, and a Payment Notification will ALSO be triggered. In other words, a Payment Notification occurs anytime funds are received, no matter what.</p>' . "\n";
 								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p>Payment Notifications are also triggered whenever a Buy Now purchase for Independent Custom Capabilities takes place.</p>' . "\n" : '';
-								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Payment Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
+								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Payment Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_payment_notifications", get_defined_vars ());
 
@@ -297,12 +297,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_email%%</code> = The Email Address associated with their User account. This might be different than what is on file with your Payment Gateway.</li>' . "\n";
 								echo '<li><code>%%user_login%%</code> = The Username associated with their account. The Customer created this during registration.</li>' . "\n";
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
-								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
+								echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
-									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member® Pro Forms):</strong><br />' . "\n";
+									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong><br />' . "\n";
 									echo '<em>These are ONLY included with payments that occur during checkout. They will NOT be provided with any future recurring payments.</em>'."\n";
 									echo '<ul>' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
@@ -373,10 +373,10 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-modification-notifications-section">' . "\n";
 								echo '<h3>Modification Notification URLs (optional)</h3>' . "\n";
-								echo '<p>If you use affiliate software, or have back-office routines that need to be notified each time a new Subscription is created by an "existing" User/Member, or an "existing" Member modifies their paid Subscription terms, you\'ll want to read this section. This is marked `Modification`, because the URLs that you list below, will be notified each time an "existing" User/Member <em>(even if they are/were a Free Subscriber)</em> signs up for a paid Subscription <em>(i.e. a Modification takes place against an existing account within WordPress®)</em>, or an "existing" Member modifies their paid Subscription terms <em>(again, a Modification takes places against an existing account within WordPress®)</em>. Depending on your fee structure, this may include a payment that establishes their Subscription, or it may not.</p>' . "\n";
+								echo '<p>If you use affiliate software, or have back-office routines that need to be notified each time a new Subscription is created by an "existing" User/Member, or an "existing" Member modifies their paid Subscription terms, you\'ll want to read this section. This is marked `Modification`, because the URLs that you list below, will be notified each time an "existing" User/Member <em>(even if they are/were a Free Subscriber)</em> signs up for a paid Subscription <em>(i.e. a Modification takes place against an existing account within WordPress)</em>, or an "existing" Member modifies their paid Subscription terms <em>(again, a Modification takes places against an existing account within WordPress)</em>. Depending on your fee structure, this may include a payment that establishes their Subscription, or it may not.</p>' . "\n";
 								echo '<p>Modification Notifications are sent right after a Member signs up and/or modifies billing terms successfully through your Payment Gateway, regardless of whether any money has actually been transacted. In other words, this Notification is triggered, even if you provided them with something for free <em>(e.g. even if no money is being transacted)</em>.</p>' . "\n";
 								echo '<p>This Notification will NOT be processed for "new" Users/Members <em>(see: Signup Notifications for that scenario)</em>.' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' And, this Notification will NOT be processed for Independent Custom Capability purchases <em>(see: Payment Notifications for that scenario)</em>.') . '</p>' . "\n";
-								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Modification Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
+								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Modification Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_modification_notifications", get_defined_vars ());
 
@@ -417,12 +417,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_email%%</code> = The Email Address associated with their User account. This might be different than what is on file with your Payment Gateway.</li>' . "\n";
 								echo '<li><code>%%user_login%%</code> = The Username associated with their account. The Customer created this during registration.</li>' . "\n";
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
-								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
+								echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
-									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member® Pro Forms):</strong>' . "\n";
+									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
 									echo '<ul>' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
@@ -491,7 +491,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-cancellation-notifications-section">' . "\n";
 								echo '<h3>Cancellation Notification URLs (optional)</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever Subscriptions are cancelled through your Payment Gateway, you\'ll want to read this section. This is marked `Cancellation`, because the URLs that you list below, will be notified each time a Subscription is cancelled. A Cancellation is triggered when you cancel a Customer\'s Subscription through your Payment Gateway, or when a Customer cancels their own Subscription.</p>' . "\n";
-								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Cancellation Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
+								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Cancellation Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><em><strong>*Understanding Cancellations*</strong> It\'s important to realize that a Cancellation is not an EOT (End Of Term). All that happens during a Cancellation event, is that billing is stopped, and it\'s understood that the Customer is going to lose access, at some point in the future. This does NOT mean, that access will be revoked immediately. A separate EOT event will automatically handle a (demotion or deletion) later, at the appropriate time; which could be several days, or even a year after the Cancellation took place.</em></p>' . "\n";
 								echo '<p><em><strong>*Some Hairy Details*</strong> There might be times whenever you notice that a Member\'s Subscription has been cancelled through your Payment Gateway... but, s2Member continues allowing the User access to your site as a paid Member. Please don\'t be confused by this... in 99.9% of these cases, the reason for this is legitimate. s2Member will only remove the User\'s Membership privileges when an EOT (End Of Term) is processed, a refund occurs, a chargeback occurs, or when a cancellation occurs - which would later result in a delayed Auto-EOT by s2Member.</em></p>' . "\n";
 								echo '<p><em>s2Member will not process an EOT (End Of Term) until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system (based on your configuration). s2Member also calculates one extra day (24 hours) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>' . "\n";
@@ -526,7 +526,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_email%%</code> = The Email Address associated with their User account. This might be different than what is on file with your Payment Gateway.</li>' . "\n";
 								echo '<li><code>%%user_login%%</code> = The Username associated with their account. The Customer created this during registration.</li>' . "\n";
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
-								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
+								echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
@@ -593,8 +593,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<h3>EOT/Deletion Notification URLs (optional)</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever Subscriptions have ended <em>(and a Member is demoted to a Free Subscriber)</em>, or when an account is deleted from the system, you\'ll want to read this section. This is marked `EOT/Deletion`, because the URLs that you list below, will be notified in both cases.</p>' . "\n";
 								echo '<p><strong>EOT = End Of Term.</strong> An EOT is triggered <em>immediately</em> when you refund a Customer, when a Customer forces a chargeback to occur, or when a paid Subscription ends naturally <em>(i.e. expires)</em>, and your Payment Gateway sends s2Member an EOT (End Of Term) response. Delayed EOTs occur after a Cancellation, either as a result of you cancelling a Customer\'s Subscription, or a Customer cancelling their own Subscription. A Cancellation usually results in a delayed EOT, because a Cancellation does NOT always warrant an immediate action; there could still be time left on their Subscription.</p>' . "\n";
-								echo '<p>Manual Deletions will trigger this Notification too. If you delete an account manually from within your WordPress® Dashboard, your URLs can be notified automatically through this API Notification, and this scenario can be detected through the Replacement Code <code>%%eot_del_type%%</code>, which is documented below. So the two events are an EOT <em>(of any kind)</em> and/or a Manual Deletion.</p>' . "\n";
-								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These EOT/Deletion Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
+								echo '<p>Manual Deletions will trigger this Notification too. If you delete an account manually from within your WordPress Dashboard, your URLs can be notified automatically through this API Notification, and this scenario can be detected through the Replacement Code <code>%%eot_del_type%%</code>, which is documented below. So the two events are an EOT <em>(of any kind)</em> and/or a Manual Deletion.</p>' . "\n";
+								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These EOT/Deletion Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><em><strong>*Some Hairy Details*</strong> There might be times whenever you notice that a Member\'s Subscription has been cancelled through your Payment Gateway... but, s2Member continues allowing the User access to your site as a paid Member. Please don\'t be confused by this... in 99.9% of these cases, the reason for this is legitimate. s2Member will only remove the User\'s Membership privileges when an EOT (End Of Term) is processed, a refund occurs, a chargeback occurs, or when a cancellation occurs - which would later result in a delayed Auto-EOT by s2Member.</em></p>' . "\n";
 								echo '<p><em>s2Member will not process an EOT (End Of Term) until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system (based on your configuration). s2Member also calculates one extra day (24 hours) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
@@ -627,7 +627,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%user_email%%</code> = The Email Address associated with their User account. This might be different than what is on file with your Payment Gateway.</li>' . "\n";
 								echo '<li><code>%%user_login%%</code> = The Username associated with their account. The Customer created this during registration.</li>' . "\n";
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
-								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
+								echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
@@ -695,7 +695,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever Subscriptions have been refunded or reversed <em>(i.e. charged back to you)</em>, you\'ll want to read this section. This is marked `Refund/Reversal`, because the URLs that you list below, will ONLY be notified in those specific cases, as opposed to EOT/Deletion Notifications, which are all-inclusive.</p>' . "\n";
 								echo '<p>This is very similar to the EOT/Deletion Notification described above. However, there is an important distinction. The all-inclusive EOT/Deletion Notification includes cancellations, expirations, failed payments, refunds, chargebacks, and even manual deletions by the Administrator from within the Dashboard. In other words, EOT/Deletion Notifications are processed ANY time a deletion or End Of Term action takes place. This API Notification, that is, Refund/Reversal Notifications, do NOT include all of those scenarios.</p>' . "\n";
 								echo '<p>So the distinction is that Refund/Reversal Notifications are ONLY sent under two specific circumstances: 1. You log into your Payment Gateway and refund a payment that is associated with a Subscription. 2. The Customer complains to your Payment Gateway and a chargeback occurs, forcing a Reversal. In both of these cases, an EOT/Deletion Notification will be sent <em>(as described in the previous section)</em>, but since EOT/Deletion is a broader Notification, these Refund/Reversal Notifications are here so you can nail down specific back-office operations in these two specific scenarios.</p>' . "\n";
-								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Refund/Reversal Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
+								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Refund/Reversal Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_refund_reversal_notifications", get_defined_vars ());
 
@@ -729,7 +729,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<li><code>%%item_number%%</code> = The Item Number (colon separated <em>level:custom_capabilities:fixed term</em>) that the payment was for.</li>' . "\n";
 								echo '<li><code>%%item_name%%</code> = The Item Name (as provided by the <code>desc=""</code> attribute in your Shortcode, which briefly describes the Item Number).</li>' . "\n";
 								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
-								echo '<li><code>%%user_id%%</code> = A unique WordPress® User ID that references this account in the WordPress® database.</li>' . "\n";
+								echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>' . "\n";
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
@@ -796,7 +796,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<h3>Specific Post/Page ~ Sale Notification URLs (optional)</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever Specific Post/Page sales take place, you\'ll want to read this section. This is marked `Specific Post/Page`, because the URLs that you list below, will be notified each time a payment occurs, on a sale providing access to a Specific Post/Page.</p>' . "\n";
 								echo '<p>This is one of only two API Notifications that are sent for Specific Post/Page Access <em>(i.e. this one, and another below, for Refunds/Reversals)</em>. All of the other API Notifications are designed for Membership Level Access' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' and Independent Custom Capabilities') . '. None of the other API Notifications will ever be processed for Specific Post/Page Access. If you intend to respond to events related to Specific Post/Page Access, you MUST use one of the two API Notifications specifically geared to Post/Page Access.</p>' . "\n";
-								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Sale Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
+								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Sale Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_sp_sale_notifications", get_defined_vars ());
 
@@ -834,7 +834,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
-									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member® Pro Forms):</strong>' . "\n";
+									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
 									echo '<ul>' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
@@ -898,7 +898,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<h3>Specific Post/Page ~ Refund/Reversal Notification URLs (optional)</h3>' . "\n";
 								echo '<p>If you use affiliate software, or have back-office routines that need to be notified whenever sales have been refunded or reversed <em>(i.e. charged back to you)</em>, you\'ll want to read this section. This is marked `Specific Post/Page`, because the URLs that you list below, will be notified each time a Refund or Reversal occurs, on a sale that provided access to a Specific Post/Page.</p>' . "\n";
 								echo '<p>This is one of only two Notifications that are sent for Specific Post/Page Access <em>(i.e. this one, and another above, for Sales)</em>. All of the other API Notifications are designed for Membership Level Access' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' and Independent Custom Capabilities') . '. None of the other API Notifications will ever be processed for Specific Post/Page Access. If you intend to respond to events related to Specific Post/Page Access, you MUST use one of the two API Notifications specifically geared to Post/Page Access.</p>' . "\n";
-								echo '<p>Please note, this feature is not to be confused with the PayPal® IPN service. PayPal® IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Refund/Reversal Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
+								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Refund/Reversal Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_sp_refund_reversal_notifications", get_defined_vars ());
 
