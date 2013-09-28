@@ -54,7 +54,7 @@ div.ws-menu-page div.ws-menu-page-hr
 		height: 1px;
 		line-height: 1px;
 		background: #DDDDDD;
-		margin: 20px 0 20px 0;
+		margin: 5px 0 5px 0;
 	}
 div.ws-menu-page .ws-menu-page-hilite
 	{
@@ -147,10 +147,12 @@ table.ws-menu-page-table ol
 table.ws-menu-page-table ul > li
 	{
 		list-style: disc outside;
+		margin-bottom: 0;
 	}
 table.ws-menu-page-table ol > li
 	{
 		list-style: decimal outside;
+		margin-bottom: 0;
 	}
 table.ws-menu-page-table > tbody > tr
 	{
@@ -201,14 +203,14 @@ table.ws-menu-page-table div.ws-menu-page-groups-hide
 		height: 24px;
 		width: 24px;
 		color: #333333;
-		padding: 10px;
+		padding: 3px;
 		cursor: pointer;
 		font-size: 28px;
 		font-weight: bold;
-		line-height: 24px;
+		line-height: 25px;
 		text-align: center;
 		background: #FFFFFF;
-		margin: 0 0 0 20px;
+		margin: 0 0 0 7px;
 		vertical-align: middle;
 		font-family: monospace;
 		border: 1px solid #666666;
@@ -229,13 +231,13 @@ table.ws-menu-page-table div.ws-menu-page-r-group-header
 	{
 		height: 24px;
 		color: #666666;
-		padding: 10px;
+		padding: 3px;
 		cursor: pointer;
 		font-size: 19px;
-		line-height: 24px;
+		line-height: 20px;
 		position: relative;
 		background: #FFFFFF;
-		margin: 30px 0 30px 0;
+		margin: 7px 0 7px 0;
 		vertical-align: middle;
 		font-family: 'Georgia', serif;
 		border: 1px solid #CCCCCC;
@@ -291,7 +293,7 @@ table.ws-menu-page-table div.ws-menu-page-group,
 table.ws-menu-page-table div.ws-menu-page-r-group
 	{
 		display: none;
-		margin: -35px 5px 0 5px;
+		margin: -15px 5px 0 5px;
 		padding: 20px 10px 10px 10px;
 		border: 1px solid #CCCCCC;
 		-moz-border-radius: 5px;
@@ -314,13 +316,13 @@ table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > 
 		width: auto;
 		color: #164A61;
 		font-size: 115%;
-		padding: 10px 10px 0 0;
+		padding: 0 0.5em 0 0;
 		font-family: 'Georgia', serif;
 	}
 table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td
 	{
 		width: auto;
-		padding: 8px 10px 8px 0;
+		padding: 0.5em 10px 0.5em 0;
 	}
 table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > th.ws-menu-page-th-side
 	{
@@ -396,10 +398,12 @@ div.ws-menu-page-readme > div.readme > div.section > div.content ol
 div.ws-menu-page-readme > div.readme > div.section > div.content ul > li
 	{
 		list-style: disc outside;
+		margin-bottom: 0;
 	}
 div.ws-menu-page-readme > div.readme > div.section > div.content ol > li
 	{
 		list-style: decimal outside;
+		margin-bottom: 0;
 	}
 /*
 Specifically for the right sidebar panel.
