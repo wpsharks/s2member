@@ -113,7 +113,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 							{
 								$per_process = apply_filters ("ws_plugin__s2member_auto_eot_system_per_process", $per_process, get_defined_vars ());
 
-								if (is_array ($eots = $wpdb->get_results ("SELECT `user_id` AS `ID` FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "s2member_auto_eot_time' AND `meta_value` != '' AND `meta_value` <= '" . $wpdb->escape (strtotime ("now")) . "' LIMIT " . $per_process)))
+								if (is_array ($eots = $wpdb->get_results ("SELECT `user_id` AS `ID` FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "s2member_auto_eot_time' AND `meta_value` != '' AND `meta_value` <= '" . esc_sql(strtotime ("now")) . "' LIMIT " . $per_process)))
 									{
 										foreach /* Go through the array of EOTS. We need to (demote|delete) each of them. */ ($eots as $eot)
 											{

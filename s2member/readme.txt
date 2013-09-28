@@ -49,7 +49,7 @@ s2Member® — a powerful (free) membership plugin for WordPress®. Protect memb
 
 == Installation ==
 
-**NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled in [our own support forums](http://www.s2member.com/forums/).
+**NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled at [s2Member.com](https://www.s2member.com/contact/?s2-ssl=yes).
 
 = s2Member® is very easy to install (instructions) =
 1. Upload the `/s2member` folder to your `/wp-content/plugins/` directory.
@@ -64,7 +64,7 @@ Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networki
 
 == Description ==
 
-**NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled in [our own support forums](http://www.s2member.com/forums/).
+**NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled at [s2Member.com](https://www.s2member.com/contact/?s2-ssl=yes).
 
 [youtube http://www.youtube.com/watch?v=2C3Lan7vxw0 /]
 
@@ -78,13 +78,13 @@ You can learn more about s2Member® at [s2Member.com](http://www.s2member.com/).
 
 == Frequently Asked Questions ==
 
-**NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled in [our own support forums](http://www.s2member.com/forums/).
+**NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled at [s2Member.com](https://www.s2member.com/contact/?s2-ssl=yes).
 
 = Please check the following s2Member® resources: =
 * s2Member® FAQs: http://www.s2member.com/faqs/
 * Knowledge Base: http://www.s2member.com/kb/
 * Video Tutorials: http://www.s2member.com/videos/
-* Support Forums: http://www.s2member.com/forums/
+* Community: http://www.s2member.com/forums/
 * Codex: http://www.s2member.com/codex/
 
 = Translating s2Member® =
