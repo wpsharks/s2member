@@ -171,22 +171,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_2", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
-								if /* Shortcut. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_new_user_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member / Add A Member", "Add A Member", "create_users", "user-new.php");
-
-								if /* Shortcut. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_browse_users_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member / Browse Members", "Browse Members", "create_users", "users.php");
-
-								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_3", true, get_defined_vars()))
-									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
-
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page", true, get_defined_vars()))
 									add_submenu_page($menu, "s2Member PayPal Options", "PayPal Options", "create_users", "ws-plugin--s2member-paypal-ops", "c_ws_plugin__s2member_menu_pages::paypal_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page", true, get_defined_vars()))
 									add_submenu_page($menu, "s2Member PayPal Buttons", "PayPal Buttons", "create_users", "ws-plugin--s2member-paypal-buttons", "c_ws_plugin__s2member_menu_pages::paypal_buttons_page");
 
-								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_4", true, get_defined_vars()))
+								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_3", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_trk_ops_page", true, get_defined_vars()))
@@ -201,19 +192,19 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_scripting_page", true, get_defined_vars()))
 									add_submenu_page($menu, "s2Member API / Scripting", "API / Scripting", "create_users", "ws-plugin--s2member-scripting", "c_ws_plugin__s2member_menu_pages::scripting_page");
 
-								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_5", true, get_defined_vars()))
+								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_4", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_integrations_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
 									add_submenu_page($menu, "s2Member / Other Integrations", "Other Integrations", "create_users", "ws-plugin--s2member-integrations", "c_ws_plugin__s2member_menu_pages::integrations_page");
 
-								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_6", true, get_defined_vars()))
+								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_5", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_logs_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
 									add_submenu_page($menu, "s2Member Logs", "Log Files (Debug)", "create_users", "ws-plugin--s2member-logs", "c_ws_plugin__s2member_menu_pages::logs_page");
 
-								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_7", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
+								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_6", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_info_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
