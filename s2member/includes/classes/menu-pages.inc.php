@@ -100,16 +100,16 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 										if($options["login_welcome_page"] && $options["login_welcome_page"] === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is the same as your Membership Options Page. Please correct this. See: <code>s2Member -› General Options -› Login Welcome Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
-										if($options["membership_options_page"] && (string)get_option("page_on_front") === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Home Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress® -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Membership Options Page</code>.'))
+										if($options["membership_options_page"] && (string)get_option("page_on_front") === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Home Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Membership Options Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
-										if($options["login_welcome_page"] && (string)get_option("page_on_front") === $options["login_welcome_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Home Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress® -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Login Welcome Page</code>.'))
+										if($options["login_welcome_page"] && (string)get_option("page_on_front") === $options["login_welcome_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Home Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Login Welcome Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
-										if($options["membership_options_page"] && (string)get_option("page_for_posts") === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Posts Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress® -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Membership Options Page</code>.'))
+										if($options["membership_options_page"] && (string)get_option("page_for_posts") === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Posts Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Membership Options Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
-										if($options["login_welcome_page"] && (string)get_option("page_for_posts") === $options["login_welcome_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Posts Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress® -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Login Welcome Page</code>.'))
+										if($options["login_welcome_page"] && (string)get_option("page_for_posts") === $options["login_welcome_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Posts Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Login Welcome Page</code>.'))
 											($enqueue_notices === true || in_array("page-conflict-warnings", (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, "*:*", true) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, true);
 
 										if($options["file_download_limit_exceeded_page"] && $options["file_download_limit_exceeded_page"] === $options["membership_options_page"] && ($display_notices === true || in_array("page-conflict-warnings", (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Download Limit Exceeded Page is the same as your Membership Options Page. Please correct this. See: <code>s2Member -› Download Options</code>.'))
@@ -148,76 +148,67 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 								$menu = apply_filters("ws_plugin__s2member_during_add_admin_options_menu_slug", "ws-plugin--s2member-start", get_defined_vars());
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_menu_page", true, get_defined_vars()))
-									add_menu_page("s2Member®", "s2Member®", "create_users", $menu, "c_ws_plugin__s2member_menu_pages::start_page", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images/brand-favicon.png");
+									add_menu_page("s2Member", "s2Member", "create_users", $menu, "c_ws_plugin__s2member_menu_pages::start_page", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images/brand-favicon.png");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_start_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® Quick-Start Guide", "Quick-Start Guide", "create_users", "ws-plugin--s2member-start", "c_ws_plugin__s2member_menu_pages::start_page");
+									add_submenu_page($menu, "s2Member Quick-Start Guide", "Quick-Start Guide", "create_users", "ws-plugin--s2member-start", "c_ws_plugin__s2member_menu_pages::start_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_1", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_mms_ops_page", (!is_multisite() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member® Multisite Configuration", "Multisite (Config)", "create_users", "ws-plugin--s2member-mms-ops", "c_ws_plugin__s2member_menu_pages::mms_ops_page");
+									add_submenu_page($menu, "s2Member Multisite Configuration", "Multisite (Config)", "create_users", "ws-plugin--s2member-mms-ops", "c_ws_plugin__s2member_menu_pages::mms_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_gen_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® General Options", "General Options", "create_users", "ws-plugin--s2member-gen-ops", "c_ws_plugin__s2member_menu_pages::gen_ops_page");
+									add_submenu_page($menu, "s2Member General Options", "General Options", "create_users", "ws-plugin--s2member-gen-ops", "c_ws_plugin__s2member_menu_pages::gen_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_res_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® Restriction Options", "Restriction Options", "create_users", "ws-plugin--s2member-res-ops", "c_ws_plugin__s2member_menu_pages::res_ops_page");
+									add_submenu_page($menu, "s2Member Restriction Options", "Restriction Options", "create_users", "ws-plugin--s2member-res-ops", "c_ws_plugin__s2member_menu_pages::res_ops_page");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_down_ops_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member® Download Options", "Download Options", "create_users", "ws-plugin--s2member-down-ops", "c_ws_plugin__s2member_menu_pages::down_ops_page");
+									add_submenu_page($menu, "s2Member Download Options", "Download Options", "create_users", "ws-plugin--s2member-down-ops", "c_ws_plugin__s2member_menu_pages::down_ops_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_2", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
-								if /* Shortcut. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_new_user_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® / Add A Member", "Add A Member", "create_users", "user-new.php");
+								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page", true, get_defined_vars()))
+									add_submenu_page($menu, "s2Member PayPal Options", "PayPal Options", "create_users", "ws-plugin--s2member-paypal-ops", "c_ws_plugin__s2member_menu_pages::paypal_ops_page");
 
-								if /* Shortcut. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_browse_users_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® / Browse Members", "Browse Members", "create_users", "users.php");
+								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page", true, get_defined_vars()))
+									add_submenu_page($menu, "s2Member PayPal Buttons", "PayPal Buttons", "create_users", "ws-plugin--s2member-paypal-buttons", "c_ws_plugin__s2member_menu_pages::paypal_buttons_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_3", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
-								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® PayPal Options", "PayPal® Options", "create_users", "ws-plugin--s2member-paypal-ops", "c_ws_plugin__s2member_menu_pages::paypal_ops_page");
+								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_trk_ops_page", true, get_defined_vars()))
+									add_submenu_page($menu, "s2Member API / Tracking", "API / Tracking", "create_users", "ws-plugin--s2member-trk-ops", "c_ws_plugin__s2member_menu_pages::trk_ops_page");
 
-								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® PayPal® Buttons", "PayPal® Buttons", "create_users", "ws-plugin--s2member-paypal-buttons", "c_ws_plugin__s2member_menu_pages::paypal_buttons_page");
+								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_els_ops_page", true, get_defined_vars()))
+									add_submenu_page($menu, "s2Member API / List Servers", "API / List Servers", "create_users", "ws-plugin--s2member-els-ops", "c_ws_plugin__s2member_menu_pages::els_ops_page");
+
+								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_api_ops_page", true, get_defined_vars()))
+									add_submenu_page($menu, "s2Member API / Notifications", "API / Notifications", "create_users", "ws-plugin--s2member-api-ops", "c_ws_plugin__s2member_menu_pages::api_ops_page");
+
+								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_scripting_page", true, get_defined_vars()))
+									add_submenu_page($menu, "s2Member API / Scripting", "API / Scripting", "create_users", "ws-plugin--s2member-scripting", "c_ws_plugin__s2member_menu_pages::scripting_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_4", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
-								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_trk_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® API / Tracking", "API / Tracking", "create_users", "ws-plugin--s2member-trk-ops", "c_ws_plugin__s2member_menu_pages::trk_ops_page");
-
-								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_els_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® API / List Servers", "API / List Servers", "create_users", "ws-plugin--s2member-els-ops", "c_ws_plugin__s2member_menu_pages::els_ops_page");
-
-								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_api_ops_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® API / Notifications", "API / Notifications", "create_users", "ws-plugin--s2member-api-ops", "c_ws_plugin__s2member_menu_pages::api_ops_page");
-
-								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_scripting_page", true, get_defined_vars()))
-									add_submenu_page($menu, "s2Member® API / Scripting", "API / Scripting", "create_users", "ws-plugin--s2member-scripting", "c_ws_plugin__s2member_menu_pages::scripting_page");
+								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_integrations_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
+									add_submenu_page($menu, "s2Member / Other Integrations", "Other Integrations", "create_users", "ws-plugin--s2member-integrations", "c_ws_plugin__s2member_menu_pages::integrations_page");
 
 								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_5", true, get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
-								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_integrations_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member® / Other Integrations", "Other Integrations", "create_users", "ws-plugin--s2member-integrations", "c_ws_plugin__s2member_menu_pages::integrations_page");
-
-								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_6", true, get_defined_vars()))
-									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
-
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_logs_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member® Logs", "Log Files (Debug)", "create_users", "ws-plugin--s2member-logs", "c_ws_plugin__s2member_menu_pages::logs_page");
+									add_submenu_page($menu, "s2Member Logs", "Log Files (Debug)", "create_users", "ws-plugin--s2member-logs", "c_ws_plugin__s2member_menu_pages::logs_page");
 
-								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_7", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
+								if /* Divider. */(apply_filters("ws_plugin__s2member_during_add_admin_options_add_divider_6", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
 									add_submenu_page($menu, "", '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', "create_users", "#");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_info_page", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-									add_submenu_page($menu, "s2Member® Information", "s2Member® Info", "create_users", "ws-plugin--s2member-info", "c_ws_plugin__s2member_menu_pages::info_page");
+									add_submenu_page($menu, "s2Member Information", "s2Member Info", "create_users", "ws-plugin--s2member-info", "c_ws_plugin__s2member_menu_pages::info_page");
 
 								do_action("ws_plugin__s2member_during_add_admin_options_additional_pages", get_defined_vars());
 							}
@@ -247,7 +238,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 
 								$menu = /* Used below for nesting additional sub-menu pages. */ "ws-plugin--s2member-mms-ops";
 
-								add_menu_page("s2Member®", "s2Member®", "create_users", $menu, "c_ws_plugin__s2member_menu_pages::mms_ops_page", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images/brand-favicon.png");
+								add_menu_page("s2Member", "s2Member", "create_users", $menu, "c_ws_plugin__s2member_menu_pages::mms_ops_page", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images/brand-favicon.png");
 
 								add_submenu_page($menu, "s2Member Multisite (Configuration)", "Multisite (Config)", "create_users", "ws-plugin--s2member-mms-ops", "c_ws_plugin__s2member_menu_pages::mms_ops_page");
 
@@ -675,7 +666,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						$htaccess = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"]."/.htaccess";
 						$htaccess_contents = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir_htaccess"])));
 
-						$no_gzip_htaccess = /* Always located in the absolute root path for WordPress®. */ ABSPATH.".htaccess";
+						$no_gzip_htaccess = /* Always located in the absolute root path for WordPress. */ ABSPATH.".htaccess";
 						$no_gzip_htaccess_contents = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_no_gzip_htaccess"])));
 
 						if(!c_ws_plugin__s2member_files::no_gzip_rules_in_root_htaccess() /* If s2Member's GZIP exclusions do NOT yet exist in the root `.htaccess` file. */)
@@ -701,15 +692,15 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 
 						if(!empty($_POST["ws_plugin__s2member_amazon_cf_files_auto_configure_distros"]) && ($nonce = $_POST["ws_plugin__s2member_amazon_cf_files_auto_configure_distros"]) && wp_verify_nonce($nonce, "ws-plugin--s2member-amazon-cf-files-auto-configure-distros"))
 							if(($amazon_cf_auto_configure_distros = c_ws_plugin__s2member_files_in::amazon_cf_auto_configure_distros()) && $amazon_cf_auto_configure_distros["success"])
-								c_ws_plugin__s2member_admin_notices::display_admin_notice('Amazon® CloudFront Distributions auto-configured successfully. Please allow 30 minutes for propagation.'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_downloads_cname"]) ? '<br /><em>Downloads Distribution CNAME: <code>'.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_downloads_cname"]).' &mdash;&raquo; '.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_downloads_dname"]).'</code></em>' : '').(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_streaming_cname"]) ? '<br /><em>Streaming Distribution CNAME: <code>'.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_streaming_cname"]).' &mdash;&raquo; '.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_streaming_dname"]).'</code></em>' : ''));
+								c_ws_plugin__s2member_admin_notices::display_admin_notice('Amazon CloudFront Distributions auto-configured successfully. Please allow 30 minutes for propagation.'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_downloads_cname"]) ? '<br /><em>Downloads Distribution CNAME: <code>'.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_downloads_cname"]).' &mdash;&raquo; '.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_downloads_dname"]).'</code></em>' : '').(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_streaming_cname"]) ? '<br /><em>Streaming Distribution CNAME: <code>'.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_streaming_cname"]).' &mdash;&raquo; '.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_streaming_dname"]).'</code></em>' : ''));
 							else // Else there was an error. We need to report this back to the site owner so they can understand what's going on.
-								(c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"] = true).c_ws_plugin__s2member_admin_notices::display_admin_notice('Unable to auto-configure Amazon® CloudFront Distributions.<br />Error code: <code>'.esc_html($amazon_cf_auto_configure_distros["code"]).'</code>. Error Message: <code>'.esc_html($amazon_cf_auto_configure_distros["message"]).'</code>', true);
+								(c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"] = true).c_ws_plugin__s2member_admin_notices::display_admin_notice('Unable to auto-configure Amazon CloudFront Distributions.<br />Error code: <code>'.esc_html($amazon_cf_auto_configure_distros["code"]).'</code>. Error Message: <code>'.esc_html($amazon_cf_auto_configure_distros["message"]).'</code>', true);
 
 						if(!empty($_POST["ws_plugin__s2member_amazon_s3_files_auto_configure_acls"]) && ($nonce = $_POST["ws_plugin__s2member_amazon_s3_files_auto_configure_acls"]) && wp_verify_nonce($nonce, "ws-plugin--s2member-amazon-s3-files-auto-configure-acls"))
 							if(($amazon_s3_auto_configure_acls = c_ws_plugin__s2member_files_in::amazon_s3_auto_configure_acls()) && $amazon_s3_auto_configure_acls["success"])
-								c_ws_plugin__s2member_admin_notices::display_admin_notice('Amazon® S3 ACLs auto-configured successfully.');
+								c_ws_plugin__s2member_admin_notices::display_admin_notice('Amazon S3 ACLs auto-configured successfully.');
 							else // Else there was an error. We need to report this back to the site owner so they can understand what's going on.
-								(c_ws_plugin__s2member_menu_pages::$pre_display_errors["s3_files_auto_configure_acls"] = true).c_ws_plugin__s2member_admin_notices::display_admin_notice('Unable to auto-configure Amazon® S3 ACLs.<br />Error code: <code>'.esc_html($amazon_s3_auto_configure_acls["code"]).'</code>. Error Message: <code>'.esc_html($amazon_s3_auto_configure_acls["message"]).'</code>', true);
+								(c_ws_plugin__s2member_menu_pages::$pre_display_errors["s3_files_auto_configure_acls"] = true).c_ws_plugin__s2member_admin_notices::display_admin_notice('Unable to auto-configure Amazon S3 ACLs.<br />Error code: <code>'.esc_html($amazon_s3_auto_configure_acls["code"]).'</code>. Error Message: <code>'.esc_html($amazon_s3_auto_configure_acls["message"]).'</code>', true);
 
 						include_once dirname(dirname(__FILE__))."/menu-pages/down-ops.inc.php";
 
@@ -790,7 +781,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 						do_action("ws_plugin__s2member_before_paypal_buttons_page", get_defined_vars());
 
 						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"])
-							c_ws_plugin__s2member_admin_notices::display_admin_notice('Please configure <code>s2Member -› PayPal® Options</code> first. Once all of your PayPal® Options are configured; including your Email Address, API Username, Password, and Signature; return to this page &amp; generate your PayPal® Button(s).', true);
+							c_ws_plugin__s2member_admin_notices::display_admin_notice('Please configure <code>s2Member -› PayPal Options</code> first. Once all of your PayPal Options are configured; including your Email Address, API Username, Password, and Signature; return to this page &amp; generate your PayPal Button(s).', true);
 
 						include_once dirname(dirname(__FILE__))."/menu-pages/paypal-buttons.inc.php";
 
