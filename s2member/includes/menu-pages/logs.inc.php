@@ -32,7 +32,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 						echo '<div class="wrap ws-menu-page">'."\n";
 
 						echo '<div id="icon-plugins" class="icon32"><br /></div>'."\n";
-						echo '<h2>s2Member Logs (for Debugging Purposes)</h2>'."\n";
+						echo '<h2>s2Member Logs</h2>'."\n";
 
 						echo '<table class="ws-menu-page-table">'."\n";
 						echo '<tbody class="ws-menu-page-table-tbody">'."\n";
@@ -45,7 +45,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 						{
 							do_action ("ws_plugin__s2member_during_logs_page_during_left_sections_before_help", get_defined_vars ());
 
-							echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member">' . "\n";
+							echo '<div class="ws-menu-page-group" title="Getting Help">' . "\n";
 
 							echo '<div class="ws-menu-page-section ws-plugin--s2member-help">' . "\n";
 							echo '<h3>Getting Help w/ s2Member (Troubleshooting)</h3>' . "\n";
@@ -80,10 +80,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 							{
 								do_action("ws_plugin__s2member_during_logs_page_during_left_sections_before_log_settings", get_defined_vars());
 
-								echo '<div class="ws-menu-page-group" title="Logging Configuration (for Debugging)">'."\n";
+								echo '<div class="ws-menu-page-group" title="Logging Configuration">'."\n";
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-log-settings-section">'."\n";
 
-								echo '<h3>s2Member Logging Configuration (for Debugging Purposes)</h3>'."\n";
+								echo '<h3>Logging Configuration</h3>'."\n";
 
 								echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
 								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems that occur during processing. Enable logging here, and then view your log files below; in the s2Member Log Viewer.</span></p>'."\n";
@@ -154,7 +154,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 						{
 							do_action("ws_plugin__s2member_during_logs_page_during_left_sections_before_logs", get_defined_vars());
 
-							echo '<div class="ws-menu-page-group" title="s2Member Log Viewer (for Debugging Purposes)" default-state="open">'."\n";
+							echo '<div class="ws-menu-page-group" title="Logs Viewer" default-state="open">'."\n";
 
 							echo '<div class="ws-menu-page-section ws-plugin--s2member-logs-section">'."\n";
 							echo '<h3>Debugging Tools/Tips &amp; Other Important Details (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-debugging-tips-details\').toggle(); return false;" class="ws-dotted-link">click here to toggle</a>)</h3>'."\n";
