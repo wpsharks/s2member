@@ -90,7 +90,7 @@ if (!class_exists ("c_ws_plugin__s2member_cache"))
 
 								$cache_needs_updating = /* Flag for cache update. */ true;
 							}
-						if /* Cache is also reset dynamically during back-end option updates. */ ($cache_needs_updating)
+						if /* Cache is also reset dynamically during back-end option updates. */ (isset($cache_needs_updating) && $cache_needs_updating)
 							{
 								update_option ("ws_plugin__s2member_cache", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]);
 							}
