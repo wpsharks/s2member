@@ -253,8 +253,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 
 										foreach (($posts = preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"])) as $p)
 											if (strpos ($p, "all-") === 0 && preg_match ("/^all-(.+)$/", $p, $m) /* Protecting `all-` of a specific Post Type? */)
-												if (is_array ($p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids ($m[1])) && !empty ($p_of_type))
-													$x_ids = array_merge /* Merge all Posts of this Post Type. */ ($x_ids, $p_of_type);
+												if ((is_array ($p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids ($m[1])) || (substr($m[1], -1) === "s"
+												   && is_array($_p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids(substr($m[1], 0, -1)))))
+													&& !empty ($p_of_type)) $x_ids = array_merge /* Merge all Posts of this Post Type. */ ($x_ids, $p_of_type);
 
 										$x_ids = /* Exclude the full list too. */ array_merge ($x_ids, $posts);
 										unset /* Just a little housekeeping here. */ ($posts, $p, $m, $p_of_type);

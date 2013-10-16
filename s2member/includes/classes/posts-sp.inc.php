@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_posts_sp"))
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"] === "all" && (!$check_user || !$user || !$user->has_cap ("access_s2member_level" . $n)))
 															return apply_filters ("ws_plugin__s2member_check_specific_post_level_access", array ("s2member_level_req" => $n), get_defined_vars ());
 
-														else if (strpos ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"], "all-") !== false && ($post_type = get_post_type ($post_id)) && in_array ("all-" . $post_type . "s", preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"])) && (!$check_user || !$user || !$user->has_cap ("access_s2member_level" . $n)))
+														else if (strpos ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"], "all-") !== false && ($post_type = get_post_type ($post_id)) && (in_array ("all-" . $post_type, preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"])) || in_array ("all-" . $post_type . "s", preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"]))) && (!$check_user || !$user || !$user->has_cap ("access_s2member_level" . $n)))
 															return apply_filters ("ws_plugin__s2member_check_specific_post_level_access", array ("s2member_level_req" => $n), get_defined_vars ());
 
 														else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"] && in_array ($post_id, preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"])) && (!$check_user || !$user || !$user->has_cap ("access_s2member_level" . $n)))

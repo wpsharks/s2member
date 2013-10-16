@@ -64,7 +64,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 
 												for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 													echo ($pages[$n] !== array("all")) ? // Protecting `all` Pages, of any kind?
-													((!in_array("all-pages", $posts[$n])) // Protecting Posts of type: `page` ( i.e. `all-pages` )?
+													((!in_array("all-page", $posts[$n]) && !in_array("all-pages", $posts[$n])) // Protecting Posts of type: `page`?
 													? '<option value="'.$n.'"'.((in_array($page_id, $pages[$n])) ? ' selected="selected"' : '').'>'.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Require Highest Level #'.$n : 'Require Level #'.$n.' (or higher)').'</option>'."\n"
 													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Posts of this type)</option>'."\n")
 													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Pages)</option>'."\n";
@@ -110,7 +110,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 
 												for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 													echo ($posts[$n] !== array("all")) ? // Protecting `all` Posts, of any kind?
-													((!in_array("all-".$post->post_type."s", $posts[$n])) // Protecting Posts `all-[of-this-type]` ( don't forget plural `s` )?
+													((!in_array("all-".$post->post_type, $posts[$n]) && !in_array("all-".$post->post_type."s", $posts[$n])) // Protecting Posts `all-[of-this-type]`?
 													? '<option value="'.$n.'"'.((in_array($post_id, $posts[$n])) ? ' selected="selected"' : '').'>'.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'Require Highest Level #'.$n : 'Require Level #'.$n.' (or higher)').'</option>'."\n"
 													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Posts of this type)</option>'."\n")
 													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Posts)</option>'."\n";

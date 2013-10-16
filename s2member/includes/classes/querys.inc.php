@@ -205,9 +205,10 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 																else if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_posts"] && (!$user || !current_user_can("access_s2member_level".$n)))
 																	{
 																		foreach(($_posts = preg_split("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_posts"])) as $_p)
-																			if(strpos($_p, "all-") === 0 && preg_match("/^all-(.+)$/", $_p, $_m) /* Protecting `all-` of a specific Post Type? */)
-																				if(is_array($_p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids($_m[1])) && !empty($_p_of_type))
-																					$_posts = array_merge /* Merge all Posts of this Post Type. */($_posts, $_p_of_type);
+																			if(strpos($_p, "all-") === 0 && preg_match("/^all-(.+?)$/", $_p, $_m) /* Protecting `all-` of a specific Post Type? */)
+																				if((is_array($_p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids($_m[1])) || (substr($_m[1], -1) === "s"
+																				   && is_array($_p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids(substr($_m[1], 0, -1)))))
+																				   && !empty($_p_of_type)) $_posts = array_merge /* Merge all Posts of this Post Type. */($_posts, $_p_of_type);
 
 																		$_posts = array_unique( /* Force integers. */c_ws_plugin__s2member_utils_arrays::force_integers($_posts));
 

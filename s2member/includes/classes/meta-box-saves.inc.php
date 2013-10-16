@@ -67,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 																	unset($pages[$n][$i]);
 
 															if (isset ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]]) && is_array ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]]))
-																if ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]] !== array ("all")&& !in_array ("all-pages", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
+																if ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]] !== array ("all") && !in_array ("all-page", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]) && !in_array ("all-pages", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
 																	array_push ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]], (string)$page_id);
 
 															for ($n = 0, $new_options = array (); $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
@@ -93,7 +93,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 																	unset($posts[$n][$i]);
 
 															if (isset ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]]) && is_array ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
-																if ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]] !== array ("all")&& !in_array ("all-" . $_p["post_type"] . "s", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
+																if ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]] !== array ("all") && !in_array ("all-" . $_p["post_type"], $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]) && !in_array ("all-" . $_p["post_type"] . "s", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
 																	array_push ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]], (string)$post_id);
 
 															for ($n = 0, $new_options = array (); $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
