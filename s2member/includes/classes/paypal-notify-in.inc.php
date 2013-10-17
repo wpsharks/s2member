@@ -1,6 +1,6 @@
 <?php
 /**
-* s2Member's PayPal® IPN handler (inner processing routines).
+* s2Member's PayPal IPN handler (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 	{
 		/**
-		* s2Member's PayPal® IPN handler (inner processing routines).
+		* s2Member's PayPal IPN handler (inner processing routines).
 		*
 		* @package s2Member\PayPal
 		* @since 3.5
@@ -28,14 +28,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 		class c_ws_plugin__s2member_paypal_notify_in
 			{
 				/**
-				* Handles PayPal® IPN processing.
+				* Handles PayPal IPN processing.
 				*
-				* These same routines also handle s2Member Pro/PayPal® Pro operations;
+				* These same routines also handle s2Member Pro/PayPal Pro operations;
 				* giving you the ability *(as needed)* to Hook into these routines using
-				* WordPress® Hooks/Filters; as seen in the source code below.
+				* WordPress Hooks/Filters; as seen in the source code below.
 				*
 				* Please do NOT modify the source code directly.
-				* Instead, use WordPress® Hooks/Filters.
+				* Instead, use WordPress Hooks/Filters.
 				*
 				* For example, if you'd like to add your own custom conditionals, use:
 				* ``add_filter ("ws_plugin__s2member_during_paypal_notify_conditionals", "your_function");``
@@ -65,7 +65,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								if (is_array ($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
 									{
 										$paypal["s2member_log"][] = "IPN received on: " . date ("D M j, Y g:i:s a T");
-										$paypal["s2member_log"][] = "s2Member POST vars verified " . ((!empty ($paypal["proxy_verified"])) ? "with a Proxy Key" : "through a POST back to PayPal®.");
+										$paypal["s2member_log"][] = "s2Member POST vars verified " . ((!empty ($paypal["proxy_verified"])) ? "with a Proxy Key" : "through a POST back to PayPal.");
 
 										$payment_status_issues = "/^(failed|denied|expired|refunded|partially_refunded|reversed|reversal|canceled_reversal|voided)$/i";
 
@@ -150,7 +150,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								else // Extensive log reporting here. This is an area where many site owners find trouble. Depending on server configuration; remote HTTPS connections may fail.
 									{
 										$paypal["s2member_log"][] = "Unable to verify \$_POST vars. This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility.";
-										$paypal["s2member_log"][] = "Please see this KB article: `http://www.s2member.com/kb/server-scanner/`. We suggest that you run the s2Member® Server Scanner.";
+										$paypal["s2member_log"][] = "Please see this KB article: `http://www.s2member.com/kb/server-scanner/`. We suggest that you run the s2Member Server Scanner.";
 										$paypal["s2member_log"][] = var_export ($_REQUEST, true); // Recording _POST + _GET vars for analysis and debugging.
 									}
 								if ($email_configs_were_on) // Back on?

@@ -28,12 +28,12 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 		class c_ws_plugin__s2member_systematics
 			{
 				/**
-				* Determines if the current page is s2Member® Systematic.
+				* Determines if the current page is s2Member Systematic.
 				*
 				* @package s2Member\Systematics
 				* @since 111115
 				*
-				* @return bool True if s2Member® Systematic, else false.
+				* @return bool True if s2Member Systematic, else false.
 				*
 				* @note The results of this function are cached staticially.
 				* 	Do NOT call upon this until the `init` Hook is fired.
@@ -50,16 +50,16 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 							{
 								return ($is_s2_systematic = apply_filters ("ws_plugin__s2member_is_s2_systematic_use_page", true, get_defined_vars ()));
 							}
-						else // Otherwise, we return false (it's NOT an s2Member® Systematic Use Page).
+						else // Otherwise, we return false (it's NOT an s2Member Systematic Use Page).
 							return ($is_s2_systematic = apply_filters ("ws_plugin__s2member_is_s2_systematic_use_page", false, get_defined_vars ()));
 					}
 				/**
-				* Determines if the current page is WordPress® Systematic.
+				* Determines if the current page is WordPress Systematic.
 				*
 				* @package s2Member\Systematics
 				* @since 111002
 				*
-				* @return bool True if WordPress® Systematic, else false.
+				* @return bool True if WordPress Systematic, else false.
 				*
 				* @note The results of this function are cached staticially.
 				* 	Do NOT call upon this until the `init` Hook is fired.
@@ -76,11 +76,11 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
-						else if (defined ("WP_INSTALLING") && WP_INSTALLING) // Installing? All WordPress® installs are considered Systematic.
+						else if (defined ("WP_INSTALLING") && WP_INSTALLING) // Installing? All WordPress installs are considered Systematic.
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
-						else if (defined ("APP_REQUEST") && APP_REQUEST) // App request? All WordPress® app requests are considered Systematic.
+						else if (defined ("APP_REQUEST") && APP_REQUEST) // App request? All WordPress app requests are considered Systematic.
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
@@ -96,7 +96,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", true, get_defined_vars ()));
 							}
-						else // Otherwise, we return false (it's NOT a WordPress® Systematic Use Page).
+						else // Otherwise, we return false (it's NOT a WordPress Systematic Use Page).
 							return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_page", false, get_defined_vars ()));
 					}
 				/**
@@ -118,11 +118,11 @@ if (!class_exists ("c_ws_plugin__s2member_systematics"))
 							{
 								return $is_systematic; // Filters will have already been applied here.
 							}
-						else if (c_ws_plugin__s2member_systematics::is_s2_systematic_use_page /* An s2Member® Systematic Use Page? */ ())
+						else if (c_ws_plugin__s2member_systematics::is_s2_systematic_use_page /* An s2Member Systematic Use Page? */ ())
 							{
 								return ($is_systematic = apply_filters ("ws_plugin__s2member_is_systematic_use_page", true, get_defined_vars ()));
 							}
-						else if (c_ws_plugin__s2member_systematics::is_wp_systematic_use_page /* A WordPress® Systematic Use Page? */ ())
+						else if (c_ws_plugin__s2member_systematics::is_wp_systematic_use_page /* A WordPress Systematic Use Page? */ ())
 							{
 								return ($is_systematic = apply_filters ("ws_plugin__s2member_is_systematic_use_page", true, get_defined_vars ()));
 							}

@@ -31,7 +31,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				* Determines the difference between two timestamps.
 				*
 				* Returns the difference in a human readable format.
-				* Supports: minutes, hours, days, weeks, months, and years. This is an improvement on WordPress® ``human_time_diff()``.
+				* Supports: minutes, hours, days, weeks, months, and years. This is an improvement on WordPress ``human_time_diff()``.
 				* This returns an "approximate" time difference. Rounded to the nearest minute, hour, day, week, month, year.
 				*
 				* @package s2Member\Utilities
@@ -106,7 +106,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param int|str $user_id Optional. A WordPress® User ID.
+				* @param int|str $user_id Optional. A WordPress User ID.
 				* @param str $period1 Optional. First Intial "Period Term" *( i.e. `0 D` )*.
 				* 	Only used when ``$user_id`` is passed in.
 				* @param str $period3 Optional. Regular "Period Term" *( i.e. `1 M` )*.

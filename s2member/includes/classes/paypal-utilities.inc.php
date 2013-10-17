@@ -1,6 +1,6 @@
 <?php
 /**
-* PayPal® utilities.
+* PayPal utilities.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 	{
 		/**
-		* PayPal® utilities.
+		* PayPal utilities.
 		*
 		* @package s2Member\PayPal
 		* @since 3.5
@@ -28,7 +28,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 		class c_ws_plugin__s2member_paypal_utilities
 			{
 				/**
-				* Get ``$_POST`` or ``$_REQUEST`` vars from PayPal®.
+				* Get ``$_POST`` or ``$_REQUEST`` vars from PayPal.
 				*
 				* @package s2Member\PayPal
 				* @since 3.5
@@ -112,7 +112,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 					}
 				/**
-				* Generates a PayPal® Proxy Key, for simulated IPN responses.
+				* Generates a PayPal Proxy Key, for simulated IPN responses.
 				*
 				* @package s2Member\PayPal
 				* @since 3.5
@@ -136,13 +136,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return apply_filters("ws_plugin__s2member_paypal_proxy_key_gen", $key, get_defined_vars());
 					}
 				/**
-				* Calls upon the PayPal® API, and returns the response.
+				* Calls upon the PayPal API, and returns the response.
 				*
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param array $post_vars An array of variables to send through the PayPal® API call.
-				* @return array An array of variables returned by the PayPal® API.
+				* @param array $post_vars An array of variables to send through the PayPal API call.
+				* @return array An array of variables returned by the PayPal API.
 				*
 				* @todo Optimize this routine with ``empty()`` and ``isset()``.
 				* @todo Possibly integrate this API: {@link http://msdn.microsoft.com/en-us/library/ff512417.aspx}.
@@ -160,7 +160,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$post_vars = apply_filters("ws_plugin__s2member_paypal_api_post_vars", $post_vars, get_defined_vars());
 						$post_vars = (is_array($post_vars)) ? $post_vars : array();
 
-						$post_vars["VERSION"] = /* Configure the PayPal® API version. */ "71.0";
+						$post_vars["VERSION"] = /* Configure the PayPal API version. */ "71.0";
 						$post_vars["USER"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"];
 						$post_vars["PWD"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"];
 						$post_vars["SIGNATURE"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"];
@@ -181,7 +181,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(!$response["ACK"] || !preg_match("/^(Success|SuccessWithWarning)$/i", $response["ACK"]))
 							{
 								if(strlen($response["L_ERRORCODE0"]) || $response["L_SHORTMESSAGE0"] || $response["L_LONGMESSAGE0"])
-									/* translators: Exclude `%2$s` and `%3$s`. These are English details returned by PayPal®. Replace `%2$s` and `%3$s` with: `Unable to process, please try again`, or something to that affect. Or, if you prefer, you could Filter ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`. */
+									/* translators: Exclude `%2$s` and `%3$s`. These are English details returned by PayPal. Replace `%2$s` and `%3$s` with: `Unable to process, please try again`, or something to that affect. Or, if you prefer, you could Filter ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`. */
 									$response["__error"] = sprintf(_x('Error #%1$s. %2$s. %3$s.', "s2member-front", "s2member"), $response["L_ERRORCODE0"], rtrim($response["L_SHORTMESSAGE0"], "."), rtrim($response["L_LONGMESSAGE0"], "."));
 
 								else // Else, generate an error messsage - so something is reported back to the Customer.
@@ -210,15 +210,15 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return apply_filters("ws_plugin__s2member_paypal_api_response", c_ws_plugin__s2member_paypal_utilities::_paypal_api_response_filters($response), get_defined_vars());
 					}
 				/**
-				* A sort of callback function that Filters PayPal® responses.
+				* A sort of callback function that Filters PayPal responses.
 				*
 				* Provides alternative explanations in some cases that require special attention.
 				*
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param array $response Expects an array of response variables returned by the PayPal® API.
-				* @return array An array of variables returned by the PayPal® API, after ``$response["__error"]`` is Filtered.
+				* @param array $response Expects an array of response variables returned by the PayPal API.
+				* @return array An array of variables returned by the PayPal API, after ``$response["__error"]`` is Filtered.
 				*/
 				public static function _paypal_api_response_filters($response = FALSE)
 					{
@@ -240,7 +240,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return /* Filters already applied with: ``ws_plugin__s2member_paypal_api_response``. */ $response;
 					}
 				/**
-				* Cleans up values passed through PayPal® NVP strings.
+				* Cleans up values passed through PayPal NVP strings.
 				*
 				* @package s2Member\PayPal
 				* @since 121202
@@ -262,13 +262,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return apply_filters("ws_plugin__s2member_paypal_api_nv_cleanup", $value, get_defined_vars());
 					}
 				/**
-				* Calls upon the PayPal® PayFlow API, and returns the response.
+				* Calls upon the PayPal PayFlow API, and returns the response.
 				*
 				* @package s2Member\PayPal
 				* @since 120514
 				*
-				* @param array $post_vars An array of variables to send through the PayPal® PayFlow API call.
-				* @return array An array of variables returned by the PayPal® PayFlow API.
+				* @param array $post_vars An array of variables to send through the PayPal PayFlow API call.
+				* @return array An array of variables returned by the PayPal PayFlow API.
 				*/
 				public static function paypal_payflow_api_response($post_vars = FALSE)
 					{
@@ -310,7 +310,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if($response["RESULT"] !== "0")
 							{
 								if(strlen($response["RESPMSG"]))
-									/* translators: Exclude `%2$s`. These are English details returned by PayPal®. Replace `%2$s` with: `Unable to process, please try again`, or something to that affect. Or, if you prefer, you could Filter ``$response["__error"]`` with `ws_plugin__s2member_paypal_payflow_api_response`. */
+									/* translators: Exclude `%2$s`. These are English details returned by PayPal. Replace `%2$s` with: `Unable to process, please try again`, or something to that affect. Or, if you prefer, you could Filter ``$response["__error"]`` with `ws_plugin__s2member_paypal_payflow_api_response`. */
 									$response["__error"] = sprintf(_x('Error #%1$s. %2$s.', "s2member-front", "s2member"), $response["RESULT"], rtrim($response["RESPMSG"], "."));
 
 								else $response["__error"] = _x("Error. Please contact Support for assistance.", "s2member-front", "s2member");
@@ -318,7 +318,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						else if(isset($response["TRXRESULT"]) && $response["TRXRESULT"] !== "0")
 							{
 								if(strlen($response["TRXRESPMSG"]))
-									/* translators: Exclude `%2$s`. These are English details returned by PayPal®. Replace `%2$s` with: `Unable to process, please try again`, or something to that affect. Or, if you prefer, you could Filter ``$response["__error"]`` with `ws_plugin__s2member_paypal_payflow_api_response`. */
+									/* translators: Exclude `%2$s`. These are English details returned by PayPal. Replace `%2$s` with: `Unable to process, please try again`, or something to that affect. Or, if you prefer, you could Filter ``$response["__error"]`` with `ws_plugin__s2member_paypal_payflow_api_response`. */
 									$response["__error"] = sprintf(_x('Error #%1$s. %2$s.', "s2member-front", "s2member"), $response["TRXRESULT"], rtrim($response["TRXRESPMSG"], "."));
 
 								else $response["__error"] = _x("Error. Please contact Support for assistance.", "s2member-front", "s2member");
@@ -347,15 +347,15 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return apply_filters("ws_plugin__s2member_paypal_payflow_api_response", c_ws_plugin__s2member_paypal_utilities::_paypal_payflow_api_response_filters($response), get_defined_vars());
 					}
 				/**
-				* A sort of callback function that Filters Payflow® responses.
+				* A sort of callback function that Filters Payflow responses.
 				*
 				* Provides alternative explanations in some cases that require special attention.
 				*
 				* @package s2Member\PayPal
 				* @since 120514
 				*
-				* @param array $response Expects an array of response variables returned by the Payflow® API.
-				* @return array An array of variables returned by the Payflow® API, after ``$response["__error"]`` is Filtered.
+				* @param array $response Expects an array of response variables returned by the Payflow API.
+				* @return array An array of variables returned by the Payflow API, after ``$response["__error"]`` is Filtered.
 				*/
 				public static function _paypal_payflow_api_response_filters($response = FALSE)
 					{
@@ -372,7 +372,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return /* Filters already applied with: ``ws_plugin__s2member_paypal_payflow_api_response``. */ $response;
 					}
 				/**
-				* Cleans up values passed through PayPal® text/namevalue strings.
+				* Cleans up values passed through PayPal text/namevalue strings.
 				*
 				* @package s2Member\PayPal
 				* @since 121202
@@ -394,7 +394,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return apply_filters("ws_plugin__s2member_paypal_payflow_api_nv_cleanup", $value, get_defined_vars());
 					}
 				/**
-				* Converts a term `D|W|M|Y` into PayPal® Pro format.
+				* Converts a term `D|W|M|Y` into PayPal Pro format.
 				*
 				* @package s2Member\PayPal
 				* @since 3.5
@@ -415,7 +415,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return apply_filters("ws_plugin__s2member_paypal_pro_term", $pro_term, get_defined_vars());
 					}
 				/**
-				* Converts a term `D|W|M|Y` into Payflow® format.
+				* Converts a term `D|W|M|Y` into Payflow format.
 				*
 				* @package s2Member\PayPal
 				* @since 120514
@@ -424,7 +424,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @param str $period Expects a numeric value.
 				* @return bool|str A full singular description of the term *( i.e. `DAY|WEEK|BIWK|MONT|QTER|SMYR|YEAR` )*, else false.
 				*
-				* @note Payflow® unfortunately does NOT support daily and/or bi-monthly billing.
+				* @note Payflow unfortunately does NOT support daily and/or bi-monthly billing.
 				*/
 				public static function paypal_payflow_term($term = FALSE, $period = FALSE)
 					{
@@ -448,7 +448,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return apply_filters("ws_plugin__s2member_paypal_payflow_term", $payflow_term, get_defined_vars());
 					}
 				/**
-				* Converts a term `Day|Week|Month|Year` into PayPal® Standard format.
+				* Converts a term `Day|Week|Month|Year` into PayPal Standard format.
 				*
 				* @package s2Member\PayPal
 				* @since 3.5
@@ -474,7 +474,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param str|array $array_or_string Either an array of PayPal® post vars, or a string.
+				* @param str|array $array_or_string Either an array of PayPal post vars, or a string.
 				* @return str|bool A `subscr_id` string if non-empty, else false.
 				*/
 				public static function paypal_pro_subscr_id($array_or_string = FALSE)
@@ -500,7 +500,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param str|array $array_or_string Either an array of PayPal® post vars, or a string.
+				* @param str|array $array_or_string Either an array of PayPal post vars, or a string.
 				* 	If it's a string, we make sure it is a valid `level:ccaps:eotper` or `sp:ids:expiration` combination.
 				* @return str|bool An `item_number` string if non-empty, else false.
 				*/
@@ -510,7 +510,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						do_action("ws_plugin__s2member_before_paypal_pro_item_number", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
-						if(isset($array_or_string["PROFILENAME"]) /* Payflow® API alternative. */)
+						if(isset($array_or_string["PROFILENAME"]) /* Payflow API alternative. */)
 							$array_or_string["PROFILEREFERENCE"] = $array_or_string["PROFILENAME"];
 
 						if(is_array($array = $array_or_string) && (!empty($array["PROFILEREFERENCE"]) || !empty($array["rp_invoice_id"])))
@@ -539,7 +539,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param str|array $array_or_string Either an array of PayPal® post vars, or a string.
+				* @param str|array $array_or_string Either an array of PayPal post vars, or a string.
 				* @return str|bool An `item_name` string if non-empty, else false.
 				*/
 				public static function paypal_pro_item_name($array_or_string = FALSE)
@@ -571,7 +571,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param str|array $array_or_string Either an array of PayPal® post vars, or a string.
+				* @param str|array $array_or_string Either an array of PayPal post vars, or a string.
 				* 	If it's a string, we make sure it is a valid `period term` combination.
 				* @param str $default Optional. Value if unavailable. Defaults to `0 D`.
 				* @return str A `period1` string if possible, or defaults to `0 D`.
@@ -582,7 +582,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						do_action("ws_plugin__s2member_before_paypal_pro_period1", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
-						if(isset($array_or_string["PROFILENAME"]) /* Payflow® API alternative. */)
+						if(isset($array_or_string["PROFILENAME"]) /* Payflow API alternative. */)
 							$array_or_string["PROFILEREFERENCE"] = $array_or_string["PROFILENAME"];
 
 						if(is_array($array = $array_or_string) && (!empty($array["PROFILEREFERENCE"]) || !empty($array["rp_invoice_id"])))
@@ -625,7 +625,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param str|array $array_or_string Either an array of PayPal® post vars, or a string.
+				* @param str|array $array_or_string Either an array of PayPal post vars, or a string.
 				* 	If it's a string, we make sure it is a valid `period term` combination.
 				* @param str $default Optional. Value if unavailable. Defaults to `1 D`.
 				* @return str A `period3` string if possible, or defaults to `1 D`.
@@ -636,7 +636,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						do_action("ws_plugin__s2member_before_paypal_pro_period3", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
-						if(isset($array_or_string["PROFILENAME"]) /* Payflow® API alternative. */)
+						if(isset($array_or_string["PROFILENAME"]) /* Payflow API alternative. */)
 							$array_or_string["PROFILEREFERENCE"] = $array_or_string["PROFILENAME"];
 
 						if(is_array($array = $array_or_string) && (!empty($array["PROFILEREFERENCE"]) || !empty($array["rp_invoice_id"])))

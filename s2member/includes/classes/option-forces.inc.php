@@ -1,6 +1,6 @@
 <?php
 /**
-* Forces WordPress® options.
+* Forces WordPress options.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 	{
 		/**
-		* Forces WordPress® options.
+		* Forces WordPress options.
 		*
 		* @package s2Member\Option_Forces
 		* @since 3.5
@@ -64,7 +64,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				/**
 				* Forces a specific Role to demote to, whenever a Member is demoted in one way or another.
 				*
-				* Use by the PayPal® IPN routines, and also by the Auto-EOT system.
+				* Use by the PayPal IPN routines, and also by the Auto-EOT system.
 				*
 				* @package s2Member\Option_Forces
 				* @since 3.5

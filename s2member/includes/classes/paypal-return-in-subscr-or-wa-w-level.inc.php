@@ -1,6 +1,6 @@
 <?php
 /**
-* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
+* s2Member's PayPal Auto-Return/PDT handler (inner processing routine).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 	{
 		/**
-		* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
+		* s2Member's PayPal Auto-Return/PDT handler (inner processing routine).
 		*
 		* @package s2Member\PayPal
 		* @since 110720
@@ -28,7 +28,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 		class c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level
 			{
 				/**
-				* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
+				* s2Member's PayPal Auto-Return/PDT handler (inner processing routine).
 				*
 				* @package s2Member\PayPal
 				* @since 110720
@@ -78,7 +78,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 
 												$paypal["initial_term"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" (zero days). */ "0 D";
 												$paypal["initial"] = (strlen($paypal["mc_amount1"]) && preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["mc_amount1"] : $paypal["mc_amount3"];
-												$paypal["regular"] = /* This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal®. */ $paypal["mc_amount3"];
+												$paypal["regular"] = /* This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal. */ $paypal["mc_amount3"];
 												$paypal["regular_term"] = /* This is just set to keep a standard; this way both initial_term & regular_term are available. */ $paypal["period3"];
 												$paypal["recurring"] = /* If non-recurring, this should be zero, otherwise Regular. */ ($paypal["recurring"]) ? $paypal["mc_amount3"] : "0";
 
@@ -98,7 +98,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 													}
 												$paypal["initial_term"] = (preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["period1"] : /* Defaults to "0 D" (zero days). */ "0 D";
 												$paypal["initial"] = (strlen($paypal["mc_amount1"]) && preg_match("/^[1-9]/", $paypal["period1"])) ? $paypal["mc_amount1"] : $paypal["mc_amount3"];
-												$paypal["regular"] = /* This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal®. */ $paypal["mc_amount3"];
+												$paypal["regular"] = /* This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal. */ $paypal["mc_amount3"];
 												$paypal["regular_term"] = /* This is just set to keep a standard; this way both initial_term & regular_term are available. */ $paypal["period3"];
 												$paypal["recurring"] = /* If non-recurring, this should be zero, otherwise Regular. */ ($paypal["recurring"]) ? $paypal["mc_amount3"] : "0";
 

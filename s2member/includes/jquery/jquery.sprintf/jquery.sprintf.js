@@ -7,7 +7,7 @@
 * Based on: {@link http://phpjs.org/functions/sprintf:522} see: {@link http://phpjs.org/pages/license}
 * 	Modified to work via: `$.sprintf()` using jQuery.
 *
-* Distributed with WordPress® themes/plugins by WebSharks, Inc.
+* Distributed with WordPress themes/plugins by WebSharks, Inc.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}

@@ -28,7 +28,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 		class c_ws_plugin__s2member_querys
 			{
 				/**
-				* The current WordPress® query object reference.
+				* The current WordPress query object reference.
 				*
 				* @package s2Member\Queries
 				* @since 110912
@@ -65,7 +65,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 						return; // For uniformity.
 					}
 				/**
-				* Filter all WordPress® queries.
+				* Filter all WordPress queries.
 				*
 				* s2Member respects the query var: `suppress_filters`.
 				* If you need to make a query without it being Filtered, use  ``$wp_query->set ("suppress_filters", true);``.
@@ -293,7 +293,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 						return; // For uniformity.
 					}
 				/**
-				* Filters WordPress® navigation menu items.
+				* Filters WordPress navigation menu items.
 				*
 				* @package s2Member\Queries
 				* @since 110912
@@ -377,7 +377,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 						return apply_filters("_ws_plugin__s2member_is_admin_ajax_search", false, get_defined_vars());
 					}
 				/**
-				* Filters WordPress® Page queries that use wp_list_pages()
+				* Filters WordPress Page queries that use wp_list_pages()
 				*
 				* @package s2Member\Queries
 				* @since 130617

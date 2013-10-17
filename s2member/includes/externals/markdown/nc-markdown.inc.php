@@ -6,10 +6,10 @@
 * Original Markdown. Copyright {@link http://daringfireball.net/projects/markdown/ John Gruber}.
 *
 * Modified by {@link http://www.websharks-inc.com/ WebSharks, Inc.}.
-* Excludes WordPress® and all other interfaces.
+* Excludes WordPress and all other interfaces.
 * Uses a custom class name and interface.
 *
-* This file is included with all WordPress® themes/plugins by WebSharks, Inc.
+* This file is included with all WordPress themes/plugins by WebSharks, Inc.
 *
 * @package WebSharks\Xtnls\Markdown
 * @since x.xx

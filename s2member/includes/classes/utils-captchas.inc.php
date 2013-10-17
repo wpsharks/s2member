@@ -43,7 +43,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
 						return apply_filters ("ws_plugin__s2member_recaptcha_keys", array ("public" => $public, "private" => $private), get_defined_vars ());
 					}
 				/**
-				* Verifies a reCAPTCHA™ code via Google®.
+				* Verifies a reCAPTCHA™ code via Google.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5

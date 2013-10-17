@@ -30,7 +30,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_boxes"))
 				/**
 				* Adds meta boxes to Post/Page editing stations.
 				*
-				* Note: WordPress® also calls this Hook with ``$type`` set to: `link` and `comment`. Possibly others.
+				* Note: WordPress also calls this Hook with ``$type`` set to: `link` and `comment`. Possibly others.
 				* 	Thus, the need for: ``in_array ($type, array_keys (get_post_types ()))``.
 				*
 				* @package s2Member\Meta_Boxes
@@ -49,7 +49,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_boxes"))
 						$excluded_types = apply_filters ("ws_plugin__s2member_add_meta_boxes_excluded_types", $excluded_types, get_defined_vars ());
 
 						if (in_array ($type, array_keys (get_post_types ())) && !in_array ($type, $excluded_types))
-							add_meta_box ("ws-plugin--s2member-security", "s2Member®", "c_ws_plugin__s2member_meta_box_security::security_meta_box", $type, "side", "high");
+							add_meta_box ("ws-plugin--s2member-security", "s2Member", "c_ws_plugin__s2member_meta_box_security::security_meta_box", $type, "side", "high");
 
 						do_action ("ws_plugin__s2member_after_add_meta_boxes", get_defined_vars ());
 

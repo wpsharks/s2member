@@ -91,7 +91,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 				* @since 3.5
 				*
 				* @param array $cats An array of Category IDs.
-				* @param int|str $post_id A numeric WordPress® Post ID.
+				* @param int|str $post_id A numeric WordPress Post ID.
 				* @return bool True if the Post is inside a desendant of at least one of the specified Categories; else false.
 				*/
 				public static function in_descendant_category($cats = FALSE, $post_id = FALSE)
@@ -142,12 +142,12 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 						return /* Default return false. */ false;
 					}
 				/**
-				* Checks to see if we're using Amazon® S3.
+				* Checks to see if we're using Amazon S3.
 				*
 				* @package s2Member\Utilities
 				* @since 110926
 				*
-				* @return bool True if using Amazon® S3, else false.
+				* @return bool True if using Amazon S3, else false.
 				*/
 				public static function using_amazon_s3_storage()
 					{
@@ -161,12 +161,12 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 						return /* Default return false. */ false;
 					}
 				/**
-				* Checks to see if we're using Amazon® CloudFront.
+				* Checks to see if we're using Amazon CloudFront.
 				*
 				* @package s2Member\Utilities
 				* @since 110926
 				*
-				* @return bool True if using Amazon® CloudFront, else false.
+				* @return bool True if using Amazon CloudFront, else false.
 				*/
 				public static function using_amazon_cf_storage()
 					{

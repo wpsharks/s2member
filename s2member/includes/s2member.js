@@ -302,7 +302,7 @@ jQuery(document).ready (function($)
 					{
 						$result.removeClass ('ws-plugin--s2member-password-strength-short ws-plugin--s2member-password-strength-bad ws-plugin--s2member-password-strength-good ws-plugin--s2member-password-strength-strong ws-plugin--s2member-password-strength-mismatch');
 
-						switch /* Uses WordPress® script: `password-strength-meter` and `pwsL10n`. */ (passwordStrength($pass1.val (), $username.val (), $pass2.val ()))
+						switch /* Uses WordPress script: `password-strength-meter` and `pwsL10n`. */ (passwordStrength($pass1.val (), $username.val (), $pass2.val ()))
 							{
 								case 1:
 									$result.addClass ('ws-plugin--s2member-password-strength-short').html (pwsL10n['short']);

@@ -114,19 +114,19 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 								do_action ("ws_plugin__s2member_during_reading_ops_notice", get_defined_vars ()); // Now check for conflicts.
 
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"] && (string)get_option ("page_on_front") === $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"]
-								&& ($notice = '<strong>NOTE:</strong> Your Membership Options Page for s2Member is currently configured as your Home Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this.'))
+								&& ($notice = '<strong>NOTE:</strong> Your Membership Options Page for s2Member is currently configured as your Home Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this.'))
 									c_ws_plugin__s2member_admin_notices::enqueue_admin_notice ($notice, "blog:" . $pagenow, true);
 
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"] && (string)get_option ("page_on_front") === $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]
-								&& ($notice = '<strong>NOTE:</strong> Your Login Welcome Page for s2Member is currently configured as your Home Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this.'))
+								&& ($notice = '<strong>NOTE:</strong> Your Login Welcome Page for s2Member is currently configured as your Home Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this.'))
 									c_ws_plugin__s2member_admin_notices::enqueue_admin_notice ($notice, "blog:" . $pagenow, true);
 
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"] && (string)get_option ("page_for_posts") === $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"]
-								&& ($notice = '<strong>NOTE:</strong> Your Membership Options Page for s2Member is currently configured as your Posts Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this.'))
+								&& ($notice = '<strong>NOTE:</strong> Your Membership Options Page for s2Member is currently configured as your Posts Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this.'))
 									c_ws_plugin__s2member_admin_notices::enqueue_admin_notice ($notice, "blog:" . $pagenow, true);
 
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"] && (string)get_option ("page_for_posts") === $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]
-								&& ($notice = '<strong>NOTE:</strong> Your Login Welcome Page for s2Member is currently configured as your Posts Page (i.e. static page) for WordPress®. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this.'))
+								&& ($notice = '<strong>NOTE:</strong> Your Login Welcome Page for s2Member is currently configured as your Posts Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this.'))
 									c_ws_plugin__s2member_admin_notices::enqueue_admin_notice ($notice, "blog:" . $pagenow, true);
 							}
 

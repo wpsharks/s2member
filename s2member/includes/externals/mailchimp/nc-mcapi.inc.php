@@ -1,8 +1,8 @@
 <?php
 /**
-* MailChimp® API Class.
+* MailChimp API Class.
 *
-* Copyright {@link http://www.mailchimp.com/ MailChimp®}.
+* Copyright {@link http://www.mailchimp.com/ MailChimp}.
 *
 * Modified by {@link http://www.websharks-inc.com/ WebSharks, Inc.}.
 * Uses a custom class name to avoid conflicts with other instances.

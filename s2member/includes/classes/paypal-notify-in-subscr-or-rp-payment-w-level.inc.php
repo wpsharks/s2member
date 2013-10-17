@@ -1,6 +1,6 @@
 <?php
 /**
-* s2Member's PayPal® IPN handler (inner processing routine).
+* s2Member's PayPal IPN handler (inner processing routine).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level"))
 	{
 		/**
-		* s2Member's PayPal® IPN handler (inner processing routine).
+		* s2Member's PayPal IPN handler (inner processing routine).
 		*
 		* @package s2Member\PayPal
 		* @since 110720
@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 		class c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level
 			{
 				/**
-				* s2Member's PayPal® IPN handler (inner processing routine).
+				* s2Member's PayPal IPN handler (inner processing routine).
 				*
 				* @package s2Member\PayPal
 				* @since 110720
@@ -58,7 +58,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 									{
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as " . ($identified_as = "( `subscr_payment|recurring_payment` )") . ".";
 										$paypal["s2member_log"][] = "Sleeping for 5 seconds. Waiting for a possible ( `subscr_signup|subscr_modify|recurring_payment_profile_created` ).";
-										sleep (5); // Sleep here for a moment. PayPal® sometimes sends a subscr_payment before the subscr_signup, subscr_modify.
+										sleep (5); // Sleep here for a moment. PayPal sometimes sends a subscr_payment before the subscr_signup, subscr_modify.
 										// It is NOT a big deal if they do. However, s2Member goes to sleep here, just to help keep the log files in a logical order.
 										$paypal["s2member_log"][] = "Awake. It's " . date ("D M j, Y g:i:s a T") . ". s2Member `txn_type` identified as " . $identified_as . ".";
 

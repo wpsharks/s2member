@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 		class c_ws_plugin__s2member_mms_patches
 			{
 				/**
-				* Synchronizes Multisite patches with WordPress® core upgrades.
+				* Synchronizes Multisite patches with WordPress core upgrades.
 				*
 				* @package s2Member\Main_Multisite_Patches
 				* @since 3.5
@@ -72,7 +72,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 								{
 									do_action ("ws_plugin__s2member_during_mms_patches_before", get_defined_vars ());
 
-									$wp_login_file = ABSPATH . "wp-login.php"; // This works for both WordPress® 3.0 and 3.1. WordPress® 3.1+ uses: `site_url('wp-signup.php')`. WordPress® 3.5+ uses: `network_site_url('wp-signup.php')`.
+									$wp_login_file = ABSPATH . "wp-login.php"; // This works for both WordPress 3.0 and 3.1. WordPress 3.1+ uses: `site_url('wp-signup.php')`. WordPress 3.5+ uses: `network_site_url('wp-signup.php')`.
 									$wp_login_section = "/([\r\n\t\s ]+)(wp_redirect( *?)\(( *?)apply_filters( *?)\(( *?)['\"]wp_signup_location['\"],( *?)(site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|network_site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|get_bloginfo( *?)\(['\"]wpurl['\"]\)( *?)\.( *?)['\"]\/wp-signup\.php['\"])( *?)\)( *?)\);)([\r\n\t\s ]+)(exit;)/";
 									$wp_login_replace = "\n\t\t// Modified for full plugin compatiblity.\n\t\t//wp_redirect( apply_filters( 'wp_signup_location', network_site_url('wp-signup.php') ) );\n\t\t//exit;";
 
@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file ' . (($wp_login_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
 											else if (!$wp_login_written) // Otherwise, we need to report that /wp-login.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file could NOT be patched. Patch NOT written.', true) : null;
-											else if (!$wp_login_patched) // Otherwise, we need to report that /wp-login.php could NOT be updated. Wrong WordPress® version?
+											else if (!$wp_login_patched) // Otherwise, we need to report that /wp-login.php could NOT be updated. Wrong WordPress version?
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file could NOT be patched. Unverifiable.', true) : null;
 										}
 									else // Otherwise, we need to report that /wp-login.php could NOT be updated. Possibly a permissions error.
@@ -98,7 +98,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file ' . (($load_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
 											else if (!$load_written) // Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file could NOT be patched. Patch NOT written.', true) : null;
-											else if (!$load_patched) // Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Wrong WordPress® version?
+											else if (!$load_patched) // Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Wrong WordPress version?
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file could NOT be patched. Unverifiable.', true) : null;
 										}
 									else // Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Possibly a permissions error.
@@ -114,7 +114,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file ' . (($user_new_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
 											else if (!$user_new_written) // Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file could NOT be patched. Patch NOT written.', true) : null;
-											else if (!$user_new_patched) // Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Wrong WordPress® version?
+											else if (!$user_new_patched) // Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Wrong WordPress version?
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file could NOT be patched. Unverifiable.', true) : null;
 										}
 									else // Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Possibly a permissions error.
@@ -130,7 +130,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file ' . (($ms_functions_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
 											else if (!$ms_functions_written) // Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file could NOT be patched. Patch NOT written.', true) : null;
-											else if (!$ms_functions_patched) // Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Wrong WordPress® version?
+											else if (!$ms_functions_patched) // Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Wrong WordPress version?
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file could NOT be patched. Unverifiable.', true) : null;
 										}
 									else // Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Possibly a permissions error.

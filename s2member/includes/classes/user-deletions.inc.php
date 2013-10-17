@@ -35,8 +35,8 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 				*
 				* @attaches-to ``add_action("remove_user_from_blog");``
 				*
-				* @param int|str $user_id Numeric WordPress® User ID.
-				* @param int|str $blog_id Numeric WordPress® Blog ID.
+				* @param int|str $user_id Numeric WordPress User ID.
+				* @param int|str $blog_id Numeric WordPress Blog ID.
 				* @param bool $s2says Optional. Defaults to false. If true, it's definitely OK to process this deletion?
 				* 	The ``$s2says`` flag can be used when/if the routine is called directly for whatever reason.
 				* @return null
@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 				* @attaches-to ``add_action("delete_user");``
 				* @attaches-to ``add_action("wpmu_delete_user");``
 				*
-				* @param int|str $user_id Numeric WordPress® User ID.
+				* @param int|str $user_id Numeric WordPress User ID.
 				* @return null
 				*/
 				public static function handle_user_deletions ($user_id = FALSE)

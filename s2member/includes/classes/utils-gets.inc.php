@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				*/
 				public static function get_all_category_ids ()
 					{
-						if (is_array ($category_ids = /* Uses the WordPress® function for this. */ get_all_category_ids ()))
+						if (is_array ($category_ids = /* Uses the WordPress function for this. */ get_all_category_ids ()))
 							$category_ids = c_ws_plugin__s2member_utils_arrays::force_integers ($category_ids);
 
 						return (!empty ($category_ids) && is_array ($category_ids)) ? array_unique ($category_ids) : array ();

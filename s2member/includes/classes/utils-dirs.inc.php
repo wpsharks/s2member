@@ -92,7 +92,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @param str $from The full directory path to calculate a relative path `from`.
 				* @param str $to The full directory or file path, which this routine will build a relative path `to`.
 				* @param bool $try_realpaths Defaults to true. When true, try to acquire ``realpath()``, thereby resolving all relative paths and/or symlinks in ``$from`` and ``$to`` args.
-				* @param bool $use_win_diff_drive_jctn Defaults to true. When true, we'll work around issues with different drives on Windows® by trying to create a directory junction.
+				* @param bool $use_win_diff_drive_jctn Defaults to true. When true, we'll work around issues with different drives on Windows by trying to create a directory junction.
 				* @return str String with the relative path to: ``$to``.
 				*/
 				public static function rel_path ($from = FALSE, $to = FALSE, $try_realpaths = TRUE, $use_win_diff_drive_jctn = TRUE)
@@ -110,7 +110,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 								$from = preg_split ("/\//", $from); // Convert ``$from``, to an array. Split on each directory separator.
 								$to = preg_split ("/\//", $to); // Also convert ``$to``, to an array. Split this on each directory separator.
 
-								if ($use_win_diff_drive_jctn && stripos (PHP_OS, "win") === 0 /* Test for different drives on Windows® servers? */)
+								if ($use_win_diff_drive_jctn && stripos (PHP_OS, "win") === 0 /* Test for different drives on Windows servers? */)
 
 									if (/*Drive? */preg_match ("/^([A-Z])\:$/i", $from[0], $_m) && ($_from_drive = $_m[1]) && preg_match ("/^([A-Z])\:$/i", $to[0], $_m) && ($_to_drive = $_m[1]))
 										if ( /* Are these locations on completely different drives? */$_from_drive !== $_to_drive)
@@ -128,7 +128,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 													}
 												else // Else, we should trigger an error in this case. It's NOT possible to generate this.
 													{
-														trigger_error ("Unable to generate a relative path across different Windows® drives." .
+														trigger_error ("Unable to generate a relative path across different Windows drives." .
 															" Please create a Directory Junction here: " . $_from_drive_jctn . ", pointing to: " . $_to_drive . ":/", E_USER_ERROR);
 													}
 											}
@@ -159,7 +159,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 						return implode ("/", $rel_path);
 					}
 				/**
-				* Creates a directory Junction in Windows®.
+				* Creates a directory Junction in Windows.
 				*
 				* @package s2Member\Utilities
 				* @since 111013
@@ -192,7 +192,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @package s2Member\Utilities
 				* @since 111017
 				*
-				* @param str $fallback Defaults to true. If true, fallback on WordPress® routine if not available, or if not writable.
+				* @param str $fallback Defaults to true. If true, fallback on WordPress routine if not available, or if not writable.
 				* @return str|bool Full string path to a writable temp directory, else false on failure.
 				*/
 				public static function get_temp_dir ($fallback = TRUE)

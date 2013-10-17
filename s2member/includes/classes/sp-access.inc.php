@@ -88,7 +88,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				* @package s2Member\SP_Access
 				* @since 3.5
 				*
-				* @param int|str $sp_id Numeric Post/Page ID in WordPress®.
+				* @param int|str $sp_id Numeric Post/Page ID in WordPress.
 				* @param bool $read_only Optional. Defaults to false. If ``$read_only = true``,
 				* 	no session cookies are set, no IP Restrictions are checked, and script execution is not exited on Link failure.
 				* 	In other words, with ``$read_only = true``, this function will simply return true or false.

@@ -66,7 +66,7 @@ if (!class_exists ("c_ws_plugin__s2member_ptags_sp"))
 							{
 								$tag_uri = c_ws_plugin__s2member_utils_urls::parse_uri (get_tag_link ($tag_id)); // Get a full valid URI for this Tag.
 
-								if (!c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page (null, $tag_uri)) // Do NOT touch WordPress® Systematics.
+								if (!c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page (null, $tag_uri)) // Do NOT touch WordPress Systematics.
 									{
 										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false; // Current User's object.
 

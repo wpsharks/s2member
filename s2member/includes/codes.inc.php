@@ -17,7 +17,7 @@
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
 /*
-Add WordPress® Editor Shortcodes.
+Add WordPress Editor Shortcodes.
 */
 add_shortcode ("s2Key", "c_ws_plugin__s2member_sc_keys::sc_get_key");
 add_shortcode ("s2Get", "c_ws_plugin__s2member_sc_gets::sc_get_details");

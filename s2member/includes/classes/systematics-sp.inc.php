@@ -28,14 +28,14 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 		class c_ws_plugin__s2member_systematics_sp
 			{
 				/**
-				* Determines if a specific Post/Page ID, or URI, is s2Member® Systematic.
+				* Determines if a specific Post/Page ID, or URI, is s2Member Systematic.
 				*
 				* @package s2Member\Systematics
 				* @since 111115
 				*
-				* @param int|str $singular_id Optional. A numeric Post/Page ID in WordPress®.
+				* @param int|str $singular_id Optional. A numeric Post/Page ID in WordPress.
 				* @param str $uri Optional. A request URI to test against.
-				* @return bool True if s2Member® Systematic, else false.
+				* @return bool True if s2Member Systematic, else false.
 				*/
 				public static function is_s2_systematic_use_specific_page ($singular_id = FALSE, $uri = FALSE)
 					{
@@ -46,25 +46,25 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 							{
 								return ($is_s2_systematic = apply_filters ("ws_plugin__s2member_is_s2_systematic_use_specific_page", true, get_defined_vars ()));
 							}
-						else // Otherwise, we return false (i.e. it's NOT an s2Member® Systematic Use Page).
+						else // Otherwise, we return false (i.e. it's NOT an s2Member Systematic Use Page).
 							return ($is_s2_systematic = apply_filters ("ws_plugin__s2member_is_s2_systematic_use_specific_page", false, get_defined_vars ()));
 					}
 				/**
-				* Determines if a specific Post/Page ID, or URI, is WordPress® Systematic.
+				* Determines if a specific Post/Page ID, or URI, is WordPress Systematic.
 				*
 				* @package s2Member\Systematics
 				* @since 111002
 				*
-				* @param int|str $singular_id Optional. A numeric Post/Page ID in WordPress®.
+				* @param int|str $singular_id Optional. A numeric Post/Page ID in WordPress.
 				* @param str $uri Optional. A request URI to test against.
-				* @return bool True if WordPress® Systematic, else false.
+				* @return bool True if WordPress Systematic, else false.
 				*/
 				public static function is_wp_systematic_use_specific_page ($singular_id = FALSE, $uri = FALSE)
 					{
 						$singular_id = ($singular_id && is_numeric ($singular_id)) ? (int)$singular_id : false; // Force types.
 						$uri = ($uri && is_string ($uri) && ($uri = c_ws_plugin__s2member_utils_urls::parse_uri ($uri))) ? $uri : false;
 
-						if ($uri && preg_match ("/\/wp-admin(?:\/|\?|$)/", $uri)) // Inside a WordPress® administrative area?
+						if ($uri && preg_match ("/\/wp-admin(?:\/|\?|$)/", $uri)) // Inside a WordPress administrative area?
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_specific_page", true, get_defined_vars ()));
 							}
@@ -72,7 +72,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 							{
 								return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_specific_page", true, get_defined_vars ()));
 							}
-						else // Otherwise, we return false (i.e. it's NOT a WordPress® Systematic Use Page).
+						else // Otherwise, we return false (i.e. it's NOT a WordPress Systematic Use Page).
 							return ($is_wp_systematic = apply_filters ("ws_plugin__s2member_is_wp_systematic_use_specific_page", false, get_defined_vars ()));
 					}
 				/**
@@ -81,7 +81,7 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 				* @package s2Member\Systematics
 				* @since 3.5
 				*
-				* @param int|str $singular_id Optional. A numeric Post/Page ID in WordPress®.
+				* @param int|str $singular_id Optional. A numeric Post/Page ID in WordPress.
 				* @param str $uri Optional. A request URI to test against.
 				* @return bool True if Systematic, else false.
 				*
@@ -95,11 +95,11 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 						$singular_id = ($singular_id && is_numeric ($singular_id)) ? (int)$singular_id : false; // Force types.
 						$uri = ($uri && is_string ($uri) && ($uri = c_ws_plugin__s2member_utils_urls::parse_uri ($uri))) ? $uri : false;
 
-						if (c_ws_plugin__s2member_systematics_sp::is_s2_systematic_use_specific_page /* An s2Member® Systematic Use Page? */ ($singular_id, $uri))
+						if (c_ws_plugin__s2member_systematics_sp::is_s2_systematic_use_specific_page /* An s2Member Systematic Use Page? */ ($singular_id, $uri))
 							{
 								return ($is_systematic = apply_filters ("ws_plugin__s2member_is_systematic_use_specific_page", true, get_defined_vars ()));
 							}
-						else if (c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page /* A WordPress® Systematic Use Page? */ ($singular_id, $uri))
+						else if (c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page /* A WordPress Systematic Use Page? */ ($singular_id, $uri))
 							{
 								return ($is_systematic = apply_filters ("ws_plugin__s2member_is_systematic_use_specific_page", true, get_defined_vars ()));
 							}

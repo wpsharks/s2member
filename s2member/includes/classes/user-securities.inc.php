@@ -30,7 +30,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 				/**
 				* Initializes Filter for `user_has_cap`.
 				*
-				* It's very important that this is NOT attached before WordPress® creates `$current_user` via `$wp->init()`.
+				* It's very important that this is NOT attached before WordPress creates `$current_user` via `$wp->init()`.
 				* This prevents crashes when other plugins attempt to call upon `current_user_can()` before WordPress is initialized.
 				* For instance, some plugins attempt to use `current_user_can()` on the `plugins_loaded` Hook, which they should not do.
 				*
@@ -57,9 +57,9 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 				* 	This array contains all of the Capabilities that the User has *( i.e. ``$user->allcaps`` )*.
 				* @param array $caps_map An array of Capabilities mapped out by the ``map_meta_cap`` function.
 				* @param array $args Array of arguments originally passed through the ``has_cap()`` function.
-				* 	However, WordPress® modifies this array of arguments in the following way.
+				* 	However, WordPress modifies this array of arguments in the following way.
 				* 	Argument `[0]` is the Capability test string itself *(this is normal)*.
-				* 	Argument `[1]` is added by WordPress®; it's the ID of the User.
+				* 	Argument `[1]` is added by WordPress; it's the ID of the User.
 				* 	Other arguments starting from array index `[2]` are normal.
 				* @return array An array of Capabilities.
 				*/

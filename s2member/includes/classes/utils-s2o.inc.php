@@ -25,14 +25,14 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 		class c_ws_plugin__s2member_utils_s2o
 			{
 				/*
-				* WordPress® directory.
+				* WordPress directory.
 				*
 				* @package s2Member\Utilities
 				* @since 110912
 				*
 				* @param str $starting_dir A directory to start searching from.
 				* @param str $alt_starting_dir An alternate directory to search from.
-				* @return str|null WordPress® directory, else exits script execution on failure.
+				* @return str|null WordPress directory, else exits script execution on failure.
 				*/
 				public static function wp_dir ($starting_dir = FALSE, $alt_starting_dir = FALSE)
 					{
@@ -45,17 +45,17 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 						header ("HTTP/1.0 500 Error");
 						header ("Content-Type: text/plain; charset=UTF-8");
 						while (@ob_end_clean ()); // Clean any existing output buffers.
-						exit ("ERROR: s2Member® unable to locate WordPress® directory.");
+						exit ("ERROR: s2Member unable to locate WordPress directory.");
 					}
 				/*
-				* WordPress® settings, after ``SHORTINIT`` section.
+				* WordPress settings, after ``SHORTINIT`` section.
 				*
 				* @package s2Member\Utilities
 				* @since 110912
 				*
-				* @param str $wp_dir WordPress® directory path.
+				* @param str $wp_dir WordPress directory path.
 				* @param str $o_file Location of calling `*-o.php` file.
-				* @return str|bool WordPress® settings, else false on failure.
+				* @return str|bool WordPress settings, else false on failure.
 				*/
 				public static function wp_settings_as ($wp_dir = FALSE, $o_file = FALSE)
 					{
@@ -84,7 +84,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 																			{
 																				if (($_wp_settings = str_replace ("__FILE__", '"' . str_replace ('"', '\"', $o_file) . '"', $_wp_settings))) // Eval compatible.
 																					{
-																						if (($_wp_settings = trim ($_wp_settings))) // WordPress®, with s2Member only.
+																						if (($_wp_settings = trim ($_wp_settings))) // WordPress, with s2Member only.
 																							return ($wp_settings_as = $_wp_settings); // After ``SHORTINIT``.
 																					}
 																			}

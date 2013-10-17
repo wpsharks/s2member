@@ -52,7 +52,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 				* @attaches-to ``add_action("edit_user_profile_update");``
 				* @attaches-to ``add_action("personal_options_update");``
 				*
-				* @param int|str $user_id Expects a numeric WordPress® User ID passed in by the Action Hook.
+				* @param int|str $user_id Expects a numeric WordPress User ID passed in by the Action Hook.
 				* @return inner Return-value of inner routine.
 				*/
 				public static function users_list_update_cols ($user_id = FALSE)
@@ -164,7 +164,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 				*
 				* @param str $val A value for this column, passed through by the Filter.
 				* @param str $col The name of the column for which we might need to supply data for.
-				* @param int|str $user_id Expects a WordPress® User ID, passed through by the Filter.
+				* @param int|str $user_id Expects a WordPress User ID, passed through by the Filter.
 				* @return str A column value introduced by this routine, or existing value, or, if empty, a dash.
 				*/
 				public static function users_list_display_cols ($val = FALSE, $col = FALSE, $user_id = FALSE)
