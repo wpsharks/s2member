@@ -121,7 +121,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 						remove_filter ("wp_mail_from", "c_ws_plugin__s2member_email_configs::_email_config_email");
 						remove_filter ("wp_mail_from_name", "c_ws_plugin__s2member_email_configs::_email_config_name");
 
-						if /* If ``$all`` is true, remove ALL attached WordPress® Filters. */ ($all)
+						if /* If ``$all`` is true, remove ALL attached WordPress Filters. */ ($all)
 							remove_all_filters ("wp_mail_from") . remove_all_filters ("wp_mail_from_name");
 
 						do_action ("ws_plugin__s2member_after_email_config_release", get_defined_vars ());
@@ -129,7 +129,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 						return /* Return for uniformity. */;
 					}
 				/**
-				* Converts primitive Role names in emails sent by WordPress®.
+				* Converts primitive Role names in emails sent by WordPress.
 				*
 				* Only necessary with this particular email: `wpmu_signup_user_notification_email`.
 				*
@@ -168,7 +168,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 						if (isset ($array["to"]) && !empty ($array["to"])) // Filter list of recipients?
 							// Reduces `"Name" <email>`, to just an email address *(for best cross-platform compatibility across various MTAs)*.
 							// Also works around bug in PHP versions prior to fix in 5.2.11. See bug report: <https://bugs.php.net/bug.php?id=28038>.
-							// Also supplements WordPress®. WordPress® currently does NOT support semicolon `;` delimitation, s2Member does.
+							// Also supplements WordPress. WordPress currently does NOT support semicolon `;` delimitation, s2Member does.
 							$array["to"] = implode (",", c_ws_plugin__s2member_utils_strings::parse_emails ($array["to"]));
 
 						return apply_filters ("ws_plugin__s2member_after_email_filter", $array, get_defined_vars ());
@@ -179,7 +179,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @package s2Member\Email_Configs
 				* @since 110707
 				*
-				* @param str|int $user_id A numeric WordPress® User ID.
+				* @param str|int $user_id A numeric WordPress User ID.
 				* @param str $user_pass Optional. A plain text version of the User's password.
 				* 	If omitted, a new password will be generated automatically.
 				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.
@@ -209,7 +209,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @package s2Member\Email_Configs
 				* @since 110707
 				*
-				* @param str|int $user_id A numeric WordPress® User ID.
+				* @param str|int $user_id A numeric WordPress User ID.
 				* @param str $user_pass Optional. A plain text version of the User's password.
 				* 	If omitted, only the administrative notification will be sent.
 				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.

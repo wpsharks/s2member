@@ -47,7 +47,7 @@ if (!class_exists ("c_ws_plugin__s2member_catgs_sp"))
 							{
 								$cat_uri = /* Get a full valid URI for this Category. */ c_ws_plugin__s2member_utils_urls::parse_uri (get_category_link ($cat_id));
 
-								if /* Do NOT touch WordPress® Systematics. */ (!c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page (null, $cat_uri))
+								if /* Do NOT touch WordPress Systematics. */ (!c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page (null, $cat_uri))
 									{
 										$user =  /* Current User's object. */(is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false;
 

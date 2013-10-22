@@ -117,17 +117,17 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 						return $details; // Return all details.
 					}
 				/**
-				* String with all version details *(for PHP, WordPress®, s2Member, and Pro)*.
+				* String with all version details *(for PHP, WordPress, s2Member, and Pro)*.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @return str String with `PHP vX.XX :: WordPress® vX.XX :: s2Member® vX.XX :: s2Member® Pro vX.XX`.
+				* @return str String with `PHP vX.XX :: WordPress vX.XX :: s2Member vX.XX :: s2Member Pro vX.XX`.
 				*/
 				public static function ver_details ()
 					{
-						$details = "PHP v" . PHP_VERSION . " :: WordPress® v" . get_bloginfo ("version") . " :: s2Member® v" . WS_PLUGIN__S2MEMBER_VERSION;
-						$details .= (c_ws_plugin__s2member_utils_conds::pro_is_installed ()) ? " :: s2Member® Pro v" . WS_PLUGIN__S2MEMBER_PRO_VERSION : "";
+						$details = "PHP v" . PHP_VERSION . " :: WordPress v" . get_bloginfo ("version") . " :: s2Member v" . WS_PLUGIN__S2MEMBER_VERSION;
+						$details .= (c_ws_plugin__s2member_utils_conds::pro_is_installed ()) ? " :: s2Member Pro v" . WS_PLUGIN__S2MEMBER_PRO_VERSION : "";
 
 						return $details; // Return all details.
 					}

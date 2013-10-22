@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_ssl"))
 						do_action ("ws_plugin__s2member_before_check_force_ssl", get_defined_vars ());
 
 						if (!$forced) // Only force SSL here once. We definitely do NOT need to run this particular routine more than ONE time.
-							if (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page () /* NOT on WordPress® Systematics. */)
+							if (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page () /* NOT on WordPress Systematics. */)
 								{
 									$s2_ssl_gv = apply_filters ("ws_plugin__s2member_check_force_ssl_get_var_name", "s2-ssl", get_defined_vars ());
 									$_g_s2_ssl = (isset ($_GET[$s2_ssl_gv]) && (!strlen ($_GET[$s2_ssl_gv]) || !preg_match ("/^(0|no|off|false)$/i", $_GET[$s2_ssl_gv]))) ? ((!strlen ($_GET[$s2_ssl_gv])) ? true : $_GET[$s2_ssl_gv]) : false;

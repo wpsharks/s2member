@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_security"))
 		class c_ws_plugin__s2member_security
 			{
 				/**
-				* s2Member's Security Gate (protects WordPress® content).
+				* s2Member's Security Gate (protects WordPress content).
 				*
 				* @package s2Member\Security
 				* @since 3.5
@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_security"))
 						return /* Return for uniformity. */;
 					}
 				/**
-				* s2Member's Security Gate (protects WordPress® queries).
+				* s2Member's Security Gate (protects WordPress queries).
 				*
 				* @package s2Member\Security
 				* @since 3.5
@@ -69,7 +69,7 @@ if (!class_exists ("c_ws_plugin__s2member_security"))
 				* @attaches-to ``add_action("pre_get_posts");``
 				*
 				* @param obj $wp_query Global ``$wp_query``, by reference.
-				* @return null May filter WordPress® queries, by hiding protected content which is NOT available to the current User/Member.
+				* @return null May filter WordPress queries, by hiding protected content which is NOT available to the current User/Member.
 				*/
 				public static function security_gate_query (&$wp_query = FALSE) // s2Member's Security Gate.
 					{

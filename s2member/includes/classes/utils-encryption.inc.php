@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				public static function key ($key = FALSE)
 					{
 						$key = (!is_string ($key) || !strlen ($key)) ? $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"] : $key;
-						$key = (!is_string ($key) || !strlen ($key)) ? /* Use the installed WordPress® salt. */ wp_salt () : $key;
+						$key = (!is_string ($key) || !strlen ($key)) ? /* Use the installed WordPress salt. */ wp_salt () : $key;
 						$key = (!is_string ($key) || !strlen ($key)) ? /* Default/backup. */ md5 ($_SERVER["HTTP_HOST"]) : $key;
 						return /* Proper encryption/decryption key. */ $key;
 					}

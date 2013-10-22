@@ -1,6 +1,6 @@
 <?php
 /**
-* s2Member's PayPal® Auto-Return/PDT handler.
+* s2Member's PayPal Auto-Return/PDT handler.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_return"))
 	{
 		/**
-		* s2Member's PayPal® Auto-Return/PDT handler.
+		* s2Member's PayPal Auto-Return/PDT handler.
 		*
 		* @package s2Member\PayPal
 		* @since 3.5
@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return"))
 		class c_ws_plugin__s2member_paypal_return
 			{
 				/**
-				* Handles PayPal® Return URLs.
+				* Handles PayPal Return URLs.
 				*
 				* @package s2Member\PayPal
 				* @since 3.5

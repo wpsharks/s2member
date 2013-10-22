@@ -1,6 +1,6 @@
 <?php
 /**
-* WordPress® footer code.
+* WordPress footer code.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_wp_footer"))
 	{
 		/**
-		* WordPress® footer code.
+		* WordPress footer code.
 		*
 		* @package s2Member\WP_Footer
 		* @since 110524RC

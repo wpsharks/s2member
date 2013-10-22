@@ -66,7 +66,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				*
 				* @todo Integrate {@link https://labs.aweber.com/docs/php-library-walkthrough AWeber's API}.
 				* @todo Add a separate option for mail debugging; or consolidate?
-				* @todo Integrate AWeber® API (much like the MailChimp® API).
+				* @todo Integrate AWeber API (much like the MailChimp API).
 				*/
 				public static function process_list_servers ($role = FALSE, $level = FALSE, $login = FALSE, $pass = FALSE, $email = FALSE, $fname = FALSE, $lname = FALSE, $ip = FALSE, $opt_in = FALSE, $double_opt_in = TRUE, $user_id = FALSE)
 					{
@@ -85,10 +85,10 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 
 								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"]) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_mailchimp_list_ids"]))
 									{
-										if /* Include the MailChimp® API Class here. */ (!class_exists ("NC_MCAPI"))
-											include_once /* MailChimp® API (no-conflict version). */ dirname (dirname (__FILE__)) . "/externals/mailchimp/nc-mcapi.inc.php";
+										if /* Include the MailChimp API Class here. */ (!class_exists ("NC_MCAPI"))
+											include_once /* MailChimp API (no-conflict version). */ dirname (dirname (__FILE__)) . "/externals/mailchimp/nc-mcapi.inc.php";
 
-										$mcapi = /* MailChimp® API (no-conflict). */ new NC_MCAPI ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"], true);
+										$mcapi = /* MailChimp API (no-conflict). */ new NC_MCAPI ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"], true);
 
 										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_mailchimp_list_ids"]) as $mailchimp_list)
 											{
@@ -155,7 +155,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														$aweber["pass_inclusion"] = (apply_filters ("ws_plugin__s2member_aweber_pass_inclusion", false, get_defined_vars ()) && $pass) ? "\nPass: " . $pass : false;
 														$buyer = ($fname || $lname) ? trim ($fname . " " . $lname) : /* Must have. AWeber's PayPal Email Parser chokes on an empty value. */ ucwords (preg_replace ("/^(.+?)@.+/", "$1", $email));
 
-														if ($aweber["wp_mail_response"] = wp_mail ($aweber["list_id"] . "@aweber.com", // AWeber® List ID converts to email address @aweber.com.
+														if ($aweber["wp_mail_response"] = wp_mail ($aweber["list_id"] . "@aweber.com", // AWeber List ID converts to email address @aweber.com.
 														($aweber["wp_mail_sbj"] = apply_filters ("ws_plugin__s2member_aweber_sbj", "s2Member Subscription Request", get_defined_vars ())), // These Filters make it possible to customize these emails.
 														($aweber["wp_mail_msg"] = apply_filters ("ws_plugin__s2member_aweber_msg", "s2Member Subscription Request\ns2Member w/ PayPal Email ID\nAd Tracking: s2Member-" . ((is_multisite () && !is_main_site ()) ? $current_blog->domain . $current_blog->path : $_SERVER["HTTP_HOST"]) . "\nEMail Address: " . $email . "\nBuyer: " . $buyer . "\nFull Name: " . trim ($fname . " " . $lname) . "\nFirst Name: " . $fname . "\nLast Name: " . $lname . "\nIP Address: " . $ip . "\nUser ID: " . $user_id . "\nLogin: " . $login . $aweber["pass_inclusion"] . "\nRole: " . $role . "\nLevel: " . $level . "\nCCaps: " . $ccaps . "\n - end.", get_defined_vars ())),
 														($aweber["wp_mail_headers"] = "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">" . (($aweber["bcc"]) ? "\r\nBcc: " . $aweber["bcc"] : "") . "\r\nContent-Type: text/plain; charset=UTF-8")))
@@ -213,7 +213,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				*
 				* @todo Integrate {@link https://labs.aweber.com/docs/php-library-walkthrough AWeber's API}.
 				* @todo Add a separate option for mail debugging; or consolidate?
-				* @todo Integrate AWeber® API (much like the MailChimp® API).
+				* @todo Integrate AWeber API (much like the MailChimp API).
 				*/
 				public static function process_list_server_removals ($role = FALSE, $level = FALSE, $login = FALSE, $pass = FALSE, $email = FALSE, $fname = FALSE, $lname = FALSE, $ip = FALSE, $opt_out = FALSE, $user_id = FALSE)
 					{
@@ -232,10 +232,10 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 
 								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"]) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_mailchimp_list_ids"]))
 									{
-										if /* Include the MailChimp® API Class here. */ (!class_exists ("NC_MCAPI"))
-											include_once /* MailChimp® API (no-conflict version). */ dirname (dirname (__FILE__)) . "/externals/mailchimp/nc-mcapi.inc.php";
+										if /* Include the MailChimp API Class here. */ (!class_exists ("NC_MCAPI"))
+											include_once /* MailChimp API (no-conflict version). */ dirname (dirname (__FILE__)) . "/externals/mailchimp/nc-mcapi.inc.php";
 
-										$mcapi = /* MailChimp® API (no-conflict). */ new NC_MCAPI ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"], true);
+										$mcapi = /* MailChimp API (no-conflict). */ new NC_MCAPI ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mailchimp_api_key"], true);
 
 										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_mailchimp_list_ids"]) as $mailchimp_list)
 											{
@@ -281,8 +281,8 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														c_ws_plugin__s2member_email_configs::email_config (); // Email configs MUST be ON for removal requests.
 															// The `From:` address MUST match AWeber account. See: <http://www.aweber.com/faq/questions/62/Can+I+Unsubscribe+People+Via+Email%3F>.
 
-														if ($aweber["wp_mail_removal_response"] = wp_mail ($aweber["list_id"] . "@aweber.com", // AWeber® List ID converts to email address @aweber.com.
-														($aweber["wp_mail_removal_sbj"] = apply_filters ("ws_plugin__s2member_aweber_removal_sbj", "REMOVE#" . $email . "#s2Member#" . $aweber["list_id"], get_defined_vars ())), // Bug fix. AWeber® does not like dots (possibly other chars) in the Ad Tracking field. Now using just: `s2Member`.
+														if ($aweber["wp_mail_removal_response"] = wp_mail ($aweber["list_id"] . "@aweber.com", // AWeber List ID converts to email address @aweber.com.
+														($aweber["wp_mail_removal_sbj"] = apply_filters ("ws_plugin__s2member_aweber_removal_sbj", "REMOVE#" . $email . "#s2Member#" . $aweber["list_id"], get_defined_vars ())), // Bug fix. AWeber does not like dots (possibly other chars) in the Ad Tracking field. Now using just: `s2Member`.
 														($aweber["wp_mail_removal_msg"] = "REMOVE"), ($aweber["wp_mail_removal_headers"] = "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">" . (($aweber["removal_bcc"]) ? "\r\nBcc: " . $aweber["removal_bcc"] : "") . "\r\nContent-Type: text/plain; charset=UTF-8")))
 															$aweber["wp_mail_removal_success"] = $removal_success = true; // Flag indicating that we DO have a successful removal; affects the function's overall return value.
 
@@ -331,7 +331,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				* @attaches-to ``add_action("ws_plugin__s2member_during_collective_mods");``
 				* @attaches-to ``add_action("ws_plugin__s2member_during_collective_eots");``
 				*
-				* @param int|str $user_id Required. A WordPress® User ID, numeric string or integer.
+				* @param int|str $user_id Required. A WordPress User ID, numeric string or integer.
 				* @param array $vars Required. An array of defined variables passed by the calling Hook.
 				* @param str $event Required. A specific event that triggered this call from the Action Hook.
 				* @param str $event_spec Required. A specific event specification *(a broader classification)*.

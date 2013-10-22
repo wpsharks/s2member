@@ -43,13 +43,13 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 							{
 								c_ws_plugin__s2member_roles_caps::unlink_roles();
 
-								if(function_exists("bbp_get_dynamic_roles") /* bbPress® v2.2+ integration. */)
+								if(function_exists("bbp_get_dynamic_roles") /* bbPress v2.2+ integration. */)
 									{
 										foreach(bbp_get_caps_for_role(bbp_get_participant_role()) as $bbp_participant_cap => $bbp_participant_cap_is)
 											if($bbp_participant_cap_is /* Is this capability enabled? */)
 												$bbp_participant_caps[$bbp_participant_cap] = true;
 									}
-								else if(function_exists("bbp_get_caps_for_role") /* bbPress® < v2.2 integration. */)
+								else if(function_exists("bbp_get_caps_for_role") /* bbPress < v2.2 integration. */)
 									{
 										foreach(bbp_get_caps_for_role(bbp_get_participant_role()) as $bbp_participant_cap)
 											$bbp_participant_caps[$bbp_participant_cap] = true;
@@ -89,7 +89,7 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 
 								$full_access_roles = array("administrator", "editor", "author", "contributor");
 
-								if(function_exists("bbp_get_caps_for_role") && !function_exists("bbp_get_dynamic_roles") /* bbPress® < v2.2 integration. */)
+								if(function_exists("bbp_get_caps_for_role") && !function_exists("bbp_get_dynamic_roles") /* bbPress < v2.2 integration. */)
 									$full_access_roles = array_merge($full_access_roles, (array)bbp_get_moderator_role());
 
 								foreach($full_access_roles as $role)
@@ -105,7 +105,7 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 						return /* Return for uniformity. */;
 					}
 				/**
-				* Adds support for bbPress® v2.2+ dynamic roles.
+				* Adds support for bbPress v2.2+ dynamic roles.
 				*
 				* @package s2Member\Roles_Caps
 				* @since 112512
@@ -152,7 +152,7 @@ if(!class_exists("c_ws_plugin__s2member_roles_caps"))
 
 								$full_access_roles = array("administrator", "editor", "author", "contributor");
 
-								if(function_exists("bbp_get_caps_for_role") && !function_exists("bbp_get_dynamic_roles") /* bbPress® < v2.2 integration. */)
+								if(function_exists("bbp_get_caps_for_role") && !function_exists("bbp_get_dynamic_roles") /* bbPress < v2.2 integration. */)
 									$full_access_roles = array_merge($full_access_roles, (array)bbp_get_moderator_role());
 
 								foreach($full_access_roles as $role)

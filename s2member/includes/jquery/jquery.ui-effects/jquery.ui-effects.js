@@ -1,7 +1,7 @@
 /**
 * jQuery UI Effects. See {@link http://docs.jquery.com/UI/Effects/}
 *
-* Distributed with WordPress® themes/plugins by WebSharks, Inc.
+* Distributed with WordPress themes/plugins by WebSharks, Inc.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}

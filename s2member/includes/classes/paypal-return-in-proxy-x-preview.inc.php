@@ -1,6 +1,6 @@
 <?php
 /**
-* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
+* s2Member's PayPal Auto-Return/PDT handler (inner processing routine).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 	{
 		/**
-		* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
+		* s2Member's PayPal Auto-Return/PDT handler (inner processing routine).
 		*
 		* @package s2Member\PayPal
 		* @since 110720
@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 		class c_ws_plugin__s2member_paypal_return_in_proxy_x_preview
 			{
 				/**
-				* s2Member's PayPal® Auto-Return/PDT handler (inner processing routine).
+				* s2Member's PayPal Auto-Return/PDT handler (inner processing routine).
 				*
 				* @package s2Member\PayPal
 				* @since 110720

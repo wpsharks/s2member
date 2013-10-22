@@ -35,8 +35,8 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 				*
 				* @attaches-to ``add_action("set_user_role");``
 				*
-				* @param int|str $user_id A numeric WordPress® User ID should be passed in by the Action Hook.
-				* @param str $role A WordPress® Role ID/Name should be passed in by the Action Hook.
+				* @param int|str $user_id A numeric WordPress User ID should be passed in by the Action Hook.
+				* @param str $role A WordPress Role ID/Name should be passed in by the Action Hook.
 				* @return null
 				*/
 				public static function synchronize_paid_reg_times ($user_id = FALSE, $role = FALSE)
@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 				* @package s2Member\Registrations
 				* @since 3.5
 				*
-				* @param int|str $user_id Optional. A numeric WordPress® User ID. Defaults to the current User, if logged-in.
+				* @param int|str $user_id Optional. A numeric WordPress User ID. Defaults to the current User, if logged-in.
 				* @return int A Unix timestamp, indicating Registration Time, else `0` on failure.
 				*/
 				public static function registration_time ($user_id = FALSE)
@@ -86,7 +86,7 @@ if (!class_exists ("c_ws_plugin__s2member_registration_times"))
 				* @since 3.5
 				*
 				* @param int|str $level Optional. Defaults to the first/initial Paid Registration Time, regardless of Level#.
-				* @param int|str $user_id Optional. A numeric WordPress® User ID. Defaults to the current User, if logged-in.
+				* @param int|str $user_id Optional. A numeric WordPress User ID. Defaults to the current User, if logged-in.
 				* @return int A Unix timestamp, indicating Paid Registration Time, else `0` on failure.
 				*/
 				public static function paid_registration_time ($level = FALSE, $user_id = FALSE)

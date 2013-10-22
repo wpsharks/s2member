@@ -47,7 +47,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 							{
 								return apply_filters ("ws_plugin__s2member_user_access_role", "", get_defined_vars ());
 							}
-						else // Else we return the first Role in their array of assigned WordPress® Roles.
+						else // Else we return the first Role in their array of assigned WordPress Roles.
 							return apply_filters ("ws_plugin__s2member_user_access_role", reset ($user->roles), get_defined_vars ());
 					}
 				/**
@@ -118,7 +118,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				* @package s2Member\User_Access
 				* @since 3.5
 				*
-				* @param str $role A WordPress® Role ID/Name.
+				* @param str $role A WordPress Role ID/Name.
 				* @return int Access Level#, `-1` if ``$role`` is empty.
 				*/
 				public static function user_access_role_to_level ($role = FALSE)

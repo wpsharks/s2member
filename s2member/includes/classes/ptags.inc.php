@@ -45,7 +45,7 @@ if (!class_exists ("c_ws_plugin__s2member_ptags"))
 
 						if (!$excluded && is_tag () && is_object ($tag = $wp_query->get_queried_object ()) && !empty ($tag->term_id) && ($tag_id = (int)$tag->term_id) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 							{
-								if (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page ()) // Do NOT touch WordPress® Systematics. This excludes all WordPress® Systematics.
+								if (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page ()) // Do NOT touch WordPress Systematics. This excludes all WordPress Systematics.
 									{
 										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false; // Current User's object.
 

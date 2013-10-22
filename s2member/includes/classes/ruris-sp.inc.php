@@ -47,7 +47,7 @@ if (!class_exists ("c_ws_plugin__s2member_ruris_sp"))
 
 						if (!$excluded && !empty ($uri) && is_string ($uri) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 							{
-								if (!c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page (null, $uri)) // Do NOT touch WordPress® Systematics.
+								if (!c_ws_plugin__s2member_systematics_sp::is_wp_systematic_use_specific_page (null, $uri)) // Do NOT touch WordPress Systematics.
 									{
 										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false; // Current User's object.
 

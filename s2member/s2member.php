@@ -3,7 +3,7 @@
 * The main plugin file.
 *
 * This file loads the plugin after checking
-* PHP, WordPress® and other compatibility requirements.
+* PHP, WordPress and other compatibility requirements.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -17,23 +17,23 @@
 * @package s2Member
 * @since 1.0
 */
-/* -- This section for WordPress® parsing. ------------------------------------------------------------------------------
+/* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
 Version: 130816
 Stable tag: 130816
 
 SSL Compatible: yes
-bbPress® Compatible: yes
-WordPress® Compatible: yes
-BuddyPress® Compatible: yes
-WP® Multisite Compatible: yes
+bbPress Compatible: yes
+WordPress Compatible: yes
+BuddyPress Compatible: yes
+WP Multisite Compatible: yes
 Multisite Blog Farm Compatible: yes
 
-PayPal® Standard Compatible: yes
-PayPal® Pro Compatible: yes w/s2Member® Pro
-Authorize.Net® Compatible: yes w/s2Member® Pro
-Google® Checkout Compatible: yes w/s2Member® Pro
-ClickBank® Compatible: yes w/s2Member® Pro
+PayPal Standard Compatible: yes
+PayPal Pro Compatible: yes w/s2Member Pro
+Authorize.Net Compatible: yes w/s2Member Pro
+Google Checkout Compatible: yes w/s2Member Pro
+ClickBank Compatible: yes w/s2Member Pro
 
 Tested up to: 3.7-alpha
 Requires at least: 3.3
@@ -42,14 +42,14 @@ Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License
 Contributors: WebSharks
 
-Author: s2Member® / WebSharks, Inc.
+Author: s2Member / WebSharks, Inc.
 Author URI: http://www.s2member.com/
 Donate link: http://www.s2member.com/donate/
 
 Text Domain: s2member
 Domain Path: /includes/translations
 
-Plugin Name: s2Member® Framework
+Plugin Name: s2Member Framework
 Forum URI: http://www.s2member.com/forums/
 Plugin URI: http://www.s2member.com/framework/
 Privacy URI: http://www.s2member.com/privacy/
@@ -60,10 +60,10 @@ Pro Module / Auto-Update URL: http://www.s2member.com/
 PayPal Pro Integration: http://www.s2member.com/videos/ED70D90C6749DA3D/
 Professional Installation URI: http://www.s2member.com/professional-installation/
 
-Description: s2Member®, a powerful (free) membership plugin for WordPress®. Protect/secure members only content with roles/capabilities.
+Description: s2Member, a powerful (free) membership plugin for WordPress. Protect/secure members only content with roles/capabilities.
 Tags: s2, s2member, s2 member, membership, users, user, members, member, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, paypal pro, pay pal, authorize, authorize.net, google checkout, clickbank, click bank, buddypress, buddy press, bbpress, bb press, shopping cart, cart, checkout, ecommerce
 
--- end section for WordPress® parsing. ------------------------------------------------------------------------------- */
+-- end section for WordPress parsing. ------------------------------------------------------------------------------- */
 if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
 /**
@@ -87,7 +87,7 @@ if(!defined("WS_PLUGIN__S2MEMBER_VERSION"))
 if(!defined("WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION"))
 	define("WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION", "5.2" /* !#php-requires-at-least-version#! */);
 /**
-* Minimum WordPress® version required to run s2Member.
+* Minimum WordPress version required to run s2Member.
 *
 * @package s2Member
 * @since 3.0
@@ -171,7 +171,7 @@ else if(is_admin()) // Admin compatibility errors.
 			}
 		else if(!version_compare(get_bloginfo("version"), WS_PLUGIN__S2MEMBER_MIN_WP_VERSION, ">="))
 			{
-				add_action("all_admin_notices", create_function('', 'echo \'<div class="error fade"><p>You need WordPress® v\' . WS_PLUGIN__S2MEMBER_MIN_WP_VERSION . \'+ to use the s2Member plugin.</p></div>\';'));
+				add_action("all_admin_notices", create_function('', 'echo \'<div class="error fade"><p>You need WordPress v\' . WS_PLUGIN__S2MEMBER_MIN_WP_VERSION . \'+ to use the s2Member plugin.</p></div>\';'));
 			}
 	}
 ?>

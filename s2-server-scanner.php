@@ -6,7 +6,7 @@
  * or any other file loading this as class: ``websharks_core_v3_deps_x__check_my_server``.
  *
  * This class MUST remain PHP v5.2 compatible. No namespace, and do NOT extend the framework.
- * This class MUST be capable of running with or without WordPress®. Possibly in a stand-alone file as class: ``websharks_core_v3_deps_x__check_my_server``.
+ * This class MUST be capable of running with or without WordPress. Possibly in a stand-alone file as class: ``websharks_core_v3_deps_x__check_my_server``.
  * We should run a ``check()`` automatically, when loaded in a stand-alone file as class: ``websharks_core_v3_deps_x__check_my_server``.
  *
  * Copyright: © 2012 (coded in the USA)
@@ -23,7 +23,7 @@ if(basename(__FILE__) !== 'deps-x.php'
 	/**
 	 * @var string Plugin name.
 	 */
-	define('___CHECK_MY_SERVER__PLUGIN_NAME', 's2Member®');
+	define('___CHECK_MY_SERVER__PLUGIN_NAME', 's2Member');
 	/**
 	 * @var string Plugin directory names (comma-delimited).
 	 */
@@ -34,9 +34,9 @@ if(basename(__FILE__) !== 'deps-x.php'
 	 */
 	$websharks_core_v3_deps_x__check_my_server = new websharks_core_v3_deps_x__check_my_server();
 	/**
-	 * Attempt to load WordPress®.
+	 * Attempt to load WordPress.
 	 */
-	if(!defined('WPINC')) // Try to load the closest WordPress® installation.
+	if(!defined('WPINC')) // Try to load the closest WordPress installation.
 		if(($___WP_LOAD = $websharks_core_v3_deps_x__check_my_server->get_wp_load()))
 			include_once $___WP_LOAD;
 	/**
@@ -44,7 +44,7 @@ if(basename(__FILE__) !== 'deps-x.php'
 	 */
 	$websharks_core_v3_deps_x__check_my_server->check();
 }
-else if(!defined('WPINC')) // Require WordPress®.
+else if(!defined('WPINC')) // Require WordPress.
 	exit('Do NOT access this file directly.');
 
 /**
@@ -135,16 +135,16 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 *    A possible FALSE return value, if invalid types are passed through arguments list.
 	 *
 	 * @auto-fix A possible FALSE return value, if an auto-fix is being requested (at least, initially).
-	 *    If an auto-fix is requested, we check to see if WordPress® is loaded up, and if the `init` hook has been fired yet.
+	 *    If an auto-fix is requested, we check to see if WordPress is loaded up, and if the `init` hook has been fired yet.
 	 *    If it has NOT been fired yet, we return FALSE (initially). Then we run this routine again on the `init` hook, with a priority of `1`.
-	 *    This allows auto-fix routines to check permissions, and perform other important tasks; with the use of all WordPress® functionality.
+	 *    This allows auto-fix routines to check permissions, and perform other important tasks; with the use of all WordPress functionality.
 	 *
 	 * @note The return value of this function depends heavily on the parameters used to call upon it.
 	 *    If it's called with ``$check_last_ok = TRUE`` (the default), there's a good chance it will simply return TRUE.
 	 *    That is, if we check a last OK time, and it's valid — a re-scan will NOT be processed; and there are no `issues` to report.
 	 *
-	 * @note This routine also deals with administrative notices in WordPress®.
-	 * @note This routine also deals with auto-fix routines in WordPress®.
+	 * @note This routine also deals with administrative notices in WordPress.
+	 * @note This routine also deals with auto-fix routines in WordPress.
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 *
@@ -152,7 +152,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 */
 	public function check($plugin_name = '', $plugin_dir_names = '', $report_notices = TRUE, $report_warnings = TRUE, $check_last_ok = TRUE, $maybe_display_wp_admin_notices = TRUE)
 	{
-		// Is WordPress® loaded up?
+		// Is WordPress loaded up?
 
 		$is_wp_loaded = (defined('WPINC')) ? TRUE : FALSE;
 
@@ -207,10 +207,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 			$check_last_ok      = ($is_check_my_server) ? FALSE : $check_last_ok;
 
 			$php_version = PHP_VERSION; // Installed PHP version.
-			global $wp_version; // Global made available by WordPress®.
+			global $wp_version; // Global made available by WordPress.
 
 			$php_version_required = '5.2'; // Required PHP version.
-			$wp_version_required  = '3.3'; // Required WordPress® version.
+			$wp_version_required  = '3.3'; // Required WordPress version.
 
 			// Look for possible filtration against this routine.
 
@@ -295,11 +295,11 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 			if($is_wp_loaded && version_compare($wp_version, $wp_version_required, '<'))
 			{
 				$errors[] = array(
-					'title'   => self::i18n('WordPress® Version'),
+					'title'   => self::i18n('WordPress Version'),
 					'message' => sprintf(
 						self::i18n(
-							'WordPress® v%1$s (or higher) is required to run %2$s.'.
-							' You are currently running WordPress® <code>v%3$s</code>. Please <a href="%4$s">upgrade</a>.'
+							'WordPress v%1$s (or higher) is required to run %2$s.'.
+							' You are currently running WordPress <code>v%3$s</code>. Please <a href="%4$s">upgrade</a>.'
 						), htmlspecialchars($wp_version_required), htmlspecialchars($plugin_name), htmlspecialchars($wp_version), esc_attr(admin_url('/update-core.php'))
 					)
 				);
@@ -307,10 +307,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 			else if($is_wp_loaded) // Pass on this check.
 			{
 				$passes[] = array(
-					'title'   => self::i18n('WordPress® Version'),
+					'title'   => self::i18n('WordPress Version'),
 					'message' => sprintf(
 						self::i18n(
-							'You are currently running WordPress® <code>%1$s</code> (which is fine).'.
+							'You are currently running WordPress <code>%1$s</code> (which is fine).'.
 							' Minimum required version is: <code>%2$s</code>'
 						), htmlspecialchars($wp_version), htmlspecialchars($wp_version_required)
 					)
@@ -1464,7 +1464,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 									'<p><strong>%1$s</strong></p>'.
 									'<p>This message was sent as a test.</p>'.
 									'<p>It\'s part of a server scan processed by: %2$s.</p>'.
-									'<p>A plugin for WordPress®.</p>'
+									'<p>A plugin for WordPress.</p>'
 								), htmlspecialchars($_mailer->Subject), htmlspecialchars($plugin_name)
 							)
 						);
@@ -1489,9 +1489,9 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						                'title'   => self::i18n('<span class="hilite">PHPMailer Class (Test Email Msg.)</span>'),
 						                'message' => sprintf(
 							                self::i18n(
-								                'Unable to send a test email message, because your installation of WordPress® is NOT yet configured with an administrative email address.'.
-								                ' Please see <a href="http://codex.wordpress.org/Settings_General_Screen" target="_blank" rel="xlink">this article</a> for a quick review of general options for WordPress®.'.
-								                ' Please configure your installation of WordPress®, with an administrative email address.'
+								                'Unable to send a test email message, because your installation of WordPress is NOT yet configured with an administrative email address.'.
+								                ' Please see <a href="http://codex.wordpress.org/Settings_General_Screen" target="_blank" rel="xlink">this article</a> for a quick review of general options for WordPress.'.
+								                ' Please configure your installation of WordPress, with an administrative email address.'
 							                ), NULL
 						                )
 						           )
@@ -1507,8 +1507,8 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 								                'We sent a test email message to <code>&lt;%1$s&gt;</code>. Unfortunately, the PHPMailer class threw the following exception: <code>possible email delivery failure</code>.'.
 								                ' Please see <a href="http://www.w3schools.com/php/php_ref_mail.asp" target="_blank" rel="xlink">this article</a> for possible solutions.'.
 								                ' Or consult with your web hosting company about this message.'.
-								                ' Note... this test email was processed by the PHPMailer class (which ships with WordPress®), and it uses PHP\'s built-in <code>mail()</code> function.'.
-								                ' On some servers (particularly Windows® servers), you might need to adjust your <a href="http://www.w3schools.com/php/php_ref_mail.asp" target="_blank" rel="xlink">php.ini file</a>, or configure an SMTP server.'.
+								                ' Note... this test email was processed by the PHPMailer class (which ships with WordPress), and it uses PHP\'s built-in <code>mail()</code> function.'.
+								                ' On some servers (particularly Windows servers), you might need to adjust your <a href="http://www.w3schools.com/php/php_ref_mail.asp" target="_blank" rel="xlink">php.ini file</a>, or configure an SMTP server.'.
 								                '<p style="font-size:110%; margin-left:5px; margin-bottom:0;"><strong>Additional Details (Message From PHP Exception):</strong></p>'.
 								                '<pre style="margin:0 0 0 15px; max-width:100%; max-height:300px; overflow:auto;">%2$s</pre>'
 							                ), htmlspecialchars(get_bloginfo('admin_email')), htmlspecialchars($mail_exception)
@@ -1542,10 +1542,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_memory_limit',
-						'title'    => self::i18n('WordPress® Memory Limit'),
+						'title'    => self::i18n('WordPress Memory Limit'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that you raise your WordPress® memory limit (please set: <code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>64M</code> (i.e. 64 megabytes).'.
+								'Although NOT required, %1$s recommends that you raise your WordPress memory limit (please set: <code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>64M</code> (i.e. 64 megabytes).'.
 								' Please see: <a href="http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP" target="_blank" rel="xlink">this how-to article</a>.'.
 								' Or consult with your web hosting company about this message. Your current memory limit is NOT yet defined.'
 							), htmlspecialchars($plugin_name)
@@ -1556,10 +1556,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_memory_limit',
-						'title'    => self::i18n('WordPress® Memory Limit'),
+						'title'    => self::i18n('WordPress Memory Limit'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that you raise your WordPress® memory limit (please set: <code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>64M</code> (i.e. 64 megabytes).'.
+								'Although NOT required, %1$s recommends that you raise your WordPress memory limit (please set: <code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>64M</code> (i.e. 64 megabytes).'.
 								' Please see: <a href="http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP" target="_blank" rel="xlink">this how-to article</a>.'.
 								' Or consult with your web hosting company about this message. Your current memory limit allows only: <code>%2$s</code>'
 							), htmlspecialchars($plugin_name), htmlspecialchars(WP_MEMORY_LIMIT)
@@ -1569,10 +1569,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				else if($is_wp_loaded) // Pass on this check.
 				{
 					$passes[] = array(
-						'title'   => self::i18n('WordPress® Memory Limit'),
+						'title'   => self::i18n('WordPress Memory Limit'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress® memory limit (<code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>, or by default), is set to: <code>%1$s</code>'
+								'Your WordPress memory limit (<code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>, or by default), is set to: <code>%1$s</code>'
 							), htmlspecialchars(WP_MEMORY_LIMIT)
 						)
 					);
@@ -1584,10 +1584,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_max_memory_limit',
-						'title'    => self::i18n('WordPress® MAX Memory Limit'),
+						'title'    => self::i18n('WordPress MAX Memory Limit'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that you raise your WordPress® MAX memory limit (please set: <code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>256M</code> (i.e. 256 megabytes).'.
+								'Although NOT required, %1$s recommends that you raise your WordPress MAX memory limit (please set: <code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>256M</code> (i.e. 256 megabytes).'.
 								' Please see: <a href="http://wordpress.org/support/topic/how-to-set-wp_max_memory_limit" target="_blank" rel="xlink">this how-to article</a>.'.
 								' Or consult with your web hosting company about this message. Your current MAX memory limit is NOT yet defined.'
 							), htmlspecialchars($plugin_name)
@@ -1598,10 +1598,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_max_memory_limit',
-						'title'    => self::i18n('WordPress® MAX Memory Limit'),
+						'title'    => self::i18n('WordPress MAX Memory Limit'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that you raise your WordPress® MAX memory limit (please set: <code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>256M</code> (i.e. 256 megabytes).'.
+								'Although NOT required, %1$s recommends that you raise your WordPress MAX memory limit (please set: <code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>256M</code> (i.e. 256 megabytes).'.
 								' Please see: <a href="http://wordpress.org/support/topic/how-to-set-wp_max_memory_limit" target="_blank" rel="xlink">this how-to article</a>.'.
 								' Or consult with your web hosting company about this message. Your current MAX memory limit allows only: <code>%2$s</code>'
 							), htmlspecialchars($plugin_name), htmlspecialchars(WP_MAX_MEMORY_LIMIT)
@@ -1611,10 +1611,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				else if($is_wp_loaded) // Pass on this check.
 				{
 					$passes[] = array(
-						'title'   => self::i18n('WordPress® MAX Memory Limit'),
+						'title'   => self::i18n('WordPress MAX Memory Limit'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress® MAX memory limit (<code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>, or by default), is set to: <code>%1$s</code>'
+								'Your WordPress MAX memory limit (<code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>, or by default), is set to: <code>%1$s</code>'
 							), htmlspecialchars(WP_MAX_MEMORY_LIMIT)
 						)
 					);
@@ -1626,7 +1626,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_http_block_external',
-						'title'    => self::i18n('WordPress® External HTTP Requests'),
+						'title'    => self::i18n('WordPress External HTTP Requests'),
 						'message'  => sprintf(
 							self::i18n(
 								'Although NOT required, %1$s recommends that you allow all external HTTP requests (please set: <code>WP_HTTP_BLOCK_EXTERNAL</code> in <code>/wp-config.php</code>), to: <code>FALSE</code>.'.
@@ -1639,10 +1639,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				else if($is_wp_loaded) // Pass on this check.
 				{
 					$passes[] = array(
-						'title'   => self::i18n('WordPress® External HTTP Requests'),
+						'title'   => self::i18n('WordPress External HTTP Requests'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress® External HTTP Requests (<code>WP_HTTP_BLOCK_EXTERNAL</code> in <code>/wp-config.php</code>, or by default), is set to: <code>FALSE</code>'
+								'Your WordPress External HTTP Requests (<code>WP_HTTP_BLOCK_EXTERNAL</code> in <code>/wp-config.php</code>, or by default), is set to: <code>FALSE</code>'
 							), NULL
 						)
 					);
@@ -1654,10 +1654,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_db_charset',
-						'title'    => self::i18n('WordPress® DB Charset'),
+						'title'    => self::i18n('WordPress DB Charset'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that your WordPress® installation be configured to operate with a <code>UTF-8</code> database charset (please set: <code>DB_CHARSET</code> in <code>/wp-config.php</code>).'.
+								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with a <code>UTF-8</code> database charset (please set: <code>DB_CHARSET</code> in <code>/wp-config.php</code>).'.
 								' Please see <a href="http://codex.wordpress.org/Editing_wp-config.php#Database_character_set" target="_blank" rel="xlink">this article</a> for further details.'.
 								' Or consult with your web hosting company about this message. Your current DB charset is NOT yet defined.'
 							), htmlspecialchars($plugin_name)
@@ -1668,10 +1668,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_db_charset',
-						'title'    => self::i18n('WordPress® DB Charset'),
+						'title'    => self::i18n('WordPress DB Charset'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that your WordPress® installation be configured to operate with a <code>UTF-8</code> database charset (please set: <code>DB_CHARSET</code> in <code>/wp-config.php</code>).'.
+								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with a <code>UTF-8</code> database charset (please set: <code>DB_CHARSET</code> in <code>/wp-config.php</code>).'.
 								' Please see <a href="http://codex.wordpress.org/Editing_wp-config.php#Database_character_set" target="_blank" rel="xlink">this article</a> for further details.'.
 								' Or consult with your web hosting company about this message. Your current DB charset is set to: <code>%2$s</code>'
 							), htmlspecialchars($plugin_name), htmlspecialchars(DB_CHARSET)
@@ -1681,10 +1681,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				else if($is_wp_loaded) // Pass on this check.
 				{
 					$passes[] = array(
-						'title'   => self::i18n('WordPress® DB Charset'),
+						'title'   => self::i18n('WordPress DB Charset'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress® database charset (<code>DB_CHARSET</code> in <code>/wp-config.php</code>, or by default), is set to: <code>%1$s</code>'
+								'Your WordPress database charset (<code>DB_CHARSET</code> in <code>/wp-config.php</code>, or by default), is set to: <code>%1$s</code>'
 							), htmlspecialchars(DB_CHARSET)
 						)
 					);
@@ -1696,10 +1696,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_db_collate',
-						'title'    => self::i18n('WordPress® DB Collation'),
+						'title'    => self::i18n('WordPress DB Collation'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that your WordPress® installation be configured to operate with a <code>UTF-8</code> database collation (please set: <code>DB_COLLATE</code> in <code>/wp-config.php</code>, to an empty string; or set it as: <code>utf8_general_ci</code>).'.
+								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with a <code>UTF-8</code> database collation (please set: <code>DB_COLLATE</code> in <code>/wp-config.php</code>, to an empty string; or set it as: <code>utf8_general_ci</code>).'.
 								' Please see <a href="http://codex.wordpress.org/Editing_wp-config.php#Database_collation" target="_blank" rel="xlink">this article</a> for further details.'.
 								' Or consult with your web hosting company about this message. Your current DB collation is NOT yet defined.'
 							), htmlspecialchars($plugin_name)
@@ -1710,10 +1710,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_db_collate',
-						'title'    => self::i18n('WordPress® DB Collation'),
+						'title'    => self::i18n('WordPress DB Collation'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that your WordPress® installation be configured to operate with a <code>UTF-8</code> database collation (please set: <code>DB_COLLATE</code> in <code>/wp-config.php</code>, to an empty string; or set it as: <code>utf8_general_ci</code>).'.
+								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with a <code>UTF-8</code> database collation (please set: <code>DB_COLLATE</code> in <code>/wp-config.php</code>, to an empty string; or set it as: <code>utf8_general_ci</code>).'.
 								' Please see <a href="http://codex.wordpress.org/Editing_wp-config.php#Database_collation" target="_blank" rel="xlink">this article</a> for further details.'.
 								' Or consult with your web hosting company about this message. Your current DB collation is set to: <code>%2$s</code>'
 							), htmlspecialchars($plugin_name), htmlspecialchars(DB_COLLATE)
@@ -1723,10 +1723,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				else if($is_wp_loaded) // Pass on this check.
 				{
 					$passes[] = array(
-						'title'   => self::i18n('WordPress® DB Collation'),
+						'title'   => self::i18n('WordPress DB Collation'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress® database collation (<code>DB_COLLATE</code> in <code>/wp-config.php</code>, or by default), is set to: %1$s'
+								'Your WordPress database collation (<code>DB_COLLATE</code> in <code>/wp-config.php</code>, or by default), is set to: %1$s'
 							), ((!DB_COLLATE) ? self::i18n('<code>an empty string</code>') : '<code>'.htmlspecialchars(DB_COLLATE).'</code>')
 						)
 					);
@@ -1740,10 +1740,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_charset_encoding',
-						'title'    => self::i18n('WordPress® Character Encoding'),
+						'title'    => self::i18n('WordPress Character Encoding'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that your WordPress® installation be configured to operate with <code>UTF-8</code> encoding.'.
+								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with <code>UTF-8</code> encoding.'.
 								' This can be changed in the Dashboard, under: <code>WordPress -› Settings -› Reading -› Encoding</code>.'.
 								' See also: <a href="http://codex.wordpress.org/Glossary#Unicode" target="_blank" rel="xlink">this article</a> about UTF-8.'.
 								' Your current encoding configuration is NOT yet defined.'
@@ -1755,10 +1755,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_charset_encoding',
-						'title'    => self::i18n('WordPress® Character Encoding'),
+						'title'    => self::i18n('WordPress Character Encoding'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that your WordPress® installation be configured to operate with <code>UTF-8</code> encoding.'.
+								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with <code>UTF-8</code> encoding.'.
 								' This can be changed in the Dashboard, under: <code>WordPress -› Settings -› Reading -› Encoding</code>.'.
 								' See also: <a href="http://codex.wordpress.org/Glossary#Unicode" target="_blank" rel="xlink">this article</a> about UTF-8.'.
 								' Your current encoding configuration is set to: <code>%2$s</code>'
@@ -1769,10 +1769,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				else if($is_wp_loaded) // Pass on this check.
 				{
 					$passes[] = array(
-						'title'   => self::i18n('WordPress® Character Encoding'),
+						'title'   => self::i18n('WordPress Character Encoding'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress® installation is operating with <code>%1$s</code> encoding, under: <code>WordPress -› Settings -› Reading -› Encoding</code>.'
+								'Your WordPress installation is operating with <code>%1$s</code> encoding, under: <code>WordPress -› Settings -› Reading -› Encoding</code>.'
 							), htmlspecialchars($blog_charset_encoding)
 						)
 					);
@@ -1791,10 +1791,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					if($configured_home_host_name !== $current_host_name && $configured_site_host_name !== $current_host_name)
 					{
 						$notices[] = array(
-							'title'   => self::i18n('WordPress® Home/Site URLs'),
+							'title'   => self::i18n('WordPress Home/Site URLs'),
 							'message' => sprintf(
 								self::i18n(
-									'Although NOT required, %1$s recommends that your WordPress® installation be configured with a matching HOST name.'.
+									'Although NOT required, %1$s recommends that your WordPress installation be configured with a matching HOST name.'.
 									' This can be changed in the Dashboard, under: <code>WordPress -> Settings -> General -> WordPress/Site URLs</code>.'.
 									' Your current configuration does NOT match: <code>%2$s</code>'
 								), htmlspecialchars($plugin_name), htmlspecialchars($current_host_name)
@@ -1806,10 +1806,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						if($configured_home_host_name === $current_host_name)
 						{
 							$passes[] = array(
-								'title'   => self::i18n('WordPress® Home URL'),
+								'title'   => self::i18n('WordPress Home URL'),
 								'message' => sprintf(
 									self::i18n(
-										'Your WordPress® home URL is configured to run on: <code>%1$s</code>, and that matches the current host name: <code>%2$s</code>'
+										'Your WordPress home URL is configured to run on: <code>%1$s</code>, and that matches the current host name: <code>%2$s</code>'
 									), htmlspecialchars($configured_home_host_name), htmlspecialchars($current_host_name)
 								)
 							);
@@ -1820,7 +1820,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 								'title'   => self::i18n('WordPress Site URL'),
 								'message' => sprintf(
 									self::i18n(
-										'Your WordPress® site URL is configured to run on: <code>%1$s</code>, and that matches the current host name: <code>%2$s</code>'
+										'Your WordPress site URL is configured to run on: <code>%1$s</code>, and that matches the current host name: <code>%2$s</code>'
 									), htmlspecialchars($configured_site_host_name), htmlspecialchars($current_host_name)
 								)
 							);
@@ -1834,12 +1834,12 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				{
 					$notices[] = array(
 						'auto_fix' => 'wp_debug_mode',
-						'title'    => self::i18n('WordPress® Debugging Mode'),
+						'title'    => self::i18n('WordPress Debugging Mode'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that your WordPress® installation be configured NOT to run in debugging mode (please set: <code>WP_DEBUG</code> to <code>FALSE</code> in <code>/wp-config.php</code>).'.
+								'Although NOT required, %1$s recommends that your WordPress installation be configured NOT to run in debugging mode (please set: <code>WP_DEBUG</code> to <code>FALSE</code> in <code>/wp-config.php</code>).'.
 								' <strong>If you decide to leave <code>WP_DEBUG</code> enabled, please take note...</strong>'.
-								' In <code>WP_DEBUG</code> mode, WordPress® will log debug messages into this file: <code>/wp-content/debug.log</code>.'.
+								' In <code>WP_DEBUG</code> mode, WordPress will log debug messages into this file: <code>/wp-content/debug.log</code>.'.
 								' Please make ABSOLUTELY sure this file is NOT publicly accessible, as it may contain sensitive server details (in some cases).'.
 								' Please see <a href="http://codex.wordpress.org/Editing_wp-config.php#Debug" target="_blank" rel="xlink">this article</a> for further details.'.
 								' Or consult with your web hosting company about this message.'
@@ -1850,10 +1850,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				else if($is_wp_loaded && (!defined('WP_DEBUG') || !WP_DEBUG)) // Pass on this check.
 				{
 					$passes[] = array(
-						'title'   => self::i18n('WordPress® Debugging Mode'),
+						'title'   => self::i18n('WordPress Debugging Mode'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress® installation is NOT running in debugging mode (<code>WP_DEBUG</code> in <code>/wp-config.php</code>, or by default), is NOT set to <code>TRUE</code>.'
+								'Your WordPress installation is NOT running in debugging mode (<code>WP_DEBUG</code> in <code>/wp-config.php</code>, or by default), is NOT set to <code>TRUE</code>.'
 							), NULL
 						)
 					);
@@ -1906,7 +1906,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 
 			/*********************************************************************************************/
 
-			if($is_wp_loaded) // ONLY if WordPress® is loaded up.
+			if($is_wp_loaded) // ONLY if WordPress is loaded up.
 			{
 				/***************************************************************************************/
 
@@ -2019,7 +2019,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 
 			// Now let's create a final ``$this->check`` value.
 			// We also make use of some additional sub-routines here,
-			// which display reports and/or WordPress® notices.
+			// which display reports and/or WordPress notices.
 
 			if($issues || $is_check_my_server)
 			{
@@ -2144,19 +2144,19 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 		{
 			if(!defined('WPINC'))
 				return self::i18n(
-					'WordPress® NOT loaded up.'
+					'WordPress NOT loaded up.'
 				);
 
 			else if(!did_action('init'))
 				return self::i18n(
-					'WordPress® `init` action hook has NOT fired yet.'.
+					'WordPress `init` action hook has NOT fired yet.'.
 					' Unable to check permissions.'
 				);
 
 			else if(!is_super_admin())
 				return self::i18n(
-					'Current user is NOT logged into WordPress®,'.
-					' or is NOT a WordPress® Super Admin.'
+					'Current user is NOT logged into WordPress,'.
+					' or is NOT a WordPress Super Admin.'
 				);
 
 			switch(strtolower($fixable_issue)) // Attempt auto-fix.
@@ -2199,9 +2199,9 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	}
 
 	/**
-	 * Attempts to re-define a WordPress® config file constant.
+	 * Attempts to re-define a WordPress config file constant.
 	 *
-	 * @param string $constant The name of a WordPress® config file constant.
+	 * @param string $constant The name of a WordPress config file constant.
 	 *
 	 * @param string $new_value The new value that should defined for the ``$constant``.
 	 *    Note, this is always passed as a string here, but the value is defined explicitly.
@@ -2224,29 +2224,29 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 		{
 			if(!defined('WPINC'))
 				return self::i18n(
-					'WordPress® NOT loaded up.'
+					'WordPress NOT loaded up.'
 				);
 
 			else if(!did_action('init'))
 				return self::i18n(
-					'WordPress® `init` action hook has NOT fired yet.'.
+					'WordPress `init` action hook has NOT fired yet.'.
 					' Unable to check permissions.'
 				);
 
 			else if(!is_super_admin())
 				return self::i18n(
-					'Current user is NOT logged into WordPress®,'.
-					' or is NOT a WordPress® Super Admin.'
+					'Current user is NOT logged into WordPress,'.
+					' or is NOT a WordPress Super Admin.'
 				);
 
 			else if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)
 				return self::i18n(
-					'Your current WordPress® configuration disallows file modifications explicitly.'.
+					'Your current WordPress configuration disallows file modifications explicitly.'.
 					' Cannot modify files (thus, cannot auto-fix this issue).'
 				);
 
 			$wp_config_file['path']                 = ABSPATH.'wp-config.php';
-			$wp_config_file['is_readable_writable'] = ( // WordPress® config file is readable/writable?
+			$wp_config_file['is_readable_writable'] = ( // WordPress config file is readable/writable?
 				file_exists($wp_config_file['path']) && is_readable($wp_config_file['path']) && is_writable($wp_config_file['path'])
 			);
 
@@ -2267,10 +2267,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 
 				unset($_new_config_value, $_old_config_value_regex, $_split, $_php_tag_regex, $_new_wp_config_file_contents);
 
-				return self::i18n('Search/replace failed inside WordPress® config file (<code>/wp-config.php</code>).');
+				return self::i18n('Search/replace failed inside WordPress config file (<code>/wp-config.php</code>).');
 			}
 			else return self::i18n(
-				'WordPress® config file (<code>/wp-config.php</code>) is NOT readable/writable.'.
+				'WordPress config file (<code>/wp-config.php</code>) is NOT readable/writable.'.
 				' Please set permissions on this file to <code>777</code>, and try again.'
 			);
 		}
@@ -2411,7 +2411,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 								     '<p class="tip">'.
 								     '<span>'.
 								     '<strong>Tip:</strong>'.
-								     ' For additional functionality, please log into WordPress® as a Super Administrator, then come back and re-run this scan.'.
+								     ' For additional functionality, please log into WordPress as a Super Administrator, then come back and re-run this scan.'.
 								     ' Additional functionality includes the ability to dismiss and/or AUTO-FIX some issues.'.
 								     '</span>'.
 								     '</p>'
@@ -2522,9 +2522,9 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	}
 
 	/**
-	 * Handles administrative notices within WordPress®.
+	 * Handles administrative notices within WordPress.
 	 *
-	 * @attaches-to WordPress® `all_admin_notices` hook.
+	 * @attaches-to WordPress `all_admin_notices` hook.
 	 * @hook-priority The default is fine.
 	 *
 	 * @return null Nothing.
@@ -2598,7 +2598,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						     '<p class="tip">'.
 						     '<span>'.
 						     '<strong>Tip:</strong>'.
-						     ' For additional functionality, please log into WordPress® as a Super Administrator.'.
+						     ' For additional functionality, please log into WordPress as a Super Administrator.'.
 						     ' Additional functionality includes the ability to dismiss and/or AUTO-FIX some issues.'.
 						     '</span>'.
 						     '</p>'

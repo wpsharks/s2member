@@ -59,7 +59,7 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 						return true; // Always return true.
 					}
 				/**
-				* Defines no-cache constants for various WordPress® plugins.
+				* Defines no-cache constants for various WordPress plugins.
 				*
 				* This is compatible with Quick Cache, W3 Total Cache, and also with WP Super Cache.
 				* Quick Cache uses: ``QUICK_CACHE_ALLOWED``, and other plugins use: ``DONOTCACHEPAGE``.

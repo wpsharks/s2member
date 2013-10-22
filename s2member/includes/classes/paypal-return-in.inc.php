@@ -1,6 +1,6 @@
 <?php
 /**
-* s2Member's PayPal® Auto-Return/PDT handler (inner processing routines).
+* s2Member's PayPal Auto-Return/PDT handler (inner processing routines).
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 	{
 		/**
-		* s2Member's PayPal® Auto-Return/PDT handler (inner processing routines).
+		* s2Member's PayPal Auto-Return/PDT handler (inner processing routines).
 		*
 		* @package s2Member\PayPal
 		* @since 3.5
@@ -28,7 +28,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 		class c_ws_plugin__s2member_paypal_return_in
 			{
 				/**
-				* Handles PayPal® Return URLs.
+				* Handles PayPal Return URLs.
 				*
 				* @package s2Member\PayPal
 				* @since 3.5
@@ -51,7 +51,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								if (is_array ($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
 									{
 										$paypal["s2member_log"][] = "Return-Data received on: " . date ("D M j, Y g:i:s a T");
-										$paypal["s2member_log"][] = "s2Member POST vars verified " . ((!empty ($paypal["proxy_verified"])) ? "with a Proxy Key" : "through a POST back to PayPal®.");
+										$paypal["s2member_log"][] = "s2Member POST vars verified " . ((!empty ($paypal["proxy_verified"])) ? "with a Proxy Key" : "through a POST back to PayPal.");
 
 										$paypal["subscr_gateway"] = (!empty ($_GET["s2member_paypal_proxy"])) ? esc_html (trim (stripslashes ($_GET["s2member_paypal_proxy"]))) : "paypal";
 
@@ -97,7 +97,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 												else // Else, use the default ``$_SERVER["HTTP_HOST"]`` error.
 													{
 														if /* Enqueue an admin notice if the site owner is using the wrong domain variation. */ ($paypal["custom"] && ($paypal["custom"] === "www.".$_SERVER["HTTP_HOST"] || "www.".$paypal["custom"] === $_SERVER["HTTP_HOST"]))
-															c_ws_plugin__s2member_admin_notices::enqueue_admin_notice("<strong>s2Member:</strong> Post-processing failed on at least one transaction. It appears that you have a PayPal® Button configured with a <code>custom=\"\"</code> Shortcode Attribute that does NOT match up with your installation domain name. If your site uses the <code>www.</code> prefix, please include that. If it does not, please exclude the <code>www.</code> prefix. You should have <code>custom=\"".preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"])."\"</code>", "*:*", true);
+															c_ws_plugin__s2member_admin_notices::enqueue_admin_notice("<strong>s2Member:</strong> Post-processing failed on at least one transaction. It appears that you have a PayPal Button configured with a <code>custom=\"\"</code> Shortcode Attribute that does NOT match up with your installation domain name. If your site uses the <code>www.</code> prefix, please include that. If it does not, please exclude the <code>www.</code> prefix. You should have <code>custom=\"".preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"])."\"</code>", "*:*", true);
 
 														$paypal["s2member_log"][] = 'Unable to verify `$_SERVER["HTTP_HOST"]`. Please check the `custom` value in your Button Code. It MUST start with your domain name.';
 
@@ -120,17 +120,17 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								else // Extensive log reporting here. This is an area where many site owners find trouble. Depending on server configuration; remote HTTPS connections may fail.
 									{
 										if /* Enqueue an admin notice if the site owner is missing the PDT Identity Key. */ (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_identity_token"])
-											c_ws_plugin__s2member_admin_notices::enqueue_admin_notice("<strong>s2Member:</strong> You have no PayPal® PDT Identity Token configured. PayPal® Auto-Return handling failed. Please update your PayPal® PDT Identity Key. See: <code>s2Member -› PayPal® Options -› PayPal® PDT/Auto-Return Integration</code>. Thank you!", "*:*", true);
+											c_ws_plugin__s2member_admin_notices::enqueue_admin_notice("<strong>s2Member:</strong> You have no PayPal PDT Identity Token configured. PayPal Auto-Return handling failed. Please update your PayPal PDT Identity Key. See: <code>s2Member -› PayPal Options -› PayPal PDT/Auto-Return Integration</code>. Thank you!", "*:*", true);
 
 										$paypal["s2member_log"][] = "Unable to verify \$_POST vars. This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility.";
-										$paypal["s2member_log"][] = "Please make sure that you configure a PayPal® PDT Identity Token for your installation of s2Member®. See: `s2Member -› PayPal® Options -› PayPal® PDT/Auto-Return Integration`.";
-										$paypal["s2member_log"][] = "See also, this KB article: `http://www.s2member.com/kb/server-scanner/`. We suggest that you run the s2Member® Server Scanner.";
+										$paypal["s2member_log"][] = "Please make sure that you configure a PayPal PDT Identity Token for your installation of s2Member. See: `s2Member -› PayPal Options -› PayPal PDT/Auto-Return Integration`.";
+										$paypal["s2member_log"][] = "See also, this KB article: `http://www.s2member.com/kb/server-scanner/`. We suggest that you run the s2Member Server Scanner.";
 										$paypal["s2member_log"][] = /* Recording _POST + _GET vars for analysis and debugging. */ var_export ($_REQUEST, true);
 
 										$paypal["s2member_log"][] = "Redirecting Customer to the Home Page (after displaying an error message).";
 
 										echo c_ws_plugin__s2member_return_templates::return_template ("default",
-											_x ('<strong>ERROR:</strong> Unable to verify <code>$_POST</code> vars.<br />Please contact Support for assistance.<br /><br />This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility. If you are the site owner, and you\'re absolutely SURE that your configuration is valid, you may want to run some tests on your server, just to be sure <code>$_POST</code> variables are populated, and that your server is able to connect/communicate with your Payment Gateway over an HTTPS connection.<br /><br />s2Member uses the <code>WP_Http</code> class for remote connections; which will try to use <code>cURL</code> first, and then fall back on the <code>FOPEN</code> method when <code>cURL</code> is not available. On a Windows® server, you may have to disable your <code>cURL</code> extension; and instead, set <code>allow_url_fopen = yes</code> in your php.ini file. The <code>cURL</code> extension (usually) does NOT support SSL connections on a Windows® server.<br /><br />Please see <a href="http://www.s2member.com/forums/topic/ideal-server-configuration-for-s2member/" target="_blank">this thread</a> for details regarding the ideal server configuration for s2Member.', "s2member-front", "s2member"),
+											_x ('<strong>ERROR:</strong> Unable to verify <code>$_POST</code> vars.<br />Please contact Support for assistance.<br /><br />This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility. If you are the site owner, and you\'re absolutely SURE that your configuration is valid, you may want to run some tests on your server, just to be sure <code>$_POST</code> variables are populated, and that your server is able to connect/communicate with your Payment Gateway over an HTTPS connection.<br /><br />s2Member uses the <code>WP_Http</code> class for remote connections; which will try to use <code>cURL</code> first, and then fall back on the <code>FOPEN</code> method when <code>cURL</code> is not available. On a Windows server, you may have to disable your <code>cURL</code> extension; and instead, set <code>allow_url_fopen = yes</code> in your php.ini file. The <code>cURL</code> extension (usually) does NOT support SSL connections on a Windows server.<br /><br />Please see <a href="http://www.s2member.com/forums/topic/ideal-server-configuration-for-s2member/" target="_blank">this thread</a> for details regarding the ideal server configuration for s2Member.', "s2member-front", "s2member"),
 											_x ("Back To Home Page", "s2member-front", "s2member"), home_url ("/"));
 									}
 								/*

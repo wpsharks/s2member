@@ -30,7 +30,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 				/**
 				* Currency converter.
 				*
-				* Uses the Google® currency conversion API.
+				* Uses the Google currency conversion API.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5

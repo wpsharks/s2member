@@ -28,7 +28,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 		class c_ws_plugin__s2member_utils_urls
 			{
 				/**
-				* Builds a WordPress® signup URL to `/wp-signup.php`.
+				* Builds a WordPress signup URL to `/wp-signup.php`.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
@@ -40,7 +40,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 						return apply_filters("wp_signup_location", site_url("/wp-signup.php"));
 					}
 				/**
-				* Builds a WordPress® registration URL to `/wp-login.php?action=register`.
+				* Builds a WordPress registration URL to `/wp-login.php?action=register`.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
@@ -92,7 +92,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				/**
 				* Encodes all types of amperands to `amp;`, for use in XHTML code.
 				*
-				* Note however, this is usually NOT necessary. Just use WordPress® ``esc_html()`` or ``esc_attr()``.
+				* Note however, this is usually NOT necessary. Just use WordPress ``esc_html()`` or ``esc_attr()``.
 				*
 				* @package s2Member\Utilities
 				* @since 111106
@@ -194,7 +194,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 							{
 								$args = /* Force array, and disable SSL verification. */ (!is_array($args)) ? array(): $args;
 
-								$args["s2member"] = WS_PLUGIN__S2MEMBER_VERSION; // Indicates this is an s2Member® connection.
+								$args["s2member"] = WS_PLUGIN__S2MEMBER_VERSION; // Indicates this is an s2Member connection.
 
 								$args["sslverify"] = (!isset($args["sslverify"])) ? /* Off. */ false : $args["sslverify"];
 
@@ -266,7 +266,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 									return /* The default tinyURL API: <http://tinyurl.com/api-create.php?url=http://www.example.com/>. */ ($shorter_url = $tiny_url);
 
 								else if($api === "goo_gl" && ($goo_gl = json_decode(trim(c_ws_plugin__s2member_utils_urls::remote("https://www.googleapis.com/urlshortener/v1/url".((($goo_gl_key = apply_filters("ws_plugin__s2member_url_shorten_api_goo_gl_key", false))) ? "?key=".urlencode($goo_gl_key) : ""), json_encode(array("longUrl" => $url)), array("headers" => array("Content-Type" => "application/json")))), true)) && !empty($goo_gl["id"]) && is_string($goo_gl_url = $goo_gl["id"]) && stripos($goo_gl_url, "http") === 0)
-									return /* Google® API: <http://code.google.com/apis/urlshortener/v1/getting_started.html>. */ ($shorter_url = $goo_gl_url);
+									return /* Google API: <http://code.google.com/apis/urlshortener/v1/getting_started.html>. */ ($shorter_url = $goo_gl_url);
 
 								else if /* Try backups? This way we can still shorten the URL with a backup. */($try_backups && count($apis) > 1)
 

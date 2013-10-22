@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				* o On the Return URL / Thank-You Page, after returning from your Payment Gateway.
 				* o Otherwise, on the Registration Form, after returning from your Payment Gateway.
 				* o Otherwise, if possible, on the Login Form *(in the footer)* after Registration is completed.
-				* o Otherwise, in the footer of your WordPress® theme, as soon as possible; or after the Customer's very first login.
+				* o Otherwise, in the footer of your WordPress theme, as soon as possible; or after the Customer's very first login.
 				*
 				* @package s2Member\Tracking
 				* @since 3.5
@@ -90,7 +90,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				*
 				* o On the Return URL / Thank-You Page, after returning from your Payment Gateway.
 				* o Otherwise, if possible, on the Login Form *(in the footer)* after returning from your Payment Gateway.
-				* o Otherwise, in the footer of your WordPress® theme, as soon as possible; or after the Customer's next login.
+				* o Otherwise, in the footer of your WordPress theme, as soon as possible; or after the Customer's next login.
 				*
 				* @package s2Member\Tracking
 				* @since 110815
@@ -142,7 +142,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				*
 				* o On the Return URL / Thank-You Page, after returning from your Payment Gateway.
 				* o Otherwise, if possible, on the Login Form *(in the footer)* after returning from your Payment Gateway.
-				* o Otherwise, in the footer of your WordPress® theme, as soon as possible; or after the Customer's next login.
+				* o Otherwise, in the footer of your WordPress theme, as soon as possible; or after the Customer's next login.
 				*
 				* @package s2Member\Tracking
 				* @since 110815

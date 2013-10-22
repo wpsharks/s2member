@@ -17,7 +17,7 @@
 Structural styles for s2Member Security Badge.
 
 These are basic CSS rules. You can override any of these
-through the `/style.css` file for your WordPress® theme.
+through the `/style.css` file for your WordPress theme.
 */
 div.ws-plugin--s2member-s-badge
 	{
@@ -28,7 +28,7 @@ div.ws-plugin--s2member-s-badge
 Structural styles for Password strength indicators.
 
 These are basic CSS rules. You can override any of these
-through the `/style.css` file for your WordPress® theme.
+through the `/style.css` file for your WordPress theme.
 */
 div.ws-plugin--s2member-password-strength
 	{
@@ -64,7 +64,7 @@ div.ws-plugin--s2member-password-strength-mismatch
 Structural styles for Multisite Integration Forms.
 
 These are basic CSS rules. You can override any of these
-through the `/style.css` file for your WordPress® theme.
+through the `/style.css` file for your WordPress theme.
 */
 div#content > div.mu_register,
 div#content > div.mu_register h2
@@ -142,7 +142,7 @@ div#content > div.mu_register > div.mu_alert
 Structural styles for Return Pages.
 
 These are basic CSS rules. You can override any of these
-through the `/style.css` file for your WordPress® theme.
+through the `/style.css` file for your WordPress theme.
 */
 body.s2member-return-body
 	{
@@ -246,7 +246,7 @@ div.s2member-return-support-section div.cc-reminder
 Structural styles for Shortcode Profile Editing panel.
 
 These are basic CSS rules. You can override any of these
-through the `/style.css` file for your WordPress® theme.
+through the `/style.css` file for your WordPress theme.
 */
 div#ws-plugin--s2member-profile-saved
 	{
@@ -327,7 +327,7 @@ form#ws-plugin--s2member-profile div.ws-plugin--s2member-profile-field-divider-s
 Structural styles for BuddyPress Profile Field items.
 
 These are basic CSS rules. You can override any of these
-through the `/style.css` file for your WordPress® theme.
+through the `/style.css` file for your WordPress theme.
 */
 body.profile.public div.ws-plugin--s2member-profile-field-4bp-divider-section
 	{
@@ -347,7 +347,7 @@ body.profile.public div.ws-plugin--s2member-profile-field-4bp-divider-section-ti
 Structural styles for BuddyPress Registration Fields.
 
 These are basic CSS rules. You can override any of these
-through the `/style.css` file for your WordPress® theme.
+through the `/style.css` file for your WordPress theme.
 */
 body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section
 	{
@@ -408,7 +408,7 @@ body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section div
 Structural styles for BuddyPress Profile Field integrations.
 
 These are basic CSS rules. You can override any of these
-through the `/style.css` file for your WordPress® theme.
+through the `/style.css` file for your WordPress theme.
 */
 body.logged-in.profile.profile-edit form#profile-edit-form div.editfield input[type="text"],
 body.logged-in.profile.profile-edit form#profile-edit-form div.editfield input[type="email"],

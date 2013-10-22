@@ -1,6 +1,6 @@
 <?php
 /**
-* WordPress® with s2Member only.
+* WordPress with s2Member only.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -21,7 +21,7 @@ if (($ws_plugin__s2member_o["wp_dir"] = c_ws_plugin__s2member_utils_s2o::wp_dir 
 		if (($ws_plugin__s2member_o["wp_settings_as"] = c_ws_plugin__s2member_utils_s2o::wp_settings_as ($ws_plugin__s2member_o["wp_dir"], __FILE__)))
 			{
 				/**
-				* Short initialization mode for WordPress®.
+				* Short initialization mode for WordPress.
 				*
 				* @package s2Member
 				* @since 110912
@@ -39,12 +39,12 @@ if (($ws_plugin__s2member_o["wp_dir"] = c_ws_plugin__s2member_utils_s2o::wp_dir 
 				*/
 				define ("WS_PLUGIN__S2MEMBER_ONLY", true);
 				/*
-				Load WordPress®.
+				Load WordPress.
 				*/
 				require($ws_plugin__s2member_o["wp_dir"] . "/wp-load.php");
 				eval ("?>" . /* Settings after ``SHORTINIT``. */ $ws_plugin__s2member_o["wp_settings_as"]);
 			}
-		else // Else fallback on full WordPress®.
+		else // Else fallback on full WordPress.
 			require($ws_plugin__s2member_o["wp_dir"] . "/wp-load.php");
 	}
 unset ($ws_plugin__s2member_o);

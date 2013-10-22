@@ -30,6 +30,6 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
  <!-- <?php echo _x ("Identifies The Customer's IP Address For Tracking", "s2member-admin", "s2member"); ?> -->
  <input type="hidden" name="on1" value="<?php echo "<?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1; ?>"; ?>" />
  <input type="hidden" name="os1" value="<?php echo "<?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1; ?>"; ?>" />
- <!-- <?php echo _x ("Displays The PayPal® Image Button", "s2member-admin", "s2member"); ?> -->
- <input type="image" src="https://www.paypal.com/<?php echo esc_attr (_x ("en_US", "s2member-front paypal-button-lang-code", "s2member")); ?>/i/btn/btn_xpressCheckout.gif" style="width:auto; height:auto; border:0;" alt="PayPal®" />
+ <!-- <?php echo _x ("Displays The PayPal Image Button", "s2member-admin", "s2member"); ?> -->
+ <input type="image" src="https://www.paypal.com/<?php echo esc_attr (_x ("en_US", "s2member-front paypal-button-lang-code", "s2member")); ?>/i/btn/btn_xpressCheckout.gif" style="width:auto; height:auto; border:0;" alt="PayPal" />
 </form>

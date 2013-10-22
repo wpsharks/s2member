@@ -1,6 +1,6 @@
 <?php
 /**
-* Pluggable functions within WordPress®.
+* Pluggable functions within WordPress.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}

@@ -4,8 +4,8 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 
 global /* A Multisite ``$base`` configuration? */ $base;
 $ws_plugin__s2member_temp_s_base = (!empty ($base)) ? $base : c_ws_plugin__s2member_utils_urls::parse_url (network_home_url ("/"), PHP_URL_PATH);
-// This works on Multisite installs too. The function ``network_home_url ()`` defaults to ``home_url ()`` on standard WordPress® installs.
-// Do NOT use ``site`` URL. Must use the `home` URL here, because that's what WordPress® uses in its own `mod_rewrite` implementation.
+// This works on Multisite installs too. The function ``network_home_url ()`` defaults to ``home_url ()`` on standard WordPress installs.
+// Do NOT use ``site`` URL. Must use the `home` URL here, because that's what WordPress uses in its own `mod_rewrite` implementation.
 ?>
 
 Options +FollowSymLinks -Indexes

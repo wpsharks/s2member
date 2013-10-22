@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_translations"))
 				/**
 				* Handles internal translations via `gettext` Filter.
 				*
-				* Important note. Because this routine also uses translation functionality by WordPress®,
+				* Important note. Because this routine also uses translation functionality by WordPress,
 				* anything translated by this routine MUST be different, otherwise it will result in a recursive loop,
 				* because the ``__()`` family of functions would be called upon recursively by this routine.
 				*
