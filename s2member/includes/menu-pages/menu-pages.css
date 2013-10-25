@@ -203,13 +203,12 @@ table.ws-menu-page-table div.ws-menu-page-groups-hide
 		height: 24px;
 		width: 24px;
 		color: #333333;
-		padding: 3px;
+		padding: 5px;
 		cursor: pointer;
 		font-size: 28px;
 		font-weight: bold;
 		line-height: 25px;
 		text-align: center;
-		background: #FFFFFF;
 		margin: 0 0 0 7px;
 		vertical-align: middle;
 		font-family: monospace;
@@ -220,6 +219,7 @@ table.ws-menu-page-table div.ws-menu-page-groups-hide
 		-moz-user-select: none;
 		-webkit-user-select: none;
 		user-select: none;
+		background: linear-gradient(to bottom, #FFFFFF 95%, rgba(236, 236, 236, 1) 90%);
 	}
 table.ws-menu-page-table div.ws-menu-page-groups-hide
 	{
@@ -231,12 +231,11 @@ table.ws-menu-page-table div.ws-menu-page-r-group-header
 	{
 		height: 24px;
 		color: #666666;
-		padding: 3px;
+		padding: 5px;
 		cursor: pointer;
 		font-size: 19px;
 		line-height: 20px;
 		position: relative;
-		background: #FFFFFF;
 		margin: 7px 0 7px 0;
 		vertical-align: middle;
 		font-family: 'Georgia', serif;
@@ -247,6 +246,7 @@ table.ws-menu-page-table div.ws-menu-page-r-group-header
 		-moz-user-select: none;
 		-webkit-user-select: none;
 		user-select: none;
+		background: linear-gradient(to bottom, #FFFFFF 95%, rgba(236, 236, 236, 1) 90%);
 	}
 table.ws-menu-page-table div.ws-menu-page-group-header > ins,
 table.ws-menu-page-table div.ws-menu-page-r-group-header > ins

@@ -454,6 +454,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								echo '<input type="button" id="ws-plugin--s2member-ip-restrictions-reset-button" value="Reset IP Restriction Logs" class="ws-menu-page-right" style="min-width:175px;" />' . "\n";
 								echo '<p>As with any Membership system, it is possible for one Member to signup, and then share their Username with someone else; or even post it online for the whole world to see. This is known as Link Sharing <em>(aka: Username Sharing)</em>. It is NOT likely that you\'ll be attacked in this way, but it\'s still a good idea to protect your system; just in case somebody tries this. s2Member\'s IP Restrictions work for Membership Level Access <em>(account logins)</em>, Specific Post/Page Access, Registration Links, and other secure Entry Points. In all cases, the rules are simple. A single Username, Access Link, and/or Entry Point ... is only valid for a certain number of unique IP addresses. Once that limit is reached, s2Member assumes there has been a security breach. At that time, s2Member will place a temporary ban <em>(preventing access)</em> to a Specific Post/Page, or to an account associated with a particular Username. This temporary ban, will ONLY affect the offending Link and/or Username associated with the security breach. You can fine-tune this behavior, using the options below.</p>' . "\n";
 								echo '<p><em>*Note* an empty IP address (associated with someone browsing anonymously), is also considered a unique IP address, so it cannot circumvent s2Member\'s security.</em></p>' . "\n";
+								echo '<p><em><strong>Note:</strong> This feature can work with or without <strong>Simultaneous Login Monitoring</strong> (Simultaneous Login Monitoring is available only in s2Member Pro). You can choose to implement both Unique IP Access Restrictions and Simultaneous Login Monitoring together; or just one of these; or neither of them. It\'s a matter of preference.</em></p>' . "\n";
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_ip_restrictions", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
@@ -534,6 +535,68 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								echo '</div>' . "\n";
 
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_ip_restrictions", get_defined_vars ());
+							}
+
+						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_slogin_restrictions", c_ws_plugin__s2member_utils_conds::pro_is_installed(), get_defined_vars ()))
+							{
+								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_slogin_restrictions", get_defined_vars ());
+
+								echo '<div class="ws-menu-page-group" title="Simultaneous Login Restrictions">' . "\n";
+
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-slogin-restrictions-section">' . "\n";
+								echo '<h3>Simultaneous Login Restrictions (prevents username sharing)</h3>' . "\n";
+								echo '<p>As with any Membership system, it is possible for one Member to signup, and then share their Username with someone else; or even post it online for the whole world to see. This is known as Username Sharing. It is NOT likely that you\'ll be attacked in this way, but it\'s not a bad idea to protect your system; just in case somebody tries this.</p>'."\n";
+								echo '<p>s2Member\'s Simultaneous Login Monitoring (for Membership Access only); works w/ user account logins <em>(Usernames)</em> to help you prevent a security breach. The rules are simple. A single Username can only have X number of simultaneous logins (as configured below). Once that limit is reached, s2Member assumes there has been a security breach. At that time, s2Member will place a temporary ban <em>(preventing access)</em> and the offending Username will be unable to login until somebody else (who is already logged into the account) has logged-out; clearing the way for someone new.</p>' . "\n";
+								echo '<p>This can be a tricky feature to configure, because not everyone actually clicks the "Logout" link obviously, and so it can be challenging to know when someone is still logged into the site and when they\'re not. s2Member monitors simultaneous logins by updating a timer when someone actually logs in; and then again on each page view while they navigate the site. If there is no activity after X amount of time, s2Member\'s Simultaneous Login Monitor considers that person inactive, and will not include them in security checks until they login again, or visit a new page on the site. You can configure the timeout period below. The default value is <code>30 minutes</code> (we recommend a low value to reduce the chance of error).</p>' . "\n";
+								echo '<p><em><strong>Note:</strong> This feature can work with or without <strong>Unique IP Access Restrictions</strong> being enabled. You can choose to implement both Unique IP Access Restrictions and Simultaneous Login Monitoring together; or just one of these; or neither of them. It\'s a matter of preference.</em></p>' . "\n";
+								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_slogin_restrictions", get_defined_vars ());
+
+								echo '<table class="form-table">' . "\n";
+								echo '<tbody>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<th>' . "\n";
+								echo '<label for="ws-plugin--s2member-max-simultaneous-logins">' . "\n";
+								echo 'Max Simultaneous Logins Allowed; for each Username:' . "\n";
+								echo '</label>' . "\n";
+								echo '</th>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<td>' . "\n";
+								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_max_simultaneous_logins" id="ws-plugin--s2member-max-simultaneous-logins" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_simultaneous_logins"]) . '" /><br />' . "\n";
+								echo 'Examples: <code>0</code> (to disable this functionality), <code>1</code> (maximum of 1 login at a time), <code>2</code>, <code>3</code>, <code>10</code>, <code>20</code>, etc.<br />' . "\n";
+								echo 'Suggestion: <code>3</code> — the chance to open your site in multiple browsers; but still prevents major security issues.<br />' . "\n";
+								echo '</td>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<th>' . "\n";
+								echo '<label for="ws-plugin--s2member-max-simultaneous-logins-timeout">' . "\n";
+								echo 'Inactivity Timeout Period; this impacts Simultaneous Login Monitoring only.<br />' . "\n";
+								echo 'Simultaneous Login Monitoring should assume a Username is logged-out after this amount of time:' . "\n";
+								echo '</label>' . "\n";
+								echo '</th>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<td>' . "\n";
+								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_max_simultaneous_logins_timeout" id="ws-plugin--s2member-max-simultaneous-logins-timeout" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_simultaneous_logins_timeout"]) . '" /><br />' . "\n";
+								echo 'Examples: <code>30 minutes</code>, <code>1 hour</code>, <code>2 hours</code>; anything compatible with PHP\'s <a href="http://php.net/manual/en/function.strtotime.php" target="_blank" rel="external">strtotime()</a>.<br />' . "\n";
+								echo 'Recommended Setting: <code>30 minutes</code>; if they stop browsing the site, they\'re considered inactive.<br />' . "\n";
+								echo '</td>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '</tbody>' . "\n";
+								echo '</table>' . "\n";
+								echo '</div>' . "\n";
+
+								echo '</div>' . "\n";
+
+								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_slogin_restrictions", get_defined_vars ());
 							}
 
 						do_action ("ws_plugin__s2member_during_res_ops_page_after_left_sections", get_defined_vars ());

@@ -49,8 +49,6 @@ s2Member® — a powerful (free) membership plugin for WordPress®. Protect memb
 
 == Installation ==
 
-**NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled at [s2Member.com](https://www.s2member.com/contact/?s2-ssl=yes).
-
 = s2Member® is very easy to install (instructions) =
 1. Upload the `/s2member` folder to your `/wp-content/plugins/` directory.
 2. Activate the plugin through the `Plugins` menu in WordPress®.
@@ -64,8 +62,6 @@ Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networki
 
 == Description ==
 
-**NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled at [s2Member.com](https://www.s2member.com/contact/?s2-ssl=yes).
-
 [youtube http://www.youtube.com/watch?v=2C3Lan7vxw0 /]
 
 The s2Member® Framework (free) integrates with PayPal® Website Payments Standard (also free), and fully supports recurring billing. s2Member supports custom Pages for registration (including Custom Registration/Profile Fields), account access, and a lot more. s2Member is compatible with Multisite Networking too, and even with BuddyPress and bbPress. With the s2Member® Pro add-on (an optional paid upgrade), you can add support for unlimited Membership Levels, PayPal® Website Payments Pro (w/ Pro Forms to facilitate on-site credit card processing), Authorize.Net® (also with Pro Forms), Google® Checkout, ClickBank®, advanced User Import/Export tools, the ability to use Coupon Codes, and many other enhancements. Videos available at: [s2Member.com / Videos](http://www.s2member.com/videos/).
@@ -77,8 +73,6 @@ s2Member allows you to protect Pages, Posts, Tags, Categories, URIs, URI word fr
 You can learn more about s2Member® at [s2Member.com](http://www.s2member.com/).
 
 == Frequently Asked Questions ==
-
-**NOTE:** Please do NOT use the WordPress® forums to seek company support. Support for s2Member® is handled at [s2Member.com](https://www.s2member.com/contact/?s2-ssl=yes).
 
 = Please check the following s2Member® resources: =
 * s2Member® FAQs: http://www.s2member.com/faqs/
@@ -92,10 +86,28 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v130816 =
+= v131025 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v131025 =
+* (s2Member) **WordPress v3.7 Compatibility** s2Member updated to support WordPress v3.7. s2Member remains compatible with WP v3.3 (or higher).
+* (s2Member Pro) **New Feature: Simultaneous Login Monitoring** Available only w/ s2Member Pro. s2Member Pro has been updated to support configurations that limit the number of simultaneous logins a single username can receive. For further details, please see: `Dashboard -› s2Member -› Restriction Options -› Simultaneous Login Restrictions` (when s2Member Pro is installed).
+* (s2Member) **Post Restrictions (#3)** Adding support for `all-[post type]` in addition to the existing `all-[post type]s` (plural) currently supported by s2Member's Restriction Options for Posts. This makes it possible for a site owner to type only the Post Type after the keyword prefix `all-`; and excluding the plural `s` in cases when this is necessary.
+* (s2Member) **Documentation Update (#3)** Adding note in Download Options panel regarding `[raw][/raw]` tags around Shortcodes when using the inFocus theme. See also [this thread](http://mysitemyway.com/support/topic/infocus-adding-tags-into-plugin-content) for further details.
+* (s2Member) **Documentation Cleanup (#12)** General cleanup in several s2Member panels to improve inline documentation that comes w/ the software. Branding improvements, padding adjustments, and subtle textual changes.
+* (s2Member) **Bug Fix (#11)** Running `isset()` against `$cache_needs_updating`` to prevent NOTICE when running in `WP_DEBUG` mode.
+* (s2Member) **Optimization (#9)** Removing all image source files (.fla and .pspimage) from the official distribution package to reduce overall filesize.
+* (s2Member) **Quick Start Video (#10)** Adding Quick Start playlist to Quick Start section.
+* (s2Member) **UI (#6)** Reducing padding around section headers in s2Member option panels to reduce the amount of space these consume.
+* (s2Member Pro) **SSL** Forcing all automatic updates of s2Member Pro to occur over SSL for improved security.
+* (s2Member) **Login Welcome Page** Improving support for new feature (force HTTP redirection). See: `s2Member -› General Options -› Login Welcome Page` for details on how this feature works.
+* (s2Member) **Bug Fix: Registration/Profile Fields** Adding space between checkboxes and their labels.
+* (s2Member) **ClickBank IPN Filter** Adding a new filter to s2Member's ClickBank IPN handler for developers integrating s2Member in creative ways: `c_ws_plugin__s2member_pro_clickbank_notify_handles_completions`. Defaults to a TRUE value. Forcing this filter to a FALSE value will prevent s2Member from handling term completions via IPN communication; in cases where it's preferred that a site owner deal with this specific scenario manually.
+* (s2Member) **Conformity** Updating calls to `$wpdb->escape()`; changing to `esc_sql()` to conform w/ WordPress standards.
+* (s2Member Pro) **Compatibility: Checkout Options** Improving theme support for Checkout Options created using Pro Forms by wrapping other Pro Form Shortcodes. Some site owners reported line break injections in the previous verison. Fixed in this release.
+* (s2Member) **See also: s2Member Repo** https://github.com/WebSharks/s2Member/commits/000000-dev
 
 = v130816 =
 * (s2Member Pro) **Compatibility, ClickBank (#467)** Improving support for ClickBank PitchPlus Upsell Flows. Please see [this thread](http://www.s2member.com/forums/topic/clickbank-buttons-not-working/#post-55725) for further details.

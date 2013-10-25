@@ -136,6 +136,8 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["max_ip_restriction"] = "5";
 				$default_options["max_ip_restriction_time"] = "3600";
 				$default_options["max_failed_login_attempts"] = "5";
+				$default_options["max_simultaneous_logins"] = "0";
+				$default_options["max_simultaneous_logins_timeout"] = "30 minutes";
 
 				$default_options["run_deactivation_routines"] = "0";
 
@@ -372,6 +374,12 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 									$value = $default_options[$key];
 
 								else if($key === "max_failed_login_attempts" && (!is_string($value) || !is_numeric($value) || $value < 0 || $value > 100))
+									$value = $default_options[$key];
+
+								else if($key === "max_simultaneous_logins" && (!is_string($value) || !is_numeric($value) || $value < 0))
+									$value = $default_options[$key];
+
+								else if($key === "max_simultaneous_logins_timeout" && (!is_string($value) || !strlen($value)))
 									$value = $default_options[$key];
 
 								else if($key === "run_deactivation_routines" && (!is_string($value) || !is_numeric($value)))

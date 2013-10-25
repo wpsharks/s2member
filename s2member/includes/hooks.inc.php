@@ -51,6 +51,8 @@ add_action("init", "c_ws_plugin__s2member_labels::config_label_translations", 10
 
 add_action("init", "c_ws_plugin__s2member_login_redirects_r::remove_login_redirect_filters", 11);
 
+add_action("init", "c_ws_plugin__s2member_login_checks::monitor_simultaneous_logins", 10);
+
 add_action("admin_init", "c_ws_plugin__s2member_menu_pages::log_file_downloader");
 add_action("admin_init", "c_ws_plugin__s2member_menu_pages::logs_zip_downloader");
 
@@ -68,7 +70,11 @@ add_action("wp_print_scripts", "c_ws_plugin__s2member_css_js_themes::add_js_w_gl
 
 add_action("wp_login_failed", "c_ws_plugin__s2member_brute_force::track_failed_logins");
 add_filter("authenticate", "c_ws_plugin__s2member_brute_force::stop_brute_force_logins", 100);
-add_filter("wp_authenticate_user", "c_ws_plugin__s2member_login_redirects::ms_wp_authenticate_user", 100);
+
+add_filter("wp_authenticate_user", "c_ws_plugin__s2member_login_checks::ms_wp_authenticate_user", 100);
+add_filter("wp_authenticate_user", "c_ws_plugin__s2member_login_checks::stop_simultaneous_logins", 100);
+add_action("wp_login", "c_ws_plugin__s2member_login_checks::update_simultaneous_logins", 1);
+add_action("clear_auth_cookie", "c_ws_plugin__s2member_login_checks::simultaneous_logout", 1);
 
 add_action("delete_user", "c_ws_plugin__s2member_user_deletions::handle_user_deletions");
 add_action("wpmu_delete_user", "c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions");
