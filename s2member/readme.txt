@@ -97,7 +97,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member) **Post Restrictions (#3)** Adding support for `all-[post type]` in addition to the existing `all-[post type]s` (plural) currently supported by s2Member's Restriction Options for Posts. This makes it possible for a site owner to type only the Post Type after the keyword prefix `all-`; and excluding the plural `s` in cases when this is necessary.
 * (s2Member) **Documentation Update (#3)** Adding note in Download Options panel regarding `[[raw][/raw]]` tags around Shortcodes when using the inFocus theme. See also [this thread](http://mysitemyway.com/support/topic/infocus-adding-tags-into-plugin-content) for further details.
 * (s2Member) **Documentation Cleanup (#12)** General cleanup in several s2Member panels to improve inline documentation that comes w/ the software. Branding improvements, padding adjustments, and subtle textual changes.
-* (s2Member) **Bug Fix (#11)** Running `isset()` against `$cache_needs_updating`` to prevent NOTICE when running in `WP_DEBUG` mode.
+* (s2Member) **Bug Fix (#11)** Running `isset()` against `$cache_needs_updating` to prevent NOTICE when running in `WP_DEBUG` mode.
 * (s2Member) **Optimization (#9)** Removing all image source files (.fla and .pspimage) from the official distribution package to reduce overall filesize.
 * (s2Member) **Quick Start Video (#10)** Adding Quick Start playlist to Quick Start section.
 * (s2Member) **UI (#6)** Reducing padding around section headers in s2Member option panels to reduce the amount of space these consume.
