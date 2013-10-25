@@ -95,7 +95,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member) **WordPress v3.7 Compatibility** s2Member updated to support WordPress v3.7. s2Member remains compatible with WP v3.3 (or higher).
 * (s2Member Pro) **New Feature: Simultaneous Login Monitoring** Available only w/ s2Member Pro. s2Member Pro has been updated to support configurations that limit the number of simultaneous logins a single username can receive. For further details, please see: `Dashboard -› s2Member -› Restriction Options -› Simultaneous Login Restrictions` (when s2Member Pro is installed).
 * (s2Member) **Post Restrictions (#3)** Adding support for `all-[post type]` in addition to the existing `all-[post type]s` (plural) currently supported by s2Member's Restriction Options for Posts. This makes it possible for a site owner to type only the Post Type after the keyword prefix `all-`; and excluding the plural `s` in cases when this is necessary.
-* (s2Member) **Documentation Update (#3)** Adding note in Download Options panel regarding `[raw][/raw]` tags around Shortcodes when using the inFocus theme. See also [this thread](http://mysitemyway.com/support/topic/infocus-adding-tags-into-plugin-content) for further details.
+* (s2Member) **Documentation Update (#3)** Adding note in Download Options panel regarding `[[raw][/raw]]` tags around Shortcodes when using the inFocus theme. See also [this thread](http://mysitemyway.com/support/topic/infocus-adding-tags-into-plugin-content) for further details.
 * (s2Member) **Documentation Cleanup (#12)** General cleanup in several s2Member panels to improve inline documentation that comes w/ the software. Branding improvements, padding adjustments, and subtle textual changes.
 * (s2Member) **Bug Fix (#11)** Running `isset()` against `$cache_needs_updating`` to prevent NOTICE when running in `WP_DEBUG` mode.
 * (s2Member) **Optimization (#9)** Removing all image source files (.fla and .pspimage) from the official distribution package to reduce overall filesize.
@@ -105,7 +105,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member) **Login Welcome Page** Improving support for new feature (force HTTP redirection). See: `s2Member -› General Options -› Login Welcome Page` for details on how this feature works.
 * (s2Member) **Bug Fix: Registration/Profile Fields** Adding space between checkboxes and their labels.
 * (s2Member) **ClickBank IPN Filter** Adding a new filter to s2Member's ClickBank IPN handler for developers integrating s2Member in creative ways: `c_ws_plugin__s2member_pro_clickbank_notify_handles_completions`. Defaults to a TRUE value. Forcing this filter to a FALSE value will prevent s2Member from handling term completions via IPN communication; in cases where it's preferred that a site owner deal with this specific scenario manually.
-* (s2Member) **Conformity** Updating calls to `$wpdb->escape()`; changing to `esc_sql()` to conform w/ WordPress standards.
+* (s2Member) **Conformity** Updating calls to `$wpdb->escape` changing to `esc_sql` to conform w/ WordPress standards.
 * (s2Member Pro) **Compatibility: Checkout Options** Improving theme support for Checkout Options created using Pro Forms by wrapping other Pro Form Shortcodes. Some site owners reported line break injections in the previous verison. Fixed in this release.
 * (s2Member) **See also: s2Member Repo** https://github.com/WebSharks/s2Member/commits/000000-dev
 
