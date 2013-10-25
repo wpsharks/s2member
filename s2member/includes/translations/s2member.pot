@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the s2Member® Framework package.
 msgid ""
 msgstr ""
-"Project-Id-Version: s2Member® Framework 130802\n"
+"Project-Id-Version: s2Member® Framework 130816\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2013-08-16 07:10:15+00:00\n"
+"POT-Creation-Date: 2013-10-25 16:35:24+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: s2member/includes/classes/brute-force.inc.php:92
+#: s2member/includes/classes/brute-force.inc.php:90
 msgctxt "s2member-front"
 msgid "Max failed logins. Please wait %s and try again."
 msgstr ""
@@ -108,262 +108,262 @@ msgid "<strong>401:</strong> Sorry, access denied."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® S3 API call. Feel free to exclude
-#. `%s` if you like.
+#. message, which comes from the Amazon S3 API call. Feel free to exclude `%s`
+#. if you like.
 
 #: s2member/includes/classes/files-in.inc.php:733
 msgctxt "s2member-admin"
-msgid "Unable to update existing Amazon® S3 Cross-Domain Policy. %s"
+msgid "Unable to update existing Amazon S3 Cross-Domain Policy. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:736
 msgctxt "s2member-admin"
-msgid "Unable to update existing Amazon® S3 Cross-Domain Policy. Connection failed."
+msgid "Unable to update existing Amazon S3 Cross-Domain Policy. Connection failed."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® S3 API call. Feel free to exclude
-#. `%s` if you like.
+#. message, which comes from the Amazon S3 API call. Feel free to exclude `%s`
+#. if you like.
 
 #: s2member/includes/classes/files-in.inc.php:740
 msgctxt "s2member-admin"
-msgid "Unable to update existing Amazon® S3 Bucket Policy. %s"
+msgid "Unable to update existing Amazon S3 Bucket Policy. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:743
 msgctxt "s2member-admin"
-msgid "Unable to update existing Amazon® S3 Bucket Policy. Connection failed."
+msgid "Unable to update existing Amazon S3 Bucket Policy. Connection failed."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® S3 API call. Feel free to exclude
-#. `%s` if you like.
+#. message, which comes from the Amazon S3 API call. Feel free to exclude `%s`
+#. if you like.
 
 #: s2member/includes/classes/files-in.inc.php:747
 msgctxt "s2member-admin"
-msgid "Unable to update existing Amazon® S3 Bucket ACLs. %s"
+msgid "Unable to update existing Amazon S3 Bucket ACLs. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:750
 msgctxt "s2member-admin"
-msgid "Unable to update existing Amazon® S3 Bucket ACLs. Connection failed."
+msgid "Unable to update existing Amazon S3 Bucket ACLs. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:753
 msgctxt "s2member-admin"
-msgid "Unable to acquire/read existing Amazon® S3 Bucket ACLs. Unexpected response."
+msgid "Unable to acquire/read existing Amazon S3 Bucket ACLs. Unexpected response."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® S3 API call. Feel free to exclude
-#. `%s` if you like.
+#. message, which comes from the Amazon S3 API call. Feel free to exclude `%s`
+#. if you like.
 
 #: s2member/includes/classes/files-in.inc.php:757
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® S3 Bucket ACLs. %s"
+msgid "Unable to acquire existing Amazon S3 Bucket ACLs. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:760
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® S3 Bucket ACLs. Connection failed."
+msgid "Unable to acquire existing Amazon S3 Bucket ACLs. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:763
 msgctxt "s2member-admin"
-msgid "Unable to auto-configure existing Amazon® S3 Bucket ACLs. Incomplete Amazon® S3 configuration options. Missing one of: Amazon® S3 Bucket, Access Key, or Secret Key."
+msgid "Unable to auto-configure existing Amazon S3 Bucket ACLs. Incomplete Amazon S3 configuration options. Missing one of: Amazon S3 Bucket, Access Key, or Secret Key."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:863
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Downloads Distro. Still in a `pending` state. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon® CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon® CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
+msgid "Unable to delete existing Amazon CloudFront Downloads Distro. Still in a `pending` state. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:870
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Downloads Distro. %s"
+msgid "Unable to delete existing Amazon CloudFront Downloads Distro. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:882
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Streaming Distro. Still in a `pending` state. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon® CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon® CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
+msgid "Unable to delete existing Amazon CloudFront Streaming Distro. Still in a `pending` state. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:889
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Streaming Distro. %s"
+msgid "Unable to delete existing Amazon CloudFront Streaming Distro. %s"
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:905
 #: s2member/includes/classes/files-in.inc.php:1089
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Origin Access Identity. %s"
+msgid "Unable to delete existing Amazon CloudFront Origin Access Identity. %s"
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® S3 API call. Feel free to exclude
-#. `%s` if you like.
+#. message, which comes from the Amazon S3 API call. Feel free to exclude `%s`
+#. if you like.
 
 #: s2member/includes/classes/files-in.inc.php:946
 msgctxt "s2member-admin"
-msgid "Unable to update existing Amazon® S3 ACLs. %s"
+msgid "Unable to update existing Amazon S3 ACLs. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:949
 msgctxt "s2member-admin"
-msgid "Unable to update existing Amazon® S3 ACLs. Connection failed."
+msgid "Unable to update existing Amazon S3 ACLs. Connection failed."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:953
 #: s2member/includes/classes/files-in.inc.php:1376
 msgctxt "s2member-admin"
-msgid "Unable to create Amazon® CloudFront Streaming Distro. %s"
+msgid "Unable to create Amazon CloudFront Streaming Distro. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:956
 #: s2member/includes/classes/files-in.inc.php:1379
 msgctxt "s2member-admin"
-msgid "Unable to create Amazon® CloudFront Streaming Distro. Connection failed."
+msgid "Unable to create Amazon CloudFront Streaming Distro. Connection failed."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:960
 #: s2member/includes/classes/files-in.inc.php:1353
 msgctxt "s2member-admin"
-msgid "Unable to create Amazon® CloudFront Downloads Distro. %s"
+msgid "Unable to create Amazon CloudFront Downloads Distro. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:963
 #: s2member/includes/classes/files-in.inc.php:1356
 msgctxt "s2member-admin"
-msgid "Unable to create Amazon® CloudFront Downloads Distro. Connection failed."
+msgid "Unable to create Amazon CloudFront Downloads Distro. Connection failed."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:967
 #: s2member/includes/classes/files-in.inc.php:1134
 msgctxt "s2member-admin"
-msgid "Unable to create Amazon® CloudFront Origin Access Identity. %s"
+msgid "Unable to create Amazon CloudFront Origin Access Identity. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:970
 #: s2member/includes/classes/files-in.inc.php:1137
 msgctxt "s2member-admin"
-msgid "Unable to create Amazon® CloudFront Origin Access Identity. Connection failed."
+msgid "Unable to create Amazon CloudFront Origin Access Identity. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:973
 msgctxt "s2member-admin"
-msgid "Unable to clear existing Amazon® CloudFront Origin Access Identity."
+msgid "Unable to clear existing Amazon CloudFront Origin Access Identity."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:977
 #: s2member/includes/classes/files-in.inc.php:1046
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Origin Access Identity. %s"
+msgid "Unable to acquire existing Amazon CloudFront Origin Access Identity. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:980
 #: s2member/includes/classes/files-in.inc.php:1049
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Origin Access Identity. Connection failed."
+msgid "Unable to acquire existing Amazon CloudFront Origin Access Identity. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:983
 msgctxt "s2member-admin"
-msgid "Unable to clear existing Amazon® CloudFront Streaming Distro."
+msgid "Unable to clear existing Amazon CloudFront Streaming Distro."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:987
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Streaming Distro. %s"
+msgid "Unable to acquire existing Amazon CloudFront Streaming Distro. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:990
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Streaming Distro. Connection failed."
+msgid "Unable to acquire existing Amazon CloudFront Streaming Distro. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:993
 msgctxt "s2member-admin"
-msgid "Unable to clear existing Amazon® CloudFront Downloads Distro."
+msgid "Unable to clear existing Amazon CloudFront Downloads Distro."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:997
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Downloads Distro. %s"
+msgid "Unable to acquire existing Amazon CloudFront Downloads Distro. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1000
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Downloads Distro. Connection failed."
+msgid "Unable to acquire existing Amazon CloudFront Downloads Distro. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1003
 msgctxt "s2member-admin"
-msgid "Unable to auto-configure Amazon® CloudFront Distros. Incomplete Amazon® CloudFront configuration options. Missing of one: Amazon® CloudFront Private Key-Pair-ID, or Private Key file contents."
+msgid "Unable to auto-configure Amazon CloudFront Distros. Incomplete Amazon CloudFront configuration options. Missing of one: Amazon CloudFront Private Key-Pair-ID, or Private Key file contents."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1006
 msgctxt "s2member-admin"
-msgid "Unable to auto-configure Amazon® S3/CloudFront Distros. Incomplete Amazon® S3 configuration options. Missing one of: Amazon® S3 Bucket, Access Key, or Secret Key. You must provide s2Member with an Amazon® S3 configuration before enabling CloudFront."
+msgid "Unable to auto-configure Amazon S3/CloudFront Distros. Incomplete Amazon S3 configuration options. Missing one of: Amazon S3 Bucket, Access Key, or Secret Key. You must provide s2Member with an Amazon S3 configuration before enabling CloudFront."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:1042
 msgctxt "s2member-admin"
-msgid "Existing Amazon® CloudFront Origin Access Identity NOT found. %s"
+msgid "Existing Amazon CloudFront Origin Access Identity NOT found. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1052
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Origin Access Identity. Invalid Access ID."
+msgid "Unable to acquire existing Amazon CloudFront Origin Access Identity. Invalid Access ID."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1092
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Origin Access Identity. Connection failed."
+msgid "Unable to delete existing Amazon CloudFront Origin Access Identity. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1095
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Origin Access Identity. Invalid Access ID, ETag, or XML config."
+msgid "Unable to delete existing Amazon CloudFront Origin Access Identity. Invalid Access ID, ETag, or XML config."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1121
@@ -375,128 +375,133 @@ msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1130
 msgctxt "s2member-admin"
-msgid "Unable to create/read Amazon® CloudFront Origin Access Identity. Unexpected response."
+msgid "Unable to create/read Amazon CloudFront Origin Access Identity. Unexpected response."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:1174
 msgctxt "s2member-admin"
-msgid "Existing Amazon® CloudFront Distro NOT found. %s"
+msgid "Existing Amazon CloudFront Distro NOT found. %s"
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:1178
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Distro. %s"
+msgid "Unable to acquire existing Amazon CloudFront Distro. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1181
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Distro. Connection failed."
+msgid "Unable to acquire existing Amazon CloudFront Distro. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1184
 msgctxt "s2member-admin"
-msgid "Unable to acquire existing Amazon® CloudFront Distro. Invalid Distro ID and/or Distro type."
+msgid "Unable to acquire existing Amazon CloudFront Distro. Invalid Distro ID and/or Distro type."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:1226
 #: s2member/includes/classes/files-in.inc.php:1299
 msgctxt "s2member-admin"
-msgid "Unable to disable existing Amazon® CloudFront Distro. %s"
+msgid "Unable to disable existing Amazon CloudFront Distro. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1229
 #: s2member/includes/classes/files-in.inc.php:1302
 msgctxt "s2member-admin"
-msgid "Unable to disable existing Amazon® CloudFront Distro. Connection failed."
+msgid "Unable to disable existing Amazon CloudFront Distro. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1232
 msgctxt "s2member-admin"
-msgid "Existing Amazon® CloudFront Distro cannot be disabled at this time. Still in a `pending` state. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon® CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon® CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
+msgid "Existing Amazon CloudFront Distro cannot be disabled at this time. Still in a `pending` state. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1238
 msgctxt "s2member-admin"
-msgid "Unable to disable existing Amazon® CloudFront Distro. Invalid Distro ID, ETag, or XML config."
+msgid "Unable to disable existing Amazon CloudFront Distro. Invalid Distro ID, ETag, or XML config."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:1281
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Distro. %s"
+msgid "Unable to delete existing Amazon CloudFront Distro. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1284
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Distro. Connection failed."
+msgid "Unable to delete existing Amazon CloudFront Distro. Connection failed."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:1288
 msgctxt "s2member-admin"
-msgid "Existing Amazon® CloudFront Distro cannot be deleted at this time. Still in a `pending` state after having been disabled by s2Member. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon® CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon® CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
+msgid "Existing Amazon CloudFront Distro cannot be deleted at this time. Still in a `pending` state after having been disabled by s2Member. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
 msgstr ""
 
 #. translators: In this translation, `%s` may be filled with an English
-#. message, which comes from the Amazon® CloudFront API call. Feel free to
+#. message, which comes from the Amazon CloudFront API call. Feel free to
 #. exclude `%s` if you like.
 
 #: s2member/includes/classes/files-in.inc.php:1292
 msgctxt "s2member-admin"
-msgid "Unable to check status of existing Amazon® CloudFront Distro. %s"
+msgid "Unable to check status of existing Amazon CloudFront Distro. %s"
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1295
 msgctxt "s2member-admin"
-msgid "Unable to check status of existing Amazon® CloudFront Distro. Connection failed."
+msgid "Unable to check status of existing Amazon CloudFront Distro. Connection failed."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1305
 msgctxt "s2member-admin"
-msgid "Existing Amazon® CloudFront Distro cannot be deleted at this time. Still in a `pending` state. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon® CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon® CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
+msgid "Existing Amazon CloudFront Distro cannot be deleted at this time. Still in a `pending` state. Please wait 15 minutes, then try again. There is a certain process that s2Member must strictly adhere to when re-configuring your Amazon CloudFront Distros. You may have to tick the auto-configure checkbox again, and re-run s2Member's auto-configuration routine many times, because s2Member will likely run into several `pending` challenges, as it works to completely re-configure your Amazon CloudFront Distros for you. Thanks for your patience. Please wait 15 minutes, then try again."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1308
 msgctxt "s2member-admin"
-msgid "Unable to delete existing Amazon® CloudFront Distro. Invalid Distro ID or ETag."
+msgid "Unable to delete existing Amazon CloudFront Distro. Invalid Distro ID or ETag."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1349
 msgctxt "s2member-admin"
-msgid "Unable to create/read Amazon® CloudFront Downloads Distro. Unexpected response."
+msgid "Unable to create/read Amazon CloudFront Downloads Distro. Unexpected response."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1372
 msgctxt "s2member-admin"
-msgid "Unable to create/read Amazon® CloudFront Streaming Distro. Unexpected response."
+msgid "Unable to create/read Amazon CloudFront Streaming Distro. Unexpected response."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:1383
 msgctxt "s2member-admin"
-msgid "Unable to create Amazon® CloudFront Distro. Invalid Distro type."
+msgid "Unable to create Amazon CloudFront Distro. Invalid Distro type."
 msgstr ""
 
-#: s2member/includes/classes/login-redirects.inc.php:51
+#: s2member/includes/classes/login-checks.inc.php:50
 msgctxt "s2member-front"
 msgid "<strong>ERROR</strong>: Invalid username for this site."
+msgstr ""
+
+#: s2member/includes/classes/login-checks.inc.php:76
+msgctxt "s2member-front"
+msgid "<strong>ERROR</strong>: Max simultaneous logins for username: %1$s. Please wait %2$s and try again."
 msgstr ""
 
 #: s2member/includes/classes/paypal-notify-in-subscr-modify-w-level.inc.php:132
@@ -647,11 +652,11 @@ msgstr ""
 
 #: s2member/includes/classes/paypal-return-in.inc.php:133
 msgctxt "s2member-front"
-msgid "<strong>ERROR:</strong> Unable to verify <code>$_POST</code> vars.<br />Please contact Support for assistance.<br /><br />This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility. If you are the site owner, and you're absolutely SURE that your configuration is valid, you may want to run some tests on your server, just to be sure <code>$_POST</code> variables are populated, and that your server is able to connect/communicate with your Payment Gateway over an HTTPS connection.<br /><br />s2Member uses the <code>WP_Http</code> class for remote connections; which will try to use <code>cURL</code> first, and then fall back on the <code>FOPEN</code> method when <code>cURL</code> is not available. On a Windows® server, you may have to disable your <code>cURL</code> extension; and instead, set <code>allow_url_fopen = yes</code> in your php.ini file. The <code>cURL</code> extension (usually) does NOT support SSL connections on a Windows® server.<br /><br />Please see <a href=\"http://www.s2member.com/forums/topic/ideal-server-configuration-for-s2member/\" target=\"_blank\">this thread</a> for details regarding the ideal server configuration for s2Member."
+msgid "<strong>ERROR:</strong> Unable to verify <code>$_POST</code> vars.<br />Please contact Support for assistance.<br /><br />This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility. If you are the site owner, and you're absolutely SURE that your configuration is valid, you may want to run some tests on your server, just to be sure <code>$_POST</code> variables are populated, and that your server is able to connect/communicate with your Payment Gateway over an HTTPS connection.<br /><br />s2Member uses the <code>WP_Http</code> class for remote connections; which will try to use <code>cURL</code> first, and then fall back on the <code>FOPEN</code> method when <code>cURL</code> is not available. On a Windows server, you may have to disable your <code>cURL</code> extension; and instead, set <code>allow_url_fopen = yes</code> in your php.ini file. The <code>cURL</code> extension (usually) does NOT support SSL connections on a Windows server.<br /><br />Please see <a href=\"http://www.s2member.com/forums/topic/ideal-server-configuration-for-s2member/\" target=\"_blank\">this thread</a> for details regarding the ideal server configuration for s2Member."
 msgstr ""
 
 #. translators: Exclude `%2$s` and `%3$s`. These are English details returned
-#. by PayPal®. Replace `%2$s` and `%3$s` with: `Unable to process, please try
+#. by PayPal. Replace `%2$s` and `%3$s` with: `Unable to process, please try
 #. again`, or something to that affect. Or, if you prefer, you could Filter
 #. ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`.
 
@@ -680,17 +685,17 @@ msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Express Checkout was NOT confirmed."
 msgstr ""
 
-#. translators: Exclude `%2$s`. These are English details returned by PayPal®.
+#. translators: Exclude `%2$s`. These are English details returned by PayPal.
 #. Replace `%2$s` with: `Unable to process, please try again`, or something to
 #. that affect. Or, if you prefer, you could Filter ``$response["__error"]``
 #. with `ws_plugin__s2member_paypal_payflow_api_response`.
 #. translators: Exclude `%2$s`. This is an English error returned by
-#. Authorize.Net®. Please replace `%2$s` with: `Unable to process, please try
+#. Authorize.Net. Please replace `%2$s` with: `Unable to process, please try
 #. again`, or something to that affect. Or, if you prefer, you could Filter
 #. ``$response["__error"]`` with
 #. `ws_plugin__s2member_pro_authnet_aim_response`.
 #. translators: Exclude `%2$s`. This is an English error returned by
-#. Authorize.Net®. Please replace `%2$s` with: `Unable to process, please try
+#. Authorize.Net. Please replace `%2$s` with: `Unable to process, please try
 #. again`, or something to that affect. Or, if you prefer, you could Filter
 #. ``$response["__error"]`` with
 #. `ws_plugin__s2member_pro_authnet_arb_response`.
@@ -1237,10 +1242,10 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:253
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:535
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:542
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:845
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:852
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:859
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:866
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:853
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:860
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:867
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:874
 msgctxt "s2member-front"
 msgid "— Oops, you missed something: —"
 msgstr ""
@@ -1252,7 +1257,7 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:772
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:239
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:852
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:860
 msgctxt "s2member-front"
 msgid "Passwords do not match up. Please try again."
 msgstr ""
@@ -1264,7 +1269,7 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:779
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:246
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:859
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:867
 msgctxt "s2member-front"
 msgid "Password MUST be at least 6 characters. Please try again."
 msgstr ""
@@ -1445,17 +1450,17 @@ msgctxt "s2member-front recaptcha-lang-code"
 msgid "en"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:148
+#: s2member/includes/syscon.inc.php:150
 msgctxt "s2member-front"
 msgid "Yes, I want to receive updates via email."
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:202
+#: s2member/includes/syscon.inc.php:204
 msgctxt "s2member-front"
 msgid "[%s] Username/Password"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:203
+#: s2member/includes/syscon.inc.php:205
 msgctxt "s2member-front"
 msgid ""
 "Your Username/Password for:\n"
@@ -1466,12 +1471,12 @@ msgid ""
 "%%%%wp_login_url%%%%"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:206
+#: s2member/includes/syscon.inc.php:208
 msgctxt "s2member-front"
 msgid "[%s] New User Registration"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:207
+#: s2member/includes/syscon.inc.php:209
 msgctxt "s2member-front"
 msgid ""
 "New User Registration on your site:\n"
@@ -1483,12 +1488,12 @@ msgid ""
 "IP Address: %%%%user_ip%%%%"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:228 s2member-pro/includes/syscon.inc.php:94
+#: s2member/includes/syscon.inc.php:230 s2member-pro/includes/syscon.inc.php:94
 msgctxt "s2member-front"
 msgid "Congratulations! (your membership has been approved)"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:229
+#: s2member/includes/syscon.inc.php:231
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your membership has been approved.\n"
@@ -1504,12 +1509,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:232 s2member-pro/includes/syscon.inc.php:98
+#: s2member/includes/syscon.inc.php:234 s2member-pro/includes/syscon.inc.php:98
 msgctxt "s2member-front"
 msgid "Thank You! (instructions for access)"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:233
+#: s2member/includes/syscon.inc.php:235
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%!\n"
@@ -1526,32 +1531,32 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:261
+#: s2member/includes/syscon.inc.php:263
 msgctxt "s2member-front"
 msgid "Free Subscriber"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:261
+#: s2member/includes/syscon.inc.php:263
 msgctxt "s2member-front"
 msgid "Bronze Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:261
+#: s2member/includes/syscon.inc.php:263
 msgctxt "s2member-front"
 msgid "Silver Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:261
+#: s2member/includes/syscon.inc.php:263
 msgctxt "s2member-front"
 msgid "Gold Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:261
+#: s2member/includes/syscon.inc.php:263
 msgctxt "s2member-front"
 msgid "Platinum Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:261
+#: s2member/includes/syscon.inc.php:263
 msgctxt "s2member-front"
 msgid "Level %s Member"
 msgstr ""
@@ -1627,7 +1632,7 @@ msgstr ""
 #: s2member/includes/templates/buttons/paypal-checkout-button.php:45
 #: s2member/includes/templates/buttons/paypal-sp-checkout-button.php:33
 msgctxt "s2member-admin"
-msgid "Displays The PayPal® Image Button"
+msgid "Displays The PayPal Image Button"
 msgstr ""
 
 #: s2member/includes/templates/buttons/paypal-checkout-button.php:26
@@ -1637,7 +1642,7 @@ msgstr ""
 
 #: s2member/includes/templates/buttons/paypal-checkout-button.php:32
 msgctxt "s2member-admin"
-msgid "Controls Modify Behavior At PayPal® Checkout"
+msgid "Controls Modify Behavior At PayPal Checkout"
 msgstr ""
 
 #: s2member/includes/templates/buttons/paypal-checkout-button.php:34
@@ -1667,7 +1672,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-ccap-terms.php:6
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:43
 msgctxt "s2member-admin"
-msgid "PayPal® (Buy Now)"
+msgid "PayPal (Buy Now)"
 msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-ccap-terms.php:7
@@ -2441,7 +2446,7 @@ msgctxt "s2member-front"
 msgid ""
 "ERROR: Unexpected status. Please contact Support for assistance.\n"
 "\n"
-"The AliPay® status did NOT match a required action."
+"The AliPay status did NOT match a required action."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/alipay/alipay-return-in.inc.php:132
@@ -2449,7 +2454,7 @@ msgctxt "s2member-front"
 msgid ""
 "ERROR: Unable to verify POST vars. Please contact Support for assistance.\n"
 "\n"
-"This is most likely related to an invalid AliPay® configuration. If you are the site owner, please check: s2Member -› AliPay® Options."
+"This is most likely related to an invalid AliPay configuration. If you are the site owner, please check: s2Member -› AliPay Options."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-cancellation-in.inc.php:116
@@ -2551,184 +2556,184 @@ msgctxt "s2member-front"
 msgid "<strong>Unknown error.</strong> Please contact Support for assistance."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:157
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:266
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:412
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:550
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:759
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:162
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:271
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:418
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:556
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:767
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:161
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:270
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:416
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:554
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:763
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:166
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:275
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:422
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:560
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:771
 msgctxt "s2member-front"
 msgid "Security Code"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:233
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:726
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:239
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:735
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:237
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:730
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:243
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:739
 msgctxt "s2member-front"
 msgid "Additional Info"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:367
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:505
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:678
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:373
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:511
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:687
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:371
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:509
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:682
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
 msgctxt "s2member-front"
-msgid "Visa®"
+msgid "Visa"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:367
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:505
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:678
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:373
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:511
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:687
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:371
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:509
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:682
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
 msgctxt "s2member-front"
-msgid "MasterCard®"
+msgid "MasterCard"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:367
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:505
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:678
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:373
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:511
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:687
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:371
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:509
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:682
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
 msgctxt "s2member-front"
-msgid "Discover®"
+msgid "Discover"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:367
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:505
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:678
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:373
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:511
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:687
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:371
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:509
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:682
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
 msgctxt "s2member-front"
-msgid "American Express®"
+msgid "American Express"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "01 January"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "02 February"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "03 March"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "04 April"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "05 May"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "06 June"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "07 July"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "08 August"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "09 September"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "10 October"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "11 November"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:383
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:521
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:697
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
 msgctxt "s2member-front"
 msgid "12 December"
 msgstr ""
@@ -2747,17 +2752,17 @@ msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:205
 msgctxt "s2member-admin"
-msgid "Authorize.Net® configuration error. Please configure your Authorize.Net® API Login ID."
+msgid "Authorize.Net configuration error. Please configure your Authorize.Net API Login ID."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:208
 msgctxt "s2member-admin"
-msgid "Authorize.Net® configuration error. Your Authorize.Net® API Transaction Key is not yet configured."
+msgid "Authorize.Net configuration error. Your Authorize.Net API Transaction Key is not yet configured."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:211
 msgctxt "s2member-admin"
-msgid "Authorize.Net® configuration error. Your Authorize.Net® Secret MD5 Hash is not yet configured."
+msgid "Authorize.Net configuration error. Your Authorize.Net Secret MD5 Hash is not yet configured."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:233
@@ -3618,7 +3623,7 @@ msgctxt "s2member-front"
 msgid ""
 "ERROR: Unexpected txnType. Please contact Support for assistance.\n"
 "\n"
-"The ClickBank® txnType did not match a required action."
+"The ClickBank txnType did not match a required action."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/clickbank/clickbank-return-in.inc.php:216
@@ -3626,12 +3631,12 @@ msgctxt "s2member-front"
 msgid ""
 "ERROR: Unable to verify POST vars. Please contact Support for assistance.\n"
 "\n"
-"This is most likely related to an invalid ClickBank® configuration. If you are the site owner, please check: s2Member -› ClickBank® Options."
+"This is most likely related to an invalid ClickBank configuration. If you are the site owner, please check: s2Member -› ClickBank Options."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/clickbank/clickbank-utilities.inc.php:168
 msgctxt "s2member-front"
-msgid "<strong>Reminder:</strong> Purchases at this site will appear on your credit card or bank statement as: <code>ClickBank®</code> or <code>CLKBANK*COM</code>."
+msgid "<strong>Reminder:</strong> Purchases at this site will appear on your credit card or bank statement as: <code>ClickBank</code> or <code>CLKBANK*COM</code>."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/google/google-button-in.inc.php:93
@@ -3724,7 +3729,7 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-pf-in.inc.php:128
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:257
 msgctxt "s2member-front"
-msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal®</a> to cancel your Subscription."
+msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal</a> to cancel your Subscription."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:344
@@ -3735,50 +3740,50 @@ msgctxt "s2member-front"
 msgid "<strong>Sorry.</strong> Your account is pending other changes. Please try again in 15 minutes."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:373
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:511
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:687
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
 msgctxt "s2member-front"
-msgid "Maestro®"
+msgid "Maestro"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:373
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:511
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:687
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
 msgctxt "s2member-front"
-msgid "Solo®"
+msgid "Solo"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:511
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:687
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
 msgctxt "s2member-front"
-msgid "PayPal®"
+msgid "PayPal"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:602
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:814
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:606
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:818
 msgctxt "s2member-front"
-msgid "We Accept PayPal®"
+msgid "We Accept PayPal"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:205
 msgctxt "s2member-admin"
-msgid "PayPal® configuration error. Please configure your PayPal® Email Address."
+msgid "PayPal configuration error. Please configure your PayPal Email Address."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:208
 msgctxt "s2member-admin"
-msgid "PayPal® configuration error. Your PayPal® API Username is not yet configured."
+msgid "PayPal configuration error. Your PayPal API Username is not yet configured."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:211
 msgctxt "s2member-admin"
-msgid "PayPal® configuration error. Your PayPal® API Password is not yet configured."
+msgid "PayPal configuration error. Your PayPal API Password is not yet configured."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:214
 msgctxt "s2member-admin"
-msgid "PayPal® configuration error. Your PayPal® API Signature is not yet configured."
+msgid "PayPal configuration error. Your PayPal API Signature is not yet configured."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:283
@@ -3790,7 +3795,7 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:79
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:135
 msgctxt "s2member-front"
-msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal®</a> to update your billing information."
+msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal</a> to update your billing information."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:286
@@ -3849,7 +3854,7 @@ msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:513
 msgctxt "s2member-admin"
-msgid "Invalid Payflow® form configuration. Invalid \"rt, rp, rr\" attributes. Payflow® supports a specific set of recurring intervals. Pro Forms can be configured to charge: weekly, bi-weekly, monthly, quarterly, semi-yearly or yearly. Any other combination results in this error. This is a Payflow® limitation."
+msgid "Invalid Payflow form configuration. Invalid \"rt, rp, rr\" attributes. Payflow supports a specific set of recurring intervals. Pro Forms can be configured to charge: weekly, bi-weekly, monthly, quarterly, semi-yearly or yearly. Any other combination results in this error. This is a Payflow limitation."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:516
@@ -3938,7 +3943,7 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:167
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:253
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:542
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:866
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:874
 msgctxt "s2member-front"
 msgid "Security Code missing. Please try again."
 msgstr ""
@@ -4276,7 +4281,7 @@ msgstr ""
 #: s2member-pro/includes/templates/options/alipay-membership-ccap-terms.php:6
 #: s2member-pro/includes/templates/options/alipay-membership-regular-terms.php:6
 msgctxt "s2member-admin"
-msgid "AliPay® (Buy Now)"
+msgid "AliPay (Buy Now)"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/alipay-membership-ccap-terms.php:7
@@ -4412,30 +4417,30 @@ msgstr ""
 #: s2member-pro/includes/templates/options/authnet-membership-ccap-terms.php:6
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:35
 msgctxt "s2member-admin"
-msgid "Authorize.Net® (Buy Now)"
+msgid "Authorize.Net (Buy Now)"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:6
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:18
 msgctxt "s2member-admin"
-msgid "Authorize.Net® (Subscriptions)"
+msgid "Authorize.Net (Subscriptions)"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/ccbill-membership-ccap-terms.php:6
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:14
 msgctxt "s2member-admin"
-msgid "ccBill® Non-Recurring / Buy Now"
+msgid "ccBill Non-Recurring / Buy Now"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:6
 msgctxt "s2member-admin"
-msgid "ccBill® Recurring Plans"
+msgid "ccBill Recurring Plans"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/clickbank-ccap-fixed-terms.php:6
 #: s2member-pro/includes/templates/options/clickbank-fixed-terms.php:6
 msgctxt "s2member-admin"
-msgid "ClickBank® (Fixed Terms)"
+msgid "ClickBank (Fixed Terms)"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/clickbank-ccap-product-types.php:6
@@ -4622,13 +4627,13 @@ msgstr ""
 #: s2member-pro/includes/templates/options/google-membership-ccap-terms.php:6
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:42
 msgctxt "s2member-admin"
-msgid "Google® (Buy Now)"
+msgid "Google (Buy Now)"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:6
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:18
 msgctxt "s2member-admin"
-msgid "Google® (Subscriptions)"
+msgid "Google (Subscriptions)"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:6
@@ -4636,14 +4641,14 @@ msgstr ""
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:6
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:19
 msgctxt "s2member-admin"
-msgid "PayPal® Pro (Subscriptions)"
+msgid "PayPal Pro (Subscriptions)"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:41
 #: s2member-pro/includes/templates/options/paypal-membership-ccap-terms.php:6
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:43
 msgctxt "s2member-admin"
-msgid "PayPal® Pro (Buy Now)"
+msgid "PayPal Pro (Buy Now)"
 msgstr ""
 
 #: s2member-pro/includes/templates/shortcodes/authnet-cancellation-form-shortcode.php:6

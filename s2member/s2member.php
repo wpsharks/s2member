@@ -19,8 +19,8 @@
 */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 130816
-Stable tag: 130816
+Version: 131025
+Stable tag: 131025
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -35,7 +35,7 @@ Authorize.Net Compatible: yes w/s2Member Pro
 Google Checkout Compatible: yes w/s2Member Pro
 ClickBank Compatible: yes w/s2Member Pro
 
-Tested up to: 3.7-alpha
+Tested up to: 3.7
 Requires at least: 3.3
 
 Copyright: © 2009 WebSharks, Inc.
@@ -75,7 +75,7 @@ if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 * @var str
 */
 if(!defined("WS_PLUGIN__S2MEMBER_VERSION"))
-	define("WS_PLUGIN__S2MEMBER_VERSION", "130816" /* !#distro-version#! */);
+	define("WS_PLUGIN__S2MEMBER_VERSION", "131025" /* !#distro-version#! */);
 /**
 * Minimum PHP version required to run s2Member.
 *
@@ -105,7 +105,7 @@ if(!defined("WS_PLUGIN__S2MEMBER_MIN_WP_VERSION"))
 * @var str
 */
 if(!defined("WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION"))
-	define("WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION", "130816" /* !#distro-version#! */);
+	define("WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION", "131025" /* !#distro-version#! */);
 /*
 Several compatibility checks.
 If all pass, load the s2Member plugin.
