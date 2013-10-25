@@ -1179,7 +1179,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 								echo '<h3>Login Welcome Page (required, please customize this)</h3>' . "\n";
 								echo '<p>Please create and/or choose an existing Page to use as the first page Members will see after logging in.</p>' . "\n";
 								echo (c_ws_plugin__s2member_utils_conds::bp_is_installed ()) ? '<p><em><strong>BuddyPress:</strong> s2Member integrates with BuddyPress. Your Login Welcome Page affects BuddyPress too.</em></p>' . "\n" : '';
-								echo '<p><em><strong>*Tip*</strong> This special Page will be protected from public access (automatically) by s2Member.</em></p>' . "\n";
+								echo '<p><em><strong>*Tips*</strong> This special Page will be protected from public access (automatically) by s2Member. Also, please remember this option CANNOT be set to your Front Page (e.g. your Home Page), or to your Posts Page (e.g. your main Blog page). Please create a separate Page in WordPress &amp; designate it here as your Login Welcome Page.</em></p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/customizing-your-lwp/" target="_blank" rel="external">Customizing Your Login Welcome Page</a>.</p>'."\n";
 								do_action ("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_login_welcome_page", get_defined_vars ());
 
