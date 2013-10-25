@@ -72,9 +72,9 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 								{
 									do_action ("ws_plugin__s2member_during_mms_patches_before", get_defined_vars ());
 
-									$wp_login_file = ABSPATH . "wp-login.php"; // This works for both WordPress 3.0 and 3.1. WordPress 3.1+ uses: `site_url('wp-signup.php')`. WordPress 3.5+ uses: `network_site_url('wp-signup.php')`.
-									$wp_login_section = "/([\r\n\t\s ]+)(wp_redirect( *?)\(( *?)apply_filters( *?)\(( *?)['\"]wp_signup_location['\"],( *?)(site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|network_site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|get_bloginfo( *?)\(['\"]wpurl['\"]\)( *?)\.( *?)['\"]\/wp-signup\.php['\"])( *?)\)( *?)\);)([\r\n\t\s ]+)(exit;)/";
-									$wp_login_replace = "\n\t\t// Modified for full plugin compatiblity.\n\t\t//wp_redirect( apply_filters( 'wp_signup_location', network_site_url('wp-signup.php') ) );\n\t\t//exit;";
+									$wp_login_file = ABSPATH . "wp-login.php"; // This works for WordPress 3.0, 3.1, all the way up to 3.7. WordPress 3.1+ uses: `site_url('wp-signup.php')`. WordPress 3.5+ uses: `network_site_url('wp-signup.php')`. WordPress v3.7 uses `$sign_up_url`.
+									$wp_login_section = "/(\s+)(wp_redirect( *?)\(( *?)apply_filters( *?)\(( *?)['\"]wp_signup_location['\"]( *?),( *?)(site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|network_site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|get_bloginfo( *?)\(['\"]wpurl['\"]\)( *?)\.( *?)['\"]\/wp-signup\.php['\"]|\\\$sign_?up_url)( *?)\)( *?)\)( *?);)(\s+)(exit( *?);)/";
+									$wp_login_replace = "\n\t\t// Modified for full plugin compatiblity.\n\t\t//wp_redirect( apply_filters( 'wp_signup_location', \$sign_up_url ) );\n\t\t//exit;";
 
 									if (file_exists ($wp_login_file) && ($wp_login = file_get_contents ($wp_login_file)) && is_writable ($wp_login_file))
 										{

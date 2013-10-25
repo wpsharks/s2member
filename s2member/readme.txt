@@ -86,10 +86,14 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v131025 =
+= v131026 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v131026 =
+* (s2Member) **WordPress v3.7 Compatibility** s2Member further updated to support subtle changes in the WordPress v3.7 `wp-login.php` file. This release corrects a minor issue w/ patches applied by s2Member when running in a Multisite Network environment. If you are running s2Member on a Multisite Network, please be sure to run the automatic patcher provided in your Dashboard against WordPress v3.7 after updating to this release of s2Member.
+* (s2Member Pro) **PayPal Central IPN** Updating the example file: `s2m-pro-extras/paypal-central-ipn.php` to use one of the latest PayPal IP addresses listed [here](https://ppmts.custhelp.com/app/answers/detail/a_id/92).
 
 = v131025 =
 * (s2Member) **WordPress v3.7 Compatibility** s2Member updated to support WordPress v3.7. s2Member remains compatible with WP v3.3 (or higher).
