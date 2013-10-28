@@ -296,35 +296,54 @@ jQuery(document).ready (function($)
 					});
 			}
 
+		ws_plugin__s2member_passwordStrengthMeter = function(password1, password2)
+					{
+						var score = 0; // Initialize score.
+
+						if((password1 != password2) && password2.length > 0)
+							return 'mismatch';
+						else if(password1.length < 1)
+							return 'empty';
+						else if(password1.length < 6)
+							return 'short';
+
+						if(password1.match(/[0-9]/))
+							score += 10;
+						if(password1.match(/[a-z]/))
+							score += 10;
+						if(password1.match(/[A-Z]/))
+							score += 10;
+						if(password1.match(/[^0-9a-zA-Z]/))
+							score = (score === 30) ? score + 20 : score + 10;
+
+						if(score < 30) return 'bad';
+						if(score < 50) return 'good';
+
+						return 'strong'; // Default return value.
+					};
+
 		ws_plugin__s2member_passwordStrength = function($username, $pass1, $pass2, $result)
 			{
-				if ($username instanceof jQuery && $pass1 instanceof jQuery && $pass2 instanceof jQuery && $result instanceof jQuery && typeof passwordStrength === 'function' && typeof pwsL10n === 'object')
+				if ($username instanceof jQuery && $pass1 instanceof jQuery && $pass2 instanceof jQuery && $result instanceof jQuery)
 					{
-						$result.removeClass ('ws-plugin--s2member-password-strength-short ws-plugin--s2member-password-strength-bad ws-plugin--s2member-password-strength-good ws-plugin--s2member-password-strength-strong ws-plugin--s2member-password-strength-mismatch');
+						var pwsL10n = { // Password strength meter translations.
+							'empty': '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Strength indicator", "s2member-front", "s2member")); ?>',
+							'short': '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Very weak", "s2member-front", "s2member")); ?>',
+							'bad': '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Weak", "s2member-front", "s2member")); ?>',
+							'good': '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Medium", "s2member-front", "s2member")); ?>',
+							'strong': '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Strong", "s2member-front", "s2member")); ?>',
+							'mismatch': '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Mismatch", "s2member-front", "s2member")); ?>'};
 
-						switch /* Uses WordPress script: `password-strength-meter` and `pwsL10n`. */ (passwordStrength($pass1.val (), $username.val (), $pass2.val ()))
-							{
-								case 1:
-									$result.addClass ('ws-plugin--s2member-password-strength-short').html (pwsL10n['short']);
-									break;
-								case 2:
-									$result.addClass ('ws-plugin--s2member-password-strength-bad').html (pwsL10n['bad']);
-									break;
-								case 3:
-									$result.addClass ('ws-plugin--s2member-password-strength-good').html (pwsL10n['good']);
-									break;
-								case 4:
-									$result.addClass ('ws-plugin--s2member-password-strength-strong').html (pwsL10n['strong']);
-									break;
-								case 5:
-									$result.addClass ('ws-plugin--s2member-password-strength-mismatch').html (pwsL10n['mismatch']);
-									break;
-								default:
-									$result.addClass ('ws-plugin--s2member-password-strength-short').html (pwsL10n['short']);
-							}
+						$result.removeClass ('ws-plugin--s2member-password-strength-short');
+						$result.removeClass ('ws-plugin--s2member-password-strength-bad');
+						$result.removeClass ('ws-plugin--s2member-password-strength-good');
+						$result.removeClass ('ws-plugin--s2member-password-strength-strong');
+						$result.removeClass ('ws-plugin--s2member-password-strength-mismatch');
+						$result.removeClass ('ws-plugin--s2member-password-strength-empty');
+
+						var meterSays = ws_plugin__s2member_passwordStrengthMeter($pass1.val (), $pass2.val ());
+						$result.addClass ('ws-plugin--s2member-password-strength-'+meterSays).html (pwsL10n[meterSays]);
 					}
-
-				return;
 			};
 
 		ws_plugin__s2member_validationErrors = function(label, field, context, required, expected)

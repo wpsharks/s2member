@@ -27,7 +27,44 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 		*/
 		class c_ws_plugin__s2member_css_js_themes
 			{
-				/**
+			/**
+				* Lazy load CSS/JS files?
+				*
+				* @package s2Member\CSS_JS
+				* @since 131028
+				*
+				* @return boolean TRUE if we should load; else FALSE.
+				*/
+				public static function lazy_load_css_js ()
+					{
+						static $load; // Static cache var.
+
+						if(isset($load)) return $load;
+
+						if(c_ws_plugin__s2member_systematics::is_s2_systematic_use_page())
+							$load = TRUE;
+
+						else if(c_ws_plugin__s2member_utils_conds::bp_is_installed()
+						        && (bp_is_register_page() || bp_is_activation_page() || bp_is_user_profile()))
+							$load = TRUE;
+
+						else if(is_singular() && ($post = get_post())
+						        && (stripos($post->post_content, "s2member") !== FALSE
+										|| stripos($post->post_content, "[s2") !== FALSE))
+							$load = TRUE;
+
+						else if(preg_match("/\/wp\-signup\.php".
+						                     "|\/wp\-login\.php".
+						                     "|\/wp\-admin\/(?:user\/)?profile\.php".
+						                     "|[?&]s2member/", $_SERVER["REQUEST_URI"]))
+							$load = TRUE;
+
+						if(!isset($load)) $load = FALSE; // Make sure it's set; always.
+
+						return ($load = apply_filters("ws_plugin__s2member_lazy_load_css_js", $load));
+					}
+
+			/**
 				* Enqueues CSS file for theme integration.
 				*
 				* @package s2Member\CSS_JS
@@ -41,7 +78,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 					{
 						do_action ("ws_plugin__s2member_before_add_css", get_defined_vars ());
 
-						if /* Not in the admin. */ (!is_admin ())
+						if(!is_admin () && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js())
 							{
 								$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"];
 
@@ -71,7 +108,8 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 
 						do_action ("ws_plugin__s2member_before_add_js_w_globals", get_defined_vars ());
 
-						if (!is_admin () || (is_user_admin () && $pagenow === "profile.php" && !current_user_can ("edit_users")))
+						if ((!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js())
+						    || (is_user_admin () && $pagenow === "profile.php" && !current_user_can ("edit_users")))
 							{
 								$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"];
 
@@ -80,11 +118,11 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 										$md5 = /* An MD5 hash based on global key => values. */ WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5;
 										// The MD5 hash allows the script to be cached in the browser until the globals happen to change.
 										// For instance, the global variables may change when a User who is logged-in changes their Profile.
-										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=" . urlencode ($md5) . "&qcABC=1", array ("jquery", "password-strength-meter"), c_ws_plugin__s2member_utilities::ver_checksum ());
+										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=" . urlencode ($md5) . "&qcABC=1", array ("jquery"), c_ws_plugin__s2member_utilities::ver_checksum (), TRUE);
 									}
 								else // Else if they are not logged in, we distinguish the JavaScript file by NOT including $md5.
 									{ // This essentially creates 2 versions of the script. One while logged in & another when not.
-										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=1&qcABC=1", array ("jquery", "password-strength-meter"), c_ws_plugin__s2member_utilities::ver_checksum ());
+										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=1&qcABC=1", array ("jquery"), c_ws_plugin__s2member_utilities::ver_checksum (), TRUE);
 									}
 								do_action ("ws_plugin__s2member_during_add_js_w_globals", get_defined_vars ());
 							}

@@ -131,7 +131,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 											$page = preg_replace ("/^([^\:]*)\:/i", "", $page);
 
 											if (empty ($adms) || in_array ("*", $adms) || in_array ($a, $adms))
-												if (!$page || "*" === $page || $pagenow === $page || $_GET["page"] === $page)
+												if (!$page || "*" === $page || $pagenow === $page || @$_GET["page"] === $page)
 													{
 														if /* Time to show it? */ (strtotime ("now") >= (int)$notice["time"])
 															{

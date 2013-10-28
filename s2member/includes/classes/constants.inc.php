@@ -282,7 +282,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see http://codex.wordpress.org/Function_Reference/wp_get_current_user wp_get_current_user()
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_ACCESS_LABEL"))
-							define ("S2MEMBER_CURRENT_USER_ACCESS_LABEL", ($c[] = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_label"]));
+							define ("S2MEMBER_CURRENT_USER_ACCESS_LABEL", ($c[] = (string)@$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_label"]));
 						/**
 						* The current User's Paid Subscription ID (when applicable).
 						*

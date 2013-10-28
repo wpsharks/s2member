@@ -62,7 +62,7 @@ if (!class_exists ("c_ws_plugin__s2member_cache"))
 							{
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["login_welcome_page"]["page"] = $lwp;
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["login_welcome_page"]["time"] = time ();
-								$links["login_welcome_page"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["login_welcome_page"]["link"] = get_page_link ($lwp);
+								$links["login_welcome_page"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["login_welcome_page"]["link"] = ($lwp) ? get_page_link ($lwp) : home_url("/");
 
 								$cache_needs_updating = /* Flag for cache update. */ true;
 							}
@@ -74,7 +74,7 @@ if (!class_exists ("c_ws_plugin__s2member_cache"))
 							{
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["membership_options_page"]["page"] = $mop;
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["membership_options_page"]["time"] = time ();
-								$links["membership_options_page"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["membership_options_page"]["link"] = get_page_link ($mop);
+								$links["membership_options_page"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["membership_options_page"]["link"] = ($mop) ? get_page_link ($mop) : home_url("/");
 
 								$cache_needs_updating = /* Flag for cache update. */ true;
 							}
@@ -86,7 +86,7 @@ if (!class_exists ("c_ws_plugin__s2member_cache"))
 							{
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["file_download_limit_exceeded_page"]["page"] = $fdlep;
 								$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["file_download_limit_exceeded_page"]["time"] = time ();
-								$links["file_download_limit_exceeded_page"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["file_download_limit_exceeded_page"]["link"] = get_page_link ($fdlep);
+								$links["file_download_limit_exceeded_page"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["cache"]["file_download_limit_exceeded_page"]["link"] = ($fdlep) ? get_page_link ($fdlep) : home_url("/");
 
 								$cache_needs_updating = /* Flag for cache update. */ true;
 							}

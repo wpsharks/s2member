@@ -248,7 +248,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 							{
 								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_amazon_s3", get_defined_vars());
 
-								echo '<div class="ws-menu-page-group" title="Amazon S3/CDN Storage Option"'.((c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"]) ? ' default-state="open"' : '').'>'."\n";
+								echo '<div class="ws-menu-page-group" title="Amazon S3/CDN Storage Option"'.((!empty(c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"])) ? ' default-state="open"' : '').'>'."\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-amazon-s3-section">'."\n";
 								echo '<h3>Amazon S3/CDN Storage &amp; Delivery (optional)</h3>'."\n";
@@ -335,7 +335,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 							{
 								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_amazon_cf", get_defined_vars());
 
-								echo '<div class="ws-menu-page-group" title="Amazon S3/CloudFront CDN Storage Option"'.((c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"]) ? ' default-state="open"' : '').'>'."\n";
+								echo '<div class="ws-menu-page-group" title="Amazon S3/CloudFront CDN Storage Option"'.((!empty(c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"])) ? ' default-state="open"' : '').'>'."\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-amazon-cf-section">'."\n";
 								echo '<h3>Amazon S3/CloudFront CDN Storage &amp; Delivery (optional)</h3>'."\n";
@@ -413,7 +413,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								echo '<tr>'."\n";
 
 								echo '<td>'."\n";
-								echo '<input type="checkbox" name="ws_plugin__s2member_amazon_cf_files_auto_configure_distros" id="ws-plugin--s2member-amazon-cf-files-auto-configure-distros" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-amazon-cf-files-auto-configure-distros")).'"'.((c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-amazon-cf-files-auto-configure-distros"><strong>Yes</strong>, automatically configure my Amazon CloudFront Distributions &amp; Amazon S3 ACLs for me.</label><br />'."\n";
+								echo '<input type="checkbox" name="ws_plugin__s2member_amazon_cf_files_auto_configure_distros" id="ws-plugin--s2member-amazon-cf-files-auto-configure-distros" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-amazon-cf-files-auto-configure-distros")).'"'.((!empty(c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"])) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-amazon-cf-files-auto-configure-distros"><strong>Yes</strong>, automatically configure my Amazon CloudFront Distributions &amp; Amazon S3 ACLs for me.</label><br />'."\n";
 								echo '<em>s2Member will auto-configure and/or delete &amp; re-configure your Amazon CloudFront Distributions for you.</em>'."\n";
 								echo '</td>'."\n";
 
@@ -421,7 +421,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								echo '<tr>'."\n";
 
 								echo '<td>'."\n";
-								echo '<input type="checkbox" name="ws_plugin__s2member_amazon_cf_files_auto_configure_distros_w_cnames" id="ws-plugin--s2member-amazon-cf-files-auto-configure-distros-w-cnames" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-amazon-cf-files-auto-configure-distros-w-cnames")).'"'.((c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"] && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_downloads_cname"] || $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_streaming_cname"])) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-amazon-cf-files-auto-configure-distros-w-cnames"><strong>Yes</strong>, I want s2Member to auto-configure using custom CNAMES that I\'ll setup.</label><br />'."\n";
+								echo '<input type="checkbox" name="ws_plugin__s2member_amazon_cf_files_auto_configure_distros_w_cnames" id="ws-plugin--s2member-amazon-cf-files-auto-configure-distros-w-cnames" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-amazon-cf-files-auto-configure-distros-w-cnames")).'"'.((!empty(c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_downloads_cname"] || $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distro_streaming_cname"])) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-amazon-cf-files-auto-configure-distros-w-cnames"><strong>Yes</strong>, I want s2Member to auto-configure using custom CNAMES that I\'ll setup.</label><br />'."\n";
 								echo '<em>* Optional, do NOT check this box unless you know what you\'re doing. This requires DNS changes.</em>'."\n";
 								echo '</td>'."\n";
 
