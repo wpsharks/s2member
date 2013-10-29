@@ -1,4 +1,4 @@
-=== s2Member® Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
+=== s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
 Version: 131026
 Stable tag: 131026
