@@ -88,7 +88,9 @@ if (!class_exists ("c_ws_plugin__s2member_no_cache"))
 						do_action ("ws_plugin__s2member_before_no_cache_constants", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						if (!$once && empty ($_GET["qcAC"]) && ($no_cache || is_user_logged_in () || c_ws_plugin__s2member_systematics::is_s2_systematic_use_page ()))
+						if (!$once && empty ($_GET["qcAC"]) && ($no_cache
+							|| (is_user_logged_in () && (!defined("QUICK_CACHE_WHEN_LOGGED_IN") || !QUICK_CACHE_WHEN_LOGGED_IN))
+						                                        || c_ws_plugin__s2member_systematics::is_s2_systematic_use_page ()))
 							{
 								/**
 								* No-cache DB queries for plugins.
