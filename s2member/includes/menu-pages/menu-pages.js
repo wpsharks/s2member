@@ -20,8 +20,6 @@
 */
 jQuery(document).ready (function($)
 	{
-		$('div#ws-menu-page-js-c-w').hide /* Hide JavaScript conflict warning. */ ();
-
 		$(window).resize ( /* Global function. */tb_position /* Thickbox resizer/positioner. */ = function()
 			{
 				var w = ($(window).width () > 720) ? 720 : $(window).width (), h = $(window).height (), admin_bar_h = ($('body.admin-bar').length) ? 28 : 0;
@@ -29,48 +27,51 @@ jQuery(document).ready (function($)
 				$('#TB_ajaxContent').css ({'width': w - 50 + 'px', 'height': h - 75 - admin_bar_h + 'px', 'margin': 0, 'padding': 0});
 			});
 
+		var $rs = $('table.ws-menu-page-table td.ws-menu-page-table-r'),
+			$rsToggler = $('> .toggler', $rs), $rsWrapper = $('> .wrapper', $rs);
+
 		var $groups = /* Query groups. */ $('div.ws-menu-page-group');
 		$groups.each ( /* Go through each group, one at a time. */function(index)
 			{
-				var $this = $(this), ins = '<ins>+</ins>', $group = $this, title = $.trim ($group.attr ('title'));
+				var $this = $(this), $group = $this, title = $.trim ($group.attr ('title'));
 
-				var $header = $('<div class="ws-menu-page-group-header">' + ins + title + '</div>');
+				var $header = $('<div class="ws-menu-page-group-header">' + title + '</div>');
 
 				$header.css /* Stack them sequentially, top to bottom. */ ({'z-index': 1});
 
-				$header.insertBefore ($group), $group.hide (), $header.click (function()
+				$header.insertBefore ($group), $header.click (function()
 					{
-						var $this = $(this), $ins = $('ins', $this), $group = $this.next ();
+						var $this = $(this), $group = $this.next ();
 
-						if ($group.css ('display') === 'none')
-							$this.addClass ('open'), $ins.html ('-'), $group.show ();
-
-						else // Else remove open class and hide group.
-							$this.removeClass ('open'), $ins.html ('+'), $group.hide ();
+						if ($this.hasClass('open'))
+							$this.add($group).removeClass ('open');
+						else $this.add($group).addClass ('open');
 
 						return /* Return. */ false;
 					});
-				if /* These are the buttons for showing/hiding all groups. */ ($groups.length > 1 && index === 0)
+				if ($groups.length > 1 && index === 0)
 					{
-						$('<div class="ws-menu-page-groups-show">+</div>').insertBefore ($header).click (function()
+						$('<div class="ws-menu-page-groups-hide"><i class="fa fa-chevron-up"></i></div>')
+							.insertBefore ('div.ws-menu-page > h2').click (function()
 							{
 								$('div.ws-menu-page-group-header').each (function()
 									{
-										var $this = $(this), $ins = $('ins', $this), $group = $this.next ();
+										var $this = $(this), $group = $this.next ();
 
-										$this.addClass ('open'), $ins.html ('-'), $group.show ();
+										$this.add($group).removeClass ('open');
 
 										return; // Return.
 									});
 								return /* Return. */ false;
 							});
-						$('<div class="ws-menu-page-groups-hide">-</div>').insertBefore ($header).click (function()
+						$('<div class="ws-menu-page-groups-show"><i class="fa fa-chevron-down"></i></div>')
+							.insertBefore ('div.ws-menu-page > h2').click (function()
 							{
 								$('div.ws-menu-page-group-header').each (function()
 									{
-										var $this = $(this), $ins = $('ins', $this), $group = $this.next ();
+										var $this = $(this), $group = $this.next ();
 
-										$this.removeClass ('open'), $ins.html ('+'), $group.hide ();
+										$this.add($group).addClass ('open');
 
 										return; // Return.
 									});
@@ -82,28 +83,27 @@ jQuery(document).ready (function($)
 
 				return; // Return.
 			});
-		if /* We only apply these special margins when there are multiple groups. */ ($groups.length > 1)
-			{
-				$('div.ws-menu-page-group-header:first').css ({'margin-right': '140px'});
-				$('div.ws-menu-page-group:first').css ({'margin-right': '145px'});
-			}
+		$rsToggler.click(function()
+		 {
+			if($rs.hasClass('open'))
+					$rsWrapper.hide(), $rs.removeClass('open');
+			else // Open the sidebar (right-side).
+					$rsWrapper.show(), $rs.addClass('open');
+		});
+		if($rsToggler.attr('default-state') === 'open') $rsToggler.click();
+
 		$('div.ws-menu-page-r-group-header').click (function()
 			{
-				var $this = $(this), $group = $this.next ('div.ws-menu-page-r-group');
+				var $this = $(this), $group = $this.next ();
 
-				if ($group.css ('display') === 'none')
-					$('ins', $this).html ('-'), $this.addClass ('open'), $group.show ();
+				if ($this.hasClass('open'))
+					$this.add($group).removeClass ('open');
+				else $this.add($group).addClass ('open');
 
-				else // Otherwise, we hide this group.
-					{
-						$('ins', $this).html ('+'), $this.removeClass ('open');
-						$group.hide ();
-					}
 				return /* Return. */ false;
 			});
 		$('div.ws-menu-page-group-header:first, div.ws-menu-page-r-group-header:first').css ({'margin-top': '0'});
-		$('div.ws-menu-page-group > div.ws-menu-page-section:first-child > h3').css ({'margin-top': '0'});
-		$('div.ws-menu-page-readme > div.readme > div.section:last-child').css ({'border-bottom-width': '0'});
+		$('div.ws-menu-page-group-header:last, div.ws-menu-page-r-group-header:last, div.ws-menu-page-group:last').css ({'margin-bottom': '0'});
 
 		$('input.ws-menu-page-media-btn').filter ( /* Only those that have a rel attribute. */function()
 			{

@@ -194,7 +194,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 										echo '<tr>'."\n";
 
 										echo '<td>'."\n";
-										echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
+										echo '<div class="info" style="margin-bottom:0;">'."\n";
 										echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems during payment processing. See: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Files (Debug)</a>.</span></p>'."\n";
 										echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
 										echo '</div>'."\n";
@@ -325,7 +325,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 								echo '<p>You\'ll need your IPN URL, which is:<br /><code>'.esc_html(site_url("/?s2member_paypal_notify=1")).'</code></p>'."\n";
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn", get_defined_vars());
 
-								echo '<h3>More Information (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-details\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
+								echo '<h3 style="margin:0;">More Information (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-details\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
 								echo '<div id="ws-plugin--s2member-paypal-ipn-details" style="display:none;">'."\n";
 								echo '<p><em><strong>*Quick Tip*</strong> In addition to the <a href="http://www.s2member.com/paypal-ipn-setup" target="_blank" rel="external">default IPN settings inside your PayPal account</a>, the IPN URL is also set on a per-transaction basis by the special PayPal Button Code that s2Member provides you with. In other words, if you have multiple sites operating on one PayPal account, that\'s OK. s2Member dynamically sets the IPN URL for each transaction. The result is that the IPN URL configured from within your PayPal account, becomes the default, which is then overwritten on a per-transaction basis. In fact, PayPal recently updated their system to support IPN URL preservation. One PayPal account can handle multiple sites, all using different IPN URLs.</em></p>'."\n";
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn_after_quick_tip", get_defined_vars());
@@ -334,7 +334,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-								echo '<h3>IPN w/ Proxy Key (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-proxy-details\').toggle(); return false;" class="ws-dotted-link">optional, for 3rd-party integrations</a>)</h3>'."\n";
+								echo '<h3 style="margin:0;">IPN w/ Proxy Key (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-proxy-details\').toggle(); return false;" class="ws-dotted-link">optional, for 3rd-party integrations</a>)</h3>'."\n";
 								echo '<div id="ws-plugin--s2member-paypal-ipn-proxy-details" style="display:none;">'."\n";
 								echo '<p>If you\'re using a 3rd-party application that needs to POST simulated IPN transactions to your s2Member installation, you can use this alternate IPN URL, which includes a Proxy Key. This encrypted Proxy Key verifies incoming data being received by s2Member\'s IPN processor. You can change <em>[proxy-gateway]</em> to whatever you like. The <em>[proxy-gateway]</em> value is required. It will be stored by s2Member as the Customer\'s Paid Subscr. Gateway. Your [proxy-gateway] value will also be reflected in s2Member\'s IPN log.</p>'."\n";
 								echo '<input type="text" autocomplete="off" value="'.format_to_edit(site_url("/?s2member_paypal_notify=1&s2member_paypal_proxy=[proxy-gateway]&s2member_paypal_proxy_verification=".urlencode(c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()))).'" style="width:99%;" />'."\n";
@@ -386,7 +386,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-								echo '<h3>More Information (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-pdt-details\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
+								echo '<h3 style="margin:0;">More Information (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-pdt-details\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
 								echo '<div id="ws-plugin--s2member-paypal-pdt-details" style="display:none;">'."\n";
 								echo '<p><em><strong>*Quick Tip*</strong> In addition to the <a href="http://www.s2member.com/paypal-pdt-setup" target="_blank" rel="external">default Auto-Return/PDT configuration inside your PayPal account</a>, the Auto-Return URL is also set on a per-transaction basis from within the special PayPal Button Code that s2Member provides you with. In other words, if you have multiple sites operating on one PayPal account, that\'s OK. s2Member dynamically sets the Auto-Return URL for each transaction. The result is that the Auto-Return URL configured from within your PayPal account, becomes the default, which is then overwritten on a per-transaction basis.</em></p>'."\n";
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_pdt_after_quick_tip", get_defined_vars());
@@ -763,7 +763,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 						echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-						echo '<p class="submit"><input type="submit" class="button-primary" value="Save All Changes" /></p>'."\n";
+						echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";
 
 						echo '</form>'."\n";
 

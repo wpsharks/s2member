@@ -102,7 +102,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 
 						$attr = /* Force array; trim quote entities. */ c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr);
 
-						$attr = shortcode_atts(array("download" => "", "download_key" => "", "stream" => "yes", "inline" => "yes", "storage" => "", "remote" => "", "ssl" => "", "rewrite" => "yes", "rewrite_base" => "", "skip_confirmation" => "", "url_to_storage_source" => "yes", "count_against_user" => "yes", "check_user" => "yes", /* Shortcode-specifics »» */ "file_download" => "", /* Configuration » */ "player" => "jwplayer-v6-rtmp", "player_id" => "s2-stream-".md5(uniqid("", TRUE)), "player_path" => "/jwplayer/jwplayer.js", "player_key" => "", "player_title" => "", "player_image" => "", "player_mediaid" => "", "player_description" => "", "player_captions" => "", /* Layout » */ "player_controls" => "yes", "player_skin" => "", "player_stretching" => "uniform", "player_width" => "480", "player_height" => "270", "player_aspectratio" => "", /* Playback » */ "player_autostart" => "no", "player_fallback" => "yes", "player_mute" => "no", "player_primary" => "flash", "player_repeat" => "no", "player_startparam" => "", /* Advanced option blocks » */ "player_option_blocks" => ""), $attr);
+						$attr = shortcode_atts(array("download" => "", "download_key" => "", "stream" => "yes", "inline" => "yes", "storage" => "", "remote" => "", "ssl" => "", "rewrite" => "yes", "rewrite_base" => "", "skip_confirmation" => "", "url_to_storage_source" => "yes", "count_against_user" => "yes", "check_user" => "yes", /* Shortcode-specifics »» */ "file_download" => "", /* Configuration » */ "player" => "jwplayer-v6-rtmp", "player_id" => "s2-stream-".md5(uniqid("", TRUE)), "player_path" => "/jwplayer/jwplayer.js", "player_key" => "", "player_title" => "", "player_image" => "", "player_mediaid" => "", "player_description" => "", "player_captions" => "", /* Layout » */ "player_controls" => "yes", "player_skin" => "", "player_stretching" => "uniform", "player_width" => "480", "player_height" => "270", "player_aspectratio" => "", /* Playback » */ "player_autostart" => "no", "player_fallback" => "yes", "player_mute" => "no", "player_primary" => (($attr["player"] === "jw-player-v6") ? "html5" : "flash"), "player_repeat" => "no", "player_startparam" => "", /* Advanced option blocks » */ "player_option_blocks" => ""), $attr);
 						$attr["download"] = (!empty($attr["file_download"])) ? $attr["file_download"] : $attr["download"];
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -116,7 +116,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 								$config[$key] = $value;
 
 						unset /* Ditch these now. We don't want these bleeding into Hooks/Filters anyway. */($key, $value);
-						
+
 						if /* Looking for a File Download URL? */(!empty($config) && isset($config["file_download"]))
 							{
 								$_get = c_ws_plugin__s2member_files::create_file_download_url($config, TRUE);
@@ -129,7 +129,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 										if(strpos($attr["player"], "jwplayer-v6") === 0)
 											{
 												$get = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($template)));
-												
+
 												$get = preg_replace("/%%streamer%%/", $_get["streamer"], $get);
 												$get = preg_replace("/%%prefix%%/", $_get["prefix"], $get);
 												$get = preg_replace("/%%file%%/", $_get["file"], $get);
@@ -155,7 +155,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 												$get = preg_replace("/%%player_aspectratio%%/", $attr["player_aspectratio"], $get);
 												$get = preg_replace("/%%player_skin%%/", $attr["player_skin"], $get);
 												$get = preg_replace("/%%player_stretching%%/", $attr["player_stretching"], $get);
-												
+
 												$get = preg_replace("/%%player_autostart%%/", ((filter_var($attr["player_autostart"], FILTER_VALIDATE_BOOLEAN)) ? "true" : "false"), $get);
 												$get = preg_replace("/%%player_fallback%%/", ((filter_var($attr["player_fallback"], FILTER_VALIDATE_BOOLEAN)) ? "true" : "false"), $get);
 												$get = preg_replace("/%%player_mute%%/", ((filter_var($attr["player_mute"], FILTER_VALIDATE_BOOLEAN)) ? "true" : "false"), $get);

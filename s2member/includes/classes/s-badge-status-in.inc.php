@@ -71,7 +71,8 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 																							{
 																								if (defined ("DB_USER") && DB_USER && defined ("DB_PASSWORD") && DB_PASSWORD && DB_USER !== DB_PASSWORD)
 																									{
-																										if (!apply_filters ("ws_plugin__s2member_disable_all_ip_restrictions", false, get_defined_vars ()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"])
+																										if ((!apply_filters ("ws_plugin__s2member_disable_all_ip_restrictions", false, get_defined_vars ()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"])
+																												|| ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_simultaneous_logins"]) /* Either of these are acceptable. */)
 																											if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_failed_login_attempts"])
 																												{
 																													if ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"] && !glob($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"].'/*'))

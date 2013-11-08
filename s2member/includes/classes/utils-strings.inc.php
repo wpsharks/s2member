@@ -332,9 +332,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*/
 				public static function highlight_php($string = FALSE)
 					{
-						$string = highlight_string((string)$string, true); // Start with PHP syntax, then Shortcodes.
-
-						return preg_replace("/\[\/?_*s2[a-z0-9_\-]+.*?\]/i", '<span style="color:#164A61;">$0</span>', $string);
+						$string = highlight_string(trim((string)$string), true); // Start with PHP syntax, then Shortcodes.
+						$string = preg_replace("/\[\/?_*s2[a-z0-9_\-]+.*?\]/i", '<span style="color:#164A61;">$0</span>', $string);
+						return str_replace('<code>', '<code class="highlight-php">', $string);
 					}
 				/**
 				* Parses email addresses from a string or array.

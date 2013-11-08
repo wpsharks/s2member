@@ -75,7 +75,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<tr>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<textarea name="ws_plugin__s2member_signup_tracking_codes" id="ws-plugin--s2member-signup-tracking-codes" rows="8" wrap="off" spellcheck="false" style="font-family:Consolas, monospace;">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["signup_tracking_codes"]) . '</textarea><br />' . "\n";
+								echo '<textarea name="ws_plugin__s2member_signup_tracking_codes" id="ws-plugin--s2member-signup-tracking-codes" rows="8" wrap="off" spellcheck="false" class="monospace">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["signup_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' (or even PHP)') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google Analytics code works just fine, AdSense performance tracking, as well as Yahoo tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
 								echo '<ul>' . "\n";
@@ -158,7 +158,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<tr>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<textarea name="ws_plugin__s2member_modification_tracking_codes" id="ws-plugin--s2member-modification-tracking-codes" rows="8" wrap="off" spellcheck="false" style="font-family:Consolas, monospace;">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_tracking_codes"]) . '</textarea><br />' . "\n";
+								echo '<textarea name="ws_plugin__s2member_modification_tracking_codes" id="ws-plugin--s2member-modification-tracking-codes" rows="8" wrap="off" spellcheck="false" class="monospace">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' (or even PHP)') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google Analytics code works just fine, AdSense performance tracking, as well as Yahoo tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
 								echo '<ul>' . "\n";
@@ -252,7 +252,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<tr>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<textarea name="ws_plugin__s2member_ccap_tracking_codes" id="ws-plugin--s2member-ccap-tracking-codes" rows="8" wrap="off" spellcheck="false" style="font-family:Consolas, monospace;">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_tracking_codes"]) . '</textarea><br />' . "\n";
+								echo '<textarea name="ws_plugin__s2member_ccap_tracking_codes" id="ws-plugin--s2member-ccap-tracking-codes" rows="8" wrap="off" spellcheck="false" class="monospace">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' (or even PHP)') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google Analytics code works just fine, AdSense performance tracking, as well as Yahoo tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
 								echo '<ul>' . "\n";
@@ -341,7 +341,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<tr>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<textarea name="ws_plugin__s2member_sp_tracking_codes" id="ws-plugin--s2member-sp-tracking-codes" rows="8" wrap="off" spellcheck="false" style="font-family:Consolas, monospace;">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_tracking_codes"]) . '</textarea><br />' . "\n";
+								echo '<textarea name="ws_plugin__s2member_sp_tracking_codes" id="ws-plugin--s2member-sp-tracking-codes" rows="8" wrap="off" spellcheck="false" class="monospace">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' (or even PHP)') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google Analytics code works just fine, AdSense performance tracking, as well as Yahoo tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
 								echo '<ul>' . "\n";
@@ -409,7 +409,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-idev-section">' . "\n";
 								echo '<h3>Integrating iDevAffiliate (affiliate program management)</h3>' . "\n";
-								echo '<a href="http://www.s2member.com/idev-affiliate" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/images/idev-logo.gif" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>' . "\n";
+								echo '<a href="http://www.s2member.com/idev-affiliate" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/images/idev-logo.gif" class="ws-menu-page-right screenshot" style="width:125px; height:125px; border:0;" alt="." /></a>' . "\n";
 								echo '<p>Adding affiliate tracking software to your site is one of the most effective ways to achieve more sales, more traffic, and more search engine ranking. <a href="http://www.s2member.com/idev-affiliate" target="_blank" rel="external">iDevAffiliate</a> (an affiliate management portal), installs in just minutes, and can be integrated seamlessly with s2Member. We recommend <a href="http://www.s2member.com/idev-affiliate" target="_blank" rel="external">iDevAffiliate Standard</a> ( $99 ) because of its proven track record, and its ability to integrate with s2Member using a variety of techniques. The most popular being a Hidden Image Tag.</p>' . "\n";
 								echo '<p>If you choose to <a href="http://www.s2member.com/idev-affiliate" target="_blank" rel="external">install iDevAffiliate</a>, you will need to configure your <code>iDevAffiliate -› Shopping Cart Integration</code>. Please choose <code>Generic Tracking Pixel</code>. Then, grab your Hidden Image Tag, and pop the code provided by iDevAffiliate into one of the fields for Tracking Codes <em>(at the top of this page)</em>. You MUST also add Replacement Codes to your Hidden Image Tag. To save you some trouble, we\'ve provided some examples below, one for each of s2Member\'s Tracking Code integrations.</p>' . "\n";
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_idev", get_defined_vars ());
@@ -458,7 +458,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-shareasale-section">' . "\n";
 								echo '<h3>Integrating ShareASale (affiliate program management)</h3>' . "\n";
-								echo '<a href="http://www.s2member.com/shareasale" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/images/sas-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>' . "\n";
+								echo '<a href="http://www.s2member.com/shareasale" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/images/sas-logo.png" class="ws-menu-page-right screenshot" style="width:125px; height:125px; border:0;" alt="." /></a>' . "\n";
 								echo '<p>Established in 2000, <a href="http://www.s2member.com/shareasale" target="_blank" rel="external">ShareASale</a> provides award winning technology and service; which will enable you to connect with a network of established affiliates, as well as recruit new ones. Joining ShareASale, maximizes your ability to reach the greatest number of affiliates, with the least amount of work. At ShareASale, you\'ll have access to an existing affiliate-base. You place your site on the market, and let their existing affiliates promote your products/services.</p>' . "\n";
 								echo '<p>If you <a href="http://www.s2member.com/shareasale" target="_blank" rel="external">become a Merchant at ShareASale</a>, you will need to configure your <code>ShareASale -› Sale Tracking</code>. Grab your Hidden Image Tag, and pop the code provided by ShareASale into one of the fields for Tracking Codes <em>(at the top of this page)</em>. You MUST also add Replacement Codes to your Hidden Image Tag. To save you some trouble, we\'ve provided some examples below, one for each of s2Member\'s Tracking Code integrations.</p>' . "\n";
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_shareasale", get_defined_vars ());
@@ -523,7 +523,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 
 						echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-						echo '<p class="submit"><input type="submit" class="button-primary" value="Save All Changes" /></p>' . "\n";
+						echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>' . "\n";
 
 						echo '</form>' . "\n";
 

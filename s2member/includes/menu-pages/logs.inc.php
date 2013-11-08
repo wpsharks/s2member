@@ -66,7 +66,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 							echo '<h3>Search s2Member KB Articles, Forums, Codex and more<em>!</em></h3>'."\n";
 							echo '<form method="get" action="http://www.s2member.com/quick-s.php" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';">'."\n";
-							echo '<p><input type="text" name="q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /><input type="submit" value="Search" /></p>'."\n";
+							echo '<p><input type="text" name="q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /> <input type="submit" value="Search" style="font-size:120%; font-weight:normal;" /></p>'."\n";
 							echo '</form>'."\n";
 
 							do_action ("ws_plugin__s2member_during_logs_page_during_left_sections_during_help", get_defined_vars ());
@@ -85,9 +85,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 								echo '<h3>Logging Configuration</h3>'."\n";
 
-								echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
+								echo '<div class="info">'."\n";
 								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems that occur during processing. Enable logging here, and then view your log files below; in the s2Member Log Viewer.</span></p>'."\n";
 								echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
+								echo '</div>'."\n";
+
+								echo '<div class="notice" style="margin-bottom:0;">'."\n";
 								echo '<p style="font-size:110%; margin-bottom:0;"><span>Regarding s2Member Security Badges. If debug logging is enabled, your site will NOT qualify for an s2Member Security Badge until you disable logging (and you must ALSO download, and then delete any existing log files). For further details, please see KB Article: <a href="http://www.s2member.com/kb/security-badges/" target="_blank" rel="external">s2Member Security Badges</a>.</span></p>'."\n";
 								echo '</div>'."\n";
 
@@ -139,7 +142,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								echo '</table>' . "\n";
 
 								echo '<p class="submit" style="margin-top:20px;">'."\n";
-								echo '<input type="submit" class="button-primary" value="Update Logging Configuration" />'."\n";
+								echo '<input type="submit" value="Update Logging Configuration" />'."\n";
 								echo '</p>' . "\n";
 
 								echo '</form>'."\n";
@@ -165,17 +168,17 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 							echo '<form method="post" onsubmit="if(!confirm(\'Archive all existing log files?\n\nAll of your current log files will be archived (e.g. they will simply be renamed with an ARCHIVED tag &amp; date in their file name); and new log files will be created automatically the next time s2Member logs something on your installation.\n\nPlease click OK to confirm this action.\')) return false;">'."\n";
 							echo '<input type="hidden" name="ws_plugin__s2member_logs_archive_start_fresh" value="'.esc_attr(wp_create_nonce ("ws-plugin--s2member-logs-archive-start-fresh")).'" />'."\n";
-							echo '<input type="submit" value="Archive All Current Log Files" class="ws-menu-page-right ws-plugin--s2member-archive-logs-start-fresh-button" style="clear:right; min-width:200px;" />'."\n";
+							echo '<input type="submit" value="Archive All Current Log Files" class="ws-menu-page-right ws-plugin--s2member-archive-logs-start-fresh-button" style="font-size:110%; font-weight:normal; clear:right; min-width:200px;" />'."\n";
 							echo '</form>'."\n";
 
 							echo '<form method="post" onsubmit="if(!confirm(\'Delete all existing log files?\n\nThis will permanently delete ALL of your existing log files (including any archived log files).\n\nPlease click OK to confirm this action.\')) return false;">'."\n";
 							echo '<input type="hidden" name="ws_plugin__s2member_logs_delete_start_fresh" value="'.esc_attr(wp_create_nonce ("ws-plugin--s2member-logs-delete-start-fresh")).'" />'."\n";
-							echo '<input type="submit" value="Permanently Delete All Log Files" class="ws-menu-page-right ws-plugin--s2member-delete-logs-start-fresh-button" style="clear:right; min-width:200px;" />'."\n";
+							echo '<input type="submit" value="Permanently Delete All Log Files" class="ws-menu-page-right ws-plugin--s2member-delete-logs-start-fresh-button" style="font-size:110%; font-weight:normal; clear:right; min-width:200px;" />'."\n";
 							echo '</form>'."\n";
 
 							echo '<form method="post">'."\n";
 							echo '<input type="hidden" name="ws_plugin__s2member_logs_download_zip" value="'.esc_attr(wp_create_nonce ("ws-plugin--s2member-logs-download-zip")).'" />'."\n";
-							echo '<input type="submit" value="Download All Log Files (Zip File)" class="ws-menu-page-right ws-plugin--s2member-logs-download-zip-button" style="clear:right; min-width:200px;" />'."\n";
+							echo '<input type="submit" value="Download All Log Files (Zip File)" class="ws-menu-page-right ws-plugin--s2member-logs-download-zip-button" style="font-size:110%; font-weight:normal; clear:right; min-width:200px;" />'."\n";
 							echo '</form>'."\n";
 
 							echo '<p><strong>Debugging Tips:</strong> &nbsp;&nbsp; It is normal to see a few errors in your log files. This is because s2Member logs ALL of its communication with Payment Gateways. Everything — not just successes. With that in mind, there will be some failures that s2Member expects (to a certain extent); and s2Member deals with these gracefully. What you\'re looking for here, are things that jump right out at you as being a major issue (e.g. when s2Member makes a point of providing details to you in a log entry about problems that should be corrected on your installation). Please read carefully.</p>'."\n";
@@ -261,8 +264,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 							echo '</select>' . "\n";
 							echo '</td>' . "\n";
 
-							echo '<td style="width:20%;">' . "\n";
-							echo '<input type="submit" value="View" class="button-primary" />'."\n";
+							echo '<td style="width:20%; padding-left:5px;">' . "\n";
+							echo '<input type="submit" value="View" style="font-size:120%; font-weight:normal;" />'."\n";
 							echo '</td>' . "\n";
 
 							echo '</tr>' . "\n";
@@ -295,20 +298,20 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 								echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'"><strong>download file</strong></a> ]</p>'."\n";
 								echo '<p style="margin-right:10px; float:right; text-align:right;"><a href="#" class="ws-plugin--s2member-log-file-viewport-toggle" style="text-decoration:none;">&#8659; expand viewport &#8659;</a></p>'."\n";
 
-								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 8px #000000; background:#EEEEEE; color:#000000; overflow-y:scroll; font-family:\'Consolas\', \'Monaco\', monospace;">'.htmlspecialchars(file_get_contents($logs_dir."/".$view_log_file)).'</textarea>' . "\n";
+								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 5px rgba(0,0,0,0.5); background:#EEEEEE; color:#000000; overflow-y:scroll;" class="monospace">'.htmlspecialchars(file_get_contents($logs_dir."/".$view_log_file)).'</textarea>' . "\n";
 
 								echo '<p style="float:left; text-align:left;"><strong>Viewing:</strong> <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'">'.esc_html($view_log_file).'</a> (log entries oldest to newest)</p>'."\n";
 								echo '<p style="float:right; text-align:right;">[ <a href="'.esc_attr(add_query_arg(array("ws_plugin__s2member_download_log_file" => $view_log_file, "ws_plugin__s2member_download_log_file_v" => wp_create_nonce ("ws-plugin--s2member-download-log-file-v")))).'"><strong>download file</strong></a> ]</p>'."\n";
 								echo '<p style="margin-right:10px; float:right; text-align:right;"><a href="#" class="ws-plugin--s2member-log-file-viewport-toggle" style="text-decoration:none;">&#8659; expand viewport &#8659;</a></p>'."\n";
 							}
 							else if($view_log_file && file_exists($logs_dir."/".$view_log_file))
-								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 8px #000000; background:#EEEEEE; color:#000000; overflow-y:scroll; font-family:\'Consolas\', \'Monaco\', monospace; font-style:italic;">— Empty at this time —</textarea>' . "\n";
+								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 5px rgba(0,0,0,0.5); background:#EEEEEE; color:#000000; overflow-y:scroll; font-style:italic;" class="monospace">— Empty at this time —</textarea>' . "\n";
 
 							else if($view_log_file && !file_exists($logs_dir."/".$view_log_file))
-								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 8px #000000; background:#EEEEEE; color:#000000; overflow-y:scroll; font-family:\'Consolas\', \'Monaco\', monospace; font-style:italic;">— File no longer exists —</textarea>' . "\n";
+								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 5px rgba(0,0,0,0.5); background:#EEEEEE; color:#000000; overflow-y:scroll; font-style:italic;" class="monospace">— File no longer exists —</textarea>' . "\n";
 
 							else // Display an empty textarea in this default scenario.
-								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 8px #000000; background:#EEEEEE; color:#000000; overflow-y:scroll; font-family:\'Consolas\', \'Monaco\', monospace; font-style:italic;"></textarea>' . "\n";
+								echo '<textarea id="ws-plugin--s2member-log-file-viewer" rows="20" wrap="on" spellcheck="false" style="box-shadow:inset 0 0 5px rgba(0,0,0,0.5); background:#EEEEEE; color:#000000; overflow-y:scroll; font-style:italic;" class="monospace"></textarea>' . "\n";
 
 							echo '</td>' . "\n";
 

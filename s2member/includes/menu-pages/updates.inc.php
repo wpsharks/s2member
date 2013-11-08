@@ -35,21 +35,23 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages_updates"))
 
 								if(!is_ssl() && !c_ws_plugin__s2member_utils_conds::is_localhost())
 									{
-										echo '<div class="ws-menu-page-r-group-header">'."\n";
-										echo '<ins class="open">-</ins>Latest News<em>!</em>'."\n";
+										echo '<div class="ws-menu-page-r-group-header open">'."\n";
+										echo '   <i class="fa fa-rss"></i> s2 News'."\n";
 										echo '</div>'."\n";
 
-										echo '<div class="ws-menu-page-r-group" style="display:block;">'."\n";
+										echo '<div class="ws-menu-page-r-group open">'."\n";
 										echo '<script type="text/javascript" src="http://feeds.feedburner.com/s2member-updates?format=sigpro&amp;nItems=5&amp;openLinks=new&amp;displayTitle=false&amp;displayFeedIcon=false&amp;displayExcerpts=false&amp;displayAuthor=false&amp;displayDate=false&amp;displayEnclosures=false&amp;displayLinkToFeed=false"></script>'."\n";
 										echo '➘ <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Knowledge Base")).'" target="_blank" rel="external">More updates...</a>'."\n";
 										echo '</div>'."\n";
 									}
 
 								echo '<div class="ws-menu-page-r-group-header">'."\n";
-								echo '<ins>+</ins>Email Updates<em>!</em>'."\n";
+								echo '   <i class="fa fa-envelope"></i> s2 Updates'."\n";
 								echo '</div>'."\n";
 
 								echo '<div class="ws-menu-page-r-group">'."\n";
+
+								echo '<p style="text-align:center; font-size:90%;"><strong>Hi '.esc_html(wp_get_current_user()->first_name).' :-)</strong><br />Subscribe here! We\'ll keep you informed about all things related to s2Member.</p>'."\n";
 
 								echo '<div id="ws-updates-div-fname">'."\n";
 								echo '<label for="ws-updates-fname">First Name: *</label><br />'."\n";
@@ -74,7 +76,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages_updates"))
 									}
 
 								echo '<div id="ws-updates-div-priv">'."\n";
-								echo '(<a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Privacy URI")).'" target="_blank">we DO respect your privacy</a>)'."\n";
+								echo '(<a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Privacy URI")).'" target="_blank">privacy policy</a>)'."\n";
 								echo '</div>'."\n";
 
 								echo '<div id="ws-updates-div-submit">'."\n";

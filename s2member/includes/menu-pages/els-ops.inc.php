@@ -105,7 +105,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-								echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
+								echo '<div class="info" style="margin-bottom:0;">'."\n";
 								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems during MailChimp processing. See: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Files (Debug)</a>.</span></p>'."\n";
 								echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
 								echo '</div>'."\n";
@@ -124,7 +124,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 								echo '<div class="ws-menu-page-group" title="AWeber Integration">'."\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-aweber-section">'."\n";
-								echo '<a href="http://www.s2member.com/aweber" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/aweber-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
+								echo '<a href="http://www.s2member.com/aweber" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/aweber-logo.png" class="ws-menu-page-right screenshot" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
 								echo '<h3>AWeber List Server Integration (optional)</h3>'."\n";
 								echo '<p>s2Member can be integrated with AWeber. AWeber is an email marketing service. Whether you\'re looking to get your first email campaign off the ground, or you\'re a seasoned veteran who wants to dig into advanced tools like detailed email web analytics, activity based segmentation, geo-targeting and broadcast split-testing, AWeber\'s got just what you need to make email marketing work for you.</p>'."\n";
 								echo '<p>You can have your Members automatically subscribed to your AWeber marketing lists <em>(e.g. newsletters / auto-responders)</em>. You\'ll need an <a href="http://www.s2member.com/aweber" target="_blank" rel="external">AWeber account</a> and your <a href="#" onclick="alert(\'To obtain your AWeber List ID(s), log into your AWeber account. Click on the Lists tab. On that page you\\\'ll find a Unique List ID associated with each of your lists. AWeber sometimes refers to this as a List Name instead of a List ID.\'); return false;">AWeber List IDs</a>. You will ALSO need to configure a <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">Custom Email Parser</a> inside your AWeber account.</p>'."\n";
@@ -162,7 +162,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-								echo '<div class="ws-menu-page-hilite" style="border-radius:3px; padding:5px;">'."\n";
+								echo '<div class="info" style="margin-bottom:0;">'."\n";
 								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems during AWeber processing. See: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Files (Debug)</a>.</span></p>'."\n";
 								echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
 								echo '</div>'."\n";
@@ -321,7 +321,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 						echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-						echo '<p class="submit"><input type="submit" class="button-primary" value="Save All Changes" /></p>'."\n";
+						echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";
 
 						echo '</form>'."\n";
 

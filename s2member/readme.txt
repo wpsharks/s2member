@@ -72,6 +72,16 @@ s2Member allows you to protect Pages, Posts, Tags, Categories, URIs, URI word fr
 
 You can learn more about s2Member® at [s2Member.com](http://www.s2member.com/).
 
+== Screenshots ==
+
+1. s2Member Screenshot #1
+2. s2Member Screenshot #2
+3. s2Member Screenshot #3
+4. s2Member Screenshot #4
+5. s2Member Screenshot #5
+6. s2Member Screenshot #6
+7. s2Member Screenshot #7
+
 == Frequently Asked Questions ==
 
 = Please check the following s2Member® resources: =

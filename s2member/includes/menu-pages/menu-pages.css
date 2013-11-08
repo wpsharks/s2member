@@ -15,400 +15,470 @@
 * @package WebSharks\Menu Pages
 * @since x.xx
 */
+@import url('//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css');
+
+/*
+Align these with menu page.
+*/
+div.updated, div.error
+{
+	font-size : 120%;
+	margin    : 25px 25px 25px 5px;
+}
+
 /*
 These CSS selectors address common layout styles.
 */
 div.ws-menu-page
-	{
-		min-width: 800px;
-		margin-bottom: 20px;
-		background: url('<?php echo $i; ?>/brand-bg.png') no-repeat top right;
-	}
+{
+	font-size     : 14px;
+	padding       : 25px;
+	min-width     : 800px;
+	margin        : 25px 25px 25px 5px;
+
+	border-radius : 5px;
+	background    : #ECECEC;
+	border        : 1px solid #A4A4A4;
+	box-shadow    : 0 0 2px 0 rgba(0, 0, 0, 0.2) !important;
+}
+div.ws-menu-page a
+{
+	color : #003E75;
+}
+div.ws-menu-page a:hover,
+div.ws-menu-page a:active
+{
+	color : #027E02;
+}
+div.ws-menu-page p:first-child,
+div.ws-menu-page pre:first-child
+{
+	margin-top : 0;
+}
+div.ws-menu-page p:last-child,
+div.ws-menu-page pre:last-child
+{
+	margin-bottom : 0;
+}
+div.ws-menu-page h3 + p
+{
+	margin-top : 0;
+}
 div.ws-menu-page a.ws-dotted-link
-	{
-		text-decoration: none;
-		border-bottom: 1px dotted;
-	}
+{
+	text-decoration : none;
+	border-bottom   : 1px dotted;
+}
 div.ws-menu-page > h2
-	{
-		margin-bottom: 15px;
-	}
+{
+	font-size      : 200%;
+	font-weight    : bold;
+
+	padding-bottom : 15px;
+	margin-bottom  : 25px;
+	border-bottom  : 1px solid #CCCCCC;
+}
+div.ws-menu-page code
+{
+	font-size   : 1em;
+	font-family : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+div.ws-menu-page pre.code
+{
+	padding    : 0;
+	background : none;
+}
+div.ws-menu-page pre.code > code
+{
+	font-size     : 90%;
+	color         : #EEEEEE;
+	background    : #222222;
+	overflow-x    : auto;
+	max-width     : 100%;
+
+	border-radius : 5px;
+	padding       : 10px;
+	display       : block;
+	box-shadow    : 0 0 5px 1px #000000 inset, 0 0 1px 1px rgba(223, 245, 165, 0.5);
+}
+div.ws-menu-page code.highlight-php
+{
+	font-size     : 90%;
+	color         : #EEEEEE;
+	background    : #FFFFFF;
+	overflow      : auto;
+	max-width     : 100%;
+	max-height    : 400px;
+	white-space   : nowrap;
+
+	border-radius : 5px;
+	padding       : 10px;
+	display       : block;
+	box-shadow    : 0 0 5px 1px rgba(0, 0, 0, 0.38) inset, 0 0 1px 1px rgba(223, 245, 165, 0.5);
+}
+div.ws-menu-page img
+{
+	border : 0;
+}
+div.ws-menu-page img.screenshot
+{
+	float         : right;
+	margin        : 0 0 0 25px;
+
+	border-radius : 5px;
+	border        : 1px solid #AFAFAF;
+
+	box-shadow    : 0 0 5px 0 rgba(0, 0, 0, 0.2) inset, 0 0 1px 0 rgba(72, 155, 88, 0.2);
+	background    : #FFFFFF;
+	padding       : 10px;
+}
 div.ws-menu-page .ws-menu-page-right
-	{
-		float: right;
-		margin-left: 25px;
-	}
+{
+	float       : right;
+	margin-left : 25px;
+}
 div.ws-menu-page .ws-menu-page-left
-	{
-		float: left;
-		margin-right: 25px;
-	}
+{
+	float        : left;
+	margin-right : 25px;
+}
 div.ws-menu-page .ws-menu-page-center
-	{
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-	}
+{
+	margin-left  : auto;
+	margin-right : auto;
+	display      : block;
+}
 div.ws-menu-page div.ws-menu-page-hr
-	{
-		height: 1px;
-		line-height: 1px;
-		background: #DDDDDD;
-		margin: 7px 0 7px 0;
-	}
-div.ws-menu-page .ws-menu-page-hilite
-	{
-		font-size: 102%;
-		background: #FAF9BB;
-	}
+{
+	height      : 1px;
+	line-height : 1px;
+	background  : #DDDDDD;
+	margin      : 10px 0 10px 0;
+}
 div.ws-menu-page .ws-menu-page-error
-	{
-		color: #CC0000;
-	}
+{
+	color : #962722;
+}
+div.ws-menu-page .ws-menu-page-hilite
+{
+	font-size     : 102%;
+	background    : #DFF0DF;
+
+	border-radius : 3px;
+	padding       : 0.2em;
+}
 div.ws-menu-page .ws-menu-page-error-hilite
-	{
-		color: #FFFFFF;
-		background: #FF0000;
-	}
+{
+	color         : #FFFFFF;
+	background    : #962722;
+
+	border-radius : 3px;
+	padding       : 0.2em;
+}
 div.ws-menu-page img.ws-menu-page-img-16
-	{
-		border: 0;
-		width: 16px;
-		height: 16px;
-	}
-div.ws-menu-page img.ws-menu-page-img-24
-	{
-		border: 0;
-		width: 24px;
-		height: 24px;
-	}
-div.ws-menu-page img.ws-menu-page-img-32
-	{
-		border: 0;
-		width: 32px;
-		height: 32px;
-	}
-div.ws-menu-page img.ws-menu-page-img-48
-	{
-		border: 0;
-		width: 48px;
-		height: 48px;
-	}
-div.ws-menu-page img.ws-menu-page-img-64
-	{
-		border: 0;
-		width: 64px;
-		height: 64px;
-	}
-div.ws-menu-page img.ws-menu-page-img-128
-	{
-		border: 0;
-		width: 128px;
-		height: 128px;
-	}
-div.ws-menu-page img.ws-menu-page-img-200
-	{
-		border: 0;
-		width: 200px;
-		height: 200px;
-	}
-div.ws-menu-page img.ws-menu-page-img-256
-	{
-		border: 0;
-		width: 256px;
-		height: 256px;
-	}
-div.ws-menu-page img.ws-menu-page-img-200-auto
-	{
-		border: 0;
-		width: 200px;
-		height: auto;
-	}
-div.ws-menu-page img.ws-menu-page-img-256-auto
-	{
-		border: 0;
-		width: 256px;
-		height: auto;
-	}
+{
+	border : 0;
+	width  : 16px;
+	height : 16px;
+}
+div.ws-menu-page label
+{
+	text-shadow         : none;
+
+	-webkit-user-select : none;
+	-moz-user-select    : none;
+	user-select         : none;
+}
+div.ws-menu-page .form-table td
+{
+	font-size   : inherit;
+	line-height : inherit;
+}
+div.ws-menu-page input:not([type='button']):not([type='submit']):not([type='radio']):not([type='checkbox']),
+div.ws-menu-page input:not([type='button']):not([type='submit']):not([type='radio']):not([type='checkbox']):focus,
+div.ws-menu-page select, div.ws-menu-page select:focus,
+div.ws-menu-page textarea, div.ws-menu-page textarea:focus
+{
+	width       : 100%;
+	height      : auto;
+
+	margin      : 0;
+	padding     : 5px;
+	line-height : 1em;
+	box-sizing  : border-box;
+	border      : 1px solid rgba(13, 31, 47, 0.5);
+
+	color       : #FFFFFF;
+	background  : #73834B;
+	box-shadow  : 0 0 1px 0 rgba(0, 0, 0, 0.5) inset, 0 0 1px 1px rgba(223, 245, 165, 0.5);
+}
+div.ws-menu-page input:not([type='button']):not([type='submit']):not([type='radio']):not([type='checkbox']):focus,
+div.ws-menu-page select:focus, div.ws-menu-page textarea:focus
+{
+	background : #637041;
+}
+div.ws-menu-page input[disabled],
+div.ws-menu-page select[disabled],
+div.ws-menu-page textarea[disabled]
+{
+	opacity : 0.5;
+}
+div.ws-menu-page button,
+div.ws-menu-page input[type='button'],
+div.ws-menu-page input[type='submit']
+{
+	line-height         : 1em;
+	font-size           : 120%;
+	color               : #FFFFFF;
+	background          : #0E4152;
+
+	border-radius       : 4px;
+	border              : 1px solid rgba(0, 0, 0, 0.5);
+	box-shadow          : 0 1px 1px 0 rgba(0, 0, 0, 0.25), -1px -1px 0 1px rgba(0, 0, 0, 0.2) inset, 1px 1px 0 1px rgba(255, 255, 255, 0.1) inset;
+
+	margin              : 0;
+	box-sizing          : border-box;
+	padding             : 6px 12px 6px 12px;
+
+	outline             : none;
+
+	cursor              : pointer;
+	-webkit-user-select : none;
+	-moz-user-select    : none;
+	user-select         : none;
+}
+div.ws-menu-page button:hover,
+div.ws-menu-page input[type='button']:hover,
+div.ws-menu-page input[type='submit']:hover
+{
+	background : #0D1F2F;
+}
+div.ws-menu-page button:active,
+div.ws-menu-page input[type='button']:active,
+div.ws-menu-page input[type='submit']:active
+{
+	-webkit-transform : scale(0.98, 0.98);
+	transform         : scale(0.98, 0.98);
+}
+div.ws-menu-page button[type='submit'],
+div.ws-menu-page input[type='submit']
+{
+	font-size   : 150%;
+	font-weight : bold;
+	background  : #5F7523;
+}
+div.ws-menu-page button[type='submit']:hover,
+div.ws-menu-page input[type='submit']:hover
+{
+	background : #4C6324;
+}
+div.ws-menu-page p.submit button[type='submit'],
+div.ws-menu-page p.submit input[type='submit']
+{
+	width : 100%;
+}
+div.ws-menu-page input[type='file']
+{
+	width : auto !important;
+}
+div.ws-menu-page .pro-preview
+{
+	opacity : 0.5;
+}
+div.ws-menu-page .info,
+div.ws-menu-page .notice,
+div.ws-menu-page .warning,
+div.ws-menu-page .error
+{
+	font-size     : 120%;
+	padding       : 10px;
+	margin        : 0 0 25px 0;
+	border-radius : 5px;
+}
+div.ws-menu-page .info
+{
+	border     : 1px solid #35558A;
+	background : #C9E0FA;
+}
+div.ws-menu-page .notice
+{
+	border     : 1px solid #E6DB55;
+	background : #FFFBCC;
+}
+div.ws-menu-page .warning
+{
+	border     : 1px solid #D29A04;
+	background : #FADDAB;
+}
+div.ws-menu-page .error
+{
+	border     : 1px solid #711E1E;
+	background : #FABBC6;
+}
+div.ws-menu-page .monospace
+{
+	font-family : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+div.ws-menu-page textarea.monospace
+{
+	white-space : nowrap;
+}
+div.ws-menu-page .clearfix:before,
+div.ws-menu-page .clearfix:after
+{
+	display : table;
+	content : ' ';
+}
+div.ws-menu-page .clearfix:after
+{
+	clear : both;
+}
+
+/*
+All-group togglers.
+*/
+div.ws-menu-page div.ws-menu-page-groups-show,
+div.ws-menu-page div.ws-menu-page-groups-hide
+{
+	float               : right;
+
+	line-height         : 1em;
+	font-size           : 150%;
+	font-weight         : bold;
+	color               : #FFFFFF;
+	background          : #0E4152;
+
+	border-radius       : 4px;
+	border              : 1px solid rgba(0, 0, 0, 0.5);
+	box-shadow          : 0 1px 1px 0 rgba(0, 0, 0, 0.25), -1px -1px 0 1px rgba(0, 0, 0, 0.2) inset, 1px 1px 0 1px rgba(255, 255, 255, 0.1) inset;
+
+	margin              : 0;
+	box-sizing          : border-box;
+	padding             : 6px 12px 6px 12px;
+
+	outline             : none;
+
+	cursor              : pointer;
+	-webkit-user-select : none;
+	-moz-user-select    : none;
+	user-select         : none;
+}
+div.ws-menu-page div.ws-menu-page-groups-show
+{
+	margin : 0 5px 0 0;
+}
+div.ws-menu-page div.ws-menu-page-groups-show:hover,
+div.ws-menu-page div.ws-menu-page-groups-hide:hover
+{
+	background : #0D1F2F;
+}
+div.ws-menu-page div.ws-menu-page-groups-show:active,
+div.ws-menu-page div.ws-menu-page-groups-hide:active
+{
+	-webkit-transform : scale(0.98, 0.98);
+	transform         : scale(0.98, 0.98);
+}
+
 /*
 Specifically for the main layout table.
 These CSS selectors address common layout styles.
 */
 table.ws-menu-page-table
-	{
-		border: 0;
-		width: 100%;
-	}
+{
+	border       : 0;
+	width        : 100%;
+	table-layout : fixed;
+}
+table.ws-menu-page-table .notice,
+table.ws-menu-page-table .info,
+table.ws-menu-page-table .warning,
+table.ws-menu-page-table .error
+{
+	font-size  : 100%;
+	font-style : italic;
+
+	padding    : 5px;
+	margin     : 1em 0 1em 0;
+}
 table.ws-menu-page-table ul,
 table.ws-menu-page-table ol
-	{
-		margin: 10px 0 10px 20px;
-	}
+{
+	margin : 10px 0 10px 20px;
+}
 table.ws-menu-page-table ul > li
-	{
-		list-style: disc outside;
-		margin-bottom: 0;
-	}
+{
+	margin-bottom : 0;
+	list-style    : disc outside;
+}
 table.ws-menu-page-table ol > li
-	{
-		list-style: decimal outside;
-		margin-bottom: 0;
-	}
+{
+	margin-bottom : 0;
+	list-style    : decimal outside;
+}
 table.ws-menu-page-table > tbody > tr
-	{
-		vertical-align: top;
-	}
+{
+	vertical-align : top;
+}
 table.ws-menu-page-table td.ws-menu-page-table-l
-	{
-		padding: 0;
-		width: 100%;
-	}
+{
+	padding : 0;
+}
 table.ws-menu-page-table td.ws-menu-page-table-r
-	{
-		padding: 0;
-		width: auto;
-	}
-table.ws-menu-page-table img.ws-menu-page-brand-icon
-	{
-		border: 0px;
-		float: right;
-		width: 128px;
-		height: 128px;
-		margin: 0 0 0 25px;
-		vertical-align: middle;
-	}
-table.ws-menu-page-table img.ws-menu-page-brand-updates
-	{
-		border: 0px;
-		float: right;
-		width: 155px;
-		height: 40px;
-		margin: 0 -153px 0 25px;
-		vertical-align: middle;
-	}
-table.ws-menu-page-table p.submit
-	{
-		margin: 0;
-		padding: 0;
-	}
-table.ws-menu-page-table a[rel ~= "external"]
-	{
-		padding-right: 18px;
-		background: url('<?php echo $i; ?>/brand-xlink.png') no-repeat center right;
-	}
-table.ws-menu-page-table div.ws-menu-page-groups-show,
-table.ws-menu-page-table div.ws-menu-page-groups-hide
-	{
-		float: right;
-		height: 24px;
-		width: 24px;
-		color: #333333;
-		padding: 5px;
-		cursor: pointer;
-		font-size: 28px;
-		font-weight: bold;
-		line-height: 25px;
-		text-align: center;
-		margin: 0 0 0 7px;
-		vertical-align: middle;
-		font-family: monospace;
-		border: 1px solid #666666;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
-		border-radius: 5px;
-		-moz-user-select: none;
-		-webkit-user-select: none;
-		user-select: none;
-		background: linear-gradient(to bottom, #FFFFFF 95%, rgba(236, 236, 236, 1) 90%);
-	}
-table.ws-menu-page-table div.ws-menu-page-groups-hide
-	{
-		color: #999999;
-		border-color: #999999;
-	}
-table.ws-menu-page-table div.ws-menu-page-group-header,
-table.ws-menu-page-table div.ws-menu-page-r-group-header
-	{
-		height: 24px;
-		color: #666666;
-		padding: 5px;
-		cursor: pointer;
-		font-size: 19px;
-		line-height: 20px;
-		position: relative;
-		margin: 7px 0 7px 0;
-		vertical-align: middle;
-		font-family: 'Georgia', serif;
-		border: 1px solid #CCCCCC;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
-		border-radius: 5px;
-		-moz-user-select: none;
-		-webkit-user-select: none;
-		user-select: none;
-		background: linear-gradient(to bottom, #FFFFFF 95%, rgba(236, 236, 236, 1) 90%);
-	}
-table.ws-menu-page-table div.ws-menu-page-group-header > ins,
-table.ws-menu-page-table div.ws-menu-page-r-group-header > ins
-	{
-		padding: 0;
-		width: 22px;
-		height: 22px;
-		color: #CCCCCC;
-		font-size: 22px;
-		line-height: 22px;
-		font-weight: bold;
-		text-align: center;
-		margin: 0 10px 0 0;
-		background: #666666;
-		text-decoration: none;
-		font-family: monospace;
-		vertical-align: text-top;
-		border: 1px solid transparent;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
-		border-radius: 5px;
-		display: inline-block;
-		zoom: 1 !ie<8;
-		display: inline !ie<8;
-		margin-top: 0 !ie<8;
-	}
-table.ws-menu-page-table div.ws-menu-page-group-header:hover,
-table.ws-menu-page-table div.ws-menu-page-group-header.open,
-table.ws-menu-page-table div.ws-menu-page-r-group-header:hover,
-table.ws-menu-page-table div.ws-menu-page-r-group-header.open
-	{
-		color: #164A61;
-		border-color: #666666;
-	}
-table.ws-menu-page-table div.ws-menu-page-group-header:hover > ins,
-table.ws-menu-page-table div.ws-menu-page-group-header.open > ins,
-table.ws-menu-page-table div.ws-menu-page-r-group-header:hover > ins,
-table.ws-menu-page-table div.ws-menu-page-r-group-header.open > ins
-	{
-		color: #FFFFFF;
-		background: #164A61;
-	}
-table.ws-menu-page-table div.ws-menu-page-group,
-table.ws-menu-page-table div.ws-menu-page-r-group
-	{
-		display: none;
-		margin: -15px 5px 0 5px;
-		padding: 20px 10px 10px 10px;
-		border: 1px solid #CCCCCC;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
-		border-radius: 5px;
-		background: #FFFFFF url('<?php echo $i; ?>/brand-gradient-bg.png') repeat-x;
-	}
-table.ws-menu-page-table div.ws-menu-page-group > div.ws-menu-page-hr,
-table.ws-menu-page-table div.ws-menu-page-r-group > div.ws-menu-page-hr
-	{
-		background: #666666;
-		margin: 15px 0 15px 0;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr
-	{
-		vertical-align: top;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > th
-	{
-		width: auto;
-		color: #164A61;
-		font-size: 115%;
-		padding: 0 0.5em 0 0;
-		font-family: 'Georgia', serif;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td
-	{
-		width: auto;
-		padding: 0.5em 10px 0.5em 0;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > th.ws-menu-page-th-side
-	{
-		width: 200px;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > input[type = "text"],
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > input[type = "password"],
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > textarea,
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > select
-	{
-		width: /* 100% does not work across all browsers. */ 100%;
-		width: /* 100% does not work in IE browsers < 8. */ 98% !ie<8;
-		box-sizing: /* Make all fields behave the same. */ border-box;
-		-ms-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > select
-	{
-		width: /* Required in IE < 8. */ 99.5% !ie<8;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > textarea
-	{
-		font-family: 'Courier New', monospace;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > input[type = "checkbox"],
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > input[type = "radio"]
-	{
-		margin-right: 3px;
-		vertical-align: middle;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > input[type = "button"].ws-menu-page-media-btn
-	{
-		float: left;
-		margin: 5px 25px 0 0;
-	}
-table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > div.ws-menu-page-scrollbox
-	{
-		margin: 1px;
-		padding: 5px;
-		height: 150px;
-		overflow-y: scroll;
-		overflow-x: visible;
-		background: #FFFFFF;
-		border: 1px solid #CCCCCC;
-		-moz-border-radius: 4px;
-		-webkit-border-radius: 4px;
-		border-radius: 4px;
-	}
-/*
-Specifically for info pages with readme files.
-These CSS selectors address common layout styles.
-*/
-div.ws-menu-page-readme > div.readme > div.section
-	{
-		margin: 0 0 20px 0;
-		padding: 0 0 20px 0;
-		border: 0 solid #DDDDDD;
-		border-width: 0 0 1px 0;
-	}
-div.ws-menu-page-readme > div.readme > div.section > h2
-	{
-		margin-top: 0;
-		padding-top: 0;
-		font-size: 150%;
-	}
-div.ws-menu-page-readme > div.readme > div.section > div.content ul,
-div.ws-menu-page-readme > div.readme > div.section > div.content ol
-	{
-		padding: 0;
-		margin: 10px 0 0 25px;
-	}
-div.ws-menu-page-readme > div.readme > div.section > div.content ul > li
-	{
-		list-style: disc outside;
-		margin-bottom: 0;
-	}
-div.ws-menu-page-readme > div.readme > div.section > div.content ol > li
-	{
-		list-style: decimal outside;
-		margin-bottom: 0;
-	}
-/*
-Specifically for the right sidebar panel.
-These CSS selectors address common layout styles.
-*/
+{
+	padding    : 0;
+	width      : 30px;
+	box-sizing : border-box;
+
+	height     : 100%;
+	position   : relative;
+}
+table.ws-menu-page-table td.ws-menu-page-table-r.open
+{
+	width : 310px;
+}
+table.ws-menu-page-table td.ws-menu-page-table-r > .toggler
+{
+	width               : 12px;
+	box-sizing          : border-box;
+	position            : absolute;
+	min-height          : 100%;
+
+	z-index             : 2;
+	top                 : 0;
+	right               : 0;
+
+	background          : #8EA7BD;
+	box-shadow          : 0 0 0 2px #FFFFFF;
+	border-radius       : 3px;
+
+	cursor              : pointer;
+	-webkit-user-select : none;
+	-moz-user-select    : none;
+	user-select         : none;
+}
+table.ws-menu-page-table td.ws-menu-page-table-r > .toggler:hover
+{
+	background : #74808B;
+}
+table.ws-menu-page-table td.ws-menu-page-table-r > .wrapper
+{
+	margin        : 0;
+	padding       : 25px;
+	position      : relative;
+	box-sizing    : border-box;
+	min-height    : 100%;
+	width         : 250px;
+
+	z-index       : 1;
+	top           : 0;
+	left          : 25px;
+
+	border-radius : 5px;
+	background    : #74808B;
+	border        : 1px solid #656F79;
+
+	display       : none;
+}
 td.ws-menu-page-table-r div.ws-menu-page-js-c-w,
 td.ws-menu-page-table-r div.ws-menu-page-updates,
 td.ws-menu-page-table-r div.ws-menu-page-installation,
@@ -418,10 +488,10 @@ td.ws-menu-page-table-r div.ws-menu-page-videos,
 td.ws-menu-page-table-r div.ws-menu-page-support,
 td.ws-menu-page-table-r div.ws-menu-page-donations,
 td.ws-menu-page-table-r div.ws-menu-page-others
-	{
-		width: 200px;
-		margin: 0 0 25px 25px;
-	}
+{
+	width  : 200px;
+	margin : 0 0 25px 0;
+}
 td.ws-menu-page-table-r div.ws-menu-page-installation img,
 td.ws-menu-page-table-r div.ws-menu-page-tools img,
 td.ws-menu-page-table-r div.ws-menu-page-kb img,
@@ -429,95 +499,294 @@ td.ws-menu-page-table-r div.ws-menu-page-videos img,
 td.ws-menu-page-table-r div.ws-menu-page-support img,
 td.ws-menu-page-table-r div.ws-menu-page-donations img,
 td.ws-menu-page-table-r div.ws-menu-page-others img
-	{
-		border: 0;
-		width: 200px;
-		height: auto;
-	}
-td.ws-menu-page-table-r div.ws-menu-page-js-c-w
-	{
-		width: 178px;
-		padding: 10px;
-		background: #FFF5F7;
-		text-align: justify;
-		border: 1px solid #FA4D4D;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
-		border-radius: 5px;
-	}
+{
+	border : 0;
+	width  : 200px;
+	height : auto;
+}
+table.ws-menu-page-table img.ws-menu-page-brand-icon
+{
+	border         : 0px;
+	float          : right;
+	width          : 128px;
+	height         : 128px;
+	margin         : 0 0 0 25px;
+	vertical-align : middle;
+}
+table.ws-menu-page-table img.ws-menu-page-brand-updates
+{
+	border         : 0px;
+	float          : right;
+	width          : 155px;
+	height         : 40px;
+	margin         : 0 -153px 0 25px;
+	vertical-align : middle;
+}
+table.ws-menu-page-table p.submit
+{
+	margin  : 0;
+	padding : 0;
+}
+table.ws-menu-page-table a[rel~="external"]
+{
+	padding-right : 18px;
+	background    : url('<?php echo $i; ?>/brand-xlink.png') no-repeat center right;
+}
+table.ws-menu-page-table div.ws-menu-page-group-header,
+table.ws-menu-page-table div.ws-menu-page-r-group-header
+{
+	z-index             : 1;
+	position            : relative;
+
+	padding             : 10px;
+	font-size           : 150%;
+	font-weight         : bold;
+	line-height         : 1em;
+	color               : #EEEEEE;
+	background          : #173B47;
+
+	border-radius       : 5px;
+	box-shadow          : 0 2px 2px 0 rgba(0, 0, 0, 0.25);
+
+	margin-bottom       : 25px;
+
+	cursor              : pointer;
+	-webkit-user-select : none;
+	-moz-user-select    : none;
+	user-select         : none;
+}
+table.ws-menu-page-table div.ws-menu-page-group-header:hover,
+table.ws-menu-page-table div.ws-menu-page-r-group-header:hover,
+table.ws-menu-page-table div.ws-menu-page-group-header.open,
+table.ws-menu-page-table div.ws-menu-page-r-group-header.open
+{
+	color      : #FFFFFF;
+	background : #0D1F2F;
+}
+table.ws-menu-page-table div.ws-menu-page-group-header.open,
+table.ws-menu-page-table div.ws-menu-page-r-group-header.open
+{
+	margin-bottom : 0;
+}
+table.ws-menu-page-table div.ws-menu-page-group-header:after,
+table.ws-menu-page-table div.ws-menu-page-r-group-header:after
+{
+	font-size   : 80%;
+	content     : '\f078';
+	font-weight : normal;
+	font-family : 'FontAwesome';
+
+	float       : right;
+	margin      : 0 0 0 10px;
+	display     : inline-block;
+}
+table.ws-menu-page-table div.ws-menu-page-group-header.open:after,
+table.ws-menu-page-table div.ws-menu-page-r-group-header.open:after
+{
+	content : '\f077';
+}
+table.ws-menu-page-table div.ws-menu-page-group,
+table.ws-menu-page-table div.ws-menu-page-r-group
+{
+	z-index                    : 0;
+	position                   : relative;
+	display                    : none;
+
+	padding                    : 25px;
+	color                      : #333333;
+	background                 : #D0DDAD;
+
+	border-bottom-left-radius  : 5px;
+	border-bottom-right-radius : 5px;
+
+	box-shadow                 : 0 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+table.ws-menu-page-table div.ws-menu-page-group.open,
+table.ws-menu-page-table div.ws-menu-page-r-group.open
+{
+	display       : block;
+	margin-bottom : 25px;
+}
+table.ws-menu-page-table div.ws-menu-page-group div.ws-menu-page-hr,
+table.ws-menu-page-table div.ws-menu-page-r-group div.ws-menu-page-hr
+{
+	background : #81E07D;
+}
+table.ws-menu-page-table div.ws-menu-page-group > div.ws-menu-page-hr,
+table.ws-menu-page-table div.ws-menu-page-r-group > div.ws-menu-page-hr
+{
+	margin : 15px 0 15px 0;
+}
+div.ws-menu-page-group > div.ws-menu-page-section:first-child > h3
+{
+	margin-top : 0;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr
+{
+	vertical-align : top;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > th
+{
+	font-size   : 115%;
+	color       : #73834B;
+	font-family : 'Georgia', serif;
+
+	width       : auto;
+	padding     : 0 0.5em 0 0;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td
+{
+	width   : auto;
+	padding : 0.5em 0 0.5em 0;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > th.ws-menu-page-th-side
+{
+	width : 200px;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > textarea
+{
+	font-family : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > * input[type='text'],
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > * input[type='password'],
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > * select
+{
+	width : auto !important;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > * input[id*='shortcode']
+{
+	width : 100% !important;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > input[type = 'checkbox'],
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > input[type = 'radio']
+{
+	margin-right   : 3px;
+	vertical-align : middle;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > input[type = 'button'].ws-menu-page-media-btn
+{
+	float  : left;
+	margin : 5px 25px 0 0;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > div.ws-menu-page-scrollbox
+{
+	margin        : 1px;
+	padding       : 5px;
+	height        : 150px;
+
+	overflow-y    : scroll;
+	overflow-x    : visible;
+
+	border-radius : 4px;
+	border        : 1px solid rgba(13, 31, 47, 0.5);
+
+	color         : #FFFFFF;
+	background    : #73834B;
+	box-shadow    : 0 0 1px 0 rgba(0, 0, 0, 0.5) inset, 0 0 1px 1px rgba(223, 245, 165, 0.5);
+}
+
+/*
+Specifically for info pages with readme files.
+These CSS selectors address common layout styles.
+*/
+div.ws-menu-page-readme > div.readme > div.section
+{
+	margin       : 0 0 20px 0;
+	padding      : 0 0 20px 0;
+	border       : 0 solid #DDDDDD;
+	border-width : 0 0 1px 0;
+}
+div.ws-menu-page-readme > div.readme > div.section:last-child
+{
+	border-bottom-width : 0;
+}
+div.ws-menu-page-readme > div.readme > div.section > h2
+{
+	margin-top  : 0;
+	padding-top : 0;
+	font-size   : 150%;
+}
+div.ws-menu-page-readme > div.readme > div.section > div.content ul,
+div.ws-menu-page-readme > div.readme > div.section > div.content ol
+{
+	padding : 0;
+	margin  : 10px 0 0 25px;
+}
+div.ws-menu-page-readme > div.readme > div.section > div.content ul > li
+{
+	list-style    : disc outside;
+	margin-bottom : 0;
+}
+div.ws-menu-page-readme > div.readme > div.section > div.content ol > li
+{
+	list-style    : decimal outside;
+	margin-bottom : 0;
+}
+
 /*
 Specifically for the right sidebar panel.
 - Specifically for the updates box.
 These CSS selectors address common layout styles.
 */
 div.ws-menu-page-updates ul
-	{
-		padding: 0;
-		margin: 0 0 0 12px;
-	}
+{
+	padding : 0;
+	margin  : 0 0 0 12px;
+}
 div.ws-menu-page-updates ul > li
-	{
-		padding: 0;
-		margin: 5px 0 5px 0;
-		list-style: square outside;
-		-moz-user-select: none;
-		-webkit-user-select: none;
-		user-select: none;
-	}
+{
+	padding             : 0;
+	margin              : 5px 0 5px 0;
+	list-style          : square outside;
+	-moz-user-select    : none;
+	-webkit-user-select : none;
+	user-select         : none;
+}
 div.ws-menu-page-updates ul > li:first-child
-	{
-		margin-top: 0;
-	}
+{
+	margin-top : 0;
+}
 div.ws-menu-page-updates a[target = "_blank"]
-	{
-		padding-right: 18px;
-		background: url('<?php echo $i; ?>/brand-xlink.png') no-repeat center right;
-	}
+{
+	padding-right : 18px;
+	background    : url('<?php echo $i; ?>/brand-xlink.png') no-repeat center right;
+}
 div.ws-menu-page-updates div#creditfooter
-	{
-		display: none;
-	}
+{
+	display : none;
+}
 div.ws-menu-page-updates div#ws-updates-div-fname,
 div.ws-menu-page-updates div#ws-updates-div-lname,
 div.ws-menu-page-updates div#ws-updates-div-email,
 div.ws-menu-page-updates div#ws-updates-div-subs,
 div.ws-menu-page-updates div#ws-updates-div-priv
-	{
-		margin: 0 0 10px 0;
-	}
+{
+	margin : 0 0 10px 0;
+}
 div.ws-menu-page-updates div#ws-updates-div-subs
-	{
-		margin: 15px 0 0 0;
-	}
+{
+	margin : 15px 0 0 0;
+}
 div.ws-menu-page-updates div#ws-updates-div-priv
-	{
-		font-size: 80%;
-		margin: 0 0 5px 0;
-	}
+{
+	font-size : 80%;
+	margin    : 0 0 5px 0;
+}
 div.ws-menu-page-updates input[type = "text"],
 div.ws-menu-page-updates input[type = "password"],
 div.ws-menu-page-updates input[type = "submit"],
 div.ws-menu-page-updates textarea,
 div.ws-menu-page-updates select
-	{
-		width: /* 100% does not work across all browsers. */ 100%;
-		width: /* 100% does not work in IE browsers < 8. */ 98% !ie<8;
-		box-sizing: /* Make all fields behave the same. */ border-box;
-		-ms-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-	}
+{
+	width              : 100%;
+	box-sizing         : border-box;
+	-ms-box-sizing     : border-box;
+	-moz-box-sizing    : border-box;
+	-webkit-box-sizing : border-box;
+}
 div.ws-menu-page-updates input[type = "checkbox"],
 div.ws-menu-page-updates input[type = "radio"]
-	{
-		margin-right: 3px;
-		vertical-align: middle;
-	}
-div.ws-menu-page-updates input[type = "submit"]
-	{
-		width: /* This width required in IE < 8. */ 100% !ie<8;
-	}
-div.ws-menu-page-updates select
-	{
-		width: /* Required in IE < 8. */ 99.5% !ie<8;
-	}
+{
+	margin-right   : 3px;
+	vertical-align : middle;
+}
