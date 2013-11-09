@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 131108
-Stable tag: 131108
+Version: 131109
+Stable tag: 131109
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -16,7 +16,7 @@ Authorize.Net® Compatible: yes w/s2Member® Pro
 Google® Checkout Compatible: yes w/s2Member® Pro
 ClickBank® Compatible: yes w/s2Member® Pro
 
-Tested up to: 3.7
+Tested up to: 3.7.1
 Requires at least: 3.3
 
 Copyright: © 2009 WebSharks, Inc.
@@ -97,12 +97,12 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
-= v131108 =
+= v131109 =
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
 
-= v131108 =
+= v131109 =
 * (s2Member/s2Member Pro) **UI Makeover** This release of s2Member upgrades all administrative UI panels.
 * (s2Member/s2Member Pro) **Compatibility** Updating s2Member for compatibility with the coming release of both Quick Cache LITE and Quick Cache Pro for WordPress. These are not available publicly yet, but they are expected for release very soon. This release of s2Member is compatible with both the current and future releases of Quick Cache for WordPress.
 * (s2Member/s2Member Pro) **Improvement (Speed)** Lazy load s2Member's JS file at all times. Done, this release will speed your site up for first-time visitors.

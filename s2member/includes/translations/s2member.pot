@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: s2Member® Framework 130816\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2013-10-26 00:00:43+00:00\n"
+"POT-Creation-Date: 2013-11-09 09:23:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,12 +21,12 @@ msgstr ""
 #: s2member/includes/classes/custom-reg-fields.inc.php:464
 #: s2member/includes/classes/profile-in.inc.php:120
 #: s2member/includes/classes/sc-profile-in.inc.php:136
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:64
-#: s2member-pro/includes/templates/forms/authnet-registration-form.php:32
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:64
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:64
-#: s2member-pro/includes/templates/forms/paypal-registration-form.php:32
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:64
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:66
+#: s2member-pro/includes/templates/forms/authnet-registration-form.php:34
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:66
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:66
+#: s2member-pro/includes/templates/forms/paypal-registration-form.php:34
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:66
 msgctxt "s2member-front"
 msgid "First Name"
 msgstr ""
@@ -35,12 +35,12 @@ msgstr ""
 #: s2member/includes/classes/custom-reg-fields.inc.php:479
 #: s2member/includes/classes/profile-in.inc.php:140
 #: s2member/includes/classes/sc-profile-in.inc.php:156
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:70
-#: s2member-pro/includes/templates/forms/authnet-registration-form.php:38
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:70
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:70
-#: s2member-pro/includes/templates/forms/paypal-registration-form.php:38
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:70
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:72
+#: s2member-pro/includes/templates/forms/authnet-registration-form.php:40
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:72
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:72
+#: s2member-pro/includes/templates/forms/paypal-registration-form.php:40
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:72
 msgctxt "s2member-front"
 msgid "Last Name"
 msgstr ""
@@ -63,10 +63,10 @@ msgstr ""
 #: s2member/includes/classes/custom-reg-fields.inc.php:446
 #: s2member/includes/classes/profile-in.inc.php:243
 #: s2member/includes/classes/sc-profile-in.inc.php:259
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:92
-#: s2member-pro/includes/templates/forms/authnet-registration-form.php:60
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:92
-#: s2member-pro/includes/templates/forms/paypal-registration-form.php:60
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:94
+#: s2member-pro/includes/templates/forms/authnet-registration-form.php:62
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:94
+#: s2member-pro/includes/templates/forms/paypal-registration-form.php:62
 msgctxt "s2member-front"
 msgid "password strength indicator"
 msgstr ""
@@ -728,12 +728,12 @@ msgstr ""
 
 #: s2member/includes/classes/profile-in.inc.php:98
 #: s2member/includes/classes/sc-profile-in.inc.php:114
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:76
-#: s2member-pro/includes/templates/forms/authnet-registration-form.php:44
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:76
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:76
-#: s2member-pro/includes/templates/forms/paypal-registration-form.php:44
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:76
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:78
+#: s2member-pro/includes/templates/forms/authnet-registration-form.php:46
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:78
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:78
+#: s2member-pro/includes/templates/forms/paypal-registration-form.php:46
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:78
 msgctxt "s2member-front"
 msgid "Email Address"
 msgstr ""
@@ -818,7 +818,7 @@ msgstr ""
 #: s2member/includes/templates/buttons/paypal-sp-checkout-button.php:34
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:270
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:560
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:562
 msgctxt "s2member-front paypal-button-lang-code"
 msgid "en_US"
 msgstr ""
@@ -889,36 +889,6 @@ msgstr ""
 #: s2member/includes/classes/users-list-in.inc.php:329
 msgctxt "s2member-front"
 msgid "(for this site)"
-msgstr ""
-
-#: s2member/includes/classes/utils-html.inc.php:59
-msgctxt "s2member-front"
-msgid "Strength indicator"
-msgstr ""
-
-#: s2member/includes/classes/utils-html.inc.php:59
-msgctxt "s2member-front"
-msgid "Very weak"
-msgstr ""
-
-#: s2member/includes/classes/utils-html.inc.php:59
-msgctxt "s2member-front"
-msgid "Weak"
-msgstr ""
-
-#: s2member/includes/classes/utils-html.inc.php:59
-msgctxt "s2member-front"
-msgid "Medium"
-msgstr ""
-
-#: s2member/includes/classes/utils-html.inc.php:59
-msgctxt "s2member-front"
-msgid "Strong"
-msgstr ""
-
-#: s2member/includes/classes/utils-html.inc.php:59
-msgctxt "s2member-front"
-msgid "Mismatch"
 msgstr ""
 
 #: s2member/includes/classes/utils-time.inc.php:53
@@ -1225,12 +1195,12 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:239
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:246
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:253
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:495
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:502
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:765
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:772
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:779
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:786
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:497
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:504
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:769
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:776
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:783
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:790
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:66
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:73
@@ -1240,12 +1210,12 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:239
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:246
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:253
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:535
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:542
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:853
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:860
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:867
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:874
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:537
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:544
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:857
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:864
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:871
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:878
 msgctxt "s2member-front"
 msgid "— Oops, you missed something: —"
 msgstr ""
@@ -1254,10 +1224,10 @@ msgstr ""
 #: s2member/includes/s2member.js:192
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:239
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:772
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:776
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:239
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:860
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:864
 msgctxt "s2member-front"
 msgid "Passwords do not match up. Please try again."
 msgstr ""
@@ -1266,181 +1236,211 @@ msgstr ""
 #: s2member/includes/s2member.js:199
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:246
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:779
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:783
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:246
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:867
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:871
 msgctxt "s2member-front"
 msgid "Password MUST be at least 6 characters. Please try again."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:345
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:330
+msgctxt "s2member-front"
+msgid "Strength indicator"
+msgstr ""
+
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:331
+msgctxt "s2member-front"
+msgid "Very weak"
+msgstr ""
+
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:332
+msgctxt "s2member-front"
+msgid "Weak"
+msgstr ""
+
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:333
+msgctxt "s2member-front"
+msgid "Medium"
+msgstr ""
+
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:334
+msgctxt "s2member-front"
+msgid "Strong"
+msgstr ""
+
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:335
+msgctxt "s2member-front"
+msgid "Mismatch"
+msgstr ""
+
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:364
 msgctxt "s2member-front"
 msgid "Please check at least one of the boxes."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:350
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:369
 msgctxt "s2member-front"
 msgid "Required. This box must be checked."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:356
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:375
 msgctxt "s2member-front"
 msgid "Please select one of the options."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:361
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:380
 msgctxt "s2member-front"
 msgid "Please select at least one of the options."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:365
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:384
 msgctxt "s2member-front"
 msgid "This is a required field, please try again."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:371
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:390
 msgctxt "s2member-front"
 msgid "Must be numeric (with or without decimals, commas allowed)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:375
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:394
 msgctxt "s2member-front"
 msgid "Must be numeric (with or without decimals, no commas)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:379
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:398
 msgctxt "s2member-front"
 msgid "Must be an integer (a whole number, without any decimals)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:383
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:402
 msgctxt "s2member-front"
 msgid "Must be an integer > 0 (whole number, no decimals, greater than 0)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:387
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:406
 msgctxt "s2member-front"
 msgid "Must be a float (floating point number, decimals required)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:391
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:410
 msgctxt "s2member-front"
 msgid "Must be a float > 0 (floating point number, decimals required, greater than 0)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:395
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:414
 msgctxt "s2member-front"
 msgid "Must be a date (required date format: dd/mm/yyyy)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:399
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:418
 msgctxt "s2member-front"
 msgid "Must be a valid email address."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:403
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:422
 msgctxt "s2member-front"
 msgid ""
 "Please use a personal email address.\n"
 "Addresses like <%s@> are problematic."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:407
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:426
 msgctxt "s2member-front"
 msgid "Must be a full URL (starting with http or https)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:411
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:430
 msgctxt "s2member-front"
 msgid "Must be a domain name (domain name only, without http)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:415
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:434
 msgctxt "s2member-front"
 msgid "Must be a phone # (10 digits w/possible hyphens,spaces,brackets)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:419
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:438
 msgctxt "s2member-front"
 msgid "Must be a US zipcode (5-9 digits w/possible hyphen)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:423
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:442
 msgctxt "s2member-front"
 msgid "Must be a Canadian zipcode (6 alpha-numerics w/possible space)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:427
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:446
 msgctxt "s2member-front"
 msgid "Must be a zipcode (either a US or Canadian zipcode)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:431
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:450
 msgctxt "s2member-front"
 msgid "Please use alphanumerics, spaces & punctuation only."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:435
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:454
 msgctxt "s2member-front"
 msgid "Please use alphanumerics & spaces only."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:439
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
 msgctxt "s2member-front"
 msgid "Please use alphanumerics & punctuation only (no spaces)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:443
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:462
 msgctxt "s2member-front"
 msgid "Please use alphanumerics only (no spaces/punctuation)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:447
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:466
 msgctxt "s2member-front"
 msgid "Please use alphabetics only (no digits/spaces/punctuation)."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:451
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:470
 msgctxt "s2member-front"
 msgid "Please use numeric digits only."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:477
 msgctxt "s2member-front"
 msgid "Must be exactly %s %s."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
-#: s2member/includes/s2member.js:461
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:477
+#: s2member/includes/s2member.js:480
 msgctxt "s2member-front"
 msgid "digit"
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
-#: s2member/includes/s2member.js:461
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:477
+#: s2member/includes/s2member.js:480
 msgctxt "s2member-front"
 msgid "digits"
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
-#: s2member/includes/s2member.js:461
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:477
+#: s2member/includes/s2member.js:480
 msgctxt "s2member-front"
 msgid "character"
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:458
-#: s2member/includes/s2member.js:461
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:477
+#: s2member/includes/s2member.js:480
 msgctxt "s2member-front"
 msgid "characters"
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:461
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:480
 msgctxt "s2member-front"
 msgid "Must be at least %s %s."
 msgstr ""
 
-#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:514
+#: s2member/includes/s2member-min.js:1 s2member/includes/s2member.js:533
 msgctxt "s2member-front"
 msgid "Processing"
 msgstr ""
@@ -3936,22 +3936,22 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:73
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:167
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:253
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:502
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:786
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:504
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:790
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:73
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:167
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:253
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:542
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:874
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:544
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:878
 msgctxt "s2member-front"
 msgid "Security Code missing. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
 #: s2member-pro/includes/separates/gateways/authnet/authnet.js:142
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:477
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:747
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:479
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:751
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:142
 msgctxt "s2member-front"
@@ -3959,61 +3959,61 @@ msgid "Please choose a Billing Method."
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:321
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:571
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:323
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:575
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:325
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:615
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:327
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:619
 msgctxt "s2member-front"
 msgid "Calculating Sales Tax..."
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:321
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:571
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:323
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:575
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:325
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:615
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:327
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:619
 msgctxt "s2member-front"
 msgid "calculating sales tax..."
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:332
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:582
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:334
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:586
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:336
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:626
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:338
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:630
 msgctxt "s2member-front"
 msgid "<strong>Sales Tax%s:</strong> %s<br /><strong>— Total%s:</strong> %s"
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:332
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:582
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:334
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:586
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:336
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:626
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:338
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:630
 msgctxt "s2member-front"
 msgid "Today"
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:644
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:648
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:688
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:60
-#: s2member-pro/includes/templates/forms/authnet-registration-form.php:28
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:60
-#: s2member-pro/includes/templates/forms/paypal-registration-form.php:28
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:692
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:62
+#: s2member-pro/includes/templates/forms/authnet-registration-form.php:30
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:62
+#: s2member-pro/includes/templates/forms/paypal-registration-form.php:30
 msgctxt "s2member-front"
 msgid "Create Profile"
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/authnet/authnet-min.js:1
-#: s2member-pro/includes/separates/gateways/authnet/authnet.js:645
+#: s2member-pro/includes/separates/gateways/authnet/authnet.js:649
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:689
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:693
 msgctxt "s2member-front"
 msgid "Your Profile"
 msgstr ""
@@ -4021,18 +4021,18 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:269
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:270
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:559
-#: s2member-pro/includes/separates/gateways/paypal/paypal.js:560
-#: s2member-pro/includes/templates/forms/authnet-cancellation-form.php:34
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:196
-#: s2member-pro/includes/templates/forms/authnet-registration-form.php:79
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:177
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:115
-#: s2member-pro/includes/templates/forms/paypal-cancellation-form.php:34
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:196
-#: s2member-pro/includes/templates/forms/paypal-registration-form.php:79
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:177
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:115
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:561
+#: s2member-pro/includes/separates/gateways/paypal/paypal.js:562
+#: s2member-pro/includes/templates/forms/authnet-cancellation-form.php:36
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:198
+#: s2member-pro/includes/templates/forms/authnet-registration-form.php:81
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:179
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:117
+#: s2member-pro/includes/templates/forms/paypal-cancellation-form.php:36
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:198
+#: s2member-pro/includes/templates/forms/paypal-registration-form.php:81
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:179
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:117
 msgctxt "s2member-front"
 msgid "Submit Form"
 msgstr ""
@@ -4074,206 +4074,206 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-cancellation-form.php:30
-#: s2member-pro/includes/templates/forms/paypal-cancellation-form.php:30
+#: s2member-pro/includes/templates/forms/authnet-cancellation-form.php:32
+#: s2member-pro/includes/templates/forms/paypal-cancellation-form.php:32
 msgctxt "s2member-front"
 msgid "Confirm Cancellation"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:19
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:19
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:19
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:19
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:21
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:21
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:21
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:21
 msgctxt "s2member-front"
 msgid "Checkout Options"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:40
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:40
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:40
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:40
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:42
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:42
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:42
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:42
 msgctxt "s2member-front"
 msgid "Coupon Code"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:47
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:47
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:47
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:47
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:49
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:49
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:49
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:49
 msgctxt "s2member-front"
 msgid "Have a Coupon Code? (please enter it here)"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:50
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:50
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:50
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:50
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:52
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:52
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:52
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:52
 msgctxt "s2member-front"
 msgid "Apply Coupon"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:82
-#: s2member-pro/includes/templates/forms/authnet-registration-form.php:50
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:82
-#: s2member-pro/includes/templates/forms/paypal-registration-form.php:50
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:84
+#: s2member-pro/includes/templates/forms/authnet-registration-form.php:52
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:84
+#: s2member-pro/includes/templates/forms/paypal-registration-form.php:52
 msgctxt "s2member-front"
 msgid "Username (lowercase letters and/or numbers)"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:88
-#: s2member-pro/includes/templates/forms/authnet-registration-form.php:56
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:88
-#: s2member-pro/includes/templates/forms/paypal-registration-form.php:56
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:90
+#: s2member-pro/includes/templates/forms/authnet-registration-form.php:58
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:90
+#: s2member-pro/includes/templates/forms/paypal-registration-form.php:58
 msgctxt "s2member-front"
 msgid "Password (type this twice please)"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:104
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:86
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:104
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:86
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:106
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:88
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:106
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:88
 msgctxt "s2member-front"
 msgid "Billing Method"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:111
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:93
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:34
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:111
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:93
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:34
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:113
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:95
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:36
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:113
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:95
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:36
 msgctxt "s2member-front"
 msgid "Card Number (no dashes or spaces)"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:117
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:99
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:40
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:117
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:99
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:40
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:119
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:101
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:42
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:119
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:101
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:42
 msgctxt "s2member-front"
 msgid "Card Expiration Date (mm/yyyy)"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:128
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:110
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:51
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:128
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:110
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:51
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:130
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:112
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:53
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:130
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:112
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:53
 msgctxt "s2member-front"
 msgid "Card Verification Code (3-4 digits)"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:128
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:110
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:51
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:128
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:110
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:51
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:130
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:112
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:53
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:130
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:112
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:53
 msgctxt "s2member-front"
 msgid "need help?"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:135
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:117
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:58
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:135
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:117
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:58
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:137
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:119
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:60
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:137
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:119
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:60
 msgctxt "s2member-front"
 msgid "Card Start Date (mm/yyyy), or Issue Number"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:145
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:127
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:68
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:145
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:127
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:68
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:147
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:129
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:70
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:147
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:129
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:70
 msgctxt "s2member-front"
 msgid "Billing Address"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:149
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:131
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:72
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:149
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:131
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:72
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:151
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:133
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:74
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:151
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:133
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:74
 msgctxt "s2member-front"
 msgid "Street Address"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:155
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:137
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:78
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:155
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:137
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:78
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:157
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:139
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:80
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:157
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:139
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:80
 msgctxt "s2member-front"
 msgid "City / Town"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:161
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:143
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:84
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:161
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:143
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:84
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:163
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:145
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:86
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:163
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:145
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:86
 msgctxt "s2member-front"
 msgid "State / Province"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:167
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:149
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:90
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:167
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:149
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:90
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:169
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:151
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:92
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:169
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:151
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:92
 msgctxt "s2member-front"
 msgid "Country"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:175
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:157
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:98
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:175
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:157
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:98
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:177
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:159
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:100
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:177
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:159
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:100
 msgctxt "s2member-front"
 msgid "Postal / Zip Code"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:191
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:173
-#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:191
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:173
+#: s2member-pro/includes/templates/forms/authnet-checkout-form.php:193
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:175
+#: s2member-pro/includes/templates/forms/paypal-checkout-form.php:193
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:175
 msgctxt "s2member-front"
 msgid "Checkout Now"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-registration-form.php:74
-#: s2member-pro/includes/templates/forms/paypal-registration-form.php:74
+#: s2member-pro/includes/templates/forms/authnet-registration-form.php:76
+#: s2member-pro/includes/templates/forms/paypal-registration-form.php:76
 msgctxt "s2member-front"
 msgid "Complete Registration"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:60
-#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:60
+#: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:62
+#: s2member-pro/includes/templates/forms/paypal-sp-checkout-form.php:62
 msgctxt "s2member-front"
 msgid "Contact Info"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:27
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:27
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:29
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:29
 msgctxt "s2member-front"
 msgid "New Billing Method"
 msgstr ""
 
-#: s2member-pro/includes/templates/forms/authnet-update-form.php:111
-#: s2member-pro/includes/templates/forms/paypal-update-form.php:111
+#: s2member-pro/includes/templates/forms/authnet-update-form.php:113
+#: s2member-pro/includes/templates/forms/paypal-update-form.php:113
 msgctxt "s2member-front"
 msgid "Update Billing Information"
 msgstr ""
