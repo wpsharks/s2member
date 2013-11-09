@@ -31,8 +31,11 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 					{
 						echo '<div class="wrap ws-menu-page">' . "\n";
 
-						echo '<div id="icon-plugins" class="icon32"><br /></div>' . "\n";
-						echo '<h2>s2Member API / Tracking</h2>' . "\n";
+						echo '<div class="ws-menu-page-toolbox">'."\n";
+						c_ws_plugin__s2member_menu_pages_tb::display ();
+						echo '</div>'."\n";
+
+						echo '<h2>API / Tracking</h2>' . "\n";
 
 						echo '<table class="ws-menu-page-table">' . "\n";
 						echo '<tbody class="ws-menu-page-table-tbody">' . "\n";
@@ -390,15 +393,11 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_sp_tracking", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_integrations_header", true, get_defined_vars ()))
+						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_integrations_divider", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_integrations_header", get_defined_vars ());
-
-								echo '<div style="border-bottom:1px solid #DFDFDF; margin:-20px 0 9px 0; padding:0;">&nbsp;</div>' . "\n";
-								echo '<div id="icon-tools" class="icon32" style="margin-top:0; margin-bottom:0; padding-top:0; padding-bottom:0;"><br /></div>' . "\n";
-								echo '<h2 style="margin-top:0; margin-bottom:0; padding-top:0; padding-bottom:0;">API / Tracking Integrations</h2>' . "\n";
-
-								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_integrations_header", get_defined_vars ());
+								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_integrations_divider", get_defined_vars ());
+								echo '<div style="border-bottom:1px solid #DFDFDF; margin:-20px 0 20px 0; padding:0;">&nbsp;</div>' . "\n";
+								do_action ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_integrations_divider", get_defined_vars ());
 							}
 
 						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_idev", true, get_defined_vars ()))

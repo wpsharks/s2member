@@ -71,12 +71,46 @@ div.ws-menu-page a.ws-dotted-link
 }
 div.ws-menu-page > h2
 {
-	font-size      : 200%;
-	font-weight    : bold;
+	font-size     : 200%;
+	font-weight   : bold;
 
-	padding-bottom : 15px;
-	margin-bottom  : 25px;
-	border-bottom  : 1px solid #CCCCCC;
+	height        : 90px;
+	box-sizing    : border-box;
+	position      : relative;
+	z-index       : 0;
+
+	margin-bottom : 25px;
+	padding       : 25px 0 0 120px;
+	background    : url('<?php echo $i; ?>/s2___.png') no-repeat left bottom;
+}
+div.ws-menu-page > h2:before
+{
+	content    : ' ';
+	display    : block;
+	width      : 85%;
+	width      : calc(100% - 220px);
+	height     : 90px;
+
+	right      : 20px;
+	bottom     : 0;
+	z-index    : 0;
+	position   : absolute;
+
+	background : url('<?php echo $i; ?>/s2___bar.png') repeat-x left bottom;
+}
+div.ws-menu-page > h2:after
+{
+	content    : ' ';
+	display    : block;
+	width      : 20px;
+	height     : 90px;
+
+	right      : 0;
+	bottom     : 0;
+	z-index    : 0;
+	position   : absolute;
+
+	background : url('<?php echo $i; ?>/s2___end.png') no-repeat right bottom
 }
 div.ws-menu-page code
 {
@@ -335,12 +369,15 @@ div.ws-menu-page .clearfix:after
 }
 
 /*
-All-group togglers.
+Tools and togglers.
 */
 div.ws-menu-page div.ws-menu-page-groups-show,
 div.ws-menu-page div.ws-menu-page-groups-hide
 {
 	float               : right;
+
+	z-index             : 1;
+	position            : relative;
 
 	line-height         : 1em;
 	font-size           : 150%;
@@ -377,6 +414,24 @@ div.ws-menu-page div.ws-menu-page-groups-hide:active
 {
 	-webkit-transform : scale(0.98, 0.98);
 	transform         : scale(0.98, 0.98);
+}
+div.ws-menu-page div.ws-menu-page-toolbox
+{
+	float     : right;
+	max-width : 300px;
+
+	z-index   : 1;
+	position  : relative;
+}
+div.ws-menu-page div.ws-menu-page-toolbox > .links
+{
+	text-align : center;
+}
+div.ws-menu-page div.ws-menu-page-toolbox > .links a
+{
+	display         : inline-block;
+	margin          : 0 10px 0 10px;
+	text-decoration : none;
 }
 
 /*
@@ -474,7 +529,7 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .wrapper
 	left          : 25px;
 
 	border-radius : 5px;
-	background    : #74808B;
+	background    : #B2BFCA;
 	border        : 1px solid #656F79;
 
 	display       : none;

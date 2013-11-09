@@ -52,7 +52,7 @@ jQuery(document).ready (function($)
 				if ($groups.length > 1 && index === 0)
 					{
 						$('<div class="ws-menu-page-groups-hide"><i class="fa fa-chevron-up"></i></div>')
-							.insertBefore ('div.ws-menu-page > h2').click (function()
+							.insertBefore ('div.ws-menu-page-toolbox').click (function()
 							{
 								$('div.ws-menu-page-group-header').each (function()
 									{
@@ -65,7 +65,7 @@ jQuery(document).ready (function($)
 								return /* Return. */ false;
 							});
 						$('<div class="ws-menu-page-groups-show"><i class="fa fa-chevron-down"></i></div>')
-							.insertBefore ('div.ws-menu-page > h2').click (function()
+							.insertBefore ('div.ws-menu-page-toolbox').click (function()
 							{
 								$('div.ws-menu-page-group-header').each (function()
 									{

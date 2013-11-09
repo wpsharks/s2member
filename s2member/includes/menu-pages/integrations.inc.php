@@ -31,8 +31,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_integrations"))
 					{
 						echo '<div class="wrap ws-menu-page">'."\n";
 
-						echo '<div id="icon-plugins" class="icon32"><br /></div>'."\n";
-						echo '<h2>Other s2Member Integrations</h2>'."\n";
+						echo '<div class="ws-menu-page-toolbox">'."\n";
+						c_ws_plugin__s2member_menu_pages_tb::display ();
+						echo '</div>'."\n";
+
+						echo '<h2>Other Integrations</h2>'."\n";
 
 						echo '<table class="ws-menu-page-table">'."\n";
 						echo '<tbody class="ws-menu-page-table-tbody">'."\n";

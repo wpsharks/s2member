@@ -36,6 +36,7 @@ Plugin URI: http://www.s2member.com/framework/
 Privacy URI: http://www.s2member.com/privacy/
 Video Tutorials: http://www.s2member.com/videos/
 Knowledge Base: http://www.s2member.com/kb/
+Newsletter: http://www.s2member.com/r/subscribe/
 Pro Module / Home Page: http://www.s2member.com/
 Pro Module / Prices: http://www.s2member.com/prices/
 Pro Module / Auto-Update URL: https://www.s2member.com/
