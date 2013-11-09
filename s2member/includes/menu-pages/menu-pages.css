@@ -228,8 +228,8 @@ div.ws-menu-page .form-table td
 	font-size   : inherit;
 	line-height : inherit;
 }
-div.ws-menu-page input:not([type='button']):not([type='submit']):not([type='radio']):not([type='checkbox']),
-div.ws-menu-page input:not([type='button']):not([type='submit']):not([type='radio']):not([type='checkbox']):focus,
+div.ws-menu-page input:not([type='image']):not([type='button']):not([type='submit']):not([type='radio']):not([type='checkbox']),
+div.ws-menu-page input:not([type='image']):not([type='button']):not([type='submit']):not([type='radio']):not([type='checkbox']):focus,
 div.ws-menu-page select, div.ws-menu-page select:focus,
 div.ws-menu-page textarea, div.ws-menu-page textarea:focus
 {
@@ -246,7 +246,7 @@ div.ws-menu-page textarea, div.ws-menu-page textarea:focus
 	background  : #73834B;
 	box-shadow  : 0 0 1px 0 rgba(0, 0, 0, 0.5) inset, 0 0 1px 1px rgba(223, 245, 165, 0.5);
 }
-div.ws-menu-page input:not([type='button']):not([type='submit']):not([type='radio']):not([type='checkbox']):focus,
+div.ws-menu-page input:not([type='image']):not([type='button']):not([type='submit']):not([type='radio']):not([type='checkbox']):focus,
 div.ws-menu-page select:focus, div.ws-menu-page textarea:focus
 {
 	background : #637041;
