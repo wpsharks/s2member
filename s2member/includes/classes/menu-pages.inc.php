@@ -148,7 +148,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 								$menu = apply_filters("ws_plugin__s2member_during_add_admin_options_menu_slug", "ws-plugin--s2member-start", get_defined_vars());
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_menu_page", true, get_defined_vars()))
-									add_menu_page("s2Member", "s2Member", "create_users", $menu, "c_ws_plugin__s2member_menu_pages::start_page", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images/brand-favicon.png");
+									add_menu_page(((c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? "s2Member (Pro)" : "s2Member"), ((c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? "s2Member (Pro)" : "s2Member"),
+									              "create_users", $menu, "c_ws_plugin__s2member_menu_pages::start_page", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/images/brand-favicon.png");
 
 								if(apply_filters("ws_plugin__s2member_during_add_admin_options_add_start_page", true, get_defined_vars()))
 									add_submenu_page($menu, "s2Member Quick-Start Guide", "Quick-Start Guide", "create_users", "ws-plugin--s2member-start", "c_ws_plugin__s2member_menu_pages::start_page");
