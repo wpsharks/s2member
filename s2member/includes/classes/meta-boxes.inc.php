@@ -45,7 +45,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_boxes"))
 					{
 						do_action ("ws_plugin__s2member_before_add_meta_boxes", get_defined_vars ());
 
-						$excluded_types = array ("link", "comment", "revision", "attachment", "nav_menu_item");
+						$excluded_types = array ("link", "comment", "revision", "attachment", "nav_menu_item", "snippet", "redirect");
 						$excluded_types = apply_filters ("ws_plugin__s2member_add_meta_boxes_excluded_types", $excluded_types, get_defined_vars ());
 
 						if (in_array ($type, array_keys (get_post_types ())) && !in_array ($type, $excluded_types))
