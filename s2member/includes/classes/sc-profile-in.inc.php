@@ -112,7 +112,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 										echo '<td>' . "\n";
 										echo '<label for="ws-plugin--s2member-profile-email">' . "\n";
 										echo '<strong>' . _x ("Email Address", "s2member-front", "s2member") . ' *</strong><br />' . "\n";
-										echo '<input type="text" aria-required="true" data-expected="email" maxlength="100" autocomplete="off" name="ws_plugin__s2member_profile_email" id="ws-plugin--s2member-profile-email" class="ws-plugin--s2member-profile-field form-control" value="' . format_to_edit ($user->user_email) . '" tabindex="' . esc_attr (($tabindex = $tabindex + 10)) . '" />' . "\n";
+										echo '<input type="email" aria-required="true" data-expected="email" maxlength="100" autocomplete="off" name="ws_plugin__s2member_profile_email" id="ws-plugin--s2member-profile-email" class="ws-plugin--s2member-profile-field form-control" value="' . format_to_edit ($user->user_email) . '" tabindex="' . esc_attr (($tabindex = $tabindex + 10)) . '" />' . "\n";
 										echo '</label>' . "\n";
 										echo '</td>' . "\n";
 										echo '</tr>' . "\n";
@@ -219,7 +219,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 																			echo '<td>' . "\n";
 																			echo '<label for="ws-plugin--s2member-profile-' . esc_attr ($field_id_class) . '">' . "\n";
 																			echo '<strong' . ((preg_match ("/^(checkbox|pre_checkbox)$/", $field["type"])) ? ' style="display:none;"' : '') . '>' . $field["label"] . (($field["required"] === "yes") ? ' *' : '') . '</strong></label>' . ((preg_match ("/^(checkbox|pre_checkbox)$/", $field["type"])) ? '' : '<br />') . "\n";
-																			echo c_ws_plugin__s2member_custom_reg_fields::custom_field_gen (__FUNCTION__, $field, "ws_plugin__s2member_profile_", "ws-plugin--s2member-profile-", "ws-plugin--s2member-profile-field form-control", "", ($tabindex = $tabindex + 1), "", $fields, $fields[$field_var], "profile");
+																			echo c_ws_plugin__s2member_custom_reg_fields::custom_field_gen (__FUNCTION__, $field, "ws_plugin__s2member_profile_", "ws-plugin--s2member-profile-", "ws-plugin--s2member-profile-field", "", ($tabindex = $tabindex + 1), "", $fields, $fields[$field_var], "profile");
 																			echo '</td>' . "\n";
 																			echo '</tr>' . "\n";
 																		}
@@ -274,7 +274,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 								echo '<td>' . "\n";
 								echo '<input type="hidden" name="ws_plugin__s2member_sc_profile_save" id="ws-plugin--s2member-sc-profile-save" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-sc-profile-save")) . '" />' . "\n";
 								echo '<input type="hidden" name="ws_plugin__s2member_profile_save" id="ws-plugin--s2member-profile-save" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-profile-save")) . '" />' . "\n";
-								echo '<input type="submit" id="ws-plugin--s2member-profile-submit" value="' . esc_attr (_x ("Save All Changes", "s2member-front", "s2member")) . '" tabindex="' . esc_attr (($tabindex = $tabindex + 10)) . '" class="btn btn-primary" />' . "\n";
+								echo '<input type="submit" id="ws-plugin--s2member-profile-submit" class="btn btn-primary" value="' . esc_attr (_x ("Save All Changes", "s2member-front", "s2member")) . '" tabindex="' . esc_attr (($tabindex = $tabindex + 10)) . '" />' . "\n";
 								echo '</td>' . "\n";
 								echo '</tr>' . "\n";
 

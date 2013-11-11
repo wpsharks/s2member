@@ -64,6 +64,9 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 								$name_suffix = (preg_match("/\[$/", $_name_prefix)) ? ']' : '';
 								$field_name = trim($_name_prefix.$field_var.$name_suffix);
 
+								if(in_array($field["type"], array("text", "textarea", "select"), TRUE))
+									$_classes = trim($_classes." form-control"); // Bootstrap.
+
 								$common = /* Common attributes. */ '';
 								$common .= ' name="'.esc_attr($field_name).'"';
 								$common .= ' id="'.esc_attr($_id_prefix.$field_id_class).'"';
@@ -326,7 +329,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 										unset /* Unset defined __refs, __v. */($__refs, $__v);
 
 										echo '<label for="ws-plugin--s2member-custom-reg-field-first-name">'._x("First Name", "s2member-front", "s2member").' *</label>'."\n";
-										echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_first_name" id="ws-plugin--s2member-custom-reg-field-first-name" class="ws-plugin--s2member-custom-reg-field" value="'.esc_attr($_p["ws_plugin__s2member_custom_reg_field_first_name"]).'" />'."\n";
+										echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_first_name" id="ws-plugin--s2member-custom-reg-field-first-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr($_p["ws_plugin__s2member_custom_reg_field_first_name"]).'" />'."\n";
 										echo '<br />'."\n";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -338,7 +341,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 										unset /* Unset defined __refs, __v. */($__refs, $__v);
 
 										echo '<label for="ws-plugin--s2member-custom-reg-field-last-name">'._x("Last Name", "s2member-front", "s2member").' *</label>'."\n";
-										echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_last_name" id="ws-plugin--s2member-custom-reg-field-last-name" class="ws-plugin--s2member-custom-reg-field" value="'.esc_attr($_p["ws_plugin__s2member_custom_reg_field_last_name"]).'" />'."\n";
+										echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_last_name" id="ws-plugin--s2member-custom-reg-field-last-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr($_p["ws_plugin__s2member_custom_reg_field_last_name"]).'" />'."\n";
 										echo '<br />'."\n";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -436,11 +439,11 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 								echo '<label for="ws-plugin--s2member-custom-reg-field-user-pass1" title="'.esc_attr(_x("Please type your Password twice to confirm.", "s2member-front", "s2member")).'">'."\n";
 								echo '<span>'._x("Password (please type it twice)", "s2member-front", "s2member").' *</span><br />'."\n";
-								echo '<input type="password" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_user_pass1" id="ws-plugin--s2member-custom-reg-field-user-pass1" class="ws-plugin--s2member-custom-reg-field" value="'.format_to_edit($_p["ws_plugin__s2member_custom_reg_field_user_pass1"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+								echo '<input type="password" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_user_pass1" id="ws-plugin--s2member-custom-reg-field-user-pass1" class="ws-plugin--s2member-custom-reg-field form-control" value="'.format_to_edit($_p["ws_plugin__s2member_custom_reg_field_user_pass1"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 								echo '</label>'."\n";
 
 								echo '<label for="ws-plugin--s2member-custom-reg-field-user-pass2" title="'.esc_attr(_x("Please type your Password twice to confirm.", "s2member-front", "s2member")).'">'."\n";
-								echo '<input type="password" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_user_pass2" id="ws-plugin--s2member-custom-reg-field-user-pass2" class="ws-plugin--s2member-custom-reg-field" value="'.format_to_edit($_p["ws_plugin__s2member_custom_reg_field_user_pass2"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+								echo '<input type="password" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_user_pass2" id="ws-plugin--s2member-custom-reg-field-user-pass2" class="ws-plugin--s2member-custom-reg-field form-control" value="'.format_to_edit($_p["ws_plugin__s2member_custom_reg_field_user_pass2"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 								echo '</label>'."\n";
 
 								echo '<div id="ws-plugin--s2member-custom-reg-field-user-pass-strength" class="ws-plugin--s2member-password-strength"><em>'._x("password strength indicator", "s2member-front", "s2member").'</em></div>'."\n";
@@ -462,7 +465,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 								echo '<p>'."\n";
 								echo '<label for="ws-plugin--s2member-custom-reg-field-first-name">'."\n";
 								echo '<span>'._x("First Name", "s2member-front", "s2member").' *</span><br />'."\n";
-								echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_first_name" id="ws-plugin--s2member-custom-reg-field-first-name" class="ws-plugin--s2member-custom-reg-field" value="'.esc_attr($_p["ws_plugin__s2member_custom_reg_field_first_name"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+								echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_first_name" id="ws-plugin--s2member-custom-reg-field-first-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr($_p["ws_plugin__s2member_custom_reg_field_first_name"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 								echo '</label>'."\n";
 								echo '</p>'."\n";
 
@@ -477,7 +480,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 								echo '<p>'."\n";
 								echo '<label for="ws-plugin--s2member-custom-reg-field-last-name">'."\n";
 								echo '<span>'._x("Last Name", "s2member-front", "s2member").' *</span><br />'."\n";
-								echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_last_name" id="ws-plugin--s2member-custom-reg-field-last-name" class="ws-plugin--s2member-custom-reg-field" value="'.esc_attr($_p["ws_plugin__s2member_custom_reg_field_last_name"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+								echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_last_name" id="ws-plugin--s2member-custom-reg-field-last-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr($_p["ws_plugin__s2member_custom_reg_field_last_name"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 								echo '</label>'."\n";
 								echo '</p>'."\n";
 
