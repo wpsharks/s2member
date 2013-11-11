@@ -247,6 +247,7 @@ form#ws-plugin--s2member-profile table td
 	border  : 0;
 }
 form#ws-plugin--s2member-profile input[type="text"],
+form#ws-plugin--s2member-profile input[type="email"],
 form#ws-plugin--s2member-profile input[type="password"],
 form#ws-plugin--s2member-profile input[type="submit"],
 form#ws-plugin--s2member-profile textarea,
@@ -332,6 +333,7 @@ body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-container
 	margin-right : 7.5%;
 }
 body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section input[type="text"],
+body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section input[type="email"],
 body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section input[type="password"],
 body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section textarea,
 body.registration form div#ws-plugin--s2member-custom-reg-fields-4bp-section select
