@@ -355,7 +355,7 @@ div.ws-menu-page .monospace
 }
 div.ws-menu-page textarea.monospace
 {
-	white-space : nowrap;
+	white-space : pre;
 }
 div.ws-menu-page .clearfix:before,
 div.ws-menu-page .clearfix:after
