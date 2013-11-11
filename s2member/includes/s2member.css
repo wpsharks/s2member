@@ -295,6 +295,7 @@ form#ws-plugin--s2member-profile select
 	}
 form#ws-plugin--s2member-profile label
 	{
+		display: inline;
 		cursor: pointer;
 	}
 form#ws-plugin--s2member-profile label.ws-plugin--s2member-custom-reg-field-op-l
