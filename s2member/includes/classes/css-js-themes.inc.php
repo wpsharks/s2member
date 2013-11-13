@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 						        && (bp_is_register_page() || bp_is_activation_page() || bp_is_user_profile()))
 							$load = TRUE;
 
-						else if(is_singular() && ($post = get_post())
+						else if(is_singular() && ($post = get_post(NULL))
 						        && (stripos($post->post_content, "s2member") !== FALSE
 										|| stripos($post->post_content, "[s2") !== FALSE))
 							$load = TRUE;
