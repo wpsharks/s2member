@@ -120,6 +120,8 @@ if(!class_exists("c_ws_plugin__s2member_ssl_in"))
 									{
 										function _ws_plugin__s2member_force_non_ssl_scheme($url = FALSE, $path = FALSE, $scheme = FALSE)
 											{
+												if($scheme === "relative") return $url; // Nothing to do in this case.
+
 												if(!in_array /* If NOT explicitly passed through. */($scheme, array("http", "https"), true))
 													{
 														if(($scheme === "login_post" || $scheme === "rpc") && (force_ssl_login() || force_ssl_admin()))
