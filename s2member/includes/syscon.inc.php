@@ -230,6 +230,14 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["signup_email_subject"] = _x("Congratulations! (your membership has been approved)", "s2member-front", "s2member");
 				$default_options["signup_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%! Your membership has been approved.\n\nIf you haven't already done so, the next step is to Register a Username.\n\nComplete your registration here:\n%%%%registration_url%%%%\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
 
+				$default_options["modification_email_recipients"] = '"%%full_name%%" <%%payer_email%%>';
+				$default_options["modification_email_subject"] = _x("Thank you! Your account has been updated.", "s2member-front", "s2member");
+				$default_options["modification_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%! Your membership has been updated to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
+
+				$default_options["ccap_email_recipients"] = '"%%full_name%%" <%%payer_email%%>';
+				$default_options["ccap_email_subject"] = _x("Thank you! Your account has been updated.", "s2member-front", "s2member");
+				$default_options["ccap_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%! You now have access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
+
 				$default_options["sp_email_recipients"] = '"%%full_name%%" <%%payer_email%%>';
 				$default_options["sp_email_subject"] = _x("Thank You! (instructions for access)", "s2member-front", "s2member");
 				$default_options["sp_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%!\n\n%%%%item_name%%%%\n\nYour order can be retrieved here:\n%%%%sp_access_url%%%%\n( link expires in %%%%sp_access_exp%%%% )\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
@@ -317,24 +325,6 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				Here they are merged. User options will overwrite some or all default values.
 				*/
 				$GLOBALS["WS_PLUGIN__"]["s2member"]["o"] = array_merge($default_options, (($options !== false) ? (array)$options : (array)get_option("ws_plugin__s2member_options")));
-
-				// Back compatibility for `filter_wp_query`. Changed in v110912 to array.
-				if(is_string($_ov = &$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["filter_wp_query"]))
-					$_ov = (!$_ov || $_ov === "none") ? $default_options["filter_wp_query"] : array_unique(preg_split("/[;,\r\n\t\s ]+/", $_ov));
-
-				// Backward compatibility for old logo image width of 500 pixels. Changed in v110604.
-				if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_logo_src"] === $default_options["login_reg_logo_src"])
-					$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_reg_logo_src_width"] = $default_options["login_reg_logo_src_width"];
-
-				// Backward compatibility for PayPal API Credentials. Starting with v3.5+, this info is stored by the free version of s2Member.
-				if(empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"]) && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["pro_paypal_api_username"]))
-					$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["pro_paypal_api_username"];
-
-				if(empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"]) && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["pro_paypal_api_password"]))
-					$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["pro_paypal_api_password"];
-
-				if(empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"]) && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["pro_paypal_api_signature"]))
-					$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"] = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["pro_paypal_api_signature"];
 				/*
 				This builds an MD5 checksum for the full array of options. This also includes the config checksum and the current set of default options.
 				*/
@@ -484,10 +474,10 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 								else if(preg_match("/^(?:signup|modification|ccap|sp)_tracking_codes$/", $key) && (!is_string($value) || !strlen($value)))
 									$value = $default_options[$key];
 
-								else if(preg_match("/^(?:signup|sp)_email_recipients$/", $key) && !is_string($value) /* Can be empty. */)
+								else if(preg_match("/^(?:signup|modification|ccap|sp)_email_recipients$/", $key) && !is_string($value) /* Can be empty. */)
 									$value = $default_options[$key];
 
-								else if(preg_match("/^(?:signup|sp)_email_(?:subject|message)$/", $key) && (!is_string($value) || !strlen($value)))
+								else if(preg_match("/^(?:signup|modification|ccap|sp)_email_(?:subject|message)$/", $key) && (!is_string($value) || !strlen($value)))
 									$value = $default_options[$key];
 
 								else if($key === "mailchimp_api_key" && (!is_string($value) || !strlen($value)))

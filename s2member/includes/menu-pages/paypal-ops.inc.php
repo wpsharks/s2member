@@ -412,7 +412,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-signup-confirmation-email-section">'."\n";
 								echo '<h3>Signup Confirmation Email (required, but the default works fine)</h3>'."\n";
-								echo '<p>This email is sent to new Customers after they return from a successful signup at PayPal. The <strong>primary</strong> purpose of this email, is to provide the Customer with instructions, along with a link to register a Username for their Membership. You may also customize this further, by providing details that are specifically geared to your site.</p>'."\n";
+								echo '<p>This email is sent to new Customers after they return from a successful signup at PayPal. The <strong>primary</strong> purpose of this email is to provide the Customer with instructions, along with a link to register a Username for their Membership. You may also customize this further by providing details that are specifically geared to your site.</p>'."\n";
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_signup_confirmation_email", get_defined_vars());
 
 								echo '<table class="form-table">'."\n";
@@ -512,6 +512,241 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_after_signup_confirmation_email", get_defined_vars());
 							}
 
+						if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_modification_confirmation_email", true, get_defined_vars()))
+							{
+								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_modification_confirmation_email", get_defined_vars());
+
+								echo '<div class="ws-menu-page-group" title="Modification Confirmation Email '.((c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? '(Standard/Pro Form)' : '(Standard)').'">'."\n";
+
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-modification-confirmation-email-section">'."\n";
+								echo '<h3>Modification Confirmation Email (required, but the default works fine)</h3>'."\n";
+								echo '<p>This email is sent to existing Users after they complete an upgrade/downgrade (if and when you make this possible). For instance, if a Free Subscriber upgrades to a paid Membership Level, s2Member considers this a Modification (NOT a Signup; a Signup is associated only with someone completely new). The <strong>primary</strong> purpose of this email is to provide the Customer with a confirmation that their account was updated. You may also customize this further by providing details that are specifically geared to your site.</p>'."\n";
+								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_modification_confirmation_email", get_defined_vars());
+
+								echo '<table class="form-table">'."\n";
+								echo '<tbody>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<th>'."\n";
+								echo '<label for="ws-plugin--s2member-modification-email-recipients">'."\n";
+								echo 'Modification Confirmation Recipients:'."\n";
+								echo '</label>'."\n";
+								echo '</th>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<td>'."\n";
+								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_modification_email_recipients" id="ws-plugin--s2member-modification-email-recipients" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_email_recipients"]).'" /><br />'."\n";
+								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />'."\n";
+								echo '<code>"%%full_name%%" &lt;%%payer_email%%&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>'."\n";
+								echo '</td>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<th>'."\n";
+								echo '<label for="ws-plugin--s2member-modification-email-subject">'."\n";
+								echo 'Modification Confirmation Email Subject:'."\n";
+								echo '</label>'."\n";
+								echo '</th>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<td>'."\n";
+								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_modification_email_subject" id="ws-plugin--s2member-modification-email-subject" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_email_subject"]).'" /><br />'."\n";
+								echo 'Subject Line used in the email sent to a Customer after a successful modification has occurred through PayPal.'."\n";
+								echo '</td>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<th>'."\n";
+								echo '<label for="ws-plugin--s2member-modification-email-message">'."\n";
+								echo 'Modification Confirmation Email Message:'."\n";
+								echo '</label>'."\n";
+								echo '</th>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<td>'."\n";
+								echo '<textarea name="ws_plugin__s2member_modification_email_message" id="ws-plugin--s2member-modification-email-message" rows="10">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_email_message"]).'</textarea><br />'."\n";
+								echo 'Message Body used in the email sent to a Customer after a successful modification has occurred through PayPal.<br /><br />'."\n";
+								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>'."\n";
+								echo '<ul>'."\n";
+								echo '<li><code>%%subscr_id%%</code> = The PayPal Subscription ID, which remains constant throughout any &amp; all future payments. [ <a href="#" onclick="alert(\'There is one exception. If you are selling Lifetime or Fixed-Term (non-recurring) access, using Buy Now functionality; the %%subscr_id%% is actually set to the Transaction ID for the purchase. PayPal does not provide a specific Subscription ID for Buy Now purchases. Since Lifetime &amp; Fixed-Term Subscriptions are NOT recurring (i.e. there is only ONE payment), using the Transaction ID as the Subscription ID is a graceful way to deal with this minor conflict.\'); return false;">?</a> ]</li>'."\n";
+								echo '<li><code>%%initial%%</code> = The Initial Fee. If you offered a 100% Free Trial, this will be <code>0</code>. [ <a href="#" onclick="alert(\'This will always represent the amount of money the Customer spent when they completed checkout, no matter what. Even if that amount is 0. If a Customer upgrades/downgrades under the terms of a 100% Free Trial Period, this will be 0.\'); return false;">?</a> ]</li>'."\n";
+								echo '<li><code>%%regular%%</code> = The Regular Amount of the Subscription. If you offer something 100% free, this will be <code>0</code>. [ <a href="#" onclick="alert(\'This is how much the Subscription costs after an Initial Period expires. If you did NOT offer an Initial Period at a different price, %%initial%% and %%regular%% will be equal to the same thing.\'); return false;">?</a> ]</li>'."\n";
+								echo '<li><code>%%recurring%%</code> = This is the amount that will be charged on a recurring basis, or <code>0</code> if non-recurring. [ <a href="#" onclick="alert(\'If Recurring Payments have not been required, this will be equal to 0. That being said, %%regular%% &amp; %%recurring%% are usually the same value. This variable can be used in two different ways. You can use it to determine what the Regular Recurring Rate is, or to determine whether the Subscription will recur or not. If it is going to recur, %%recurring%% will be > 0.\'); return false;">?</a> ]</li>'."\n";
+								echo '<li><code>%%first_name%%</code> = The First Name of the Customer who purchased the Membership Subscription.</li>'."\n";
+								echo '<li><code>%%last_name%%</code> = The Last Name of the Customer who purchased the Membership Subscription.</li>'."\n";
+								echo '<li><code>%%full_name%%</code> = The Full Name (First &amp; Last) of the Customer who purchased the Membership Subscription.</li>'."\n";
+								echo '<li><code>%%payer_email%%</code> = The Email Address of the Customer who purchased the Membership Subscription.</li>'."\n";
+								echo '<li><code>%%item_number%%</code> = The Item Number (colon separated <code><em>level:custom_capabilities:fixed term</em></code>) that the Subscription is for.</li>'."\n";
+								echo '<li><code>%%item_name%%</code> = The Item Name (as provided by the <code>desc=""</code> attribute in your Shortcode, which briefly describes the Item Number).</li>'."\n";
+								echo '<li><code>%%initial_term%%</code> = This is the term length of the Initial Period. This will be a numeric value, followed by a space, then a single letter. [ <a href="#" onclick="alert(\'Here are some examples:\\n\\n%%initial_term%% = 1 D (this means 1 Day)\\n%%initial_term%% = 1 W (this means 1 Week)\\n%%initial_term%% = 1 M (this means 1 Month)\\n%%initial_term%% = 1 Y (this means 1 Year)\\n\\nThe Initial Period never recurs, so this only lasts for the term length specified, then it is over.\'); return false;">?</a> ]</li>'."\n";
+								echo '<li><code>%%initial_cycle%%</code> = This is the <code>%%initial_term%%</code> from above, converted to a cycle representation of: <code><em>X days/weeks/months/years</em></code>.</li>'."\n";
+								echo '<li><code>%%regular_term%%</code> = This is the term length of the Regular Period. This will be a numeric value, followed by a space, then a single letter. [ <a href="#" onclick="alert(\'Here are some examples:\\n\\n%%regular_term%% = 1 D (this means 1 Day)\\n%%regular_term%% = 1 W (this means 1 Week)\\n%%regular_term%% = 1 M (this means 1 Month)\\n%%regular_term%% = 1 Y (this means 1 Year)\\n%%regular_term%% = 1 L (this means 1 Lifetime)\\n\\nThe Regular Term is usually recurring. So the Regular Term value represents the period (or duration) of each recurring period. If %%recurring%% = 0, then the Regular Term only applies once, because it is not recurring. So if it is not recurring, the value of %%regular_term%% simply represents how long their Membership privileges are going to last after the %%initial_term%% has expired, if there was an Initial Term. The value of this variable ( %%regular_term%% ) will never be empty, it will always be at least: 1 D, meaning 1 day. No exceptions.\'); return false;">?</a> ]</li>'."\n";
+								echo '<li><code>%%regular_cycle%%</code> = This is the <code>%%regular_term%%</code> from above, converted to a cycle representation of: <code><em>[every] X days/weeks/months/years — OR daily, weekly, bi-weekly, monthly, bi-monthly, quarterly, yearly, or lifetime</em></code>. This is a very useful Replacment Code. Its value is dynamic; depending on term length, recurring status, and period/term lengths configured.</li>'."\n";
+								echo '<li><code>%%recurring/regular_cycle%%</code> = Example (<code>14.95 / Monthly</code>), or ... (<code>0 / non-recurring</code>); depending on the value of <code>%%recurring%%</code>.</li>'."\n";
+								echo '<li><code>%%user_first_name%%</code> = The First Name listed on their User account. This might be different than what is on file with PayPal.</li>' . "\n";
+								echo '<li><code>%%user_last_name%%</code> = The Last Name listed on their User account. This might be different than what is on file with PayPal.</li>' . "\n";
+								echo '<li><code>%%user_full_name%%</code> = The Full Name listed on their User account. This might be different than what is on file with PayPal.</li>' . "\n";
+								echo '<li><code>%%user_email%%</code> = The Email Address associated with their User account. This might be different than what is on file with PayPal.</li>' . "\n";
+								echo '<li><code>%%user_login%%</code> = The Username associated with their account. The Customer created this during registration.</li>' . "\n";
+								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
+								echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>' . "\n";
+								echo '</ul>'."\n";
+
+								echo '<strong>Custom Registration/Profile Fields are also supported in this email:</strong>' . "\n";
+								echo '<ul>' . "\n";
+								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
+								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
+								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
+								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -› General Options -› Registration/Profile Fields</em>.</li>' . "\n";
+								echo '</ul>' . "\n";
+
+								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>'."\n";
+								echo '<ul>'."\n";
+								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>'."\n";
+								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>'."\n";
+								echo '</ul>'."\n";
+								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />'."\n";
+								echo '<em>(The campaign (i.e. christmas-promo) could be referenced using <code>%%cv1%%</code>)</em><br />'."\n";
+								echo '<code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|christmas-promo"</code>'."\n";
+
+								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ?
+									'<div class="ws-menu-page-hr"></div>' . "\n".
+									'<p style="margin:0;"><strong>PHP Code:</strong> It is also possible to use PHP tags — optional (for developers). If you use PHP tags, please run a test email with <code>&lt;?php print_r(get_defined_vars()); ?&gt;</code>. This will give you a full list of all PHP variables available to you in this email. The <code>$paypal</code> variable is the most important one. It contains all of the <code>$_POST</code> variables received from PayPal\'s IPN service — or from an s2Member Pro Form integration (e.g. <code>$paypal["item_number"]</code>, <code>$paypal["item_name"]</code>, etc). Please note that all Replacement Codes will be parsed first, and then any PHP tags that you\'ve included. Also, please remember that emails are sent in plain text format.</p>'."\n"
+									: '';
+								echo '</td>'."\n";
+
+								echo '</tr>'."\n";
+								echo '</tbody>'."\n";
+								echo '</table>'."\n";
+								echo '</div>'."\n";
+
+								echo '</div>'."\n";
+
+								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_after_modification_confirmation_email", get_defined_vars());
+							}
+
+						if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_ccap_confirmation_email", true, get_defined_vars()))
+							{
+								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_ccap_confirmation_email", get_defined_vars());
+
+								echo '<div class="ws-menu-page-group" title="Capability Confirmation Email '.((c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? '(Standard/Pro Form)' : '(Standard)').'">'."\n";
+
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-ccap-confirmation-email-section">'."\n";
+								echo '<h3>Capability Confirmation Email (required, but the default works fine)</h3>'."\n";
+								echo '<p>This email is sent to existing Users after they complete a Buy Now purchase for one or more Custom Capabilities (if and when you make this possible); see: <code>Dashboard -› s2Member -› PayPal Buttons/Forms -› Capability (Buy Now)</code>. The <strong>primary</strong> purpose of this email is to provide the Customer with a confirmation that their account was updated. You may also customize this further by providing details that are specifically geared to your site.</p>'."\n";
+								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_ccap_confirmation_email", get_defined_vars());
+
+								echo '<table class="form-table">'."\n";
+								echo '<tbody>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<th>'."\n";
+								echo '<label for="ws-plugin--s2member-ccap-email-recipients">'."\n";
+								echo 'Capability Confirmation Recipients:'."\n";
+								echo '</label>'."\n";
+								echo '</th>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<td>'."\n";
+								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_ccap_email_recipients" id="ws-plugin--s2member-ccap-email-recipients" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_email_recipients"]).'" /><br />'."\n";
+								echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />'."\n";
+								echo '<code>"%%full_name%%" &lt;%%payer_email%%&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>'."\n";
+								echo '</td>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<th>'."\n";
+								echo '<label for="ws-plugin--s2member-ccap-email-subject">'."\n";
+								echo 'Capability Confirmation Email Subject:'."\n";
+								echo '</label>'."\n";
+								echo '</th>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<td>'."\n";
+								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_ccap_email_subject" id="ws-plugin--s2member-ccap-email-subject" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_email_subject"]).'" /><br />'."\n";
+								echo 'Subject Line used in the email sent to a Customer after a purchase is completed through PayPal.'."\n";
+								echo '</td>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<th>'."\n";
+								echo '<label for="ws-plugin--s2member-ccap-email-message">'."\n";
+								echo 'Capability Confirmation Email Message:'."\n";
+								echo '</label>'."\n";
+								echo '</th>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<td>'."\n";
+								echo '<textarea name="ws_plugin__s2member_ccap_email_message" id="ws-plugin--s2member-ccap-email-message" rows="10">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_email_message"]).'</textarea><br />'."\n";
+								echo 'Message Body used in the email sent to a Customer after a purchase is completed through PayPal.<br /><br />'."\n";
+								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>'."\n";
+								echo '<ul>'."\n";
+								echo '<li><code>%%txn_id%%</code> = The PayPal Transaction ID. PayPal assigns a unique identifier for every purchase.</li>'."\n";
+								echo '<li><code>%%amount%%</code> = The full Amount that you charged for Custom Capability access.</li>'."\n";
+								echo '<li><code>%%first_name%%</code> = The First Name of the Customer who completed the purchase.</li>'."\n";
+								echo '<li><code>%%last_name%%</code> = The Last Name of the Customer who completed the purchase.</li>'."\n";
+								echo '<li><code>%%full_name%%</code> = The Full Name (First &amp; Last) of the Customer who completed the purchase.</li>'."\n";
+								echo '<li><code>%%payer_email%%</code> = The Email Address of the Customer who completed the purchase.</li>'."\n";
+								echo '<li><code>%%item_number%%</code> = The Item Number (colon separated <code><em>*:custom_capabilities</em></code>); where <code>custom_capabilities</code> is a comma-delimited list of the Custom Capabilities they purchased.</li>'."\n";
+								echo '<li><code>%%item_name%%</code> = The Item Name (as provided by the <code>desc=""</code> attribute in your Shortcode, which briefly describes the Item Number).</li>'."\n";
+								echo '<li><code>%%user_first_name%%</code> = The First Name listed on their User account. This might be different than what is on file with PayPal.</li>' . "\n";
+								echo '<li><code>%%user_last_name%%</code> = The Last Name listed on their User account. This might be different than what is on file with PayPal.</li>' . "\n";
+								echo '<li><code>%%user_full_name%%</code> = The Full Name listed on their User account. This might be different than what is on file with PayPal.</li>' . "\n";
+								echo '<li><code>%%user_email%%</code> = The Email Address associated with their User account. This might be different than what is on file with PayPal.</li>' . "\n";
+								echo '<li><code>%%user_login%%</code> = The Username associated with their account. The Customer created this during registration.</li>' . "\n";
+								echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>' . "\n";
+								echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>' . "\n";
+								echo '</ul>'."\n";
+
+								echo '<strong>Custom Registration/Profile Fields are also supported in this email:</strong>' . "\n";
+								echo '<ul>' . "\n";
+								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
+								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
+								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
+								echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member -› General Options -› Registration/Profile Fields</em>.</li>' . "\n";
+								echo '</ul>' . "\n";
+
+								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>'."\n";
+								echo '<ul>'."\n";
+								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>'."\n";
+								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>'."\n";
+								echo '</ul>'."\n";
+								echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />'."\n";
+								echo '<em>(The campaign (i.e. christmas-promo) could be referenced using <code>%%cv1%%</code>)</em><br />'."\n";
+								echo '<code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|christmas-promo"</code>'."\n";
+
+								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ?
+									'<div class="ws-menu-page-hr"></div>' . "\n".
+									'<p style="margin:0;"><strong>PHP Code:</strong> It is also possible to use PHP tags — optional (for developers). If you use PHP tags, please run a test email with <code>&lt;?php print_r(get_defined_vars()); ?&gt;</code>. This will give you a full list of all PHP variables available to you in this email. The <code>$paypal</code> variable is the most important one. It contains all of the <code>$_POST</code> variables received from PayPal\'s IPN service — or from an s2Member Pro Form integration (e.g. <code>$paypal["item_number"]</code>, <code>$paypal["item_name"]</code>, etc). Please note that all Replacement Codes will be parsed first, and then any PHP tags that you\'ve included. Also, please remember that emails are sent in plain text format.</p>'."\n"
+									: '';
+								echo '</td>'."\n";
+
+								echo '</tr>'."\n";
+								echo '</tbody>'."\n";
+								echo '</table>'."\n";
+								echo '</div>'."\n";
+
+								echo '</div>'."\n";
+
+								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_after_ccap_confirmation_email", get_defined_vars());
+							}
+
 						if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_sp_confirmation_email", true, get_defined_vars()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_sp_confirmation_email", get_defined_vars());
@@ -520,7 +755,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-sp-confirmation-email-section">'."\n";
 								echo '<h3>Specific Post/Page Confirmation Email (required, but the default works fine)</h3>'."\n";
-								echo '<p>This email is sent to new Customers after they return from a successful purchase at PayPal, for Specific Post/Page Access. (see: <code>s2Member -› Restriction Options -› Specific Post/Page Access</code>). This is NOT used for Membership sales, only for Specific Post/Page Access. The <strong>primary</strong> purpose of this email, is to provide the Customer with instructions, along with a link to access the Specific Post/Page they\'ve purchased access to. If you\'ve created a Specific Post/Page Package (with multiple Posts/Pages bundled together into one transaction), this ONE link (<code>%%sp_access_url%%</code>) will automatically authenticate them for access to ALL of the Posts/Pages included in their transaction. You may customize this email further, by providing details that are specifically geared to your site.</p>'."\n";
+								echo '<p>This email is sent to new Customers after they return from a successful purchase at PayPal, for Specific Post/Page Access. (see: <code>s2Member -› Restriction Options -› Specific Post/Page Access</code>). This is NOT used for Membership sales, only for Specific Post/Page Access. The <strong>primary</strong> purpose of this email is to provide the Customer with instructions, along with a link to access the Specific Post/Page they\'ve purchased access to. If you\'ve created a Specific Post/Page Package (with multiple Posts/Pages bundled together into one transaction), this ONE link (<code>%%sp_access_url%%</code>) will automatically authenticate them for access to ALL of the Posts/Pages included in their transaction. You may customize this email further by providing details that are specifically geared to your site.</p>'."\n";
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_sp_confirmation_email", get_defined_vars());
 
 								echo '<table class="form-table">'."\n";
@@ -579,7 +814,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 								echo '<li><code>%%sp_access_url%%</code> = The full URL (generated by s2Member) where the Customer can gain access.</li>'."\n";
 								echo '<li><code>%%sp_access_exp%%</code> = Human readable expiration for <code>%%sp_access_url%%</code>. Ex: <em>(link expires in <code>%%sp_access_exp%%</code>)</em>.</li>'."\n";
 								echo '<li><code>%%txn_id%%</code> = The PayPal Transaction ID. PayPal assigns a unique identifier for every purchase.</li>'."\n";
-								echo '<li><code>%%amount%%</code> = The full Amount that you charged for Specific Post/Page Access. This value will <code>always be > 0</code>.</li>'."\n";
+								echo '<li><code>%%amount%%</code> = The full Amount that you charged for Specific Post/Page Access.</li>'."\n";
 								echo '<li><code>%%first_name%%</code> = The First Name of the Customer who purchased Specific Post/Page Access.</li>'."\n";
 								echo '<li><code>%%last_name%%</code> = The Last Name of the Customer who purchased Specific Post/Page Access.</li>'."\n";
 								echo '<li><code>%%full_name%%</code> = The Full Name (First &amp; Last) of the Customer who purchased Specific Post/Page Access.</li>'."\n";
