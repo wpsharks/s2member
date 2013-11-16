@@ -64,7 +64,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 
 								echo '<form method="post" name="ws_plugin__s2member_profile" id="ws-plugin--s2member-profile">' . "\n";
 
-								if ($GLOBALS["ws_plugin__s2member_profile_saved"]) // Respond to successful updates.
+								if (!empty($GLOBALS["ws_plugin__s2member_profile_saved"])) // Respond to successful updates.
 									{
 										echo '<div id="ws-plugin--s2member-profile-saved" class="alert alert-success">' . "\n";
 										echo _x ("Profile updated successfully.", "s2member-front", "s2member") . "\n";
