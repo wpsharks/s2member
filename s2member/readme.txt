@@ -48,19 +48,6 @@ Tags: s2, s2member, s2 member, membership, users, user, members, member, subscri
 
 s2Member® — a powerful (free) membership plugin for WordPress®. Protect members only content with roles/capabilities.
 
-== Installation ==
-
-= s2Member® is very easy to install (instructions) =
-1. Upload the `/s2member` folder to your `/wp-content/plugins/` directory.
-2. Activate the plugin through the **Plugins** menu in WordPress®.
-3. Navigate to the **s2Member® Options** panel for configuration details.
-
-= See Also (s2Member.com) =
-[Detailed installation/upgrade instructions](http://www.s2member.com/framework/#!s2_tab_jump=s2-framework-install-update).
-
-= Is s2Member compatible with Multisite Networking? =
-Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networking. After you enable Multisite Networking, install the s2Member plugin. Then navigate to `s2Member -› Multisite (Config)` in the Dashboard on your Main Site.
-
 == Description ==
 
 [youtube http://www.youtube.com/watch?v=2C3Lan7vxw0 /]
@@ -72,6 +59,22 @@ s2Member supports Free Subscribers (at Level #0), and up to four primary Members
 s2Member allows you to protect Pages, Posts, Tags, Categories, URIs, URI word fragments, URI Replacement Codes for BuddyPress, Specific Post/Page "Buy Now" Access, and even portions of content within Posts/Pages/themes/plugins. All settings are configurable through the s2Member Options panel. This makes s2Member VERY easy to integrate into any site powered by WordPress®. With s2Member, you can also protect downloadable files, using restrictions to control how many downloads can occur within a certain amount of time; all based on Membership Level or even Custom Capabilities. sMember® can even integrate with Amazon® S3 and CloudFront (optional) for serving protected audio/video streams over an RTMP protocol.
 
 You can learn more about s2Member® at [s2Member.com](http://www.s2member.com/).
+
+== Installation ==
+
+= s2Member® is Very Easy to Install =
+
+1. Upload the `/s2member` folder to your `/wp-content/plugins/` directory.
+2. Activate the plugin through the **Plugins** menu in WordPress®.
+3. Navigate to the **s2Member® Options** panel for configuration details.
+
+= See Also (s2Member.com) =
+
+[Detailed installation/upgrade instructions](http://www.s2member.com/framework/#!s2_tab_jump=s2-framework-install-update).
+
+= Is s2Member compatible with Multisite Networking? =
+
+Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networking. After you enable Multisite Networking, install the s2Member plugin. Then navigate to `s2Member -› Multisite (Config)` in the Dashboard on your Main Site.
 
 == Screenshots ==
 
@@ -85,24 +88,28 @@ You can learn more about s2Member® at [s2Member.com](http://www.s2member.com/).
 
 == Frequently Asked Questions ==
 
-= Please check the following s2Member® resources: =
-* s2Member® FAQs: http://www.s2member.com/faqs/
-* Knowledge Base: http://www.s2member.com/kb/
-* Video Tutorials: http://www.s2member.com/videos/
-* Community: http://www.s2member.com/forums/
-* Codex: http://www.s2member.com/codex/
+= Please Check the Following s2Member® Resources =
+
+* s2Member® FAQs: <http://www.s2member.com/faqs/>
+* Knowledge Base: <http://www.s2member.com/kb/>
+* Video Tutorials: <http://www.s2member.com/videos/>
+* Community: <http://www.s2member.com/forums/>
+* Codex: <http://www.s2member.com/codex/>
 
 = Translating s2Member® =
+
 Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
 == Upgrade Notice ==
 
 = v131109 =
+
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
 
 = v131109 =
+
 * (s2Member/s2Member Pro) **UI Makeover** This release of s2Member upgrades all administrative UI panels.
 * (s2Member/s2Member Pro) **Compatibility** Updating s2Member for compatibility with the coming release of both Quick Cache LITE and Quick Cache Pro for WordPress. These are not available publicly yet, but they are expected for release very soon. This release of s2Member is compatible with both the current and future releases of Quick Cache for WordPress.
 * (s2Member/s2Member Pro) **Improvement (Speed)** Lazy load s2Member's JS file at all times. Done, this release will speed your site up for first-time visitors.
@@ -114,10 +121,12 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member Pro) **Checkout Options** Improving support for multiple Checkout Options. When a customer changes to a new Checkout Option by selecting an option from the drop-down menu in a Pro Form; this action will now result in a hash jump back to the location of the Pro Form on any given page; instead of to the top of the page, which could potentially result in a confusing experience on some sites (depending on the implementation). Aside: for developers, it's helpful to know that all s2Member Pro Forms now have a hashable ID `#s2p-form` that is cleaner than the longer (product-specific) IDs associated with Pro Forms; e.g. `s2member-pro-paypal-form...`, etc. If you need to hash a Pro Form, please use the more general `#s2p-form` on the end of a URL. This will take a customer directly to that Pro Form in the context of any given page.
 
 = v131026 =
+
 * (s2Member) **WordPress v3.7 Compatibility** s2Member further updated to support subtle changes in the WordPress v3.7 `wp-login.php` file. This release corrects a minor issue w/ patches applied by s2Member when running in a Multisite Network environment. If you are running s2Member on a Multisite Network, please be sure to run the automatic patcher provided in your Dashboard against WordPress v3.7 after updating to this release of s2Member.
 * (s2Member Pro) **PayPal Central IPN** Updating the example file: `s2m-pro-extras/paypal-central-ipn.php` to use one of the latest PayPal IP addresses listed [here](https://ppmts.custhelp.com/app/answers/detail/a_id/92).
 
 = v131025 =
+
 * (s2Member) **WordPress v3.7 Compatibility** s2Member updated to support WordPress v3.7. s2Member remains compatible with WP v3.3 (or higher).
 * (s2Member Pro) **New Feature: Simultaneous Login Monitoring** Available only w/ s2Member Pro. s2Member Pro has been updated to support configurations that limit the number of simultaneous logins a single username can receive. For further details, please see: `Dashboard -› s2Member -› Restriction Options -› Simultaneous Login Restrictions` (when s2Member Pro is installed).
 * (s2Member) **Post Restrictions (#3)** Adding support for `all-[post type]` in addition to the existing `all-[post type]s` (plural) currently supported by s2Member's Restriction Options for Posts. This makes it possible for a site owner to type only the Post Type after the keyword prefix `all-`; and excluding the plural `s` in cases when this is necessary.
@@ -136,6 +145,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member) **See also: s2Member Repo** https://github.com/WebSharks/s2Member/commits/000000-dev
 
 = v130816 =
+
 * (s2Member Pro) **Compatibility, ClickBank (#467)** Improving support for ClickBank PitchPlus Upsell Flows. Please see [this thread](http://www.s2member.com/forums/topic/clickbank-buttons-not-working/#post-55725) for further details.
 * (s2Member/s2Member Pro) **User Search on Multisite Networks (#468)** User search functionality was partially broken for Child Blogs in a Multisite Network after some improvements were implemented in s2Member® v130731. The issue has now been corrected in this release for Multisite Networks. For further details, please see [this thread](http://www.s2member.com/forums/topic/user-search-no-longer-working/#post-55778).
 * (s2Member/s2Member Pro) **Z-Index in Menu Pages (#461)** Stacking order against a WordPress® installation running a Dashboard with a collapsed sidebar menu (left side) was causing some UI problems. Fixed in this release.
@@ -144,13 +154,16 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Videos (#467)** Updating internal documentation found in `Dashboard -› s2Member® -› Quick-Start`. Specifically, the video player here was integrated with an older version of the YouTube® API and was not working properly. Fixed in this release.
 
 = v130802 =
+
 * (s2Member Pro) **Compatibility, WordPress® v3.6** Updating s2Member® Pro Form templates and their underlying CSS. This update improves their appearance against the Twenty Thirteen theme that comes with WordPress® v3.6. Specifically, some of the Pro Form buttons were a little out of place in this new default theme. Fixed in this release.
 * (s2Member Pro) **Compatibility, Checkout Options (#443)** Revision 3. Updating this feature to support a wider variety of WordPress® configurations and content filters. This update also resolves an empty `desc=""` attribute error reported by some site owners. Feature description... It is now possible to build dropdown menus offering your customers a variety of options using a Single Pro Form. This is accomplished quite easily using Shortcodes. For full details and examples, please check this section of your Dashboard in the latest release. See: `s2Member® -› PayPal® Pro Forms -› Wrapping Multiple Shortcodes as "Checkout Options"`. NOTE: this works for PayPal® Pro Forms, and ALSO for Authorize.Net Pro Forms.
 
 = v130801 =
+
 * (s2Member Pro) **New Feature; Checkout Options (#403)** Revision 2. Updating documentation on this new feature to prevent conufusion for site owners. s2Member® Pro now supports "Checkout Options". It is now possible to build dropdown menus offering your customers a variety of options using a Single Pro Form. This is accomplished quite easily using Shortcodes. For full details and examples, please check this section of your Dashboard in the latest release. See: `s2Member® -› PayPal® Pro Forms -› Wrapping Multiple Shortcodes as "Checkout Options"`. NOTE: this works for PayPal® Pro Forms, and ALSO for Authorize.Net Pro Forms.
 
 = v130731 =
+
 * (s2Member Pro) **New Feature; Checkout Options (#403)** s2Member® Pro now supports "Checkout Options". It is now possible to build dropdown menus offering your customers a variety of options using a Single Pro Form. This is accomplished quite easily using Shortcodes. For full details and examples, please check this section of your Dashboard in the latest release. See: `s2Member® -› PayPal® Pro Forms -› Wrapping Multiple Shortcodes as "Checkout Options"`. NOTE: this works for PayPal® Pro Forms, and ALSO for Authorize.Net Pro Forms.
 * (s2Member Pro) **Free Checkout (#403)** It is now possible to offer a 100% free checkout experience using any of s2Member's Pro Form Shortcodes. In previous releases of s2Member® it was not possible to set the `ra=""` Attribute to a zero dollar amount. Now it is! This works for PayPal® Pro Forms, and also for Authorize.Net Pro Forms.
 * (s2Member Pro) **100% Off Coupons (#403)** It is now possible to offer a 100% off coupon. This works for PayPal® Pro Forms, and also for Authorize.Net Pro Forms. See: `s2Member® -› Pro Coupon Codes` for details and examples.
@@ -164,6 +177,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Bug Fix (#418)** Fixed incorrect result totals under some rare scenarios in user search results.
 
 = v130617 =
+
 * (s2Member/s2Member Pro) **IP Restrictions (#148)** It is now possible to introduce a custom template file that controls the error message displayed when/if a user breaches security by exceeding your maximum unique IP addresses; as configured under `s2Member -› Restriction Options -› Unique IP Restrictions`. If you would like to use a custom template for this message, please copy the default template file from `/s2member/includes/templates/errors/ip-restrictions.php` and place this file into your active WordPress® theme directory (or into the `/wp-content/` directory if you prefer). s2Member will automatically find your custom template in one of these locations; and s2Member will use your custom template instead of the built-in default.
 * (s2Member Pro) **Bug Fix (#302)** Updating Authorize.Net Pro Form Generator to support max days of `365` instead of `7`.
 * (s2Member Pro) **Amazon S3 Secret Access Keys (#321)** Updating UI configuration panel to better explain what a Secret Access Key is; and adding a note about Secret Access Keys for Amazon S3 integration. Amazon® is deprecating Secret Access Keys, but they ARE still required for digitally signed URLs. This update changes nothing in s2Member's functionality. It simply adds some additional detail to a configuration field that will assist site owners integrating s2Member w/ Amazon S3 for the first time.
@@ -173,6 +187,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member Pro) **PayPal Pro Forms (#312)** Preventing the use of multiple Pro Forms in the same Post/Page. This has never been possible, it is known to break the functionality of s2Member Pro Forms. Please limit Pro Form Shortcodes to ONE for each Post/Page; and do NOT attempt to use more than one Pro Form Shortcode on the same Post/Page (at the same time). In this release we have added a friendly JavaScript alert/warning for site owners that attempt this, so that problems and confusion can be avoided in this unlikely scenario.
 
 = v130513 =
+
 * (s2Member/s2Member Pro) **s2Stream Shortcode Bug Fix (#256)** Fixing a bug first introduced in the previous release where we added support for `player_aspectratio`. This quick update corrects the PHP parse error at line #154 of `sc-files-in.inc.php`. It also corrects the behavior of the `player_height=""` and `player_aspectratio=""` Shortcode Attributes for the `s2Stream` Shortcode. Many thanks to everyone that reported this bug.
 * (s2Member Pro) **Codestyling Localization** Removing symlink creator for Codestyleing Localization compatibility. There have been some reports of problems during WordPress® automatic upgrades (when/if the symlink exists). Until we can find a way to avoid this, we're disabling the automatic symlink generator. If you're running the Codestyling Localization plugin together with s2Member Pro, you will need to create the symlink yourself if you want to make s2Member fully compatible. Please create a symlink here: `/wp-content/plugins/s2member/s2member-pro` that points to the s2Member Pro directory: `/wp-content/plugins/s2member-pro`. See notes in previous changelog for further details on this.
 
@@ -185,8 +200,8 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 
  2. Now, please follow the [instructions here](http://www.s2member.com/pro/#!s2_tab_jump=s2-pro-install-update) to upgrade s2Member® Pro manually.
 
-
 = v130510 =
+
 * (s2Member Pro) **Authorize.Net UK (and Other Currencies) (#104)** Adding support for Authorize.Net UK and other currencies too. s2Member Pro now officially supports Authorize.Net UK Edition. It is now possible to change your Authorize.Net Pro Form Shortcode Attribute `cc="USD"` to one of these values: `cc="USD"`, or `cc="CAD"` or `cc="EUR"` or `cc="GBP"`. For further details, please see: `Dashboard -› Authorize.Net Pro Forms -› Shortcode Attributes (Explained)`.
 * (s2Member Pro) **ClickBank Skins (#227)** Adding support for the `cbskin=""` Shortcode Attribute. For further details, please see: `Dashboard -› ClickBank Buttons -› Shortcode Attributes (Explained)`.
 * (s2Member Pro) **ClickBank PitchPlus Upsell Flows (#227)** Adding support for ClickBank PitchPlus Upsell Flows via new Shortcode Attributes: `cbfid=""`, `cbur=""`, `cbf="auto"`. s2Member Pro now officially supports ClickBank PitchPlus Upsell Flows. We support PitchPlus Basic and PitchPlus Advanced too. For further details, please see: `Dashboard -› ClickBank Buttons -› Shortcode Attributes (Explained)`.
@@ -216,12 +231,14 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member Pro) **Username Validation (#246)** Now forcing user input (during Pro Form registration) to lowercase on Multisite Networks to prevent unnecessary validation errors during checkout (saving a customer time). Also, s2Member now validates a customer's Username before it is passed through `sanitize_user()` (a core WordPress® function). This prevents confusion for a customer where certain characters were stripped out automatically, causing them problems when attempting to log in for the first time (e.g. the customer thinks their Username is `john~doe`; when it is actually `johndoe` because WordPress (when running a Multisite Network) removes anything that is NOT `a-z0-9 _.-@` (and s2Member removes whitespace as well).
 
 = v130406 =
+
 * (s2Member/s2Member Pro) **Multisite Networks (#145)** Bug fix on Multisite Networks related to User deletions and subsequent logins on child blogs. For further details, please see [this thread](http://www.s2member.com/forums/topic/deleted-users-can-log-in/#post-46738).
 * (s2Member Pro) **New Feature (#59)** It is now possible to Edit a User in the Dashboard and check a box to have the User's password reset, and an email message sent automatically to the User/Member with a copy of the Username/Password. This requires s2Member® Pro.
 * (s2Member Pro) **API Functions (#158)** New PayPal® Pro API Functions (`s2member_pro_paypal_rbp_for_user`, `s2member_pro_paypal_rbp_times_for_user`). These are for developers. For further details, please see [this article](http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/) in the s2Member® Codex.
 * (s2Member Pro) **API Functions (#158)** New PayPal® Pro (PayFlow® Edition) API Functions (`s2member_pro_payflow_rbp_for_user`, `s2member_pro_payflow_rbp_times_for_user`). These are for developers. For further details, please see [this article](http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/) in the s2Member® Codex.
 
 = v130404 =
+
 * (s2Member Pro) **Compatibility (#108)** Updating s2Member® Pro's integration with Authorize.Net to allow charges up to `$99,999.00` (formerly `$10,000.00`).
 * (s2Member/s2Member Pro) **User Searches (#91)** Updating `pre_user_query` filter to include `first_name/last_name` (instead of only the `display_name`).
 * (s2Member/s2Member Pro) **bbPress Integration (#88)** Updating bbPress Role/Cap filter to exclude itself during bbPress deactivation. This was causing a loss of the `read` Capability inadvertently.
@@ -233,10 +250,12 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **JW Player (#121)** Adding support for percentage-based width/height values in `player_width="" player_height=""` attributes of an s2Stream shortcode that generates a JW Player. Example: `player_width="100%"`.
 
 = v130221 =
+
 * (s2Member/s2Member Pro) **Bug Fix (#41)** Custom Registration/Profile Fields with an ID that ended with `-[0-9]+` or `_[0-9]+` was failing JavaScript validation due to a parsing issue. Fixed in this release.
 * (s2Member/s2Member Pro) **Bug Fix (#43)** A bug first introduced in the last release of s2Member® v130220 was preventing Administrative New User Notifications from being sent by s2Member®. Fixed in this release.
 
 = v130220 =
+
 * (s2Member Pro) **Feature Enhancement/User Exportation (#33)** Adding support for UTF-8 BOM in CSV User export files. Now a configurable option during User/Member Exportation.
 * (s2Member/s2Member Pro) **Feature Enhancement/Emails (#21)** Adding additional Replacement Codes for New User Email Notifications (for both the User/Member Notification and also for the Administrator Notification). The following Replacement Codes are now possible: `%%role%%`, `%%label%%`, `%%level%%`, `%%ccaps%%`. Also adding four new Filters for developers. These include: `ws_plugin__s2member_welcome_email_sbj`, `ws_plugin__s2member_welcome_email_msg`, `ws_plugin__s2member_admin_new_user_email_sbj`, `ws_plugin__s2member_admin_new_user_email_msg`. See `Dashboard -› General Options -›  Email Configuration` for further details.
 * (s2Member/s2Member Pro) **Feature Enhancement/Emails (#30)** Adding support for PHP tags in the following emails: New User Notification, Administrative New User Notification, Signup Confirmation Email, Specific Post/Page Confirmation Email. See the relevant sections in your Dashboard for further details. Such as: `s2Member® -› General Options -› Email Configuration` and `s2Member® -› PayPal® Options -› Signup Confirmation Email`.
@@ -248,6 +267,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Feature Enhancement/s2Stream Shortcode (#32)** Adding additional support for JW Player™ Captions, Titles, Descriptions, and Media IDs (i.e. `player_title=""`, `player_description=""`, `player_mediaid=""`, `player_captions=""`). Please check the Shortcode Attributes tab in [this KB article](http://www.s2member.com/kb/jwplayer-s2stream-shortcodes/#using-s2stream-shortcodes) for further details.
 
 = v130214 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member/s2Member Pro) **Log Viewer (#16)** Additional log file descriptions have been added to the Dashboard, along with some other UI enhancements in this section.
 * (s2Member/s2Member Pro) **Bug Fix (#18)** Usernames consisting of all numeric values were not always being redirected to the Login Welcome Page upon logging in, even when s2Member® was configured to do so. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/subscribers-not-taken-to-welcome-page/page/2/#post-41663).
@@ -258,6 +278,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Compatibility** Bumping minimum WordPress® requirement from v3.2 up to v3.3. Starting with this release, s2Member® is no longer compatible with the much older WordPress® v3.2.
 
 = v130213 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member Pro) **Compatibility (#13)** PayPal® Payments Pro, PayPal® Payments Pro (Payflow Edition), and Authorize.Net. s2Member® Pro now supports a recurring interval of Semi-Yearly (e.g. charges occur every six months). This has always been possible by manipulating Shortcode Attribues, but it's now officially supported by Pro Form Generators in your Dashboard — which come with s2Member® Pro.
 * (s2Member Pro) **Compatibility (#13)** ClickBank® Recurring Products. ClickBank® has started allowing a Weekly recurring interval and stopped allowing Yearly. s2Member® has been updated in this release to support a Weekly recurring interval with ClickBank®; and to remove the Yearly option in the ClickBank® Button Generator.
@@ -294,6 +315,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Compatibility** Updated all of s2Member's IPN handlers to accept `$_REQUEST` data for Proxy-related variables like `s2member_paypal_proxy_return_url`. This allows s2Member® itself to use `$_POST` variables for Proxy-related variables; and it further reduces the likelihood of 403 Forbidden errors caused by [paranoid Mod Security configurations](http://www.s2member.com/kb/mod-security-random-503-403-errors/). One issue this should help to correct, is a mysterious case where a `success=""` Shortcode Attribute is not working as you might expect. This can be caused by [paranoid Mod Security configurations](http://www.s2member.com/kb/mod-security-random-503-403-errors/) at places like HostGator®, because a URL is passing through a query string. This release will help to prevent this from becoming a problem, because `success=""` URLs will be passed through `$_POST` variables now in all Pro Form integrations.
 
 = v130207 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member Pro) **Bug Fix (#2)** Modification Tracking Codes not working properly under s2Member's Authorize.Net integration. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/shareasale-integration-not-working/#post-40954).
 * (s2Member) **Compatibility (#4)** PayPal® integrated into a site charging in the JPY currency was incorrectly limited to an amount of 10000.00. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/default-currency-can-i-change-it-to-yen/#post-40590).
@@ -302,6 +324,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Compatibility (#6)** s2Member® File Downloads (audio/video files) with spaces in a file name were not always being handled properly. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/jwplayer-filename-bug/#post-40799).
 
 = v130203 =
+
 * **(New Release) Please read this changelog for important details.**
 * (s2Member Pro) **Remote Ops API (`create_user`)** s2Member® Pro's Remote Operations API, for the `create_user` Operation has been updated to support a new specification: `modify_if_login_exists`. For further details, please check your s2Member® Pro Dashboard here: `s2Member® -› API / Scripting -› Remote Operations API`.
 * (s2Member Pro) **Remote Ops API (`modify_user`,`delete_user`)** s2Member® Pro's Remote Operations API has been updated to support two additional Operations: `update_user` and `delete_user`. For further details on these new Operations, please check your s2Member® Pro Dashboard here: `s2Member® -› API / Scripting -› Remote Operations API`.
@@ -312,6 +335,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member Pro) **User Importation (#89)** s2Member® Pro's User/Member Import format changed in this release (with respect to Custom Registration/Profile Fields only). If you are importing Custom Registration/Profile Fields, please review [this KB article](http://www.s2member.com/kb/importing-updating-users/#custom-registration-profile-fields) before you import new Users/Members or mass update any existing Users/Members. ALSO NOTE: User/Member CSV Export Files generated by previous versions of s2Member® Pro (if they contained any Custom Registration/Profile Fields) will NOT be compatible with this latest release (e.g. you should NOT attempt to re-import those old files in an effort to mass update existing Users/Members). Please generate a new User/Member CSV Export File in the latest release of s2Member® Pro before attempting to edit and/or mass update existing Users/Members with applications like MS Excel or OpenOffice.
 
 = v130123 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member/s2Member Pro) **s2Stream Shortcode (#78)** s2Member® now supports JW Player® license keys using Shortcode Attribute `player_key=""`. See [this KB article](http://www.s2member.com/kb/jwplayer-s2stream-shortcodes/) please. Also discussed in [this thread](http://www.s2member.com/forums/topic/new-jw-player-6-s2-video-audio-shortcodes/#post-38768).
 * (s2Member/s2Member Pro) **s2Stream Shortcode (#79)** s2Member® now supports JW Player® [Advanced Option Blocks](http://www.longtailvideo.com/support/jw-player/28839/embedding-the-player) using Shortcode Attribute `player_option_blocks=""`. Example: `player_option_blocks="sharing:{}"`. See [this KB article](http://www.s2member.com/kb/jwplayer-s2stream-shortcodes/) please. Also discussed in [this thread](http://www.s2member.com/forums/topic/new-jw-player-6-s2-video-audio-shortcodes/#post-38768).
@@ -320,6 +344,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **KB Articles** Inline documentation updated in some areas, with a few links pointing to helpful/related KB articles.
 
 = v130121 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * **New Feature** s2Member® now comes with a new Shortcode `[s2Stream file_download="video.mp4" player="jwplayer-v6" ... /]`, making it MUCH easier for site owners to implemement RTMP streams of audio/video content. For further details, please check your Dashboard under: `s2Member® -› Download Options -› JW Player® v6 and RTMP Protocol Examples`. See also: `s2Member® -› Download Options -› Shortcode Attributes (Explained)`.
 * **Compatibility (#75)** Updated s2Member's local file storage engine (for File Downloads via s2Member®), to support special characters in file names. Discussed in [this thread](http://www.s2member.com/forums/topic/problem-with-quotes-in-filename-downloads/#post-38395).
@@ -327,6 +352,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * **Compatibility** Updated s2Member's integration with Amazon® S3 to extend the default 30 second connection timeout (which was too conservative for many integrations) up to 24 hours by default, making it match the same as s2Member's Amazon® CloudFront connection timeout. For further details, please check your Dashboard under: `s2Member® -› Download Options -› Amazon® S3/CDN Storage -› Dev Note w/Technical Details`. It is possible to modify this connection timeout through a Filter discussed there.
 
 = v130116 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * **Compatibility (#39)** Updated codes samples for JW Player®, to include the `mp4:` prefix when implementing RTMP streams against MP4 video files. Discussed in [this thread](http://www.s2member.com/forums/topic/cloudfront-subfolder-streaming-error/#post-35750).
 * **Compatibility (#51)** Updated Payflow® API to support recurring billing every six months. Discussed in [this thread](http://www.s2member.com/forums/topic/payflow-error-6-month-recurring-membership/#post-36053).
@@ -334,6 +360,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * **Feature Improvement (#71)** s2Member® has been updated to support byte-range requests with it's default local file storage engine, served from the `/s2member-files/` directory. s2Member® has always supported byte-range requests when integrated with Amazon® CloudFront. Now it supports byte-range requests in it's default local storage engine too. This will improve compatibility with mobile devices, iTunes™  and other devices that use byte-range requests. Discussed in [this thread](http://www.s2member.com/forums/topic/any-way-to-set-accept-ranges-for-downloads/#post-15871).
 
 = v121213 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * **Updated for compatibility with WordPress® v3.5. Backward compatibility remains for previous versions of WordPress®, as far back as WordPress® v3.2.**
 * (s2Member Pro) **Bug Fix**. An issue first introduced in s2Member® Pro v120517 where we fixed problems with the `maxlength` attribute in Authorize.Net Pro Forms, left a remaining problem. The State/Province field in the Billing Address section of a Pro Form, since s2Member® Pro v120517, has only accepted 2 characters when it should have been capable of accepting up to 40 characters. Fixed in this release.
@@ -343,11 +370,13 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member Pro) **Bug Fix**. Free Registration Pro Forms submitted without having payment gateway API credentials configured within s2Member® resulted in an on-site error message when there should NOT be one (because a site owner is dealing with Free Registration only in this scenario). Fixed in this release.
 
 = v121204 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member / s2Member Pro) **Bug Fix**. An issue with long billing agreement descriptions under PayPal® Pro (Payflow® Edition) accounts, when coupon codes were being used by customers, was addressed in this release. Symptoms of this bug were errors in s2Member® log files from the Payflow® API, with error code: `11581-Profile description is invalid`. Caused by undocumented length requirements for the billing agreement description under the Payflow® API. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/error-generic-processor-error-11581/page/2/#post-33477).
 * (s2Member / s2Member Pro) **Compatibility**. Updated JW Player code samples for compatibility with JW Player v6. Discussed in [this thread](http://www.s2member.com/forums/topic/jw-player-rtmp-streaming-mp4-amazon-s3/page/2/#post-32074).
 
 = v121201 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member / s2Member Pro) **Bug Fix**. Support Rep Cristián Lávaque found a bug in the behavior of s2Member’s Alternative View Restrictions, associated with Category listings in custom menu widgets. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/welcome-page-title-shows-but-no-content/page/2/#post-29802).
 * (s2Member Pro) **Feature Enhancement**. s2Member Pro Forms integrated ONLY with PayPal Express Checkout (`accept="paypal" accept_via_paypal="paypal"`), will no longer display a Billing Method section on the Pro Form, as it's not necessary (there's only one possible option in this case, and it's already depicted by the PayPal button at the bottom of the Pro Form). Many site owners had implemented CSS hacks to hide this section of a Pro Form configured this way, based on [this FAQ article](http://www.s2member.com/faqs/#s2-faqs-paypal-pro-not-required). This hack is no longer necessary - starting with this release.
@@ -357,6 +386,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member Pro) **Authorize.Net**. True montly billing instead of every 30 days. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/1-month-recurring-billing-instead-of-30-days/#post-30420).
 
 = v121023 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member / s2Member Pro) **Bug Fix**. A bug related to s2Member's `is_site_root()` method, when fancy permalinks are NOT in use; has been corrected for compatibility with the latest version of WordPress. Please see [this thread](http://www.s2member.com/forums/topic/new-custom-field-default-not-on-old-users/#post-28792) for futher details.
 * (s2Member Pro) **Import/Export Bug Fix**. An issue related to RFC guidelines for escape sequences in CSV files has been addressed in this release. Please see [this thread](http://www.s2member.com/forums/topic/new-custom-field-default-not-on-old-users/#post-28792) for futher details.
@@ -368,11 +398,13 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member Pro) **ccBill® DataLink Integration**. DataLink integration with ccBill® was modified to prevent dates in the future from being requested from the DataLink API. ccBill® was responding to some DataLink requests with a failed authentication, which were caused by dates/times in the future; according to MST on the ccBill® side of things.
 
 = v120703 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member/s2Member Pro) **Payflow® Express Checkout**. An issue related to Express Checkout (when using the Payflow® API), has been corrected in this release. A bug in previous releases, was causing error messages under certain circumstances that read `Field format error: Invalid PayerID`.
 * (s2Member/s2Member Pro) **WordPress® v3.4**. Standards compliance. Routine maintenance. Re-confirmed compatibility with WordPress® v3.4.
 
 = v120622 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member/s2Member Pro) **WordPress® v3.4**. Confirmed compatibility with WordPress® v3.4.
 * (s2Member/s2Member Pro) **Currency Conversion**. This release updates s2Member's currency conversion API, which is powered by Google®. Please see [this thread](http://www.s2member.com/forums/topic/paypal-agreecontinue-sends-to-memb-options/#post-16972) for further details.
@@ -380,6 +412,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Character Encoding**. This release fixes a big in s2Member's character encoding conversion, for IPN responses received from PayPal®. This releases also fixes an issue specifically with the pound sterling symbol `£`, which was causing some transient IPN data to become corrupted, under the right scenario.
 
 = v120608 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member/s2Member Pro) **WordPress® v3.4**. Updated for compatibility with the coming release of [WordPress® v3.4](http://wordpress.org/news/2012/06/wordpress-3-4-release-candidate-2/). Additional details available [here](http://wordpress.org/news/2012/06/wordpress-3-4-release-candidate-2/).
 * (s2Member/s2Member Pro) **Payflow® Bug Fix**. This release addresses two bugs that existed in s2Member's Payflow® integration. Resolved in this release. Please see [this thread](http://www.s2member.com/forums/topic/transactions-not-going-through/#post-15896) for further details.
@@ -387,6 +420,7 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member) **Documentation**. Code samples for Content Dripping have been updated in the Dashboard, in order to correct a date comparison snippet, which was WRONG. Please check your Dashboard under: `s2Member® -› API Scripting -› Content Dripping -› Example #2`, for the updated code sample.
 
 = v120601 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member Pro) **ClickBank® Button Shortcodes**. This release works around a bug that has been discovered on the ClickBank® side of things, when a `+` character appears in the `desc=""` attribute of your ClickBank® Button Shortcode. Resolved in this release. Please see [this thread](http://www.s2member.com/forums/topic/clickbank-output-url/#post-15166) for further details.
 * (s2Member Pro) **Payflow® Daily Recurrence (Limitation)**. PayPal® Pro accounts with the Payflow® Edition API, are NOT capable of charging on a `daily` recurring basis. Previous releases of s2Member® Pro mistakenly documented this as being possible. Resolved in this release. PayPal® Pro accounts operating with the Payflow® Edition (and integrated with s2Member®), are only capable of charging recurring fees on the following schedules: `weekly, bi-weekly, monthly, quarterly, or yearly`. This is in large part, a limitation in the Payflow® API, which we hope will be resolved by PayPal® in a future version. Please feel free to contact PayPal® if you'd like to vote for this feature! This limitation does NOT affect existing PayPal® Pro accounts operating exclusively under the PayPal® Pro API (e.g. without Payflow®).
@@ -394,12 +428,14 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **Bug Fix**. A bug related to inaccurate role assignment, under certain scenarios (for administrative accounts). Resolved in this release. Please see [this thread](http://www.s2member.com/forums/topic/inaccurate-role-assignment-in-s2member-pro/#post-14122) for further details.
 
 = v120517 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member Pro) **PayPal® Pro Forms**. This release removes all limitations on the maximum length of an initial trial/period. It is now possible to offer any number of days/weeks/months/years for free, or at a different initial rate.
 * (s2Member Pro) **Authorize.Net® Bug Fix**. Max length (i.e. `maxlength=""`) adjusted in Pro Forms integrating with Authorize.Net. Transactions were sometimes failing due to character length restrictions imposed by the Authorize.Net® API. Fixed in this release. Please see [this thread](http://www.s2member.com/forums/topic/customer-charged-but-not-given-access/#post-13454) for further details.
 * (s2Member/s2Member Pro) **JW Player® Code Samples**. Updated code samples for JW Player®, to reduce the possibility of a namespace conflict in configuration variables. For further details, please check [this thread](http://www.s2member.com/forums/topic/jw-player-new-code-conflict/#post-13819).
 
 = v120514 =
+
 * **(Maintenance Release) Upgrade immediately.**
 * (s2Member Pro) **Payflow® API Support**. s2Member® Pro now supports PayPal® Pro accounts operating with the Payflow® edition. It is now possible to process recurring payments through newer PayPal® Pro accounts (e.g. those which may use the new Payflow® API for recurring billing). Please note, this feature should ONLY be used by site owners with a brand new PayPal® Pro account, which has Recurring Billing service enabled under the Payflow® edition. Site owners with existing PayPal® Pro accounts are NOT impacted by this feature, nor should they attempt to use this feature. For further details, please check your Dashboard under: `s2Member® -› PayPal® Options -› Payflow® Account Details`.
 * (s2Member Pro) **Authorize.Net® Shortcode Attribute**. A new Shortcode Attribute `rrt=""`, is available for Authorize.Net® Pro Forms. For further details, please check your Dashboard under: `s2Member® -› Authorize.Net® Forms -› Shortcode Attributes (Explained)`.
@@ -409,14 +445,17 @@ Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
 * (s2Member/s2Member Pro) **JW Player® Code Samples**. Updated code samples for JW Player®. For further details, please check your Dashboard under: `s2Member® -› Download Options -› JW Player® Code Samples`.
 
 = v120309 =
+
 * (s2Member Pro) **ccBill® Cancellations**. It's now possible for s2Member to pull ccBill® "cancellation" events, from the ccBill® DataLink Service Suite. For further details and configuration options, please check this section of your Dashboard: `s2Member -› ccBill Options -› DataLink Integration`.
 * (s2Member/s2Member Pro) **Bug fix**. Some PHP installations running in safe mode were experiencing `400 Bad Request` errors whenever s2Member's Amazon® CloudFront configuration routines for file downloads were processed. Fixed in this release.
 
 = v120308 =
+
 * (s2Member/s2Member Pro) **Custom Registration/Profile Fields**. Now possible to create a Custom Field that's always hidden, during both registration and any future Profile edits (e.g. for administrative purposes only).
 * (s2Member/s2Member Pro) **Compatibility**. Minor updates for compatibility with the coming release of WordPress® v3.4.
 * (s2Member Pro) **Bug fix**. Broken link in UI leading to: `s2m-pro-extras.zip`. Corrected in this release.
 
 = v120301 - 1.0 =
+
 * ... trimmed away at v111220.
 * Initial release: v1.0.
