@@ -44,6 +44,9 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 						if(c_ws_plugin__s2member_systematics::is_s2_systematic_use_page())
 							$load = TRUE;
 
+						else if(!empty($_GET[apply_filters ("ws_plugin__s2member_check_force_ssl_get_var_name", "s2-ssl", get_defined_vars ())]))
+							$load = TRUE;
+
 						else if(c_ws_plugin__s2member_utils_conds::bp_is_installed()
 						        && (bp_is_register_page() || bp_is_activation_page() || bp_is_user_profile()))
 							$load = TRUE;
