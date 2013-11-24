@@ -129,6 +129,8 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["gateway_debug_logs"] = "0";
 				$default_options["gateway_debug_logs_extensive"] = "0";
 
+				$default_options["lazy_load_css_js"] = "1";
+
 				$default_options["sec_encryption_key"] = "";
 				$default_options["sec_encryption_key_history"] = array();
 				$default_options["s_badge_status_enabled"] = "0";
@@ -346,6 +348,9 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 									$value = $default_options[$key];
 
 								else if(preg_match("/^gateway_debug_logs|gateway_debug_logs_extensive/", $key) && (!is_string($value) || !is_numeric($value)))
+									$value = $default_options[$key];
+
+								else if($key === "lazy_load_css_js" && (!is_string($value) || !is_numeric($value)))
 									$value = $default_options[$key];
 
 								else if($key === "sec_encryption_key" && (!is_string($value) || !strlen($value)))

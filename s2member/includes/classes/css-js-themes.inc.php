@@ -41,7 +41,10 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 
 						if(isset($load)) return $load;
 
-						if(c_ws_plugin__s2member_systematics::is_s2_systematic_use_page())
+						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["lazy_load_css_js"])
+							$load = TRUE;
+
+						else if(c_ws_plugin__s2member_systematics::is_s2_systematic_use_page())
 							$load = TRUE;
 
 						else if(!empty($_GET[apply_filters ("ws_plugin__s2member_check_force_ssl_get_var_name", "s2-ssl", array())]))

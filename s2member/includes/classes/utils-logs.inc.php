@@ -52,6 +52,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_logs"))
 						'/clickbank-ipn/' => array('short' => 'ClickBank IPN communication.', 'long' => 'This log file records the IPN data ClickBank sends to s2Member with details regarding new transactions, cancellations, expirations, etc. See also: paypal-ipn.log (s2Member\'s core processor).'),
 						'/clickbank-rtn/' => array('short' => 'ClickBank Auto-Return communication.', 'long' => 'This log file records the Auto-Return data ClickBank sends to s2Member with details regarding new transactions (i.e. logs routines that help s2Member process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
 
+						'/google-rtn/' => array('short' => 'Google Auto-Return communication.', 'long' => 'This log file records the Auto-Return data Google sends to s2Member with details regarding new transactions (i.e. logs routines that help s2Member process Thank-You pages). See also: paypal-rtn.log (s2Member\'s core processor).'),
 						'/google-ipn/' => array('short' => 'Google Callback/IPN communication.', 'long' => 'This log file records the Callback/IPN data Google sends to s2Member with details regarding new transactions, cancellations, expirations, etc. See also: paypal-ipn.log (s2Member\'s core processor).'),
 
 						'/ccbill-ipn/' => array('short' => 'ccBill Bg Post/IPN communication.', 'long' => 'This log file records the Bg Post/IPN data ccBill sends to s2Member with details regarding new transactions. See also: paypal-ipn.log (s2Member\'s core processor).'),

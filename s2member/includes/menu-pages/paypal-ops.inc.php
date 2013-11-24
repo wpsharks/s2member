@@ -512,7 +512,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_after_signup_confirmation_email", get_defined_vars());
 							}
 
-						if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_modification_confirmation_email", true, get_defined_vars()))
+						if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_modification_confirmation_email", c_ws_plugin__s2member_utils_conds::pro_is_installed(), get_defined_vars()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_modification_confirmation_email", get_defined_vars());
 
@@ -633,7 +633,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_after_modification_confirmation_email", get_defined_vars());
 							}
 
-						if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_ccap_confirmation_email", true, get_defined_vars()))
+						if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_ccap_confirmation_email", c_ws_plugin__s2member_utils_conds::pro_is_installed(), get_defined_vars()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_ccap_confirmation_email", get_defined_vars());
 
