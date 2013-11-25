@@ -50,9 +50,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 
 								if (isset($_GET["item_number"])) // Remove any spaces from the ccaps string.
 									{
-										$arr = explode(':', $_GET["item_number"]);
-										$arr[1] = str_replace(' ', '', $arr[1]);
-										$_GET["item_number"] = implode(':', $arr);
+										$arr = explode(":", $_GET["item_number"]);
+										$arr[1] = str_replace(" ", "", $arr[1]);
+										$_GET["item_number"] = implode(":", $arr);
 										unset($arr);
 									}
 
