@@ -234,15 +234,15 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 
 				$default_options["modification_email_recipients"] = '"%%full_name%%" <%%payer_email%%>';
 				$default_options["modification_email_subject"] = _x("Thank you! Your account has been updated.", "s2member-front", "s2member");
-				$default_options["modification_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%! Your membership has been updated to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
+				$default_options["modification_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
 
 				$default_options["ccap_email_recipients"] = '"%%full_name%%" <%%payer_email%%>';
 				$default_options["ccap_email_subject"] = _x("Thank you! Your account has been updated.", "s2member-front", "s2member");
-				$default_options["ccap_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%! You now have access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
+				$default_options["ccap_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
 
 				$default_options["sp_email_recipients"] = '"%%full_name%%" <%%payer_email%%>';
 				$default_options["sp_email_subject"] = _x("Thank You! (instructions for access)", "s2member-front", "s2member");
-				$default_options["sp_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%!\n\n%%%%item_name%%%%\n\nYour order can be retrieved here:\n%%%%sp_access_url%%%%\n( link expires in %%%%sp_access_exp%%%% )\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
+				$default_options["sp_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%!\n\n%%%%item_name%%%%\n\nYour order can be retrieved here:\n%%%%sp_access_url%%%%\n(link expires in %%%%sp_access_exp%%%%)\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
 
 				$default_options["mailchimp_api_key"] = "";
 

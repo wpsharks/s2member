@@ -124,7 +124,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 											}
 									}
 								// Otherwise, authentication was NOT possible via link or session.
-								if (!$read_only && /* A Specific Post/Page Link? */ !empty ($_g["s2member_sp_access"]))
+								if (!$read_only && /* A Specific Post/Page Access Link? */ !empty ($_g["s2member_sp_access"]))
 									{
 										status_header (503);
 										header ("Content-Type: text/html; charset=UTF-8");
