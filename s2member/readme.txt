@@ -142,11 +142,31 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v131109 =
+= v131126 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v131126 =
+
+* (s2Member Pro) **Google Wallet.** s2Member Pro now supports [Google Wallet for Digital Goods](https://developers.google.com/commerce/wallet/digital/).
+
+ In the past we offered support for Google "Checkout" (Google "Checkout" is no longer available as of November 2013). s2Member's previous integration with Google Checkout has now been fully updated to support Google "Wallet" for Digital Goods. To enable Google Wallet in your installation of s2Member Pro, please see: `Dashboard -› s2Member Pro -› Other Gateways -› Google Wallet`. For setup instructions, please see: `Dashboard -› s2Member Pro -› Google Options`.
+
+ At the time of this writing, there are no KB articles related to Google Wallet at s2Member.com (yet); these will come soon. Until then, you might find it helpful to review dev notes by Jason Caldwell (Lead Developer). Please see: <https://github.com/WebSharks/s2Member/issues/19>.
+
+ We also suggest that you review the documentation in your Dashboard under: `s2Member Pro -› Google Options` and `s2Member Pro -› Google Buttons`. If you were previously using Google "Checkout", please review [this notice posted by Google](https://support.google.com/checkout/sell/answer/3080449?hl=en).
+* (s2Member/s2Member Pro) **Bootstrap Compatibility.** s2Member has been updated throughout to support the [Twitter Bootstrap](http://getbootstrap.com/) CSS framework when running on a WordPress theme that's been built on Bootstrap. For instance; profile editing forms, custom registration/profile fields, s2Member Pro Forms for checkout/registration; these will now look good on sites powered by Bootstrap. This change has no impact on functionality, only on appearance; and only IF your site is powered by Bootstrap. Throughout s2Member's HTML code we've added CSS class names that follow a Bootstrap standard. These Bootstrap classes are blended together with default structural styles that makes s2Member compatible with all WordPress themes. This way s2Member (and s2Member Pro) can produce a clean/professional appearance on just about any WordPress theme; and now Bootstrap is supported too!
+* (s2Member Pro) **Configurable Emails.** We've added new configuration panels into the s2Member UI for a Modification Confirmation Email and also for the Custom Capability Confirmation Email. These are now configurable for all payment gateways integrated with s2Member Pro; e.g. AliPay, ccBill, ClickBank, Google Wallet, Authorize.Net, PayPal Standard, and PayPal Pro. These emails have always existed, but up until now customization required a WordPress filter. Now it's easier, you can customize these from the Dashboard! Please note: this feature comes only with s2Member Pro. As one example, please check your Dashboard under: `s2Member Pro -› PayPal Options -› Modification Confirmation Email`.
+* (s2Member/s2Member Pro) **Snippets/Redirects.** Snippets and Redirects no longer carry the s2Member Restriction Options meta box in the Post/Page editing station; there's no need for Restrictions against these two special Post Types. This change, together with the latest improvements in these two plugins: [WP Snippets](http://wordpress.org/plugins/wp-snippets/) and [WP Redirects](http://wordpress.org/plugins/wp-redirects/) (also produced by our team) offer a more powerful solution now that all of these plugins are more compatible with each other.
+* (s2Member/s2Member Pro) **Backward Compatibility.** Updating calls to `get_post()`. We're adding a `NULL` argument to prevent warnings in older releases of WordPress where an argument was required; e.g. `get_post(NULL)`.
+* (s2Member/s2Member Pro) **Forward Compatibility.** Adding support for the `relative` scheme in SSL filters that deal with `set_url_scheme()` in the latest versions of WordPress. This improves s2Member's "force SSL mode" where a site owner sets the Custom Field for a Post/Page; e.g. `s2member_force_ssl` is set to `yes`. This change will better support themes/plugins that use absolute relative paths together with WordPress core functions like `site_url()` and `home_url()`.
+* (s2Member/s2Member Pro) **PHP Debug Notices.** Updating s2Member's source code to further prevent PHP debug notices when running in `WP_DEBUG` mode. This is part of an ongoing effort keep s2Member running smoothly in PHP strict mode; and to maintain conformity with WordPress standards.
+* (s2Member Pro) **Unlimited Membership Levels.** Updating the built-in software documentation for s2Member Pro to cover an edge case where a site owner many choose to exceed the recommended maximum for Membership Levels when running s2Member Pro. If you intend to use more than `100` Membership Levels (this is not recommended); but if you do, please see: `Dashboard -› s2Member Pro -› General Options -› Membership Levels/Labels` for the latest details on this.
+* (s2Member/s2Member Pro) **Dropping IE8 Support.** s2Member and s2Member Pro will no longer support IE8 in any official capacity. s2Member's HTML output and CSS files have been cleaned up; and all hacks related to IE8 have been removed. Out with the old, in with the new! We need to keep s2Member up-to-date with the latest improvements offered by IE9 and other modern browsers. While s2Member may continue to function relatively well in IE8, hacks used in the past to accomodate edge cases in this buggy browser have been removed in favor of standards compliance.
+* (s2Member/s2Member Pro) **Bug Fix.** s2Member and s2Member Pro have both been updated to prevent spaces in a comma-delimited list of Custom Capabilities; e.g. `ccaps="music, videos"` should be `ccaps="music,videos"` please. Spaces in this list have never been allowed, but now there is better server-side validation to prevent this from happening; reducing the chance of error when a site owner configures a Button or Pro Form shortcode with s2Member.
+* (s2Member/s2Member Pro) **Other Minor Bug Fixes.** Please see: <https://github.com/WebSharks/s2Member/commits/000000-dev>
 
 = v131109 =
 
