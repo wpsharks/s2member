@@ -167,7 +167,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								$logm = c_ws_plugin__s2member_utilities::mem_details ();
 								$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . $_SERVER["HTTP_USER_AGENT"];
 								$log4 = (is_multisite () && !is_main_site ()) ? ($_log4 = $current_blog->domain . $current_blog->path) . "\n" . $log4 : $log4;
-								$log2 = (is_multisite () && !is_main_site ()) ? "paypal-rtn-4-" . trim (preg_replace ("/[^a-z0-9]/i", "-", $_log4), "-") . ".log" : "paypal-rtn.log";
+								$log2 = (is_multisite () && !is_main_site ()) ? "gateway-core-rtn-4-" . trim (preg_replace ("/[^a-z0-9]/i", "-", $_log4), "-") . ".log" : "gateway-core-rtn.log";
 
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
 									if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
