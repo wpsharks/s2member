@@ -48,6 +48,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								$custom_success_redirection = (!empty ($_GET["s2member_paypal_return_success"])) ? esc_html (trim (stripslashes ($_GET["s2member_paypal_return_success"]))) : false;
 								$custom_success_redirection = ($custom_success_redirection) ? str_ireplace (array ("&#038;", "&amp;"), "&", $custom_success_redirection) : $custom_success_redirection;
 
+								if (isset($_GET["item_number"])) // Remove any spaces from the ccaps string.
+									{
+										$arr = explode(":", $_GET["item_number"]);
+										$arr[1] = str_replace(" ", "", $arr[1]);
+										$_GET["item_number"] = implode(":", $arr);
+										unset($arr);
+									}
+
 								if (is_array ($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
 									{
 										$paypal["s2member_log"][] = "Return-Data received on: " . date ("D M j, Y g:i:s a T");
