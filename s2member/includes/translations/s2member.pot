@@ -1,10 +1,10 @@
-# Copyright (C) 2010 s2Member® Framework
-# This file is distributed under the same license as the s2Member® Framework package.
+# Copyright (C) 2010 
+# This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version: s2Member® Framework 130816\n"
+"Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2013-11-09 09:23:22+00:00\n"
+"POT-Creation-Date: 2013-11-26 12:09:36+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,8 +17,8 @@ msgctxt "s2member-front"
 msgid "Max failed logins. Please wait %s and try again."
 msgstr ""
 
-#: s2member/includes/classes/custom-reg-fields.inc.php:328
-#: s2member/includes/classes/custom-reg-fields.inc.php:464
+#: s2member/includes/classes/custom-reg-fields.inc.php:331
+#: s2member/includes/classes/custom-reg-fields.inc.php:467
 #: s2member/includes/classes/profile-in.inc.php:120
 #: s2member/includes/classes/sc-profile-in.inc.php:136
 #: s2member-pro/includes/templates/forms/authnet-checkout-form.php:66
@@ -31,8 +31,8 @@ msgctxt "s2member-front"
 msgid "First Name"
 msgstr ""
 
-#: s2member/includes/classes/custom-reg-fields.inc.php:340
-#: s2member/includes/classes/custom-reg-fields.inc.php:479
+#: s2member/includes/classes/custom-reg-fields.inc.php:343
+#: s2member/includes/classes/custom-reg-fields.inc.php:482
 #: s2member/includes/classes/profile-in.inc.php:140
 #: s2member/includes/classes/sc-profile-in.inc.php:156
 #: s2member-pro/includes/templates/forms/authnet-checkout-form.php:72
@@ -45,8 +45,8 @@ msgctxt "s2member-front"
 msgid "Last Name"
 msgstr ""
 
-#: s2member/includes/classes/custom-reg-fields.inc.php:437
-#: s2member/includes/classes/custom-reg-fields.inc.php:442
+#: s2member/includes/classes/custom-reg-fields.inc.php:440
+#: s2member/includes/classes/custom-reg-fields.inc.php:445
 #: s2member/includes/classes/profile-in.inc.php:233
 #: s2member/includes/classes/profile-in.inc.php:239
 #: s2member/includes/classes/sc-profile-in.inc.php:249
@@ -55,12 +55,12 @@ msgctxt "s2member-front"
 msgid "Please type your Password twice to confirm."
 msgstr ""
 
-#: s2member/includes/classes/custom-reg-fields.inc.php:438
+#: s2member/includes/classes/custom-reg-fields.inc.php:441
 msgctxt "s2member-front"
 msgid "Password (please type it twice)"
 msgstr ""
 
-#: s2member/includes/classes/custom-reg-fields.inc.php:446
+#: s2member/includes/classes/custom-reg-fields.inc.php:449
 #: s2member/includes/classes/profile-in.inc.php:243
 #: s2member/includes/classes/sc-profile-in.inc.php:259
 #: s2member-pro/includes/templates/forms/authnet-checkout-form.php:94
@@ -504,34 +504,6 @@ msgctxt "s2member-front"
 msgid "<strong>ERROR</strong>: Max simultaneous logins for username: %1$s. Please wait %2$s and try again."
 msgstr ""
 
-#: s2member/includes/classes/paypal-notify-in-subscr-modify-w-level.inc.php:132
-#: s2member/includes/classes/paypal-notify-in-subscr-or-wa-w-level.inc.php:156
-#: s2member/includes/classes/paypal-notify-in-wa-ccaps-wo-level.inc.php:100
-msgctxt "s2member-front"
-msgid "Thank you! Your account has been updated."
-msgstr ""
-
-#: s2member/includes/classes/paypal-notify-in-subscr-modify-w-level.inc.php:132
-#: s2member/includes/classes/paypal-notify-in-subscr-or-wa-w-level.inc.php:156
-#: s2member/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:187
-#: s2member/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:234
-msgctxt "s2member-front"
-msgid "Thank you! You've been updated to:"
-msgstr ""
-
-#: s2member/includes/classes/paypal-notify-in-subscr-modify-w-level.inc.php:132
-#: s2member/includes/classes/paypal-notify-in-subscr-or-wa-w-level.inc.php:156
-#: s2member/includes/classes/paypal-notify-in-wa-ccaps-wo-level.inc.php:100
-msgctxt "s2member-front"
-msgid "Please log back in now."
-msgstr ""
-
-#: s2member/includes/classes/paypal-notify-in-wa-ccaps-wo-level.inc.php:100
-#: s2member/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:144
-msgctxt "s2member-front"
-msgid "Thank you! You now have access to:"
-msgstr ""
-
 #: s2member/includes/classes/paypal-return-in-no-tx-data.inc.php:66
 #: s2member/includes/classes/paypal-return-in-proxy-ty-email.inc.php:64
 msgctxt "s2member-front"
@@ -576,6 +548,12 @@ msgctxt "s2member-front"
 msgid "Continue (Click Here)"
 msgstr ""
 
+#: s2member/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:187
+#: s2member/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:234
+msgctxt "s2member-front"
+msgid "Thank you! You've been updated to:"
+msgstr ""
+
 #: s2member/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:188
 #: s2member/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:235
 #: s2member/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:145
@@ -613,6 +591,11 @@ msgstr ""
 #: s2member/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:351
 msgctxt "s2member-front"
 msgid "Please Register Now (Click Here)"
+msgstr ""
+
+#: s2member/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:144
+msgctxt "s2member-front"
+msgid "Thank you! You now have access to:"
 msgstr ""
 
 #: s2member/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:155
@@ -728,6 +711,8 @@ msgstr ""
 
 #: s2member/includes/classes/profile-in.inc.php:98
 #: s2member/includes/classes/sc-profile-in.inc.php:114
+#: s2member-pro/includes/separates/gateways/google/google-min.js:1
+#: s2member-pro/includes/separates/gateways/google/google.js:39
 #: s2member-pro/includes/templates/forms/authnet-checkout-form.php:78
 #: s2member-pro/includes/templates/forms/authnet-registration-form.php:46
 #: s2member-pro/includes/templates/forms/authnet-sp-checkout-form.php:78
@@ -808,10 +793,10 @@ msgid "If you need assistance, please <a href=\"%s\" target=\"_blank\">contact s
 msgstr ""
 
 #: s2member/includes/classes/sc-paypal-button-e.inc.php:77
-#: s2member/includes/classes/sc-paypal-button-in.inc.php:72
-#: s2member/includes/classes/sc-paypal-button-in.inc.php:95
-#: s2member/includes/classes/sc-paypal-button-in.inc.php:149
-#: s2member/includes/classes/sc-paypal-button-in.inc.php:204
+#: s2member/includes/classes/sc-paypal-button-in.inc.php:73
+#: s2member/includes/classes/sc-paypal-button-in.inc.php:96
+#: s2member/includes/classes/sc-paypal-button-in.inc.php:150
+#: s2member/includes/classes/sc-paypal-button-in.inc.php:205
 #: s2member/includes/templates/buttons/paypal-cancellation-button.php:7
 #: s2member/includes/templates/buttons/paypal-ccaps-checkout-button.php:34
 #: s2member/includes/templates/buttons/paypal-checkout-button.php:46
@@ -1450,17 +1435,17 @@ msgctxt "s2member-front recaptcha-lang-code"
 msgid "en"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:150
+#: s2member/includes/syscon.inc.php:152
 msgctxt "s2member-front"
 msgid "Yes, I want to receive updates via email."
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:204
+#: s2member/includes/syscon.inc.php:206
 msgctxt "s2member-front"
 msgid "[%s] Username/Password"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:205
+#: s2member/includes/syscon.inc.php:207
 msgctxt "s2member-front"
 msgid ""
 "Your Username/Password for:\n"
@@ -1471,12 +1456,12 @@ msgid ""
 "%%%%wp_login_url%%%%"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:208
+#: s2member/includes/syscon.inc.php:210
 msgctxt "s2member-front"
 msgid "[%s] New User Registration"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:209
+#: s2member/includes/syscon.inc.php:211
 msgctxt "s2member-front"
 msgid ""
 "New User Registration on your site:\n"
@@ -1488,12 +1473,12 @@ msgid ""
 "IP Address: %%%%user_ip%%%%"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:230 s2member-pro/includes/syscon.inc.php:94
+#: s2member/includes/syscon.inc.php:232 s2member-pro/includes/syscon.inc.php:94
 msgctxt "s2member-front"
 msgid "Congratulations! (your membership has been approved)"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:231
+#: s2member/includes/syscon.inc.php:233
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your membership has been approved.\n"
@@ -1509,12 +1494,28 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:234 s2member-pro/includes/syscon.inc.php:98
+#: s2member/includes/syscon.inc.php:236 s2member/includes/syscon.inc.php:240
+msgctxt "s2member-front"
+msgid "Thank you! Your account has been updated."
+msgstr ""
+
+#: s2member/includes/syscon.inc.php:237 s2member/includes/syscon.inc.php:241
+msgctxt "s2member-front"
+msgid ""
+"Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n"
+"\n"
+"If you have any trouble, please feel free to contact us.\n"
+"\n"
+"Best Regards,\n"
+"%s"
+msgstr ""
+
+#: s2member/includes/syscon.inc.php:244 s2member-pro/includes/syscon.inc.php:98
 msgctxt "s2member-front"
 msgid "Thank You! (instructions for access)"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:235
+#: s2member/includes/syscon.inc.php:245
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%!\n"
@@ -1523,7 +1524,7 @@ msgid ""
 "\n"
 "Your order can be retrieved here:\n"
 "%%%%sp_access_url%%%%\n"
-"( link expires in %%%%sp_access_exp%%%% )\n"
+"(link expires in %%%%sp_access_exp%%%%)\n"
 "\n"
 "If you have any trouble, please feel free to contact us.\n"
 "\n"
@@ -1531,32 +1532,32 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:263
+#: s2member/includes/syscon.inc.php:273
 msgctxt "s2member-front"
 msgid "Free Subscriber"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:263
+#: s2member/includes/syscon.inc.php:273
 msgctxt "s2member-front"
 msgid "Bronze Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:263
+#: s2member/includes/syscon.inc.php:273
 msgctxt "s2member-front"
 msgid "Silver Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:263
+#: s2member/includes/syscon.inc.php:273
 msgctxt "s2member-front"
 msgid "Gold Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:263
+#: s2member/includes/syscon.inc.php:273
 msgctxt "s2member-front"
 msgid "Platinum Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:263
+#: s2member/includes/syscon.inc.php:273
 msgctxt "s2member-front"
 msgid "Level %s Member"
 msgstr ""
@@ -1689,7 +1690,6 @@ msgid "PayPal® (Subscriptions)"
 msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:7
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:7
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:7
 msgctxt "s2member-admin"
 msgid "Daily (recurring charge, for ongoing access)"
@@ -1697,7 +1697,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:8
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:7
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:8
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:7
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:8
 msgctxt "s2member-admin"
@@ -1706,7 +1705,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:9
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:8
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:9
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:8
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:9
 msgctxt "s2member-admin"
@@ -1716,7 +1714,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:10
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:9
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:7
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:10
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:7
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:9
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:10
 msgctxt "s2member-admin"
@@ -1726,7 +1724,6 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:11
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:10
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:8
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:11
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:11
 msgctxt "s2member-admin"
 msgid "Bi-Monthly (recurring charge, for ongoing access)"
@@ -1735,7 +1732,6 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:12
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:11
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:9
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:12
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:10
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:12
 msgctxt "s2member-admin"
@@ -1752,7 +1748,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:14
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:13
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:13
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:12
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:14
 msgctxt "s2member-admin"
@@ -1760,7 +1755,6 @@ msgid "Yearly (recurring charge, for ongoing access)"
 msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:20
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:19
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:18
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:20
 msgctxt "s2member-admin"
@@ -1768,7 +1762,6 @@ msgid "One Time (for 1 day access, non-recurring)"
 msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:21
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:20
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:19
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:21
 msgctxt "s2member-admin"
@@ -1776,7 +1769,6 @@ msgid "One Time (for 2 day access, non-recurring)"
 msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:22
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:21
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:20
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:22
 msgctxt "s2member-admin"
@@ -1784,7 +1776,6 @@ msgid "One Time (for 3 day access, non-recurring)"
 msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:23
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:22
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:21
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:23
 msgctxt "s2member-admin"
@@ -1792,7 +1783,6 @@ msgid "One Time (for 4 day access, non-recurring)"
 msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:24
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:23
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:22
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:24
 msgctxt "s2member-admin"
@@ -1800,7 +1790,6 @@ msgid "One Time (for 5 day access, non-recurring)"
 msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:25
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:24
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:23
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:25
 msgctxt "s2member-admin"
@@ -1809,7 +1798,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:27
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:19
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:26
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:25
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:27
 msgctxt "s2member-admin"
@@ -1818,7 +1806,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:28
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:20
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:27
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:26
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:28
 msgctxt "s2member-admin"
@@ -1827,7 +1814,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:29
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:21
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:28
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:27
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:29
 msgctxt "s2member-admin"
@@ -1836,7 +1822,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:31
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:23
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:30
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:13
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:29
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:31
 msgctxt "s2member-admin"
@@ -1845,7 +1831,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:32
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:24
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:31
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:30
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:32
 msgctxt "s2member-admin"
@@ -1854,7 +1839,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:33
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:25
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:32
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:31
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:33
 msgctxt "s2member-admin"
@@ -1863,7 +1847,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:34
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:26
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:33
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:32
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:34
 msgctxt "s2member-admin"
@@ -1872,7 +1855,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:35
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:27
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:34
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:33
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:35
 msgctxt "s2member-admin"
@@ -1881,7 +1863,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:36
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:28
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:35
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:34
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:36
 msgctxt "s2member-admin"
@@ -1890,7 +1871,6 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:38
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:30
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:37
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:36
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:38
 msgctxt "s2member-admin"
@@ -1899,7 +1879,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:44
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:36
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:43
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:19
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:42
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:44
 msgctxt "s2member-admin"
@@ -1909,7 +1889,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:45
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:37
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:15
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:44
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:20
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:43
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:45
 msgctxt "s2member-admin"
@@ -1919,7 +1899,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:46
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:38
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:16
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:45
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:21
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:44
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:46
 msgctxt "s2member-admin"
@@ -1929,7 +1909,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:47
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:39
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:17
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:46
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:22
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:45
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:47
 msgctxt "s2member-admin"
@@ -1939,7 +1919,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:48
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:40
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:18
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:47
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:23
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:46
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:48
 msgctxt "s2member-admin"
@@ -1949,7 +1929,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:49
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:41
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:19
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:48
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:24
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:47
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:49
 msgctxt "s2member-admin"
@@ -1959,7 +1939,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:51
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:43
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:21
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:50
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:26
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:49
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:51
 msgctxt "s2member-admin"
@@ -1969,7 +1949,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:52
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:44
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:22
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:51
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:27
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:50
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:52
 msgctxt "s2member-admin"
@@ -1979,7 +1959,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:53
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:45
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:23
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:52
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:28
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:51
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:53
 msgctxt "s2member-admin"
@@ -1989,7 +1969,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:55
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:47
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:25
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:54
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:30
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:53
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:55
 msgctxt "s2member-admin"
@@ -1999,7 +1979,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:56
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:48
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:26
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:55
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:31
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:54
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:56
 msgctxt "s2member-admin"
@@ -2009,7 +1989,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:57
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:49
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:27
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:56
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:32
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:55
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:57
 msgctxt "s2member-admin"
@@ -2019,7 +1999,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:58
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:50
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:28
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:57
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:33
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:56
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:58
 msgctxt "s2member-admin"
@@ -2029,7 +2009,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:59
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:51
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:29
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:58
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:34
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:57
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:59
 msgctxt "s2member-admin"
@@ -2039,7 +2019,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:60
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:52
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:30
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:59
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:35
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:58
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:60
 msgctxt "s2member-admin"
@@ -2049,7 +2029,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:62
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:54
 #: s2member-pro/includes/templates/options/ccbill-membership-regular-terms.php:32
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:61
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:37
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:60
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:62
 msgctxt "s2member-admin"
@@ -2058,7 +2038,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:63
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:55
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:62
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:38
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:61
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:63
 msgctxt "s2member-admin"
@@ -2067,7 +2047,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:64
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:56
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:63
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:39
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:62
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:64
 msgctxt "s2member-admin"
@@ -2076,7 +2056,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:65
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:57
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:64
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:40
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:63
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:65
 msgctxt "s2member-admin"
@@ -2085,7 +2065,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:66
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:58
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:65
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:41
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:64
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:66
 msgctxt "s2member-admin"
@@ -2094,7 +2074,7 @@ msgstr ""
 
 #: s2member/includes/templates/options/paypal-membership-regular-terms.php:68
 #: s2member-pro/includes/templates/options/authnet-membership-regular-terms.php:60
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:67
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:43
 #: s2member-pro/includes/templates/options/payflow-membership-regular-terms.php:66
 #: s2member-pro/includes/templates/options/paypal-membership-regular-terms.php:68
 msgctxt "s2member-admin"
@@ -2404,6 +2384,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-sp-hours.php:47
 #: s2member-pro/includes/templates/options/alipay-sp-hours.php:47
 #: s2member-pro/includes/templates/options/authnet-sp-hours.php:47
+#: s2member-pro/includes/templates/options/ccbill-sp-hours.php:35
 #: s2member-pro/includes/templates/options/clickbank-sp-hours.php:47
 #: s2member-pro/includes/templates/options/google-sp-hours.php:47
 #: s2member-pro/includes/templates/options/paypal-sp-hours.php:47
@@ -2414,6 +2395,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-sp-hours.php:48
 #: s2member-pro/includes/templates/options/alipay-sp-hours.php:48
 #: s2member-pro/includes/templates/options/authnet-sp-hours.php:48
+#: s2member-pro/includes/templates/options/ccbill-sp-hours.php:36
 #: s2member-pro/includes/templates/options/clickbank-sp-hours.php:48
 #: s2member-pro/includes/templates/options/google-sp-hours.php:48
 #: s2member-pro/includes/templates/options/paypal-sp-hours.php:48
@@ -2424,6 +2406,7 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-sp-hours.php:49
 #: s2member-pro/includes/templates/options/alipay-sp-hours.php:49
 #: s2member-pro/includes/templates/options/authnet-sp-hours.php:49
+#: s2member-pro/includes/templates/options/ccbill-sp-hours.php:37
 #: s2member-pro/includes/templates/options/clickbank-sp-hours.php:49
 #: s2member-pro/includes/templates/options/google-sp-hours.php:49
 #: s2member-pro/includes/templates/options/paypal-sp-hours.php:49
@@ -2434,11 +2417,23 @@ msgstr ""
 #: s2member/includes/templates/options/paypal-sp-hours.php:50
 #: s2member-pro/includes/templates/options/alipay-sp-hours.php:50
 #: s2member-pro/includes/templates/options/authnet-sp-hours.php:50
+#: s2member-pro/includes/templates/options/ccbill-sp-hours.php:38
 #: s2member-pro/includes/templates/options/clickbank-sp-hours.php:50
 #: s2member-pro/includes/templates/options/google-sp-hours.php:50
 #: s2member-pro/includes/templates/options/paypal-sp-hours.php:50
 msgctxt "s2member-admin"
 msgid "Buy Now (Specific Post/Page, link valid for 5 years)"
+msgstr ""
+
+#: s2member/includes/templates/options/paypal-sp-hours.php:51
+#: s2member-pro/includes/templates/options/alipay-sp-hours.php:51
+#: s2member-pro/includes/templates/options/authnet-sp-hours.php:51
+#: s2member-pro/includes/templates/options/ccbill-sp-hours.php:39
+#: s2member-pro/includes/templates/options/clickbank-sp-hours.php:51
+#: s2member-pro/includes/templates/options/google-sp-hours.php:51
+#: s2member-pro/includes/templates/options/paypal-sp-hours.php:51
+msgctxt "s2member-admin"
+msgid "Buy Now (Specific Post/Page, link valid for 50 years)"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/alipay/alipay-return-in.inc.php:117
@@ -2556,184 +2551,184 @@ msgctxt "s2member-front"
 msgid "<strong>Unknown error.</strong> Please contact Support for assistance."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:161
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:270
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:416
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:554
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:763
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:166
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:275
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:422
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:560
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:771
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:162
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:271
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:417
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:555
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:764
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:167
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:276
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:423
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:561
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:772
 msgctxt "s2member-front"
 msgid "Security Code"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:237
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:730
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:243
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:739
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:238
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:731
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:244
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:740
 msgctxt "s2member-front"
 msgid "Additional Info"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:371
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:509
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:682
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:372
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:510
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:683
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:378
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:516
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:692
 msgctxt "s2member-front"
 msgid "Visa"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:371
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:509
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:682
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:372
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:510
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:683
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:378
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:516
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:692
 msgctxt "s2member-front"
 msgid "MasterCard"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:371
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:509
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:682
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:372
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:510
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:683
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:378
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:516
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:692
 msgctxt "s2member-front"
 msgid "Discover"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:371
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:509
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:682
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:372
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:510
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:683
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:378
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:516
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:692
 msgctxt "s2member-front"
 msgid "American Express"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "01 January"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "02 February"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "03 March"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "04 April"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "05 May"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "06 June"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "07 July"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "08 August"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "09 September"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "10 October"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "11 November"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:381
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:519
-#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:692
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:387
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:525
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:701
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:382
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:520
+#: s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:693
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:388
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:526
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:702
 msgctxt "s2member-front"
 msgid "12 December"
 msgstr ""
@@ -3639,85 +3634,6 @@ msgctxt "s2member-front"
 msgid "<strong>Reminder:</strong> Purchases at this site will appear on your credit card or bank statement as: <code>ClickBank</code> or <code>CLKBANK*COM</code>."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/google/google-button-in.inc.php:93
-#: s2member-pro/includes/classes/gateways/google/google-button-in.inc.php:115
-#: s2member-pro/includes/classes/gateways/google/google-button-in.inc.php:137
-#: s2member-pro/includes/templates/buttons/google-ccaps-checkout-button.php:7
-#: s2member-pro/includes/templates/buttons/google-checkout-button.php:7
-#: s2member-pro/includes/templates/buttons/google-sp-checkout-button.php:7
-msgctxt "s2member-front google-button-lang-code"
-msgid "en_US"
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:96
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:152
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:212
-msgctxt "s2member-front"
-msgid "Grants you immediate access."
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:165
-msgctxt "s2member-front"
-msgid "You now have access to:<br />%s<br />(<a href=\"%s\">please log back in now</a>)"
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:228
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:334
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:455
-msgctxt "s2member-front"
-msgid "You've been updated to:<br />%s<br />(<a href=\"%s\">please log back in now</a>)"
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:233
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:339
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:460
-msgctxt "s2member-front"
-msgid "%s<br />(the next step is to Register a Username)"
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:289
-msgctxt "s2member-front"
-msgid "100% free trial. NO charge today."
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:290
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:411
-msgctxt "s2member-front"
-msgid "First payment for immediate access."
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:306
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:427
-msgctxt "s2member-front"
-msgid "You'll receive an email confirmation within 15 minutes."
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:315
-msgctxt "s2member-front"
-msgid "Cancel at any time to avoid %s."
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:315
-msgctxt "s2member-front"
-msgid "this charge"
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:315
-msgctxt "s2member-front"
-msgid "charges"
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:357
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:478
-msgctxt "s2member-front"
-msgid "Covers ongoing access."
-msgstr ""
-
-#: s2member-pro/includes/classes/gateways/google/google-co-in.inc.php:436
-msgctxt "s2member-front"
-msgid "Cancel at any time to avoid charges."
-msgstr ""
-
 #: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-in.inc.php:123
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:247
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:263
@@ -3740,28 +3656,28 @@ msgctxt "s2member-front"
 msgid "<strong>Sorry.</strong> Your account is pending other changes. Please try again in 15 minutes."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:378
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:516
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:692
 msgctxt "s2member-front"
 msgid "Maestro"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:377
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:378
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:516
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:692
 msgctxt "s2member-front"
 msgid "Solo"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:515
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:691
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:516
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:692
 msgctxt "s2member-front"
 msgid "PayPal"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:606
-#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:818
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:607
+#: s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:819
 msgctxt "s2member-front"
 msgid "We Accept PayPal"
 msgstr ""
@@ -4016,6 +3932,12 @@ msgstr ""
 #: s2member-pro/includes/separates/gateways/paypal/paypal.js:693
 msgctxt "s2member-front"
 msgid "Your Profile"
+msgstr ""
+
+#: s2member-pro/includes/separates/gateways/google/google-min.js:1
+#: s2member-pro/includes/separates/gateways/google/google.js:49
+msgctxt "s2member-front"
+msgid "Thank you! Please check your email for further details."
 msgstr ""
 
 #: s2member-pro/includes/separates/gateways/paypal/paypal-min.js:1
@@ -4625,13 +4547,13 @@ msgid "31 Days"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/google-membership-ccap-terms.php:6
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:42
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:18
 msgctxt "s2member-admin"
 msgid "Google (Buy Now)"
 msgstr ""
 
 #: s2member-pro/includes/templates/options/google-membership-regular-terms.php:6
-#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:18
+#: s2member-pro/includes/templates/options/google-membership-regular-terms.php:12
 msgctxt "s2member-admin"
 msgid "Google (Subscriptions)"
 msgstr ""
