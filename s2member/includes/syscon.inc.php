@@ -129,7 +129,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["gateway_debug_logs"] = "0";
 				$default_options["gateway_debug_logs_extensive"] = "0";
 
-				$default_options["lazy_load_css_js"] = "1";
+				$default_options["lazy_load_css_js"] = "0";
 
 				$default_options["sec_encryption_key"] = "";
 				$default_options["sec_encryption_key_history"] = array();
