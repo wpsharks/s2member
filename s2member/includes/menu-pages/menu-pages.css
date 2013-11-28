@@ -114,7 +114,6 @@ div.ws-menu-page > h2:after
 }
 div.ws-menu-page code
 {
-	font-size   : 1em;
 	font-family : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
 }
 div.ws-menu-page pre.code
