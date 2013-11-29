@@ -40,7 +40,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages_updates"))
 										echo '</div>'."\n";
 
 										echo '<div class="ws-menu-page-r-group open">'."\n";
-										echo '<script type="text/javascript" src="http://feeds.feedburner.com/s2member-updates?format=sigpro&amp;nItems=5&amp;openLinks=new&amp;displayTitle=false&amp;displayFeedIcon=false&amp;displayExcerpts=false&amp;displayAuthor=false&amp;displayDate=false&amp;displayEnclosures=false&amp;displayLinkToFeed=false"></script>'."\n";
+										echo '<script type="text/javascript" src="http://feeds.feedburner.com/s2member?format=sigpro&amp;nItems=5&amp;openLinks=new&amp;displayTitle=false&amp;displayFeedIcon=false&amp;displayExcerpts=false&amp;displayAuthor=false&amp;displayDate=false&amp;displayEnclosures=false&amp;displayLinkToFeed=false"></script>'."\n";
 										echo '➘ <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Knowledge Base")).'" target="_blank" rel="external">More updates...</a>'."\n";
 										echo '</div>'."\n";
 									}
