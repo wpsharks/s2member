@@ -43,6 +43,12 @@ Icon?
 # Amazon Web Services
 .elasticbeanstalk/
 
+# Others
+/s2m-src-files/
+/s2m-pro-extras/
+/s2member-pro/
+/s2member.php
+
 # For shell glob patterns. This includes GIT files too. We simply maintain this list together with `.gitignore`.
 # ._*;*~;*.bak;.idea;*.iml;*.ipr;*.iws;.git;.gitignore;.gitattributes;CVS;.cvsignore;.svn;_svn;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes;.elasticbeanstalk
 
