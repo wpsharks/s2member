@@ -44,8 +44,8 @@ Icon?
 .elasticbeanstalk/
 
 # Others
-/s2m-pro-extras/
-/s2member-pro/
+/s2m-pro-extras
+/s2member-pro
 /s2member.php
 
 # For shell glob patterns. This includes GIT files too. We simply maintain this list together with `.gitignore`.
