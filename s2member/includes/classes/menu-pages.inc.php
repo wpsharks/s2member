@@ -781,8 +781,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 					{
 						do_action("ws_plugin__s2member_before_paypal_buttons_page", get_defined_vars());
 
-						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"])
-							c_ws_plugin__s2member_admin_notices::display_admin_notice('Please configure <code>s2Member -› PayPal Options</code> first. Once all of your PayPal Options are configured; including your Email Address, API Username, Password, and Signature; return to this page &amp; generate your PayPal Button(s).', true);
+						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"])
+							c_ws_plugin__s2member_admin_notices::display_admin_notice('Please configure <code>s2Member -› PayPal Options</code> first. Once all of your PayPal Options are configured; including your Email Address, Merchant ID, API Username, Password, and Signature; return to this page &amp; generate your PayPal Button(s).', true);
 
 						include_once dirname(dirname(__FILE__))."/menu-pages/paypal-buttons.inc.php";
 

@@ -78,6 +78,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 								$code = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $code);
 								$code = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $code);
+								$code = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $code);
 
 								$code = $_code = ($attr["image"] && $attr["image"] !== "default") ? preg_replace ('/ src\="(.*?)"/', ' src="' . c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($attr["image"])) . '"', $code) : preg_replace ('/ src\="(.*?)"/', ' src="' . c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($default_image)) . '"', $code);
 
@@ -114,6 +115,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 								$code = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $code);
 								$code = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $code);
+								$code = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $code);
 								$code = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (home_url ("/"))), $code);
 								$code = preg_replace ("/%%notify_url%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ("/?s2member_paypal_notify=1"))), $code);
 								$code = preg_replace ("/%%return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($success_return_url)), $code);
@@ -169,6 +171,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 								$code = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $code);
 								$code = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $code);
+								$code = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $code);
 								$code = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (home_url ("/"))), $code);
 								$code = preg_replace ("/%%notify_url%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ("/?s2member_paypal_notify=1"))), $code);
 								$code = preg_replace ("/%%return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($success_return_url)), $code);
@@ -229,6 +232,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 								$code = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $code);
 								$code = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $code);
+								$code = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $code);
 								$code = preg_replace ("/%%level_label%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $attr["level"] . "_label"])), $code);
 								$code = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (home_url ("/"))), $code); // This brings them back to Front Page.
 								$code = preg_replace ("/%%notify_url%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ("/?s2member_paypal_notify=1"))), $code);

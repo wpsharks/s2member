@@ -104,6 +104,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 										$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-checkout-button.php")));
 										$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 										$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
+										$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $ws_plugin__s2member_temp_s);
 										$ws_plugin__s2member_temp_s = preg_replace ("/%%level%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($n)), $ws_plugin__s2member_temp_s);
 										$ws_plugin__s2member_temp_s = preg_replace ("/%%level_label%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_label"])), $ws_plugin__s2member_temp_s);
 										$ws_plugin__s2member_temp_s = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_s);
@@ -206,6 +207,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = preg_replace ('/name\="modify" value\="(.*?)"/', 'name="modify" value="1"', $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
+								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%level%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ("1")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%level_label%% /", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level1_label"])), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_s);
@@ -285,6 +287,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-ccaps-checkout-button.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
+								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%notify_url%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ("/?s2member_paypal_notify=1"))), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ("/?s2member_paypal_return=1"))), $ws_plugin__s2member_temp_s);
@@ -335,6 +338,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-cancellation-button.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
+								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%images%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"] . "/images")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%wpurl%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ())), $ws_plugin__s2member_temp_s);
 								echo preg_replace ("/\<a/", '<a target="_blank"', $ws_plugin__s2member_temp_s);
@@ -364,6 +368,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-cancellation-button.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
+								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%images%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"] . "/images")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%wpurl%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ())), $ws_plugin__s2member_temp_s);
 								echo format_to_edit ($ws_plugin__s2member_temp_s);
@@ -493,6 +498,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-sp-checkout-button.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
+								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%notify_url%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ("/?s2member_paypal_notify=1"))), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%return%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr (site_url ("/?s2member_paypal_return=1"))), $ws_plugin__s2member_temp_s);

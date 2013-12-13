@@ -66,6 +66,23 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 								echo '<tr>'."\n";
 
 								echo '<th>'."\n";
+								echo '<label for="ws-plugin--s2member-paypal-merchant-id">'."\n";
+								echo 'Your PayPal Merchant ID:'."\n";
+								echo '</label>'."\n";
+								echo '</th>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<td>'."\n";
+								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_merchant_id" id="ws-plugin--s2member-paypal-merchant-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"]).'" /><br />'."\n";
+								echo 'At PayPal, see: <code>Profile -› Secure Merchant ID</code>.'."\n";
+								echo '</td>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<th>'."\n";
 								echo '<label for="ws-plugin--s2member-paypal-business">'."\n";
 								echo 'Your PayPal EMail Address:'."\n";
 								echo '</label>'."\n";
@@ -76,7 +93,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_business" id="ws-plugin--s2member-paypal-business" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"]).'" /><br />'."\n";
-								echo 'Enter the email address you\'ve associated with your PayPal Business account.'."\n";
+								echo 'At PayPal, see: <code>Profile -› Email Accounts</code>.'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
