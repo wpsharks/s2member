@@ -699,7 +699,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 								$s3_location = ((strtolower($s3c["bucket"]) !== $s3c["bucket"])) ? "/".$s3c["bucket"]."/?acl" : "/?acl";
 								$s3_domain = ((strtolower($s3c["bucket"]) !== $s3c["bucket"])) ? "s3.amazonaws.com" : $s3c["bucket"].".s3.amazonaws.com";
 								$s3_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_s3_sign("GET\n\n\n".$s3_date."\n/".$s3c["bucket"]."/?acl"));
-								$s3_args = array("method" => "GET", "redirection" => 0, "headers" => array("Host" => $s3_domain, "Date" => $s3_date, "Authorization" => "AWS ".$s3c["access_key"].":".$s3_signature));
+								$s3_args = array("method" => "GET", "redirection" => 5, "headers" => array("Host" => $s3_domain, "Date" => $s3_date, "Authorization" => "AWS ".$s3c["access_key"].":".$s3_signature));
 
 								if(($s3_response = c_ws_plugin__s2member_utils_urls::remote("https://".$s3_domain.$s3_location, false, array_merge($s3_args, array("timeout" => 20)), "array")) && $s3_response["code"] === 200)
 									{
@@ -708,7 +708,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 												$s3_owner = array("access_id" => trim($s3_owner_id_tag[1]), "display_name" => trim($s3_owner_display_name_tag[1]));
 												$s3_acls_xml = '<AccessControlPolicy><Owner><ID>'.esc_html($s3_owner["access_id"]).'</ID><DisplayName>'.esc_html($s3_owner["display_name"]).'</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>'.esc_html($s3_owner["access_id"]).'</ID><DisplayName>'.esc_html($s3_owner["display_name"]).'</DisplayName></Grantee><Permission>FULL_CONTROL</Permission></Grant>'.(($cfc["distros_s3_access_id"]) ? '<Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>'.esc_html($cfc["distros_s3_access_id"]).'</ID><DisplayName>s2Member/CloudFront</DisplayName></Grantee><Permission>READ</Permission></Grant>' : '').'</AccessControlList></AccessControlPolicy>';
 												$s3_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_s3_sign("PUT\n\napplication/xml\n".$s3_date."\n/".$s3c["bucket"]."/?acl"));
-												$s3_args = array("method" => "PUT", "redirection" => 0, "body" => $s3_acls_xml, "headers" => array("Host" => $s3_domain, "Content-Type" => "application/xml", "Date" => $s3_date, "Authorization" => "AWS ".$s3c["access_key"].":".$s3_signature));
+												$s3_args = array("method" => "PUT", "redirection" => 5, "body" => $s3_acls_xml, "headers" => array("Host" => $s3_domain, "Content-Type" => "application/xml", "Date" => $s3_date, "Authorization" => "AWS ".$s3c["access_key"].":".$s3_signature));
 
 												if(($s3_response = c_ws_plugin__s2member_utils_urls::remote("https://".$s3_domain.$s3_location, false, array_merge($s3_args, array("timeout" => 20)), "array")) && $s3_response["code"] === 200)
 													{
@@ -716,14 +716,14 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 														($s3_policy_id = md5(uniqid("s2Member/CloudFront:", true))).($s3_policy_sid = md5(uniqid("s2Member/CloudFront:", true)));
 														$s3_policy_json = '{"Version":"2008-10-17","Id":"'.c_ws_plugin__s2member_utils_strings::esc_dq($s3_policy_id).'","Statement":[{"Sid":"'.c_ws_plugin__s2member_utils_strings::esc_dq($s3_policy_sid).'","Effect":"Allow","Principal":{"CanonicalUser":"'.c_ws_plugin__s2member_utils_strings::esc_dq($cfc["distros_s3_access_id"]).'"},"Action":"s3:GetObject","Resource":"arn:aws:s3:::'.c_ws_plugin__s2member_utils_strings::esc_dq($s3c["bucket"]).'/*"}]}';
 														$s3_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_s3_sign("PUT\n\napplication/json\n".$s3_date."\n/".$s3c["bucket"]."/?policy"));
-														$s3_args = array("method" => "PUT", "redirection" => 0, "body" => $s3_policy_json, "headers" => array("Host" => $s3_domain, "Content-Type" => "application/json", "Date" => $s3_date, "Authorization" => "AWS ".$s3c["access_key"].":".$s3_signature));
+														$s3_args = array("method" => "PUT", "redirection" => 5, "body" => $s3_policy_json, "headers" => array("Host" => $s3_domain, "Content-Type" => "application/json", "Date" => $s3_date, "Authorization" => "AWS ".$s3c["access_key"].":".$s3_signature));
 
 														if(!$cfc["distros_s3_access_id"] || (($s3_response = c_ws_plugin__s2member_utils_urls::remote("https://".$s3_domain.$s3_location, false, array_merge($s3_args, array("timeout" => 20)), "array")) && ($s3_response["code"] === 200 || $s3_response["code"] === 204 /* Also OK. */)))
 															{
 																$s3_location = ((strtolower($s3c["bucket"]) !== $s3c["bucket"])) ? "/".$s3c["bucket"]."/crossdomain.xml" : "/crossdomain.xml";
 																$s3_policy_xml = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents(dirname(dirname(__FILE__))."/templates/cfg-files/s2-cross-xml.php")));
 																$s3_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_s3_sign("PUT\n\ntext/xml\n".$s3_date."\nx-amz-acl:public-read\n/".$s3c["bucket"]."/crossdomain.xml"));
-																$s3_args = array("method" => "PUT", "redirection" => 0, "body" => $s3_policy_xml, "headers" => array("Host" => $s3_domain, "Content-Type" => "text/xml", "Date" => $s3_date, "X-Amz-Acl" => "public-read", "Authorization" => "AWS ".$s3c["access_key"].":".$s3_signature));
+																$s3_args = array("method" => "PUT", "redirection" => 5, "body" => $s3_policy_xml, "headers" => array("Host" => $s3_domain, "Content-Type" => "text/xml", "Date" => $s3_date, "X-Amz-Acl" => "public-read", "Authorization" => "AWS ".$s3c["access_key"].":".$s3_signature));
 
 																if(($s3_response = c_ws_plugin__s2member_utils_urls::remote("https://".$s3_domain.$s3_location, false, array_merge($s3_args, array("timeout" => 20)), "array")) && $s3_response["code"] === 200)
 																	return /* Successfully configured Amazon S3 Bucket ACLs and Policy. */ array("success" => true, "code" => null, "message" => null);
@@ -1031,7 +1031,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 								$cf_date = gmdate("D, d M Y H:i:s")." GMT";
 								$cf_location = "/2010-11-01/origin-access-identity/cloudfront/".$access_id;
 								$cf_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_cf_sign($cf_date));
-								$cf_args = array("method" => "GET", "redirection" => 0, "headers" => array("Host" => $cf_domain, "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
+								$cf_args = array("method" => "GET", "redirection" => 5, "headers" => array("Host" => $cf_domain, "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
 
 								if(($cf_response = c_ws_plugin__s2member_utils_urls::remote("https://".$cf_domain.$cf_location, false, array_merge($cf_args, array("timeout" => 20)), "array")) && (($cf_response["code"] === 404 && $cf_response["message"]) || ($cf_response["code"] === 200 && !empty($cf_response["headers"]["etag"]) && !empty($cf_response["body"]))))
 									{
@@ -1079,7 +1079,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 								$cf_date = gmdate("D, d M Y H:i:s")." GMT";
 								$cf_location = "/2010-11-01/origin-access-identity/cloudfront/".$access_id;
 								$cf_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_cf_sign($cf_date));
-								$cf_args = array("method" => "DELETE", "redirection" => 0, "headers" => array("Host" => $cf_domain, "Date" => $cf_date, "If-Match" => $access_id_etag, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
+								$cf_args = array("method" => "DELETE", "redirection" => 5, "headers" => array("Host" => $cf_domain, "Date" => $cf_date, "If-Match" => $access_id_etag, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
 
 								if(($cf_response = c_ws_plugin__s2member_utils_urls::remote("https://".$cf_domain.$cf_location, false, array_merge($cf_args, array("timeout" => 20)), "array")) && ($cf_response["code"] === 200 || $cf_response["code"] === 204 /* Deleted. */))
 									return /* Deleted successfully. */ array("success" => true, "code" => null, "message" => null);
@@ -1119,7 +1119,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 						$cf_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_cf_sign($cf_date));
 						$cf_distros_access_reference = time().".".md5("access".$s3c["bucket"].$s3c["access_key"].$s3c["secret_key"].$cfc["private_key"].$cfc["private_key_id"]);
 						$cf_distros_access_xml = '<?xml version="1.0" encoding="UTF-8"?><CloudFrontOriginAccessIdentityConfig xmlns="http://cloudfront.amazonaws.com/doc/2010-11-01/"><CallerReference>'.esc_html($cf_distros_access_reference).'</CallerReference><Comment>'.esc_html(sprintf(_x("Created by s2Member, for S3 Bucket: %s.", "s2member-admin", "s2member"), $s3c["bucket"])).'</Comment></CloudFrontOriginAccessIdentityConfig>';
-						$cf_args = array("method" => "POST", "redirection" => 0, "body" => $cf_distros_access_xml, "headers" => array("Host" => $cf_domain, "Content-Type" => "application/xml", "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
+						$cf_args = array("method" => "POST", "redirection" => 5, "body" => $cf_distros_access_xml, "headers" => array("Host" => $cf_domain, "Content-Type" => "application/xml", "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
 
 						if(($cf_response = c_ws_plugin__s2member_utils_urls::remote("https://".$cf_domain.$cf_location, false, array_merge($cf_args, array("timeout" => 20)), "array")) && ($cf_response["code"] === 200 || $cf_response["code"] === 201 /* Created. */))
 							{
@@ -1163,7 +1163,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 								$cf_date = gmdate("D, d M Y H:i:s")." GMT";
 								$cf_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_cf_sign($cf_date));
 								$cf_location = ($distro_type === "streaming") ? "/2010-11-01/streaming-distribution/".$distro_id : "/2010-11-01/distribution/".$distro_id;
-								$cf_args = array("method" => "GET", "redirection" => 0, "headers" => array("Host" => $cf_domain, "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
+								$cf_args = array("method" => "GET", "redirection" => 5, "headers" => array("Host" => $cf_domain, "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
 
 								if(($cf_response = c_ws_plugin__s2member_utils_urls::remote("https://".$cf_domain.$cf_location, false, array_merge($cf_args, array("timeout" => 20)), "array")) && (($cf_response["code"] === 404 && $cf_response["message"]) || ($cf_response["code"] === 200 && !empty($cf_response["headers"]["etag"]) && !empty($cf_response["body"]))))
 									{
@@ -1216,7 +1216,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 												$cf_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_cf_sign($cf_date));
 												$cf_location = ($distro_id_type === "streaming") ? "/2010-11-01/streaming-distribution/".$distro_id."/config" : "/2010-11-01/distribution/".$distro_id."/config";
 												$cf_distro_xml = ($distro_id_type === "streaming") ? '<?xml version="1.0" encoding="UTF-8"?><StreamingDistributionConfig xmlns="http://cloudfront.amazonaws.com/doc/2010-11-01/"><S3Origin><DNSName>'.esc_html($s3c["bucket"]).'.s3.amazonaws.com</DNSName></S3Origin><CallerReference>'.esc_html($distro_id_reference).'</CallerReference><Enabled>false</Enabled><TrustedSigners><Self/></TrustedSigners></StreamingDistributionConfig>' : '<?xml version="1.0" encoding="UTF-8"?><DistributionConfig xmlns="http://cloudfront.amazonaws.com/doc/2010-11-01/"><S3Origin><DNSName>'.esc_html($s3c["bucket"]).'.s3.amazonaws.com</DNSName></S3Origin><CallerReference>'.esc_html($distro_id_reference).'</CallerReference><Enabled>false</Enabled><TrustedSigners><Self/></TrustedSigners></DistributionConfig>';
-												$cf_args = array("method" => "PUT", "redirection" => 0, "body" => $cf_distro_xml, "headers" => array("Host" => $cf_domain, "Content-Type" => "application/xml", "Date" => $cf_date, "If-Match" => $distro_id_etag, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
+												$cf_args = array("method" => "PUT", "redirection" => 5, "body" => $cf_distro_xml, "headers" => array("Host" => $cf_domain, "Content-Type" => "application/xml", "Date" => $cf_date, "If-Match" => $distro_id_etag, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
 
 												if(($cf_response = c_ws_plugin__s2member_utils_urls::remote("https://".$cf_domain.$cf_location, false, array_merge($cf_args, array("timeout" => 20)), "array")) && $cf_response["code"] === 200 && !empty($cf_response["headers"]["etag"]) && !empty($cf_response["body"]))
 													return array("success" => true, "code" => null, "message" => null, "etag" => trim($cf_response["headers"]["etag"]), "xml" => trim($cf_response["body"]), "deployed" => ((stripos($cf_response["body"], "<Status>Deployed</Status>") !== false) ? true : false));
@@ -1271,7 +1271,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 														$cf_date = gmdate("D, d M Y H:i:s")." GMT";
 														$cf_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_cf_sign($cf_date));
 														$cf_location = ($distro_id_type === "streaming") ? "/2010-11-01/streaming-distribution/".$distro_id : "/2010-11-01/distribution/".$distro_id;
-														$cf_args = array("method" => "DELETE", "redirection" => 0, "headers" => array("Host" => $cf_domain, "Date" => $cf_date, "If-Match" => $cf_response["etag"], "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
+														$cf_args = array("method" => "DELETE", "redirection" => 5, "headers" => array("Host" => $cf_domain, "Date" => $cf_date, "If-Match" => $cf_response["etag"], "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
 
 														if(($cf_response = c_ws_plugin__s2member_utils_urls::remote("https://".$cf_domain.$cf_location, false, array_merge($cf_args, array("timeout" => 20)), "array")) && ($cf_response["code"] === 200 || $cf_response["code"] === 204 /* Deleted. */))
 															return /* Deleted successfully. */ array("success" => true, "code" => null, "message" => null);
@@ -1338,7 +1338,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 										$cf_location = /* Create distro. */ "/2010-11-01/distribution";
 										$cf_distro_downloads_reference = time().".".md5("downloads".$s3c["bucket"].$s3c["access_key"].$s3c["secret_key"].$cfc["private_key"].$cfc["private_key_id"].$cfc["distro_downloads_cname"]);
 										$cf_distro_downloads_xml = '<?xml version="1.0" encoding="UTF-8"?><DistributionConfig xmlns="http://cloudfront.amazonaws.com/doc/2010-11-01/"><S3Origin><DNSName>'.esc_html($s3c["bucket"]).'.s3.amazonaws.com</DNSName><OriginAccessIdentity>origin-access-identity/cloudfront/'.esc_html($cfc["distros_access_id"]).'</OriginAccessIdentity></S3Origin><CallerReference>'.esc_html($cf_distro_downloads_reference).'</CallerReference>'.(($cfc["distro_downloads_cname"]) ? '<CNAME>'.esc_html($cfc["distro_downloads_cname"]).'</CNAME>' : '').'<Comment>'.esc_html(sprintf(_x("Created by s2Member, for S3 Bucket: %s.", "s2member-admin", "s2member"), $s3c["bucket"])).'</Comment><Enabled>true</Enabled><DefaultRootObject>index.html</DefaultRootObject><TrustedSigners><Self/></TrustedSigners></DistributionConfig>';
-										$cf_args = array("method" => "POST", "redirection" => 0, "body" => $cf_distro_downloads_xml, "headers" => array("Host" => $cf_domain, "Content-Type" => "application/xml", "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
+										$cf_args = array("method" => "POST", "redirection" => 5, "body" => $cf_distro_downloads_xml, "headers" => array("Host" => $cf_domain, "Content-Type" => "application/xml", "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
 
 										if(($cf_response = c_ws_plugin__s2member_utils_urls::remote("https://".$cf_domain.$cf_location, false, array_merge($cf_args, array("timeout" => 20)), "array")) && ($cf_response["code"] === 200 || $cf_response["code"] === 201 /* Created. */))
 											{
@@ -1361,7 +1361,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 										$cf_location = /* Create streaming distro. */ "/2010-11-01/streaming-distribution";
 										$cf_distro_streaming_reference = time().".".md5("streaming".$s3c["bucket"].$s3c["access_key"].$s3c["secret_key"].$cfc["private_key"].$cfc["private_key_id"].$cfc["distro_streaming_cname"]);
 										$cf_distro_streaming_xml = '<?xml version="1.0" encoding="UTF-8"?><StreamingDistributionConfig xmlns="http://cloudfront.amazonaws.com/doc/2010-11-01/"><S3Origin><DNSName>'.esc_html($s3c["bucket"]).'.s3.amazonaws.com</DNSName><OriginAccessIdentity>origin-access-identity/cloudfront/'.esc_html($cfc["distros_access_id"]).'</OriginAccessIdentity></S3Origin><CallerReference>'.esc_html($cf_distro_streaming_reference).'</CallerReference>'.(($cfc["distro_streaming_cname"]) ? '<CNAME>'.esc_html($cfc["distro_streaming_cname"]).'</CNAME>' : '').'<Comment>'.esc_html(sprintf(_x("Created by s2Member, for S3 Bucket: %s.", "s2member-admin", "s2member"), $s3c["bucket"])).'</Comment><Enabled>true</Enabled><DefaultRootObject>index.html</DefaultRootObject><TrustedSigners><Self/></TrustedSigners></StreamingDistributionConfig>';
-										$cf_args = array("method" => "POST", "redirection" => 0, "body" => $cf_distro_streaming_xml, "headers" => array("Host" => $cf_domain, "Content-Type" => "application/xml", "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
+										$cf_args = array("method" => "POST", "redirection" => 5, "body" => $cf_distro_streaming_xml, "headers" => array("Host" => $cf_domain, "Content-Type" => "application/xml", "Date" => $cf_date, "Authorization" => "AWS ".$cfc["access_key"].":".$cf_signature));
 
 										if(($cf_response = c_ws_plugin__s2member_utils_urls::remote("https://".$cf_domain.$cf_location, false, array_merge($cf_args, array("timeout" => 20)), "array")) && ($cf_response["code"] === 200 || $cf_response["code"] === 201 /* Created. */))
 											{
