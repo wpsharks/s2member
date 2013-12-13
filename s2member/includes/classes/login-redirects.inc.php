@@ -58,9 +58,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 								if /* Nag em? */ ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"])
 									delete_user_setting ("default_password_nag") . update_user_option ($user_id, "default_password_nag", false, true);
 
-								$disable_login_ip_restrictions = apply_filters ("ws_plugin__s2member_disable_login_ip_restrictions", false, get_defined_vars ());
-
-								if (($ok = true) && !is_super_admin ($user_id) && $username !== "demo" && !$disable_login_ip_restrictions)
+								if (($ok = true) && !is_super_admin ($user_id) && $username !== "demo" // Exclude super admins, the `demo` user, and anyone who can edit posts.
+								    && !apply_filters ("ws_plugin__s2member_disable_login_ip_restrictions", (($user->has_cap ("edit_posts")) ? true : false), get_defined_vars ()))
 									$ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok ($_SERVER["REMOTE_ADDR"], $username);
 
 								if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"]) // Alter value of `redirect_to`?
