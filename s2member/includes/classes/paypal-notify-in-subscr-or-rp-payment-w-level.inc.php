@@ -57,12 +57,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 								if (!get_transient ($transient_ipn = "s2m_ipn_" . md5 ("s2member_transient_" . $_paypal_s)) && set_transient ($transient_ipn, time (), 31556926 * 10))
 									{
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as " . ($identified_as = "( `subscr_payment|recurring_payment` )") . ".";
-										$paypal["s2member_log"][] = "Sleeping for 5 seconds. Waiting for a possible ( `subscr_signup|subscr_modify|recurring_payment_profile_created` ).";
-										sleep (5); // Sleep here for a moment. PayPal sometimes sends a subscr_payment before the subscr_signup, subscr_modify.
-										// It is NOT a big deal if they do. However, s2Member goes to sleep here, just to help keep the log files in a logical order.
-										$paypal["s2member_log"][] = "Awake. It's " . date ("D M j, Y g:i:s a T") . ". s2Member `txn_type` identified as " . $identified_as . ".";
 
-										list ($paypal["level"], $paypal["ccaps"]) = preg_split ("/\:/", $paypal["item_number"], 3);
+										if(empty($_REQUEST["s2member_paypal_proxy"])) // Only on true PayPal IPNs; e.g. we can bypass this on proxied IPNs.
+											{
+												$paypal["s2member_log"][] = "Sleeping for 5 seconds. Waiting for a possible ( `subscr_signup|subscr_modify|recurring_payment_profile_created` ).";
+												sleep (5); // Sleep here for a moment. PayPal sometimes sends a subscr_payment before the subscr_signup, subscr_modify.
+												$paypal["s2member_log"][] = "Awake. It's " . date ("D M j, Y g:i:s a T") . ". s2Member `txn_type` identified as " . $identified_as . ".";
+											}
+										list($paypal["level"], $paypal["ccaps"]) = preg_split ("/\:/", $paypal["item_number"], 3);
 
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
