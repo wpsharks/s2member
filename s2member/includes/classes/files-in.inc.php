@@ -583,6 +583,14 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 							{
 								do_action("ws_plugin__s2member_during_check_file_remote_authorization_before", get_defined_vars());
 
+								if((empty($_SERVER["PHP_AUTH_USER"]) || $_SERVER["PHP_AUTH_USER"] === "NOUSER") && !empty($_SERVER["HTTP_AUTHORIZATION"]))
+									{
+										$auth = trim(preg_replace("/^.+?\s+/", "", $_SERVER["HTTP_AUTHORIZATION"]));
+										$auth = explode(":", base64_decode($auth), 2);
+
+										if(!empty($auth[0])) $_SERVER["PHP_AUTH_USER"] = $auth[0];
+										if(!empty($auth[1])) $_SERVER["PHP_AUTH_PW"] = $auth[1];
+									}
 								if(empty($_SERVER["PHP_AUTH_USER"]) || empty($_SERVER["PHP_AUTH_PW"]) || !user_pass_ok($_SERVER["PHP_AUTH_USER"], $_SERVER["PHP_AUTH_PW"]))
 									{
 										header('WWW-Authenticate: Basic realm="'.c_ws_plugin__s2member_utils_strings::esc_dq(strip_tags(_x("Members Only", "s2member-front", "s2member"))).'"');
