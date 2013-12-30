@@ -116,7 +116,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 
 						if (is_admin () && is_array ($notices = get_option ("ws_plugin__s2member_notices")) && !empty ($notices))
 							{
-								$a = (is_blog_admin ()) ? "blog" : $a;
+								$a = (is_blog_admin ()) ? "blog" : "";
 								$a = (is_user_admin ()) ? "user" : $a;
 								$a = (is_network_admin ()) ? "network" : $a;
 								$a =  /* Default Blog Admin. */(!$a) ? "blog" : $a;
