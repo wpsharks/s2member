@@ -142,11 +142,27 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v131126 =
+= v131230 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v131230 =
+
+* (s2Member/s2Member Pro) **Compatibility**. Updated to support WordPress v3.8. Nothing significant, just minor UI tweaks in the Login/Registration Design for WordPress v3.8; e.g. `wp-login.php` got some minor improvements in this release of s2Member and s2Member Pro.
+* (s2Member) **Compatibility**. PayPal's API for Subscription Cancellation Buttons was changed recently. PayPal now requires a Merchant ID instead of the site owner's email address. This issue has been causing an error when a user attempts to cancel a PayPal Subscription through an s2Member-generated PayPal Subscription Cancellation "Button" (i.e. this affects Buttons only, not Pro Forms). Fixed in this release. Site owners using PayPal Buttons should update their PayPal Merchant ID for s2Member. Please see: `Dashboard ⥱ s2Member ⥱ PayPal Options ⥱ Account Details`.
+* (s2Member/s2Member Pro) **Compatibility**. Default s2Member option value for CSS/JS Lazy Loading is now off instead of on; e.g. s2Member's CSS/JS JavaScript libraries are now loaded on every page by default. Lazy loading must now be enabled by a site owner as a performance enhancement (optional). For further details, please see: `Dashboard ⥱ s2Member ⥱ General Options ⥱ CSS/JS Lazy Loading`.
+* (s2Member/s2Member Pro) **Logging**. s2Member's core payment gateway processors now log to files `gateway-core-ipn.log` and `gateway-core-rtn.log`. These log file names were changed in this release. In previous versions of s2Member these log entries were kept inside `paypal-ipn.log` and `paypal-rtn.log`.
+* (s2Member/s2Member Pro) **Updates**. The XML/RSS feed box for the most recent s2Member Updates (for site owners only; in the Dashboard); has been updated to our newest feed location at: `http://feeds.feedburner.com/s2member`.
+* (s2Member/s2Member Pro) **Bug Fix**. s2Member should follow redirects in API calls to Amazon.com. See: <https://github.com/WebSharks/s2Member/issues/35> for further details.
+* (s2Member/s2Member Pro) **Bug Fix**. By default, do not count login IP Restrictions against users who can `edit_posts`. See: <https://github.com/WebSharks/s2Member/issues/32> for further details.
+* (s2Member/s2Member Pro) **Bug Fix**. Sleep offset to `10` seconds for `subscr_eot`. See <https://github.com/WebSharks/s2Member/issues/34> for further details.
+* (s2Member/s2Member Pro) **Enhancement**. Updating the "s2" icon in the Dashboard to our most recent version.
+* (s2Member Pro) **Bug Fix**. s2Member Pro now accepts `TOO MANY FAILURES` as an EOT response type status under PayPal Pro (Payflow Edition) accounts. This was previously causing a problem against newer PayPal Pro accounts (w/ the Payflow Edition); whereby some customers who were reaching Max Failed Payments were not being demoted properly in all cases. Fixed in this release.
+* (s2Member/s2Member Pro) **Compatibility**. Adding support for `$_SERVER['HTTP_AUTHORIZATION']` when s2Member is used for Remote Auth file hosting. Some servers do not support `$_SERVER['PHP_AUTH_USER']`. Instead, s2Member can get the username/password by parsing them out of `$_SERVER['HTTP_AUTHORIZATION']` when/if necessary. Fixed in this release.
+* (s2Member/s2Member Pro) **PHP Debug Notices.** Updating s2Member's source code to further prevent PHP debug notices when running in `WP_DEBUG` mode. This is part of an ongoing effort keep s2Member running smoothly in PHP strict mode; and to maintain conformity with WordPress standards.
+* (s2Member Pro) **Bug Fix**. Define `abbr_bytes()` method as static to prevent issues during automatic upgrades of s2Member Pro. Please see <https://github.com/WebSharks/s2Member/issues/37> for further details.
 
 = v131126 =
 
