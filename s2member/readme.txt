@@ -142,17 +142,18 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v131230 =
+= v140105 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
 
-= v131230 =
+= v140105 =
 
 * (s2Member/s2Member Pro) **Compatibility**. Updated to support WordPress v3.8. Nothing significant, just minor UI tweaks in the Login/Registration Design for WordPress v3.8; e.g. `wp-login.php` got some minor improvements in this release of s2Member and s2Member Pro.
 * (s2Member) **Compatibility**. PayPal's API for Subscription Cancellation Buttons was changed recently. PayPal now requires a Merchant ID instead of the site owner's email address. This issue has been causing an error when a user attempts to cancel a PayPal Subscription through an s2Member-generated PayPal Subscription Cancellation "Button" (i.e. this affects Buttons only, not Pro Forms). Fixed in this release. Site owners using PayPal Buttons should update their PayPal Merchant ID for s2Member. Please see: `Dashboard ⥱ s2Member ⥱ PayPal Options ⥱ Account Details`.
 * (s2Member/s2Member Pro) **Compatibility**. Default s2Member option value for CSS/JS Lazy Loading is now off instead of on; e.g. s2Member's CSS/JS JavaScript libraries are now loaded on every page by default. Lazy loading must now be enabled by a site owner as a performance enhancement (optional). For further details, please see: `Dashboard ⥱ s2Member ⥱ General Options ⥱ CSS/JS Lazy Loading`.
+* (s2Member Pro) **Remote Operations API**. This release introduces two new API methods; `auth_check_user` and `get_user`. These methods (combined with those which already exist in s2Member Pro) now make s2Member Pro's Remote Operations API a pleasure to work with. For further details, please see: `Dashboard ⥱ s2Member Pro ⥱ API Scripting ⥱ Pro Remote Operations API`. Here you will find the API Key for your installation, along with several code samples.
 * (s2Member/s2Member Pro) **Logging**. s2Member's core payment gateway processors now log to files `gateway-core-ipn.log` and `gateway-core-rtn.log`. These log file names were changed in this release. In previous versions of s2Member these log entries were kept inside `paypal-ipn.log` and `paypal-rtn.log`.
 * (s2Member/s2Member Pro) **Updates**. The XML/RSS feed box for the most recent s2Member Updates (for site owners only; in the Dashboard); has been updated to our newest feed location at: `http://feeds.feedburner.com/s2member`.
 * (s2Member/s2Member Pro) **Bug Fix**. s2Member should follow redirects in API calls to Amazon.com. See: <https://github.com/WebSharks/s2Member/issues/35> for further details.
