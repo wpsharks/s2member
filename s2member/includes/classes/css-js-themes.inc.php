@@ -41,6 +41,8 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 
 						if(isset($load)) return $load;
 
+						$null = NULL; // Needed below in earlier versions of WP.
+
 						if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["lazy_load_css_js"])
 							$load = TRUE;
 
@@ -54,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 						        && (bp_is_register_page() || bp_is_activation_page() || bp_is_user_profile()))
 							$load = TRUE;
 
-						else if(is_singular() && ($post = get_post(NULL))
+						else if(is_singular() && ($post = get_post($null))
 						        && (stripos($post->post_content, "s2member") !== FALSE
 										|| stripos($post->post_content, "[s2") !== FALSE))
 							$load = TRUE;
