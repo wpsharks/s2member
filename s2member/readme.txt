@@ -164,6 +164,7 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 * (s2Member/s2Member Pro) **Compatibility**. Adding support for `$_SERVER['HTTP_AUTHORIZATION']` when s2Member is used for Remote Auth file hosting. Some servers do not support `$_SERVER['PHP_AUTH_USER']`. Instead, s2Member can get the username/password by parsing them out of `$_SERVER['HTTP_AUTHORIZATION']` when/if necessary. Fixed in this release.
 * (s2Member/s2Member Pro) **PHP Debug Notices.** Updating s2Member's source code to further prevent PHP debug notices when running in `WP_DEBUG` mode. This is part of an ongoing effort keep s2Member running smoothly in PHP strict mode; and to maintain conformity with WordPress standards.
 * (s2Member Pro) **Bug Fix**. Define `abbr_bytes()` method as static to prevent issues during automatic upgrades of s2Member Pro. Please see <https://github.com/WebSharks/s2Member/issues/37> for further details.
+* (s2Member/s2Member Pro) **Backward Compatibility.** Updating calls to `get_post()`. We're adding a `NULL` argument via `$null` to prevent warnings in older releases of WordPress where an argument was required; e.g. `$null = NULL; get_post($null)`.
 
 = v131126 =
 
