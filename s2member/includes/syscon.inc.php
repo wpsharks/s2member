@@ -167,7 +167,8 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["mms_auto_patch"] = "1";
 				$default_options["mms_registration_file"] = "wp-login";
 				$default_options["mms_registration_grants"] = "none";
-				for($n = 0, $v = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++, $v = $v + 5)$default_options["mms_registration_blogs_level".$n] = (string)$v;
+				for($n = 0, $v = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++, $v = $v + 5)
+					$default_options["mms_registration_blogs_level".$n] = (string)$v;
 
 				$default_options["login_welcome_page"] = "";
 				$default_options["login_redirection_override"] = "";
@@ -246,10 +247,16 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["sp_email_message"] = sprintf(_x("Thanks %%%%first_name%%%%!\n\n%%%%item_name%%%%\n\nYour order can be retrieved here:\n%%%%sp_access_url%%%%\n(link expires in %%%%sp_access_exp%%%%)\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", "s2member-front", "s2member"), get_bloginfo("name"));
 
 				$default_options["mailchimp_api_key"] = "";
+				$default_options["getresponse_api_key"] = "";
 
-				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)$default_options["level".$n."_mailchimp_list_ids"] = "";
+				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+					$default_options["level".$n."_mailchimp_list_ids"] = "";
 
-				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)$default_options["level".$n."_aweber_list_ids"] = "";
+				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+					$default_options["level".$n."_getresponse_list_ids"] = "";
+
+				for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+					$default_options["level".$n."_aweber_list_ids"] = "";
 
 				$default_options["signup_notification_urls"] = "";
 				$default_options["registration_notification_urls"] = "";

@@ -56,7 +56,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-mailchimp-section">'."\n";
 								echo '<a href="http://www.s2member.com/mailchimp" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/mailchimp-stamp.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
 								echo '<h3>MailChimp List Server Integration (optional)</h3>'."\n";
-								echo '<p>s2Member can be integrated with MailChimp. MailChimp is an email marketing service. MailChimp makes it easy to send email newsletters to your Customers, manage your MailChimp subscriber lists, and track campaign performance. Although s2Member can be integrated with almost ANY list server, we highly recommend MailChimp; because of their <a href="http://www.s2member.com/mailchimp-api-docs" target="_blank" rel="external">powerful API for MailChimp services</a>. In future versions of s2Member, we plan to build additional features into s2Member that work with, and extend, MailChimp services.</p>'."\n";
+								echo '<p>s2Member can be integrated with MailChimp. MailChimp is an email marketing service. MailChimp makes it easy to send email newsletters to your Customers, manage your MailChimp subscriber lists, and track campaign performance. Although s2Member can be integrated with almost ANY list server, we highly recommend MailChimp; because of their <a href="http://www.s2member.com/mailchimp-api-docs" target="_blank" rel="external">powerful API for MailChimp services</a>. In future versions of s2Member, we plan to build additional features into s2Member that work with, and extend MailChimp services.</p>'."\n";
 								echo '<p>For now, we\'ve covered the basics. You can have your Members automatically subscribed to your MailChimp marketing lists <em>(e.g. newsletters / auto-responders)</em>. You\'ll need a <a href="http://www.s2member.com/mailchimp" target="_blank" rel="external">MailChimp account</a>, a <a href="http://www.s2member.com/mailchimp-api-key" target="_blank" rel="external">MailChimp API Key</a>, and your <a href="#" onclick="alert(\'To obtain your MailChimp List ID(s), log into your MailChimp account and click the Lists tab. Now click the (View) button, for the List(s) you want to integrate with s2Member. Then, click the (Settings) link. At the bottom of the (Settings) page, for each list; you\\\'ll find a Unique List ID.\'); return false;">MailChimp List IDs</a>.</p>'."\n";
 								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_during_mailchimp", get_defined_vars());
 
@@ -118,6 +118,78 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 								echo '</div>'."\n";
 
 								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_after_mailchimp", get_defined_vars());
+							}
+
+						if(apply_filters("ws_plugin__s2member_during_els_ops_page_during_left_sections_display_getresponse", true, get_defined_vars()))
+							{
+								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_before_getresponse", get_defined_vars());
+
+								echo '<div class="ws-menu-page-group" title="GetResponse Integration">'."\n";
+
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-getresponse-section">'."\n";
+								echo '<a href="http://www.s2member.com/r/getresponse/" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/getresponse-logo.png" class="ws-menu-page-right" style="width:256px; height:89px; border:0;" alt="." /></a>'."\n";
+								echo '<h3>GetResponse List Server Integration (optional)</h3>'."\n";
+								echo '<p>s2Member can be integrated with GetResponse. GetResponse is a complete email marketing solution. It provides turnkey newsletter publishing and hosting features, as well as unlimited autoresponders to deliver information to your subscribers and convert them to paying customers.</p>'."\n";
+								echo '<p>You can have your Members automatically subscribed to your GetResponse marketing lists <em>(e.g. newsletters / auto-responders)</em>. You\'ll need a <a href="http://www.s2member.com/r/getresponse" target="_blank" rel="external">GetResponse account</a>, a <a href="http://www.s2member.com/r/getresponse-api-key" target="_blank" rel="external">GetResponse API Key</a>, and your <a href="http://www.s2member.com/r/getresponse-campaigns-list" target="_blank" rel="external" onclick="alert(\'To obtain your GetResponse Campaign Token(s), log into your GetResponse account and navigate to your entire list of Campaigns. In the left-hand column you\\\'ll find a list of Unique Campaign Tokens.\\n\\nPlease click OK and we\\\'ll take you there now :-)\');">GetResponse Campaign Tokens</a>.</p>'."\n";
+								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_during_getresponse", get_defined_vars());
+
+								echo '<table class="form-table">'."\n";
+								echo '<tbody>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<th>'."\n";
+								echo '<label for="ws-plugin--s2member-getresponse-api-key">'."\n";
+								echo 'GetResponse API Key:'."\n";
+								echo '</label>'."\n";
+								echo '</th>'."\n";
+
+								echo '</tr>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<td>'."\n";
+								echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_getresponse_api_key" id="ws-plugin--s2member-getresponse-api-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"]).'" /><br />'."\n";
+								echo 'Once you have a GetResponse account, you\'ll need to login; then <a href="http://www.s2member.com/r/getresponse-api-key" target="_blank" rel="external">get your API Key</a>.'."\n";
+								echo '</td>'."\n";
+
+								echo '</tr>'."\n";
+
+								for($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+									{
+										echo '<tr>'."\n";
+
+										echo '<th>'."\n";
+										echo '<label for="ws-plugin--s2member-level'.$n.'-getresponse-list-ids">'."\n";
+										echo 'Campaign Token(s) for '.(($n === 0) ? 'Free Subscribers' : 'Level #'.$n.' Members').' (comma-delimited):'."\n";
+										echo '</label>'."\n";
+										echo '</th>'."\n";
+
+										echo '</tr>'."\n";
+										echo '<tr>'."\n";
+
+										echo '<td>'."\n";
+										echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_level'.$n.'_getresponse_list_ids" id="ws-plugin--s2member-level'.$n.'-getresponse-list-ids" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_getresponse_list_ids"]).'" /><br />'."\n";
+										echo 'New '.(($n === 0) ? 'Free Subscribers' : 'Level #'.$n.' Members').' will be subscribed to these Campaign Tokens.<br />'."\n";
+										echo 'Ex: <code>4ksdX</code> or <code>4ksdX, koeeXs, ggjXk, aakSc</code>'."\n";
+										echo '</td>'."\n";
+
+										echo '</tr>'."\n";
+									}
+
+								echo '</tbody>'."\n";
+								echo '</table>'."\n";
+
+								echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+								echo '<div class="info" style="margin-bottom:0;">'."\n";
+								echo '<p style="font-size:110%; margin-top:0;"><span>We HIGHLY recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems during GetResponse processing. See: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">Log Files (Debug)</a>.</span></p>'."\n";
+								echo '<p style="font-size:110%; margin-bottom:0;"><span class="ws-menu-page-error">However, it is VERY IMPORTANT to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We STRONGLY suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
+								echo '</div>'."\n";
+
+								echo '</div>'."\n";
+
+								echo '</div>'."\n";
+
+								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_after_getresponse", get_defined_vars());
 							}
 
 						if(apply_filters("ws_plugin__s2member_during_els_ops_page_during_left_sections_display_aweber", true, get_defined_vars()))
@@ -289,8 +361,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 								echo '<option value="2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_auto_opt_out_transitions"] === "2") ? ' selected="selected"' : '').'>Yes (always automatically transition, even if NOT removed from a previous list)</option>'."\n";
 								echo '</select><br />'."\n";
 								echo '<em><strong>*Transitions*</strong> When/if s2Member automatically removes a Member from Lists at their current Level# (based on your configuration in the previous section), this setting tells s2Member that it should <strong>also</strong> transition the Member to any Lists you\'ve configured at the new Access Level# (i.e. Role) they are being changed to. For example, if a Member is demoted from Level #1 to Level #0, do you want s2Member to add them to the Level #0 List(s) after it removes them from the Level #1 List(s)?</em><br /><br />'."\n";
-								echo '<em><strong>*If removed from a previous list, or NOT?*</strong> You can choose your preference above. When/if s2Member automatically transitions a mailing list subscriber, it will first try to remove the subscriber from a previous mailing list. If s2Member is able to remove the subscriber from a previous list before the transition takes place, s2Member will then make an attempt (based on your configuration) to transition the subscriber to a new/different list silently (e.g. without a new confirmation email being sent out). If s2Member is NOT able to remove a subscriber from a previous list, it can - (if configured to do so), still transition a subscriber to a new list, by sending the subscriber a new email confirmation letter (e.g. this is NOT silent, because you absolutely NEED the subscriber\'s permission in this case).</em><br /><br />'."\n";
-								echo '<em><strong>*Seamless with MailChimp*</strong> If enabled, Automatic List Transitions work seamlessly with MailChimp. Automatic List Transitions also work with AWeber, but AWeber will ALWAYS send the User/Member a new confirmation email, asking them to confirm changes to their mailing list subscription with you. Work is underway to improve this aspect of s2Member\'s integration with AWeber in a future release. Ideally, a Customer would be transitioned silently behind the scene with AWeber too, when appropriate.</em>'."\n";
+								echo '<em><strong>*If removed from a previous list, or NOT?*</strong> You can choose your preference above. When/if s2Member automatically transitions a mailing list subscriber, it will first try to remove the subscriber from a previous mailing list. If s2Member is able to remove the subscriber from a previous list before the transition takes place, s2Member will then make an attempt (based on your configuration) to transition the subscriber to a new/different list silently (e.g. without a new confirmation email being sent out). If s2Member is NOT able to remove a subscriber from a previous list, it can (if configured to do so) still transition a subscriber to a new list, by sending the subscriber a new email confirmation letter (e.g. this is NOT silent, because you absolutely NEED the subscriber\'s permission in this case).</em><br /><br />'."\n";
+								echo '<em><strong>*Seamless with MailChimp*</strong> If enabled, Automatic List Transitions work seamlessly with MailChimp. Automatic List Transitions also work with GetResponse/AWeber, but GetResponse/AWeber will ALWAYS send the User/Member a new confirmation email, asking them to confirm changes to their mailing list subscription with you. Work is underway to improve this aspect of s2Member\'s integration with GetResponse/AWeber in a future release. Ideally, a Customer would be transitioned silently behind the scene with GetResponse/AWeber too, when appropriate.</em>'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";

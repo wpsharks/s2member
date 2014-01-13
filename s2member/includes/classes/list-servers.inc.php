@@ -40,7 +40,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 						do_action ("ws_plugin__s2member_before_list_servers_integrated", get_defined_vars ());
 
 						for /* Go through each Level; looking for a configured list. */ ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
-							if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_mailchimp_list_ids"]) || !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_aweber_list_ids"]))
+							if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_mailchimp_list_ids"]) || !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_getresponse_list_ids"]) || !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_aweber_list_ids"]))
 								return apply_filters ("ws_plugin__s2member_list_servers_integrated", true, get_defined_vars ());
 
 						return apply_filters ("ws_plugin__s2member_list_servers_integrated", false, get_defined_vars ());
@@ -94,9 +94,9 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 											{
 												$mailchimp = array ("function" => __FUNCTION__, "func_get_args" => $args, "api_method" => "listSubscribe");
 
-												if /* Trim this up. NO trailing white space. */ (($mailchimp["list"] = trim ($mailchimp_list)))
+												if (($mailchimp["list"] = trim ($mailchimp_list)))
 													{
-														if /* Also contains Interest Groups? */ (strpos ($mailchimp["list"], "::") !== false)
+														if (strpos ($mailchimp["list"], "::") !== false) // Also contains Interest Groups?
 															{
 																list ($mailchimp["list_id"], $mailchimp["interest_groups_title"], $mailchimp["interest_groups"]) = preg_split ("/\:\:/", $mailchimp["list"], 3);
 
@@ -138,6 +138,45 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 																	file_put_contents ($logs_dir . "/" . $log2,
 																	                   "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" .
 																	                                            c_ws_plugin__s2member_utils_logs::conceal_private_info(var_export ($mailchimp, true)) . "\n\n",
+																	                   FILE_APPEND);
+													}
+											}
+									}
+
+								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"]) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]))
+									{
+										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]) as $getresponse_list)
+											{
+												$getresponse = array ("function" => __FUNCTION__, "func_get_args" => $args, "api_method" => "add_contact");
+
+												if (($getresponse["list_id"] = $getresponse["list"] = trim ($getresponse_list)))
+													{
+														$getresponse["api_headers"] = array("Content-Type" => "application/json");
+														$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"],
+														                                 array("name" => trim($fname." ".$lname), "email" => $email, "ip" => $ip,
+														                                       "campaign" => $getresponse["list_id"], "action" => "standard", "cycle_day" => 0,
+														                                       "customs" => apply_filters ("ws_plugin__s2member_getresponse_customs_array", array(), get_defined_vars ())));
+														if(!$getresponse["api_params"][1]["ip"] || $getresponse["api_params"][1]["ip"] === "unknown") unset($getresponse["api_params"][1]["ip"]); // Remove if empty; causes API error.
+														$getresponse["api_request"] = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
+
+														if (is_object($getresponse["api_response"] = // Post JSON-encoded request via getResponse API.
+															              json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"],
+															                                                                   array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error)
+														    && $getresponse["api_response"]->result->queued) $getresponse["api_success"] = $success = true;
+
+														$logt = c_ws_plugin__s2member_utilities::time_details ();
+														$logv = c_ws_plugin__s2member_utilities::ver_details ();
+														$logm = c_ws_plugin__s2member_utilities::mem_details ();
+														$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . $_SERVER["HTTP_USER_AGENT"];
+														$log4 = (is_multisite () && !is_main_site ()) ? ($_log4 = $current_blog->domain . $current_blog->path) . "\n" . $log4 : $log4;
+														$log2 = (is_multisite () && !is_main_site ()) ? "getresponse-api-4-" . trim (preg_replace ("/[^a-z0-9]/i", "-", $_log4), "-") . ".log" : "getresponse-api.log";
+
+														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
+															if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
+																if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
+																	file_put_contents ($logs_dir . "/" . $log2,
+																	                   "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" .
+																	                                            c_ws_plugin__s2member_utils_logs::conceal_private_info(var_export ($getresponse, true)) . "\n\n",
 																	                   FILE_APPEND);
 													}
 											}
@@ -263,6 +302,53 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 																	file_put_contents ($logs_dir . "/" . $log2,
 																	                   "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" .
 																	                                            c_ws_plugin__s2member_utils_logs::conceal_private_info(var_export ($mailchimp, true)) . "\n\n",
+																	                   FILE_APPEND);
+													}
+											}
+									}
+
+								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"]) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]))
+									{
+										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]) as $getresponse_list)
+											{
+												$getresponse = array ("function" => __FUNCTION__, "func_get_args" => $args, "api_method" => "get_contacts");
+
+												if (($getresponse["list_id"] = $getresponse["list"] = trim ($getresponse_list)))
+													{
+														$getresponse["api_headers"]   = array("Content-Type" => "application/json");
+														$getresponse["api_params"]    = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"],
+														                                 array("campaigns" => array($getresponse["list_id"]), "email" => array("EQUALS" => $email)));
+														$getresponse["api_request"]   = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
+
+														if (is_object($getresponse["api_response"] = // Post JSON-encoded request via getResponse API.
+															              json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"],
+															                                                                   array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error)
+														      && ($getresponse["api_response_contact_ids"] = array_keys((array)$getresponse["api_response"]->result))
+																&& ($getresponse["api_response_contact_id"] = $getresponse["api_response_contact_ids"][0]))
+															{
+																$getresponse["api_method"] = "delete_contact"; // Update method now.
+																$getresponse["api_headers"] = array("Content-Type" => "application/json");
+																$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"], array("contact" => $getresponse["api_response_contact_id"]));
+																$getresponse["api_request"] = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
+
+																if (is_object($getresponse["api_response"] = // Post JSON-encoded request via getResponse API.
+																	              json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"],
+																	                                                                   array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error)
+																    && $getresponse["api_response"]->result->deleted) $getresponse["api_success"] = $success = true;
+															}
+														$logt = c_ws_plugin__s2member_utilities::time_details ();
+														$logv = c_ws_plugin__s2member_utilities::ver_details ();
+														$logm = c_ws_plugin__s2member_utilities::mem_details ();
+														$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . $_SERVER["HTTP_USER_AGENT"];
+														$log4 = (is_multisite () && !is_main_site ()) ? ($_log4 = $current_blog->domain . $current_blog->path) . "\n" . $log4 : $log4;
+														$log2 = (is_multisite () && !is_main_site ()) ? "getresponse-api-4-" . trim (preg_replace ("/[^a-z0-9]/i", "-", $_log4), "-") . ".log" : "getresponse-api.log";
+
+														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"])
+															if (is_dir ($logs_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"]))
+																if (is_writable ($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files ())
+																	file_put_contents ($logs_dir . "/" . $log2,
+																	                   "LOG ENTRY: ".$logt . "\n" . $logv . "\n" . $logm . "\n" . $log4 . "\n" .
+																	                                            c_ws_plugin__s2member_utils_logs::conceal_private_info(var_export ($getresponse, true)) . "\n\n",
 																	                   FILE_APPEND);
 													}
 											}
