@@ -1158,6 +1158,32 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 
 					/*********************************************************************************************/
 
+					if(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https' && (empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) !== 'on') && (empty($_SERVER['SERVER_PORT']) || (integer)$_SERVER['SERVER_PORT'] !== 443))
+						{
+							$errors[] = array(
+								'title'   => self::i18n('HTTPS Proxy; Missing <code>$_SERVER[\'HTTPS\']</code>'),
+								'message' => sprintf(
+									self::i18n(
+									    'Possible load balancer w/ HTTPS port forwarding. Load balancers are great, but your PHP environment is missing the <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'HTTPS\'] = on</a> variable. This is needed by WordPress® in order to determine the current protocol in use. See also: <a href="http://codex.wordpress.org/Function_Reference/is_ssl" target="_blank" rel="xlink">is_ssl()</a> for further details.'.
+									    ' Please consult with your web hosting company about this message.'
+									), htmlspecialchars($plugin_name)
+								)
+							);
+						}
+					else if(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+						{
+							$passes[] = array(
+								'title'   => self::i18n('<code>$_SERVER[\'HTTPS\'] = on</code>'),
+								'message' => sprintf(
+									self::i18n(
+									    'Possible load balancer w/ HTTPS port forwarding; and your PHP environment includes the <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'HTTPS\'] = on</a> variable. So you\'re good here.'
+									), NULL
+								)
+							);
+						}
+
+					/*********************************************************************************************/
+
 					if(($sys_temp_dir = sys_get_temp_dir()) && ($sys_temp_dir = @realpath($sys_temp_dir))
 					   && is_readable($sys_temp_dir) && is_writable($sys_temp_dir)
 					) // Ideal location for temporary files (best security here).
