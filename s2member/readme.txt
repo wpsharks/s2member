@@ -21,7 +21,7 @@ Requires at least: 3.3
 
 Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License v2 or later.
-Contributors: WebSharks, anguz
+Contributors: WebSharks, anguz, raamdev
 
 Author: s2Member® / WebSharks, Inc.
 Author URI: http://www.s2member.com/

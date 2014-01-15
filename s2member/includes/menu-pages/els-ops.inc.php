@@ -120,7 +120,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_after_mailchimp", get_defined_vars());
 							}
 
-						if(apply_filters("ws_plugin__s2member_during_els_ops_page_during_left_sections_display_getresponse", true, get_defined_vars()))
+						if(apply_filters("ws_plugin__s2member_during_els_ops_page_during_left_sections_display_getresponse", c_ws_plugin__s2member_utils_conds::pro_is_installed(), get_defined_vars()))
 							{
 								do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_before_getresponse", get_defined_vars());
 

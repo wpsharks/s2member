@@ -85,7 +85,7 @@ $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["recaptcha"] = array("public_key" => "6
 /*
 Configure the right menu options panel for s2Member.
 */
-$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["menu_pages"] = array("updates" => true, "upsell-pro" => true, "installation" => false, "tools" => false, "kb" => true, "videos" => true, "support" => false, "donations" => true);
+$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["menu_pages"] = array("updates" => true, "upsell-pro" => true, "installation" => false, "tools" => false, "kb" => true, "videos" => true, "support" => true, "donations" => true);
 /*
 Check if s2Member has been configured *should be set after the first config via options panel*.
 */
