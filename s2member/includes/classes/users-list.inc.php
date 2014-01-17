@@ -135,6 +135,8 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
 							$cols["s2member_ccaps"] = "Custom Capabilities";
 
+						$cols["s2member_auto_eot_time"] = "EOT Time";
+
 						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 							foreach (json_decode ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 								{
@@ -207,6 +209,8 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 
 								$val = (!empty ($ccaps)) ? implode ("<br />", $ccaps) : "—";
 							}
+						else if($col === "s2member_auto_eot_time")
+							$val = ($v = get_user_option ("s2member_auto_eot_time", $user_id)) ? esc_html ($v) : "—";
 
 						else if (preg_match ("/^s2member_custom_field_/", $col))
 							{
