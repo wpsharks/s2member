@@ -19,6 +19,7 @@ CVS/
 .cvsignore
 .svn/
 _svn/
+.bzr/
 .hg/
 .hgignore
 SCCS/
