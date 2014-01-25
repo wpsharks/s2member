@@ -172,7 +172,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 											}
 									}
 								// Supports nested Shortcodes.
-								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", (($condition_failed) ? "" : $content), get_defined_vars ()));
+								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", (($condition_failed) ? "" :
+									c_ws_plugin__s2member_utils_strings::trim_html($content)), get_defined_vars ()));
 							}
 
 						else if ($conditional_logic === "OR") // This is the OR variation. This routine analyzes conditionals using OR logic, instead of AND logic.
@@ -255,7 +256,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 											}
 									}
 								// Supports nested Shortcodes.
-								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", (($condition_succeeded) ? $content : ""), get_defined_vars ()));
+								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", (($condition_succeeded) ?
+									c_ws_plugin__s2member_utils_strings::trim_html($content) : ""), get_defined_vars ()));
 							}
 					}
 			}

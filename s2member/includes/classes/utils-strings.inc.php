@@ -250,6 +250,22 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 						return is_array($value) ? array_map("c_ws_plugin__s2member_utils_strings::trim_qts_deep", $value) : preg_replace("/^(?:".$qts.")+|(?:".$qts.")+$/", "", (string)$value);
 					}
 				/**
+				* Trims HTML whitespace.
+				*
+				* This is useful on Shortcode content.
+				*
+				* @package s2Member\Utilities
+				* @since 140124
+				*
+				* @param str $string Input string to trim.
+				* @return str Output string with all HTML whitespace trimmed away.
+				*/
+				public static function trim_html($string = FALSE)
+					{
+						$whitespace = '\0\x0B|\s|&nbsp;|\<br\>|\<br\s*\/\>|\<p\>(?:&nbsp;)*\<\/p\>';
+						return preg_replace('/^(?:'.$whitespace.')+|(?:'.$whitespace.')+$/', '', (string)$string);
+					}
+				/**
 				* Wraps a string with the characters provided.
 				*
 				* This is useful when preparing an input array for ``c_ws_plugin__s2member_utils_arrays::in_regex_array()``.
