@@ -2406,10 +2406,16 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 								"onclick=\"return confirm('".self::i18n("PLEASE CONFIRM\\nSend a test email message now?")."');\"";
 
 							echo '<a href="'.esc_attr(add_query_arg(urlencode_deep($_test_email), (string)$_SERVER['REQUEST_URI'])).'" '.$_test_email_confirmation.'>'.
-							     self::i18n('Test Email Functionality?').
+							     self::i18n('Test Email?').
 							     '</a>';
 
 							unset($_test_email, $_test_email_confirmation);
+						}
+					if((defined('WPINC') && !is_ssl()) || (!defined('WPINC') && (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on')))
+						{
+							echo '<a href="'.esc_attr('https://'.(string)$_SERVER['HTTP_HOST'].(string)$_SERVER['REQUEST_URI']).'">'.
+							     self::i18n('Test HTTPS?').
+							     '</a>';
 						}
 					echo '</div>';
 					echo '</h1>';
