@@ -1183,7 +1183,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						{
 							array_unshift( // Push to top of the stack.
 								$passes, array(
-								'title'   => self::i18n('<code>$_SERVER[\'HTTPS\'] = on</code>'),
+								'title'   => self::i18n('HTTPS Proxy; <code>$_SERVER[\'HTTPS\'] = on</code>'),
 								'message' => sprintf(
 									self::i18n(
 									    'Possible load balancer w/ HTTPS port forwarding; and your PHP environment includes the <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'HTTPS\'] = on</a> and/or <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'SERVER_PORT\'] = 443</a> variables. So you\'re good here.'
