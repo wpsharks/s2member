@@ -185,6 +185,14 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				$is_test_email = TRUE;
 			else $is_test_email = FALSE;
 
+			// Is this a test for HTTPS?
+
+			if($is_wp_loaded && !empty($_g['test_https']) && is_string($_g['test_https'])
+			   && !empty($_g['checksum']) && is_string($_g['checksum']) && $this->verify_checksum($_g['test_https'], $_g['checksum'])
+			) // For further details, please see notes in the docBlock, regarding HTTPS requests.
+				$is_test_https = TRUE;
+			else $is_test_https = FALSE;
+
 			// If this IS an auto-fix request, should we compact (or extract), the originals?
 
 			if($is_wp_loaded && $is_auto_fix) // Yes, this IS an auto-fix request.
@@ -1160,7 +1168,8 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 
 					if(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https' && (empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) !== 'on') && (empty($_SERVER['SERVER_PORT']) || (integer)$_SERVER['SERVER_PORT'] !== 443))
 						{
-							$errors[] = array(
+							array_unshift( // Push to top of the stack.
+								$errors, array(
 								'title'   => self::i18n('HTTPS Proxy; Missing <code>$_SERVER[\'HTTPS\']</code>'),
 								'message' => sprintf(
 									self::i18n(
@@ -1168,18 +1177,44 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 									    ' Please consult with your web hosting company about this message.'
 									), htmlspecialchars($plugin_name)
 								)
-							);
+							));
 						}
 					else if(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
 						{
-							$passes[] = array(
+							array_unshift( // Push to top of the stack.
+								$passes, array(
 								'title'   => self::i18n('<code>$_SERVER[\'HTTPS\'] = on</code>'),
 								'message' => sprintf(
 									self::i18n(
-									    'Possible load balancer w/ HTTPS port forwarding; and your PHP environment includes the <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'HTTPS\'] = on</a> variable. So you\'re good here.'
+									    'Possible load balancer w/ HTTPS port forwarding; and your PHP environment includes the <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'HTTPS\'] = on</a> and/or <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'SERVER_PORT\'] = 443</a> variables. So you\'re good here.'
 									), NULL
 								)
-							);
+							));
+						}
+					else if($is_test_https && ((empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) !== 'on') && (empty($_SERVER['SERVER_PORT']) || (integer)$_SERVER['SERVER_PORT'] !== 443)))
+						{
+							array_unshift( // Push to top of the stack.
+								$errors, array(
+								'title'   => self::i18n('<code>$_SERVER[\'HTTPS\'] = on</code>'),
+								'message' => sprintf(
+									self::i18n(
+									    'Your PHP environment is missing the <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'HTTPS\'] = on</a> and/or <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'SERVER_PORT\'] = 443</a> variables.'.
+									    ' Please consult with your web hosting company about this message.'
+									), NULL
+								)
+							));
+						}
+					else if($is_test_https) // Pass on this check.
+						{
+							array_unshift( // Push to top of the stack.
+								$passes, array(
+								'title'   => self::i18n('<code>$_SERVER[\'HTTPS\'] = on</code>'),
+								'message' => sprintf(
+									self::i18n(
+									    'Your PHP environment includes the <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'HTTPS\'] = on</a> and/or <a href="http://www.php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">$_SERVER[\'SERVER_PORT\'] = 443</a> variables. So you\'re good here.'
+									), NULL
+								)
+							));
 						}
 
 					/*********************************************************************************************/
@@ -2411,11 +2446,19 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 
 							unset($_test_email, $_test_email_confirmation);
 						}
-					if((defined('WPINC') && !is_ssl()) || (!defined('WPINC') && (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] !== 'on')))
+					if((defined('WPINC') && !is_ssl()))
 						{
-							echo '<a href="'.esc_attr('https://'.(string)$_SERVER['HTTP_HOST'].(string)$_SERVER['REQUEST_URI']).'">'.
+							$_test_https = array(
+								'websharks_core__deps' => array(
+									'test_email' => 'test_https',
+									'checksum'   => $this->generate_checksum('test_https')
+								)
+							);
+							echo '<a href="'.esc_attr(add_query_arg(urlencode_deep($_test_https), 'https://'.(string)$_SERVER['HTTP_HOST'].(string)$_SERVER['REQUEST_URI'])).'">'.
 							     self::i18n('Test HTTPS?').
 							     '</a>';
+
+							unset($_test_https);
 						}
 					echo '</div>';
 					echo '</h1>';
