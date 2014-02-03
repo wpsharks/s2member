@@ -1690,9 +1690,12 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 										'title'    => self::i18n('WordPress External HTTP Requests'),
 										'message'  => sprintf(
 											self::i18n(
-											    'Although NOT required, %1$s recommends that you allow all external HTTP requests (please set: <code>WP_HTTP_BLOCK_EXTERNAL</code> in <code>/wp-config.php</code>), to: <code>FALSE</code>.'.
+											    'Although NOT absolutely required, %1$s HIGHLY recommends that you allow all external HTTP requests (please set: <code>WP_HTTP_BLOCK_EXTERNAL</code> in <code>/wp-config.php</code>), to: <code>FALSE</code>.'.
 											    ' Please see: <a href="http://kovshenin.com/2012/how-to-disable-http-calls-in-wordpress/" target="_blank" rel="xlink">this how-to article</a>.'.
-											    ' Or consult with your web hosting company about this message. Your are currently blocking all external HTTP requests.'
+											    ' Or, consult with your web hosting company about this message. Your are currently blocking all external HTTP requests.'.
+											    ' <strong>IMPORTANT:</strong> unless you have ALSO configured <code>WP_ACCESSIBLE_HOSTS</code>, your current'.
+											    ' configuration of <code>WP_HTTP_BLOCK_EXTERNAL</code> will prevent all outbound communication'.
+											    ' from your site to other remote service APIs.'
 											), htmlspecialchars($plugin_name)
 										)
 									);
