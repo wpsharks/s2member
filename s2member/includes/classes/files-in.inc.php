@@ -124,7 +124,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 														return false;
 												}
 
-											else if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"] || ($file_downloads_enabled_by_site_owner = $min_level_4_downloads = c_ws_plugin__s2member_files::min_level_4_downloads()) === false)
+											else // Default behavior; check file download access against the current user.
 												{
 													if /* We only need remote functionality when/if we're actually serving. */($serving)
 														if(!has_filter("ws_plugin__s2member_check_file_download_access_user", "c_ws_plugin__s2member_files_in::check_file_remote_authorization"))
@@ -134,7 +134,20 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 														if(has_filter("ws_plugin__s2member_check_file_download_access_user", "c_ws_plugin__s2member_files_in::check_file_remote_authorization"))
 															remove_filter("ws_plugin__s2member_check_file_download_access_user", "c_ws_plugin__s2member_files_in::check_file_remote_authorization", 10, 2);
 
-													if((isset($file_downloads_enabled_by_site_owner, $min_level_4_downloads) && $file_downloads_enabled_by_site_owner === false) || ($file_downloads_enabled_by_site_owner = $min_level_4_downloads = c_ws_plugin__s2member_files::min_level_4_downloads()) === false)
+													if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
+														{
+															if /* We only need this section when/if we're actually serving. */($serving)
+															{
+																status_header(503);
+																header("Content-Type: text/html; charset=UTF-8");
+																while (@ob_end_clean ()); // Clean any existing output buffers.
+																exit(_x('<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member -› General Options -› Membership Options Page</code>.', "s2member-front", "s2member"));
+															}
+															else // Else return false.
+																return false;
+														}
+
+													else if(($file_downloads_enabled_by_site_owner = $min_level_4_downloads = c_ws_plugin__s2member_files::min_level_4_downloads()) === false)
 														{
 															if /* We only need this section when/if we're actually serving. */($serving)
 															{
