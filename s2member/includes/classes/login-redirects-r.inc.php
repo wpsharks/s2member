@@ -59,8 +59,12 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects_r"))
 							if($redirect_to && is_string ($redirect_to) && strpos($redirect_to, "wp-admin") === FALSE)
 								{
 									$redirect_to = preg_replace("/^https\:\/\//i", "http://", $redirect_to);
-									if(stripos($redirect_to, "http://") !== 0) // Force an absolute URL in this case.
-										$redirect_to = home_url($redirect_to, "http");
+									if(stripos($redirect_to, "http://") !== 0) // Force absolute.
+										{
+											$home_path = trim((string)@parse_url(home_url('/'), PHP_URL_PATH), '/');
+											$http_home_base = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/', '', home_url('/', 'http')), '/');
+											$redirect = $http_home_base.'/'.ltrim($redirect_to, '/');
+										}
 								}
 						return $redirect_to;
 					}
