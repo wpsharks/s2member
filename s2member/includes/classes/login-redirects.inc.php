@@ -94,8 +94,12 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 												if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"])
 													{
 														$redirect = preg_replace("/^https\:\/\//i", "http://", $redirect);
-														if(stripos($redirect, "http://") !== 0) // Force an absolute URL in this case.
-															$redirect = home_url($redirect, "http");
+														if(stripos($redirect, "http://") !== 0) // Force absolute.
+															{
+																$home_path = trim((string)@parse_url(home_url('/'), PHP_URL_PATH), '/');
+																$http_home_base = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/', '', home_url('/', 'http')), '/');
+																$redirect = $http_home_base.'/'.ltrim($redirect, '/');
+															}
 													}
 												wp_redirect($redirect).exit();
 											}
