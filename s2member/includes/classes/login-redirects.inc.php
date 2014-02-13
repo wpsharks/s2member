@@ -67,7 +67,11 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 										{
 											$_REQUEST["redirect_to"] = preg_replace("/^https\:\/\//i", "http://", $_REQUEST["redirect_to"]);
 											if(stripos($_REQUEST["redirect_to"], "http://") !== 0) // Force an absolute URL in this case.
-												$_REQUEST["redirect_to"] = home_url($_REQUEST["redirect_to"], "http");
+												{
+													$home_path = trim((string)@parse_url(home_url('/'), PHP_URL_PATH), '/');
+													$http_home_base = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/', '', home_url('/', 'http')), '/');
+													$_REQUEST["redirect_to"] = $http_home_base.'/'.ltrim($_REQUEST["redirect_to"], '/');
+												}
 										}
 								if (($redirect = apply_filters ("ws_plugin__s2member_login_redirect", (($user->has_cap ("edit_posts")) ? false : true), get_defined_vars ())))
 									{
