@@ -108,7 +108,8 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 											{
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $option_line)
 													{
-														list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
+														$option_value = $option_label = $option_default = "";
+														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
 														if($option_value === (string)$_value)
 															{
 																$gen = $option_label;
@@ -122,7 +123,8 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 												$selected_default_option = false;
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $option_line)
 													{
-														list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
+														$option_value = $option_label = $option_default = "";
+														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
 														$gen .= '<option value="'.esc_attr($option_value).'"'.(((($option_default && !$_submission) || ($option_value === (string)$_value && !$selected_default_option)) && ($selected_default_option = true)) ? ' selected="selected"' : '').'>'.$option_label.'</option>';
 													}
 												$gen .= '</select>';
@@ -134,7 +136,8 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 											{
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $option_line)
 													{
-														list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
+														$option_value = $option_label = $option_default = "";
+														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
 														if(in_array($option_value, (array)$_value))
 															$gen .= $option_label.", ";
 													}
@@ -148,7 +151,8 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 												$gen = '<select multiple="multiple" size="3"'.$common.'>';
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $option_line)
 													{
-														list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
+														$option_value = $option_label = $option_default = "";
+														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
 														$gen .= '<option value="'.esc_attr($option_value).'"'.((($option_default && !$_submission) || in_array($option_value, (array)$_value)) ? ' selected="selected"' : '').'>'.$option_label.'</option>';
 													}
 												$gen .= '</select>';
@@ -184,7 +188,8 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 											{
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $i => $option_line)
 													{
-														list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
+														$option_value = $option_label = $option_default = "";
+														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
 														if(in_array($option_value, (array)$_value))
 															$gen .= $option_label.", ";
 													}
@@ -201,7 +206,8 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 													{
 														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1---'.($i).'"', $common);
 
-														list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
+														$option_value = $option_label = $option_default = "";
+														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
 
 														$gen .= ($i > 0) ? $sep : ''; // Separators can be filtered above.
 														$gen .= '<input type="checkbox" value="'.esc_attr($option_value).'"';
@@ -216,7 +222,8 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 											{
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $i => $option_line)
 													{
-														list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
+														$option_value = $option_label = $option_default = "";
+														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
 														if($option_value === (string)$_value)
 															{
 																$gen = $option_label;
@@ -233,7 +240,8 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 													{
 														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1---'.($i).'"', $common);
 
-														list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
+														$option_value = $option_label = $option_default = "";
+														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
 
 														$gen .= ($i > 0) ? $sep : ''; // Separators can be filtered above.
 														$gen .= '<input type="radio" value="'.esc_attr($option_value).'"';
