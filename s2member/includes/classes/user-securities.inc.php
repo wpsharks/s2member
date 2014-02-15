@@ -69,7 +69,10 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 						do_action ("ws_plugin__s2member_before_user_capabilities", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						if (!is_multisite () && !empty ($capabilities["administrator"]) && !empty ($args[0]) && preg_match ("/^access_s2member_ccap_/i", $args[0]) && apply_filters ("ws_plugin__s2member_admins_have_all_ccaps", true, get_defined_vars ()))
+						if (!empty ($capabilities["access_s2member_ccap_all_ccaps"]) && !empty ($args[0]) && preg_match ("/^access_s2member_ccap_/i", $args[0]) && apply_filters ("ws_plugin__s2member_all_ccaps_enable", true, get_defined_vars ()))
+							$capabilities = array_merge ((array)$capabilities, array ($args[0] => 1));
+
+						else if (!is_multisite () && !empty ($capabilities["administrator"]) && !empty ($args[0]) && preg_match ("/^access_s2member_ccap_/i", $args[0]) && apply_filters ("ws_plugin__s2member_admins_have_all_ccaps", true, get_defined_vars ()))
 							$capabilities = array_merge ((array)$capabilities, array ($args[0] => 1));
 
 						else if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && (is_super_admin () || !empty ($capabilities["administrator"])) && !empty ($args[0]) && ($args[0] === "edit_user" || $args[0] === "edit_users"))
