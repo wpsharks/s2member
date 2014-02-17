@@ -219,7 +219,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 																			echo '<td>' . "\n";
 																			echo '<label for="ws-plugin--s2member-profile-' . esc_attr ($field_id_class) . '">' . "\n";
 																			echo '<strong' . ((preg_match ("/^(checkbox|pre_checkbox)$/", $field["type"])) ? ' style="display:none;"' : '') . '>' . $field["label"] . (($field["required"] === "yes") ? ' *' : '') . '</strong></label>' . ((preg_match ("/^(checkbox|pre_checkbox)$/", $field["type"])) ? '' : '<br />') . "\n";
-																			echo c_ws_plugin__s2member_custom_reg_fields::custom_field_gen (__FUNCTION__, $field, "ws_plugin__s2member_profile_", "ws-plugin--s2member-profile-", "ws-plugin--s2member-profile-field", "", ($tabindex = $tabindex + 1), "", $fields, $fields[$field_var], "profile");
+																			echo c_ws_plugin__s2member_custom_reg_fields::custom_field_gen (__FUNCTION__, $field, "ws_plugin__s2member_profile_", "ws-plugin--s2member-profile-", "ws-plugin--s2member-profile-field", "", ($tabindex = $tabindex + 1), "", $fields, @$fields[$field_var], "profile");
 																			echo '</td>' . "\n";
 																			echo '</tr>' . "\n";
 																		}
