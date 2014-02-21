@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects_r"))
 										{
 											$home_path = trim((string)@parse_url(home_url('/'), PHP_URL_PATH), '/');
 											$http_home_base = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/', '', home_url('/', 'http')), '/');
-											$redirect = $http_home_base.'/'.ltrim($redirect_to, '/');
+											$redirect_to = $http_home_base.'/'.ltrim($redirect_to, '/');
 										}
 								}
 						return $redirect_to;
