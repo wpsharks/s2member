@@ -60,7 +60,7 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 
 								if (($ok = true) && !is_super_admin ($user_id) && $username !== "demo" // Exclude super admins, the `demo` user, and anyone who can edit posts.
 								    && !apply_filters ("ws_plugin__s2member_disable_login_ip_restrictions", (($user->has_cap ("edit_posts")) ? true : false), get_defined_vars ()))
-									$ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok ($_SERVER["REMOTE_ADDR"], $username);
+									$ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok ($_SERVER["REMOTE_ADDR"], strtolower($username));
 
 								if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"]) // Alter value of `redirect_to`?
 									if(!empty ($_REQUEST["redirect_to"]) && is_string ($_REQUEST["redirect_to"]) && strpos($_REQUEST["redirect_to"], "wp-admin") === FALSE)
