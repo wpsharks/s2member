@@ -80,13 +80,13 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 										}
 								}
 
-						if (is_array ($logicals) && !empty ($logicals) && count (array_unique ($logicals)) > 1)
+						if (!empty ($logicals) && is_array ($logicals) && count (array_unique ($logicals)) > 1)
 							{
 								trigger_error ("s2If, AND/OR malformed conditional logic. It's NOT possible to mix logic using AND/OR combinations. You MUST stick to one type of logic or another. If both types of logic are needed, you MUST use two different Shortcode expressions. Or, use Advanced (PHP) Conditionals instead.", E_USER_ERROR);
 								return ""; // Return now; empty string in this case.
 							}
 
-						$conditional_logic = (is_array ($logicals) && !empty ($logicals) && preg_match ("/^(\|\||OR)$/i", $logicals[0])) ? "OR" : "AND";
+						$conditional_logic = (!empty ($logicals) && is_array ($logicals) && preg_match ("/^(\|\||OR)$/i", $logicals[0])) ? "OR" : "AND";
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_sc_if_conditionals_after_conditional_logic", get_defined_vars ());
@@ -172,7 +172,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 											}
 									}
 								// Supports nested Shortcodes.
-								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", (($condition_failed) ? "" :
+								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", ((!empty($condition_failed)) ? "" :
 									c_ws_plugin__s2member_utils_strings::trim_html($content)), get_defined_vars ()));
 							}
 
@@ -256,9 +256,10 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 											}
 									}
 								// Supports nested Shortcodes.
-								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", (($condition_succeeded) ?
+								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", ((!empty($condition_succeeded)) ?
 									c_ws_plugin__s2member_utils_strings::trim_html($content) : ""), get_defined_vars ()));
 							}
+						return "";
 					}
 			}
 	}
