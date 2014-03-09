@@ -383,6 +383,10 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 													if(function_exists("apache_setenv"))
 														@apache_setenv("no-gzip", "1");
 
+													$content_encoding_header = "Content-Encoding:"; // Default value; standards compliant.
+													if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_content_encodong_none"])
+														$content_encoding_header = "Content-Encoding: none";
+
 													while /* Cleans existing output buffers. */(@ob_end_clean());
 
 													if /* Requesting a specific byte range? */($range)
@@ -391,7 +395,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 																{
 																	status_header(416);
 																	nocache_headers();
-																	header("Content-Encoding:");
+																	header($content_encoding_header);
 																	header("Accept-Ranges: bytes");
 																	header("Content-Type: ".$mimetype);
 																	header("Content-Length: ".$length);
@@ -407,7 +411,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 																{
 																	status_header(416);
 																	nocache_headers();
-																	header("Content-Encoding:");
+																	header($content_encoding_header);
 																	header("Accept-Ranges: bytes");
 																	header("Content-Type: ".$mimetype);
 																	header("Content-Length: ".$length);
@@ -420,7 +424,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 																{
 																	status_header(416);
 																	nocache_headers();
-																	header("Content-Encoding:");
+																	header($content_encoding_header);
 																	header("Accept-Ranges: bytes");
 																	header("Content-Type: ".$mimetype);
 																	header("Content-Length: ".$length);
@@ -453,7 +457,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 																{
 																	status_header(416);
 																	nocache_headers();
-																	header("Content-Encoding:");
+																	header($content_encoding_header);
 																	header("Accept-Ranges: bytes");
 																	header("Content-Type: ".$mimetype);
 																	header("Content-Length: ".$length);
@@ -463,7 +467,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 															// Range.
 															status_header(206);
 															nocache_headers();
-															header("Content-Encoding:");
+															header($content_encoding_header);
 															header("Accept-Ranges: bytes");
 															header("Content-Type: ".$mimetype);
 															header("Content-Range: bytes ".$byte_range_start."-".$byte_range_stops."/".$length);
@@ -475,7 +479,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 														{
 															status_header(200);
 															nocache_headers();
-															header("Content-Encoding:");
+															header($content_encoding_header);
 															header("Accept-Ranges: bytes");
 															header("Content-Type: ".$mimetype);
 															header("Content-Length: ".$length);

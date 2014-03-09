@@ -678,10 +678,39 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_gzip_conflicts", get_defined_vars());
 
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
+
 								echo '<p style="margin:0; font-weight:bold;">s2Member automatically adds this to your <code>.htaccess</code> file upon activation of the plugin.</p>'."\n";
 								echo '<p style="margin:0;">The following <code>mod_rewrite</code> rule goes inside this file: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path(ABSPATH.".htaccess")).'</code></p>'."\n";
 								echo '<pre class="code"><code>'.esc_html(trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_no_gzip_htaccess"])))).'</code></pre>';
 								echo '<p><strong>* Tip:</strong> this covers all types of integration with s2Member File Downloads, even if you\'re using s2Member\'s Advanced Mod Rewrite Linkage.</p>'."\n";
+
+								echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+								echo '<table class="form-table">' . "\n";
+								echo '<tbody>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<th>' . "\n";
+								echo '<label for="ws-plugin--s2member-file-download-content-encodong-none">' . "\n";
+								echo 'Also Force a <code>Content-Encoding: none</code> Header?' . "\n";
+								echo '</label>' . "\n";
+								echo '</th>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<td>' . "\n";
+								echo '<select name="ws_plugin__s2member_file_download_content_encodong_none" id="ws-plugin--s2member-file-download-content-encodong-none">' . "\n";
+								echo '<option value="0"' . ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_content_encodong_none"]) ? ' selected="selected"' : '') . '>No (remain standards compliant; I will configure my server properly)</option>' . "\n";
+								echo '<option value="1"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_content_encodong_none"]) ? ' selected="selected"' : '') . '>Yes (my web server is stubborn; downloads are corrupted without this)</option>' . "\n";
+								echo '</select>' . "\n";
+								echo '</td>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '</tbody>' . "\n";
+								echo '</table>' . "\n";
+
+								echo '<p><code>Content-Encoding: none</code> can be forced by s2Member in order to workaround stubborn web server configurations. However, please note that <code>Content-Encoding: none</code> is an invalid header (NOT standards compliant), so don\'t enable this unless you absolutely need to. For instance, if files downloaded via s2Member are always corrupt, you could enable this to workaround the issue. The issue being... that your web server is ignoring all of s2Member\'s attempts to serve a file without Content-Encoding. While <code>Content-Encoding: none</code> is indeed a hack, it\'s a relatively common hack that most modern browsers will understand just fine; making this a viable solution when/if necessary.</p>'."\n";
 								echo '</div>'."\n";
 
 								echo '</div>'."\n";

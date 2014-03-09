@@ -289,6 +289,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				$default_options["file_download_limit_exceeded_page"] = "";
 				$default_options["file_download_inline_extensions"] = "";
 				$default_options["file_download_stream_extensions"] = "";
+				$default_options["file_download_content_encodong_none"] = "0";
 
 				$default_options["amazon_s3_files_bucket"] = "";
 				$default_options["amazon_s3_files_access_key"] = "";
