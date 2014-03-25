@@ -8,14 +8,15 @@ $ws_plugin__s2member_temp_s_base = (!empty ($base)) ? $base : c_ws_plugin__s2mem
 // Do NOT use ``site`` URL. Must use the `home` URL here, because that's what WordPress uses in its own `mod_rewrite` implementation.
 ?>
 
-Options +FollowSymLinks -Indexes
-
-<IfModule mod_env.c>
+<IfModule env_module>
 # No GZIP for script-based file downloads.
 	SetEnv no-gzip 1
 </IfModule>
 
-<IfModule mod_rewrite.c>
+<IfModule rewrite_module>
+# Enable symlinks (required for rewrites).
+	Options +FollowSymLinks
+
 # Enable rewrite and configure base.
 	RewriteEngine On
 	RewriteBase <?php echo $ws_plugin__s2member_temp_s_base . "\n"; ?>
@@ -101,8 +102,16 @@ Options +FollowSymLinks -Indexes
 	RewriteRule ^(.*)$ %{ENV:s2member_file_download_wp_vdir}?s2member_file_download=%{ENV:s2member_file_download}%{ENV:s2member_file_stream}%{ENV:s2member_file_inline}%{ENV:s2member_file_storage}%{ENV:s2member_file_remote}%{ENV:s2member_file_ssl}%{ENV:s2member_file_download_key}%{ENV:s2member_skip_confirmation} [QSA,L]
 </IfModule>
 
-<IfModule !mod_rewrite.c>
-	deny from all
+<IfModule !rewrite_module>
+	<IfModule authz_core_module>
+		Require all denied
+	</IfModule>
+	<IfModule !authz_core_module>
+		deny from all
+	</IfModule>
 </IfModule>
+
+# Disallow directory indexing here.
+	Options -Indexes
 
 <?php unset ($ws_plugin__s2member_temp_s_base); ?>

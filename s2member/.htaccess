@@ -1,4 +1,5 @@
-# Configuration of directory indexes.
-# For added security (set these explicitly).
 Options -Indexes
-DirectoryIndex index.php
+<IfModule dir_module>
+	DirectoryIndex disabled
+	DirectoryIndex index.php
+</IfModule>
