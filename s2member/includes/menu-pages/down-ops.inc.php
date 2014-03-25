@@ -701,7 +701,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '<td>' . "\n";
 								echo '<select name="ws_plugin__s2member_file_download_content_encodong_none" id="ws-plugin--s2member-file-download-content-encodong-none">' . "\n";
-								echo '<option value="0"' . ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_content_encodong_none"]) ? ' selected="selected"' : '') . '>No (remain standards compliant; I will configure my server properly)</option>' . "\n";
+								echo '<option value="0"' . ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_content_encodong_none"]) ? ' selected="selected"' : '') . '>No (remain standards-compliant; I will configure my server properly)</option>' . "\n";
 								echo '<option value="1"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_content_encodong_none"]) ? ' selected="selected"' : '') . '>Yes (my web server is stubborn; downloads are corrupted without this)</option>' . "\n";
 								echo '</select>' . "\n";
 								echo '</td>' . "\n";
