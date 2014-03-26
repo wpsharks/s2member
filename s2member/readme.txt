@@ -16,7 +16,7 @@ Authorize.Net® Compatible: yes w/s2Member® Pro
 Google® Checkout Compatible: yes w/s2Member® Pro
 ClickBank® Compatible: yes w/s2Member® Pro
 
-Tested up to: 3.8
+Tested up to: 3.9
 Requires at least: 3.3
 
 Copyright: © 2009 WebSharks, Inc.
