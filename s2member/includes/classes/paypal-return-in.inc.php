@@ -45,6 +45,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 
 						if (!empty ($_GET["s2member_paypal_return"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !empty ($_GET["s2member_paypal_proxy"])))
 							{
+								$paypal = array(); // Initialize PayPal array; we also reference this with a variable for a possible proxy handler.
+								if(!empty($_GET["s2member_paypal_proxy"]) && in_array($_GET["s2member_paypal_proxy"], array("alipay", "authnet", "clickbank", "ccbill", "google"), TRUE))
+									${esc_html(trim(stripslashes($_GET["s2member_paypal_proxy"])))} = &$paypal; // Internal alias by reference.
+
 								$custom_success_redirection = (!empty ($_GET["s2member_paypal_return_success"])) ? esc_html (trim (stripslashes ($_GET["s2member_paypal_return_success"]))) : false;
 								$custom_success_redirection = ($custom_success_redirection) ? str_ireplace (array ("&#038;", "&amp;"), "&", $custom_success_redirection) : $custom_success_redirection;
 
@@ -137,27 +141,27 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								Add RTN proxy (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_proxy"]))
-									$paypal["s2member_paypal_proxy"] = $_GET["s2member_paypal_proxy"];
+									$paypal["s2member_paypal_proxy"] = esc_html(trim(stripslashes($_GET["s2member_paypal_proxy"])));
 								/*
 								Add IPN proxy use vars (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_proxy_use"]))
-									$paypal["s2member_paypal_proxy_use"] = $_GET["s2member_paypal_proxy_use"];
+									$paypal["s2member_paypal_proxy_use"] = esc_html(trim(stripslashes($_GET["s2member_paypal_proxy_use"])));
 								/*
 								Also add RTN proxy self-verification (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_proxy_verification"]))
-									$paypal["s2member_paypal_proxy_verification"] = $_GET["s2member_paypal_proxy_verification"];
+									$paypal["s2member_paypal_proxy_verification"] = esc_html(trim(stripslashes($_GET["s2member_paypal_proxy_verification"])));
 								/*
 								Also add RTN success redirection URL (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_return_success"]))
-									$paypal["s2member_paypal_return_success"] = $_GET["s2member_paypal_return_success"];
+									$paypal["s2member_paypal_return_success"] = esc_html(trim(stripslashes($_GET["s2member_paypal_return_success"])));
 								/*
 								Also add RTN t and r Attributes (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_GET["s2member_paypal_return_tra"]))
-									$paypal["s2member_paypal_return_tra"] = $_GET["s2member_paypal_return_tra"];
+									$paypal["s2member_paypal_return_tra"] = esc_html(trim(stripslashes($_GET["s2member_paypal_return_tra"])));
 								/*
 								If debugging/logging is enabled; we need to append $paypal to the log file.
 									Logging now supports Multisite Networking as well.

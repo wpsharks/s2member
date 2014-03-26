@@ -62,6 +62,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status (); // Filters on?
 								c_ws_plugin__s2member_email_configs::email_config_release (); // Release s2Member Filters.
 
+								$paypal = array(); // Initialize PayPal array; we also reference this with a variable for a possible proxy handler.
+								if(!empty($_REQUEST["s2member_paypal_proxy"]) && in_array($_REQUEST["s2member_paypal_proxy"], array("alipay", "authnet", "clickbank", "ccbill", "google"), TRUE))
+									${esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy"])))} = &$paypal; // Internal alias by reference.
+
 								if (is_array ($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
 									{
 										$paypal["s2member_log"][] = "IPN received on: " . date ("D M j, Y g:i:s a T");
@@ -69,7 +73,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 
 										$payment_status_issues = "/^(failed|denied|expired|refunded|partially_refunded|reversed|reversal|canceled_reversal|voided)$/i";
 
-										$paypal["subscr_gateway"] = (!empty ($_REQUEST["s2member_paypal_proxy"])) ? esc_html (trim (stripslashes ($_REQUEST["s2member_paypal_proxy"]))) : "paypal";
+										$paypal["subscr_gateway"] = (!empty ($_REQUEST["s2member_paypal_proxy"])) ? esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy"]))) : "paypal";
 
 										$coupon = (!empty($_REQUEST["s2member_paypal_proxy_coupon"]) && is_array($_REQUEST["s2member_paypal_proxy_coupon"])) ? stripslashes_deep($_REQUEST["s2member_paypal_proxy_coupon"]) : array();
 										$coupon = (isset($coupon["full_coupon_code"], $coupon["coupon_code"], $coupon["affiliate_id"]) && is_string($coupon["full_coupon_code"]) && is_string($coupon["coupon_code"]) && is_string($coupon["affiliate_id"])) ? $coupon : array("full_coupon_code" => "", "coupon_code" => "", "affiliate_id" => "");
@@ -135,13 +139,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 													unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 											}
 
-										else if (!empty ($paypal["txn_type"]) && preg_match ("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]))
+										else if (!empty ($paypal["txn_type"]) && preg_match("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]))
 											{
 												$paypal["s2member_log"][] = "Transaction type ( `recurring_payment_profile_cancel` ), but there is no match to an existing account; so verification of `\$_SERVER[\"HTTP_HOST\"]` was not possible.";
 												$paypal["s2member_log"][] = "It's likely this account was just upgraded/downgraded by s2Member Pro; so the Subscr. ID has probably been updated on-site; nothing to worry about here.";
 											}
 
-										else if (!empty ($paypal["txn_type"]) && preg_match ("/^recurring_/i", $paypal["txn_type"])) // Otherwise, is this a ^recurring_ txn_type?
+										else if (!empty ($paypal["txn_type"]) && preg_match("/^recurring_/i", $paypal["txn_type"])) // Otherwise, is this a ^recurring_ txn_type?
 											$paypal["s2member_log"][] = "Transaction type ( `^recurring_?` ), but there is no match to an existing account; so verification of `\$_SERVER[\"HTTP_HOST\"]` was not possible.";
 
 										else // Else, use the default ``$_SERVER["HTTP_HOST"]`` error.
@@ -159,22 +163,22 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								Add IPN proxy (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_REQUEST["s2member_paypal_proxy"]))
-									$paypal["s2member_paypal_proxy"] = $_REQUEST["s2member_paypal_proxy"];
+									$paypal["s2member_paypal_proxy"] = esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy"])));
 								/*
 								Add IPN proxy use vars (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_REQUEST["s2member_paypal_proxy_use"]))
-									$paypal["s2member_paypal_proxy_use"] = $_REQUEST["s2member_paypal_proxy_use"];
+									$paypal["s2member_paypal_proxy_use"] = esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy_use"])));
 								/*
 								Add IPN proxy coupon vars (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_REQUEST["s2member_paypal_proxy_coupon"]))
-									$paypal["s2member_paypal_proxy_coupon"] = $_REQUEST["s2member_paypal_proxy_coupon"];
+									$paypal["s2member_paypal_proxy_coupon"] = esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy_coupon"])));
 								/*
 								Also add IPN proxy self-verification (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_REQUEST["s2member_paypal_proxy_verification"]))
-									$paypal["s2member_paypal_proxy_verification"] = $_REQUEST["s2member_paypal_proxy_verification"];
+									$paypal["s2member_paypal_proxy_verification"] = esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy_verification"])));
 								/*
 								If debugging/logging is enabled; we need to append ``$paypal`` to the log file.
 									Logging now supports Multisite Networking as well.
