@@ -89,10 +89,10 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 													$redirect = $redirection_url; // Special redirection URL (overrides LWP).
 
 												else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"])
-													$redirect = get_page_link ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]); // Else we use the Login Welcome Page configured for s2Member.
+													 // Else we use the Login Welcome Page configured for s2Member.
+													$redirect = get_page_link ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]);
 
-												else
-													$redirect = '';
+												else $redirect = home_url("/"); // Default to the home page.
 
 												if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"])
 													{
