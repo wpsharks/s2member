@@ -1462,6 +1462,47 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_gen_ops"))
 								do_action ("ws_plugin__s2member_during_gen_ops_page_during_left_sections_after_url_shortening", get_defined_vars ());
 							}
 
+						if (apply_filters ("ws_plugin__s2member_during_gen_ops_page_during_left_sections_display_sc_conds", true, get_defined_vars ()))
+							{
+								do_action ("ws_plugin__s2member_during_gen_ops_page_during_left_sections_before_sc_conds", get_defined_vars ());
+
+								echo '<div class="ws-menu-page-group" title="s2If (Simple Conditional) Preferences">' . "\n";
+
+								echo '<div class="ws-menu-page-section ws-plugin--s2member-sc-conds-section">' . "\n";
+								echo '<h3>s2If (Simple Conditional) Preferences</h3>' . "\n";
+								echo '<p>s2Member makes Simple Conditionals available to you from within WordPress, using Shortcodes that are fully compatible with both the Visual Editor, and also the HTML Tab in WordPress. For further details, please check your Dashboard under: <code>s2Member ⥱ API / Scripting ⥱ Simple Shortcode Conditionals</code>. The settings below impact the behavior of Simple Shortcode Conditionals in WordPress.</p>' . "\n";
+								do_action ("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_sc_conds", get_defined_vars ());
+
+								echo '<table class="form-table">' . "\n";
+								echo '<tbody>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<th>' . "\n";
+								echo '<label for="ws-plugin--s2member-sc-conds-allow-arbitrary-php">' . "\n";
+								echo 'Allow Arbitrary PHP Code via the <code>php</code> Attribute?' . "\n";
+								echo '</label>' . "\n";
+								echo '</th>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '<tr>' . "\n";
+
+								echo '<td>' . "\n";
+								echo '<select name="ws_plugin__s2member_sc_conds_allow_arbitrary_php" id="ws-plugin--s2member-sc-conds-allow-arbitrary-php">' . "\n";
+								echo '<option value="0"' . ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_allow_arbitrary_php"]) ? ' selected="selected"' : '') . '>No (recommended for best security; e.g. on sites with multiple editors)</option>' . "\n";
+								echo '<option value="1"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_allow_arbitrary_php"]) ? ' selected="selected"' : '') . '>Yes (allow me to use PHP via the [s2If php=""][/s2If] shortcode)</option>' . "\n";
+								echo '</select>' . "\n";
+								echo '</td>' . "\n";
+
+								echo '</tr>' . "\n";
+								echo '</tbody>' . "\n";
+								echo '</table>' . "\n";
+								echo '</div>' . "\n";
+
+								echo '</div>' . "\n";
+
+								do_action ("ws_plugin__s2member_during_gen_ops_page_during_left_sections_after_sc_conds", get_defined_vars ());
+							}
+
 						do_action ("ws_plugin__s2member_during_gen_ops_page_after_left_sections", get_defined_vars ());
 
 						echo '<div class="ws-menu-page-hr"></div>' . "\n";

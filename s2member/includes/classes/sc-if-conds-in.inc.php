@@ -50,7 +50,6 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 				* @param str $shortcode The actual Shortcode name itself.
 				* @return str The ``$content`` if true, else an empty string.
 				*
-				* @todo Add support for ``else if`` logic.
 				* @todo Add support for nested AND/OR conditionals inside the ONE Shortcode.
 				* @todo Address possible security issue on sites with multiple editors, some of which should not have access to this feature.
 				*/
@@ -60,9 +59,51 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 						do_action ("ws_plugin__s2member_before_sc_if_conditionals", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
-						$blog_farm_safe = apply_filters ("ws_plugin__s2member_sc_if_conditionals_blog_farm_safe", array ("is_user_logged_in", "is_user_not_logged_in", "user_is", "user_is_not", "user_can", "user_cannot", "current_user_is", "current_user_is_not", "current_user_can", "current_user_cannot", "is_admin", "is_blog_admin", "is_user_admin", "is_network_admin", "is_404", "is_home", "is_front_page", "is_singular", "is_single", "is_page", "is_page_template", "is_attachment", "is_feed", "is_archive", "is_search", "is_category", "is_tax", "is_tag", "has_tag", "is_author", "is_date", "is_day", "is_month", "is_time", "is_year", "is_sticky", "is_paged", "is_preview", "is_comments_popup", "in_the_loop", "comments_open", "pings_open", "has_excerpt", "has_post_thumbnail"), get_defined_vars ());
+						$blog_farm_safe = apply_filters ("ws_plugin__s2member_sc_if_conditionals_blog_farm_safe",
+						                                 array ("is_user_logged_in", "is_user_not_logged_in",
+						                                        "user_is", "user_is_not", "user_can", "user_cannot",
+						                                        "current_user_is", "current_user_is_not", "current_user_can", "current_user_cannot",
+						                                        "is_admin", "is_blog_admin", "is_user_admin", "is_network_admin",
+						                                        "is_404", "is_home", "is_front_page", "is_singular", "is_single", "is_page",
+						                                        "is_page_template", "is_attachment", "is_feed", "is_archive", "is_search",
+						                                        "is_category", "is_tax", "is_tag", "has_tag", "is_author", "is_date",
+						                                        "is_day", "is_month", "is_time", "is_year", "is_sticky", "is_paged",
+						                                        "is_preview", "is_comments_popup", "in_the_loop", "comments_open",
+						                                        "pings_open", "has_excerpt", "has_post_thumbnail"), get_defined_vars ());
 
-						$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr); // Force array; trim quote entities.
+						$sc_conds_allow_arbitrary_php = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_allow_arbitrary_php"];
+						if(is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
+						    $sc_conds_allow_arbitrary_php = FALSE; // Always disallow on child blogs of a blog farm.
+
+						$attr =  // Trim quote entities to prevent issues in messy editors.
+							c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr);
+
+						$content_if = $content_else = NULL; // Initialize.
+						$shortcode_depth  = strspn($shortcode, '_'); // Based on a zero index.
+						$else_tag   = "[".str_repeat("_", $shortcode_depth)."else]"; // e.g. [else], [_else], [__else]
+
+						if(strpos($content, $else_tag) !== FALSE)
+						    list($content_if, $content_else) = explode($else_tag, $content, 2);
+
+						# Arbitrary PHP code via the `php` attribute...
+
+                  if($sc_conds_allow_arbitrary_php && isset($attr["php"]))
+                      {
+                          if(($condition_succeeded = c_ws_plugin__s2member_sc_if_conds_in::evl("return (".$attr["php"].");")))
+                              $condition_content = isset($content_if) ? $content_if : $content;
+                          else $condition_content = isset($content_else) ? $content_else : "";
+
+                          if($condition_content) $condition_content = c_ws_plugin__s2member_utils_strings::trim_html($condition_content);
+
+                          return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", $condition_content, get_defined_vars ()));
+                      }
+                  else if(isset($attr["php"])) // Site owner is trying to use `php`, but it's NOT allowed on this installation.
+                     {
+                         trigger_error ("s2If syntax error. Simple Conditionals are not currently configured to allow arbitrary PHP code evaluation.", E_USER_ERROR);
+					          return ""; // Return now; empty string in this case.
+                     }
+
+                  # Default behavior otherwise...
 
 						foreach ($attr as $attr_key => $attr_value) // Detects and removes logical attributes.
 							// It's NOT possible to mix logic. You MUST stick to one type of logic or another.
@@ -165,9 +206,13 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 												return ""; // Return now; empty string in this case.
 											}
 									}
-								// Supports nested Shortcodes.
-								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", ((!empty($condition_failed)) ? "" :
-									c_ws_plugin__s2member_utils_strings::trim_html($content)), get_defined_vars ()));
+								if(!empty($condition_failed))
+                          $condition_content = isset($content_else) ? $content_else : "";
+                        else $condition_content = isset($content_if) ? $content_if : $content;
+
+                        if($condition_content) $condition_content = c_ws_plugin__s2member_utils_strings::trim_html($condition_content);
+
+								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", $condition_content, get_defined_vars ()));
 							}
 
 						else if ($conditional_logic === "OR") // This is the OR variation. This routine analyzes conditionals using OR logic, instead of AND logic.
@@ -245,12 +290,29 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 												return ""; // Return now; empty string in this case.
 											}
 									}
-								// Supports nested Shortcodes.
-								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", ((!empty($condition_succeeded)) ?
-									c_ws_plugin__s2member_utils_strings::trim_html($content) : ""), get_defined_vars ()));
+								if(!empty($condition_succeeded))
+                           $condition_content = isset($content_if) ? $content_if : $content;
+                        else $condition_content = isset($content_else) ? $content_else : "";
+
+                        if($condition_content) $condition_content = c_ws_plugin__s2member_utils_strings::trim_html($condition_content);
+
+								return do_shortcode (apply_filters ("ws_plugin__s2member_sc_if_conditionals", $condition_content, get_defined_vars ()));
 							}
-						return "";
+						return ""; // Default return value.
 					}
+				/**
+				* Sandbox for arbitrary PHP code evaluation in `[s2If/]` shortcodes.
+				*
+				* @package s2Member\s2If
+				* @since 140326
+				*
+				* @param str $expression PHP expression.
+				* @return bool TRUE if condition succeed; else FALSE.
+				*/
+				public static function evl($expression)
+				{
+					return eval("return (".(string)$expression.");");
+				}
 			}
 	}
 ?>
