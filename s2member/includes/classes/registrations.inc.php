@@ -446,7 +446,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																	$_p[$_key] = $_value; // Add each of these key conversions.
 														unset /* Just a little housekeeping here. */ ($_key, $_value);
 
-														if (!is_admin () && (isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_id"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_custom"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_ccaps"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_auto_eot_time"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_notes"])))
+														if (!is_admin () && (isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_id"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_baid"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_custom"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_ccaps"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_auto_eot_time"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_notes"])))
 															exit (_x ("s2Member security violation. You attempted to POST administrative variables that will NOT be trusted in a NON-administrative zone!", "s2member-front", "s2member"));
 
 														$_pmr = array_merge ($_p, $meta, $rvs); // Merge all of these arrays together now, in this specific order.
@@ -469,6 +469,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$login = $user->user_login;
 																$ip = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_registration_ip"];
 																$ip = (!$ip) ? $_SERVER["REMOTE_ADDR"] : $ip; // Else use environment variable.
+																$subscr_baid = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_baid"];
 																$cv = preg_split ("/\|/", $custom);
 
 																if (!($auto_eot_time = "") && $eotper) // If a specific EOT Period is included.
@@ -517,6 +518,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																update_user_option ($user_id, "s2member_auto_eot_time", $auto_eot_time);
 																update_user_option ($user_id, "s2member_subscr_gateway", $subscr_gateway);
 																update_user_option ($user_id, "s2member_subscr_id", $subscr_id);
+																update_user_option ($user_id, "s2member_subscr_baid", $subscr_baid);
 																update_user_option ($user_id, "s2member_custom", $custom);
 																update_user_option ($user_id, "s2member_notes", $notes);
 
@@ -632,6 +634,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$ip = (!$ip) ? $_SERVER["REMOTE_ADDR"] : $ip; // Else use environment variable.
 																$custom = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_custom"];
 																$subscr_id = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_id"];
+																$subscr_baid = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_baid"];
 																$subscr_gateway = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway"];
 																$cv = preg_split ("/\|/", (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_custom"]);
 
@@ -679,6 +682,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																update_user_option ($user_id, "s2member_auto_eot_time", $auto_eot_time);
 																update_user_option ($user_id, "s2member_subscr_gateway", $subscr_gateway);
 																update_user_option ($user_id, "s2member_subscr_id", $subscr_id);
+																update_user_option ($user_id, "s2member_subscr_baid", $subscr_baid);
 																update_user_option ($user_id, "s2member_custom", $custom);
 																update_user_option ($user_id, "s2member_notes", $notes);
 
@@ -771,6 +775,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$ip = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_registration_ip"];
 																$custom = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_custom"];
 																$subscr_id = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_id"];
+																$subscr_baid = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_baid"];
 																$subscr_gateway = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway"];
 																$cv = preg_split ("/\|/", (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_custom"]);
 
@@ -809,6 +814,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																update_user_option ($user_id, "s2member_auto_eot_time", $auto_eot_time);
 																update_user_option ($user_id, "s2member_subscr_gateway", $subscr_gateway);
 																update_user_option ($user_id, "s2member_subscr_id", $subscr_id);
+																update_user_option ($user_id, "s2member_subscr_baid", $subscr_baid);
 																update_user_option ($user_id, "s2member_custom", $custom);
 																update_user_option ($user_id, "s2member_notes", $notes);
 
