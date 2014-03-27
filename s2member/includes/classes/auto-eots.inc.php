@@ -130,6 +130,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																		$custom = get_user_option ("s2member_custom", $user_id);
 																		$subscr_gateway = get_user_option ("s2member_subscr_gateway", $user_id);
 																		$subscr_id = get_user_option ("s2member_subscr_id", $user_id);
+																		$subscr_baid = get_user_option ("s2member_subscr_baid", $user_id);
 																		$fields = get_user_option ("s2member_custom_fields", $user_id);
 																		$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id);
 
@@ -153,6 +154,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 
 																		delete_user_option ($user_id, "s2member_custom");
 																		delete_user_option ($user_id, "s2member_subscr_id");
+																		delete_user_option ($user_id, "s2member_subscr_baid");
 																		delete_user_option ($user_id, "s2member_subscr_gateway");
 
 																		delete_user_option ($user_id, "s2member_ipn_signup_vars");
