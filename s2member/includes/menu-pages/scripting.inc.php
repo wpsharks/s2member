@@ -13,6 +13,8 @@
 *
 * @package s2Member\Menu_Pages
 * @since 3.0
+ *
+ * @TODO Shortcode equivalents using [else] syntax.
 */
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit ("Do not access this file directly.");
