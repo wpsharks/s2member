@@ -71,8 +71,10 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 						                                        "is_preview", "is_comments_popup", "in_the_loop", "comments_open",
 						                                        "pings_open", "has_excerpt", "has_post_thumbnail"), get_defined_vars ());
 
+						$pro_is_installed = c_ws_plugin__s2member_utils_conds::pro_is_installed(); // Has pro version?
+
 						$sc_conds_allow_arbitrary_php = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_allow_arbitrary_php"];
-						if(is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
+						if(!$pro_is_installed || (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()))
 						    $sc_conds_allow_arbitrary_php = FALSE; // Always disallow on child blogs of a blog farm.
 
 						$attr =  // Trim quote entities to prevent issues in messy editors.
@@ -82,7 +84,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 						$shortcode_depth  = strspn($shortcode, '_'); // Based on a zero index.
 						$else_tag   = "[".str_repeat("_", $shortcode_depth)."else]"; // e.g. [else], [_else], [__else]
 
-						if(strpos($content, $else_tag) !== FALSE)
+						if(strpos($content, $else_tag) !== FALSE && $pro_is_installed)
 						    list($content_if, $content_else) = explode($else_tag, $content, 2);
 
 						# Arbitrary PHP code via the `php` attribute...

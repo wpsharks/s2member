@@ -341,7 +341,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_conditionals", get_defined_vars ());
 								echo '</div>' . "\n";
 
-								if(!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
+								if((!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
 									{
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 

@@ -83,11 +83,13 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 										echo '<p><strong>Example #2:</strong> The same as example #1, but this uses <code>[else]</code> syntax.</strong></p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[else]</code> requires s2Member Pro.</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-is-user-logged-in-else-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 										echo '<p><strong>Example #3:</strong> Full access for any Member with a Level >= 1; also using <code>[else]</code> syntax.</strong></p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[else]</code> requires s2Member Pro.</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-can-full-access-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -98,6 +100,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 										echo '<p><strong>Example #5:</strong> The same as example #4, but this uses <code>[else]</code> syntax &amp; nesting.</strong></p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[else]</code> requires s2Member Pro.</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-is-specific-content-else-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -134,6 +137,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<p><em><strong class="ws-menu-page-hilite">If you need to have both types of logic, use nesting...</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-nesting-farm.x-php")) . '</p>' . "\n";
 										echo '<p><em><strong class="ws-menu-page-hilite">Another example, if you use <code>[else]</code> when nesting...</strong></em></p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[else]</code> requires s2Member Pro.</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-nesting-else-farm.x-php")) . '</p>' . "\n";
 										echo '</div>' . "\n";
 
@@ -163,11 +167,13 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 										echo '<p><strong>Example #2:</strong> The same as example #1, but this uses <code>[else]</code> syntax.</strong></p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[else]</code> requires s2Member Pro.</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-is-user-logged-in-else.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 										echo '<p><strong>Example #3:</strong> Full access for any Member with a Level >= 1; also using <code>[else]</code> syntax.</strong></p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[else]</code> requires s2Member Pro.</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-can-full-access.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -178,6 +184,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 										echo '<p><strong>Example #5:</strong> The same as example #4, but this uses <code>[else]</code> syntax &amp; nesting.</strong></p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[else]</code> requires s2Member Pro.</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-is-specific-content-else.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -214,6 +221,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<p><em><strong class="ws-menu-page-hilite">If you need to have both types of logic, use nesting...</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-nesting.x-php")) . '</p>' . "\n";
 										echo '<p><em><strong class="ws-menu-page-hilite">Another example, if you use <code>[else]</code> when nesting...</strong></em></p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[else]</code> requires s2Member Pro.</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-nesting-else.x-php")) . '</p>' . "\n";
 										echo '</div>' . "\n";
 
