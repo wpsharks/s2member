@@ -346,7 +346,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 										echo '<h3>Arbitrary PHP Code via <code>[s2If php=&quot;&quot;]</code></h3>' . "\n";
-										echo '<p>By default, the <code>[s2If /]</code> Shortcode is limited to a specific set of Conditional Tags provided by WordPress and the s2Member plugin; e.g. <code>[s2If current_user_can(access_s2member_level1)]</code>; as one quick example. Arbitrary PHP code is NOT allowed with this syntax.</p>'."\n";
+										echo '<p>By default, the <code>[s2If]</code> Shortcode is limited to a specific set of Conditional Tags provided by WordPress and the s2Member plugin; e.g. <code>[s2If current_user_can(access_s2member_level1)]</code>; as one quick example. Arbitrary PHP code is NOT allowed with this syntax.</p>'."\n";
 										echo '<p>However, a second syntax variation exists; where it IS possible to use arbitrary PHP code (but only if enabled below). The second syntax variation uses one <code>php</code> Shortcode Attribute to run your conditional check; e.g. <code>[s2If php="current_user_can(\'access_s2member_level1\')"]</code>. For developers, this has some obvious advantages. The code inside the <code>php</code> attribute is evaluated at runtime, so it\'s possible to accomplish more when necessary. Of course, you could also use a plugin like <a href="https://www.s2member.com/kb/ezphp-plugin/" target="_blank" rel="external">ezPHP</a> to accomplish the same thing (if you prefer).</p>' . "\n";
 
 										echo '<table class="form-table">' . "\n";
