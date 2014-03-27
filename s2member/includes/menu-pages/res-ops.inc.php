@@ -341,6 +341,38 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_during_conditionals", get_defined_vars ());
 								echo '</div>' . "\n";
 
+								if(!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
+									{
+										echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+										echo '<h3>Arbitrary PHP Code via <code>[s2If php=&quot;&quot;]</code></h3>' . "\n";
+										echo '<p>By default, the <code>[s2If /]</code> Shortcode is limited to a specific set of Conditional Tags provided by WordPress and the s2Member plugin; e.g. <code>[s2If current_user_can(access_s2member_level1)]</code>; as one quick example. Arbitrary PHP code is NOT allowed with this syntax.</p>'."\n";
+										echo '<p>However, a second syntax variation exists; where it IS possible to use arbitrary PHP code (but only if enabled below). The second syntax variation uses one <code>php</code> Shortcode Attribute to run your conditional check; e.g. <code>[s2If php="current_user_can(\'access_s2member_level1\')"]</code>. For developers, this has some obvious advantages. The code inside the <code>php</code> attribute is evaluated at runtime, so it\'s possible to accomplish more when necessary. Of course, you could also use a plugin like <a href="https://www.s2member.com/kb/ezphp-plugin/" target="_blank" rel="external">ezPHP</a> to accomplish the same thing (if you prefer).</p>' . "\n";
+
+										echo '<table class="form-table">' . "\n";
+										echo '<tbody>' . "\n";
+										echo '<tr>' . "\n";
+
+										echo '<th>' . "\n";
+										echo '<label for="ws-plugin--s2member-sc-conds-allow-arbitrary-php">' . "\n";
+										echo 'Allow Arbitrary PHP Code via the <code>[s2If php=&quot;&quot;]</code> Attribute?' . "\n";
+										echo '</label>' . "\n";
+										echo '</th>' . "\n";
+
+										echo '</tr>' . "\n";
+										echo '<tr>' . "\n";
+
+										echo '<td>' . "\n";
+										echo '<select name="ws_plugin__s2member_sc_conds_allow_arbitrary_php" id="ws-plugin--s2member-sc-conds-allow-arbitrary-php">' . "\n";
+										echo '<option value="0"' . ((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_allow_arbitrary_php"]) ? ' selected="selected"' : '') . '>No (recommended for best security; e.g. on sites with multiple authors/editors)</option>' . "\n";
+										echo '<option value="1"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_allow_arbitrary_php"]) ? ' selected="selected"' : '') . '>Yes (allow me to use PHP via the [s2If php=&quot;&quot;][/s2If] shortcode)</option>' . "\n";
+										echo '</select>' . "\n";
+										echo '</td>' . "\n";
+
+										echo '</tr>' . "\n";
+										echo '</tbody>' . "\n";
+										echo '</table>' . "\n";
+									}
 								echo '</div>' . "\n";
 
 								do_action ("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_conditionals", get_defined_vars ());
