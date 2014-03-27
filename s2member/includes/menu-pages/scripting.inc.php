@@ -87,7 +87,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #3:</strong> Full access for any Member with a Level >= 1.</strong></p>' . "\n";
+										echo '<p><strong>Example #3:</strong> Full access for any Member with a Level >= 1; also using <code>[else]</code> syntax.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-can-full-access-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -97,17 +97,22 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #5:</strong> Simple Conditionals w/ integrated use of [s2Get /].</strong></p>' . "\n";
+										echo '<p><strong>Example #5:</strong> The same as example #4, but this uses <code>[else]</code> syntax &amp; nesting.</strong></p>' . "\n";
+										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-is-specific-content-else-farm.x-php")) . '</p>' . "\n";
+
+										echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+										echo '<p><strong>Example #6:</strong> Simple Conditionals w/ integrated use of [s2Get /].</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-1-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #6:</strong> Using multiple Conditionals together, and even nesting other Shortcodes.</strong></p>' . "\n";
+										echo '<p><strong>Example #7:</strong> Using multiple Conditionals together; also nesting other Shortcodes.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-2-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #7:</strong> Using multiple Conditionals together, and even nesting Conditionals.</strong></p>' . "\n";
+										echo '<p><strong>Example #8:</strong> Using multiple Conditionals together; also nesting Conditionals.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-3-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -126,8 +131,10 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<p><em><strong>Implementing AND/OR Conditional expressions:</strong></em></p>' . "\n";
 										echo '<p><em>*Tip: do NOT mix AND/OR expressions.<br /> <strong class="ws-menu-page-error-hilite">BAD</strong> <code>is_user_logged_in() AND is_page(1) OR is_page(2)</code><br />- use one or the other; do NOT mix AND/OR together.</em></p>' . "\n";
-										echo '<p><em><strong class="ws-menu-page-hilite">If you need to have both types of logic, use nesting:</strong></em></p>' . "\n";
-										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-nesting.x-php")) . '</p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">If you need to have both types of logic, use nesting...</strong></em></p>' . "\n";
+										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-nesting-farm.x-php")) . '</p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">Another example, if you use <code>[else]</code> when nesting...</strong></em></p>' . "\n";
+										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-nesting-else-farm.x-php")) . '</p>' . "\n";
 										echo '</div>' . "\n";
 
 										echo '</div>' . "\n";
@@ -160,7 +167,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #3:</strong> Full access for any Member with a Level >= 1.</strong></p>' . "\n";
+										echo '<p><strong>Example #3:</strong> Full access for any Member with a Level >= 1; also using <code>[else]</code> syntax.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-can-full-access.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -170,17 +177,22 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #5:</strong> Simple Conditionals w/ integrated use of [s2Get /].</strong></p>' . "\n";
+										echo '<p><strong>Example #5:</strong> The same as example #4, but this uses <code>[else]</code> syntax &amp; nesting.</strong></p>' . "\n";
+										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-is-specific-content-else.x-php")) . '</p>' . "\n";
+
+										echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+										echo '<p><strong>Example #6:</strong> Simple Conditionals w/ integrated use of [s2Get /].</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-1.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #6:</strong> Using multiple Conditionals together, and even nesting other Shortcodes.</strong></p>' . "\n";
+										echo '<p><strong>Example #7:</strong> Using multiple Conditionals together; also nesting other Shortcodes.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-2.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #7:</strong> Using multiple Conditionals together, and even nesting Conditionals.</strong></p>' . "\n";
+										echo '<p><strong>Example #8:</strong> Using multiple Conditionals together; also nesting Conditionals.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-3.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -199,8 +211,10 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<p><em><strong>Implementing AND/OR Conditional expressions:</strong></em></p>' . "\n";
 										echo '<p><em>*Tip: do NOT mix AND/OR expressions.<br /> <strong class="ws-menu-page-error-hilite">BAD</strong> <code>is_user_logged_in() AND is_page(1) OR is_page(2)</code><br />- use one or the other; do NOT mix AND/OR together.</em></p>' . "\n";
-										echo '<p><em><strong class="ws-menu-page-hilite">If you need to have both types of logic, use nesting:</strong></em></p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">If you need to have both types of logic, use nesting...</strong></em></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-nesting.x-php")) . '</p>' . "\n";
+										echo '<p><em><strong class="ws-menu-page-hilite">Another example, if you use <code>[else]</code> when nesting...</strong></em></p>' . "\n";
+										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-nesting-else.x-php")) . '</p>' . "\n";
 										echo '</div>' . "\n";
 
 										echo '</div>' . "\n";
