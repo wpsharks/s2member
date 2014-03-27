@@ -79,13 +79,11 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 											return ""; // Return now; empty string in this case.
 										}
 								}
-
 						if (!empty ($logicals) && is_array ($logicals) && count (array_unique ($logicals)) > 1)
 							{
 								trigger_error ("s2If, AND/OR malformed conditional logic. It's NOT possible to mix logic using AND/OR combinations. You MUST stick to one type of logic or another. If both types of logic are needed, you MUST use two different Shortcode expressions. Or, use Advanced (PHP) Conditionals instead.", E_USER_ERROR);
 								return ""; // Return now; empty string in this case.
 							}
-
 						$conditional_logic = (!empty ($logicals) && is_array ($logicals) && preg_match ("/^(\|\||OR)$/i", $logicals[0])) ? "OR" : "AND";
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -119,7 +117,6 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 																						break;
 																					}
 																			}
-
 																		else if (empty ($args)) // No arguments at all.
 																			{
 																				if ($test === true && !call_user_func ($conditional))
@@ -127,20 +124,17 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 																						$condition_failed = true;
 																						break;
 																					}
-
 																				else if ($test === false && call_user_func ($conditional))
 																					{
 																						$condition_failed = true;
 																						break;
 																					}
 																			}
-
 																		else if ($test === true && !call_user_func_array ($conditional, $args))
 																			{
 																				$condition_failed = true;
 																				break;
 																			}
-
 																		else if ($test === false && call_user_func_array ($conditional, $args))
 																			{
 																				$condition_failed = true;
@@ -203,7 +197,6 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 																						break;
 																					}
 																			}
-
 																		else if (empty ($args)) // No arguments at all.
 																			{
 																				if ($test === true && call_user_func ($conditional))
@@ -211,20 +204,17 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 																						$condition_succeeded = true;
 																						break;
 																					}
-
 																				else if ($test === false && !call_user_func ($conditional))
 																					{
 																						$condition_succeeded = true;
 																						break;
 																					}
 																			}
-
 																		else if ($test === true && call_user_func_array ($conditional, $args))
 																			{
 																				$condition_succeeded = true;
 																				break;
 																			}
-
 																		else if ($test === false && !call_user_func_array ($conditional, $args))
 																			{
 																				$condition_succeeded = true;

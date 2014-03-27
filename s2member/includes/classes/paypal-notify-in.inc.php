@@ -135,6 +135,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 														else if (($_paypal_cp = c_ws_plugin__s2member_paypal_notify_in_billing_agreement_signup::cp (get_defined_vars ())))
 															$paypal = $_paypal_cp;
 
+														else if (($_paypal_cp = c_ws_plugin__s2member_paypal_notify_in_merch_pmt::cp (get_defined_vars ())))
+															$paypal = $_paypal_cp;
+
 														else // Ignoring this IPN request. The txn_type/status does NOT require any action.
 															$paypal["s2member_log"][] = "Ignoring this IPN request. The `txn_type/status` does NOT require any action on the part of s2Member.";
 													}
