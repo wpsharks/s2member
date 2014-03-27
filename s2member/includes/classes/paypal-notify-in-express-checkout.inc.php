@@ -40,9 +40,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_express_checkout"))
 					{
 						extract($vars, EXTR_OVERWRITE | EXTR_REFS); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
-						if ((!empty ($paypal["txn_type"]) && preg_match ("/^express_checkout$/i", $paypal["txn_type"]))
-						&& (empty ($paypal["payment_status"]) || empty ($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
-						&& (!empty ($paypal["txn_id"])))
+						if (!empty ($paypal["txn_type"]) && preg_match ("/^express_checkout$/i", $paypal["txn_type"]))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_paypal_notify_before_express_checkout", get_defined_vars ());
