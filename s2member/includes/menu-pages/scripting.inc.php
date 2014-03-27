@@ -82,27 +82,32 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #2:</strong> Full access for any Member with a Level >= 1.</strong></p>' . "\n";
+										echo '<p><strong>Example #2:</strong> The same as example #1, but this uses <code>[else]</code> syntax.</strong></p>' . "\n";
+										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-is-user-logged-in-else-farm.x-php")) . '</p>' . "\n";
+
+										echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+										echo '<p><strong>Example #3:</strong> Full access for any Member with a Level >= 1.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-can-full-access-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #3:</strong> Specific content for each different Member Level.</strong></p>' . "\n";
+										echo '<p><strong>Example #4:</strong> Specific content for each different Member Level.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-is-specific-content-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #4:</strong> Simple Conditionals w/ integrated use of [s2Get /].</strong></p>' . "\n";
+										echo '<p><strong>Example #5:</strong> Simple Conditionals w/ integrated use of [s2Get /].</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-1-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #5:</strong> Using multiple Conditionals together, and even nesting other Shortcodes.</strong></p>' . "\n";
+										echo '<p><strong>Example #6:</strong> Using multiple Conditionals together, and even nesting other Shortcodes.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-2-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #6:</strong> Using multiple Conditionals together, and even nesting Conditionals.</strong></p>' . "\n";
+										echo '<p><strong>Example #7:</strong> Using multiple Conditionals together, and even nesting Conditionals.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-3-farm.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -150,27 +155,32 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #2:</strong> Full access for any Member with a Level >= 1.</strong></p>' . "\n";
+										echo '<p><strong>Example #2:</strong> The same as example #1, but this uses <code>[else]</code> syntax.</strong></p>' . "\n";
+										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-is-user-logged-in-else.x-php")) . '</p>' . "\n";
+
+										echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+										echo '<p><strong>Example #3:</strong> Full access for any Member with a Level >= 1.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-can-full-access.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #3:</strong> Specific content for each different Member Level.</strong></p>' . "\n";
+										echo '<p><strong>Example #4:</strong> Specific content for each different Member Level.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-current-user-is-specific-content.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #4:</strong> Simple Conditionals w/ integrated use of [s2Get /].</strong></p>' . "\n";
+										echo '<p><strong>Example #5:</strong> Simple Conditionals w/ integrated use of [s2Get /].</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-1.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #5:</strong> Using multiple Conditionals together, and even nesting other Shortcodes.</strong></p>' . "\n";
+										echo '<p><strong>Example #6:</strong> Using multiple Conditionals together, and even nesting other Shortcodes.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-2.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>Example #6:</strong> Using multiple Conditionals together, and even nesting Conditionals.</strong></p>' . "\n";
+										echo '<p><strong>Example #7:</strong> Using multiple Conditionals together, and even nesting Conditionals.</strong></p>' . "\n";
 										echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/sc-s2-conditional-supplements-3.x-php")) . '</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
