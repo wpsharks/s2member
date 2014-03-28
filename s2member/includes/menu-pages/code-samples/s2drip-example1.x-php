@@ -1,20 +1,20 @@
-[s2Drip level="1" after_day="4"]
+[s2Drip level="1" from_day="4"]
 	Some content for Members at Level 1 (or higher).
 
-	This content will show only after day 4 of their paid membership.
-		~ i.e. it starts showing on day 5.
+	This content will show only after day 3 of their paid membership.
+		~ i.e. it starts showing on day 4.
 
 	It will continue to be shown every day thereafter.
 [/s2Drip]
 
-[s2Drip level="1" after_day="4" until_day="30"]
+[s2Drip level="1" from_day="4" to_day="30"]
 	Some content for Members at Level 1 (or higher).
 
-	This content will show only after day 4 of their paid membership.
-		~ i.e. it starts showing on day 5.
+	This content will show only after day 3 of their paid membership.
+		~ i.e. it starts showing on day 4.
 
-	In addition, this content will stop being shown after day 29 of their paid membership.
-		... i.e. stop showing on day 30.
+	In addition, this content will stop being shown on day 31 of their paid membership.
+		... i.e. show until (and including) day 30; stop showing after day 30.
 [/s2Drip]
 
 **NOTE** The use of [s2Drip] requires s2Member Pro.
