@@ -1,12 +1,26 @@
 [s2Drip level="1" after_day="4"]
 	Some content for Members at Level 1 (or higher).
+
 	This content will show only after day 4 of their paid membership.
+		~ i.e. it starts showing on day 5.
+
+	It will continue to be shown every day thereafter.
 [/s2Drip]
 
-[s2Drip level="1" after_day="4" before_day="30"]
+[s2Drip level="1" after_day="4" until_day="30"]
 	Some content for Members at Level 1 (or higher).
-	This content will show only after day 4 of their paid membership;
-		and, this content will NOT show after day 30 of their paid membership.
+
+	This content will show only after day 4 of their paid membership.
+		~ i.e. it starts showing on day 5.
+
+	In addition, this content will stop being shown after day 29 of their paid membership.
+		... i.e. stop showing on day 30.
 [/s2Drip]
 
 **NOTE** The use of [s2Drip] requires s2Member Pro.
+
+**NOTE** [s2Drip] will NOT work as expected when testing against an Administrator who is logged in.
+	While Administrators DO gain full access to all content, Administrators generally
+	do NOT have a paid registration time; i.e. they are not an actual customer.
+	Thus, do NOT test this as an Administrator, you WILL be confused :-)
+	Administrators will always see the content, no matter.
