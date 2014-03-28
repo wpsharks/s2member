@@ -63,12 +63,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										$is_reversal = (preg_match("/^(reversed|reversal)$/i", $paypal["payment_status"]) && $paypal["parent_txn_id"]);
 										$is_reversal = (!$is_reversal) ? (preg_match("/^new_case$/i", $paypal["txn_type"]) && preg_match("/^chargeback$/i", $paypal["case_type"])) : $is_reversal;
 										$is_refund_or_reversal = ($is_refund || $is_reversal); // If either of the previous tests above evaluated to true; then it's obviously a Refund and/or a Reversal.
+										$is_partial_refund = // Partial refund detection. All refunds processed against Subscriptions are considered partials. Full refunds occur only against Buy Now transactions.
+											(!$is_refund || (!empty($paypal["mc_gross"]) && ($original_txn_type = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("txn_type", FALSE, $paypal["subscr_id"])) === "web_accept"
+										      && ($original_mc_gross = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("mc_gross", FALSE, $paypal["subscr_id"])) <= abs($paypal["mc_gross"]))) ? FALSE : TRUE;
 										$is_delayed_eot = (!$is_refund_or_reversal && preg_match("/^(subscr_eot|recurring_payment_expired)$/i", $paypal["txn_type"]) && preg_match("/^I-/i", $paypal["subscr_id"]));
 
 										if($is_refund_or_reversal)
 											$paypal["s2member_log"][] = "s2Member `txn_type` identified as ".($identified_as = "( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback` )").".";
-										else
-											$paypal["s2member_log"][] = "s2Member `txn_type` identified as ".($identified_as = "( `subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment` ) - or - `recurring_payment_profile_cancel` w/ `initial_payment_status` ( `failed` )").".";
+										else $paypal["s2member_log"][] = "s2Member `txn_type` identified as ".($identified_as = "( `subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment` ) - or - `recurring_payment_profile_cancel` w/ `initial_payment_status` ( `failed` )").".";
 
 										if(empty($_REQUEST["s2member_paypal_proxy"])) // Only on true PayPal IPNs; e.g. we can bypass this on proxied IPNs.
 											{
@@ -85,11 +87,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 												$user_reg_ip = get_user_option("s2member_registration_ip", $user_id); // Needed below.
 												$user_reg_ip = $paypal["ip"] = ($user_reg_ip) ? $user_reg_ip : $paypal["ip"];
 
-												if( // Here we take action, BUT based on Auto EOT Behavior options; as configured by the Site Owner.
-												(!$is_refund_or_reversal && !$is_delayed_eot && !get_user_option("s2member_auto_eot_time", $user_id))
-												|| ($is_refund_or_reversal && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,reversals")
-												|| ($is_reversal && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "reversals")
-												|| ($is_refund && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds"))
+												if((!$is_refund_or_reversal && !$is_delayed_eot && !get_user_option("s2member_auto_eot_time", $user_id))
+													|| ($is_refund_or_reversal && $is_partial_refund && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,partial_refunds,reversals")
+													|| ($is_refund_or_reversal && !$is_partial_refund && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,reversals")
+													|| ($is_refund && !$is_partial_refund && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds")
+													|| ($is_reversal && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "reversals"))
 													{
 														if(!$user->has_cap("administrator")) // Do NOT process this routine on Administrators.
 															{
@@ -294,11 +296,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 												else if(!$is_refund_or_reversal || $is_delayed_eot)
 													$paypal["s2member_log"][] = "Skipping (demote|delete) Member, for now. An Auto-EOT Time is already set for this account. When an Auto-EOT Time has been recorded, s2Member will handle EOT (demote|delete) events using it's own Auto-EOT System - internally.";
 
+												else if($is_refund && $is_partial_refund)
+													$paypal["s2member_log"][] = "Skipping (demote|delete) Member. Your configuration dictates that s2Member should NOT take any immediate action on an EOT associated with a Partial Refund. An s2Member API Notification will still be processed however.";
+
+												else if($is_refund && !$is_partial_refund)
+													$paypal["s2member_log"][] = "Skipping (demote|delete) Member. Your configuration dictates that s2Member should NOT take any immediate action on an EOT associated with a Full Refund. An s2Member API Notification will still be processed however.";
+
 												else if($is_reversal)
 													$paypal["s2member_log"][] = "Skipping (demote|delete) Member. Your configuration dictates that s2Member should NOT take any immediate action on an EOT associated with a Chargeback Reversal. An s2Member API Notification will still be processed however.";
-
-												else if($is_refund)
-													$paypal["s2member_log"][] = "Skipping (demote|delete) Member. Your configuration dictates that s2Member should NOT take any immediate action on an EOT associated with a Refund. An s2Member API Notification will still be processed however.";
 											}
 										else if($is_delayed_eot) // Otherwise, we need to re-generate/store this IPN into a Transient Queue. Then re-process it on registration.
 											{

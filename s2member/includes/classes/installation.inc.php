@@ -78,37 +78,37 @@ if(!class_exists("c_ws_plugin__s2member_installation"))
 										$like = "`meta_key` LIKE 's2member\_%' AND `meta_key` NOT LIKE '%s2member\_originating\_blog%'";
 										$wpdb->query("UPDATE `".$wpdb->usermeta."` SET `meta_key` = CONCAT('".$wpdb->prefix."', `meta_key`) WHERE ".$like);
 									}
-
 								if /* Needs to be upgraded? */(!$v || !version_compare($v, "3.2.5", ">="))
 									// Version 3.2.5 is where transient names were changed. They're prefixed now.
 									{
 										$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '\_transient\_%'");
 									}
-
 								if /* Needs to be upgraded? */(!$v || !version_compare($v, "3.2.6", ">="))
 									// Version 3.2.6 fixed `s2member_ccaps_req` being stored empty and/or w/ one empty element in the array.
 									{
 										$wpdb->query("DELETE FROM `".$wpdb->postmeta."` WHERE `meta_key` = 's2member_ccaps_req' AND `meta_value` IN('','a:0:{}','a:1:{i:0;s:0:\"\";}')");
 									}
-
 								if(!$v || !version_compare($v, "110912", ">=") && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["filter_wp_query"] === array("all"))
 									// s2Member v110912 changed the way the "all" option for Alternative Views was handled.
 									{
 										$notice = '<strong>IMPORTANT:</strong> This version of s2Member changes the way your <code>Alternative View Protections</code> work. Please review your options under: <code>s2Member -› Restriction Options -› Alternative View Protections</code>.';
 										c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array("blog|network:plugins.php", "blog|network:ws-plugin--s2member-start", "blog|network:ws-plugin--s2member-mms-ops", "blog|network:ws-plugin--s2member-gen-ops", "blog|network:ws-plugin--s2member-res-ops"));
 									}
-								
 								if($v && version_compare($v, "130316", "<=")) // This version disables logging by default.
 									{
 										c_ws_plugin__s2member_menu_pages::update_all_options(array("ws_plugin__s2member_gateway_debug_logs" => "0", "ws_plugin__s2member_gateway_debug_logs_extensive" => "0"), true, false, false, false, false);
-									
+
 										$notice = '<strong>IMPORTANT:</strong> This version of s2Member disables s2Member\'s debug logging by default (for added security). Please see: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">s2Member -› Log Files (Debug) -› Configuration</a> for further details.';
 										c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array("blog|network:plugins.php", "blog|network:ws-plugin--s2member-start", "blog|network:ws-plugin--s2member-mms-ops", "blog|network:ws-plugin--s2member-gen-ops", "blog|network:ws-plugin--s2member-res-ops"));
-										
+
 										$notice = '<strong>IMPORTANT / Regarding s2Member Security Badges:</strong> If debug logging is enabled, your site will no longer qualify for an s2Member Security Badge until you disable logging (and you MUST also download, and then delete any existing log files from the past). Please see KB Article: <a href="http://www.s2member.com/kb/security-badges/" target="_blank" rel="external">s2Member Security Badges</a> for further details. If you have existing s2Member log files, you will need to delete those files from the server before your s2Member Security Badge can be re-enabled. s2Member stores log files here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code>. See also: <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">s2Member -› Log Files (Debug) -› Configuration</a> for further details.';
 										c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array("blog|network:plugins.php", "blog|network:ws-plugin--s2member-start", "blog|network:ws-plugin--s2member-mms-ops", "blog|network:ws-plugin--s2member-gen-ops", "blog|network:ws-plugin--s2member-res-ops"));
 									}
-									
+								if($v && version_compare($v, "140128", "<=")) // This version introduces support for partial refunds.
+									{
+										if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,reversals") // `refunds,reversals` => `refunds,partial_refunds,reversals`
+											c_ws_plugin__s2member_menu_pages::update_all_options(array("ws_plugin__s2member_triggers_immediate_eot" => "refunds,partial_refunds,reversals"), true, false, false, false, false);
+									}
 								$notice = '<strong>s2Member</strong> has been <strong>reactivated</strong>, with '.(($reactivation_reason === "levels") ? '<code>'.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]).'</code> Membership Levels' : 'the latest version').'.<br />';
 								$notice .= 'You now have version '.esc_html(WS_PLUGIN__S2MEMBER_VERSION).'. Your existing configuration remains.';
 
@@ -171,7 +171,7 @@ if(!class_exists("c_ws_plugin__s2member_installation"))
 								c_ws_plugin__s2member_roles_caps::unlink_roles /* Unlink Roles/Caps. */();
 
 								c_ws_plugin__s2member_files::remove_no_gzip_from_root_htaccess /* Remove GZIP exclusions. */();
-								
+
 								if(is_dir($files_dir = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"]))
 									{
 										if(file_exists($htaccess = $files_dir."/.htaccess"))

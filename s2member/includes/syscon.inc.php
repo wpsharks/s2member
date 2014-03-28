@@ -321,7 +321,7 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 
 				$default_options["specific_ids"] = "";
 
-				$default_options["triggers_immediate_eot"] = "refunds,reversals";
+				$default_options["triggers_immediate_eot"] = "refunds,partial_refunds,reversals";
 				$default_options["membership_eot_behavior"] = "demote";
 				$default_options["eot_time_ext_behavior"] = "extend";
 				$default_options["auto_eot_system_enabled"] = "1";
