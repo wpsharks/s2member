@@ -67,14 +67,14 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 
 						if /* This case includes some additional routines that can use the ``$os0`` value. */ ($subscr_or_txn_id && $os0)
 							{
-								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' OR `meta_value` = '" . esc_sql ($os0) . "') LIMIT 1"))
+								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_subscr_baid' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' OR `meta_value` = '" . esc_sql ($os0) . "') LIMIT 1"))
 								|| ($q = $wpdb->get_row ("SELECT `ID` AS `user_id` FROM `" . $wpdb->users . "` WHERE `ID` = '" . esc_sql ($os0) . "' LIMIT 1")))
 									if (($custom = get_user_option ("s2member_custom", $q->user_id)))
 										return $custom;
 							}
 						else if /* Otherwise, if all we have is a Subscr./Txn. ID value. */ ($subscr_or_txn_id)
 							{
-								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND `meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' LIMIT 1")))
+								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_subscr_baid' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND `meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' LIMIT 1")))
 									if (($custom = get_user_option ("s2member_custom", $q->user_id)))
 										return $custom;
 							}
@@ -98,13 +98,13 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 
 						if  /* This case includes some additional routines that can use the ``$os0`` value. */($subscr_or_txn_id && $os0)
 							{
-								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' OR `meta_value` = '" . esc_sql ($os0) . "') LIMIT 1"))
+								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_subscr_baid' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' OR `meta_value` = '" . esc_sql ($os0) . "') LIMIT 1"))
 								|| ($q = $wpdb->get_row ("SELECT `ID` AS `user_id` FROM `" . $wpdb->users . "` WHERE `ID` = '" . esc_sql ($os0) . "' LIMIT 1")))
 									return $q->user_id;
 							}
 						else if /* Otherwise, if all we have is a Subscr./Txn. ID value. */ ($subscr_or_txn_id)
 							{
-								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND `meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' LIMIT 1")))
+								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_subscr_baid' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND `meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' LIMIT 1")))
 									return $q->user_id;
 							}
 						return /* Otherwise, return false. */ false;
@@ -127,14 +127,14 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 
 						if  /* This case includes some additional routines that can use the ``$os0`` value. */($subscr_or_txn_id && $os0)
 							{
-								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' OR `meta_value` = '" . esc_sql ($os0) . "') LIMIT 1"))
+								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_subscr_baid' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND (`meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' OR `meta_value` = '" . esc_sql ($os0) . "') LIMIT 1"))
 								|| ($q = $wpdb->get_row ("SELECT `ID` AS `user_id` FROM `" . $wpdb->users . "` WHERE `ID` = '" . esc_sql ($os0) . "' LIMIT 1")))
 									if (is_object ($user = new WP_User ($q->user_id)) && !empty ($user->ID) && ($email = $user->user_email))
 										return $email;
 							}
 						else if  /* Otherwise, if all we have is a Subscr./Txn. ID value. */($subscr_or_txn_id)
 							{
-								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND `meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' LIMIT 1")))
+								if (($q = $wpdb->get_row ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE (`meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' OR `meta_key` = '" . $wpdb->prefix . "s2member_subscr_baid' OR `meta_key` = '" . $wpdb->prefix . "s2member_first_payment_txn_id') AND `meta_value` = '" . esc_sql ($subscr_or_txn_id) . "' LIMIT 1")))
 									if (is_object ($user = new WP_User ($q->user_id)) && !empty ($user->ID) && ($email = $user->user_email))
 										return $email;
 							}
@@ -158,7 +158,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 					{
 						if ($user_id || ($subscr_id && ($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($subscr_id))) || (!$user_id && !$subscr_id && is_object ($user = wp_get_current_user ()) && !empty ($user->ID) && ($user_id = $user->ID)))
 							{
-								if (($_subscr_id = get_user_option ("s2member_subscr_id", $user_id)) && (!$subscr_id || $subscr_id === $_subscr_id) && ($subscr_id = $_subscr_id))
+								$_subscr_id = get_user_option ("s2member_subscr_id", $user_id);
+								$_subscr_baid = get_user_option ("s2member_subscr_baid", $user_id);
+
+								if ($_subscr_id && (!$subscr_id || $subscr_id === $_subscr_id || $subscr_id === $_subscr_baid) && ($subscr_id = $_subscr_id))
 									if (is_array ($ipn_signup_vars = get_user_option ("s2member_ipn_signup_vars", $user_id)))
 										if ($ipn_signup_vars["subscr_id"] === $subscr_id)
 											return $ipn_signup_vars;
