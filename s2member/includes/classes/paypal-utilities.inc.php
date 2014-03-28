@@ -483,14 +483,17 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						do_action("ws_plugin__s2member_before_paypal_pro_subscr_id", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
-						if(is_array($array = $array_or_string) && !empty($array["recurring_payment_id"]))
-							$subscr_id = trim($array["recurring_payment_id"]);
-
-						else if(is_array($array = $array_or_string) && !empty($array["subscr_id"]))
+						if(is_array($array = $array_or_string) && !empty($array["subscr_id"]))
 							$subscr_id = trim($array["subscr_id"]);
 
-						else if(is_string($string = $array_or_string) && !empty($string))
-							$subscr_id = trim($string);
+						else if(is_array($array = $array_or_string) && !empty($array["recurring_payment_id"]))
+							$subscr_id = trim($array["recurring_payment_id"]);
+
+						else if(is_array($array = $array_or_string) && !empty($array["mp_id"])
+							&& ($ipn_signup_var_subscr_id = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("subscr_id", FALSE, $array["mp_id"])))
+							$subscr_id = trim($ipn_signup_var_subscr_id); // Found w/ a Billing Agreement ID.
+
+						else if(is_string($string = $array_or_string) && !empty($string)) $subscr_id = trim($string);
 
 						return apply_filters("ws_plugin__s2member_paypal_pro_subscr_id", ((!empty($subscr_id)) ? $subscr_id : false), get_defined_vars());
 					}
@@ -510,20 +513,23 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						do_action("ws_plugin__s2member_before_paypal_pro_item_number", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
-						if(isset($array_or_string["PROFILENAME"]) /* Payflow API alternative. */)
+						if(is_array($array_or_string) && isset($array_or_string["PROFILENAME"]) /* Payflow. */)
 							$array_or_string["PROFILEREFERENCE"] = $array_or_string["PROFILENAME"];
 
-						if(is_array($array = $array_or_string) && (!empty($array["PROFILEREFERENCE"]) || !empty($array["rp_invoice_id"])))
-							list($_reference, $_domain, $_item_number) = array_map("trim", preg_split("/~/", ((!empty($array["PROFILEREFERENCE"])) ? $array["PROFILEREFERENCE"] : $array["rp_invoice_id"]), 3));
+						if(is_array($array = $array_or_string) && !empty($array["item_number"]))
+							$_item_number = trim($array["item_number"]);
 
 						else if(is_array($array = $array_or_string) && !empty($array["item_number1"]))
 							$_item_number = trim($array["item_number1"]);
 
-						else if(is_array($array = $array_or_string) && !empty($array["item_number"]))
-							$_item_number = trim($array["item_number"]);
+						else if(is_array($array = $array_or_string) && (!empty($array["PROFILEREFERENCE"]) || !empty($array["rp_invoice_id"])))
+							list($_reference, $_domain, $_item_number) = array_map("trim", preg_split("/~/", ((!empty($array["PROFILEREFERENCE"])) ? $array["PROFILEREFERENCE"] : $array["rp_invoice_id"]), 3));
 
-						else if(is_string($string = $array_or_string) && !empty($string))
-							$_item_number = trim($string);
+						else if(is_array($array = $array_or_string) && !empty($array["mp_id"])
+							&& ($ipn_signup_var_item_number = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_number", FALSE, $array["mp_id"])))
+							$_item_number = trim($ipn_signup_var_item_number); // Found w/ a Billing Agreement ID.
+
+						else if(is_string($string = $array_or_string) && !empty($string)) $_item_number = trim($string);
 
 						if(!empty($_item_number) && preg_match($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_or_wo_level_regex"], $_item_number))
 							$item_number = $_item_number;
@@ -548,17 +554,20 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						do_action("ws_plugin__s2member_before_paypal_pro_item_name", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
-						if(is_array($array = $array_or_string) && !empty($array["product_name"]))
-							$item_name = trim($array["product_name"]);
+						if(is_array($array = $array_or_string) && !empty($array["item_name"]))
+							$item_name = trim($array["item_name"]);
 
 						else if(is_array($array = $array_or_string) && !empty($array["item_name1"]))
 							$item_name = trim($array["item_name1"]);
 
-						else if(is_array($array = $array_or_string) && !empty($array["item_name"]))
-							$item_name = trim($array["item_name"]);
+						else if(is_array($array = $array_or_string) && !empty($array["product_name"]))
+							$item_name = trim($array["product_name"]);
 
-						else if(is_string($string = $array_or_string) && !empty($string))
-							$item_name = trim($string);
+						else if(is_array($array = $array_or_string) && !empty($array["mp_id"])
+							&& ($ipn_signup_var_item_name = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_name", FALSE, $array["mp_id"])))
+							$item_name = trim($ipn_signup_var_item_name); // Found w/ a Billing Agreement ID.
+
+						else if(is_string($string = $array_or_string) && !empty($string)) $item_name = trim($string);
 
 						return apply_filters("ws_plugin__s2member_paypal_pro_item_name", ((!empty($item_name)) ? $item_name : false), get_defined_vars());
 					}
@@ -582,19 +591,21 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						do_action("ws_plugin__s2member_before_paypal_pro_period1", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
-						if(isset($array_or_string["PROFILENAME"]) /* Payflow API alternative. */)
+						if(is_array($array_or_string) && isset($array_or_string["PROFILENAME"]) /* Payflow. */)
 							$array_or_string["PROFILEREFERENCE"] = $array_or_string["PROFILENAME"];
 
-						if(is_array($array = $array_or_string) && (!empty($array["PROFILEREFERENCE"]) || !empty($array["rp_invoice_id"])))
+						if(is_array($array = $array_or_string) && !empty($array["period1"])) $_period1 = trim($array["period1"]);
+
+						else if(is_array($array = $array_or_string) && (!empty($array["PROFILEREFERENCE"]) || !empty($array["rp_invoice_id"])))
 							{
 								list($_reference, $_domain, $_item_number) = array_map("trim", preg_split("/~/", ((!empty($array["PROFILEREFERENCE"])) ? $array["PROFILEREFERENCE"] : $array["rp_invoice_id"]), 3));
 								list($_start_time, $_period1, $_period3) = array_map("trim", preg_split("/\:/", $_reference, 3));
 							}
-						else if(is_array($array = $array_or_string) && !empty($array["period1"]))
-							$_period1 = trim($array["period1"]);
+						else if(is_array($array = $array_or_string) && !empty($array["mp_id"])
+							&& ($ipn_signup_var_period1 = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("period1", FALSE, $array["mp_id"])))
+							$_period1 = trim($ipn_signup_var_period1); // Found w/ a Billing Agreement ID.
 
-						else if(is_string($string = $array_or_string) && !empty($string))
-							$_period1 = trim($string);
+						else if(is_string($string = $array_or_string) && !empty($string)) $_period1 = trim($string);
 
 						if /* Were we able to get a `period1` string? */(!empty($_period1))
 							{
@@ -636,19 +647,21 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						do_action("ws_plugin__s2member_before_paypal_pro_period3", get_defined_vars());
 						unset /* Unset defined __refs, __v. */($__refs, $__v);
 
-						if(isset($array_or_string["PROFILENAME"]) /* Payflow API alternative. */)
+						if(is_array($array_or_string) && isset($array_or_string["PROFILENAME"]) /* Payflow. */)
 							$array_or_string["PROFILEREFERENCE"] = $array_or_string["PROFILENAME"];
 
-						if(is_array($array = $array_or_string) && (!empty($array["PROFILEREFERENCE"]) || !empty($array["rp_invoice_id"])))
+						if(is_array($array = $array_or_string) && !empty($array["period3"])) $_period3 = trim($array["period3"]);
+
+						else if(is_array($array = $array_or_string) && (!empty($array["PROFILEREFERENCE"]) || !empty($array["rp_invoice_id"])))
 							{
 								list($_reference, $_domain, $_item_number) = array_map("trim", preg_split("/~/", ((!empty($array["PROFILEREFERENCE"])) ? $array["PROFILEREFERENCE"] : $array["rp_invoice_id"]), 3));
 								list($_start_time, $_period1, $_period3) = array_map("trim", preg_split("/\:/", $_reference, 3));
 							}
-						else if(is_array($array = $array_or_string) && !empty($array["period3"]))
-							$_period3 = trim($array["period3"]);
+						else if(is_array($array = $array_or_string) && !empty($array["mp_id"])
+							&& ($ipn_signup_var_period3 = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("period3", FALSE, $array["mp_id"])))
+							$_period3 = trim($ipn_signup_var_period3); // Found w/ a Billing Agreement ID.
 
-						else if(is_string($string = $array_or_string) && !empty($string))
-							$_period3 = trim($string);
+						else if(is_string($string = $array_or_string) && !empty($string)) $_period3 = trim($string);
 
 						if /* Were we able to get a `period3` string? */(!empty($_period3))
 							{
