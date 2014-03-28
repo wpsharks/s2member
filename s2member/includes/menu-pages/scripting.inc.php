@@ -461,6 +461,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
+								echo '<p><strong>A very simple way to drip content; via the <code>[s2Drip]</code> Shortcode:</strong></p>' . "\n";
+								if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()) echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[s2Drip]</code> requires s2Member Pro.</strong></em></p>' . "\n";
+								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/s2drip-example1.x-php")) . '</p>' . "\n";
+
+								echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
 								echo '<p><strong>To drip content using <code>S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS</code>:</strong></p>' . "\n";
 								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/current-user-paid-registration-days-dripping.x-php")) . '</p>' . "\n";
 

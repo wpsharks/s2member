@@ -1,0 +1,12 @@
+[s2Drip level="1" after_day="4"]
+	Some content for Members at Level 1 (or higher).
+	This content will show only after day 4 of their paid membership.
+[/s2Drip]
+
+[s2Drip level="1" after_day="4" before_day="30"]
+	Some content for Members at Level 1 (or higher).
+	This content will show only after day 4 of their paid membership;
+		and, this content will NOT show after day 30 of their paid membership.
+[/s2Drip]
+
+**NOTE** The use of [s2Drip] requires s2Member Pro.
