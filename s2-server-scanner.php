@@ -2137,7 +2137,10 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 * @param string  $dir The directory we should begin with.
 	 *
 	 * @param boolean $ignore_vcs_dirs Optional. Defaults to a TRUE value.
-	 *    By default, we ignore VCS directories (e.g. `.git` and `.svn`).
+	 *    By default, we ignore VCS directories (e.g. `.git`, `.svn` and `.bzr`).
+	 *
+	 * @param boolean $ignore_readme_files Optional. Defaults to a TRUE value.
+	 *    By default, we ignore README files (e.g. `readme.txt` and `readme.md`).
 	 *
 	 * @param string  $root_dir Internal parameter. Defaults to an empty string, indicating the current ``$dir``.
 	 *    Recursive calls to this method will automatically pass this value, indicating the main root directory value.
@@ -2148,7 +2151,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 *
 	 * @wp-assertion This is tested via WordPress.
 	 */
-	public function dir_checksum($dir, $ignore_vcs_dirs = TRUE, $root_dir = '')
+	public function dir_checksum($dir, $ignore_vcs_dirs = TRUE, $ignore_readme_files = TRUE, $root_dir = '')
 		{
 			if(is_string($dir) && $dir && is_string($root_dir))
 				{
@@ -2162,7 +2165,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					$root_dir     = (!$root_dir) ? $dir : $this->n_dir_seps(realpath($root_dir));
 					$relative_dir = preg_replace('/^'.preg_quote($root_dir, '/').'(?:\/|$)/', '', $dir);
 
-					if($ignore_vcs_dirs && in_array(basename($dir), array('.git', '.svn'), TRUE))
+					if($ignore_vcs_dirs && in_array(basename($dir), array('.git', '.svn', '.bzr'), TRUE))
 						return $checksums; // Ignore this VCS directory.
 
 					$checksums[$relative_dir] = md5($relative_dir); // Establish relative directory checksum.
@@ -2170,11 +2173,12 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					while(($entry = readdir($handle)) !== FALSE)
 						if($entry !== '.' && $entry !== '..') // Ignore single/double dots.
 							if($entry !== 'checksum.txt' || $dir !== $root_dir) // Skip in root directory.
-								{
-									if(is_dir($dir.'/'.$entry))
-										$checksums[$relative_dir.'/'.$entry] = $this->dir_checksum($dir.'/'.$entry, $ignore_vcs_dirs, $root_dir);
-									else $checksums[$relative_dir.'/'.$entry] = md5($relative_dir.'/'.$entry.md5_file($dir.'/'.$entry));
-								}
+								if(!$ignore_readme_files || !in_array(strtolower($entry), array('readme.txt', 'readme.md'), TRUE))
+									{
+										if(is_dir($dir.'/'.$entry))
+											$checksums[$relative_dir.'/'.$entry] = $this->dir_checksum($dir.'/'.$entry, $ignore_vcs_dirs, $ignore_readme_files, $root_dir);
+										else $checksums[$relative_dir.'/'.$entry] = md5($relative_dir.'/'.$entry.md5_file($dir.'/'.$entry));
+									}
 					closedir($handle); // Close directory handle now.
 
 					ksort($checksums, SORT_STRING); // In case order changes from one server to another.
