@@ -78,8 +78,15 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 										$coupon = (!empty($_REQUEST["s2member_paypal_proxy_coupon"]) && is_array($_REQUEST["s2member_paypal_proxy_coupon"])) ? stripslashes_deep($_REQUEST["s2member_paypal_proxy_coupon"]) : array();
 										$coupon = (isset($coupon["full_coupon_code"], $coupon["coupon_code"], $coupon["affiliate_id"]) && is_string($coupon["full_coupon_code"]) && is_string($coupon["coupon_code"]) && is_string($coupon["affiliate_id"])) ? $coupon : array("full_coupon_code" => "", "coupon_code" => "", "affiliate_id" => "");
 
-										if (empty ($paypal["custom"]) && !empty ($paypal["recurring_payment_id"])) // Lookup on Recurring Profiles?
+										if(!empty($paypal["txn_type"]) && $paypal["txn_type"] === "merch_pmt")
+											// This is mostly irrelevant, but it helps to keep the logs cleaner.
+											sleep(5); // Wait for Pro Form procesing to complete.
+
+										if (empty ($paypal["custom"]) && !empty ($paypal["recurring_payment_id"])) // Recurring Profile ID.
 											$paypal["custom"] = c_ws_plugin__s2member_utils_users::get_user_custom_with ($paypal["recurring_payment_id"]);
+
+										else if (empty ($paypal["custom"]) && !empty ($paypal["mp_id"])) // Lookup; based on a Billing Agreement ID.
+											$paypal["custom"] = c_ws_plugin__s2member_utils_users::get_user_custom_with ($paypal["mp_id"]);
 
 										if (!empty ($paypal["custom"]) && preg_match ("/^" . preg_quote (preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"]), "/") . "/i", $paypal["custom"]))
 											{
