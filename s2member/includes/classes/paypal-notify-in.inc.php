@@ -176,22 +176,22 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								Add IPN proxy (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_REQUEST["s2member_paypal_proxy"]))
-									$paypal["s2member_paypal_proxy"] = esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy"])));
+									$paypal["s2member_paypal_proxy"] = esc_html(trim(stripslashes((string)$_REQUEST["s2member_paypal_proxy"])));
 								/*
 								Add IPN proxy use vars (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_REQUEST["s2member_paypal_proxy_use"]))
-									$paypal["s2member_paypal_proxy_use"] = esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy_use"])));
+									$paypal["s2member_paypal_proxy_use"] = esc_html(trim(stripslashes((string)$_REQUEST["s2member_paypal_proxy_use"])));
 								/*
 								Add IPN proxy coupon vars (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_REQUEST["s2member_paypal_proxy_coupon"]))
-									$paypal["s2member_paypal_proxy_coupon"] = esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy_coupon"])));
+									$paypal["s2member_paypal_proxy_coupon"] = stripslashes_deep((array)$_REQUEST["s2member_paypal_proxy_coupon"]);
 								/*
 								Also add IPN proxy self-verification (when available) to the ``$paypal`` array.
 								*/
 								if (!empty ($_REQUEST["s2member_paypal_proxy_verification"]))
-									$paypal["s2member_paypal_proxy_verification"] = esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy_verification"])));
+									$paypal["s2member_paypal_proxy_verification"] = esc_html(trim(stripslashes((string)$_REQUEST["s2member_paypal_proxy_verification"])));
 								/*
 								If debugging/logging is enabled; we need to append ``$paypal`` to the log file.
 									Logging now supports Multisite Networking as well.
