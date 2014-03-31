@@ -67,6 +67,48 @@ if (!class_exists ("c_ws_plugin__s2member_mo_page"))
 					{
 						return c_ws_plugin__s2member_mo_page_in::wp_redirect_w_mop_vars ($seeking_type, $seeking_type_value, $req_type, $req_type_value, $seeking_uri, $res_type);
 					}
+
+				public static function back_compat_mop_vars()
+					{
+						if(empty($_REQUEST["_s2member_vars"])
+						   || !is_string($_REQUEST["_s2member_vars"])
+						) return;
+
+						foreach(explode(";", $_REQUEST["_s2member_vars"]) as $_v)
+							$v[] = explode(",", $_v);
+						unset($_v);
+
+						if(!isset($v, $v[0], $v[1])
+						   || count($v[0]) !== 3 || count($v[1]) !== 3
+						) return;
+
+						/*
+						 * Back compat. Deprecated since v1404xx.
+						 */
+						$ov["_s2member_seeking"]     = array(
+							"type"   => $v[1][0],
+							$v[1][0] => $v[1][1],
+							"_uri"   => $v[1][2]
+						);
+						$ov["_s2member_req"]         = array(
+							"type"   => $v[0][1],
+							$v[0][1] => $v[0][2],
+						);
+						$ov["_s2member_res"]["type"] = $v[0][0];
+
+						/*
+						 * Back compat. Deprecated since v1104xx.
+						 */
+						$ov["s2member_seeking"]          = $v[1][0]."-".$v[1][1];
+						$ov["s2member_".$v[0][1]."_req"] = $v[0][2];
+
+						/*
+						 * Fill both $_GET and $_REQUEST vars.
+						 */
+						foreach($ov as $_k => $_v)
+							$_GET[$_k] = $_REQUEST[$_k] = $_v;
+						unset($_k, $_v);
+					}
 			}
 	}
 ?>

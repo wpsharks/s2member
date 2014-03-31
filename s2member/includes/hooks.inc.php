@@ -181,6 +181,8 @@ add_filter("bbp_get_caps_for_role", "c_ws_plugin__s2member_roles_caps::bbp_dynam
 add_action("bbp_activation", "c_ws_plugin__s2member_roles_caps::config_roles", 11);
 
 add_action("http_api_debug", "c_ws_plugin__s2member_utils_logs::http_api_debug", 1000, 5);
+
+add_action("plugins_loaded", "c_ws_plugin__s2member_mo_page::back_compat_mop_vars", -(PHP_INT_MAX - 10));
 /*
 Register the activation | de-activation routines.
 */

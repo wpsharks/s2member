@@ -81,24 +81,38 @@ if (!class_exists ("c_ws_plugin__s2member_mo_page_in"))
 				* 	One of: `post|page|catg|ptag|file|ruri|ccap|sp|sys`.
 				* 	Defaults to ``$seeking_type``.
 				* @return bool This function always returns true.
+				 *
+				 * @TODO Update documentation in the API Scripting section.
 				*/
 				public static function wp_redirect_w_mop_vars ($seeking_type = FALSE, $seeking_type_value = FALSE, $req_type = FALSE, $req_type_value = FALSE, $seeking_uri = FALSE, $res_type = FALSE)
 					{
-						do_action ("ws_plugin__s2member_before_wp_redirect_w_mop_vars", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_wp_redirect_w_mop_vars", get_defined_vars());
 
-						$status = /* Allow Filters. Defaults to `301`. */ apply_filters ("ws_plugin__s2member_content_redirect_status", 301, get_defined_vars ());
-						$status = /* Allow Filters. Defaults to `301`. */ apply_filters ("ws_plugin__s2member_wp_redirect_w_mop_vars_status", $status, get_defined_vars ());
+						foreach(array("seeking_type", "seeking_type_value", "req_type", "req_type_value", "seeking_uri", "res_type") as $_param)
+							{
+								if($_param === "seeking_uri" || ($_param === "seeking_type_value" && $seeking_type === "ruri"))
+									${$_param} = base64_encode((string)${$_param});
+								else ${$_param} = str_replace(array(",", ";"), "", (string)${$_param});
+							}
+						unset($_param); // Housekeeping.
 
-						$seeking_uri = (strlen ((string)$seeking_uri) /* URIs are base64 encoded. */) ? base64_encode ((string)$seeking_uri) : (string)$seeking_uri;
-						$seeking_type_value = ((string)$seeking_type /* URIs are base64 encoded. */ === "ruri") ? base64_encode ((string)$seeking_type_value) : (string)$seeking_type_value;
+						if(!$res_type) $res_type = $seeking_type;
 
-						$res_type = (!(string)$res_type) ? /* Restriction type preventing access. Defaults to ``$seeking_type`` if NOT passed in explicitly. */ (string)$seeking_type : (string)$res_type;
+						$vars  = $res_type.",".$req_type.",".$req_type_value.";";
+						$vars .= $seeking_type.",".$seeking_type_value.",".$seeking_uri;
+						$vars  = array("_s2member_vars" => $vars);
 
-						wp_redirect (add_query_arg (urlencode_deep (array ("_s2member_seeking" => array ("type" => (string)$seeking_type, urlencode ((string)$seeking_type)=> (string)$seeking_type_value, "_uri" => (string)$seeking_uri), "_s2member_req" => array ("type" => (string)$req_type, urlencode ((string)$req_type)=> (string)$req_type_value), "_s2member_res" => array ("type" => (string)$res_type), "s2member_seeking" => (string)$seeking_type . "-" . (string)$seeking_type_value, "s2member_" . urlencode ((string)$req_type) . "_req" => (string)$req_type_value)), get_page_link ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])), $status);
+						$status = apply_filters("ws_plugin__s2member_content_redirect_status", 301, get_defined_vars());
+						$status = apply_filters("ws_plugin__s2member_wp_redirect_w_mop_vars_status", $status, get_defined_vars());
 
-						do_action ("ws_plugin__s2member_after_wp_redirect_w_mop_vars", get_defined_vars ());
+						$mop_url = get_page_link($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"]);
+						$mop_url = apply_filters("ws_plugin__s2member_wp_redirect_w_mop_vars_url", add_query_arg(urlencode_deep($vars), $mop_url), get_defined_vars());
 
-						return true; // Always returns true here.
+						wp_redirect($mop_url, $status); // NOTE: we do not exit here (on purpose).
+
+						do_action("ws_plugin__s2member_after_wp_redirect_w_mop_vars", get_defined_vars());
+
+						return TRUE; // Always returns true here.
 					}
 			}
 	}
