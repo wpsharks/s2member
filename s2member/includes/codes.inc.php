@@ -23,7 +23,7 @@ add_shortcode("s2Key", "c_ws_plugin__s2member_sc_keys::sc_get_key");
 add_shortcode("s2Get", "c_ws_plugin__s2member_sc_gets::sc_get_details");
 add_shortcode("s2File", "c_ws_plugin__s2member_sc_files::sc_get_file");
 add_shortcode("s2Stream", "c_ws_plugin__s2member_sc_files::sc_get_stream");
-add_shortcode('s2MOP', 'c_ws_plugin__s2member_sc_mop_vars_notice::shortcode');
+add_shortcode("s2MOP", "c_ws_plugin__s2member_sc_mop_vars_notice::shortcode");
 
 add_shortcode("s2If", "c_ws_plugin__s2member_sc_if_conds::sc_if_conditionals");
 add_shortcode("_s2If", "c_ws_plugin__s2member_sc_if_conds::sc_if_conditionals");
