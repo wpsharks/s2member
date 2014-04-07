@@ -44,25 +44,21 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 			 *
 			 * @return null Or exits script execution after redirection w/ `301` status.
 			 */
-			public static function membership_options_page /* Real Membership Options Page. */
-			()
+			public static function membership_options_page() // Real Membership Options Page.
 				{
 					do_action("ws_plugin__s2member_before_membership_options_page", get_defined_vars());
 
 					if(!empty ($_GET["s2member_membership_options_page"]) && is_array($_g = c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_GET))))
 						{
-							$args = /* Initialize this to an empty array value. */
-								array();
+							$args = array(); // Initialize this to an empty array value.
 
 							foreach($_g as $var => $value) // Include all of the `_?s2member_` variables.
 								// Do NOT include `s2member_membership_options_page`; creates a redirection loop.
 								if(preg_match("/^_?s2member_/", $var) && $var !== "s2member_membership_options_page")
-									$args[$var] = /* Supports nested arrays. */
-										$value;
+									$args[$var] = $value; // Supports nested arrays.
 
 							wp_redirect(add_query_arg(urlencode_deep($args), get_page_link($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])), 301).exit ();
 						}
-
 					do_action("ws_plugin__s2member_after_membership_options_page", get_defined_vars());
 				}
 
