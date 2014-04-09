@@ -1075,27 +1075,33 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-api-mop-vars-section">' . "\n";
 								echo '<h3>Membership Options Page Variables (some scripting required)</h3>' . "\n";
 								echo '<p>At the core of s2Member, is it\'s ability to protect content <em>(i.e. Posts, Pages, Tags, Categories, URI word fragments, etc)</em>. Whenever a public User, or even an existing Member attempts to access an area of your site that is unavailable to them; either because they are not logged-in, not a paying Member at all; or maybe they are logged-in, but they don\'t have access to content you\'ve protected at a higher Membership Level; s2Member will always redirect these unauthenticated requests to your Membership Options Page.</p>' . "\n";
-								echo '<p>So your Membership Options Page is a key element of your site. It serves as the focal point of your s2Member installation. Understanding this, you can see it becomes important for s2Member to provide information about what the User/Member was attempting to access <em>(e.g. before they were redirected to the Membership Options Page)</em>. This is where s2Member\'s MOP Vars come in <em>(i.e. Membership Options Page Variables)</em>. Whenever s2Member redirects a User/Member to your Membership Options Page, it will include these important MOP Variables in the query string of the URL. These Variables can be used to provide more informative messages; or even to provide a different set of Membership Options <em>(i.e. Payment Buttons)</em>, based on what a User/Member was attempting to access.</p>' . "\n";
+								echo '<p>So your Membership Options Page is a key element of your site. It serves as the focal point of your s2Member installation. Understanding this, you can see it becomes important for s2Member to provide information about what the User/Member was attempting to access <em>(before they were redirected to the Membership Options Page)</em>. This is where s2Member\'s MOP Vars come in <em>(i.e. Membership Options Page Variables)</em>. Whenever s2Member redirects a User/Member to your Membership Options Page, it will include these important MOP Variables in the query string of the URL. These Variables can be used to provide more informative messages; or even to provide a different set of Membership Options <em>(e.g. Payment Buttons)</em>, based on what a User/Member was attempting to access.</p>' . "\n";
 								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_mop_vars", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
-								echo '<strong>See Also:</strong> <a href="http://www.s2member.com/codex/stable/s2member/api_constants/package-summary/" target="_blank" rel="external">s2Member Codex -› API Constants</a>, and <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/" target="_blank" rel="external">s2Member Codex -› API Functions</a>.</p>' . "\n";
+								echo '<p><strong>TIP:</strong> If you\'re running s2Member Pro, there is a NEW simplified way to deal with MOP Vars using the <a href="http://www.s2member.com/kb/s2mop-shortcode/" target="_blank" rel="external"><code>[s2MOP]</code> Shortcode</a>.<br />' . "\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/api-mop-vars.x-php")) . '</p>' . "\n";
-
-								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-
-								echo '<p><strong>Code Samples:</strong> This may give you some ideas [ <a href="#" onclick="jQuery(\'p#ws-plugin--s2member-api-mop-vars-code-samples\').toggle(); return false;" class="ws-dotted-link">click here</a> ].</p>' . "\n";
+								echo '<p><strong>PHP Code Sample:</strong> This may give you some other ideas [<a href="#" onclick="jQuery(\'p#ws-plugin--s2member-api-mop-vars-code-samples\').toggle(); return false;" class="ws-dotted-link">click here</a>].</p>' . "\n";
 								echo '<p id="ws-plugin--s2member-api-mop-vars-code-samples" style="display:none;">' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/api-mop-vars-e.x-php")) . '</p>' . "\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p><strong>Backward compatibility:</strong> The structure of s2Member\'s MOP Vars changed a bit in Nov, 2011. However, s2Member still provides the same MOP Vars that it used in previous versions, for backward compatibility. These <a href="#" onclick="jQuery(\'p#ws-plugin--s2member-old-api-mop-vars-details\').toggle(); return false;" class="ws-dotted-link">old MOP Variables</a> were more difficult to use; they are now deprecated <em>(i.e. they WILL eventually be removed)</em>. Going foward, please go by the new documentation above.</p>' . "\n";
+								echo '<p><strong>s2Member MOP Vars (Explained) ...</strong></p>' . "\n";
+								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/api-mop-vars.x-php")) . '</p>' . "\n";
+
+								echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+								echo '<p><strong>Backward compatibility (the old way):</strong> The structure of s2Member\'s MOP Vars changed again in Apr, 2014. However, s2Member still provides the same MOP Vars that it used in previous versions, for backward compatibility. These <a href="#" onclick="jQuery(\'p#ws-plugin--s2member-old-api-mop-vars-details\').toggle(); return false;" class="ws-dotted-link">old MOP Variables</a> were more difficult to use; they are now deprecated <em>(i.e. they WILL eventually be removed)</em>. Going foward, please go by the new documentation above.</p>' . "\n";
 								echo '<p id="ws-plugin--s2member-old-api-mop-vars-details" style="display:none;">' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/api-mop-vars-o.x-php")) . '</p>' . "\n";
+								echo '</div>' . "\n";
+
+								echo '<div class="ws-menu-page-hr"></div>' . "\n";
+
+								echo '<p><strong>Backward compatibility (the really old way):</strong> The structure of s2Member\'s MOP Vars changed a bit in Nov, 2011. However, s2Member still provides the same MOP Vars that it used in previous versions, for backward compatibility. These <a href="#" onclick="jQuery(\'p#ws-plugin--s2member-really-old-api-mop-vars-details\').toggle(); return false;" class="ws-dotted-link">old MOP Variables</a> were more difficult to use; they are now deprecated <em>(i.e. they WILL eventually be removed)</em>. Going foward, please go by the new documentation above.</p>' . "\n";
+								echo '<p id="ws-plugin--s2member-really-old-api-mop-vars-details" style="display:none;">' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/api-mop-vars-ro.x-php")) . '</p>' . "\n";
 								echo '</div>' . "\n";
 
 								echo '</div>' . "\n";
