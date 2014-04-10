@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------------------------------------
-Example redirection link with MOP Vars, in psuedo code:
+Example redirection link with MOP Vars, in pseudo code:
 -----------------------------------------------------------------------------------------------------------
 
 s2Member's MOP Vars are now a dot (`.`) delimited list of six values.
