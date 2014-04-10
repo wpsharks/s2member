@@ -1,10 +1,10 @@
-# Copyright (C) 2014
+# Copyright (C) 2014 
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  140328\n"
+"Project-Id-Version:  140409\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2014-03-29 00:07:53+00:00\n"
+"POT-Creation-Date: 2014-04-10 02:25:41+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1419,12 +1419,12 @@ msgctxt "s2member-front"
 msgid "Yes, I want to receive updates via email."
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:208
+#: s2member/includes/syscon.inc.php:209
 msgctxt "s2member-front"
 msgid "[%s] Username/Password"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:209
+#: s2member/includes/syscon.inc.php:210
 msgctxt "s2member-front"
 msgid ""
 "Your Username/Password for:\n"
@@ -1435,12 +1435,12 @@ msgid ""
 "%%%%wp_login_url%%%%"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:212
+#: s2member/includes/syscon.inc.php:213
 msgctxt "s2member-front"
 msgid "[%s] New User Registration"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:213
+#: s2member/includes/syscon.inc.php:214
 msgctxt "s2member-front"
 msgid ""
 "New User Registration on your site:\n"
@@ -1452,13 +1452,13 @@ msgid ""
 "IP Address: %%%%user_ip%%%%"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:235
+#: s2member/includes/syscon.inc.php:236
 #: s2member-pro/includes/syscon.inc.php:94
 msgctxt "s2member-front"
 msgid "Congratulations! (your membership has been approved)"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:236
+#: s2member/includes/syscon.inc.php:237
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your membership has been approved.\n"
@@ -1474,12 +1474,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:239 s2member/includes/syscon.inc.php:243
+#: s2member/includes/syscon.inc.php:240 s2member/includes/syscon.inc.php:244
 msgctxt "s2member-front"
 msgid "Thank you! Your account has been updated."
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:240 s2member/includes/syscon.inc.php:244
+#: s2member/includes/syscon.inc.php:241 s2member/includes/syscon.inc.php:245
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n"
@@ -1490,13 +1490,13 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:247
+#: s2member/includes/syscon.inc.php:248
 #: s2member-pro/includes/syscon.inc.php:98
 msgctxt "s2member-front"
 msgid "Thank You! (instructions for access)"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:248
+#: s2member/includes/syscon.inc.php:249
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%!\n"
@@ -1513,32 +1513,32 @@ msgid ""
 "%s"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:282
+#: s2member/includes/syscon.inc.php:283
 msgctxt "s2member-front"
 msgid "Free Subscriber"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:282
+#: s2member/includes/syscon.inc.php:283
 msgctxt "s2member-front"
 msgid "Bronze Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:282
+#: s2member/includes/syscon.inc.php:283
 msgctxt "s2member-front"
 msgid "Silver Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:282
+#: s2member/includes/syscon.inc.php:283
 msgctxt "s2member-front"
 msgid "Gold Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:282
+#: s2member/includes/syscon.inc.php:283
 msgctxt "s2member-front"
 msgid "Platinum Member"
 msgstr ""
 
-#: s2member/includes/syscon.inc.php:282
+#: s2member/includes/syscon.inc.php:283
 msgctxt "s2member-front"
 msgid "Level %s Member"
 msgstr ""
