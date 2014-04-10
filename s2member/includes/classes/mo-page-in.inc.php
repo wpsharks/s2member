@@ -93,14 +93,14 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 						{
 							if($_param === "seeking_uri" || ($_param === "seeking_type_value" && $seeking_type === "ruri"))
 								${$_param} = base64_encode((string)${$_param});
-							else ${$_param} = str_replace(array(",", ";"), "", (string)${$_param});
+							else ${$_param} = str_replace(".", "", (string)${$_param});
 						}
 					unset($_param); // Housekeeping.
 
 					if(!$res_type) $res_type = $seeking_type;
 
-					$vars = $res_type.",".$req_type.",".$req_type_value.";";
-					$vars .= $seeking_type.",".$seeking_type_value.",".$seeking_uri;
+					$vars = $res_type.".".$req_type.".".$req_type_value.".";
+					$vars .= $seeking_type.".".$seeking_type_value.".".$seeking_uri;
 					$vars = array("_s2member_vars" => $vars);
 
 					$status = apply_filters("ws_plugin__s2member_content_redirect_status", 301, get_defined_vars());
@@ -117,6 +117,50 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 					do_action("ws_plugin__s2member_after_wp_redirect_w_mop_vars", get_defined_vars());
 
 					return TRUE; // Always returns true here.
+				}
+
+			/*
+			 * s2Member's MOP Vars are now a dot (`.`) delimited list of six values.
+			 *
+			 * e.g. .../membership-options-page/
+			 *    ?_s2member_vars=[restriction type].[requirement type].[requirement type value].
+			 *       [seeking type].[seeking type value].[seeking URI base 64 encoded]
+			 */
+			public static function back_compat_mop_vars()
+				{
+					if(empty($_REQUEST["_s2member_vars"])
+					   || !is_string($_REQUEST["_s2member_vars"])
+					) return;
+
+					$v = explode(".", $_v);
+					if(count($v) !== 6) return;
+
+					/*
+					 * Back compat. Deprecated since v1404xx.
+					 */
+					$ov["_s2member_seeking"]     = array(
+						"type" => $v[3],
+						$v[3]  => $v[4],
+						"_uri" => $v[5]
+					);
+					$ov["_s2member_req"]         = array(
+						"type" => $v[1],
+						$v[1]  => $v[2],
+					);
+					$ov["_s2member_res"]["type"] = $v[0];
+
+					/*
+					 * Back compat. Deprecated since v1104xx.
+					 */
+					$ov["s2member_seeking"]       = $v[3]."-".$v[4];
+					$ov["s2member_".$v[1]."_req"] = $v[2];
+
+					/*
+					 * Fill both $_GET and $_REQUEST vars.
+					 */
+					foreach($ov as $_k => $_v)
+						$_GET[$_k] = $_REQUEST[$_k] = $_v;
+					unset($_k, $_v);
 				}
 		}
 	}
