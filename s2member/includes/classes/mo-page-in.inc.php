@@ -132,7 +132,7 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 					   || !is_string($_REQUEST["_s2member_vars"])
 					) return;
 
-					$v = explode(".", $_v);
+					$v = explode(".", $_REQUEST["_s2member_vars"]);
 					if(count($v) !== 6) return;
 
 					/*
