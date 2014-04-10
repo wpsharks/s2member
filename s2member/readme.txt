@@ -148,6 +148,16 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Changelog ==
 
+= v140409 =
+
+* (s2Member Pro) **s2MOP Shortcode**. A new shortcode is now available for site owners running s2Member Pro: `[s2MOP]`. For further details, please check your Dashboard under: `s2Member ⥱ API / Scripting ⥱ Membership Options Page / Variables`. See also: [this KB article]( http://www.s2member.com/kb/s2mop-shortcode/).
+* (s2Member/s2Member Pro) **Compatibility**. Reviewed by Lead Developer Jason Caldwell for full compatibility against WordPress v3.9. s2Member also remains backward compatible with WP v3.3 - 3.8.
+* (s2Member/s2Member Pro) **Security Review**. Reviewed by Lead Developer Jason Caldwell to look closer at any portions of s2Member which might be impacted by the [OpenSSL Heartbleed bug](http://heartbleed.com/). Please note, the Heartbleed bug is NOT an s2Member bug. It is a bug in the OpenSSL library used by many services across the web. Please see this [GitHub issue](https://github.com/WebSharks/s2Member/issues/90) where Jason posted a few tips for site owners running the s2Member software.
+* (s2Member/s2Member Pro) **s2 MOP Vars**. The format of s2Member's MOP Vars has been updated in this release. Backward compatibility remains for the older formats, so this should not cause any problems for site owners using the older formats provided by previous versions of s2Member. For further details, please check your Dashboard under: `s2Member ⥱ API / Scripting ⥱ Membership Options Page / Variables`.
+* (s2Member/s2Member Pro) **s2 MOP Vars**. s2Member MOP Vars are now an optional feature. It is now possible to disable the additional variables that s2Member appends to the end of your Membership Options Page when it redirects a visitor without access to something you've restricted. To configure this new option, please check your Dashboard under: `s2Member ⥱ General Options ⥱ Membership Options Page`.
+* (s2Member/s2Member Pro) **Bug Fix**. Updating core IPN handler to correct a PHP warning `array to string conversion`. A symptom was to see warnings in your PHP error log when using a custom Thank-You page. Fixed in this release.
+* (s2Member/s2Member Pro) **Bug Fix**. Updating the new EOT Time column in the list of WP Users so it displays a human readable date and time; as opposed to a UNIX timestamp. Fixed in this release.
+
 = v140328 =
 
 * (s2Member/s2Member Pro) **Compatibility**. Updated to support WordPress v3.9. Nothing significant, just minor UI tweaks to make s2Member fully compatible with WP v3.9.
