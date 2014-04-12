@@ -216,7 +216,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				* 	See: {@link http://www.php.net/manual/en/function.ksort.php}
 				* @return Unlike PHP's ``ksort()``, this function returns the array, and does NOT work on a reference.
 				*/
-				function ksort_deep ($array = FALSE, $flags = SORT_REGULAR)
+				public static function ksort_deep ($array = FALSE, $flags = SORT_REGULAR)
 					{
 						$array = (array)$array;
 						ksort /* Sort by key. */ ($array, $flags);
