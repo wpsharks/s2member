@@ -425,7 +425,7 @@ jQuery(document).ready (function($)
 										{
 											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a full URL (starting with http or https).", "s2member-front", "s2member")); ?>';
 										}
-									else if (expected === 'domain' && !value.match (/^([a-z0-9]+)(((-*)([a-z0-9]+))*)(((\.)([a-z0-9]+)(((-*)([a-z0-9]+))*))*)(\.)([a-z]{2,6})$/i))
+									else if (expected === 'domain' && !value.match (/^([a-z0-9]+)(((-*)([a-z0-9]+))*)(((\.)([a-z0-9]+)(((-*)([a-z0-9]+))*))*)(\.)([a-z]{2,})$/i))
 										{
 											return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Must be a domain name (domain name only, without http).", "s2member-front", "s2member")); ?>';
 										}
