@@ -1,19 +1,19 @@
 <?php
 /**
-* Primary Hooks/Filters used by the s2Member plugin.
-*
-* Copyright: © 2009-2011
-* {@link http://www.websharks-inc.com/ WebSharks, Inc.}
-* (coded in the USA)
-*
-* Released under the terms of the GNU General Public License.
-* You should have received a copy of the GNU General Public License,
-* along with this software. In the main directory, see: /licensing/
-* If not, see: {@link http://www.gnu.org/licenses/}.
-*
-* @package s2Member
-* @since 3.0
-*/
+ * Primary Hooks/Filters used by the s2Member plugin.
+ *
+ * Copyright: © 2009-2011
+ * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
+ * (coded in the USA)
+ *
+ * Released under the terms of the GNU General Public License.
+ * You should have received a copy of the GNU General Public License,
+ * along with this software. In the main directory, see: /licensing/
+ * If not, see: {@link http://www.gnu.org/licenses/}.
+ *
+ * @package s2Member
+ * @since 3.0
+ */
 if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
 /*
@@ -63,7 +63,7 @@ add_action("wp", "c_ws_plugin__s2member_security::security_gate", 1);
 
 add_filter("wp_mail", "c_ws_plugin__s2member_email_configs::email_filter");
 
-add_filter /* Shortcodes in widgets. */("widget_text", "do_shortcode");
+add_filter("widget_text", "do_shortcode"); // Shortcodes in widgets.
 
 add_action("wp_print_styles", "c_ws_plugin__s2member_css_js_themes::add_css");
 add_action("wp_print_scripts", "c_ws_plugin__s2member_css_js_themes::add_js_w_globals");
@@ -159,6 +159,7 @@ add_action("show_user_profile", "c_ws_plugin__s2member_users_list::users_list_ed
 add_action("edit_user_profile_update", "c_ws_plugin__s2member_users_list::users_list_update_cols");
 add_action("personal_options_update", "c_ws_plugin__s2member_users_list::users_list_update_cols");
 add_action("set_user_role", "c_ws_plugin__s2member_registration_times::synchronize_paid_reg_times", 10, 2);
+add_action("update_user_meta", "c_ws_plugin__s2member_registration_times::log_capability_time", 10, 4);
 add_filter("show_password_fields", "c_ws_plugin__s2member_user_securities::hide_password_fields", 10, 2);
 
 add_filter("cron_schedules", "c_ws_plugin__s2member_cron_jobs::extend_cron_schedules");

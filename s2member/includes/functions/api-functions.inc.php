@@ -2240,9 +2240,18 @@ if(!function_exists("s2member_registration_time"))
 */
 if(!function_exists("s2member_paid_registration_time"))
 	{
-		function s2member_paid_registration_time($level = FALSE, $user_id = FALSE)
+		function s2member_paid_registration_time($level = false, $user_id = false)
 			{
 				return c_ws_plugin__s2member_registration_times::paid_registration_time($level, $user_id);
+			}
+	}
+if(!function_exists("s2member_capability_times"))
+	{
+		function s2member_capability_times($user_id = false, $levels_and_or_caps = false)
+			{
+				if(!$user_id) $user_id = get_current_user_id();
+
+				return c_ws_plugin__s2member_registration_times::get_capability_times($user_id, $levels_and_or_caps);
 			}
 	}
 /**
