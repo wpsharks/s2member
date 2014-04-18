@@ -118,6 +118,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 
 								delete_user_option ($user_id, "s2member_ipn_signup_vars");
 								delete_user_option ($user_id, "s2member_paid_registration_times");
+								delete_user_option ($user_id, "s2member_capability_times");
 								delete_user_option ($user_id, "s2member_sp_references");
 
 								delete_user_option ($user_id, "s2member_last_status_scan");
