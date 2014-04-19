@@ -2166,7 +2166,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					$relative_dir = preg_replace('/^'.preg_quote($root_dir, '/').'(?:\/|$)/', '', $dir);
 
 					if($ignore_vcs_dirs && in_array(basename($dir), array('.git', '.svn', '.bzr'), TRUE))
-						return $checksums; // Ignore this VCS directory.
+						return ''; // Ignore this VCS directory.
 
 					$checksums[$relative_dir] = md5($relative_dir); // Establish relative directory checksum.
 
