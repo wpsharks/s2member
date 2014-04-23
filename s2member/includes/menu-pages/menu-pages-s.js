@@ -248,7 +248,7 @@ jQuery(document).ready(function($)
 													{
 														var row = 'tr.ws-plugin--s2member-custom-reg-field-configuration-table-row-'+(fields.length-1);
 														alert('Field created successfully.\n* Remember to "Save All Changes".');
-														$(row).effect('highlight', 1500);
+														//$(row).effect('highlight');
 													}, 500);
 											}
 									};
@@ -270,7 +270,7 @@ jQuery(document).ready(function($)
 													{
 														var row = 'tr.ws-plugin--s2member-custom-reg-field-configuration-table-row-'+index;
 														alert('Field updated successfully.\n* Remember to "Save All Changes".');
-														$(row).effect('highlight', 1500);
+														//$(row).effect('highlight');
 													}, 500);
 											}
 									};
