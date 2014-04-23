@@ -82,8 +82,6 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 			 *   Defaults to ``$seeking_type``.
 			 *
 			 * @return bool This function always returns true.
-			 *
-			 * @TODO Update documentation in the API Scripting section.
 			 */
 			public static function wp_redirect_w_mop_vars($seeking_type = FALSE, $seeking_type_value = FALSE, $req_type = FALSE, $req_type_value = FALSE, $seeking_uri = FALSE, $res_type = FALSE)
 				{
@@ -93,14 +91,14 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 						{
 							if($_param === "seeking_uri" || ($_param === "seeking_type_value" && $seeking_type === "ruri"))
 								${$_param} = base64_encode((string)${$_param});
-							else ${$_param} = str_replace(".", "", (string)${$_param});
+							else ${$_param} = str_replace("..", "--", (string)${$_param});
 						}
 					unset($_param); // Housekeeping.
 
 					if(!$res_type) $res_type = $seeking_type;
 
-					$vars = $res_type.".".$req_type.".".$req_type_value.".";
-					$vars .= $seeking_type.".".$seeking_type_value.".".$seeking_uri;
+					$vars = $res_type."..".$req_type."..".$req_type_value."..";
+					$vars .= $seeking_type."..".$seeking_type_value."..".$seeking_uri;
 					$vars = array("_s2member_vars" => $vars);
 
 					$status = apply_filters("ws_plugin__s2member_content_redirect_status", 301, get_defined_vars());
@@ -120,11 +118,11 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 				}
 
 			/*
-			 * s2Member's MOP Vars are now a dot (`.`) delimited list of six values.
+			 * s2Member's MOP Vars are now a double-dot (`..`) delimited list of six values.
 			 *
 			 * e.g. .../membership-options-page/
-			 *    ?_s2member_vars=[restriction type].[requirement type].[requirement type value].
-			 *       [seeking type].[seeking type value].[seeking URI base 64 encoded]
+			 *    ?_s2member_vars=[restriction type]..[requirement type]..[requirement type value]..
+			 *       [seeking type]..[seeking type value]..[seeking URI base 64 encoded]
 			 */
 			public static function back_compat_mop_vars()
 				{
@@ -132,7 +130,7 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 					   || !is_string($_REQUEST["_s2member_vars"])
 					) return;
 
-					$v = explode(".", $_REQUEST["_s2member_vars"]);
+					$v = explode("..", $_REQUEST["_s2member_vars"]);
 					if(count($v) !== 6) return;
 
 					/*
