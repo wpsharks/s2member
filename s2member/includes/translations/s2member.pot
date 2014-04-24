@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  140409\n"
+"Project-Id-Version:  140423\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2014-04-10 02:25:41+00:00\n"
+"POT-Creation-Date: 2014-04-24 01:15:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -635,7 +635,7 @@ msgstr ""
 #: s2member/includes/classes/paypal-utilities.inc.php:316
 #: s2member/includes/classes/paypal-utilities.inc.php:324
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:97
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:329
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:325
 msgctxt "s2member-front"
 msgid "Error. Please contact Support for assistance."
 msgstr ""
@@ -668,7 +668,7 @@ msgstr ""
 #: s2member/includes/classes/paypal-utilities.inc.php:314
 #: s2member/includes/classes/paypal-utilities.inc.php:322
 #: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:94
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:326
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:322
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s."
 msgstr ""
@@ -2744,7 +2744,7 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:233
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:517
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:236
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:597
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:595
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">log in</a> to cancel your account."
 msgstr ""
@@ -2759,208 +2759,208 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:244
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:244
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:250
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:260
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:266
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:259
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:265
 msgctxt "s2member-front"
 msgid "Nothing to cancel. You have NO recurring fees."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:250
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:528
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:272
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:608
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:271
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:606
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">log in</a> to update your billing information."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:253
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:275
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:274
 msgctxt "s2member-front"
 msgid "Nothing to update. You're NOT a paid Member."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:258
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:261
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:280
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:289
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:302
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:308
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:279
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:288
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:300
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:306
 msgctxt "s2member-front"
 msgid "Nothing to update. You have NO recurring fees. Or, your billing profile is no longer active. Please contact Support if you need assistance."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:267
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:314
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:312
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"level\" attribute. Membership Level. Must be numeric [0-%s]."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:270
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:317
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:315
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"level\" attribute. Membership Level. Must be numeric [0-%s]."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:273
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:361
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:320
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:426
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:318
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:424
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ccaps\" attribute. Custom Capabilities. When provided, must be all lowercase [a-z_0-9,]. A preceding `-all,` directive is also acceptable."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:276
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:385
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:323
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:468
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:321
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:466
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tp\" attribute. The Trial Period. When provided, must be numeric."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:279
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:388
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:326
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:471
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:324
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:469
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tp\" attribute. The Trial Period. When provided, must be >= 1."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:282
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:391
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:329
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:474
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:327
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:472
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"tt\" attribute. The Trial Term. When \"tp\" is provided, \"tt\" (Trial Term) must be one of D,W,M,Y."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:285
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:394
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:332
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:477
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:330
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:475
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tt\" attribute. The Trial Term. When \"tp\" is provided, \"tt\" (Trial Term) must be one of D,W,M,Y."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:288
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:335
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:333
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"custom\" attribute. When provided, must start with your domain name."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:293
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:340
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:338
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"ids\" attribute. Must contain comma-delimited Post/Page IDs."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:296
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:343
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:341
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ids\" attribute. Must contain comma-delimited Post/Page IDs. Must contain [0-9,] only."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:299
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:346
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:344
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"exp\" attribute. Specific Post/Page Expiration (in hours). Must be numeric."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:302
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:349
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:347
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"exp\" attribute. Specific Post/Page Expiration (in hours). Must be numeric."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:305
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:352
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:350
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"exp\" attribute. Specific Post/Page Expiration (in hours). Must be >= 1."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:308
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:355
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:353
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"exp\" attribute. Specific Post/Page Expiration (in hours). Must be <= 43800."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:311
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:358
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:356
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"sp_ids_exp\" internal attribute. Please check Shortcode Attributes."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:314
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:361
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:359
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"sp_ids_exp\" internal attribute. Please check Shortcode Attributes."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:317
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:367
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:364
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:432
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:362
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:430
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"desc\" attribute. Please provide a Description for this form."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:320
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:370
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:367
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:435
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:365
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:433
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Your \"desc\" (Description) attribute must be <= 100 characters long."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:323
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:373
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:370
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:438
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:368
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:436
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"custom\" attribute. Must start with your domain name."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:326
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:373
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:371
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"custom\" attribute. Must start with your domain name."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:329
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:379
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:376
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:444
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:374
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:442
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"cc\" attribute. Must be a 3 character Currency Code."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:332
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:382
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:379
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:447
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:377
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:445
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"cc\" attribute. Must be a 3 character Currency Code."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:335
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:463
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:400
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:537
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:398
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:535
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"ra\" attribute. The Regular Amount. Must be >= 0.00."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:338
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:466
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:403
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:540
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:401
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:538
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount. Must be numeric."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:341
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:469
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:406
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:543
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:404
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:541
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount. Must be >= 0.00."
 msgstr ""
@@ -2972,69 +2972,69 @@ msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount.
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:349
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:414
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:412
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">login</a> to update your billing plan."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:352
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:417
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:415
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">login</a> before making this purchase."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:355
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:420
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:418
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"level\" attribute. Membership Level. Must be numeric [1-%s], or an asterisk (*)."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:358
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:423
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:421
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"level\" attribute. Membership Level. Must be numeric [1-%s], or an asterisk (*)."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:364
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:429
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:427
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing or invalid \"ccaps\" attribute. When \"level\" is \"*\" for (Independent Custom Capabilities), \"ccaps\" is required. All lowercase [a-z_0-9,]. A preceding `-all,` directive is also acceptable."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:376
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:441
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:439
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"custom\" attribute. Must start with matching domain."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:397
 msgctxt "s2member-admin"
-msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. The \"tt\" (Trial Term) attribute is \"D\", and \"tp\" (Trial Period) > 365."
+msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. There is an Intial/Trial amount, and \"tt\" (Trial Term) attribute is \"D\", and \"tp\" (Trial Period) > 365."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:400
 msgctxt "s2member-admin"
-msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. The \"tt\" (Trial Term) attribute is \"W\", and \"tp\" (Trial Period) > 52."
+msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. There is an Intial/Trial amount, and \"tt\" (Trial Term) attribute is \"W\", and \"tp\" (Trial Period) > 52."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:403
 msgctxt "s2member-admin"
-msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. The \"tt\" (Trial Term) attribute is \"M\", and \"tp\" (Trial Period) > 12."
+msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. There is an Intial/Trial amount, and \"tt\" (Trial Term) attribute is \"M\", and \"tp\" (Trial Period) > 12."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:406
 msgctxt "s2member-admin"
-msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. The \"tt\" (Trial Term) attribute is \"Y\", and \"tp\" (Trial Period) > 1."
+msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. There is an Intial/Trial amount, and \"tt\" (Trial Term) attribute is \"Y\", and \"tp\" (Trial Period) > 1."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:409
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:480
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:478
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ta\" attribute. The Trial Amount. When provided, must be numeric."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:412
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:483
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:481
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ta\" attribute. The Trial Amount. When provided, must be >= 0.00."
 msgstr ""
@@ -3045,31 +3045,31 @@ msgid "Invalid form configuration. Invalid \"ta\" attribute. The Trial Amount. W
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:418
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:489
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:487
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"rp\" attribute. The Regular Period. Must be >= 1."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:421
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:492
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:490
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rp\" attribute. The Regular Period. Must be numeric."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:424
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:495
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:493
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rp\" attribute. The Regular Period. Must be >= 1."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:427
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:498
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:496
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"rt\" attribute. The Regular Term. Must be one of D,W,M,Y,L."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:430
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:501
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:499
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt\" attribute. The Regular Term. Must be one of D,W,M,Y,L."
 msgstr ""
@@ -3080,93 +3080,93 @@ msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\"
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:436
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:504
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:502
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\" (Regular Term) attribute is \"D\", \"rp\" (Regular Period) > 365, and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:439
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:507
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:505
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\" (Regular Term) attribute is \"W\", \"rp\" (Regular Period) > 52, and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:442
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:510
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:508
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\" (Regular Term) attribute is \"M\", \"rp\" (Regular Period) > 12, and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:445
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:519
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:517
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\" (Regular Term) attribute is \"Y\", \"rp\" (Regular Period) > 1, and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:448
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:522
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:520
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rp, rt\" attributes. The \"rt\" (Regular Term) attribute is \"L\" (Lifetime), and \"rp\" (Regular Period) > 1."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:451
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:525
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:523
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rr\" attributes. The \"rt\" (Regular Term) attribute is \"L\" (Lifetime), and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:454
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:528
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:526
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"level_ccaps_eotper\" attribute. Please check Shortcode Attributes."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:457
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:460
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:531
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:534
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:529
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:532
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"level_ccaps_eotper\" attribute. Please check Shortcode Attributes."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:475
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:549
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:547
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rr\" attribute. Regular Recurring. When provided, must be 0, 1, or BN."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:478
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:552
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:550
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rr, tp\" attributes. The \"rr\" (Regular Recurring) attribute is \"BN\" (Buy Now), and \"tp\" (Trial Period) is not \"0\"."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:481
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:555
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:553
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"level, rr\" attributes. The \"level\" (Level) attribute is \"*\" for (Independent Custom Capabilities), and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:484
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:558
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:556
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ta, tp, tt\" attributes. Trial Period. When provided, these cannot be exactly the same as your \"ra, rp, rt\" attributes."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:487
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:561
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:559
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rrt\" attribute. Recurring Times (fixed). When provided, must be numeric."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:490
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:564
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:562
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rrt\" attribute. Recurring Times (fixed). When provided, must be >= 1."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:493
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:567
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:565
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rr, rrt\" attributes. When \"rrt\" (Recurring Times) is provided, \"rr\" (Regular Recurring) must be 1."
 msgstr ""
@@ -3176,11 +3176,11 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:614
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:670
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:762
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:600
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:650
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:694
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:750
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:842
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:598
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:648
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:692
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:748
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:840
 msgctxt "s2member-front"
 msgid "Missing or invalid Security Code. Please try again."
 msgstr ""
@@ -3188,9 +3188,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:523
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:531
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:681
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:603
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:611
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:761
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:601
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:609
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:759
 msgctxt "s2member-admin"
 msgid "Unable to process. You are an Administrator. Stopping here for security. Otherwise, an Administrator could lose access."
 msgstr ""
@@ -3198,9 +3198,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:534
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:631
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:723
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:614
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:711
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:803
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:612
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:709
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:801
 msgctxt "s2member-front"
 msgid "Missing Card Type (Billing Method). Please try again."
 msgstr ""
@@ -3210,11 +3210,11 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:637
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:726
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:729
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:617
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:714
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:717
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:806
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:809
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:615
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:712
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:715
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:804
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:807
 msgctxt "s2member-front"
 msgid "Invalid Card Type (Billing Method). Please try again."
 msgstr ""
@@ -3222,9 +3222,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:540
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:640
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:732
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:620
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:720
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:812
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:618
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:718
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:810
 msgctxt "s2member-front"
 msgid "Missing Card Number. Please try again."
 msgstr ""
@@ -3232,9 +3232,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:543
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:643
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:735
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:623
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:723
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:815
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:621
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:721
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:813
 msgctxt "s2member-front"
 msgid "Missing Card Expiration Date (mm/yyyy). Please try again."
 msgstr ""
@@ -3242,9 +3242,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:546
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:646
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:738
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:626
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:726
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:818
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:624
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:724
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:816
 msgctxt "s2member-front"
 msgid "Invalid Card Expiration Date. Must be in this format (mm/yyyy). Please try again."
 msgstr ""
@@ -3252,9 +3252,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:549
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:649
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:741
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:629
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:729
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:821
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:627
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:727
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:819
 msgctxt "s2member-front"
 msgid "Missing Card Verification Code. It's on the back of your Card. 3-4 digits. Please try again."
 msgstr ""
@@ -3262,9 +3262,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:552
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:652
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:744
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:632
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:732
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:824
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:630
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:730
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:822
 msgctxt "s2member-front"
 msgid "Missing Card Start Date, or Issue #. Required for Maestro/Solo. Please try again."
 msgstr ""
@@ -3272,9 +3272,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:555
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:655
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:747
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:635
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:735
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:827
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:633
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:733
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:825
 msgctxt "s2member-front"
 msgid "Missing Street Address. Please try again."
 msgstr ""
@@ -3282,9 +3282,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:558
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:658
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:750
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:638
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:738
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:830
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:636
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:736
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:828
 msgctxt "s2member-front"
 msgid "Missing City/Town. Please try again."
 msgstr ""
@@ -3292,9 +3292,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:561
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:661
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:753
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:641
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:741
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:833
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:639
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:739
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:831
 msgctxt "s2member-front"
 msgid "Missing State/Province. Please try again."
 msgstr ""
@@ -3302,9 +3302,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:564
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:664
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:756
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:644
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:744
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:836
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:642
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:742
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:834
 msgctxt "s2member-front"
 msgid "Missing Country. Please try again."
 msgstr ""
@@ -3312,9 +3312,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:567
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:667
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:759
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:647
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:747
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:839
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:645
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:745
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:837
 msgctxt "s2member-front"
 msgid "Missing Postal/Zip Code. Please try again."
 msgstr ""
@@ -3322,9 +3322,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:575
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:619
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:684
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:655
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:699
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:764
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:653
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:697
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:762
 msgctxt "s2member-front"
 msgid "Missing First Name. Please try again."
 msgstr ""
@@ -3332,9 +3332,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:578
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:622
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:687
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:658
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:702
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:767
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:656
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:700
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:765
 msgctxt "s2member-front"
 msgid "Missing Last Name. Please try again."
 msgstr ""
@@ -3342,9 +3342,9 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:581
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:625
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:690
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:661
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:705
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:770
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:659
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:703
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:768
 msgctxt "s2member-front"
 msgid "Missing or invalid Email Address. Please try again."
 msgstr ""
@@ -3352,91 +3352,91 @@ msgstr ""
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:584
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:628
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:693
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:664
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:708
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:773
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:662
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:706
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:771
 msgctxt "s2member-front"
 msgid "Invalid Email Address. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:587
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:696
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:667
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:776
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:665
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:774
 msgctxt "s2member-front"
 msgid "That Email Address is already in use. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:590
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:699
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:670
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:779
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:668
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:777
 msgctxt "s2member-front"
 msgid "Missing or invalid Username. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:593
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:702
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:673
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:782
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:671
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:780
 msgctxt "s2member-front"
 msgid "Invalid Username. Please try again. Use ONLY lowercase alphanumerics."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:596
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:705
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:676
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:785
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:674
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:783
 msgctxt "s2member-front"
 msgid "That Username is already in use. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:602
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:711
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:682
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:791
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:680
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:789
 msgctxt "s2member-front"
 msgid "Missing Password. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:605
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:714
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:685
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:794
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:683
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:792
 msgctxt "s2member-front"
 msgid "Invalid Password. Must be at least 6 characters. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:608
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:717
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:688
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:797
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:686
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:795
 msgctxt "s2member-front"
 msgid "Invalid Password. Max length is 20 characters. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:611
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:720
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:691
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:800
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:689
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:798
 msgctxt "s2member-front"
 msgid "Password fields do NOT match. Please try again."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:675
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:755
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:753
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">log in</a> to modify your billing plan."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:678
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:758
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:756
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">log in</a> before making this purchase."
 msgstr ""
 
 #: s2member-pro/includes/classes/gateways/authnet/authnet-responses.inc.php:765
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:845
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:843
 msgctxt "s2member-front"
 msgid "Unknown form submission type. Please contact Support."
 msgstr ""
@@ -3473,26 +3473,26 @@ msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> No Subscr. ID. Please contact Support for assistance."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:666
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:809
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:662
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:805
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:295
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:438
 msgctxt "s2member-front percentage-symbol"
 msgid "%"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:808
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:804
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:437
 msgctxt "s2member-front"
 msgid " + tax"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:853
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:905
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:918
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:940
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1000
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1015
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:849
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:901
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:914
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:936
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:996
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1011
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:482
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:534
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:547
@@ -3503,12 +3503,12 @@ msgctxt "s2member-front"
 msgid "COUPON %s off. (Now: %s)"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:854
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:906
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:919
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:941
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1001
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1016
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:850
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:902
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:915
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:937
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:997
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1012
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:483
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:535
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:548
@@ -3519,12 +3519,12 @@ msgctxt "s2member-front"
 msgid "<div>Coupon: <strong>%s off</strong>. (Now: <strong>%s</strong>)</div>"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:866
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:879
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:892
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:955
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:970
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:985
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:862
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:875
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:888
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:951
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:966
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:981
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:495
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:508
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:521
@@ -3535,12 +3535,12 @@ msgctxt "s2member-front"
 msgid "COUPON %s off. (Now: %s, then %s)"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:867
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:880
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:893
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:956
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:971
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:986
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:863
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:876
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:889
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:952
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:967
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:982
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:496
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:509
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:522
@@ -3551,27 +3551,27 @@ msgctxt "s2member-front"
 msgid "<div>Coupon: <strong>%s off</strong>. (Now: <strong>%s, then %s</strong>)</div>"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:923
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1020
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:919
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1016
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:552
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:649
 msgctxt "s2member-front"
 msgid "<div>Sorry, your Coupon is not applicable.</div>"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1024
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1020
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:653
 msgctxt "s2member-front"
 msgid "<div>Coupon: <strong>%s0.00 off</strong>.</div>"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1028
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1024
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:657
 msgctxt "s2member-front"
 msgid "<div>Sorry, your Coupon cannot be applied to this particular purchase.</div>"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1032
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1028
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:661
 msgctxt "s2member-front"
 msgid "<div>Sorry, your Coupon <strong>expired</strong>: <em>%s</em>.</div>"
@@ -3579,14 +3579,14 @@ msgstr ""
 
 #. translators: `%1$s` is new price/description, after coupon applied. `%2$s`
 #. is original description.
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1038
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1034
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:667
 msgctxt "s2member-front"
 msgid "%1$s ~ ORIGINALLY: %2$s"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1067
-#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1070
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1063
+#: s2member-pro/includes/classes/gateways/authnet/authnet-utilities.inc.php:1066
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:696
 #: s2member-pro/includes/classes/gateways/paypal/paypal-utilities.inc.php:699
 msgctxt "s2member-front"
@@ -3616,7 +3616,7 @@ msgstr ""
 
 #: s2member-pro/includes/classes/gateways/paypal/paypal-cancellation-in.inc.php:123
 #: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:247
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:263
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:262
 msgctxt "s2member-front"
 msgid "<strong>Unable to cancel at this time.</strong> Your account is pending other changes. Please try again in 15 minutes."
 msgstr ""
@@ -3682,9 +3682,9 @@ msgctxt "s2member-admin"
 msgid "PayPal configuration error. Your PayPal API Signature is not yet configured."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:283
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:296
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:299
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:282
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:295
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:298
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-in.inc.php:79
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-in.inc.php:135
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-in.inc.php:139
@@ -3694,76 +3694,76 @@ msgctxt "s2member-front"
 msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal</a> to update your billing information."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:286
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:305
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:285
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:303
 #: s2member-pro/includes/classes/gateways/paypal/paypal-update-in.inc.php:127
 msgctxt "s2member-front"
 msgid "<strong>Unable to update at this time.</strong> Your account is pending other changes. Please try again in 15 minutes."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:382
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:450
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:380
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:448
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"dg\" attribute. Digital indicator. Must be numeric [0-1]."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:385
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:453
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:383
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:451
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"dg\" attribute. Digital indicator. Must be numeric [0-1]."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:388
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:456
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:386
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:454
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"ns\" attribute. Shipping configuration. Must be numeric [0-2]."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:391
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:459
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:389
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:457
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ns\" attribute. Shipping configuration. Must be numeric [0-2]."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:394
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:462
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:392
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:460
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ns\" attribute. Shipping configuration. Must be 1 with \"dg\" (digital) items."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:397
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:465
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:395
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:463
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"lc\" attribute. Locale Code. When provided, must be a 2 character country code."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:409
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:546
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:407
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:544
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount. Must be <= 10000.00."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:486
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:484
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ta\" attribute. The Trial Amount. When provided, must be <= 10000.00."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:513
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:511
 msgctxt "s2member-admin"
 msgid "Invalid Payflow form configuration. Invalid \"rt, rp, rr\" attributes. Payflow supports a specific set of recurring intervals. Pro Forms can be configured to charge: weekly, bi-weekly, monthly, quarterly, semi-yearly or yearly. Any other combination results in this error. This is a Payflow limitation."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:516
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:514
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\" (Regular Term) attribute is \"Y\", \"rp\" (Regular Period) > 5, and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:570
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:568
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rr, rra\" attributes. When \"rr\" (Regular Recurring) is 0 or 1, \"rra\" (Recurring Retry Attempts) must be numeric."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:573
+#: s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:571
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rr, rra\" attributes. When \"rr\" (Regular Recurring) is 0 or 1, \"rra\" (Recurring Retry Attempts) must be >= 0."
 msgstr ""
