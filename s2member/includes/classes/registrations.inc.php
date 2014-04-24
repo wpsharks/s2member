@@ -974,7 +974,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		unset($sbj, $msg, $var, $val, $recipient, $email_configs_were_on); // Housekeeping.
 																	}
 
-																if ($url = $GLOBALS["ws_plugin__s2member_registration_return_url"])
+																if (!empty($GLOBALS["ws_plugin__s2member_registration_return_url"]) && ($url = $GLOBALS["ws_plugin__s2member_registration_return_url"]))
 
 																	if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)))
 																		if (($url = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($role)), $url)))
