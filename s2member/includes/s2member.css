@@ -27,6 +27,58 @@ div.ws-plugin--s2member-s-badge
 }
 
 /*
+Button processing animation.
+*/
+@-moz-keyframes ws-plugin--s2member-spin
+{
+	from
+	{
+		-moz-transform : rotate(0deg);
+	}
+	to
+	{
+		-moz-transform : rotate(360deg);
+	}
+}
+@-webkit-keyframes ws-plugin--s2member-spin
+{
+	from
+	{
+		-webkit-transform : rotate(0deg);
+	}
+	to
+	{
+		-webkit-transform : rotate(360deg);
+	}
+}
+@keyframes ws-plugin--s2member-spin
+{
+	from
+	{
+		transform : rotate(0deg);
+	}
+	to
+	{
+		transform : rotate(360deg);
+	}
+}
+button.ws-plugin--s2member-animate-processing:after
+{
+	content           : '';
+
+	float             : right;
+	width             : .5em;
+	height            : .5em;
+	margin            : .25em 0 0 .25em;
+
+	border-radius     : 50%;
+	border            : 1px dashed;
+
+	-webkit-animation : ws-plugin--s2member-spin 1s linear infinite;
+	animation         : ws-plugin--s2member-spin 1s linear infinite;
+}
+
+/*
 Structural styles for Password strength indicators.
 
 These are basic CSS rules. You can override any of these

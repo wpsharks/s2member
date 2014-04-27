@@ -485,54 +485,10 @@ jQuery(document).ready (function($)
 				return '';
 			};
 
-		ws_plugin__s2member_animateProcessingConfig = {originalText: '', interval: null, speed: 100}, ws_plugin__s2member_animateProcessing = function($obj, reset)
+		ws_plugin__s2member_animateProcessing = function($obj, reset)
 			{
-				if /* This function expects a valid jQuery object. */ ($obj instanceof jQuery)
-					{
-						if /* Resets back to originalText value (also clears interval). */ (reset)
-							{
-								clearInterval(ws_plugin__s2member_animateProcessingConfig.interval);
-
-								if (ws_plugin__s2member_animateProcessingConfig.originalText)
-									$obj.val (ws_plugin__s2member_animateProcessingConfig.originalText);
-
-								return; // No need to proceed any further.
-							}
-
-						$obj.first ().each ( /* Interval routine configured here. */function()
-							{
-								var $this = $(this), i = 0, dir = 'r', dots = ['.', '..', '...'];
-
-								ws_plugin__s2member_animateProcessingConfig.originalText = $this.val ();
-
-								clearInterval(ws_plugin__s2member_animateProcessingConfig.interval);
-
-								ws_plugin__s2member_animateProcessingConfig.interval = setInterval(function()
-									{
-										if /* Right... */ (dir === 'r')
-											{
-												if (i + 1 <= dots.length - 1)
-													i = i + 1, dir = 'r';
-												else // Switch direction.
-													i = i - 1, dir = 'l';
-											}
-
-										else if /* Left.. */ (dir === 'l')
-											{
-												if (i - 1 >= 0)
-													i = i - 1, dir = 'l';
-												else // Switch direction.
-													i = i + 1, dir = 'r';
-											}
-
-										for (var _dots = dots[i], l = dots[i].length; l < dots.length; l++)
-											{
-												_dots += /* Prevents jumping. */ ' ';
-											}
-
-										$this.val ('<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (_x ("Processing", "s2member-front", "s2member")); ?>' + _dots);
-									}, ws_plugin__s2member_animateProcessingConfig.speed);
-							});
-					}
+				if(reset)
+					$($obj).removeClass('ws-plugin--s2member-animate-processing');
+				else $($obj).addClass('ws-plugin--s2member-animate-processing');
 			};
 	});
