@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @attaches-to ``add_filter("random_password");``
 				*
-				* @param str $password Expects a plain text Password passed through by the Filter.
+				* @param string $password Expects a plain text Password passed through by the Filter.
 				* @return str Password, possibly assigned through s2Member Custom Registration/Profile Field input.
 				*/
 				public static function generate_password ($password = FALSE)
@@ -228,7 +228,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				* @attaches-to ``add_action("wpmu_activate_user");``
 				*
 				* @param int|str $user_id A numeric WordPress User ID.
-				* @param str $password Plain text Password should be passed through by the Action Hook.
+			@param string tr $password Plain text Password should be passed through by the Action Hook.
 				* @param array $meta Expects an array of ``$meta`` details, passed through by the Action Hook.
 				* @return null
 				*/
@@ -268,8 +268,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @param int|str $blog_id A numeric WordPress Blog ID.
 				* @param int|str $user_id A numeric WordPress User ID.
-				* @param str $password Plain text Password should be passed through by the Action Hook.
-				* @param str $title The title that a User chose during signup; for their new Blog on the Network.
+@param string m str $password Plain text Password should be passed through by the Action Hoo@param string aram str $title The title that a User chose during signup; for their new Blog on the Network.
 				* @param array $meta Expects an array of ``$meta`` details, passed through by the Action Hook.
 				* @return null
 				*/
@@ -303,9 +302,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @attaches-to ``add_filter("registration_errors");``
 				*
-				* @param obj $errors Expects a `WP_Error` object passed in by the Filter.
-				* @param str $user_login Expects the User's Username, passed in by the Filter.
-				* @param str $user_email Expects the User's Email Address, passed in by the Filter.
+				* @param obj $errors Expects a `WP_Error` object passed in by the Fi@param string  @param str $user_login Expects the User's Username, passed in by the@param string 		* @param str $user_email Expects the User's Email Address, passed in by the Filter.
 				* @return obj A `WP_Error` object, or exits script execution after handling registration redirection.
 				*/
 				public static function ms_register_existing_user ($errors = FALSE, $user_login = FALSE, $user_email = FALSE)
@@ -352,10 +349,9 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				* This function will fire the Hook `user_register`.
 				*
 				* @package s2Member\Registrations
-				* @since 3.5
-				*
-				* @param str $user_login Expects the User's Username.
-				* @param str $user_email Expects the User's Email Address.
+				* @sinc@param string
+				* @param str $user_login Expects the Us@param string me.
+				* @param str $user_email Expects the User@param string dress.
 				* @param str $user_pass Expects the User's plain text Password.
 				* @param int|str $user_id Optional. A numeric WordPress User ID.
 				* 	If unspecified, a lookup is performed with ``$user_login`` and ``$user_email``.
@@ -398,7 +394,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @attaches-to ``add_action("user_register");``
 				*
-				* @param int|str $user_id A numeric WordPress User ID.
+				* @param int|str $user_id A numeri@param string  User ID.
 				* @param str $password Optional in most cases. A User's plain text Password. If unspecified, attempts are made to collect the plain text Password from other sources.
 				* @param array $meta Optional in most cases. Defaults to false. An array of meta data for a User/Member.
 				* @return null No return value. Returns `null` in possible every scenario.
@@ -1048,4 +1044,3 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 					}
 			}
 	}
-?>

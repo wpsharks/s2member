@@ -9,4 +9,3 @@ if ($pages = get_pages ())
 				CANNOT access this particular Page. */
 			}
 	}
-?>

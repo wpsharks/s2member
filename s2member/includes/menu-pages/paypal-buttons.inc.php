@@ -649,4 +649,3 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 	}
 
 new c_ws_plugin__s2member_menu_page_paypal_buttons ();
-?>

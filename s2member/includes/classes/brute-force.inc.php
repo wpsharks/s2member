@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_brute_force"))
 				*
 				* @attaches-to ``add_action("wp_login_failed");``
 				*
-				* @param str $username Expects the $username to be passed in through the Hook.
+				* @param string $username Expects the $username to be passed in through the Hook.
 				* @return null
 				*/
 				public static function track_failed_logins ($username = FALSE)
@@ -98,4 +98,3 @@ if (!class_exists ("c_ws_plugin__s2member_brute_force"))
 					}
 			}
 	}
-?>

@@ -30,8 +30,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 				* @package s2Member\Utilities
 				* @since 110912
 				*
-				* @param str $starting_dir A directory to start searching from.
-				* @param str $alt_starting_dir An alternate directory to search from.
+				* @param string $starting_dir A directory to start searching from.
+			@param string tr $alt_starting_dir An alternate directory to search from.
 				* @return str|null WordPress directory, else exits script execution on failure.
 				*/
 				public static function wp_dir ($starting_dir = FALSE, $alt_starting_dir = FALSE)
@@ -56,8 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 				* @package s2Member\Utilities
 				* @since 110912
 				*
-				* @param str $wp_dir WordPress directory path.
-				* @param str $o_file Location of calling `*-o.php` file.
+@param string m str $wp_dir WordPress directory pat@param string aram str $o_file Location of calling `*-o.php` file.
 				* @return str|bool WordPress settings, else false on failure.
 				*/
 				public static function wp_settings_as ($wp_dir = FALSE, $o_file = FALSE)
@@ -104,8 +103,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 				*
 				* @package s2Member\Utilities
 				* @since 110917
-				*
-				* @param str $string Input string.
+@param string  @param str $string Input string.
 				* @param int $times Mumber of escapes. Defaults to 1.
 				* @return str Output string after dollar signs are escaped.
 				*/
@@ -118,9 +116,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 				* Evaluates PHP code, and "returns" output.
 				*
 				* @package s2Member\Utilities
-				* @since 110917
-				*
-				* @param str $code A string of data, possibly with embedded PHP code.
+				* @since 1109@param string 		* @param str $code A string of data, possibly with embedded PHP code.
 				* @return str Output after PHP evaluation.
 				*/
 				public static function evl ($code = FALSE)
@@ -133,4 +129,3 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 					}
 			}
 	}
-?>

@@ -35,7 +35,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 				*
 				* @attaches-to ``add_filter("update_feedback");``
 				*
-				* @param str $message Expects message string passed through by the Filter.
+				* @param string $message Expects message string passed through by the Filter.
 				* @return str Message after having been Filtered by this routine.
 				*/
 				public static function sync_mms_patches ($message = FALSE)
@@ -147,4 +147,3 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 					}
 			}
 	}
-?>

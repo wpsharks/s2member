@@ -145,4 +145,3 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods_in"))
 					}
 			}
 	}
-?>

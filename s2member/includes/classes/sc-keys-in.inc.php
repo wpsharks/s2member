@@ -36,8 +36,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_keys_in"))
 				* @attaches-to ``add_shortcode("s2Key");``
 				*
 				* @param array $attr An array of Attributes.
-				* @param str $content Content inside the Shortcode.
-				* @param str $shortcode The actual Shortcode name itself.
+				* @param string $content Content inside the Shortcode.
+			@param string tr $shortcode The actual Shortcode name itself.
 				* @return str Value of the requested key, or null on failure.
 				*/
 				public static function sc_get_key ($attr = FALSE, $content = FALSE, $shortcode = FALSE)
@@ -61,4 +61,3 @@ if (!class_exists ("c_ws_plugin__s2member_sc_keys_in"))
 					}
 			}
 	}
-?>

@@ -24,4 +24,3 @@ if (is_dir ($ws_plugin__s2member_temp_dir = dirname (__FILE__) . "/functions"))
 		if (preg_match ("/\.php$/", $ws_plugin__s2member_temp_s) && $ws_plugin__s2member_temp_s !== "index.php")
 			include_once $ws_plugin__s2member_temp_dir . "/" . $ws_plugin__s2member_temp_s;
 unset ($ws_plugin__s2member_temp_dir, $ws_plugin__s2member_temp_s);
-?>

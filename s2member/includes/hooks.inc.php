@@ -189,4 +189,3 @@ Register the activation | de-activation routines.
 */
 register_activation_hook($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["plugin_basename"], "c_ws_plugin__s2member_installation::activate");
 register_deactivation_hook($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["plugin_basename"], "c_ws_plugin__s2member_installation::deactivate");
-?>

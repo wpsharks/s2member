@@ -15,4 +15,3 @@ if ($posts = get_posts ())
 				So if this was actually a "Page", that would be valid, w/ "singular". */
 			}
 	}
-?>

@@ -83,7 +83,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\WS_PLUGIN__S2MEMBER_VERSION
 						*/
@@ -270,7 +270,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("s2member_access_role")`
@@ -304,7 +304,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("s2member_subscr_id")`
@@ -343,7 +343,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("s2member_subscr_or_wp_id")`
@@ -383,7 +383,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("s2member_subscr_gateway")`
@@ -425,7 +425,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("s2member_custom")`
@@ -647,7 +647,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("display_name")`
@@ -686,7 +686,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("first_name")`
@@ -725,7 +725,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("last_name")`
@@ -764,7 +764,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("user_login")`
@@ -803,7 +803,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("user_email")`
@@ -842,7 +842,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("s2member_registration_ip")`
@@ -887,7 +887,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("s2member_registration_ip")`
@@ -1000,7 +1000,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						*
@@ -1354,7 +1354,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_LOGIN_PAGE_URL
 						* @see s2Member\API_Constants\S2MEMBER_LOGOUT_PAGE_URL
@@ -1393,7 +1393,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\s2member_user_downloads()
 						* @see s2Member\API_Functions\s2member_total_downloads_of()
@@ -1448,7 +1448,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_LOGIN_PAGE_URL
 						* @see s2Member\API_Constants\S2MEMBER_LOGOUT_PAGE_URL
@@ -1488,7 +1488,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_LOGIN_PAGE_URL
 						* @see s2Member\API_Constants\S2MEMBER_LOGOUT_PAGE_URL
@@ -1528,7 +1528,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_LOGIN_PAGE_URL
 						*
@@ -1568,7 +1568,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_LOGOUT_PAGE_URL
 						*
@@ -1613,7 +1613,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\get_user_field()
 						* @see `get_user_field("s2member_access_role")`
@@ -1756,7 +1756,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\s2member_user_downloads()
 						* @see s2Member\API_Functions\s2member_total_downloads_of()
@@ -1797,7 +1797,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_REG_EMAIL_FROM_EMAIL
 						*
@@ -1824,7 +1824,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_REG_EMAIL_FROM_NAME
 						*
@@ -1851,7 +1851,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_RETURN_URL
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_PDT_IDENTITY_TOKEN
@@ -1879,7 +1879,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_NOTIFY_URL
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_PDT_IDENTITY_TOKEN
@@ -1907,7 +1907,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_USERNAME
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_PASSWORD
@@ -1939,7 +1939,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_ENDPOINT
 						*
@@ -1969,7 +1969,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_ENDPOINT
 						*
@@ -1995,7 +1995,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_BUSINESS
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_PASSWORD
@@ -2023,7 +2023,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_BUSINESS
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_USERNAME
@@ -2051,7 +2051,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_BUSINESS
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_API_USERNAME
@@ -2079,7 +2079,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_RETURN_URL
 						* @see s2Member\API_Constants\S2MEMBER_PAYPAL_NOTIFY_URL
@@ -2140,7 +2140,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 110720
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Functions\s2member_value_for_pp_inv()
 						*
@@ -2198,7 +2198,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS0
 						*
@@ -2256,7 +2256,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON0
 						*
@@ -2311,7 +2311,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1
 						*
@@ -2366,7 +2366,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*
 						* @see s2Member\API_Constants\S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1
 						*
@@ -2384,7 +2384,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @package s2Member\API_Constants
 						* @since 3.5
 						*
-						* @var str
+						* @var string
 						*/
 						if (!defined ("WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5"))
 							define ("WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5", md5 (serialize ($c) . c_ws_plugin__s2member_utilities::ver_checksum ()));
@@ -2397,4 +2397,3 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 					}
 			}
 	}
-?>

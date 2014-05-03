@@ -46,8 +46,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 				* @attaches-to ``add_shortcode("s2If")`` + _s2If, __s2If, ___s2If for nesting.
 				*
 				* @param array $attr An array of Attributes.
-				* @param str $content Content inside the Shortcode.
-				* @param str $shortcode The actual Shortcode name itself.
+				* @param string $content Content inside the Shortcode.
+			@param string tr $shortcode The actual Shortcode name itself.
 				* @return str The ``$content`` if true, else an empty string.
 				*
 				* @todo Add support for nested AND/OR conditionals inside the ONE Shortcode.
@@ -308,7 +308,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 				* @package s2Member\s2If
 				* @since 140326
 				*
-				* @param str $expression PHP expression.
+@param string m str $expression PHP expression.
 				* @return bool TRUE if condition succeed; else FALSE.
 				*/
 				public static function evl($expression)
@@ -317,4 +317,3 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 				}
 			}
 	}
-?>

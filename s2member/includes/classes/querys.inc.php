@@ -337,7 +337,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*
 				* @attaches-to ``add_filter("comment_feed_where");``
 				*
-				* @param str $cwhere Expects the SQL `WHERE` portion to be passed through by the Filter.
+				* @param string $cwhere Expects the SQL `WHERE` portion to be passed through by the Filter.
 				* @param obj $wp_query Expects ``$wp_query`` by reference, from the Filter.
 				* @return str The revised ``$cwhere`` string.
 				*/
@@ -400,4 +400,3 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 					}
 			}
 	}
-?>

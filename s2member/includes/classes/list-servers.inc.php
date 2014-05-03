@@ -51,13 +51,10 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				* @package s2Member\List_Servers
 				* @since 3.5
 				*
-				* @param str $role A WordPress Role ID/Name, such as `subscriber`, or `s2member_level1`.
+				* @param string $role A WordPress Role ID/Name, such as `subscriber`, or `s2member_level1`.
 				* @param int|str $level A numeric s2Member Access Level number.
-				* @param str $login Username for the User.
-				* @param str $pass Plain Text Password for the User.
-				* @param str $email Email Address for the User.
-				* @param str $fname First Name for the User.
-				* @param str $lname Last Name for the User.
+			@param string tr $login Username for the User.
+@param string m str $pass Plain Text Password for the Use@param string aram str $email Email Address for the @param string  @param str $fname First Name for t@param string 		* @param str $lname Last Name fo@param string
 				* @param str $ip IP Address for the User.
 				* @param bool $opt_in Defaults to false; must be set to true. Indicates the User IS opting in.
 				* @param bool $double_opt_in Defaults to true. If false, no email confirmation is required. Use at your own risk.
@@ -236,15 +233,14 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				* Processes List Server removals for s2Member.
 				*
 				* @package s2Member\List_Servers
-				* @since 3.5
-				*
+				* @s@param string 		*
 				* @param str $role A WordPress Role ID/Name, such as `subscriber`, or `s2member_level1`.
-				* @param int|str $level A numeric s2Member Access Level number.
-				* @param str $login Username for the User.
-				* @param str $pass Plain Text Password for the User.
-				* @param str $email Email address for the User.
-				* @param str $fname First Name for the User.
-				* @param str $lname Last Name for the User.
+				* @param int|str $level A numeric s2Member Acc@param string umber.
+				* @param str $login Us@param string the User.
+				* @param str $pass Plain Text@param string or the User.
+				* @param str $email E@param string s for the User.
+				* @param str $f@param string Name for the User.
+				* @param st@param string st Name for the User.
 				* @param str $ip IP Address for the User.
 				* @param bool $opt_out Defaults to false; must be set to true. Indicates the User IS opting out.
 				* @param int|str $user_id A WordPress User ID, numeric string or integer.
@@ -418,11 +414,11 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				* @attaches-to ``add_action("ws_plugin__s2member_during_collective_eots");``
 				*
 				* @param int|str $user_id Required. A WordPress User ID, numeric string or integer.
-				* @param array $vars Required. An array of defined variables passed by the calling Hook.
-				* @param str $event Required. A specific event that triggered this call from the Action Hook.
-				* @param str $event_spec Required. A specific event specification *(a broader classification)*.
-				* @param str $mod_new_role Required if ``$event_spec === "modification"`` (but can be empty). Role the User is being modified to.
-				* @param str $mod_new_user Optional. If ``$event_spec === "modification"``, the new User object with current details.
+				* @param array $vars Required. An array of defined va@param string sed by the calling Hook.
+				* @param str $event Required. A specific event that tri@param string  call from the Action Hook.
+				* @param str $event_spec Required. A specific event sp@param string  *(a broader classification)*.
+				* @param str $mod_new_role Required if ``$event_spec === "modification"`` (but can be@param string le the User is being modified to.
+				* @param str $mod_new_user Optional. If ``$event_spec === "modificatio@param string ew User object with current details.
 				* @param str $mod_old_user Optional. If ``$event_spec === "modification"``, the old/previous User obj with old details.
 				* @return null This function does not have a return value.
 				*/
@@ -474,4 +470,3 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 					}
 			}
 	}
-?>

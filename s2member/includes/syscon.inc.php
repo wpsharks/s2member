@@ -583,4 +583,3 @@ if(!function_exists("ws_plugin__s2member_configure_options_and_their_defaults"))
 				return apply_filters_ref_array("ws_plugin__s2member_options", array(&$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]));
 			}
 	}
-?>

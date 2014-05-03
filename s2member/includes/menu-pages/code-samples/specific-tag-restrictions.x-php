@@ -10,4 +10,3 @@ if ($tags = get_the_tags ())
 				or any Posts/Pages with this Tag. */
 			}
 	}
-?>

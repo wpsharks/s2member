@@ -631,8 +631,8 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $file Input File Download to validate.
-				* @param str $key Input File Download Key to validate.
+				* @param string $file Input File Download to validate.
+				* @param string $key Input File Download Key to validate.
 				* @return bool True if valid, else false.
 				*/
 				public static function check_file_download_key($file = FALSE, $key = FALSE)
@@ -658,7 +658,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110524RC
 				*
-				* @param str $string Input string/data, to be signed by this routine.
+				* @param string $string Input string/data, to be signed by this routine.
 				* @return str An HMAC-SHA1 signature for Amazon S3.
 				*/
 				public static function amazon_s3_sign($string = FALSE)
@@ -673,12 +673,12 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $file Input file path, to be signed by this routine.
+				* @param string $file Input file path, to be signed by this routine.
 				* @param bool $stream Is this resource file to be served as streaming media?
 				* @param bool $inline Is this resource file to be served inline, or no?
 				* @param bool $ssl Is this resource file to be served via SSL, or no?
-				* @param str $basename The absolute basename of the resource file.
-				* @param str $mimetype The MIME content-type of the resource file.
+				* @param string $basename The absolute basename of the resource file.
+				* @param string $mimetype The MIME content-type of the resource file.
 				* @return str An HMAC-SHA1 signature URL for Amazon S3.
 				*/
 				public static function amazon_s3_url($file = FALSE, $stream = FALSE, $inline = FALSE, $ssl = FALSE, $basename = FALSE, $mimetype = FALSE)
@@ -793,7 +793,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $string Input string/data, to be signed by this routine.
+				* @param string $string Input string/data, to be signed by this routine.
 				* @return str An HMAC-SHA1 signature for Amazon CloudFront.
 				*/
 				public static function amazon_cf_sign($string = FALSE)
@@ -808,7 +808,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $string Input string/data, to be signed by this routine.
+				* @param string $string Input string/data, to be signed by this routine.
 				* @return str|bool An RSA-SHA1 signature for Amazon CloudFront, else false on failure.
 				*/
 				public static function amazon_cf_rsa_sign($string = FALSE)
@@ -823,12 +823,12 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $file Input file path, to be signed by this routine.
+				* @param string $file Input file path, to be signed by this routine.
 				* @param bool $stream Is this resource file to be served as streaming media?
 				* @param bool $inline Is this resource file to be served inline, or no?
 				* @param bool $ssl Is this resource file to be served via SSL, or no?
-				* @param str $basename The absolute basename of the resource file.
-				* @param str $mimetype The MIME content-type of the resource file.
+				* @param string $basename The absolute basename of the resource file.
+				* @param string $mimetype The MIME content-type of the resource file.
 				* @return str An RSA-SHA1 signature URL for Amazon CloudFront.
 				*/
 				public static function amazon_cf_url($file = FALSE, $stream = FALSE, $inline = FALSE, $ssl = FALSE, $basename = FALSE, $mimetype = FALSE)
@@ -1036,7 +1036,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $access_id Required. An Origin Access ID.
+				* @param string $access_id Required. An Origin Access ID.
 				* @return array Array containing a true `success` and `etag`, `xml` elements on success, else a failure array.
 				* 	Failure array will contain a failure `code`, and a failure `message`.
 				*/
@@ -1082,9 +1082,9 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $access_id Required. An Origin Access ID.
-				* @param str $access_id_etag Required. An Origin Access ETag header.
-				* @param str $access_id_xml Required. An Origin Access Identity's XML configuration.
+				* @param string $access_id Required. An Origin Access ID.
+				* @param string $access_id_etag Required. An Origin Access ETag header.
+				* @param string $access_id_xml Required. An Origin Access Identity's XML configuration.
 				* @return array Array containing a true `success` element on success, else a failure array.
 				* 	Failure array will contain a failure `code`, and a failure `message`.
 				*/
@@ -1167,8 +1167,8 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $distro_id Required. A Distro ID.
-				* @param str $distro_type Required: `downloads|streaming`.
+				* @param string $distro_id Required. A Distro ID.
+				* @param string $distro_type Required: `downloads|streaming`.
 				* @return array Array containing a true `success` and `etag`, `xml`, `deployed` elements on success, else a failure array.
 				* 	Failure array will contain a failure `code`, and a failure `message`.
 				*/
@@ -1214,9 +1214,9 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $distro_id Required. A Distro ID.
-				* @param str $distro_id_etag Required. A Distro ETag header.
-				* @param str $distro_id_xml Required. A Distro's XML configuration.
+				* @param string $distro_id Required. A Distro ID.
+				* @param string $distro_id_etag Required. A Distro ETag header.
+				* @param string $distro_id_xml Required. A Distro's XML configuration.
 				* @return array Array containing a true `success` and `etag`, `xml`, `deployed` elements on success, else a failure array.
 				* 	Failure array will contain a failure `code`, and a failure `message`.
 				*/
@@ -1268,9 +1268,9 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $distro_id Required. A Distro ID.
-				* @param str $distro_id_etag Required. A Distro ETag header.
-				* @param str $distro_id_xml Required. A Distro's XML configuration.
+				* @param string $distro_id Required. A Distro ID.
+				* @param string $distro_id_etag Required. A Distro ETag header.
+				* @param string $distro_id_xml Required. A Distro's XML configuration.
 				* @return array Array containing a true `success` element on success, else a failure array.
 				* 	Failure array will contain a failure `code`, and a failure `message`.
 				*/
@@ -1338,7 +1338,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				* @package s2Member\Files
 				* @since 110926
 				*
-				* @param str $distro_type Required: `downloads|streaming`.
+				* @param string $distro_type Required: `downloads|streaming`.
 				* @return array Array containing a true `success` and `distro_[distro_type]_id`, `distro_[distro_type]_dname` elements on success, else a failure array.
 				* 	Failure array will contain a failure `code`, and a failure `message`.
 				*/
@@ -1409,4 +1409,3 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 					}
 			}
 	}
-?>

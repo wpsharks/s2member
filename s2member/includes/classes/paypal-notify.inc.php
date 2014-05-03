@@ -35,7 +35,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify"))
 				*
 				* @attaches-to ``add_action("init");``
 				*
-				* @return null|inner Return-value of inner routine.
+				* @return null|mixed Return-value of inner routine.
 				*/
 				public static function paypal_notify ()
 					{
@@ -46,4 +46,3 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify"))
 					}
 			}
 	}
-?>

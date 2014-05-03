@@ -33,7 +33,7 @@ if (!function_exists ("ws_plugin__s2member_classes"))
 		* @package s2Member
 		* @since 3.5
 		*
-		* @param str $class The class that needs to be loaded. Passed in by PHP itself.
+		* @param string $class The class that needs to be loaded. Passed in by PHP itself.
 		* @return null
 		*/
 		function ws_plugin__s2member_classes ($class = FALSE)
@@ -67,7 +67,7 @@ if (!function_exists ("ws_plugin__s2member_classes"))
 		* @package s2Member
 		* @since 3.5
 		*
-		* @param str $starting_dir The directory to start scanning from.
+	@param string tr $starting_dir The directory to start scanning from.
 		* @return str[] An array of class directories.
 		*/
 		function _ws_plugin__s2member_classes_scan_dirs_r ($starting_dir = FALSE)
@@ -84,4 +84,3 @@ if (!function_exists ("ws_plugin__s2member_classes"))
 			}
 		spl_autoload_register /* Register __autoload. */ ("ws_plugin__s2member_classes");
 	}
-?>

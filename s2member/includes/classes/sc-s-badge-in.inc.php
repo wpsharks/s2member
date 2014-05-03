@@ -36,8 +36,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_s_badge_in"))
 				* @attaches-to ``add_shortcode("s2Member-Security-Badge");``
 				*
 				* @param array $attr An array of Attributes.
-				* @param str $content Content inside the Shortcode.
-				* @param str $shortcode The actual Shortcode name itself.
+				* @param string $content Content inside the Shortcode.
+			@param string tr $shortcode The actual Shortcode name itself.
 				* @return str Resulting Security Badge code; HTML markup.
 				*/
 				public static function sc_s_badge ($attr = FALSE, $content = FALSE, $shortcode = FALSE)
@@ -56,4 +56,3 @@ if (!class_exists ("c_ws_plugin__s2member_sc_s_badge_in"))
 					}
 			}
 	}
-?>

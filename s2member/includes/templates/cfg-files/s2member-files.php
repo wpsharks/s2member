@@ -6,8 +6,6 @@ global /* A Multisite ``$base`` configuration? */ $base;
 $ws_plugin__s2member_temp_s_base = (!empty ($base)) ? $base : c_ws_plugin__s2member_utils_urls::parse_url (network_home_url ("/"), PHP_URL_PATH);
 // This works on Multisite installs too. The function ``network_home_url ()`` defaults to ``home_url ()`` on standard WordPress installs.
 // Do NOT use ``site`` URL. Must use the `home` URL here, because that's what WordPress uses in its own `mod_rewrite` implementation.
-?>
-
 <IfModule env_module>
 # No GZIP for script-based file downloads.
 	SetEnv no-gzip 1
@@ -19,8 +17,7 @@ $ws_plugin__s2member_temp_s_base = (!empty ($base)) ? $base : c_ws_plugin__s2mem
 
 # Enable rewrite and configure base.
 	RewriteEngine On
-	RewriteBase <?php echo $ws_plugin__s2member_temp_s_base . "\n"; ?>
-
+	RewriteBase <?php echo $ws_plugin__s2member_temp_s_base . "\n";
 # Initialize all environment variables we're using below.
 	RewriteCond %{ENV:s2member_file_download_setup} !^complete$
 	RewriteRule ^(.*)$ - [E=s2member_file_download_wp_vdir:0,E=s2member_file_download:$1,E=s2member_file_stream:0,E=s2member_file_inline:0,E=s2member_file_storage:0,E=s2member_file_remote:0,E=s2member_file_ssl:0,E=s2member_file_download_key:0,E=s2member_skip_confirmation:0,E=s2member_file_download_setup:complete]
@@ -114,4 +111,4 @@ $ws_plugin__s2member_temp_s_base = (!empty ($base)) ? $base : c_ws_plugin__s2mem
 # Disallow directory indexing here.
 	Options -Indexes
 
-<?php unset ($ws_plugin__s2member_temp_s_base); ?>
+<?php unset ($ws_plugin__s2member_temp_s_base);

@@ -35,7 +35,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_css_js"))
 				*
 				* @attaches-to ``add_action("init");``
 				*
-				* @return null|inner Return-value of inner routine.
+				* @return null|mixed Return-value of inner routine.
 				*/
 				public static function menu_pages_css ()
 					{
@@ -52,7 +52,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_css_js"))
 				*
 				* @attaches-to ``add_action("init");``
 				*
-				* @return null|inner Return-value of inner routine.
+				* @return null|mixed Return-value of inner routine.
 				*/
 				public static function menu_pages_js ()
 					{
@@ -63,4 +63,3 @@ if (!class_exists ("c_ws_plugin__s2member_admin_css_js"))
 					}
 			}
 	}
-?>

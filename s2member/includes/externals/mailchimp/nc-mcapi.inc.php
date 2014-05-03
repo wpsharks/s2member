@@ -17,22 +17,22 @@ class NC_MCAPI {
     var $version = "1.3";
     var $errorMessage;
     var $errorCode;
-    
+
     /**
      * Cache the information on the API location on the server
      */
     var $apiUrl;
-    
+
     /**
      * Default to a 300 second timeout on server calls
      */
-    var $timeout = 300; 
-    
+    var $timeout = 300;
+
     /**
      * Default to a 8K chunk size
      */
     var $chunkSize = 8192;
-    
+
     /**
      * Cache the user api_key so we only have to log in once per client instantiation
      */
@@ -42,10 +42,10 @@ class NC_MCAPI {
      * Cache the user api_key so we only have to log in once per client instantiation
      */
     var $secure = false;
-    
+
     /**
      * Connect to the MailChimp API for a given list.
-     * 
+     *
      * @param string $apikey Your MailChimp apikey
      * @param string $secure Whether or not this should use a secure connection
      */
@@ -70,7 +70,7 @@ class NC_MCAPI {
             $this->secure = false;
         }
     }
-    
+
     /**
      * Unschedule a campaign that is scheduled to be sent in the future
      *
@@ -182,70 +182,70 @@ class NC_MCAPI {
      * @example xml-rpc_campaignSegmentTest.php
      *
      * @param string $list_id the list to test segmentation on - get lists using lists()
-     * @param array $options with 2 keys:  
+     * @param array $options with 2 keys:
              string "match" controls whether to use AND or OR when applying your options - expects "<strong>any</strong>" (for OR) or "<strong>all</strong>" (for AND)
              array "conditions" - up to 10 different criteria to apply while segmenting. Each criteria row must contain 3 keys - "<strong>field</strong>", "<strong>op</strong>", and "<strong>value</strong>" - and possibly a fourth, "<strong>extra</strong>", based on these definitions:
-    
+
             Field = "<strong>date</strong>" : Select based on signup date
                 Valid Op(eration): <strong>eq</strong> (is) / <strong>gt</strong> (after) / <strong>lt</strong> (before)
-                Valid Values: 
+                Valid Values:
                 string last_campaign_sent  uses the date of the last campaign sent
                 string campaign_id - uses the send date of the campaign that carriers the Id submitted - see campaigns()
                 string YYYY-MM-DD - any date in the form of YYYY-MM-DD - <em>note:</em> anything that appears to start with YYYY will be treated as a date
-                          
+
             Field = "<strong>interests-X</strong>": where X is the Grouping Id from listInterestGroupings()
-                Valid Op(erations): <strong>one</strong> / <strong>none</strong> / <strong>all</strong> 
+                Valid Op(erations): <strong>one</strong> / <strong>none</strong> / <strong>all</strong>
                 Valid Values: a comma delimited of interest groups for the list - see listInterestGroupings()
-        
+
             Field = "<strong>aim</strong>"
                 Valid Op(erations): <strong>open</strong> / <strong>noopen</strong> / <strong>click</strong> / <strong>noclick</strong>
                 Valid Values: "<strong>any</strong>" or a valid AIM-enabled Campaign that has been sent
-    
+
             Field = "<strong>rating</strong>" : allows matching based on list member ratings
                 Valid Op(erations):  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;)
                 Valid Values: a number between 0 and 5
-    
+
             Field = "<strong>ecomm_prod</strong>" or "<strong>ecomm_prod</strong>": allows matching product and category names from purchases
-                Valid Op(erations): 
+                Valid Op(erations):
                  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;) / <strong>like</strong> (like '%blah%') / <strong>nlike</strong> (not like '%blah%') / <strong>starts</strong> (like 'blah%') / <strong>ends</strong> (like '%blah')
                 Valid Values: any string
-    
+
             Field = "<strong>ecomm_spent_one</strong>" or "<strong>ecomm_spent_all</strong>" : allows matching purchase amounts on a single order or all orders
                 Valid Op(erations): <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;)
                 Valid Values: a number
-    
+
             Field = "<strong>ecomm_date</strong>" : allow matching based on order dates
                 Valid Op(eration): <strong>eq</strong> (is) / <strong>gt</strong> (after) / <strong>lt</strong> (before)
-                Valid Values: 
+                Valid Values:
                 string YYYY-MM-DD - any date in the form of YYYY-MM-DD
-                
+
             Field = "<strong>social_gender</strong>" : allows matching against the gender acquired from SocialPro
                 Valid Op(eration): <strong>eq</strong> (is) / <strong>ne</strong> (is not)
                 Valid Values: male, female
-                
+
             Field = "<strong>social_age</strong>" : allows matching against the age acquired from SocialPro
                 Valid Op(erations):  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;)
                 Valid Values: any number
-    
+
             Field = "<strong>social_influence</strong>" : allows matching against the influence acquired from SocialPro
                 Valid Op(erations):  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;)
                 Valid Values: a number between 0 and 5
-    
-            Field = "<strong>social_network</strong>" : 
+
+            Field = "<strong>social_network</strong>" :
                 Valid Op(erations):  <strong>member</strong> (is a member of) / <strong>notmember</strong> (is not a member of)
                 Valid Values: twitter, facebook, myspace, linkedin, flickr
-    
-            Field = "<strong>static_segment</strong>" : 
+
+            Field = "<strong>static_segment</strong>" :
                 Valid Op(eration): <strong>eq</strong> (is in) / <strong>ne</strong> (is not in)
                 Valid Values: an int - get from listStaticSegments()
-    
+
             Field = An <strong>Address</strong> Merge Var. Use <strong>Merge0-Merge30</strong> or the <strong>Custom Tag</strong> you've setup for your merge field - see listMergeVars(). Note, Address fields can still be used with the default operations below - this section is broken out solely to highlight the differences in using the geolocation routines.
                 Valid Op(erations): <strong>geoin</strong>
                 Valid Values: The number of miles an address should be within
                 Extra Value: The Zip Code to be used as the center point
-        
+
             Default Field = A Merge Var. Use <strong>Merge0-Merge30</strong> or the <strong>Custom Tag</strong> you've setup for your merge field - see listMergeVars()
-                Valid Op(erations): 
+                Valid Op(erations):
                  <strong>eq</strong> (=) / <strong>ne</strong> (!=) / <strong>gt</strong> (&gt;) / <strong>lt</strong> (&lt;) / <strong>like</strong> (like '%blah%') / <strong>nlike</strong> (not like '%blah%') / <strong>starts</strong> (like 'blah%') / <strong>ends</strong> (like '%blah')
                 Valid Values: any string
      * @return int total The total number of subscribers matching your segmentation options
@@ -276,7 +276,7 @@ class NC_MCAPI {
             int template_id optional - use this user-created template to generate the HTML content of the campaign (takes precendence over other template options)
             int gallery_template_id optional - use a template from the public gallery to generate the HTML content of the campaign (takes precendence over base template options)
             int base_template_id optional - use this a base/start-from-scratch template to generate the HTML content of the campaign
-            int folder_id optional - automatically file the new campaign in the folder_id passed. Get using folders() - note that Campaigns and Autoresponders have separate folder setupsn 
+            int folder_id optional - automatically file the new campaign in the folder_id passed. Get using folders() - note that Campaigns and Autoresponders have separate folder setupsn
             array tracking optional - set which recipient actions will be tracked, as a struct of boolean values with the following keys: "opens", "html_clicks", and "text_clicks".  By default, opens and HTML clicks will be tracked. Click tracking can not be disabled for Free accounts.
             string title optional - an internal name to use for this campaign.  By default, the campaign subject will be used.
             boolean authenticate optional - set to true to enable SenderID, DomainKeys, and DKIM authentication, defaults to false.
@@ -287,24 +287,24 @@ class NC_MCAPI {
             boolean auto_tweet optional If set, this campaign will be auto-tweeted when it is sent - defaults to false. Note that if a Twitter account isn't linked, this will be silently ignored.
             boolean timewarp optional If set, this campaign must be scheduled 24 hours in advance of sending - default to false. Only valid for "regular" campaigns and "absplit" campaigns that split on schedule_time.
             boolean ecomm360 optional If set, our <a href="http://www.mailchimp.com/blog/ecommerce-tracking-plugin/" target="_blank">Ecommerce360 tracking</a> will be enabled for links in the campaign
-    
-    * @param array $content the content for this campaign - use a struct with the following keys: 
+
+    * @param array $content the content for this campaign - use a struct with the following keys:
                 string html for pasted HTML content
                 string text for the plain-text version
                 string url to have us pull in content from a URL. Note, this will override any other content options - for lists with Email Format options, you'll need to turn on generate_text as well
                 string archive to send a Base64 encoded archive file for us to import all media from. Note, this will override any other content options - for lists with Email Format options, you'll need to turn on generate_text as well
                 string archive_type optional - only necessary for the "archive" option. Supported formats are: zip, tar.gz, tar.bz2, tar, tgz, tbz . If not included, we will default to zip
-                
+
                 If you chose a template instead of pasting in your HTML content, then use "html_" followed by the template sections as keys - for example, use a key of "html_MAIN" to fill in the "MAIN" section of a template. Supported template sections include: "html_HEADER", "html_MAIN", "html_SIDECOLUMN", and "html_FOOTER"
     * @param array $segment_opts optional - if you wish to do Segmentation with this campaign this array should contain: see campaignSegmentTest(). It's suggested that you test your options against campaignSegmentTest(). Also, "trans" campaigns <strong>do not</strong> support segmentation.
-    * @param array $type_opts optional - 
+    * @param array $type_opts optional -
             For RSS Campaigns this, array should contain:
                 string url the URL to pull RSS content from - it will be verified and must exist
                 string schedule optional one of "daily", "weekly", "monthly" - defaults to "daily"
                 string schedule_hour optional an hour between 0 and 24 - default to 4 (4am <em>local time</em>) - applies to all schedule types
                 string schedule_weekday optional for "weekly" only, a number specifying the day of the week to send: 0 (Sunday) - 6 (Saturday) - defaults to 1 (Monday)
                 string schedule_monthday optional for "monthly" only, a number specifying the day of the month to send (1 - 28) or "last" for the last day of a given month. Defaults to the 1st day of the month
-             
+
             For A/B Split campaigns, this array should contain:
                 string split_test The values to segment based on. Currently, one of: "subject", "from_name", "schedule". NOTE, for "schedule", you will need to call campaignSchedule() separately!
                 string pick_winner How the winner will be picked, one of: "opens" (by the open_rate), "clicks" (by the click rate), "manual" (you pick manually)
@@ -317,14 +317,14 @@ class NC_MCAPI {
                 string from_email_b optional sort of, required when split_test is "from_name"
                 string subject_a optional sort of, required when split_test is "subject"
                 string subject_b optional sort of, required when split_test is "subject"
-                
+
             For AutoResponder campaigns, this array should contain:
                 string offset-units one of "day", "week", "month", "year" - required
                 string offset-time optional, sort of - the number of units must be a number greater than 0 for signup based autoresponders
                 string offset-dir either "before" or "after"
                 string event optional "signup" (default) to base this on double-optin signup, "date" or "annual" to base this on merge field in the list
                 string event-datemerge optional sort of, this is required if the event is "date" or "annual"
-    
+
      *
      * @return string the ID for the created campaign
      */
@@ -339,8 +339,8 @@ class NC_MCAPI {
     }
 
     /** Update just about any setting for a campaign that has <em>not</em> been sent. See campaignCreate() for details.
-     *   
-     *  
+     *
+     *
      *  Caveats:<br/><ul>
      *        <li>If you set list_id, all segmentation options will be deleted and must be re-added.</li>
      *        <li>If you set template_id, you need to follow that up by setting it's 'content'</li>
@@ -449,7 +449,7 @@ class NC_MCAPI {
             boolean timewarp Whether or not the campaign used Timewarp
             boolean timewarp_schedule The time, in GMT, that the Timewarp campaign is being sent. For A/B Split campaigns, this is blank and is instead in their schedule_a and schedule_b in the type_opts array
             array tracking containing "text_clicks", "html_clicks", and "opens" as boolean values representing whether or not they were enabled
-            string segment_text a string marked-up with HTML explaining the segment used for the campaign in plain English 
+            string segment_text a string marked-up with HTML explaining the segment used for the campaign in plain English
             array segment_opts the segment used for the campaign - can be passed to campaignSegmentTest() or campaignCreate()
             array type_opts the type-specific options for the campaign - can be passed to campaignCreate()
      */
@@ -509,7 +509,7 @@ class NC_MCAPI {
             int unique_opens the unique clicks for this timezone
             int bounces the total bounces for this timezone
             int total the total number of members sent to in this timezone
-            int sent the total number of members delivered to in this timezone        
+            int sent the total number of members delivered to in this timezone
      */
     function campaignStats($cid) {
         $params = array();
@@ -539,7 +539,7 @@ class NC_MCAPI {
     /**
      * Get the top 5 performing email domains for this campaign. Users want more than 5 should use campaign campaignEmailStatsAIM()
      * or campaignEmailStatsAIMAll() and generate any additional stats they require.
-     * 
+     *
      * @section Campaign  Stats
      *
      * @example mcapi_campaignEmailDomainPerformance.php
@@ -558,7 +558,7 @@ class NC_MCAPI {
      * @returnf int bounces_pct Percentage of bounces from this domain (whole number)
      * @returnf int opens_pct Percentage of opens from this domain (whole number)
      * @returnf int clicks_pct Percentage of clicks from this domain (whole number)
-     * @returnf int unsubs_pct Percentage of unsubs from this domain (whole number) 
+     * @returnf int unsubs_pct Percentage of unsubs from this domain (whole number)
      */
     function campaignEmailDomainPerformance($cid) {
         $params = array();
@@ -594,7 +594,7 @@ class NC_MCAPI {
 
     /**
      * <strong>DEPRECATED</strong> Get all email addresses with Hard Bounces for a given campaign
-     * 
+     *
      * @deprecated See campaignMembers() for a replacement
      *
      * @section Campaign  Stats
@@ -646,7 +646,7 @@ class NC_MCAPI {
      * @param string $cid the campaign id to pull bounces for (can be gathered using campaigns())
      * @param int    $start optional for large data sets, the page number to start at - defaults to 1st page of data  (page 0)
      * @param int    $limit optional for large data sets, the number of results to return - defaults to 1000, upper limit set at 15000
-     * @return array email addresses that unsubscribed from this campaign along with reasons, if given 
+     * @return array email addresses that unsubscribed from this campaign along with reasons, if given
      * @return array a total of all unsubscribed emails and the specific emails for this page
      * @returnf int total   the total number of unsubscribes for the campaign
      * @returnf array data  the full email addresses that unsubscribed
@@ -735,7 +735,7 @@ class NC_MCAPI {
 
     /**
      * Retrieve the countries and number of opens tracked for each. Email address are not returned.
-     * 
+     *
      * @section Campaign  Stats
      *
      *
@@ -754,13 +754,13 @@ class NC_MCAPI {
 
     /**
      * Retrieve the regions and number of opens tracked for a certain country. Email address are not returned.
-     * 
+     *
      * @section Campaign  Stats
      *
      *
      * @param string $cid the campaign id to pull bounces for (can be gathered using campaigns())
      * @param string $code An ISO3166 2 digit country code
-     * @return array regions an array of regions within the provided country where opens occurred. 
+     * @return array regions an array of regions within the provided country where opens occurred.
      * @returnf string code An internal code for the region. When this is blank, it indicates we know the country, but not the region
      * @returnf string name The name of the region, if we have one. For blank "code" values, this will be "Rest of Country"
      * @returnf int opens The total number of opens that occurred in the country
@@ -774,7 +774,7 @@ class NC_MCAPI {
 
     /**
      * Retrieve the tracked eepurl mentions on Twitter
-     * 
+     *
      * @section Campaign  Stats
      *
      *
@@ -806,10 +806,10 @@ class NC_MCAPI {
     }
 
     /**
-     * Retrieve the most recent full bounce message for a specific email address on the given campaign. 
+     * Retrieve the most recent full bounce message for a specific email address on the given campaign.
      * Messages over 30 days old are subject to being removed
-     * 
-     * 
+     *
+     *
      * @section Campaign  Stats
      *
      * @param string $cid the campaign id to pull bounces for (can be gathered using campaigns())
@@ -830,7 +830,7 @@ class NC_MCAPI {
      * Retrieve the full bounce messages for the given campaign. Note that this can return very large amounts
      * of data depending on how large the campaign was and how much cruft the bounce provider returned. Also,
      * message over 30 days old are subject to being removed
-     * 
+     *
      * @section Campaign  Stats
      *
      * @example mcapi_campaignBounceMessages.php
@@ -857,7 +857,7 @@ class NC_MCAPI {
 
     /**
      * Retrieve the Ecommerce Orders tracked by campaignEcommOrderAdd()
-     * 
+     *
      * @section Campaign  Stats
      *
      * @param string $cid the campaign id to pull bounces for (can be gathered using campaigns())
@@ -934,12 +934,12 @@ class NC_MCAPI {
 
     /**
      * Get the HTML template content sections for a campaign. Note that this <strong>will</strong> return very jagged, non-standard results based on the template
-     * a campaign is using. You only want to use this if you want to allow editing template sections in your applicaton. 
-     * 
+     * a campaign is using. You only want to use this if you want to allow editing template sections in your applicaton.
+     *
      * @section Campaign  Related
      *
      * @param string $cid the campaign id to get content for (can be gathered using campaigns())
-     * @return array array containing all content section for the campaign - 
+     * @return array array containing all content section for the campaign -
      */
     function campaignTemplateContent($cid) {
         $params = array();
@@ -1038,7 +1038,7 @@ class NC_MCAPI {
     }
 
     /**
-     * Given a campaign and correct paging limits, return the entire click and open history with timestamps, ordered by time, 
+     * Given a campaign and correct paging limits, return the entire click and open history with timestamps, ordered by time,
      * for every user a campaign was delivered to.
      *
      * @section Campaign Report Data
@@ -1063,7 +1063,7 @@ class NC_MCAPI {
     }
 
     /**
-     * Attach Ecommerce Order Information to a Campaign. This will generall be used by ecommerce package plugins 
+     * Attach Ecommerce Order Information to a Campaign. This will generall be used by ecommerce package plugins
      * <a href="/plugins/ecomm360.phtml">that we provide</a> or by 3rd part system developers.
      * @section Campaign  Related
      *
@@ -1081,7 +1081,7 @@ class NC_MCAPI {
                 array items the individual line items for an order using these keys:
                 <div style="padding-left:30px"><table><tr><td colspan=*>
                     int line_num optional the line number of the item on the order. We will generate these if they are not passed
-                    int product_id the store's internal Id for the product. Lines that do no contain this will be skipped 
+                    int product_id the store's internal Id for the product. Lines that do no contain this will be skipped
                     string product_name the product name for the product_id associated with this item. We will auto update these as they change (based on product_id)
                     int category_id the store's internal Id for the (main) category associated with this product. Our testing has found this to be a "best guess" scenario
                     string category_name the category name for the category_id this product is in. Our testing has found this to be a "best guess" scenario. Our plugins walk the category heirarchy up and send "Root - SubCat1 - SubCat4", etc.
@@ -1116,7 +1116,7 @@ class NC_MCAPI {
      * @param int $limit optional - control paging of lists, number of lists to return with each call, defaults to 25 (max=100)
      * @return array an array with keys listed in Returned Fields below
      * @returnf int total the total number of lists which matched the provided filters
-     * @returnf array data the lists which matched the provided filters, including the following for 
+     * @returnf array data the lists which matched the provided filters, including the following for
              string id The list id for this list. This will be used for all other list management functions.
              int web_id The list id used in our web app, allows you to create a link directly to it
              string name The name of the list.
@@ -1138,7 +1138,7 @@ class NC_MCAPI {
                  int campaign_count The number of campaigns in any status that use this list
                  int grouping_count The number of Interest Groupings for this list
                  int group_count The number of Interest Groups (regardless of grouping) for this list
-                 int merge_var_count The number of merge vars for this list (not including the required EMAIL one) 
+                 int merge_var_count The number of merge vars for this list (not including the required EMAIL one)
                  int avg_sub_rate the average number of subscribe per month for the list (empty value if we haven't calculated this yet)
                  int avg_unsub_rate the average number of unsubscribe per month for the list (empty value if we haven't calculated this yet)
                  int target_sub_rate the target subscription rate for the list to keep it growing (empty value if we haven't calculated this yet)
@@ -1196,7 +1196,7 @@ class NC_MCAPI {
                     boolean show optional indicates whether the field is displayed in the app's list member view - defaults to true
                     string default_value optional the default value for the field. See listSubscribe() for formatting info. Defaults to blank
                     array choices optional kind of - an array of strings to use as the choices for radio and dropdown type fields
-    
+
      * @return bool true if the request succeeds, otherwise an error will be thrown
      */
     function listMergeVarAdd($id, $tag, $name, $options=array (
@@ -1228,7 +1228,7 @@ class NC_MCAPI {
     }
 
     /**
-     * Delete a merge tag from a given list and all its members. Seriously - the data is removed from all members as well! 
+     * Delete a merge tag from a given list and all its members. Seriously - the data is removed from all members as well!
      * Note that on large lists this method may seem a bit slower than calls you typically make.
      *
      * @section List Related
@@ -1269,7 +1269,7 @@ class NC_MCAPI {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupAdd.php
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $group_name the interest group to add - group names must be unique within a grouping
      * @param int optional $grouping_id The grouping to add the new group to - get using listInterestGrouping() . If not supplied, the first grouping on the list is used.
@@ -1287,7 +1287,7 @@ class NC_MCAPI {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupDel.php
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $group_name the interest group to delete
      * @param int $grouping_id The grouping to delete the group from - get using listInterestGrouping() . If not supplied, the first grouping on the list is used.
@@ -1304,7 +1304,7 @@ class NC_MCAPI {
     /** Change the name of an Interest Group
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $old_name the interest group name to be changed
      * @param string $new_name the new interest group name to be set
@@ -1325,7 +1325,7 @@ class NC_MCAPI {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupingAdd.php
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $name the interest grouping to add - grouping names must be unique
      * @param string $type The type of the grouping to add - one of "checkboxes", "hidden", "dropdown", "radio"
@@ -1345,10 +1345,10 @@ class NC_MCAPI {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupingUpdate.php
-     * 
+     *
      * @param int $grouping_id the interest grouping id - get from listInterestGroupings()
      * @param string $name The name of the field to update - either "name" or "type". Groups with in the grouping should be manipulated using the standard listInterestGroup* methods
-     * @param string $value The new value of the field. Grouping names must be unique - only "hidden" and "checkboxes" grouping types can be converted between each other. 
+     * @param string $value The new value of the field. Grouping names must be unique - only "hidden" and "checkboxes" grouping types can be converted between each other.
      * @return bool true if the request succeeds, otherwise an error will be thrown
      */
     function listInterestGroupingUpdate($grouping_id, $name, $value) {
@@ -1363,7 +1363,7 @@ class NC_MCAPI {
      *
      * @section List Related
      * @example xml-rpc_listInterestGroupingDel.php
-     * 
+     *
      * @param int $grouping_id the interest grouping id - get from listInterestGroupings()
      * @return bool true if the request succeeds, otherwise an error will be thrown
      */
@@ -1376,7 +1376,7 @@ class NC_MCAPI {
     /** Return the Webhooks configured for the given list
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @return array list of webhooks
      * @returnf string url the URL for this Webhook
@@ -1392,7 +1392,7 @@ class NC_MCAPI {
     /** Add a new Webhook URL for the given list
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $url a valid URL for the Webhook - it will be validated. note that a url may only exist on a list once.
      * @param array $actions optional a hash of actions to fire this Webhook for
@@ -1421,7 +1421,7 @@ class NC_MCAPI {
     /** Delete an existing Webhook URL from a given list
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $url the URL of a Webhook on this list
      * @return boolean true if the call succeeds, otherwise an exception will be thrown
@@ -1436,7 +1436,7 @@ class NC_MCAPI {
     /** Retrieve all of the Static Segments for a list.
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @return array an array of parameters for each static segment
      * @returnf int id the id of the segment
@@ -1453,12 +1453,12 @@ class NC_MCAPI {
     }
 
     /** Save a segment against a list for later use. There is no limit to the number of segments which can be saved. Static Segments <strong>are not</strong> tied
-     *  to any merge data, interest groups, etc. They essentially allow you to configure an unlimited number of custom segments which will have standard performance. 
+     *  to any merge data, interest groups, etc. They essentially allow you to configure an unlimited number of custom segments which will have standard performance.
      *  When using proper segments, Static Segments are one of the available options for segmentation just as if you used a merge var (and they can be used with other segmentation
      *  options), though performance may degrade at that point.
-     * 
+     *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param string $name a unique name per list for the segment - 50 byte maximum length, anything longer will throw an error
      * @return int the id of the new segment, otherwise an error will be thrown.
@@ -1473,7 +1473,7 @@ class NC_MCAPI {
     /** Resets a static segment - removes <strong>all</strong> members from the static segment. Note: does not actually affect list member data
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param int $seg_id the id of the static segment to reset  - get from listStaticSegments()
      * @return bool true if it worked, otherwise an error is thrown.
@@ -1488,7 +1488,7 @@ class NC_MCAPI {
     /** Delete a static segment. Note that this will, of course, remove any member affiliations with the segment
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param int $seg_id the id of the static segment to delete - get from listStaticSegments()
      * @return bool true if it worked, otherwise an error is thrown.
@@ -1504,7 +1504,7 @@ class NC_MCAPI {
      *  in order to be included - this <strong>will not</strong> subscribe them to the list!
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param int $seg_id the id of the static segment to modify - get from listStaticSegments()
      * @param array $batch an array of email addresses and/or unique_ids to add to the segment
@@ -1524,7 +1524,7 @@ class NC_MCAPI {
      *  in order to be removed - this <strong>will not</strong> unsubscribe them from the list!
      *
      * @section List Related
-     * 
+     *
      * @param string $id the list id to connect to. Get by calling lists()
      * @param int $seg_id the id of the static segment to delete - get from listStaticSegments()
      * @param array $batch an array of email addresses and/or unique_ids to remove from the segment
@@ -1546,7 +1546,7 @@ class NC_MCAPI {
      * @section List Related
      *
      * @example mcapi_listSubscribe.php
-     * @example json_listSubscribe.php        
+     * @example json_listSubscribe.php
      * @example xml-rpc_listSubscribe.php
      *
      * @param string $id the list id to connect to. Get by calling lists()
@@ -1556,12 +1556,12 @@ class NC_MCAPI {
                         array GROUPINGS Set Interest Groups by Grouping. Each element in this array should be an array containing the "groups" parameter which contains a comma delimited list of Interest Groups to add. Commas in Interest Group names should be escaped with a backslash. ie, "," =&gt; "\," and either an "id" or "name" parameter to specify the Grouping - get from listInterestGroupings()
                         string OPTINIP Set the Opt-in IP fields. <em>Abusing this may cause your account to be suspended.</em> We do validate this and it must not be a private IP address.
                         array MC_LOCATION Set the members geographic location. By default if this merge field exists, we'll update using the optin_ip if it exists. If the array contains LATITUDE and LONGITUDE keys, they will be used. NOTE - this will slow down each subscribe call a bit, especially for lat/lng pairs in sparsely populated areas. Currently our automated background processes can and will overwrite this based on opens and clicks.
-                        
+
                         <strong>Handling Field Data Types</strong> - most fields you can just pass a string and all is well. For some, though, that is not the case...
                         Field values should be formatted as follows:
                         string address For the string version of an Address, the fields should be delimited by <strong>2</strong> spaces. Address 2 can be skipped. The Country should be a 2 character ISO-3166-1 code and will default to your default country if not set
                         array address For the array version of an Address, the requirements for Address 2 and Country are the same as with the string version. Then simply pass us an array with the keys <strong>addr1</strong>, <strong>addr2</strong>, <strong>city</strong>, <strong>state</strong>, <strong>zip</strong>, <strong>country</strong> and appropriate values for each
-    
+
                         string date use YYYY-MM-DD to be safe. Generally, though, anything strtotime() understands we'll understand - <a href="http://us2.php.net/strtotime" target="_blank">http://us2.php.net/strtotime</a>
                         string dropdown can be a normal string - we <em>will</em> validate that the value is a valid option
                         string image must be a valid, existing url. we <em>will</em> check its existence
@@ -1569,7 +1569,7 @@ class NC_MCAPI {
                         double number pass in a valid number - anything else will turn in to zero (0). Note, this will be rounded to 2 decimal places
                         string phone If your account has the US Phone numbers option set, this <em>must</em> be in the form of NPA-NXX-LINE (404-555-1212). If not, we assume an International number and will simply set the field with what ever number is passed in.
                         string website This is a standard string, but we <em>will</em> verify that it looks like a valid URL
-    
+
      * @param string $email_type optional email type preference for the email (html, text, or mobile defaults to html)
      * @param bool $double_optin optional flag to control whether a double opt-in confirmation message is sent, defaults to true. <em>Abusing this may cause your account to be suspended.</em>
      * @param bool $update_existing optional flag to control whether a existing subscribers should be updated instead of throwing and error, defaults to false
@@ -1615,7 +1615,7 @@ class NC_MCAPI {
     }
 
     /**
-     * Edit the email address, merge fields, and interest groups for a list member. If you are doing a batch update on lots of users, 
+     * Edit the email address, merge fields, and interest groups for a list member. If you are doing a batch update on lots of users,
      * consider using listBatchSubscribe() with the update_existing and possible replace_interests parameter.
      *
      * @section List Related
@@ -1649,7 +1649,7 @@ class NC_MCAPI {
      * @example xml-rpc_listBatchSubscribe.php
      *
      * @param string $id the list id to connect to. Get by calling lists()
-     * @param array $batch an array of structs for each address to import with two special keys: "EMAIL" for the email address, and "EMAIL_TYPE" for the email type option (html, text, or mobile) 
+     * @param array $batch an array of structs for each address to import with two special keys: "EMAIL" for the email address, and "EMAIL_TYPE" for the email type option (html, text, or mobile)
      * @param boolean $double_optin flag to control whether to send an opt-in confirmation email - defaults to true
      * @param boolean $update_existing flag to control whether to update members that are already subscribed to the list or to return an error, defaults to false (return error)
      * @param boolean $replace_interests flag to determine whether we replace the interest groups with the updated groups provided, or we add the provided groups to the member's interest groups (optional, defaults to true)
@@ -1746,7 +1746,7 @@ class NC_MCAPI {
             string email_type The type of emails this customer asked to get: html, text, or mobile
             array merges An associative array of all the merge tags and the data for those tags for this email address. <em>Note</em>: Interest Groups are returned as comma delimited strings - if a group name contains a comma, it will be escaped with a backslash. ie, "," =&gt; "\,". Groupings will be returned with their "id" and "name" as well as a "groups" field formatted just like Interest Groups
             string status The subscription status for this email address, either pending, subscribed, unsubscribed, or cleaned
-            string ip_opt IP Address this address opted in from. 
+            string ip_opt IP Address this address opted in from.
             string ip_signup IP Address this address signed up from.
             int member_rating the rating of the subscriber. This will be 1 - 5 as described <a href="http://eepurl.com/f-2P" target="_blank">here</a>
             string campaign_id If the user is unsubscribed and they unsubscribed from a specific campaign, that campaign_id will be listed, otherwise this is not returned.
@@ -1772,7 +1772,7 @@ class NC_MCAPI {
      * @example xml-rpc_listMemberInfo.php
      *
      * @param string $id the list id to connect to. Get by calling lists()
-     * @param array $email_address an array of up to 50 email addresses to get information for OR the "id"(s) for the member returned from listMembers, Webhooks, and Campaigns. 
+     * @param array $email_address an array of up to 50 email addresses to get information for OR the "id"(s) for the member returned from listMembers, Webhooks, and Campaigns.
      * @return array array of data and success/error counts
      * @returnf int success the number of subscribers successfully found on the list
      * @returnf int errors the number of subscribers who were not found on the list
@@ -1826,7 +1826,7 @@ class NC_MCAPI {
      * @example mcapi_listGrowthHistory.php
      *
      * @param string $id the list id to connect to. Get by calling lists()
-     * @return array array of months and growth 
+     * @return array array of months and growth
      * @returnf string month The Year and Month in question using YYYY-MM format
      * @returnf int existing number of existing subscribers to start the month
      * @returnf int imports number of subscribers imported during the month
@@ -1982,7 +1982,7 @@ class NC_MCAPI {
      * @param array  $values the values to updates - while both are optional, at least one should be provided. Both can be updated at the same time.
             string name optional the name for the template - names must be unique and a max of 50 bytes
             string html optional a string specifying the entire template to be created. This is <strong>NOT</strong> campaign content. They are intended to utilize our <a href="http://www.mailchimp.com/resources/email-template-language/" target="_blank">template language</a>.
-        
+
      * @return boolean true if the template was updated, otherwise an error will be thrown
      */
     function templateUpdate($id, $values) {
@@ -2023,7 +2023,7 @@ class NC_MCAPI {
     /**
      * Retrieve lots of account information including payments made, plan info, some account stats, installed modules,
      * contact info, and more. No private information like Credit Card numbers is available.
-     * 
+     *
      * @section Helper
      *
      * @return array containing the details for the account tied to this API Key
@@ -2187,7 +2187,7 @@ class NC_MCAPI {
 
     /**
      * Retrieve the Ecommerce Orders for an account
-     * 
+     *
      * @section Ecommerce
      *
      * @param int $start optional for large data sets, the page number to start at - defaults to 1st page of data  (page 0)
@@ -2215,14 +2215,14 @@ class NC_MCAPI {
     }
 
     /**
-     * Import Ecommerce Order Information to be used for Segmentation. This will generally be used by ecommerce package plugins 
+     * Import Ecommerce Order Information to be used for Segmentation. This will generally be used by ecommerce package plugins
      * <a href="/plugins/ecomm360.phtml">that we provide</a> or by 3rd part system developers.
      * @section Ecommerce
      *
      * @param array $order an array of information pertaining to the order that has completed. Use the following keys:
                 string id the Order Id
                 string email_id optional (kind of) the Email Id of the subscriber we should attach this order to (see the "mc_eid" query string variable a campaign passes) - either this or <strong>email</strong> is required. If both are provided, email_id takes precedence
-                string email optional (kind of) the Email Address we should attach this order to - either this or <strong>email_id</strong> is required. If both are provided, email_id takes precedence 
+                string email optional (kind of) the Email Address we should attach this order to - either this or <strong>email_id</strong> is required. If both are provided, email_id takes precedence
                 double total The Order Total (ie, the full amount the customer ends up paying)
                 string order_date optional the date of the order - if this is not provided, we will default the date to now
                 double shipping optional the total paid for Shipping Fees
@@ -2234,7 +2234,7 @@ class NC_MCAPI {
                 array items the individual line items for an order using these keys:
                 <div style="padding-left:30px"><table><tr><td colspan=*>
                     int line_num optional the line number of the item on the order. We will generate these if they are not passed
-                    int product_id the store's internal Id for the product. Lines that do no contain this will be skipped 
+                    int product_id the store's internal Id for the product. Lines that do no contain this will be skipped
                     string product_name the product name for the product_id associated with this item. We will auto update these as they change (based on product_id)
                     int category_id the store's internal Id for the (main) category associated with this product. Our testing has found this to be a "best guess" scenario
                     string category_name the category name for the category_id this product is in. Our testing has found this to be a "best guess" scenario. Our plugins walk the category heirarchy up and send "Root - SubCat1 - SubCat4", etc.
@@ -2250,7 +2250,7 @@ class NC_MCAPI {
     }
 
     /**
-     * Delete Ecommerce Order Information used for segmentation. This will generally be used by ecommerce package plugins 
+     * Delete Ecommerce Order Information used for segmentation. This will generally be used by ecommerce package plugins
      * <a href="/plugins/ecomm360.phtml">that we provide</a> or by 3rd part system developers.
      * @section Ecommerce
      *
@@ -2269,7 +2269,7 @@ class NC_MCAPI {
      * Retrieve all List Ids a member is subscribed to.
      *
      * @section Helper
-     * 
+     *
      * @param string $email_address the email address to check OR the email "id" returned from listMemberInfo, Webhooks, and Campaigns
      * @return array An array of list_ids the member is subscribed to.
      */
@@ -2283,7 +2283,7 @@ class NC_MCAPI {
      * Retrieve all Campaigns Ids a member was sent
      *
      * @section Helper
-     * 
+     *
      * @param string $email_address the email address to unsubscribe  OR the email "id" returned from listMemberInfo, Webhooks, and Campaigns
      * @return array An array of campaign_ids the member received
      */
@@ -2297,7 +2297,7 @@ class NC_MCAPI {
      * Return the current Chimp Chatter messages for an account.
      *
      * @section Helper
-     * 
+     *
      * @return array An array of chatter messages and properties
      * @returnf string message The chatter message
      * @returnf string type The type of the message - one of lists:new-subscriber, lists:unsubscribes, lists:profile-updates, campaigns:facebook-likes, campaigns:facebook-comments, campaigns:forward-to-friend, lists:imports, or campaigns:inbox-inspections
@@ -2317,7 +2317,7 @@ class NC_MCAPI {
      * @section Security Related
      * @example xml-rpc_apikeyAdd.php
      * @example mcapi_apikeyAdd.php
-     * 
+     *
      * @param string $username Your MailChimp user name
      * @param string $password Your MailChimp password
      * @param boolean $expired optional - whether or not to include expired keys, defaults to false
@@ -2353,9 +2353,9 @@ class NC_MCAPI {
 
     /**
      * Expire a Specific API Key. Note that if you expire all of your keys, just visit <a href="http://admin.mailchimp.com/account/api" target="_blank">your API dashboard</a>
-     * to create a new one. If you are trying to shut off access to your account for an old developer, change your 
-     * MailChimp password, then expire all of the keys they had access to. Note that this takes effect immediately, so make 
-     * sure you replace the keys in any working application before expiring them! Consider yourself warned... 
+     * to create a new one. If you are trying to shut off access to your account for an old developer, change your
+     * MailChimp password, then expire all of the keys they had access to. Note that this takes effect immediately, so make
+     * sure you replace the keys in any working application before expiring them! Consider yourself warned...
      *
      * @section Security Related
      * @example mcapi_apikeyExpire.php
@@ -2396,7 +2396,7 @@ class NC_MCAPI {
         $params = array();
         return $this->callServer("callMethod", $params);
     }
-    
+
     /**
      * Actually connect to the server and call the requested methods, parsing the result.
      * You should never have to call this function manually.
@@ -2451,4 +2451,3 @@ class NC_MCAPI {
     }
 
 }
-?>

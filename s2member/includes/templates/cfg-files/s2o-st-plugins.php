@@ -1,8 +1,6 @@
 <?php
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-?>
-
 // s2Member-only mode. Only load the s2Member plugin, exclude all others.
 
 $o_ws_plugin__s2member = preg_replace ("/-o\.php$/", ".php", __FILE__);

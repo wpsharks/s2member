@@ -416,4 +416,3 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 	}
 
 new c_ws_plugin__s2member_menu_page_els_ops();
-?>

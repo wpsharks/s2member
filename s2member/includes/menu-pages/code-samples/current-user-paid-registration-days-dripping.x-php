@@ -1,15 +1,12 @@
-<?php if(S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS >= 30){ ?>
+<?php if(S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS >= 30){
 	Drip content to Members that started paying you at least 30 days ago.
-<?php } ?>
-
-<?php if(S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS >= 60){ ?>
+<?php }
+<?php if(S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS >= 60){
 	Drip content to Members that started paying you at least 60 days ago.
-<?php } ?>
-
-<?php if(S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS >= 90){ ?>
+<?php }
+<?php if(S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS >= 90){
 	Drip content to Members that started paying you at least 90 days ago.
-<?php } ?>
-
+<?php }
 ---- s2member Shortcode Equivalent (Requires s2Member Pro) ----
 
 [s2If php="S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS >= 30"]

@@ -1,8 +1,6 @@
 <?php
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-?>
-
 <optgroup label="<?php echo esc_attr (_x ("PayPal® (Subscriptions)", "s2member-admin", "s2member")); ?>">
 <option value="1-D-1"><?php echo esc_html (_x ("Daily (recurring charge, for ongoing access)", "s2member-admin", "s2member")); ?></option>
 <option value="1-W-1"><?php echo esc_html (_x ("Weekly (recurring charge, for ongoing access)", "s2member-admin", "s2member")); ?></option>

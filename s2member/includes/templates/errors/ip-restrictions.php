@@ -1,8 +1,6 @@
 <?php
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	 exit("Do not access this file directly.");
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +8,6 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	 <title><?php echo _x('503: Service Temporarily Unavailable', "s2member-front", "s2member"); ?></title>
 </head>
 <body>
-<?php echo _x('<strong>503: Service Temporarily Unavailable</strong><br />Too many IP addresses accessing one secure area<em>!</em><br />Please contact Support if you need assistance.', "s2member-front", "s2member"); ?>
+<?php echo _x('<strong>503: Service Temporarily Unavailable</strong><br />Too many IP addresses accessing one secure area<em>!</em><br />Please contact Support if you need assistance.', "s2member-front", "s2member");
 </body>
 </html>

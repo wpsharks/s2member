@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				* @package s2Member\SP_Access
 				* @since 3.5
 				*
-				* @param str|int $sp_ids Comma-delimited list of Specific Post/Page IDs *(numerical)*.
+				* @param string|int $sp_ids Comma-delimited list of Specific Post/Page IDs *(numerical)*.
 				* @param int|str $hours Optional. A numeric expiration time for this link, in hours. Defaults to `72`.
 				* @param bool $shrink Optional. Defaults to true. If false, the raw link will NOT be processed by the tinyURL API.
 				* @return str|bool A Specific Post/Page Access Link, or false on failure.
@@ -146,7 +146,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				* @package s2Member\SP_Access
 				* @since 3.5
 				*
-				* @param str $add_sp_access_value Encrypted Specific Post/Page Access value.
+				* @param string $add_sp_access_value Encrypted Specific Post/Page Access value.
 				* @return array Array of Specific Post/Page Access values.
 				*/
 				public static function sp_access_session ($add_sp_access_value = FALSE)
@@ -177,4 +177,3 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 					}
 			}
 	}
-?>

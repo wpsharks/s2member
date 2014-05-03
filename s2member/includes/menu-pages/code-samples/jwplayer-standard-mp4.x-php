@@ -3,8 +3,6 @@
 $s2_jw_config["jwplayer"] = "/jwplayer/"; // Relative URL path to JW Player files directory.
 $s2_jw_config["mp4_video_file_name"] = "video.mp4"; // Name of your MP4 test file.
 // Don't edit anything else below unless you know what you're doing.
-?>
-
 <div id="jw-container">JW Player® appears here.</div>
 <script type="text/javascript" src="<?php echo $s2_jw_config["jwplayer"]; ?>jwplayer.js"></script>
 <script type="text/javascript">

@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $code A string of data, possibly with embedded PHP code.
+				* @param string $code A string of data, possibly with embedded PHP code.
 				* @return str Output after PHP evaluation.
 				*/
 				public static function evl ($code = FALSE, $vars = array())
@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $function Name of a function to call upon.
+				* @param string $function Name of a function to call upon.
 				* @return str Output after call to function.
 				* 	Any output is buffered and returned.
 				*/
@@ -137,7 +137,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $v A variation number to display. Defaults to `1`.
+				* @param string $v A variation number to display. Defaults to `1`.
 				* @param bool $no_cache Defaults to false. If true, the HTML markup will contain query string params that prevent caching.
 				* @param bool $display_on_failure. Defaults to false. True if we need to display the "NOT yet verified" version inside admin panels.
 				* @return str HTML markup for display of s2Member Security Badge.
@@ -205,4 +205,3 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 					}
 			}
 	}
-?>

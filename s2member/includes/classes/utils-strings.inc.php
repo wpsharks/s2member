@@ -55,9 +55,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $string Input string.
+				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
-				* @param str $escape_char The character to be used in escapes.
+				* @param string $escape_char The character to be used in escapes.
 				* @return str Output string after double quotes are escaped.
 				*/
 				public static function esc_dq($string = FALSE, $times = FALSE, $escape_char = "\\")
@@ -72,7 +72,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $string Input string.
+				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
 				* @return str Output string after single quotes are escaped.
 				*/
@@ -88,7 +88,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 110901
 				*
-				* @param str $string Input string.
+				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
 				* @return str Output string after JavaScript and single quotes are escaped.
 				*/
@@ -104,7 +104,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $string Input string.
+				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
 				* @return str Output string after dollar signs are escaped.
 				*
@@ -123,7 +123,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 120103
 				*
-				* @param str $string Input string.
+				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
 				* @return str Output string after backreferences are escaped.
 				*/
@@ -139,7 +139,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str $string Input string.
+				* @param string $string Input string.
 				* @return str Output string, after characters NOT on a standard U.S. keyboard have been stripped.
 				*/
 				public static function strip_2_kb_chars($string = FALSE)
@@ -155,9 +155,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @see s2Member\Utilities\c_ws_plugin__s2member_utils_strings::trim_deep()
 				* @see http://php.net/manual/en/function.trim.php
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
-				* @param str|bool $chars Optional. Defaults to false, indicating the default trim chars ` \t\n\r\0\x0B`. Or, set to a specific string of chars.
-				* @param str|bool $extra_chars Optional. This is NOT possible with PHP alone, but here you can specify extra chars; in addition to ``$chars``.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|bool $chars Optional. Defaults to false, indicating the default trim chars ` \t\n\r\0\x0B`. Or, set to a specific string of chars.
+				* @param string|bool $extra_chars Optional. This is NOT possible with PHP alone, but here you can specify extra chars; in addition to ``$chars``.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up according to arguments passed in.
 				*/
 				public static function trim($value = FALSE, $chars = FALSE, $extra_chars = FALSE)
@@ -173,9 +173,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @see s2Member\Utilities\c_ws_plugin__s2member_utils_strings::trim()
 				* @see http://php.net/manual/en/function.trim.php
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
-				* @param str|bool $chars Optional. Defaults to false, indicating the default trim chars ` \t\n\r\0\x0B`. Or, set to a specific string of chars.
-				* @param str|bool $extra_chars Optional. This is NOT possible with PHP alone, but here you can specify extra chars; in addition to ``$chars``.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|bool $chars Optional. Defaults to false, indicating the default trim chars ` \t\n\r\0\x0B`. Or, set to a specific string of chars.
+				* @param string|bool $extra_chars Optional. This is NOT possible with PHP alone, but here you can specify extra chars; in addition to ``$chars``.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up according to arguments passed in.
 				*/
 				public static function trim_deep($value = FALSE, $chars = FALSE, $extra_chars = FALSE)
@@ -199,7 +199,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up.
 				*/
 				public static function trim_dq_deep($value = FALSE)
@@ -212,7 +212,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up.
 				*/
 				public static function trim_sq_deep($value = FALSE)
@@ -225,7 +225,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up.
 				*/
 				public static function trim_dsq_deep($value = FALSE)
@@ -240,7 +240,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111011
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up.
 				*/
 				public static function trim_qts_deep($value = FALSE)
@@ -257,7 +257,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 140124
 				*
-				* @param str $string Input string to trim.
+				* @param string $string Input string to trim.
 				* @return str Output string with all HTML whitespace trimmed away.
 				*/
 				public static function trim_html($string = FALSE)
@@ -273,9 +273,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
-				* @param str $beg Optional. A string value to wrap at the beginning of each value.
-				* @param str $end Optional. A string value to wrap at the ending of each value.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string $beg Optional. A string value to wrap at the beginning of each value.
+				* @param string $end Optional. A string value to wrap at the ending of each value.
 				* @param bool $wrap_e Optional. Defaults to false. Should empty strings be wrapped too?
 				* @return str|array Either the input string, or the input array; after all data is wrapped up.
 				*/
@@ -297,8 +297,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 110926
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
-				* @param str $delimiter Optional. If a delimiting character is specified, it will also be escaped via ``preg_quote()``.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string $delimiter Optional. If a delimiting character is specified, it will also be escaped via ``preg_quote()``.
 				* @return str|array Either the input string, or the input array; after all data is escaped with ``preg_quote()``.
 				*/
 				public static function preg_quote_deep($value = FALSE, $delimiter = FALSE)
@@ -343,7 +343,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $str Input string to be highlighted.
+				* @param string $str Input string to be highlighted.
 				* @return str The highlighted string.
 				*/
 				public static function highlight_php($string = FALSE)
@@ -358,7 +358,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111009
 				*
-				* @param str|array $value Input string or an array is also fine.
+				* @param string|array $value Input string or an array is also fine.
 				* @return array Array of parsed email addresses.
 				*/
 				public static function parse_emails($value = FALSE)
@@ -389,10 +389,10 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 110913
 				*
-				* @param str $string Input string to be base64 encoded.
+				* @param string $string Input string to be base64 encoded.
 				* @param array $url_unsafe_chars Optional. An array of un-safe characters. Defaults to: ``array("+", "/")``.
 				* @param array $url_safe_chars Optional. An array of safe character replacements. Defaults to: ``array("-", "_")``.
-				* @param str $trim_padding_chars Optional. A string of padding chars to rtrim. Defaults to: `=~.`.
+				* @param string $trim_padding_chars Optional. A string of padding chars to rtrim. Defaults to: `=~.`.
 				* @return str The base64 URL-safe encoded string.
 				*/
 				public static function base64_url_safe_encode($string = FALSE, $url_unsafe_chars = array("+", "/"), $url_safe_chars = array("-", "_"), $trim_padding_chars = "=~.")
@@ -414,10 +414,10 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 110913
 				*
-				* @param str $base64_url_safe Input string to be base64 decoded.
+				* @param string $base64_url_safe Input string to be base64 decoded.
 				* @param array $url_unsafe_chars Optional. An array of un-safe character replacements. Defaults to: ``array("+", "/")``.
 				* @param array $url_safe_chars Optional. An array of safe characters. Defaults to: ``array("-", "_")``.
-				* @param str $trim_padding_chars Optional. A string of padding chars to rtrim. Defaults to: `=~.`.
+				* @param string $trim_padding_chars Optional. A string of padding chars to rtrim. Defaults to: `=~.`.
 				* @return str The decoded string.
 				*/
 				public static function base64_url_safe_decode($base64_url_safe = FALSE, $url_unsafe_chars = array("+", "/"), $url_safe_chars = array("-", "_"), $trim_padding_chars = "=~.")
@@ -437,8 +437,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111017
 				*
-				* @param str $string Input string/data, to be signed by this routine.
-				* @param str $key The secret key that will be used in this signature.
+				* @param string $string Input string/data, to be signed by this routine.
+				* @param string $key The secret key that will be used in this signature.
 				* @return str|bool An RSA-SHA1 signature string, or false on failure.
 				*/
 				public static function rsa_sha1_sign($string = FALSE, $key = FALSE)
@@ -471,9 +471,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111017
 				*
-				* @param str $string Input string/data, to be signed by this routine.
-				* @param str $key The secret key that will be used in this signature.
-				* @param str $openssl Optional. Defaults to `openssl`. Path to OpenSSL executable.
+				* @param string $string Input string/data, to be signed by this routine.
+				* @param string $key The secret key that will be used in this signature.
+				* @param string $openssl Optional. Defaults to `openssl`. Path to OpenSSL executable.
 				* @return str|bool An RSA-SHA1 signature string, or false on failure.
 				*/
 				public static function _rsa_sha1_shell_sign($string = FALSE, $key = FALSE, $openssl = FALSE)
@@ -498,7 +498,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111017
 				*
-				* @param str $key The secret key to be used in an RSA-SHA1 signature.
+				* @param string $key The secret key to be used in an RSA-SHA1 signature.
 				* @return str Key with incomplete wrappers corrected, when/if possible.
 				*
 				* @see http://www.faqs.org/qa/qa-14736.html
@@ -524,8 +524,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111017
 				*
-				* @param str $string Input string/data, to be signed by this routine.
-				* @param str $key The secret key that will be used in this signature.
+				* @param string $string Input string/data, to be signed by this routine.
+				* @param string $key The secret key that will be used in this signature.
 				* @return str An HMAC-SHA1 signature string.
 				*/
 				public static function hmac_sha1_sign($string = FALSE, $key = FALSE)
@@ -544,7 +544,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*
 				* @see http://www.faqs.org/rfcs/rfc3986.html
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all unreserved chars are decoded properly.
 				*/
 				public static function urldecode_ur_chars_deep($value = array())
@@ -561,4 +561,3 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 					}
 			}
 	}
-?>

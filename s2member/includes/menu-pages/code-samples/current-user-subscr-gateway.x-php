@@ -1,4 +1,4 @@
-<?php echo S2MEMBER_CURRENT_USER_SUBSCR_GATEWAY; ?>
+<?php echo S2MEMBER_CURRENT_USER_SUBSCR_GATEWAY;
 This may output something like: paypal
 (this is the Paid Subscr. Gateway associated with their Paid Subscr. ID)
 (possible values: paypal, alipay, authnet, ccbill, clickbank, google)

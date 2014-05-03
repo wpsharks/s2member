@@ -35,7 +35,7 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 				*
 				* @attaches-to ``add_filter("login_headerurl");``
 				*
-				* @param str $url Expects a login header URL passed in by the Filter.
+				* @param string $url Expects a login header URL passed in by the Filter.
 				* @return str A URL based on s2Member's UI configuration.
 				*/
 				public static function login_header_url($url = FALSE)
@@ -57,7 +57,7 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 				*
 				* @attaches-to ``add_filter("login_headertitle");``
 				*
-				* @param str $title Expects a title passed in by the Filter.
+			@param string tr $title Expects a title passed in by the Filter.
 				* @return str A title based on s2Member's UI configuration.
 				*/
 				public static function login_header_title($title = FALSE)
@@ -188,4 +188,3 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 					}
 			}
 	}
-?>

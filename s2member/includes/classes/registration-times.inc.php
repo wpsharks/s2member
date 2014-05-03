@@ -36,7 +36,7 @@ if(!class_exists("c_ws_plugin__s2member_registration_times"))
 			 * @attaches-to ``add_action("set_user_role");``
 			 *
 			 * @param int|str $user_id A numeric WordPress User ID should be passed in by the Action Hook.
-			 * @param str     $role A WordPress Role ID/Name should be passed in by the Action Hook.
+			 * @param string     $role A WordPress Role ID/Name should be passed in by the Action Hook.
 			 *
 			 * @return null
 			 */
@@ -242,4 +242,3 @@ if(!class_exists("c_ws_plugin__s2member_registration_times"))
 				}
 		}
 	}
-?>

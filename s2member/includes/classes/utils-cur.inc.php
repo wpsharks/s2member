@@ -36,8 +36,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 				* @since 3.5
 				*
 				* @param int|str $a The amount, in ``$from``.
-				* @param str $from A 3 character Currency Code.
-				* @param str $to A 3 character Currency Code.
+				* @param string $from A 3 character Currency Code.
+			@param string tr $to A 3 character Currency Code.
 				* @return float|str|bool A numeric amount in ``$to``,
 				* 	after having been converted. Else false.
 				*
@@ -67,7 +67,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 				* @package s2Member\Utilities
 				* @since 110531
 				*
-				* @param str $currency Expects a 3 character Currency Code.
+@param string m str $currency Expects a 3 character Currency Code.
 				* @return str A Currency Symbol. Defaults to the `$` sign.
 				*/
 				public static function symbol($currency = FALSE)
@@ -104,4 +104,3 @@ if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 					}
 			}
 	}
-?>

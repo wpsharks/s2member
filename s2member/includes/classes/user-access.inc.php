@@ -118,7 +118,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				* @package s2Member\User_Access
 				* @since 3.5
 				*
-				* @param str $role A WordPress Role ID/Name.
+				* @param string $role A WordPress Role ID/Name.
 				* @return int Access Level#, `-1` if ``$role`` is empty.
 				*/
 				public static function user_access_role_to_level ($role = FALSE)
@@ -170,4 +170,3 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 					}
 			}
 	}
-?>

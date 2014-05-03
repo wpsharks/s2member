@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_css"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $css A string of CSS.
+				* @param string $css A string of CSS.
 				* @return str String of CSS, after compression.
 				*/
 				public static function compress_css ($css = FALSE)
@@ -82,4 +82,3 @@ if (!class_exists ("c_ws_plugin__s2member_utils_css"))
 					}
 			}
 	}
-?>

@@ -355,4 +355,3 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level"))
 					}
 			}
 	}
-?>

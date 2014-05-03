@@ -191,4 +191,3 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 					}
 			}
 	}
-?>

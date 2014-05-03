@@ -9,4 +9,3 @@ if ($categories = get_categories ())
 				or any Posts inside this Category, or any of its sub-Categories. */
 			}
 	}
-?>

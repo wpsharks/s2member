@@ -1,8 +1,6 @@
 <?php
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
-?>
-
 <form action="https://%%endpoint%%/cgi-bin/webscr" method="post">
  <input type="hidden" name="business" value="%%paypal_business%%" />
  <input type="hidden" name="cmd" value="_xclick-subscriptions" />
