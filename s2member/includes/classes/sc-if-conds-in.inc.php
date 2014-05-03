@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 				* @param array $attr An array of Attributes.
 				* @param string $content Content inside the Shortcode.
 			@param string tr $shortcode The actual Shortcode name itself.
-				* @return str The ``$content`` if true, else an empty string.
+				* @return string The ``$content`` if true, else an empty string.
 				*
 				* @todo Add support for nested AND/OR conditionals inside the ONE Shortcode.
 				* @todo Address possible security issue on sites with multiple editors, some of which should not have access to this feature.

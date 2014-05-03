@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 				*
 				* @param string $doctype_html_head_title Optional. The title of the HTML document being generated.
 			@param string tr $doctype_html_head_action Optional. An action Hook to process during HEAD generation.
-				* @return str A DOCTYPE tag along with the HEAD section and title tag, configured by parameters.
+				* @return string A DOCTYPE tag along with the HEAD section and title tag, configured by parameters.
 				*/
 				public static function doctype_html_head ($doctype_html_head_title = FALSE, $doctype_html_head_action = FALSE)
 					{

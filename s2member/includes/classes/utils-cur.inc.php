@@ -68,7 +68,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_cur"))
 				* @since 110531
 				*
 @param string m str $currency Expects a 3 character Currency Code.
-				* @return str A Currency Symbol. Defaults to the `$` sign.
+				* @return string A Currency Symbol. Defaults to the `$` sign.
 				*/
 				public static function symbol($currency = FALSE)
 					{

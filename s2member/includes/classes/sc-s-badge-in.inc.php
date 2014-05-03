@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_s_badge_in"))
 				* @param array $attr An array of Attributes.
 				* @param string $content Content inside the Shortcode.
 			@param string tr $shortcode The actual Shortcode name itself.
-				* @return str Resulting Security Badge code; HTML markup.
+				* @return string Resulting Security Badge code; HTML markup.
 				*/
 				public static function sc_s_badge ($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{

@@ -33,7 +33,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @return str Full URL to `/wp-signup.php`.
+				* @return string Full URL to `/wp-signup.php`.
 				*/
 				public static function wp_signup_url()
 					{
@@ -45,7 +45,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @return str Full URL to `/wp-login.php?action=register`.
+				* @return string Full URL to `/wp-login.php?action=register`.
 				*/
 				public static function wp_register_url()
 					{
@@ -98,7 +98,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @since 111106
 				*
 				* @param string $url_uri_query A full URL, a partial URI, or just the query string.
-				* @return str A full URL, a partial URI, or just the query string; after having been encoded by this routine.
+				* @return string A full URL, a partial URI, or just the query string; after having been encoded by this routine.
 				*/
 				public static function e_amps($url_uri_query = FALSE)
 					{
@@ -111,7 +111,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @since 111106
 				*
 				* @param string $url_uri_query A full URL, a partial URI, or just the query string.
-				* @return str A full URL, a partial URI, or just the query string; after having been normalized by this routine.
+				* @return string A full URL, a partial URI, or just the query string; after having been normalized by this routine.
 				*/
 				public static function n_amps($url_uri_query = FALSE)
 					{
@@ -128,7 +128,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @since 3.5
 				*
 				* @param string $url_uri Either a full URL, or a partial URI.
-				* @return str A valid URI, starting with `/` on success, else an empty string.
+				* @return string A valid URI, starting with `/` on success, else an empty string.
 				*/
 				public static function parse_uri($url_uri = FALSE)
 					{
@@ -284,7 +284,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*
 				* @param string $url_uri_query A full URL, a partial URI, or just the query string; to remove s2Member-generated signatures from.
 				* @param string $sig_var Optional. The name of the s2Member-generated signature variable. Defaults to `_s2member_sig`.
-				* @return str A full URL, a partial URI, or just the query string; without any s2Member-generated signatures.
+				* @return string A full URL, a partial URI, or just the query string; without any s2Member-generated signatures.
 				*/
 				public static function remove_s2member_sigs($url_uri_query = FALSE, $sig_var = FALSE)
 					{
@@ -302,7 +302,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*
 				* @param string $url_uri_query A full URL, a partial URI, or just a query string; to append the s2Member-generated signature onto.
 				* @param string $sig_var Optional. The name of the s2Member-generated signature variable. Defaults to `_s2member_sig`.
-				* @return str A full URL, a partial URI, or just a query string; with an s2Member-generated signature.
+				* @return string A full URL, a partial URI, or just a query string; with an s2Member-generated signature.
 				*/
 				public static function add_s2member_sig($url_uri_query = FALSE, $sig_var = FALSE)
 					{

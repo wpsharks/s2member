@@ -339,7 +339,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*
 				* @param string $cwhere Expects the SQL `WHERE` portion to be passed through by the Filter.
 				* @param obj $wp_query Expects ``$wp_query`` by reference, from the Filter.
-				* @return str The revised ``$cwhere`` string.
+				* @return string The revised ``$cwhere`` string.
 				*/
 				public static function _query_level_access_coms($cwhere = FALSE, &$wp_query = FALSE)
 					{

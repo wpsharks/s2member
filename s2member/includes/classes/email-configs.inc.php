@@ -59,7 +59,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @attaches-to ``add_filter("wp_mail_from");``
 				*
 				* @param string $email Expects the email address to be passed in by the Filter.
-				* @return str s2Member-configured email address.
+				* @return string s2Member-configured email address.
 				*/
 				public static function _email_config_email ($email = FALSE)
 					{
@@ -76,7 +76,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @attaches-to ``add_filter("wp_mail_from_name");``
 				*
 				* @param string $name Expects the name to be passed in by the Filter.
-				* @return str s2Member-configured name.
+				* @return string s2Member-configured name.
 				*/
 				public static function _email_config_name ($name = FALSE)
 					{
@@ -139,7 +139,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @attaches-to ``add_filter("wpmu_signup_user_notification_email");``
 				*
 				* @param string $message Expects the message string to be passed in by the Filter.
-				* @return str Message after having been Filtered by s2Member.
+				* @return string Message after having been Filtered by s2Member.
 				*/
 				public static function ms_nice_email_roles ($message = FALSE)
 					{

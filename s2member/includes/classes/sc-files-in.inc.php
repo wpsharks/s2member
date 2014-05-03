@@ -38,7 +38,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 				* @param array $attr An array of Attributes.
 				* @param string $content Content inside the Shortcode.
 			@param string tr $shortcode The actual Shortcode name itself.
-				* @return str Value of requested File Download URL, streamer array element; or null on failure.
+				* @return string Value of requested File Download URL, streamer array element; or null on failure.
 				*/
 				public static function sc_get_file($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{
@@ -91,7 +91,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 				*
 				* @param array $attr An array of Attributes.
 @param string m str $content Content inside the Shortcod@param string aram str $shortcode The actual Shortcode name itself.
-				* @return str HTML markup that produces an audio/video stream for a specific player.
+				* @return string HTML markup that produces an audio/video stream for a specific player.
 				*/
 				public static function sc_get_stream($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{

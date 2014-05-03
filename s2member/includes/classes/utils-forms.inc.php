@@ -34,7 +34,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_forms"))
 				* @since 3.5
 				*
 				* @param string $form A form tag with hidden input fields.
-				* @return str A URL with query string equivalents.
+				* @return string A URL with query string equivalents.
 				*/
 				public static function form_whips_2_url ($form = FALSE)
 					{

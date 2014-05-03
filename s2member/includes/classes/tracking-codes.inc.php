@@ -240,7 +240,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				* @package s2Member\Tracking
 				* @since 110720
 				*
-				* @return str HTML output for all Tracking Codes integrated with s2Member.
+				* @return string HTML output for all Tracking Codes integrated with s2Member.
 				*/
 				public static function generate_all_tracking_codes ()
 					{

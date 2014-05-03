@@ -34,7 +34,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @since 111017
 				*
 				* @param string $path Directory or file path.
-				* @return str Directory or file path, after having been normalized by this routine.
+				* @return string Directory or file path, after having been normalized by this routine.
 				*/
 				public static function n_dir_seps ($path = FALSE)
 					{
@@ -47,7 +47,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @since 3.5
 				*
 				* @param string $path Directory or file path.
-				* @return str Directory or file path without `/app_data/`.
+				* @return string Directory or file path without `/app_data/`.
 				*/
 				public static function strip_dir_app_data ($path = FALSE)
 					{
@@ -60,7 +60,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @since 110815
 				*
 				* @param string $path Directory or file path.
-				* @return str Basename; including a possible `/app_data/` directory.
+				* @return string Basename; including a possible `/app_data/` directory.
 				*/
 				public static function basename_dir_app_data ($path = FALSE)
 					{
@@ -75,7 +75,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @since 110815
 				*
 				* @param string $path Directory or file path.
-				* @return str Shorther path, from document root.
+				* @return string Shorther path, from document root.
 				*/
 				public static function doc_root_path ($path = FALSE)
 					{
@@ -93,7 +93,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @param string $to The full directory or file path, which this routine will build a relative path `to`.
 				* @param bool $try_realpaths Defaults to true. When true, try to acquire ``realpath()``, thereby resolving all relative paths and/or symlinks in ``$from`` and ``$to`` args.
 				* @param bool $use_win_diff_drive_jctn Defaults to true. When true, we'll work around issues with different drives on Windows by trying to create a directory junction.
-				* @return str String with the relative path to: ``$to``.
+				* @return string String with the relative path to: ``$to``.
 				*/
 				public static function rel_path ($from = FALSE, $to = FALSE, $try_realpaths = TRUE, $use_win_diff_drive_jctn = TRUE)
 					{

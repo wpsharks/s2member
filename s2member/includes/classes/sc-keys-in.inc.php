@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_keys_in"))
 				* @param array $attr An array of Attributes.
 				* @param string $content Content inside the Shortcode.
 			@param string tr $shortcode The actual Shortcode name itself.
-				* @return str Value of the requested key, or null on failure.
+				* @return string Value of the requested key, or null on failure.
 				*/
 				public static function sc_get_key ($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{

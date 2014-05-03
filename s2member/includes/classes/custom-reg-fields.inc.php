@@ -44,7 +44,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 				* @param array $_submission Optional. But should be passed in with any submission data related to this Field. For instance, you might pass in ``$_POST``.
 				* @param string|array $_value Optional. The value of this Field, either by default, or from the ``$_submission`` array.
 				* @param string $_editable_context Optional. One of `profile|profile-view|registration`.
-				* @return str The resulting Custom Field, in HTML format.
+				* @return string The resulting Custom Field, in HTML format.
 				*/
 				public static function custom_field_gen($_function = FALSE, $_field = FALSE, $_name_prefix = FALSE, $_id_prefix = FALSE, $_classes = FALSE, $_styles = FALSE, $_tabindex = FALSE, $_attrs = FALSE, $_submission = FALSE, $_value = FALSE, $_editable_context = FALSE)
 					{

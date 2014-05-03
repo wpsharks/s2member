@@ -58,7 +58,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
 				* @param string $escape_char The character to be used in escapes.
-				* @return str Output string after double quotes are escaped.
+				* @return string Output string after double quotes are escaped.
 				*/
 				public static function esc_dq($string = FALSE, $times = FALSE, $escape_char = "\\")
 					{
@@ -74,7 +74,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*
 				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
-				* @return str Output string after single quotes are escaped.
+				* @return string Output string after single quotes are escaped.
 				*/
 				public static function esc_sq($string = FALSE, $times = FALSE)
 					{
@@ -90,7 +90,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*
 				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
-				* @return str Output string after JavaScript and single quotes are escaped.
+				* @return string Output string after JavaScript and single quotes are escaped.
 				*/
 				public static function esc_js_sq($string = FALSE, $times = FALSE)
 					{
@@ -106,7 +106,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*
 				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
-				* @return str Output string after dollar signs are escaped.
+				* @return string Output string after dollar signs are escaped.
 				*
 				* @deprecated Starting with s2Member v120103, please use:
 				* ``c_ws_plugin__s2member_utils_strings::esc_refs()``.
@@ -125,7 +125,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*
 				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
-				* @return str Output string after backreferences are escaped.
+				* @return string Output string after backreferences are escaped.
 				*/
 				public static function esc_refs($string = NULL, $times = NULL)
 					{
@@ -140,7 +140,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @since 111106
 				*
 				* @param string $string Input string.
-				* @return str Output string, after characters NOT on a standard U.S. keyboard have been stripped.
+				* @return string Output string, after characters NOT on a standard U.S. keyboard have been stripped.
 				*/
 				public static function strip_2_kb_chars($string = FALSE)
 					{
@@ -258,7 +258,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @since 140124
 				*
 				* @param string $string Input string to trim.
-				* @return str Output string with all HTML whitespace trimmed away.
+				* @return string Output string with all HTML whitespace trimmed away.
 				*/
 				public static function trim_html($string = FALSE)
 					{
@@ -322,7 +322,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @param int $length Optional. Defaults to `12`. Length of the random string.
 				* @param bool $special_chars Defaults to true. If false, special chars are NOT included.
 				* @param bool $extra_special_chars Defaults to false. If true, extra special chars are included.
-				* @return str A randomly generated string, based on parameter configuration.
+				* @return string A randomly generated string, based on parameter configuration.
 				*/
 				public static function random_str_gen($length = FALSE, $special_chars = TRUE, $extra_special_chars = FALSE)
 					{
@@ -344,7 +344,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @since 3.5
 				*
 				* @param string $str Input string to be highlighted.
-				* @return str The highlighted string.
+				* @return string The highlighted string.
 				*/
 				public static function highlight_php($string = FALSE)
 					{
@@ -393,7 +393,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @param array $url_unsafe_chars Optional. An array of un-safe characters. Defaults to: ``array("+", "/")``.
 				* @param array $url_safe_chars Optional. An array of safe character replacements. Defaults to: ``array("-", "_")``.
 				* @param string $trim_padding_chars Optional. A string of padding chars to rtrim. Defaults to: `=~.`.
-				* @return str The base64 URL-safe encoded string.
+				* @return string The base64 URL-safe encoded string.
 				*/
 				public static function base64_url_safe_encode($string = FALSE, $url_unsafe_chars = array("+", "/"), $url_safe_chars = array("-", "_"), $trim_padding_chars = "=~.")
 					{
@@ -418,7 +418,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @param array $url_unsafe_chars Optional. An array of un-safe character replacements. Defaults to: ``array("+", "/")``.
 				* @param array $url_safe_chars Optional. An array of safe characters. Defaults to: ``array("-", "_")``.
 				* @param string $trim_padding_chars Optional. A string of padding chars to rtrim. Defaults to: `=~.`.
-				* @return str The decoded string.
+				* @return string The decoded string.
 				*/
 				public static function base64_url_safe_decode($base64_url_safe = FALSE, $url_unsafe_chars = array("+", "/"), $url_safe_chars = array("-", "_"), $trim_padding_chars = "=~.")
 					{
@@ -499,7 +499,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @since 111017
 				*
 				* @param string $key The secret key to be used in an RSA-SHA1 signature.
-				* @return str Key with incomplete wrappers corrected, when/if possible.
+				* @return string Key with incomplete wrappers corrected, when/if possible.
 				*
 				* @see http://www.faqs.org/qa/qa-14736.html
 				*/
@@ -526,7 +526,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*
 				* @param string $string Input string/data, to be signed by this routine.
 				* @param string $key The secret key that will be used in this signature.
-				* @return str An HMAC-SHA1 signature string.
+				* @return string An HMAC-SHA1 signature string.
 				*/
 				public static function hmac_sha1_sign($string = FALSE, $key = FALSE)
 					{

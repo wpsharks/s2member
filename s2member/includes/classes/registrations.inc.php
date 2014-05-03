@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				* @attaches-to ``add_filter("random_password");``
 				*
 				* @param string $password Expects a plain text Password passed through by the Filter.
-				* @return str Password, possibly assigned through s2Member Custom Registration/Profile Field input.
+				* @return string Password, possibly assigned through s2Member Custom Registration/Profile Field input.
 				*/
 				public static function generate_password ($password = FALSE)
 					{

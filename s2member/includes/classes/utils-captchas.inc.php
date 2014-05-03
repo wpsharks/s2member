@@ -66,7 +66,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
 				* @since 3.5
 				*
 @param string m str $theme Optional. The theme used in display. Defaults to `clean@param string aram str $tabindex Optional. Value of `tabindex=""` attribute. Defaults to @param string  @param str $error Optional. An error message to display.
-				* @return str HTML markup for JavaScript tag.
+				* @return string HTML markup for JavaScript tag.
 				*/
 				public static function recaptcha_script_tag ($theme = FALSE, $tabindex = FALSE, $error = FALSE)
 					{

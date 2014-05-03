@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 				* @param array $attr An array of Attributes.
 				* @param string $content Content inside the Shortcode.
 			@param string tr $shortcode The actual Shortcode name itself.
-				* @return str The resulting PayPal Button Code.
+				* @return string The resulting PayPal Button Code.
 				*/
 				public static function sc_paypal_button ($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{
