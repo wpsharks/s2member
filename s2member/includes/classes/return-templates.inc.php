@@ -33,10 +33,11 @@ if (!class_exists ("c_ws_plugin__s2member_return_templates"))
 				* @package s2Member\Return_Templates
 				* @since 110720
 				*
-				* @param string $template Optional A Subscr. Gateway code should be used as the template name, or `default` is a multipurpose template. Defaults to `default`. Used in template selection.
-			@param string tr $response Optional. Response message to fill template with, using the Replacement Code `%%response%%` inside the template file. Defaults to: `Thank you. Please click the link below.`.
-@param string m str $continue_html Optional. The HTML value of the continuation link presented within the template using Replacement Code `%%continue%%`. Defaults to: `Continue@param string aram str $continue_link Optional. The HREF value for the continuation link presented within the template using Replacement Code `%%continue%%`. Defaults to: ``home_url ("/")``.
-				* @return string The full HTML code of the template. All Replacement Codes inside the template file will have already been filled by this routine.
+				* @param str $template Optional A Subscr. Gateway code should be used as the template name, or `default` is a multipurpose template. Defaults to `default`. Used in template selection.
+				* @param str $response Optional. Response message to fill template with, using the Replacement Code `%%response%%` inside the template file. Defaults to: `Thank you. Please click the link below.`.
+				* @param str $continue_html Optional. The HTML value of the continuation link presented within the template using Replacement Code `%%continue%%`. Defaults to: `Continue`.
+				* @param str $continue_link Optional. The HREF value for the continuation link presented within the template using Replacement Code `%%continue%%`. Defaults to: ``home_url ("/")``.
+				* @return str The full HTML code of the template. All Replacement Codes inside the template file will have already been filled by this routine.
 				*/
 				public static function return_template ($template = FALSE, $response = FALSE, $continue_html = FALSE, $continue_link = FALSE)
 					{
@@ -80,3 +81,4 @@ if (!class_exists ("c_ws_plugin__s2member_return_templates"))
 					}
 			}
 	}
+?>

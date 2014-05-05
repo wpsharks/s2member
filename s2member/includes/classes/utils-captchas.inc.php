@@ -48,8 +48,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param string $challenge The value of `recaptcha_challenge_field` during form submisson.
-			@param string tr $response The value of `recaptcha_response_field` during form submission.
+				* @param str $challenge The value of `recaptcha_challenge_field` during form submisson.
+				* @param str $response The value of `recaptcha_response_field` during form submission.
 				* @return bool True if ``$response`` is valid, else false.
 				*/
 				public static function recaptcha_code_validates ($challenge = FALSE, $response = FALSE)
@@ -65,8 +65,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-@param string m str $theme Optional. The theme used in display. Defaults to `clean@param string aram str $tabindex Optional. Value of `tabindex=""` attribute. Defaults to @param string  @param str $error Optional. An error message to display.
-				* @return string HTML markup for JavaScript tag.
+				* @param str $theme Optional. The theme used in display. Defaults to `clean`.
+				* @param str $tabindex Optional. Value of `tabindex=""` attribute. Defaults to `-1`.
+				* @param str $error Optional. An error message to display.
+				* @return str HTML markup for JavaScript tag.
 				*/
 				public static function recaptcha_script_tag ($theme = FALSE, $tabindex = FALSE, $error = FALSE)
 					{
@@ -82,3 +84,4 @@ if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
 					}
 			}
 	}
+?>

@@ -35,7 +35,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js"))
 				*
 				* @attaches-to ``add_action("init");``
 				*
-				* @return null|mixed Return-value of inner routine.
+				* @return null|inner Return-value of inner routine.
 				*/
 				public static function css ()
 					{
@@ -52,7 +52,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js"))
 				*
 				* @attaches-to ``add_action("init");``
 				*
-				* @return null|mixed Return-value of inner routine.
+				* @return null|inner Return-value of inner routine.
 				*/
 				public static function js_w_globals ()
 					{
@@ -63,3 +63,4 @@ if (!class_exists ("c_ws_plugin__s2member_css_js"))
 					}
 			}
 	}
+?>

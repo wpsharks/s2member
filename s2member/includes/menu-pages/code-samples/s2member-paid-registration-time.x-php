@@ -15,3 +15,4 @@ $time = s2member_paid_registration_time ("level1"); // ... first "paid" registra
 $time = s2member_paid_registration_time ("level2"); // ... first "paid" registration or upgrade time at Level#2.
 $time = s2member_paid_registration_time ("level3"); // ... first "paid" registration or upgrade time at Level#3.
 $time = s2member_paid_registration_time ("level4"); // ... first "paid" registration or upgrade time at Level#4.
+?>

@@ -57,8 +57,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param string $subscr_or_txn_id Either a Paid Subscr. ID, or a Paid Transaction ID.
-			@param string tr $os0 Optional. A second lookup parameter, usually the `os0` value for PayPal integrations.
+				* @param str $subscr_or_txn_id Either a Paid Subscr. ID, or a Paid Transaction ID.
+				* @param str $os0 Optional. A second lookup parameter, usually the `os0` value for PayPal integrations.
 				* @return str|bool The Custom String value on success, else false on failure.
 				*/
 				public static function get_user_custom_with ($subscr_or_txn_id = FALSE, $os0 = FALSE)
@@ -88,7 +88,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-@param string m str $subscr_or_txn_id Either a Paid Subscr. ID, or a Paid Transaction I@param string aram str $os0 Optional. A second lookup parameter, usually the `os0` value for PayPal integrations.
+				* @param str $subscr_or_txn_id Either a Paid Subscr. ID, or a Paid Transaction ID.
+				* @param str $os0 Optional. A second lookup parameter, usually the `os0` value for PayPal integrations.
 				* @return int|bool A WordPress User ID on success, else false on failure.
 				*/
 				public static function get_user_id_with ($subscr_or_txn_id = FALSE, $os0 = FALSE)
@@ -115,7 +116,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
-@param string  @param str $subscr_or_txn_id Either a Paid Subscr. ID, or a Paid Transac@param string 		* @param str $os0 Optional. A second lookup parameter, usually the `os0` value for PayPal integrations.
+				*
+				* @param str $subscr_or_txn_id Either a Paid Subscr. ID, or a Paid Transaction ID.
+				* @param str $os0 Optional. A second lookup parameter, usually the `os0` value for PayPal integrations.
 				* @return int|bool A User's Email Address on success, else false on failure.
 				*/
 				public static function get_user_email_with ($subscr_or_txn_id = FALSE, $os0 = FALSE)
@@ -145,7 +148,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param int|str $user_id Optional. A numeric WordPre@param string
+				* @param int|str $user_id Optional. A numeric WordPress User ID.
 				* @param str $subscr_id Optional. Can be used instead of passing in a ``$user_id``.
 				* 	If ``$subscr_id`` is passed in, it has to match the one found inside the resulting IPN Signup Vars collected by this routine.
 				* 	If neither of these parameters are passed in, the current User is assumed instead, obtained through ``wp_get_current_user()``.
@@ -171,9 +174,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				* The ``$user_id`` can be passed in directly; or a lookup can be performed with ``$subscr_id``.
 				*
 				* @package s2Member\Utilities
-				* @sinc@param string 		*
+				* @since 110912
+				*
 				* @param str $var Required. The requested Signup Var.
-				* @param int|str $user_id Optional. A numeric W@param string er ID.
+				* @param int|str $user_id Optional. A numeric WordPress User ID.
 				* @param str $subscr_id Optional. Can be used instead of passing in a ``$user_id``.
 				* 	If ``$subscr_id`` is passed in, it has to match the one found inside the resulting IPN Signup Vars collected by this routine.
 				* 	If neither of these parameters are passed in, the current User is assumed instead, obtained through ``wp_get_current_user()``.
@@ -216,9 +220,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				* Returns the WordPress User ID if they exist.
 				*
 				* @package s2Member\Utilities
-		@param string 3.5
+				* @since 3.5
 				*
-				* @param str $user_l@param string 's Username.
+				* @param str $user_login A User's Username.
 				* @param str $user_email A User's Email Address.
 				* @return int|bool If exists, a WordPress User ID, else false.
 				*/
@@ -237,9 +241,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				*
 				* Returns the WordPress User ID if they exist.
 				*
-				* @package s2Member\Utilit@param string since 3.5
+				* @package s2Member\Utilities
+				* @since 3.5
 				*
-				* @param str $@param string A User's Username.
+				* @param str $user_login A User's Username.
 				* @param str $user_email A User's Email Address.
 				* @param int|str $blog_id A numeric WordPress Blog ID.
 				* @return int|bool If exists *(but not on Blog)*, a WordPress User ID, else false.
@@ -259,9 +264,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				*
 				* Returns the WordPress User ID if they exist.
 				*
-				* @package s2Member\@param string 			* @since 3.5
+				* @package s2Member\Utilities
+				* @since 3.5
 				*
-				* @param@param string login A User's Username.
+				* @param str $user_login A User's Username.
 				* @param str $user_email A User's Email Address.
 				* @param int|str $blog_id A numeric WordPress Blog ID.
 				* @return int|bool If exists *(but not on Blog)*, a WordPress User ID, else false.
@@ -273,7 +279,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				/**
 				* Retrieves a field value. Also supports Custom Fields.
 				*
-				* @package s2M@param string ties
+				* @package s2Member\Utilities
 				* @since 3.5
 				*
 				* @param str $field_id Required. A unique Custom Registration/Profile Field ID, that you configured with s2Member.
@@ -345,3 +351,4 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 					}
 			}
 	}
+?>

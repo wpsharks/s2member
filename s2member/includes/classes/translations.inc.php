@@ -62,10 +62,10 @@ if (!class_exists ("c_ws_plugin__s2member_translations"))
 				*
 				* @attaches-to ``add_filter("gettext");``
 				*
-				* @param string $translated Expects already-translated string passed in by Filter.
-			@param string tr $original Expects original text string passed in by Filter.
-@param string m str $domain Expects translation domain passed in by Filter.
-				* @return string Translated string, possibly modified by this routine.
+				* @param str $translated Expects already-translated string passed in by Filter.
+				* @param str $original Expects original text string passed in by Filter.
+				* @param str $domain Expects translation domain passed in by Filter.
+				* @return str Translated string, possibly modified by this routine.
 				*/
 				public static function translation_mangler ($translated = FALSE, $original = FALSE, $domain = FALSE)
 					{
@@ -171,3 +171,4 @@ if (!class_exists ("c_ws_plugin__s2member_translations"))
 					}
 			}
 	}
+?>

@@ -1,4 +1,4 @@
-<?php echo S2MEMBER_CURRENT_USER_SUBSCR_OR_WP_ID;
+<?php echo S2MEMBER_CURRENT_USER_SUBSCR_OR_WP_ID; ?>
 This may output something like: I-82234JD0923423
 	Or possibly something like: 8845
 

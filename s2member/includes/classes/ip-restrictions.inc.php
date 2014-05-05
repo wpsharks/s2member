@@ -35,8 +35,8 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
          * @package s2Member\IP_Restrictions
          * @since 3.5
          *
-         * @param string $ip IP Address.
-         * @param string $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
+         * @param str $ip IP Address.
+         * @param str $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
          * @return bool True if IP Restrictions are OK, otherwise this function will exit script execution after issuing a warning.
          */
         public static function ip_restrictions_ok($ip = FALSE, $restriction = FALSE)
@@ -136,7 +136,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
          * @package s2Member\IP_Restrictions
          * @since 130407
          *
-     @param string m str $restriction Unique IP Restriction name/identifier. Such as Username, or a unique access code.
+         * @param str $restriction Unique IP Restriction name/identifier. Such as Username, or a unique access code.
          * @return bool TRUE if at or above max allowable IPs; else FALSE.
          */
         public static function specific_ip_restriction_at_or_above_max($restriction = FALSE)
@@ -170,7 +170,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
          * @package s2Member\IP_Restrictions
          * @since 3.5
          *
-  @param string aram str $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
+         * @param str $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
          * @return bool True if the specific IP Restriction is associated with a security breach, else false.
          */
         public static function specific_ip_restriction_breached_security($restriction = FALSE)
@@ -188,7 +188,8 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
          *
          * @package s2Member\IP_Restrictions
          * @since 3.5
-         *@param string  @param str $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
+         *
+         * @param str $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
          * @return bool Always returns a `true` value.
          *
          * @todo Make return value conditional, based on success.
@@ -297,3 +298,4 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
         }
     }
 }
+?>

@@ -34,8 +34,8 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 				* @since 3.5
 				*
 				* @param int|str $user_id A numeric WordPress User ID.
-				* @param string $notes The string of notes to append. One note, or many.
-				* @return string The full set of notes, including appendage.
+				* @param str $notes The string of notes to append. One note, or many.
+				* @return str The full set of notes, including appendage.
 				*/
 				public static function append_user_notes ($user_id = FALSE, $notes = FALSE)
 					{
@@ -63,8 +63,8 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 				* @since 3.5
 				*
 				* @param int|str $user_id A numeric WordPress User ID.
-			@param string tr $regex A regular expression to match against each line.
-				* @return string The full set of notes, after clearing.
+				* @param str $regex A regular expression to match against each line.
+				* @return str The full set of notes, after clearing.
 				*/
 				public static function clear_user_note_lines ($user_id = FALSE, $regex = FALSE)
 					{
@@ -93,3 +93,4 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 					}
 			}
 	}
+?>

@@ -105,3 +105,4 @@ function ws_plugin__s2member_enqueue_admin_notice ($notice = FALSE, $on_pages = 
 	{
 		return c_ws_plugin__s2member_admin_notices::enqueue_admin_notice ($notice, $on_pages, $error, $time, $dismiss);
 	}
+?>

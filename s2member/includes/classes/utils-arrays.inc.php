@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param string $regex A regular expression to look for inside the array.
+				* @param str $regex A regular expression to look for inside the array.
 				* @return bool True if the regular expression matched at least one value in the array, else false.
 				*/
 				public static function regex_in_array ($regex = FALSE, $array = FALSE)
@@ -87,7 +87,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param string $string A string to test against.
+				* @param str $string A string to test against.
 				* @param array $array An array of regex patterns to match against ``$string``.
 				* @return bool True if at least one regular expression in the ``$array`` matched ``$string``, else false.
 				*/
@@ -229,3 +229,4 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 					}
 			}
 	}
+?>

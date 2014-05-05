@@ -1,4 +1,4 @@
-<?php echo S2MEMBER_CURRENT_USER_SUBSCR_ID;
+<?php echo S2MEMBER_CURRENT_USER_SUBSCR_ID; ?>
 This may output something like: I-82234JD0923423
 
 This is the Paid Subscription ID associated with their account.

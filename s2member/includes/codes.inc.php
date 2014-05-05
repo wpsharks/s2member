@@ -39,3 +39,4 @@ add_shortcode("__________s2If", "c_ws_plugin__s2member_sc_if_conds::sc_if_condit
 add_shortcode("s2Member-Profile", "c_ws_plugin__s2member_sc_profile::sc_profile");
 add_shortcode("s2Member-PayPal-Button", "c_ws_plugin__s2member_sc_paypal_button::sc_paypal_button");
 add_shortcode("s2Member-Security-Badge", "c_ws_plugin__s2member_sc_s_badge::sc_s_badge");
+?>

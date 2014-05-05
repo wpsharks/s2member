@@ -35,8 +35,8 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				*
 				* @attaches-to ``add_filter("pre_option_default_role");``
 				*
-				* @param string $default_role Expects a default Role to be passed by the Filter.
-				* @return string Default Role, as configured by s2Member.
+				* @param str $default_role Expects a default Role to be passed by the Filter.
+				* @return str Default Role, as configured by s2Member.
 				*/
 				public static function force_default_role ($default_role = FALSE)
 					{
@@ -52,8 +52,8 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				*
 				* @attaches-to ``add_filter("pre_site_option_default_user_role");``
 				*
-			@param string tr $default_role Expects a default Role to be passed by the Filter.
-				* @return string Default Role, as configured by s2Member.
+				* @param str $default_role Expects a default Role to be passed by the Filter.
+				* @return str Default Role, as configured by s2Member.
 				*/
 				public static function force_mms_default_role ($default_role = FALSE)
 					{
@@ -69,8 +69,8 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				* @package s2Member\Option_Forces
 				* @since 3.5
 				*
-@param string m str $demotion_role Expects a demotion Role to be passed by the caller.
-				* @return string Demotion Role, as configured by s2Member.
+				* @param str $demotion_role Expects a demotion Role to be passed by the caller.
+				* @return str Demotion Role, as configured by s2Member.
 				*/
 				public static function force_demotion_role ($demotion_role = FALSE)
 					{
@@ -87,7 +87,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				* @attaches-to ``add_filter("pre_site_option_add_new_users");``
 				*
 				* @param int|str $allow Numeric string (`1`) or (`0`), expected by the Filter.
-				* @return string Numeric (`1`) or (`0`) indicating true or false. Forces to (`1`) true.
+				* @return str Numeric (`1`) or (`0`) indicating true or false. Forces to (`1`) true.
 				*/
 				public static function mms_allow_new_users ($allow = FALSE)
 					{
@@ -125,7 +125,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				* @attaches-to ``add_filter("pre_option_users_can_register");``
 				*
 				* @param int|str $users_can_register Numeric (`1`) or (`0`), indicating true or false; passed through by the Filter.
-				* @return string Numeric value of (`1`) or (`0`), indicating true or false; depending on several factors.
+				* @return str Numeric value of (`1`) or (`0`), indicating true or false; depending on several factors.
 				*/
 				public static function check_register_access ($users_can_register = FALSE)
 					{
@@ -158,8 +158,9 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				* @since 3.5
 				*
 				* @attaches-to ``add_filter("pre_site_option_registration");``
-			@param string aram str $users_can_register Expects *( `none`, `all`, `blog`, `user` )*, passed through by the Filter.
-				* @return string One of `none|all|user`; depending on several factors.
+				*
+				* @param str $users_can_register Expects *( `none`, `all`, `blog`, `user` )*, passed through by the Filter.
+				* @return str One of `none|all|user`; depending on several factors.
 				*/
 				public static function check_mms_register_access ($users_can_register = FALSE)
 					{
@@ -255,3 +256,4 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 					}
 			}
 	}
+?>

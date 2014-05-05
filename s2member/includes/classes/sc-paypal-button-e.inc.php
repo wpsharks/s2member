@@ -36,9 +36,9 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param string $code The PayPal Button Code before encryption.
+				* @param str $code The PayPal Button Code before encryption.
 				* @param array $vars An array of defined variables in the scope of the calling Filter.
-				* @return string The Resulting PayPal Button Code *(possibly encrypted, depending on configuration)*.
+				* @return str The Resulting PayPal Button Code *(possibly encrypted, depending on configuration)*.
 				*/
 				public static function sc_paypal_button_encryption ($code = FALSE, $vars = FALSE)
 					{
@@ -94,3 +94,4 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 					}
 			}
 	}
+?>

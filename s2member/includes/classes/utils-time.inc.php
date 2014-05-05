@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				*
 				* @param int $from Beginning timestamp to start from.
 				* @param int $to Ending timestamp to stop at.
-				* @return string Human readable difference between ``$from`` and ``$to``.
+				* @return str Human readable difference between ``$from`` and ``$to``.
 				*/
 				public static function approx_time_difference ($from = FALSE, $to = FALSE)
 					{
@@ -107,11 +107,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				* @since 3.5
 				*
 				* @param int|str $user_id Optional. A WordPress User ID.
-				* @param string $period1 Optional. First Intial "Period Term" *( i.e. `0 D` )*.
+				* @param str $period1 Optional. First Intial "Period Term" *( i.e. `0 D` )*.
 				* 	Only used when ``$user_id`` is passed in.
-			@param string tr $period3 Optional. Regular "Period Term" *( i.e. `1 M` )*.
+				* @param str $period3 Optional. Regular "Period Term" *( i.e. `1 M` )*.
 				* 	Only used when ``$user_id`` is passed in.
-@param string m str $eotper Optional. A Fixed "Period Term" *( i.e. `1 M` )*.
+				* @param str $eotper Optional. A Fixed "Period Term" *( i.e. `1 M` )*.
 				* 	This replaces ``$period1`` / ``$period3``.
 				* 	Not used when ``$user_id`` is passed in.
 				* 	Only when ``$user_id`` is not passed in.
@@ -217,7 +217,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
-			@param string aram str $term_or_period_term A Term, or a "Period Term" combina@param string  @param str $directive Optional. One of `recurring|singular|plural`. Defaults to `recurring`.
+				*
+				* @param str $term_or_period_term A Term, or a "Period Term" combination.
+				* @param str $directive Optional. One of `recurring|singular|plural`. Defaults to `recurring`.
 				* @return str|bool A Term Cycle *( i.e. `Daily`, `Weekly`, `Monthly`, `Yearly`, `Lifetime`, etc. )*, else false on failure.
 				*
 				* @todo Add support here for fixed recurring payments configured through `rrt=""`.
@@ -258,9 +260,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				* Example: `2 months`.
 				*
 				* @package s2Member\Utilities
-				* @since 3@param string 		* @param str $period_term A "Period Term" combination.
+				* @since 3.5
+				*
+				* @param str $period_term A "Period Term" combination.
 				* @param bool|int|str $recurring Defaults to false. If true, the ``$period_term`` is recurring. Can also be the string `0|1|BN`.
-				* @return string Verbose *(lowercase)* Period Term description *( i.e. `weekly`, `every 3 weeks`, `lifetime`, `3 months`, `1 month`, etc. )*.
+				* @return str Verbose *(lowercase)* Period Term description *( i.e. `weekly`, `every 3 weeks`, `lifetime`, `3 months`, `1 month`, etc. )*.
 				*
 				* @todo Add support here for fixed recurring payments configured through `rrt=""`.
 				*/
@@ -298,10 +302,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param int|str $amount A numeric amount, usually in @param string
+				* @param int|str $amount A numeric amount, usually in US dollars.
 				* @param str $period_term A "Period Term" combo, with space separation.
 				* @param bool|int|str $recurring Defaults to false. If true, the ``$period_term`` is recurring. Can also be the string `0|1|BN`.
-				* @return string Verbose *(lowercase)* Amount Period Term description *( i.e. `1.00`, `1.00 / monthly`, `1.00 every 3 months`, `1.00 for 1 month`, `1.00 for 3 months`, etc. )*.
+				* @return str Verbose *(lowercase)* Amount Period Term description *( i.e. `1.00`, `1.00 / monthly`, `1.00 every 3 months`, `1.00 for 1 month`, `1.00 for 3 months`, etc. )*.
 				*
 				* @todo Add support here for fixed recurring payments configured through `rrt=""`.
 				*/
@@ -332,3 +336,4 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 					}
 			}
 	}
+?>

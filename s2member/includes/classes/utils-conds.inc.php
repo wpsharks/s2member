@@ -110,7 +110,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param string $url_uri Either a full URL, or a partial URI to test.
+				* @param str $url_uri Either a full URL, or a partial URI to test.
 				* @return bool True if the URL or URI leads to the site root, else false.
 				*/
 				public static function is_site_root($url_uri = FALSE)
@@ -186,3 +186,4 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 					}
 			}
 	}
+?>

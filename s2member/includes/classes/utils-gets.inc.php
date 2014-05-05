@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @package s2Member\Utilities
 				* @since 111101
 				*
-				* @param string $tags Tag slugs/names/IDs; comma-delimited.
+				* @param str $tags Tag slugs/names/IDs; comma-delimited.
 				* @return array Unique array of Tag IDs *(as integers)*. With Tag slugs/names converted to IDs.
 				*/
 				public static function get_tags_converted_to_ids ($tags = FALSE)
@@ -109,7 +109,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-			@param string tr $post_type Optional. If provided, return all Post IDs of a specific Post Type.
+				* @param str $post_type Optional. If provided, return all Post IDs of a specific Post Type.
 				* 	Otherwise, return all Post IDs that are NOT of these Post Types: `page|attachment|nav_menu_item|revision`.
 				* @return array Unique array of all Post IDs *(as integers)*, including Custom Post Types; or all Post IDs of a specific Post Type.
 				*/
@@ -359,3 +359,4 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 					}
 			}
 	}
+?>

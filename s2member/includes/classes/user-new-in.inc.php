@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 				*
 				* @attaches-to ``ob_start("c_ws_plugin__s2member_user_new_in::_admin_user_new_fields");``
 				*
-				* @return string Output buffer.
+				* @return str Output buffer.
 				*/
 				public static function _admin_user_new_fields ($buffer = FALSE)
 					{
@@ -278,3 +278,4 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 					}
 			}
 	}
+?>

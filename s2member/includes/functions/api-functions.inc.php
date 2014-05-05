@@ -108,7 +108,7 @@ if(!function_exists("is_user_not_logged_in"))
 * @since 110524RC
 *
 * @param int|str $id A numeric WordPress User ID.
-* @param string $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
+* @param str $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
 * @return bool True if the specific User is/has the specified Role, else false.
 *
 * @see s2Member\API_Functions\user_is()
@@ -192,7 +192,8 @@ if(!function_exists("user_is"))
 * @package s2Member\API_Functions
 * @since 110524RC
 *
-* @param int|str $id A numeric WordPress User ID.@param string tr $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
+* @param int|str $id A numeric WordPress User ID.
+* @param str $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
 * @return bool True if the specific User is/does NOT have the specified Role, else false.
 *
 * @see s2Member\API_Functions\user_is()
@@ -267,7 +268,9 @@ if(!function_exists("user_is_not"))
 * All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
-* @since 3.@param string m str $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
+* @since 3.5
+*
+* @param str $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
 * @return bool True if the current User is/has the specified Role, else false.
 *
 * @see s2Member\API_Functions\user_is()
@@ -349,7 +352,9 @@ if(!function_exists("current_user_is"))
 * All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
-* @since@param string aram str $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
+* @since 3.5
+*
+* @param str $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
 * @return bool True if the current User is/does NOT have the specified Role, else false.
 *
 * @see s2Member\API_Functions\user_is()
@@ -431,7 +436,8 @@ if(!function_exists("current_user_is_not"))
 * @package s2Member\API_Functions
 * @since 3.5
 *
-* @param int|str $blog_id A WordPress Blog ID *(must be n@param string  @param str $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
+* @param int|str $blog_id A WordPress Blog ID *(must be numeric)*.
+* @param str $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
 * @return bool True if the current User is/has the specified Role, on the specified Blog, else false.
 *
 * @see s2Member\API_Functions\user_is()
@@ -509,7 +515,7 @@ if(!function_exists("current_user_is_for_blog"))
 * @package s2Member\API_Functions
 * @since 3.5
 *
-* @param int|str $blog_id A WordPress Blog ID *(must b@param string .
+* @param int|str $blog_id A WordPress Blog ID *(must be numeric)*.
 * @param str $role A WordPress Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
 * @return bool True if the current User is/does NOT have the specified Role, on the specified Blog, else false.
 *
@@ -578,7 +584,7 @@ if(!function_exists("current_user_is_not_for_blog"))
 * @package s2Member\API_Functions
 * @since 3.5
 *
-* @param int|str $id A numeric Wor@param string  ID.
+* @param int|str $id A numeric WordPress User ID.
 * @param str $capability A WordPress Capability ID *( i.e. `access_s2member_level[0-9]+`, `access_s2member_ccap_music` )*.
 * @return bool True if the specific User does NOT have the specified Capability or Role, else false.
 *
@@ -644,7 +650,8 @@ if(!function_exists("user_cannot"))
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
 * All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
 *
-* @package s2Member\API_Functi@param string e 3.5
+* @package s2Member\API_Functions
+* @since 3.5
 *
 * @param str $capability A WordPress Capability ID *( i.e. `access_s2member_level[0-9]+`, `access_s2member_ccap_music` )*.
 * 	Or a Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
@@ -715,7 +722,7 @@ if(!function_exists("current_user_cannot"))
 * @package s2Member\API_Functions
 * @since 3.5
 *
-* @param int|str $blog_id A WordPress Blog ID@param string numeric)*.
+* @param int|str $blog_id A WordPress Blog ID *(must be numeric)*.
 * @param str $capability A WordPress Capability ID *( i.e. `access_s2member_level[0-9]+`, `access_s2member_ccap_music` )*.
 * 	Or a Role ID *( i.e. `s2member_level[0-9]+`, `administrator`, `editor`, `author`, `contributor`, `subscriber` )*.
 * @return bool True if the current User does NOT have the specified Capability or Role, else false.
@@ -816,7 +823,7 @@ if(!function_exists("current_user_cannot_for_blog"))
 * @since 3.5
 *
 * @param int|str $what Optional. Defaults to the current $post ID when called from within {@link http://codex.wordpress.org/The_Loop The Loop}.
-* 	If passed in, this should be a WordPress Category ID, Tag ID, Post ID, or Page ID. Or a full @param string is also fine.
+* 	If passed in, this should be a WordPress Category ID, Tag ID, Post ID, or Page ID. Or a full URL. A URI is also fine.
 * @param str $type Optional. One of `category`, `tag`, `post`, `page`, `singular` or `uri`. Defaults to `singular` *(i.e. a Post or Page)*.
 * @param bool $check_user Optional. Consider the current User? Defaults to false.
 * @return array|bool A non-empty array *(meaning true)*, or false if the content is not protected *(i.e. available publicly)*.
@@ -941,7 +948,7 @@ if(!function_exists("is_protected_by_s2member"))
 * @since 3.5
 *
 * @param int|str $what Optional. Defaults to the current $post ID when called from within {@link http://codex.wordpress.org/The_Loop The Loop}.
-* 	If passed in, this should be a WordPress Category ID, Tag ID, Post ID, or Page ID. Or a fu@param string RI is also fine.
+* 	If passed in, this should be a WordPress Category ID, Tag ID, Post ID, or Page ID. Or a full URL. A URI is also fine.
 * @param str $type Optional. One of `category`, `tag`, `post`, `page`, `singular` or `uri`. Defaults to `singular` *(i.e. a Post or Page)*.
 * @return bool True if the current User IS permitted, else false if the content is NOT available to the current User;
 * 	based on your configuration of s2Member, and based on the current User's Role/Capabilities.
@@ -1633,7 +1640,7 @@ if(!function_exists("is_page_permitted_by_s2member"))
 * ```
 * *but please note, `else if()` logic is not possible with `[s2If /]`.*
 *
-* @package s2Membe@param string ions
+* @package s2Member\API_Functions
 * @since 3.5
 *
 * @param str $uri_or_full_url Required. This should be a URI starting with `/`, or a full URL is also fine.
@@ -1711,7 +1718,7 @@ if(!function_exists("is_uri_protected_by_s2member"))
 * ```
 * *but please note, `else if()` logic is not possible with `[s2If /]`.*
 *
-* @package s2Me@param string nctions
+* @package s2Member\API_Functions
 * @since 3.5
 *
 * @param str $uri_or_full_url Required. This should be a URI starting with `/`, or a full URL is also fine.
@@ -1901,7 +1908,7 @@ if(!function_exists("detach_s2member_query_filters"))
 * @param array $config Required. This is an array of configuration options associated with permissions being checked against the current User/Member; and also the actual URL generated by this routine.
 * 	Possible ``$config`` array elements: `file_download` *(required)*, `file_download_key`, `file_stream`, `file_inline`, `file_storage`, `file_remote`, `file_ssl`, `file_rewrite`, `file_rewrite_base`, `skip_confirmation`, `url_to_storage_source`, `count_against_user`, `check_user`.
 * @param bool $get_streamer_array Optional. Defaults to `false`. If `true`, this API Function will return an array with the following elements: `streamer`, `file`, `url`. For further details, please review this section in your Dashboard: `s2Member -› Download Options -› JW Player & RTMP Protocol Examples`. Note, if this is true, s2Member will automatically force ``"url_to_storage_source" => true`` and ``"file_stream" => true``. For that reason, you should carefully review the details and warning above regarding `url_to_storage_source`. If you set ``$get_streamer_array``, you should also set ``"check_user" => true`` and ``"count_against_user" => true``.
-* @return string A File Download URL string on success; or an array on success, with elements `streamer`, `file`, `url` when/if ``$get_streamer_array`` is true; else false on any type of failure.
+* @return str A File Download URL string on success; or an array on success, with elements `streamer`, `file`, `url` when/if ``$get_streamer_array`` is true; else false on any type of failure.
 *
 * @see s2Member\API_Functions\s2member_file_download_key()
 */
@@ -1944,14 +1951,14 @@ if(!function_exists("s2member_file_download_url"))
 * or even combine them with Specific Post/Page Access, and more.
 * The possibilities are limitless really.
 *
-* @package s@param string _Functions
+* @package s2Member\API_Functions
 * @since 3.5
 *
 * @param str $file Location of the protected File, relative to the `/s2member-files/` directory.
-* @param string|bool $directive Optional. Defaults to false. If you set this to any non-zero value ( i.e. the string `universal` ),
+* @param str|bool $directive Optional. Defaults to false. If you set this to any non-zero value ( i.e. the string `universal` ),
 * 	the resulting Key will be universal *(i.e. valid for any User, at any time, from any browser)*. That is to say; universal, for this particular File.
 * 	It is also possible to pass in the ``$directive`` string `ip-forever`, making the Key last forever, but only for a specific IP address.
-* @return string The File Download Key. Which is an MD5 hash *(always 32 characters)*, URL-safe.
+* @return str The File Download Key. Which is an MD5 hash *(always 32 characters)*, URL-safe.
 *
 * @see s2Member\API_Functions\s2member_file_download_url()
 *
@@ -1982,7 +1989,7 @@ if(!function_exists("s2member_file_download_key"))
 * @package s2Member\API_Functions
 * @since 111026
 *
-* @param string|int $user_id Optional. Default@param string rrently logged-in User's ID.
+* @param str|int $user_id Optional. Defaults to the currently logged-in User's ID.
 * @param str $not_counting_this_particular_file Optional. If you want to exclude a particular file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon S3 Bucket *(when applicable)*.
 * @return array An array with the following elements... File Downloads allowed for this User: (int)`allowed`, Download Period for this User in days: (int)`allowed_days`, Files downloaded by this User in the current Period: (int)`currently`, log of all Files downloaded in the current Period, with file names/dates: (array)`log`, archive of all Files downloaded in prior Periods, with file names/dates: (array)`archive`.
 *
@@ -2031,11 +2038,11 @@ if(!function_exists("s2member_user_downloads"))
 * There is NO Shortcode equivalent for this yet.
 * ```
 *
-* @packag@param string API_Functions
+* @package s2Member\API_Functions
 * @since 111026
 *
 * @param str $file Required. Location of the file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon S3 Bucket *(when applicable)*.
-* @param string|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
+* @param str|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
 * @param bool $check_archives_too Optional. Defaults to true. When true, s2Member checks its File Download Archive too, instead of ONLY looking at Files downloaded in the current Period. Period is based on your Basic Download Restrictions setting of allowed days across various Levels of Membership, for each respective User/Member. Or, if ``$user_id`` is specified, based solely on a specific User's `allowed_days`, configured in your Basic Download Restrictions, at the User's current Membership Level.
 * @return int The total for this particular ``$file``, based on configuration of function arguments.
 *
@@ -2083,11 +2090,11 @@ if(!function_exists("s2member_total_downloads_of"))
 * There is NO Shortcode equivalent for this yet.
 * ```
 *
-* @pac@param string er\API_Functions
+* @package s2Member\API_Functions
 * @since 111026
 *
 * @param str $file Required. Location of the file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon S3 Bucket *(when applicable)*.
-* @param string|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
+* @param str|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
 * @param bool $check_archives_too Optional. Defaults to true. When true, s2Member checks its File Download Archive too, instead of ONLY looking at Files downloaded in the current Period. Period is based on your Basic Download Restrictions setting of allowed days across various Levels of Membership, for each respective User/Member. Or, if ``$user_id`` is specified, based solely on a specific User's `allowed_days`, configured in your Basic Download Restrictions, at the User's current Membership Level.
 * @return int The total for this particular ``$file``, based on configuration of function arguments.
 *
@@ -2222,7 +2229,7 @@ if(!function_exists("s2member_registration_time"))
 * There is NO Shortcode equivalent for this (yet).
 * ```
 *
-@param string s2Member\API_Functions
+* @package s2Member\API_Functions
 * @since 3.5
 *
 * @param str $level Optional. Defaults to the first/initial Paid Registration Time, regardless of Level#.
@@ -2384,7 +2391,9 @@ if(!function_exists("s2member_capability_times"))
 * [s2Get user_option="s2member_subscr_gateway" /] # Paid Subscr. Gateway Code for the current User.
 * [s2Get user_option="s2member_registration_ip" /] # IP the current User had during registration.
 * [s2Get user_option="s2member_login_counter" /] # Number of times the User has logged in.
-* ```@param string ge s2Member\API_Functions
+* ```
+*
+* @package s2Member\API_Functions
 * @since 3.5
 *
 * @param str $field_id Required. A unique Custom Registration/Profile Field ID, that you configured with s2Member.
@@ -2487,7 +2496,7 @@ if(!function_exists("get_s2member_custom_fields"))
 * @package s2Member\API_Functions
 * @since 110720
 *
-* @return string A unique Invoice.
+* @return str A unique Invoice.
 *
 * @see s2Member\API_Constants\S2MEMBER_VALUE_FOR_PP_INV
 *
@@ -2512,8 +2521,12 @@ if(!function_exists("s2member_value_for_pp_inv"))
 * ———— Shortcode Equivalent ————
 * ```
 * There is NO Shortcode equivalent for this (yet).
-* ```@param string ge s2Member\API_Functions
-* @since 11@param string aram str $url A full/long URL to be shortened.
+* ```
+*
+* @package s2Member\API_Functions
+* @since 111004
+*
+* @param str $url A full/long URL to be shortened.
 * @param str $api_sp Optional. A specific URL shortening API to use. Defaults to that which is configured in the s2Member Dashboard. Normally `tiny_url` by default.
 * @param bool $try_backups Defaults to true. If a failure occurs with the first API, we'll try others until we have success.
 * @return str|bool The shortened URL on success, else false on failure.
@@ -2539,13 +2552,16 @@ if(!function_exists("s2member_shorten_url"))
 * ```
 * ———— Shortcode Equivalent ————
 * ```
-* There is NO Shortcode equivalent for this (yet).@param string @package s2Member\API_Functions
-* @s@param string
+* There is NO Shortcode equivalent for this (yet).
+* ```
+*
+* @package s2Member\API_Functions
+* @since 111106
 *
 * @param str $string A string of data to encrypt.
 * @param str $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
 * @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *(recommended)*.
-* @return string Encrypted string.
+* @return str Encrypted string.
 *
 * @see s2Member\API_Functions\s2member_decrypt()
 * @see s2Member\API_Functions\s2member_xencrypt()
@@ -2572,14 +2588,15 @@ if(!function_exists("s2member_encrypt"))
 * ```
 * ———— Shortcode Equivalent ————
 * ```
-* There is NO Shortcode equivalent for this @param string `
+* There is NO Shortcode equivalent for this (yet).
+* ```
 *
 * @package s2Member\API_Functions
 * @since 111106
 *
-* @param str@param string string of data to decrypt. Should still be base64 encoded.
+* @param str $base64 A string of data to decrypt. Should still be base64 encoded.
 * @param str $key Optional. Key used originally for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-* @return string Decrypted string.
+* @return str Decrypted string.
 *
 * @see s2Member\API_Functions\s2member_encrypt()
 * @see s2Member\API_Functions\s2member_xencrypt()
@@ -2604,15 +2621,16 @@ if(!function_exists("s2member_decrypt"))
 * ```
 * ———— Shortcode Equivalent ————
 * ```
-* There is NO Shortcode equivalent for@param string .
+* There is NO Shortcode equivalent for this (yet).
 * ```
 *
-* @package s2Member\API_Fu@param string since 111106
+* @package s2Member\API_Functions
+* @since 111106
 *
 * @param str $string A string of data to encrypt.
 * @param str $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
 * @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *(recommended)*.
-* @return string Encrypted string.
+* @return str Encrypted string.
 *
 * @see s2Member\API_Functions\s2member_xdecrypt()
 * @see s2Member\API_Functions\s2member_encrypt()
@@ -2637,15 +2655,15 @@ if(!function_exists("s2member_xencrypt"))
 * ```
 * ———— Shortcode Equivalent ————
 * ```
-* There is NO Shortcode equivale@param string  (yet).
+* There is NO Shortcode equivalent for this (yet).
 * ```
 *
 * @package s2Member\API_Functions
 * @since 111106
 *
-@param string r $base64 A string of data to decrypt. Should still be base64 encoded.
+* @param str $base64 A string of data to decrypt. Should still be base64 encoded.
 * @param str $key Optional. Key used originally for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-* @return string Decrypted string.
+* @return str Decrypted string.
 *
 * @see s2Member\API_Functions\s2member_xencrypt()
 * @see s2Member\API_Functions\s2member_encrypt()
@@ -2669,7 +2687,7 @@ if(!function_exists("s2member_xdecrypt"))
 * ```
 * ———— Shortcode Equivalent ————
 * ```
-* There is NO Shortcode eq@param string r this (yet).
+* There is NO Shortcode equivalent for this (yet).
 * ```
 *
 * @package s2Member\API_Functions
@@ -2689,3 +2707,4 @@ if(!function_exists("s2member_login_ips_for"))
 				return (is_array($ips)) ? $ips : array();
 			}
 	}
+?>

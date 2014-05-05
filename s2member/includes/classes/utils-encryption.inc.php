@@ -33,8 +33,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param string $key Optional. Attempt to force a specific Key. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-				* @return string Proper encryption/decryption Key. If ``$key`` is passed in, and it validates, we'll return that. Otherwise use a default Key.
+				* @param str $key Optional. Attempt to force a specific Key. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
+				* @return str Proper encryption/decryption Key. If ``$key`` is passed in, and it validates, we'll return that. Otherwise use a default Key.
 				*/
 				public static function key ($key = FALSE)
 					{
@@ -51,10 +51,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-			@param string tr $string A string of data to encrypt.
-@param string m str $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
+				* @param str $string A string of data to encrypt.
+				* @param str $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
 				* @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *(recommended)*.
-				* @return string Encrypted string.
+				* @return str Encrypted string.
 				*/
 				public static function encrypt ($string = FALSE, $key = FALSE, $w_md5_cs = TRUE)
 					{
@@ -83,8 +83,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
-			@param string aram str $base64 A string of data to decrypt. Should still be base64 enc@param string  @param str $key Optional. Key used originally for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-				* @return string Decrypted string.
+				*
+				* @param str $base64 A string of data to decrypt. Should still be base64 encoded.
+				* @param str $key Optional. Key used originally for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
+				* @return str Decrypted string.
 				*/
 				public static function decrypt ($base64 = FALSE, $key = FALSE)
 					{
@@ -116,10 +118,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				* XOR two-way encryption/decryption, with a base64 wrapper.
 				*
 				* @package s2Member\Utilities
-				* @since 3@param string 		* @param str $string A string of data @param string
+				* @since 3.5
+				*
+				* @param str $string A string of data to encrypt.
 				* @param str $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
 				* @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *(recommended)*.
-				* @return string Encrypted string.
+				* @return str Encrypted string.
 				*/
 				public static function xencrypt ($string = FALSE, $key = FALSE, $w_md5_cs = TRUE)
 					{
@@ -142,10 +146,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				* XOR two-way encryption/decryption, with a base64 wrapper.
 				*
 				* @package s2Member\Utilities
-				* @s@param string 		*
-				* @param str $base64 A string of data to decrypt. Should still b@param string coded.
+				* @since 3.5
+				*
+				* @param str $base64 A string of data to decrypt. Should still be base64 encoded.
 				* @param str $key Optional. Key used originally for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-				* @return string Decrypted string.
+				* @return str Decrypted string.
 				*/
 				public static function xdecrypt ($base64 = FALSE, $key = FALSE)
 					{
@@ -178,3 +183,4 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 					}
 			}
 	}
+?>

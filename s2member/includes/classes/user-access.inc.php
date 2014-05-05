@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				*
 				* @param obj $user Optional. A `WP_User` object. Defaults to the current User.
 				* 	In order to check the current User, you must call this function with no arguments/parameters.
-				* @return string Role ID/Name, or an empty string if they have no Role, or if ``$user`` does not exist, or if no User is currently logged-in.
+				* @return str Role ID/Name, or an empty string if they have no Role, or if ``$user`` does not exist, or if no User is currently logged-in.
 				*/
 				public static function user_access_role ($user = FALSE)
 					{
@@ -118,7 +118,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				* @package s2Member\User_Access
 				* @since 3.5
 				*
-				* @param string $role A WordPress Role ID/Name.
+				* @param str $role A WordPress Role ID/Name.
 				* @return int Access Level#, `-1` if ``$role`` is empty.
 				*/
 				public static function user_access_role_to_level ($role = FALSE)
@@ -153,7 +153,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				*
 				* @param obj $user Optional. A `WP_User` object. Defaults to the current User.
 				* 	In order to check the current User, you must call this function with no arguments/parameters.
-				* @return string Access Level Label, empty string if ``$user`` does not exist, or if no User is currently logged-in.
+				* @return str Access Level Label, empty string if ``$user`` does not exist, or if no User is currently logged-in.
 				*/
 				public static function user_access_label ($user = FALSE)
 					{
@@ -170,3 +170,4 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 					}
 			}
 	}
+?>

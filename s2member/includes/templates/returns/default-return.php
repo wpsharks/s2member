@@ -1,6 +1,8 @@
 <?php
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
+?>
+
 %%doctype_html_head%%
 <!-- Note. The DOCTYPE and HEAD Replacement Code can be removed if you would rather build your own. -->
 <!-- Note. It is OK to use PHP code inside this template file (when/if needed). -->

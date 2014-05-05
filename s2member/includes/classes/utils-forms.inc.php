@@ -33,8 +33,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_forms"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param string $form A form tag with hidden input fields.
-				* @return string A URL with query string equivalents.
+				* @param str $form A form tag with hidden input fields.
+				* @return str A URL with query string equivalents.
 				*/
 				public static function form_whips_2_url ($form = FALSE)
 					{
@@ -67,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_forms"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-			@param string tr $form A form tag with hidden input fields.
+				* @param str $form A form tag with hidden input fields.
 				* @return array An associative array of all hidden input fields.
 				*/
 				public static function form_whips_2_array ($form = FALSE)
@@ -95,3 +95,4 @@ if (!class_exists ("c_ws_plugin__s2member_utils_forms"))
 					}
 			}
 	}
+?>

@@ -58,8 +58,8 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*
 				* @attaches-to ``add_filter("wp_mail_from");``
 				*
-				* @param string $email Expects the email address to be passed in by the Filter.
-				* @return string s2Member-configured email address.
+				* @param str $email Expects the email address to be passed in by the Filter.
+				* @return str s2Member-configured email address.
 				*/
 				public static function _email_config_email ($email = FALSE)
 					{
@@ -75,8 +75,8 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*
 				* @attaches-to ``add_filter("wp_mail_from_name");``
 				*
-				* @param string $name Expects the name to be passed in by the Filter.
-				* @return string s2Member-configured name.
+				* @param str $name Expects the name to be passed in by the Filter.
+				* @return str s2Member-configured name.
 				*/
 				public static function _email_config_name ($name = FALSE)
 					{
@@ -138,8 +138,8 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*
 				* @attaches-to ``add_filter("wpmu_signup_user_notification_email");``
 				*
-				* @param string $message Expects the message string to be passed in by the Filter.
-				* @return string Message after having been Filtered by s2Member.
+				* @param str $message Expects the message string to be passed in by the Filter.
+				* @return str Message after having been Filtered by s2Member.
 				*/
 				public static function ms_nice_email_roles ($message = FALSE)
 					{
@@ -179,12 +179,12 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @package s2Member\Email_Configs
 				* @since 110707
 				*
-				* @param string|int $user_id A numeric WordPress User ID.
-				* @param string $user_pass Optional. A plain text version of the User's password.
+				* @param str|int $user_id A numeric WordPress User ID.
+				* @param str $user_pass Optional. A plain text version of the User's password.
 				* 	If omitted, a new password will be generated automatically.
 				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.
 				*  This defaults to a value of `array('user')`. We notify the User/Member only (and NOT the administrator).
-				* @param string $user_email Optional. This defaults to the user's currently configured email address.
+				* @param str $user_email Optional. This defaults to the user's currently configured email address.
 				* @return bool True if all required parameters are supplied, else false.
 				*/
 				public static function reset_pass_resend_new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user"), $user_email = FALSE)
@@ -209,11 +209,11 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @package s2Member\Email_Configs
 				* @since 110707
 				*
-				* @param string|int $user_id A numeric WordPress User ID.
-				* @param string $user_pass Optional. A plain text version of the User's password.
+				* @param str|int $user_id A numeric WordPress User ID.
+				* @param str $user_pass Optional. A plain text version of the User's password.
 				* 	If omitted, only the administrative notification will be sent.
 				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.
-				* @param string $user_email Optional. This defaults to the user's currently configured email address.
+				* @param str $user_email Optional. This defaults to the user's currently configured email address.
 				* @return bool True if all required parameters are supplied, else false.
 				*/
 				public static function new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user", "admin"), $user_email = FALSE)
@@ -398,3 +398,4 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 					}
 			}
 	}
+?>

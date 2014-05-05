@@ -36,8 +36,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_gets_in"))
 				* @attaches-to ``add_shortcode("s2Get");``
 				*
 				* @param array $attr An array of Attributes.
-				* @param string $content Content inside the Shortcode.
-			@param string tr $shortcode The actual Shortcode name itself.
+				* @param str $content Content inside the Shortcode.
+				* @param str $shortcode The actual Shortcode name itself.
 				* @return mixed Value of the requested data, or null on failure.
 				*
 				* @todo Prevent this routine from potentially returning objects/arrays?
@@ -71,3 +71,4 @@ if (!class_exists ("c_ws_plugin__s2member_sc_gets_in"))
 					}
 			}
 	}
+?>

@@ -46,8 +46,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds"))
 				* @attaches-to ``add_shortcode("s2If")`` + _s2If, __s2If, ___s2If for nesting.
 				*
 				* @param array $attr An array of Attributes.
-				* @param string $content Content inside the Shortcode.
-			@param string tr $shortcode The actual Shortcode name itself.
+				* @param str $content Content inside the Shortcode.
+				* @param str $shortcode The actual Shortcode name itself.
 				* @return inner Return-value of inner routine.
 				*/
 				public static function sc_if_conditionals ($attr = FALSE, $content = FALSE, $shortcode = FALSE)
@@ -56,3 +56,4 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds"))
 					}
 			}
 	}
+?>

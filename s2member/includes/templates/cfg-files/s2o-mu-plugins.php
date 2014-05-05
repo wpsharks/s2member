@@ -1,6 +1,8 @@
 <?php
 if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 	exit("Do not access this file directly.");
+?>
+
 // s2Member-only mode. Only load (o)nly/(a)ll files.
 
 if (file_exists (WPMU_PLUGIN_DIR . "/s2member-o-hacks.php"))

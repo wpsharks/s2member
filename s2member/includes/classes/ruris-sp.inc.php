@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_ruris_sp"))
 				* @package s2Member\URIs
 				* @since 3.5
 				*
-				* @param string $uri A URI, or a full URL is also fine.
+				* @param str $uri A URI, or a full URL is also fine.
 				* @param bool $check_user Test permissions against the current User? Defaults to true.
 				* @return null|array Non-empty array (with details) if access is denied, else null if access is allowed.
 				*/
@@ -74,3 +74,4 @@ if (!class_exists ("c_ws_plugin__s2member_ruris_sp"))
 					}
 			}
 	}
+?>

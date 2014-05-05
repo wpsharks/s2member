@@ -165,10 +165,10 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 				*
 				* @attaches-to ``add_filter ("manage_users_custom_column");``
 				*
-				* @param string $val A value for this column, passed through by the Filter.
-			@param string tr $col The name of the column for which we might need to supply data for.
+				* @param str $val A value for this column, passed through by the Filter.
+				* @param str $col The name of the column for which we might need to supply data for.
 				* @param int|str $user_id Expects a WordPress User ID, passed through by the Filter.
-				* @return string A column value introduced by this routine, or existing value, or, if empty, a dash.
+				* @return str A column value introduced by this routine, or existing value, or, if empty, a dash.
 				*/
 				public static function users_list_display_cols ($val = FALSE, $col = FALSE, $user_id = FALSE)
 					{
@@ -250,3 +250,4 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 					}
 			}
 	}
+?>

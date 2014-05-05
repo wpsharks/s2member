@@ -348,3 +348,4 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 	}
 
 new c_ws_plugin__s2member_menu_page_logs();
+?>

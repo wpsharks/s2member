@@ -14,3 +14,4 @@ attach_s2member_query_filters();
 
 	wp_reset_query();
 detach_s2member_query_filters();
+?>

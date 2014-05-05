@@ -20,8 +20,8 @@
 * @package WebSharks\Xtnls\Markdown
 * @since x.xx
 *
-* @param string $text Text to be parsed by the Markdown class.
-* @return string HTML output; after having been parsed by the Markdown class.
+* @param str $text Text to be parsed by the Markdown class.
+* @return str HTML output; after having been parsed by the Markdown class.
 */
 function NC_Markdown($text) {
 
@@ -233,7 +233,7 @@ class NC_Markdown_Parser {
 		$attr = '
 			(?>				# optional tag attributes
 			  \s			# starts with whitespace
-			  (
+			  (?>
 				[^>"/]+		# text outside quotes
 			  |
 				/+(?!>)		# slash not followed by ">"
@@ -246,12 +246,12 @@ class NC_Markdown_Parser {
 			';
 		$content =
 			str_repeat('
-				(
+				(?>
 				  [^<]+			# content without tag
 				|
 				  <\2			# nested opening tag
 					'.$attr.'	# attributes
-					(
+					(?>
 					  />
 					|
 					  >', $nested_tags_level).	# end of opening tag
@@ -277,8 +277,8 @@ class NC_Markdown_Parser {
 		# the inner nested divs must be indented.
 		# We need to do this before the next, more liberal match, because the next
 		# match will start at the first `<div>` and stop at the first `</div>`.
-		$text = preg_replace_callback('{(
-			(
+		$text = preg_replace_callback('{(?>
+			(?>
 				(?<=\n\n)		# Starting after a blank line
 				|				# or
 				\A\n?			# the beginning of the doc
@@ -917,7 +917,7 @@ class NC_Markdown_Parser {
 		$text = preg_replace_callback('{
 				(?:\n\n|\A\n?)
 				(	            # $1 = the code block -- one or more lines, starting with a space/tab
-				  (
+				  (?>
 					[ ]{'.$this->tab_width.'}  # Lines must start with a tab or a tab-width of spaces
 					.*\n+
 				  )+
@@ -1116,7 +1116,7 @@ class NC_Markdown_Parser {
 	function doBlockQuotes($text) {
 		$text = preg_replace_callback('/
 			  (								# Wrap whole match in $1
-				(
+				(?>
 				  ^[ ]*>[ ]?			# ">" at the start of a line
 					.+\n					# rest of the first line
 				  (.+\n)*					# subsequent consecutive lines
@@ -1343,7 +1343,7 @@ class NC_Markdown_Parser {
 					<\?.*?\?> | <%.*?%>		# processing instruction
 				|
 					<[/!$]?[-a-zA-Z0-9:]+	# regular tags
-					(
+					(?>
 						\s
 						(?>[^"\'>]+|"[^"]*"|\'[^\']*\')*
 					)?
@@ -1471,3 +1471,4 @@ class NC_Markdown_Parser {
 	}
 
 }
+?>
