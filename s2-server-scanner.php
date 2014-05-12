@@ -63,7 +63,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	/**
 	 * @var string Current version.
 	 */
-	public $version = '140505';
+	public $version = '140511';
 
 	/**
 	 * @var array A static cache (for all instances).
