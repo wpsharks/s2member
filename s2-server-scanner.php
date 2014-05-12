@@ -219,11 +219,13 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					$is_check_my_server = (basename(__FILE__) !== 'deps-x.php' && __CLASS__ === 'websharks_core_v3_deps_x__check_my_server') ? TRUE : FALSE;
 					$check_last_ok      = ($is_check_my_server) ? FALSE : $check_last_ok;
 
-					$php_version = PHP_VERSION; // Installed PHP version.
+					$apache_version = $this->apache_version();
+					$php_version    = PHP_VERSION; // Installed PHP version.
 					global $wp_version; // Global made available by WordPress.
 
-					$php_version_required = '5.2'; // Required PHP version.
-					$wp_version_required  = '3.3'; // Required WordPress version.
+					$apache_version_required = '2.1'; // Required Apache version.
+					$php_version_required    = '5.2'; // Required PHP version.
+					$wp_version_required     = '3.3'; // Required WordPress version.
 
 					// Look for possible filtration against this routine.
 
@@ -276,6 +278,32 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							unset($_file); // A little housekeeping.
 						}
 
+					/*********************************************************************************************/
+
+					if($apache_version && version_compare($apache_version, $apache_version_required, '<'))
+						{
+							$errors[] = array(
+								'title'   => $this->i18n('Apache Version'),
+								'message' => sprintf(
+									$this->i18n(
+										'Apache v%1$s (or higher) is required to run %2$s.'.
+										' You are currently running Apache <code>v%3$s</code>. Please upgrade.'
+									), htmlspecialchars($apache_version_required), htmlspecialchars($plugin_name), htmlspecialchars($apache_version)
+								)
+							);
+						}
+					else if($apache_version) // Pass on this check.
+						{
+							$passes[] = array(
+								'title'   => $this->i18n('Apache Version'),
+								'message' => sprintf(
+									$this->i18n(
+										'You are currently running Apache <code>%1$s</code> (which is fine).'.
+										' Minimum required version is: <code>%2$s</code>.'
+									), htmlspecialchars($apache_version), htmlspecialchars($apache_version_required)
+								)
+							);
+						}
 					/*********************************************************************************************/
 
 					if(version_compare($php_version, $php_version_required, '<'))
@@ -2719,6 +2747,43 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					echo '</div>';
 					echo '</div>';
 				}
+		}
+
+	/**
+	 * Acquires the currently installed version of Apache.
+	 *
+	 * @return string Current version of Apache (if possible; and if Apache is installed).
+	 */
+	public function apache_version()
+		{
+			if(isset(self::$info_cache[__FUNCTION__]))
+				return self::$info_cache[__FUNCTION__];
+
+			$regex = '/Apache\/(?P<version>[1-9][^\s]*)/i';
+
+			if(!empty($_SERVER['SERVER_SOFTWARE']) && is_string($_SERVER['SERVER_SOFTWARE']))
+				if(preg_match($regex, $_SERVER['SERVER_SOFTWARE'], $apache))
+					return (self::$info_cache[__FUNCTION__] = $apache['version']);
+
+			if(!$this->is_function_possible('shell_exec') || ini_get('open_basedir'))
+				return (self::$info_cache[__FUNCTION__] = ''); // Not possible.
+
+			if(!($httpd_v = shell_exec('/usr/bin/env httpd -v')))
+				{
+					$_possible_httpd_locations = array(
+						'/usr/sbin/httpd', '/usr/bin/httpd',
+						'/usr/local/sbin/httpd', '/usr/local/bin/httpd',
+						'/usr/local/apache/sbin/httpd', '/usr/local/apache/bin/httpd'
+					);
+					foreach($_possible_httpd_locations as $_httpd_location) if(is_file($_httpd_location))
+						if(($httpd_v = shell_exec(escapeshellarg($_httpd_location).' -v')))
+							break; // All done here.
+					unset($_possible_httpd_locations, $_httpd_location);
+				}
+			if($httpd_v && preg_match($regex, $httpd_v, $apache))
+				return (self::$info_cache[__FUNCTION__] = $apache['version']);
+
+			return (self::$info_cache[__FUNCTION__] = ''); // Unable to determine.
 		}
 
 	/**
