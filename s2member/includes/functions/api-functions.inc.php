@@ -2245,13 +2245,36 @@ if(!function_exists("s2member_paid_registration_time"))
 				return c_ws_plugin__s2member_registration_times::paid_registration_time($level, $user_id);
 			}
 	}
-if(!function_exists("s2member_capability_times"))
+/**
+* Gets access capability times.
+*
+* @package s2Member\API_Functions
+* @since 140514
+*
+* @param integer $user_id WP User ID.
+* @param array   $access_caps Optional. If not passed, this returns all times for all caps.
+*    If passed, please pass an array of specific access capabilities to get the times for.
+*    If removal times are desired, you should add a `-` prefix.
+*    e.g. `array('ccap_music','level2','-ccap_video')`
+*
+* @return array An array of all access capability times.
+*    Keys are UTC timestamps (w/ microtime precision), values are the capabilities (including `-` prefixed removals).
+*    e.g. `array('1234567890.0001' => 'ccap_music', '1234567890.0002' => 'level2', '1234567890.0003' => '-ccap_video')`
+*/
+if(!function_exists("s2member_access_cap_times") && !function_exists("s2member_capability_times"))
 	{
-		function s2member_capability_times($user_id = false, $levels_and_or_caps = false)
+		function s2member_access_cap_times($user_id = NULL, $access_caps = array())
 			{
 				if(!$user_id) $user_id = get_current_user_id();
 
-				return c_ws_plugin__s2member_registration_times::get_capability_times($user_id, $levels_and_or_caps);
+				return c_ws_plugin__s2member_access_cap_times::get_access_cap_times($user_id, $access_caps);
+			}
+		/* Deprecated in favor of `s2member_access_cap_times()`. */
+		function s2member_capability_times($user_id = NULL, $access_caps = array())
+			{
+				if(!$user_id) $user_id = get_current_user_id();
+
+				return c_ws_plugin__s2member_access_cap_times::get_access_cap_times($user_id, $access_caps);
 			}
 	}
 /**
