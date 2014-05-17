@@ -46,7 +46,7 @@ if (!class_exists ("c_ws_plugin__s2member_return_templates"))
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 
 						$template = ($template) ? $template : "default";
-						$continue_link = ($continue_link) ? $continue_link : home_url ("/");
+						$continue_link = ($continue_link) ? $continue_link : home_url ("/", "http");
 						$continue_html = ($continue_html) ? $continue_html : _x ("Continue", "s2member-front", "s2member");
 						$response = ($response) ? $response : _x ("Thank you. Please click the link below.", "s2member-front", "s2member");
 
