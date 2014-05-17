@@ -558,6 +558,9 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 						return /* Return for uniformity. */;
 					}
+			public static function validate_custom_registration_fields($data)
+					{
+						// @TODO Merge work from Floobits after work is completed.
+					}
 			}
 	}
-?>
