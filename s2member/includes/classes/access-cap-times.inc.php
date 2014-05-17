@@ -27,6 +27,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 	 */
 	class c_ws_plugin__s2member_access_cap_times
 	{
+
 		/**
 		 * @var array Previous array of user CAPS.
 		 *    For internal use only.
@@ -141,20 +142,36 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		 */
 		public static function get_access_cap_times($user_id, $access_caps = array())
 		{
+			$ac_times = array();
 			if(($user_id = (integer)$user_id))
 			{
 				$ac_times = get_user_option('s2member_access_cap_times', $user_id);
-
 				if(!is_array($ac_times))
 					$ac_times = array();
 
-				else if($access_caps)
+				/* ------- Begin back compat. */
+				$ac_times_min = !empty($ac_times) ? min(array_keys($ac_times)) : 0;
+				if(($r_time = c_ws_plugin__s2member_registration_times::registration_time()) && (empty($ac_times_min) || $r_time < $ac_times_min))
+					$ac_times[$r_time] = 'level0';
+
+				$pr_times = get_user_option("s2member_paid_registration_times", $user_id);
+				if(is_array($pr_times))
+				{
+					$role_objects = $GLOBALS['wp_roles']->role_objects;
+					foreach($pr_times as $_level => $_time)
+						if(isset($role_objects['s2member_'.$_level]) && (empty($ac_times_min) || $_time < $ac_times_min))
+							foreach(array_keys($role_objects['s2member_'.$_level]->capabilities) as $_cap)
+								if(strpos($_cap, 'access_s2member_') === 0)
+									$ac_times[(string)($_time += .0001)] = substr($_cap, 16);
+					unset($_level, $_time, $_cap);
+				}
+				/* ------- End back compat. */
+
+				if($access_caps)
 					$ac_times = array_intersect($ac_times, (array)$access_caps);
 
 				ksort($ac_times, SORT_NUMERIC);
 			}
-			else $ac_times = array();
-
 			return apply_filters('ws_plugin__s2member_get_access_cap_times', $ac_times, get_defined_vars());
 		}
 	}
