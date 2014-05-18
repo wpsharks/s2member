@@ -154,6 +154,8 @@ add_action("network_admin_notices", "c_ws_plugin__s2member_admin_notices::admin_
 add_action("pre_user_query", "c_ws_plugin__s2member_users_list::users_list_query");
 add_filter("manage_users_columns", "c_ws_plugin__s2member_users_list::users_list_cols");
 add_filter("manage_users_custom_column", "c_ws_plugin__s2member_users_list::users_list_display_cols", 10, 3);
+add_filter ("manage_users_sortable_columns", "c_ws_plugin__s2member_users_list::users_list_add_sortable");
+add_filter ("pre_user_query", "c_ws_plugin__s2member_users_list::users_list_make_sortable");
 add_action("edit_user_profile", "c_ws_plugin__s2member_users_list::users_list_edit_cols");
 add_action("show_user_profile", "c_ws_plugin__s2member_users_list::users_list_edit_cols");
 add_action("edit_user_profile_update", "c_ws_plugin__s2member_users_list::users_list_update_cols");

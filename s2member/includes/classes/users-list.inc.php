@@ -248,6 +248,54 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 
 						return apply_filters ("ws_plugin__s2member_users_list_display_cols", ((strlen ($val)) ? $val : "—"), get_defined_vars ());
 					}
+
+			/**
+			 * Displays column data in the row of details.
+			 *
+			 * @package s2Member\Users_List
+			 * @since 140518
+			 *
+			 * @attaches-to ``add_filter ("manage_users_sortable_columns");``
+			 *
+			 * @param array $columns An Array of sortable User List Columns
+			 */
+			public static function users_list_add_sortable($columns)
+				{
+					$columns['s2member_registration_time'] = 's2member_registration_time';
+					$columns['s2member_subscr_id'] = 's2member_subscr_id';
+					$columns['s2member_auto_eot_time'] = 's2member_auto_eot_time';
+					$columns['s2member_login_counter'] = 's2member_login_counter';
+					$columns['s2member_last_login_time'] = 's2member_last_login_time';
+					return $columns;
+				}
+
+			/**
+			 * Displays column data in the row of details.
+			 *
+			 * @package s2Member\Users_List
+			 * @since 140518
+			 *
+			 * @attaches-to ``add_filter ("pre_user_query");``
+			 *
+			 * @param array $query `WP_Query` Object passed from WordPress
+			 */
+			public static function users_list_make_sortable($query)
+				{
+					global $wpdb;
+					$vars = $query->query_vars;
+
+					switch($vars['orderby'])
+						{
+							case 's2member_registration_time':
+							case 's2member_subscr_id':
+							case 's2member_auto_eot_time':
+							case 's2member_login_counter':
+							case 's2member_last_login_time':
+								$query->query_from .= " LEFT JOIN " . $wpdb->prefix . "usermeta m ON (" . $wpdb->prefix."users.ID = m.user_id  AND m.meta_key = '" . $wpdb->prefix . $vars['orderby'] . '\')';
+								$query->query_orderby = "ORDER BY m.meta_value ".$vars['order'];
+							break;
+						}
+				}
 			}
 	}
 ?>
