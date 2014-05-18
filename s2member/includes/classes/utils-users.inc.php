@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				*/
 				public static function users_in_database ()
 					{
-						global /* Global database object reference. */ $wpdb;
+						global $wpdb; /** @var $wpdb \wpdb */
 
 						$q1 = mysql_query ("SELECT SQL_CALC_FOUND_ROWS `" . $wpdb->users . "`.`ID` FROM `" . $wpdb->users . "`, `" . $wpdb->usermeta . "` WHERE `" . $wpdb->users . "`.`ID` = `" . $wpdb->usermeta . "`.`user_id` AND `" . $wpdb->usermeta . "`.`meta_key` = '" . esc_sql ($wpdb->prefix . "capabilities") . "' LIMIT 1", $wpdb->dbh);
 						$q2 = mysql_query ("SELECT FOUND_ROWS()", $wpdb->dbh);
@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				*/
 				public static function get_user_custom_with ($subscr_or_txn_id = FALSE, $os0 = FALSE)
 					{
-						global /* Need global DB obj. */ $wpdb;
+						global $wpdb; /** @var $wpdb \wpdb */
 
 						if /* This case includes some additional routines that can use the ``$os0`` value. */ ($subscr_or_txn_id && $os0)
 							{
@@ -94,7 +94,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				*/
 				public static function get_user_id_with ($subscr_or_txn_id = FALSE, $os0 = FALSE)
 					{
-						global /* Need global DB obj. */ $wpdb;
+						global $wpdb; /** @var $wpdb \wpdb */
 
 						if  /* This case includes some additional routines that can use the ``$os0`` value. */($subscr_or_txn_id && $os0)
 							{
@@ -123,7 +123,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				*/
 				public static function get_user_email_with ($subscr_or_txn_id = FALSE, $os0 = FALSE)
 					{
-						global /* Need global DB obj. */ $wpdb;
+						global $wpdb; /** @var $wpdb \wpdb */
 
 						if  /* This case includes some additional routines that can use the ``$os0`` value. */($subscr_or_txn_id && $os0)
 							{
@@ -228,7 +228,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				*/
 				public static function user_login_email_exists ($user_login = FALSE, $user_email = FALSE)
 					{
-						global /* Global database object reference. */ $wpdb;
+						global $wpdb; /** @var $wpdb \wpdb */
 
 						if /* Only if we have both of these. */ ($user_login && $user_email)
 							if (($user_id = $wpdb->get_var ("SELECT `ID` FROM `" . $wpdb->users . "` WHERE `user_login` LIKE '" . esc_sql (like_escape ($user_login)) . "' AND `user_email` LIKE '" . esc_sql (like_escape ($user_email)) . "' LIMIT 1")))
@@ -295,7 +295,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				*/
 				public static function get_user_field ($field_id = FALSE, $user_id = FALSE) // Very powerful function here.
 					{
-						global /* Global database object reference. */ $wpdb;
+						global $wpdb; /** @var $wpdb \wpdb */
 
 						$current_user = /* Current User's object (used when/if `$user_id` is empty). */ wp_get_current_user ();
 
