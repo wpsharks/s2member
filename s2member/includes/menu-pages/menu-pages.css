@@ -200,6 +200,14 @@ div.ws-menu-page .ws-menu-page-hilite
 	border-radius : 3px;
 	padding       : 0.2em;
 }
+div.ws-menu-page .ws-menu-page-bright-hilite
+{
+	font-size     : 102%;
+	background    : #EBF084;
+
+	border-radius : 3px;
+	padding       : 0.2em;
+}
 div.ws-menu-page .ws-menu-page-error-hilite
 {
 	color         : #FFFFFF;
