@@ -93,12 +93,13 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods_in"))
 																	else // Else ``unset()``.
 																		unset($fields[$field_var]);
 																}
-															else if ($field["required"] === "yes"
-															         && (!isset ($_p["ws_plugin__s2member_profile_" . $field_var])
-															             || (!is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && !is_string ($_p["ws_plugin__s2member_profile_" . $field_var]))
-															             || (is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && empty ($_p["ws_plugin__s2member_profile_" . $field_var]))
-															             || (is_string ($_p["ws_plugin__s2member_profile_" . $field_var]) && !strlen ($_p["ws_plugin__s2member_profile_" . $field_var]))
-																			))
+															else if ( // If the field is required but missing; or it was provided but invalid...
+																			($field["required"] === "yes" && (!isset ($_p["ws_plugin__s2member_profile_" . $field_var])
+																				|| (!is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && !is_string ($_p["ws_plugin__s2member_profile_" . $field_var]))
+																				|| (is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && empty ($_p["ws_plugin__s2member_profile_" . $field_var]))
+																				|| (is_string ($_p["ws_plugin__s2member_profile_" . $field_var]) && !strlen ($_p["ws_plugin__s2member_profile_" . $field_var]))))
+																			|| (isset ($_p["ws_plugin__s2member_profile_" . $field_var]) && c_ws_plugin__s2member_custom_reg_fields::validation_errors(array($field_var => $_p["ws_plugin__s2member_profile_" . $field_var]), array($field)))
+																	  )
 																{
 																	if (isset ($_existing_fields[$field_var]) && ((is_array ($_existing_fields[$field_var]) && !empty ($_existing_fields[$field_var])) || (is_string ($_existing_fields[$field_var]) && strlen ($_existing_fields[$field_var]))))
 																		$fields[$field_var] = $_existing_fields[$field_var];
@@ -109,7 +110,7 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods_in"))
 																{
 																	if (((is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && !empty ($_p["ws_plugin__s2member_profile_" . $field_var]))
 																	    || (is_string ($_p["ws_plugin__s2member_profile_" . $field_var]) && strlen ($_p["ws_plugin__s2member_profile_" . $field_var])))
-																	&& !c_ws_plugin__s2member_custom_reg_fields::validate_custom_registration_fields(array($field_var => $_p["ws_plugin__s2member_profile_" . $field_var]), array($field)))
+																	&& !c_ws_plugin__s2member_custom_reg_fields::validation_errors(array($field_var => $_p["ws_plugin__s2member_profile_" . $field_var]), array($field)))
 																		$fields[$field_var] = $_p["ws_plugin__s2member_profile_" . $field_var];
 																	else // Else ``unset()``.
 																		unset($fields[$field_var]);

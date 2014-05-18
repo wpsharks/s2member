@@ -572,7 +572,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 			 *    If there are errors, the array keys are the custom registration field variable names.
 			 *    Each array value is an error message with basic HTML markup.
 			 */
-			public static function validate_custom_registration_fields($input, $fields_to_validate)
+			public static function validation_errors($input, $fields_to_validate)
 				{
 					$input               = (array)$input;
 					$fields_to_validate  = (array)$fields_to_validate;
