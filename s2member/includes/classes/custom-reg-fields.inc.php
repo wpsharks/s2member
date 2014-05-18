@@ -574,6 +574,9 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 			 */
 			public static function validate_custom_registration_fields($input, $fields_to_validate)
 				{
+					$input               = (array)$input;
+					$fields_to_validate  = (array)$fields_to_validate;
+
 					$errors                   = array(); // Initialize the array of errors.
 					$force_personal_emails    = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_force_personal_emails'][0]) ? TRUE : FALSE;
 					$non_personal_email_users = '/^(?:'.implode('|', preg_split('/[\s;,]+/', preg_quote($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_force_personal_emails'], '/'))).'@/i';
