@@ -579,8 +579,8 @@ jQuery(document).ready(function($)
 												form += '<optgroup label="Any Character Combination">';
 												for(i = 1; i <= 25; i++)
 													{
-														form += '<option value="any-'+i+'"'+((field.expected === 'any-'+i) ? ' selected="selected"' : '')+'">Any Character Combination ( '+i+' character minimum )</option>';
-														form += '<option value="any-'+i+'-e"'+((field.expected === 'any-'+i+'-e') ? ' selected="selected"' : '')+'">Any Character Combination ( exactly '+i+' character'+((i > 1) ? 's' : '')+' )</option>';
+														form += '<option value="any-'+i+'"'+((field.expected === 'any-'+i) ? ' selected="selected"' : '')+'">Any Character Combination ('+i+' character minimum)</option>';
+														form += '<option value="any-'+i+'-e"'+((field.expected === 'any-'+i+'-e') ? ' selected="selected"' : '')+'">Any Character Combination (exactly '+i+' character'+((i > 1) ? 's' : '')+')</option>';
 													}
 												form += '</optgroup>';
 
@@ -589,8 +589,8 @@ jQuery(document).ready(function($)
 												form += '<optgroup label="Alphanumerics, Spaces &amp; Punctuation Only">';
 												for(i = 1; i <= 25; i++)
 													{
-														form += '<option value="alphanumerics-spaces-punctuation-'+i+'"'+((field.expected === 'alphanumerics-spaces-punctuation-'+i) ? ' selected="selected"' : '')+'">Alphanumerics, Spaces &amp; Punctuation ( '+i+' character minimum )</option>';
-														form += '<option value="alphanumerics-spaces-punctuation-'+i+'-e"'+((field.expected === 'alphanumerics-spaces-punctuation-'+i+'-e') ? ' selected="selected"' : '')+'">Alphanumerics, Spaces &amp; Punctuation ( exactly '+i+' character'+((i > 1) ? 's' : '')+' )</option>';
+														form += '<option value="alphanumerics-spaces-punctuation-'+i+'"'+((field.expected === 'alphanumerics-spaces-punctuation-'+i) ? ' selected="selected"' : '')+'">Alphanumerics, Spaces &amp; Punctuation ('+i+' character minimum)</option>';
+														form += '<option value="alphanumerics-spaces-punctuation-'+i+'-e"'+((field.expected === 'alphanumerics-spaces-punctuation-'+i+'-e') ? ' selected="selected"' : '')+'">Alphanumerics, Spaces &amp; Punctuation (exactly '+i+' character'+((i > 1) ? 's' : '')+')</option>';
 													}
 												form += '</optgroup>';
 
@@ -599,8 +599,8 @@ jQuery(document).ready(function($)
 												form += '<optgroup label="Alphanumerics &amp; Spaces Only">';
 												for(i = 1; i <= 25; i++)
 													{
-														form += '<option value="alphanumerics-spaces-'+i+'"'+((field.expected === 'alphanumerics-spaces-'+i) ? ' selected="selected"' : '')+'">Alphanumerics &amp; Spaces ( '+i+' character minimum )</option>';
-														form += '<option value="alphanumerics-spaces-'+i+'-e"'+((field.expected === 'alphanumerics-spaces-'+i+'-e') ? ' selected="selected"' : '')+'">Alphanumerics &amp; Spaces ( exactly '+i+' character'+((i > 1) ? 's' : '')+' )</option>';
+														form += '<option value="alphanumerics-spaces-'+i+'"'+((field.expected === 'alphanumerics-spaces-'+i) ? ' selected="selected"' : '')+'">Alphanumerics &amp; Spaces ('+i+' character minimum)</option>';
+														form += '<option value="alphanumerics-spaces-'+i+'-e"'+((field.expected === 'alphanumerics-spaces-'+i+'-e') ? ' selected="selected"' : '')+'">Alphanumerics &amp; Spaces (exactly '+i+' character'+((i > 1) ? 's' : '')+')</option>';
 													}
 												form += '</optgroup>';
 
@@ -609,8 +609,8 @@ jQuery(document).ready(function($)
 												form += '<optgroup label="Alphanumerics &amp; Punctuation Only">';
 												for(i = 1; i <= 25; i++)
 													{
-														form += '<option value="alphanumerics-punctuation-'+i+'"'+((field.expected === 'alphanumerics-punctuation-'+i) ? ' selected="selected"' : '')+'">Alphanumerics &amp; Punctuation ( '+i+' character minimum )</option>';
-														form += '<option value="alphanumerics-punctuation-'+i+'-e"'+((field.expected === 'alphanumerics-punctuation-'+i+'-e') ? ' selected="selected"' : '')+'">Alphanumerics &amp; Punctuation ( exactly '+i+' character'+((i > 1) ? 's' : '')+' )</option>';
+														form += '<option value="alphanumerics-punctuation-'+i+'"'+((field.expected === 'alphanumerics-punctuation-'+i) ? ' selected="selected"' : '')+'">Alphanumerics &amp; Punctuation ('+i+' character minimum)</option>';
+														form += '<option value="alphanumerics-punctuation-'+i+'-e"'+((field.expected === 'alphanumerics-punctuation-'+i+'-e') ? ' selected="selected"' : '')+'">Alphanumerics &amp; Punctuation (exactly '+i+' character'+((i > 1) ? 's' : '')+')</option>';
 													}
 												form += '</optgroup>';
 
@@ -619,8 +619,8 @@ jQuery(document).ready(function($)
 												form += '<optgroup label="Alphanumerics Only">';
 												for(i = 1; i <= 25; i++)
 													{
-														form += '<option value="alphanumerics-'+i+'"'+((field.expected === 'alphanumerics-'+i) ? ' selected="selected"' : '')+'">Alphanumerics ( '+i+' character minimum )</option>';
-														form += '<option value="alphanumerics-'+i+'-e"'+((field.expected === 'alphanumerics-'+i+'-e') ? ' selected="selected"' : '')+'">Alphanumerics ( exactly '+i+' character'+((i > 1) ? 's' : '')+' )</option>';
+														form += '<option value="alphanumerics-'+i+'"'+((field.expected === 'alphanumerics-'+i) ? ' selected="selected"' : '')+'">Alphanumerics ('+i+' character minimum)</option>';
+														form += '<option value="alphanumerics-'+i+'-e"'+((field.expected === 'alphanumerics-'+i+'-e') ? ' selected="selected"' : '')+'">Alphanumerics (exactly '+i+' character'+((i > 1) ? 's' : '')+')</option>';
 													}
 												form += '</optgroup>';
 
@@ -629,8 +629,8 @@ jQuery(document).ready(function($)
 												form += '<optgroup label="Alphabetics Only">';
 												for(i = 1; i <= 25; i++)
 													{
-														form += '<option value="alphabetics-'+i+'"'+((field.expected === 'alphabetics-'+i) ? ' selected="selected"' : '')+'">Alphabetics ( '+i+' character minimum )</option>';
-														form += '<option value="alphabetics-'+i+'-e"'+((field.expected === 'alphabetics-'+i+'-e') ? ' selected="selected"' : '')+'">Alphabetics ( exactly '+i+' character'+((i > 1) ? 's' : '')+' )</option>';
+														form += '<option value="alphabetics-'+i+'"'+((field.expected === 'alphabetics-'+i) ? ' selected="selected"' : '')+'">Alphabetics ('+i+' character minimum)</option>';
+														form += '<option value="alphabetics-'+i+'-e"'+((field.expected === 'alphabetics-'+i+'-e') ? ' selected="selected"' : '')+'">Alphabetics (exactly '+i+' character'+((i > 1) ? 's' : '')+')</option>';
 													}
 												form += '</optgroup>';
 
@@ -639,8 +639,8 @@ jQuery(document).ready(function($)
 												form += '<optgroup label="Numeric Digits Only">';
 												for(i = 1; i <= 25; i++)
 													{
-														form += '<option value="numerics-'+i+'"'+((field.expected === 'numerics-'+i) ? ' selected="selected"' : '')+'">Numeric Digits ( '+i+' digit minimum )</option>';
-														form += '<option value="numerics-'+i+'-e"'+((field.expected === 'numerics-'+i+'-e') ? ' selected="selected"' : '')+'">Numeric Digits ( exactly '+i+' digit'+((i > 1) ? 's' : '')+' )</option>';
+														form += '<option value="numerics-'+i+'"'+((field.expected === 'numerics-'+i) ? ' selected="selected"' : '')+'">Numeric Digits ('+i+' digit minimum)</option>';
+														form += '<option value="numerics-'+i+'-e"'+((field.expected === 'numerics-'+i+'-e') ? ' selected="selected"' : '')+'">Numeric Digits (exactly '+i+' digit'+((i > 1) ? 's' : '')+')</option>';
 													}
 												form += '</optgroup>';
 
