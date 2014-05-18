@@ -277,13 +277,13 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 			 *
 			 * @attaches-to ``add_filter ("pre_user_query");``
 			 *
-			 * @param array $query `WP_Query` Object passed from WordPress
+			 * @param WP_User_Query $query `WP_Query` Object passed from WordPress
 			 */
 			public static function users_list_make_sortable($query)
 				{
 					if (!is_admin() || empty($GLOBALS['pagenow']) || $GLOBALS['pagenow'] !== 'users.php' || !isset ($query->query_vars)) return;
 
-					global $wpdb;
+					global $wpdb; /** @var $wpdb wpdb */
 					$vars = $query->query_vars;
 
 					switch($vars['orderby'])
