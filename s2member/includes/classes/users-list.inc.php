@@ -281,6 +281,8 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 			 */
 			public static function users_list_make_sortable($query)
 				{
+					if (!is_admin() || empty($GLOBALS['pagenow']) || $GLOBALS['pagenow'] !== 'users.php') return;
+
 					global $wpdb;
 					$vars = $query->query_vars;
 
