@@ -592,7 +592,30 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 						$_field_expects  = !empty($_field['expected']) ? $_field['expected'] : '';
 						$_field_label    = !empty($_field['label']) ? $_field['label'] : ucwords(str_replace('_', ' ', $_field_var));
 
-						if($_field_required) switch($_field_type)
+						switch($_field_type)
+						{
+							case 'text':
+							case 'textarea':
+							case 'checkbox':
+							case 'pre_checkbox':
+							case 'radios':
+							case 'select':
+								if(isset($input[$_field_var]) && !is_string($input[$_field_var]))
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Invalid data type. Expecting a string.', 's2member-front', 's2member').'</em>';
+								break;
+
+							case 'checkboxes':
+							case 'selects':
+								if(isset($input[$_field_var]) && !is_array($input[$_field_var]))
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Invalid data type. Expecting an array.', 's2member-front', 's2member').'</em>';
+								break;
+
+							default: // Default case handler for best security.
+								if(isset($input[$_field_var]) && !is_string($input[$_field_var]))
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Invalid data type. Expecting a string.', 's2member-front', 's2member').'</em>';
+								break;
+						}
+						if(empty($errors[$_field_var]) && $_field_required) switch($_field_type)
 						{
 							case 'text':
 							case 'textarea':
@@ -635,7 +658,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 						{
 							case 'text':
 							case 'textarea':
-								if(isset($input[$_field_var]) && is_string($input[$_field_var])) switch($_field_expects)
+								if(isset($input[$_field_var]) && is_string($input[$_field_var]) && isset($input[$_field_var][0])) switch($_field_expects)
 								{
 									case 'numeric-wp-commas':
 										if(!preg_match('/^[0-9][0-9\.,]*$/', $input[$_field_var]))

@@ -78,6 +78,7 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods_in"))
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 											if ($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level ("auto-detection", "profile"))
 												{
+													$fields = array(); // Initialize the array of fields.
 													$_existing_fields = get_user_option ("s2member_custom_fields", $user_id);
 
 													foreach (json_decode ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
@@ -92,7 +93,13 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods_in"))
 																	else // Else ``unset()``.
 																		unset($fields[$field_var]);
 																}
-															else if ($field["required"] === "yes" && (!isset ($_p["ws_plugin__s2member_profile_" . $field_var]) || (!is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && !is_string ($_p["ws_plugin__s2member_profile_" . $field_var])) || (is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && empty ($_p["ws_plugin__s2member_profile_" . $field_var])) || (is_string ($_p["ws_plugin__s2member_profile_" . $field_var]) && !strlen ($_p["ws_plugin__s2member_profile_" . $field_var]))))
+															else if ($field["required"] === "yes"
+															         && (!isset ($_p["ws_plugin__s2member_profile_" . $field_var])
+															             || (!is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && !is_string ($_p["ws_plugin__s2member_profile_" . $field_var]))
+															             || (is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && empty ($_p["ws_plugin__s2member_profile_" . $field_var]))
+															             || (is_string ($_p["ws_plugin__s2member_profile_" . $field_var]) && !strlen ($_p["ws_plugin__s2member_profile_" . $field_var]))
+																			 || 0 === 1 // @TODO Add validation routine here.
+																			))
 																{
 																	if (isset ($_existing_fields[$field_var]) && ((is_array ($_existing_fields[$field_var]) && !empty ($_existing_fields[$field_var])) || (is_string ($_existing_fields[$field_var]) && strlen ($_existing_fields[$field_var]))))
 																		$fields[$field_var] = $_existing_fields[$field_var];
