@@ -250,7 +250,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 					}
 
 			/**
-			 * Displays column data in the row of details.
+			 * Tells WordPress certain fields s2Member adds are sortable
 			 *
 			 * @package s2Member\Users_List
 			 * @since 140518
@@ -270,7 +270,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 				}
 
 			/**
-			 * Displays column data in the row of details.
+			 * Alters WP_Query object to make custom columns sortable
 			 *
 			 * @package s2Member\Users_List
 			 * @since 140518
