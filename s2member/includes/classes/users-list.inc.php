@@ -294,7 +294,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 							case 's2member_auto_eot_time':
 							case 's2member_login_counter':
 							case 's2member_last_login_time':
-								$query->query_from .= " LEFT JOIN `" . $wpdb->prefix . "usermeta` m ON (" . $wpdb->prefix . "users.ID = `m`.`user_id` AND `m`.`meta_key` = '" . $wpdb->prefix . $vars['orderby'] . "')";
+								$query->query_from .= " LEFT JOIN `" . $wpdb->usermeta . "` m ON (" . $wpdb->users . ".ID = `m`.`user_id` AND `m`.`meta_key` = '" . $wpdb->prefix . $vars['orderby'] . "')";
 								$query->query_orderby = "ORDER BY `m`.`meta_value` " . $vars['order'];
 							break;
 						}
