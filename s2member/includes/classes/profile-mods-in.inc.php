@@ -98,7 +98,6 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods_in"))
 															             || (!is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && !is_string ($_p["ws_plugin__s2member_profile_" . $field_var]))
 															             || (is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && empty ($_p["ws_plugin__s2member_profile_" . $field_var]))
 															             || (is_string ($_p["ws_plugin__s2member_profile_" . $field_var]) && !strlen ($_p["ws_plugin__s2member_profile_" . $field_var]))
-																			 || 0 === 1 // @TODO Add validation routine here.
 																			))
 																{
 																	if (isset ($_existing_fields[$field_var]) && ((is_array ($_existing_fields[$field_var]) && !empty ($_existing_fields[$field_var])) || (is_string ($_existing_fields[$field_var]) && strlen ($_existing_fields[$field_var]))))
@@ -108,7 +107,9 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods_in"))
 																}
 															else if (isset ($_p["ws_plugin__s2member_profile_" . $field_var]))
 																{
-																	if ((is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && !empty ($_p["ws_plugin__s2member_profile_" . $field_var])) || (is_string ($_p["ws_plugin__s2member_profile_" . $field_var]) && strlen ($_p["ws_plugin__s2member_profile_" . $field_var])))
+																	if (((is_array ($_p["ws_plugin__s2member_profile_" . $field_var]) && !empty ($_p["ws_plugin__s2member_profile_" . $field_var]))
+																	    || (is_string ($_p["ws_plugin__s2member_profile_" . $field_var]) && strlen ($_p["ws_plugin__s2member_profile_" . $field_var])))
+																	&& !c_ws_plugin__s2member_custom_reg_fields::validate_custom_registration_fields(array($field_var => $_p["ws_plugin__s2member_profile_" . $field_var]), array($field)))
 																		$fields[$field_var] = $_p["ws_plugin__s2member_profile_" . $field_var];
 																	else // Else ``unset()``.
 																		unset($fields[$field_var]);
