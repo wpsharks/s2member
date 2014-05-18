@@ -287,6 +287,9 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 					switch($vars['orderby'])
 						{
 							case 's2member_registration_time':
+								$query->query_orderby = "ORDER BY `user_registered` " . $vars['order'];
+							break;
+
 							case 's2member_subscr_id':
 							case 's2member_auto_eot_time':
 							case 's2member_login_counter':
