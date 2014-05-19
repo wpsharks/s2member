@@ -281,7 +281,10 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 			 */
 			public static function users_list_make_sortable($query)
 				{
-					if (!is_admin() || empty($GLOBALS['pagenow']) || $GLOBALS['pagenow'] !== 'users.php' || !isset ($query->query_vars)) return;
+					if (!is_admin()
+					    || empty($GLOBALS['pagenow']) || $GLOBALS['pagenow'] !== 'users.php'
+					    || !isset ($query->query_vars))
+						return;
 
 					global $wpdb; /** @var $wpdb wpdb */
 					$vars = $query->query_vars;
@@ -296,11 +299,10 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 							case 's2member_auto_eot_time':
 							case 's2member_login_counter':
 							case 's2member_last_login_time':
-								$query->query_from .= " LEFT JOIN `" . $wpdb->usermeta . "` `m` ON (" . $wpdb->users . ".ID = `m`.`user_id` AND `m`.`meta_key` = '" . esc_sql($wpdb->prefix . $vars['orderby']) . "')";
+								$query->query_from .= " LEFT JOIN `" . $wpdb->usermeta . "` `m` ON (" . $wpdb->users . ".`ID` = `m`.`user_id` AND `m`.`meta_key` = '" . esc_sql($wpdb->prefix . $vars['orderby']) . "')";
 								$query->query_orderby = "ORDER BY `m`.`meta_value` " . $vars['order'];
 							break;
 						}
 				}
 			}
 	}
-?>
