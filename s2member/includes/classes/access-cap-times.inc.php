@@ -150,6 +150,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 					$ac_times = array();
 
 				/* ------- Begin back compat. */
+				// $update_ac_times = empty($ac_times) ? FALSE : TRUE;
 				$ac_times_min = !empty($ac_times) ? min(array_keys($ac_times)) : 0;
 				if(($r_time = c_ws_plugin__s2member_registration_times::registration_time()) && (empty($ac_times_min) || $r_time < $ac_times_min))
 					$ac_times[$r_time] = 'level0';
@@ -171,6 +172,9 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 					$ac_times = array_intersect($ac_times, (array)$access_caps);
 
 				ksort($ac_times, SORT_NUMERIC);
+
+				//if($update_ac_times)
+				//	update_user_option($user_id, 's2member_access_cap_times', $ac_times);
 			}
 			return apply_filters('ws_plugin__s2member_get_access_cap_times', $ac_times, get_defined_vars());
 		}
