@@ -96,31 +96,32 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 
 			foreach($caps as &$_caps)
 			{
-				foreach(array_intersect($_caps, array_keys($role_objects)) as $_role)
-					$_caps = array_merge($_caps, array_keys($role_objects[$_role]->capabilities));
-				$_caps = array_unique($_caps);
+				foreach(array_intersect(array_keys($_caps), array_keys($role_objects)) as $_role)
+					if($_caps[$_role]) // If the cap (i.e. the role) is enabled; merge its caps.
+						$_caps = array_merge($_caps, $role_objects[$_role]->capabilities);
 
-				foreach($_caps as $_k => $_cap)
+				foreach($_caps as $_cap => $_enabled)
+				{
+					unset($_caps[$_cap]);
 					if(strpos($_cap, 'access_s2member_') === 0)
-						$_caps[$_k] = substr($_caps[$_k], 16);
-					else
-						unset($_caps[$_k]);
+						$_caps[substr($_cap, 16)] = $_enabled;
+				}
 			}
-			unset($_caps, $_role, $_k, $_cap);
+			unset($_caps, $_role, $_cap, $_enabled);
 
 			$ac_times = get_user_option('s2member_access_cap_times', $user_id);
 			if(!is_array($ac_times)) $ac_times = array();
 			$time = (float)time();
 
-			foreach($caps['prev'] as $_cap => $_enabled)
-				if(!array_key_exists($_cap, $caps['now']) || (!$caps['now'][$_cap] && $_enabled))
+			foreach($caps['prev'] as $_cap => $_was_enabled)
+				if($_was_enabled && empty($caps['now'][$_cap]))
 					$ac_times[number_format(($time += .0001), 4, '.', '')] = '-'.$_cap;
-			unset($_cap, $_enabled);
+			unset($_cap, $_was_enabled);
 
-			foreach($caps['now'] as $_cap => $_enabled)
-				if($_enabled && (!array_key_exists($_cap, $caps['prev']) || !$caps['prev'][$_cap]))
+			foreach($caps['now'] as $_cap => $_now_enabled)
+				if($_now_enabled && empty($caps['prev'][$_cap]))
 					$ac_times[number_format(($time += .0001), 4, '.', '')] = $_cap;
-			unset($_cap, $_enabled);
+			unset($_cap, $_now_enabled);
 
 			update_user_option($user_id, 's2member_access_cap_times', $ac_times);
 		}
