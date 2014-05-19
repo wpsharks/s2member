@@ -153,6 +153,10 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 
 			$user_ids = $wpdb->get_col("SELECT DISTINCT `user_id` FROM `".$wpdb->usermeta."` WHERE `umeta_id` IN('".implode("','", $meta_ids)."')");
 
+			if(count($user_ids) > 50)
+				if(function_exists('set_time_limit'))
+					@set_time_limit(900);
+
 			foreach($user_ids as $_user_id)
 				self::log_access_cap_time(0, $_user_id, $meta_key, array());
 			unset($_user_id);
