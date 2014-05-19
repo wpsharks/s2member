@@ -129,6 +129,36 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		}
 
 		/**
+		 * Logs access capability times.
+		 *
+		 * @package s2Member\CCAPS
+		 * @since 140514
+		 *
+		 * @attaches-to ``add_action('deleted_user_meta')``
+		 *
+		 * @param array   $meta_ids Meta row ID in database.
+		 * @param integer $object_id User ID.
+		 * @param string  $meta_key Meta key.
+		 */
+		public static function log_access_cap_time_on_delete($meta_ids, $object_id, $meta_key)
+		{
+			$wpdb = $GLOBALS['wpdb'];
+			/** @var $wpdb \wpdb For IDEs. */
+
+			if(strpos($meta_key, 'capabilities') === FALSE || $meta_key !== $wpdb->get_blog_prefix().'capabilities')
+				return; // Not updating caps.
+
+			if(!is_array($meta_ids) || !$meta_ids)
+				return; // Nothing to do.
+
+			$user_ids = $wpdb->get_col("SELECT DISTINCT `user_id` FROM `".$wpdb->usermeta."` WHERE `umeta_id` IN('".implode("','", $meta_ids)."')");
+
+			foreach($user_ids as $_user_id)
+				self::log_access_cap_time(0, $_user_id, $meta_key, array());
+			unset($_user_id);
+		}
+
+		/**
 		 * Gets access capability times.
 		 *
 		 * @package s2Member\CCAPS

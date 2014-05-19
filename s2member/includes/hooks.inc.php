@@ -156,8 +156,8 @@ add_action("network_admin_notices", "c_ws_plugin__s2member_admin_notices::admin_
 add_action("pre_user_query", "c_ws_plugin__s2member_users_list::users_list_query");
 add_filter("manage_users_columns", "c_ws_plugin__s2member_users_list::users_list_cols");
 add_filter("manage_users_custom_column", "c_ws_plugin__s2member_users_list::users_list_display_cols", 10, 3);
-add_filter ("manage_users_sortable_columns", "c_ws_plugin__s2member_users_list::users_list_add_sortable");
-add_filter ("pre_user_query", "c_ws_plugin__s2member_users_list::users_list_make_sortable");
+add_filter("manage_users_sortable_columns", "c_ws_plugin__s2member_users_list::users_list_add_sortable");
+add_filter("pre_user_query", "c_ws_plugin__s2member_users_list::users_list_make_sortable");
 add_action("edit_user_profile", "c_ws_plugin__s2member_users_list::users_list_edit_cols");
 add_action("show_user_profile", "c_ws_plugin__s2member_users_list::users_list_edit_cols");
 add_action("edit_user_profile_update", "c_ws_plugin__s2member_users_list::users_list_update_cols");
@@ -167,8 +167,10 @@ add_filter("show_password_fields", "c_ws_plugin__s2member_user_securities::hide_
 
 add_action("add_user_meta", "c_ws_plugin__s2member_access_cap_times::get_user_caps_before_update", 10, 4);
 add_action("update_user_meta", "c_ws_plugin__s2member_access_cap_times::get_user_caps_before_update", 10, 4);
+
 add_action("added_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_time", 10, 4);
 add_action("updated_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_time", 10, 4);
+add_action("deleted_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_time_on_delete", 10, 3);
 
 add_filter("cron_schedules", "c_ws_plugin__s2member_cron_jobs::extend_cron_schedules");
 add_action("ws_plugin__s2member_auto_eot_system__schedule", "c_ws_plugin__s2member_auto_eots::auto_eot_system");
