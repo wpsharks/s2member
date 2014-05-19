@@ -55,7 +55,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 			if(strpos($meta_key, 'capabilities') === FALSE || $meta_key !== $wpdb->get_blog_prefix().'capabilities')
 				return; // Not updating caps.
 
-			$user_id = $object_id;
+			$user_id = (integer)$object_id;
 			$user    = new WP_User($user_id);
 			if(!$user->ID || !$user->exists())
 				return; // Not a valid user.
