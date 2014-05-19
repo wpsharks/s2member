@@ -93,7 +93,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 									if(strpos($_key, "ws_plugin__s2member_custom_reg_field_") === 0)
 										$input[str_replace("ws_plugin__s2member_custom_reg_field_", "", $_key)] = $_value;
 
-								$fields_to_validate = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level("auto-detection", "registration");
+								$fields_to_validate = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level("auto-detection", "registration", TRUE);
 								$validation_errors = c_ws_plugin__s2member_custom_reg_fields::validation_errors(!empty($input) ? $input : array(), $fields_to_validate);
 
 								if($validation_errors) foreach($validation_errors as $_field_var => $_error)
@@ -128,7 +128,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 											if(strpos($_key, "ws_plugin__s2member_custom_reg_field_") === 0)
 												$input[str_replace("ws_plugin__s2member_custom_reg_field_", "", $_key)] = $_value;
 
-										$fields_to_validate = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level("auto-detection", "registration");
+										$fields_to_validate = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level("auto-detection", "registration", TRUE);
 										$validation_errors = c_ws_plugin__s2member_custom_reg_fields::validation_errors(!empty($input) ? $input : array(), $fields_to_validate);
 
 										if($validation_errors) foreach($validation_errors as $_field_var => $_error)
