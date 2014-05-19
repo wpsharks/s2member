@@ -248,6 +248,59 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 
 						return apply_filters ("ws_plugin__s2member_users_list_display_cols", ((strlen ($val)) ? $val : "—"), get_defined_vars ());
 					}
+
+			/**
+			 * Tells WordPress certain fields s2Member adds are sortable
+			 *
+			 * @package s2Member\Users_List
+			 * @since 140518
+			 *
+			 * @attaches-to ``add_filter ("manage_users_sortable_columns");``
+			 *
+			 * @param array $columns An Array of sortable User List Columns
+			 */
+			public static function users_list_add_sortable($columns)
+				{
+					$columns['s2member_registration_time'] = 's2member_registration_time';
+					$columns['s2member_subscr_id'] = 's2member_subscr_id';
+					$columns['s2member_auto_eot_time'] = 's2member_auto_eot_time';
+					$columns['s2member_login_counter'] = 's2member_login_counter';
+					$columns['s2member_last_login_time'] = 's2member_last_login_time';
+					return $columns;
+				}
+
+			/**
+			 * Alters WP_Query object to make custom columns sortable
+			 *
+			 * @package s2Member\Users_List
+			 * @since 140518
+			 *
+			 * @attaches-to ``add_filter ("pre_user_query");``
+			 *
+			 * @param WP_User_Query $query `WP_Query` Object passed from WordPress
+			 */
+			public static function users_list_make_sortable($query)
+				{
+					if (!is_admin() || empty($GLOBALS['pagenow']) || $GLOBALS['pagenow'] !== 'users.php' || !isset ($query->query_vars)) return;
+
+					global $wpdb; /** @var $wpdb wpdb */
+					$vars = $query->query_vars;
+
+					switch($vars['orderby'])
+						{
+							case 's2member_registration_time':
+								$query->query_orderby = "ORDER BY `user_registered` " . $vars['order'];
+							break;
+
+							case 's2member_subscr_id':
+							case 's2member_auto_eot_time':
+							case 's2member_login_counter':
+							case 's2member_last_login_time':
+								$query->query_from .= " LEFT JOIN `" . $wpdb->usermeta . "` `m` ON (" . $wpdb->users . ".ID = `m`.`user_id` AND `m`.`meta_key` = '" . esc_sql($wpdb->prefix . $vars['orderby']) . "')";
+								$query->query_orderby = "ORDER BY `m`.`meta_value` " . $vars['order'];
+							break;
+						}
+				}
 			}
 	}
 ?>
