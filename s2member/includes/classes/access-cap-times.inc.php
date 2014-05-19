@@ -96,20 +96,20 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 			$caps['now']             = is_array($meta_value) ? $meta_value : array();
 			$role_objects            = $GLOBALS['wp_roles']->role_objects;
 
-			foreach($caps as &$_caps)
+			foreach($caps as &$_caps_prev_next)
 			{
-				foreach(array_intersect(array_keys($_caps), array_keys($role_objects)) as $_role)
-					if($_caps[$_role]) // If the cap (i.e. the role) is enabled; merge its caps.
-						$_caps = array_merge($_caps, $role_objects[$_role]->capabilities);
+				foreach(array_intersect(array_keys($_caps_prev_next), array_keys($role_objects)) as $_role)
+					if($_caps_prev_next[$_role]) // If the cap (i.e. the role) is enabled; merge its caps.
+						$_caps_prev_next = array_merge($_caps_prev_next, $role_objects[$_role]->capabilities);
 
-				foreach($_caps as $_cap => $_enabled)
+				foreach($_caps_prev_next as $_cap => $_enabled)
 				{
-					unset($_caps[$_cap]);
+					unset($_caps_prev_next[$_cap]);
 					if(strpos($_cap, 'access_s2member_') === 0)
-						$_caps[substr($_cap, 16)] = $_enabled;
+						$_caps_prev_next[substr($_cap, 16)] = $_enabled;
 				}
 			}
-			unset($_caps, $_role, $_cap, $_enabled);
+			unset($_caps_prev_next, $_role, $_cap, $_enabled);
 
 			$ac_times = get_user_option('s2member_access_cap_times', $user_id);
 			if(!is_array($ac_times)) $ac_times = array();
