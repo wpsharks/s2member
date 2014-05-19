@@ -109,10 +109,6 @@ if(!class_exists("c_ws_plugin__s2member_installation"))
 										if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,reversals") // `refunds,reversals` => `refunds,partial_refunds,reversals`
 											c_ws_plugin__s2member_menu_pages::update_all_options(array("ws_plugin__s2member_triggers_immediate_eot" => "refunds,partial_refunds,reversals"), true, false, false, false, false);
 									}
-								if($v && version_compare($v, "140511", "<=")) // This version no longer uses `s2member_capability_times`.
-									{
-										$wpdb->query("DELETE FROM `".$wpdb->usermeta."` WHERE `meta_key` = '".esc_sql($wpdb->prefix."s2member_capability_times")."'");
-									}
 								$notice = '<strong>s2Member</strong> has been <strong>reactivated</strong>, with '.(($reactivation_reason === "levels") ? '<code>'.esc_html($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]).'</code> Membership Levels' : 'the latest version').'.<br />';
 								$notice .= 'You now have version '.esc_html(WS_PLUGIN__S2MEMBER_VERSION).'. Your existing configuration remains.';
 
