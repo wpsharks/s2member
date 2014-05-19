@@ -195,7 +195,6 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 												$val .= (($val) ? "<br />" : "") . '<small><em>@Level ' . esc_html ($level) . ': <span title="' . esc_attr (date ("D M jS, Y", $time)) . ' @ precisely ' . esc_attr (date ("g:i a", $time)) . '">' . esc_html (date ("D M jS, Y", $time)) . '</span></em></small>';
 										}
 							}
-
 						else if ($col === "s2member_subscr_id")
 							$val = ($v = get_user_option ("s2member_subscr_id", $user_id)) ? esc_html ($v) : "—";
 
@@ -228,7 +227,6 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 
 								$last_fields_id = $user_id; // Record this.
 							}
-
 						else if ($col === "s2member_login_counter")
 							$val = ($v = get_user_option ("s2member_login_counter", $user_id)) ? esc_html ($v) : "—";
 
