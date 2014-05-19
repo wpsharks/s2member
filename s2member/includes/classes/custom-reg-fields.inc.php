@@ -602,18 +602,18 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 							case 'radios':
 							case 'select':
 								if(isset($input[$_field_var]) && !is_string($input[$_field_var]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Invalid data type. Expecting a string.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Invalid data type. Expecting a string.', 's2member-front', 's2member').'</em>';
 								break;
 
 							case 'checkboxes':
 							case 'selects':
 								if(isset($input[$_field_var]) && !is_array($input[$_field_var]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Invalid data type. Expecting an array.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Invalid data type. Expecting an array.', 's2member-front', 's2member').'</em>';
 								break;
 
 							default: // Default case handler for best security.
 								if(isset($input[$_field_var]) && !is_string($input[$_field_var]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Invalid data type. Expecting a string.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Invalid data type. Expecting a string.', 's2member-front', 's2member').'</em>';
 								break;
 						}
 						if(empty($errors[$_field_var]) && $_field_required) switch($_field_type)
@@ -621,38 +621,38 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 							case 'text':
 							case 'textarea':
 								if(!isset($input[$_field_var]) || !is_string($input[$_field_var]) || !isset($input[$_field_var][0]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('This is a required field, please try again.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('This is a required field, please try again.', 's2member-front', 's2member').'</em>';
 								break;
 
 							case 'checkbox':
 							case 'pre_checkbox':
 								if(!isset($input[$_field_var]) || !is_string($input[$_field_var]) || !isset($input[$_field_var][0]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Required. This box must be checked.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Required. This box must be checked.', 's2member-front', 's2member').'</em>';
 								break;
 
 							case 'checkboxes':
 								if(!isset($input[$_field_var]) || !is_array($input[$_field_var]) || empty($input[$_field_var]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please check at least one of the boxes.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please check at least one of the boxes.', 's2member-front', 's2member').'</em>';
 								break;
 
 							case 'radios':
 								if(!isset($input[$_field_var]) || !is_string($input[$_field_var]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please select one of the options.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please select one of the options.', 's2member-front', 's2member').'</em>';
 								break;
 
 							case 'select':
 								if(!isset($input[$_field_var]) || !is_string($input[$_field_var]) || !isset($input[$_field_var][0]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please select one of the options.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please select one of the options.', 's2member-front', 's2member').'</em>';
 								break;
 
 							case 'selects':
 								if(!isset($input[$_field_var]) || !is_array($input[$_field_var]) || empty($input[$_field_var]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please select at least one of the options.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please select at least one of the options.', 's2member-front', 's2member').'</em>';
 								break;
 
 							default: // Default case handler for best security.
 								if(!isset($input[$_field_var]) || !is_string($input[$_field_var]) || !isset($input[$_field_var][0]))
-									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('This is a required field, please try again.', 's2member-front', 's2member').'</em>';
+									$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('This is a required field, please try again.', 's2member-front', 's2member').'</em>';
 								break;
 						}
 						if(empty($errors[$_field_var]) && $_field_expects) switch($_field_type)
@@ -663,96 +663,96 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 								{
 									case 'numeric-wp-commas':
 										if(!preg_match('/^[0-9][0-9\.,]*$/', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be numeric (with or without decimals, commas allowed).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be numeric (with or without decimals, commas allowed).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'numeric':
 										if(!preg_match('/^[0-9][0-9\.]*$/', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be numeric (with or without decimals, no commas).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be numeric (with or without decimals, no commas).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'integer':
 										if(!preg_match('/^[0-9]+$/', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be an integer (a whole number, without any decimals).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be an integer (a whole number, without any decimals).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'integer-gt-0':
 										if(!preg_match('/^[0-9]+$/', $input[$_field_var]) || $input[$_field_var] <= 0)
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be an integer &gt; 0 (whole number, no decimals, greater than 0).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be an integer &gt; 0 (whole number, no decimals, greater than 0).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'float':
 										if(!preg_match('/^[0-9\.]+$/', $input[$_field_var]) || !preg_match('/[0-9]/', $input[$_field_var]) || !preg_match('/\./', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a float (floating point number, decimals required).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a float (floating point number, decimals required).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'float-gt-0':
 										if(!preg_match('/^[0-9\.]+$/', $input[$_field_var]) || !preg_match('/[0-9]/', $input[$_field_var]) || !preg_match('/\./', $input[$_field_var]) || $input[$_field_var] <= 0)
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a float &gt; 0 (floating point number, decimals required, greater than 0).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a float &gt; 0 (floating point number, decimals required, greater than 0).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'date':
 										if(!preg_match('/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a date (required date format: dd/mm/yyyy).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a date (required date format: dd/mm/yyyy).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'email':
 										if(!is_email($input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a valid email address.', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a valid email address.', 's2member-front', 's2member').'</em>';
 
 										else if($force_personal_emails && $non_personal_email_users && preg_match($non_personal_email_users, $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'.sprintf(_x('Please use a personal email address. Addresses like &lt;%s@&gt; are problematic.', 's2member-front', 's2member'), substr($input[$_field_var], 0, strpos($input[$_field_var], '@'))).'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'.sprintf(_x('Please use a personal email address. Addresses like &lt;%s@&gt; are problematic.', 's2member-front', 's2member'), substr($input[$_field_var], 0, strpos($input[$_field_var], '@'))).'</em>';
 										break;
 
 									case 'url':
 										if(!preg_match('/^https?\:\/\/.+$/i', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a full URL (starting with http or https).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a full URL (starting with http or https).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'domain':
 										if(!preg_match('/^[a-zA-Z0-9]+(?:\-*[a-zA-Z0-9]+)*(?:\.[a-zA-Z0-9]+(?:\-*[a-zA-Z0-9]+)*)*(?:\.[a-zA-Z][a-zA-Z0-9]+)?$/', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a domain name (domain name only, without http).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a domain name (domain name only, without http).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'phone':
 										if(!preg_match('/^[0-9 ()\-]+$/', $input[$_field_var]) || strlen(preg_replace('/[^0-9]+/', '', $input[$_field_var])) !== 10)
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a phone # (10 digits w/possible hyphens, spaces, brackets).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a phone # (10 digits w/possible hyphens, spaces, brackets).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'uszip':
 										if(!preg_match('/^[0-9]{5}(?:\-[0-9]{4})?$/', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a US zipcode (5-9 digits w/ possible hyphen).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a US zipcode (5-9 digits w/ possible hyphen).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'cazip':
 										if(!preg_match('/^[0-9A-Z]{3} ?[0-9A-Z]{3}$/i', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a Canadian zipcode (6 alpha-numerics w/ possible space).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a Canadian zipcode (6 alpha-numerics w/ possible space).', 's2member-front', 's2member').'</em>';
 										break;
 
 									case 'uczip':
 										if(!preg_match('/^[0-9]{5}(?:\-[0-9]{4})?$/', $input[$_field_var]) && !preg_match('/^[0-9A-Z]{3} ?[0-9A-Z]{3}$/i', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Must be a zipcode (either a US or Canadian zipcode).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a zipcode (either a US or Canadian zipcode).', 's2member-front', 's2member').'</em>';
 										break;
 
 									default: // Handle others dynamically here.
 
 										if(preg_match('/^alphanumerics\-spaces\-punctuation\-[0-9]+(?:\-e)?$/', $_field_expects) && !preg_match('/^[a-z 0-9\/\\\\,.?:;"\'{}[\]\^|+=_()*&%$#@!`~\-]+$/i', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please use alphanumerics, spaces &amp; punctuation only.', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please use alphanumerics, spaces &amp; punctuation only.', 's2member-front', 's2member').'</em>';
 
 										else if(preg_match('/^alphanumerics\-spaces\-[0-9]+(?:\-e)?$/', $_field_expects) && !preg_match('/^[a-z 0-9]+$/i', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please use alphanumerics &amp; spaces only.', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please use alphanumerics &amp; spaces only.', 's2member-front', 's2member').'</em>';
 
 										else if(preg_match('/^alphanumerics\-punctuation\-[0-9]+(?:\-e)?$/', $_field_expects) && !preg_match('/^[a-z0-9\/\\\\,.?:;"\'{}[\]\^|+=_()*&%$#@!`~\-]+$/i', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please use alphanumerics &amp; punctuation only (no spaces).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please use alphanumerics &amp; punctuation only (no spaces).', 's2member-front', 's2member').'</em>';
 
 										else if(preg_match('/^alphanumerics\-[0-9]+(?:\-e)?$/', $_field_expects) && !preg_match('/^[a-z0-9]+$/i', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please use alphanumerics only (no spaces/punctuation).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please use alphanumerics only (no spaces/punctuation).', 's2member-front', 's2member').'</em>';
 
 										else if(preg_match('/^alphabetics\-[0-9]+(?:\-e)?$/', $_field_expects) && !preg_match('/^[a-z]+$/i', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please use alphabetics only (no digits/spaces/punctuation).', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please use alphabetics only (no digits/spaces/punctuation).', 's2member-front', 's2member').'</em>';
 
 										else if(preg_match('/^numerics\-[0-9]+(?:\-e)?$/', $_field_expects) && !preg_match('/^[0-9]+$/i', $input[$_field_var]))
-											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'._x('Please use numeric digits only.', 's2member-front', 's2member').'</em>';
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Please use numeric digits only.', 's2member-front', 's2member').'</em>';
 
 										else if(preg_match('/^(?:any|alphanumerics\-spaces\-punctuation|alphanumerics\-spaces|alphanumerics\-punctuation|alphanumerics|alphabetics|numerics)\-[0-9]+(?:\-e)?$/', $_field_expects))
 										{
@@ -772,7 +772,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 													$_field_expects_digits_chars = _x('character', 's2member-front', 's2member');
 												else $_field_expects_digits_chars = _x('characters', 's2member-front', 's2member');
 
-												$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'.sprintf(_x('Must be exactly %s %s.', 's2member-front', 's2member'), $_field_expects_length, $_field_expects_digits_chars).'</em>';
+												$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'.sprintf(_x('Must be exactly %s %s.', 's2member-front', 's2member'), $_field_expects_length, $_field_expects_digits_chars).'</em>';
 											}
 											else if(strlen($input[$_field_var]) < $_field_expects_length)
 											{
@@ -786,7 +786,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 													$_field_expects_digits_chars = _x('character', 's2member-front', 's2member');
 												else $_field_expects_digits_chars = _x('characters', 's2member-front', 's2member');
 
-												$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br /><em>'.sprintf(_x('Must be at least %s %s.', 's2member-front', 's2member'), $_field_expects_length, $_field_expects_digits_chars).'</em>';
+												$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'.sprintf(_x('Must be at least %s %s.', 's2member-front', 's2member'), $_field_expects_length, $_field_expects_digits_chars).'</em>';
 											}
 										}
 										break;
