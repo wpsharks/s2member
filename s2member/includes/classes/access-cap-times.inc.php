@@ -109,7 +109,8 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 			unset($_caps, $_role, $_k, $_cap);
 
 			$ac_times = get_user_option('s2member_access_cap_times', $user_id);
-			$time     = (float)time();
+			if(!is_array($ac_times)) $ac_times = array();
+			$time = (float)time();
 
 			foreach($caps['prev'] as $_cap_removed => $_enabled)
 				if(!array_key_exists($_cap_removed, $caps['now']) || (!$caps['now'][$_cap_removed] && $_enabled))
