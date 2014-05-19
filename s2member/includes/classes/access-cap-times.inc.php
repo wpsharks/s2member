@@ -90,7 +90,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 				return; // Not a valid user.
 
 			$caps['prev']            = !empty(self::$prev_caps_by_user[$user_id]) ? self::$prev_caps_by_user[$user_id] : array();
-			self::$prev_caps_by_user = array();
+			self::$prev_caps_by_user = array(); // Reset this in case `get_user_caps_before_update()` doesn't run somehow.
 			$caps['now']             = is_array($meta_value) ? $meta_value : array();
 			$role_objects            = $GLOBALS['wp_roles']->role_objects;
 
@@ -114,12 +114,12 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 
 			foreach($caps['prev'] as $_cap_removed => $_enabled)
 				if(!array_key_exists($_cap_removed, $caps['now']) || (!$caps['now'][$_cap_removed] && $_enabled))
-					$ac_times[(string)($time += .0001)] = '-'.$_cap_removed;
+					$ac_times[number_format(($time += .0001), 4, '.', '')] = '-'.$_cap_removed;
 			unset($_cap_removed, $_enabled);
 
 			foreach($caps['now'] as $_cap_added => $_enabled)
 				if($_enabled && (!array_key_exists($_cap_added, $caps['prev']) || !$caps['prev'][$_cap_added]))
-					$ac_times[(string)($time += .0001)] = $_cap_added;
+					$ac_times[number_format(($time += .0001), 4, '.', '')] = $_cap_added;
 			unset($_cap_added, $_enabled);
 
 			update_user_option($user_id, 's2member_access_cap_times', $ac_times);
@@ -147,27 +147,27 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 			if(($user_id = (integer)$user_id))
 			{
 				$ac_times = get_user_option('s2member_access_cap_times', $user_id);
-				if(!is_array($ac_times))
-					$ac_times = array();
+				if(!is_array($ac_times)) $ac_times = array();
 
-				/* ------- Begin back compat. */
+				/* ------- Begin back compat. with `s2member_paid_registration_times`. */
+
 				// $update_ac_times = empty($ac_times) ? FALSE : TRUE;
 				$ac_times_min = !empty($ac_times) ? min(array_keys($ac_times)) : 0;
 				if(($r_time = c_ws_plugin__s2member_registration_times::registration_time()) && (empty($ac_times_min) || $r_time < $ac_times_min))
-					$ac_times[(string)($r_time += .0001)] = 'level0';
+					$ac_times[number_format(($r_time += .0001), 4, '.', '')] = 'level0';
+				unset($r_time); // Housekeeping.
 
-				$pr_times = get_user_option("s2member_paid_registration_times", $user_id);
-				if(is_array($pr_times))
+				if(is_array($pr_times = get_user_option('s2member_paid_registration_times', $user_id)))
 				{
 					$role_objects = $GLOBALS['wp_roles']->role_objects;
 					foreach($pr_times as $_level => $_time)
 						if(isset($role_objects['s2member_'.$_level]) && (empty($ac_times_min) || $_time < $ac_times_min))
 							foreach(array_keys($role_objects['s2member_'.$_level]->capabilities) as $_cap)
 								if(strpos($_cap, 'access_s2member_') === 0)
-									$ac_times[(string)($_time += .0001)] = substr($_cap, 16);
+									$ac_times[number_format(($_time += .0001), 4, '.', '')] = substr($_cap, 16);
 					unset($_level, $_time, $_cap);
 				}
-				/* ------- End back compat. */
+				/* ------- End back compat. with `s2member_paid_registration_times`. */
 
 				if($access_caps)
 					$ac_times = array_intersect($ac_times, (array)$access_caps);
