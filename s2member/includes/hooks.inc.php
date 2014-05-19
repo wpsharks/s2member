@@ -94,6 +94,7 @@ add_filter("bp_core_get_site_options", "c_ws_plugin__s2member_option_forces::che
 add_filter("random_password", "c_ws_plugin__s2member_registrations::generate_password");
 add_action("user_register", "c_ws_plugin__s2member_registrations::configure_user_registration");
 add_action("register_form", "c_ws_plugin__s2member_custom_reg_fields::custom_registration_fields");
+add_filter("registration_errors", "c_ws_plugin__s2member_registrations::custom_registration_field_errors", 10, 3);
 
 add_filter("add_signup_meta", "c_ws_plugin__s2member_registrations::ms_process_signup_meta");
 add_filter("bp_signup_usermeta", "c_ws_plugin__s2member_registrations::ms_process_signup_meta");
@@ -107,6 +108,7 @@ add_action("wpmu_activate_blog", "c_ws_plugin__s2member_registrations::configure
 add_action("signup_extra_fields", "c_ws_plugin__s2member_custom_reg_fields::ms_custom_registration_fields");
 
 add_action("bp_after_signup_profile_fields", "c_ws_plugin__s2member_custom_reg_fields_4bp::custom_registration_fields_4bp");
+add_action("bp_signup_validate", "c_ws_plugin__s2member_registrations::custom_registration_field_errors_4bp");
 add_action("bp_after_profile_field_content", "c_ws_plugin__s2member_custom_reg_fields_4bp::custom_profile_fields_4bp");
 add_action("bp_profile_field_item", "c_ws_plugin__s2member_custom_reg_fields_4bp::custom_profile_field_items_4bp");
 

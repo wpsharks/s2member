@@ -38,8 +38,8 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @attaches-to ``add_filter("random_password");``
 				*
-				* @param str $password Expects a plain text Password passed through by the Filter.
-				* @return str Password, possibly assigned through s2Member Custom Registration/Profile Field input.
+				* @param string $password Expects a plain text Password passed through by the Filter.
+				* @return string Password, possibly assigned through s2Member Custom Registration/Profile Field input.
 				*/
 				public static function generate_password ($password = FALSE)
 					{
@@ -60,9 +60,83 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 											$password = $custom; // Yes, use s2Member custom Password supplied by Remote Op.
 									}
 							}
-
 						return apply_filters ("ws_plugin__s2member_generate_password", ($GLOBALS["ws_plugin__s2member_generate_password_return"] = $password), get_defined_vars ());
 					}
+
+				/**
+				* Intersects with ``register_new_user()`` in the WordPress core.
+				*
+				* This function Filters registration errors inside `/wp-login.php` via ``register_new_user()``.
+				*
+				* This can ONLY be fired through `/wp-login.php` on the front-side.
+				*
+				* @package s2Member\Registrations
+				* @since 140518
+				*
+				* @attaches-to ``add_filter("registration_errors");``
+				*
+				* @param WP_Error $errors Expects a `WP_Error` object passed in by the Filter.
+				* @param string $user_login Expects the User's Username, passed in by the Filter.
+				* @param string $user_email Expects the User's Email Address, passed in by the Filter.
+				* @return WP_Error A `WP_Error` object instance.
+				*/
+				public static function custom_registration_field_errors($errors = FALSE, $user_login = FALSE, $user_email = FALSE)
+				{
+					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+					do_action("ws_plugin__s2member_before_custom_registration_field_errors", get_defined_vars());
+					unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
+					if (!is_admin () && preg_match ("/\/wp-login\.php/", $_SERVER["REQUEST_URI"]))
+						if (is_wp_error ($errors) && !empty ($_POST) && is_array ($_POST))
+							{
+								foreach(c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)) as $_key => $_value)
+									if(strpos($_key, "ws_plugin__s2member_custom_reg_field_") === 0)
+										$input[str_replace("ws_plugin__s2member_custom_reg_field_", "", $_key)] = $_value;
+
+								$fields_to_validate = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level("auto-detection", "registration");
+								$validation_errors = c_ws_plugin__s2member_custom_reg_fields::validation_errors(!empty($input) ? $input : array(), $fields_to_validate);
+
+								if($validation_errors) foreach($validation_errors as $_field_var => $_error)
+									$errors->add("custom_reg_field_".$_field_var, $_error);
+								unset($_field_var, $_error);
+							}
+					return apply_filters ("ws_plugin__s2member_custom_registration_field_errors", $errors, get_defined_vars ());
+				}
+
+				/**
+				* Intersects with ``bp_core_screen_signup()`` in the BuddyPress core.
+				*
+				* This can ONLY be fired through `/register` via BuddyPress.
+				*
+				* @package s2Member\Registrations
+				* @since 140518
+				*
+				* @attaches-to ``add_action("bp_signup_validate");``
+				*/
+				public static function custom_registration_field_errors_4bp()
+				{
+					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+					do_action("ws_plugin__s2member_before_custom_registration_field_errors_4bp", get_defined_vars());
+					unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+
+					if (!is_admin () && c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())
+						if(in_array ("registration", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
+							if(apply_filters ("ws_plugin__s2member_custom_registration_fields_4bp_display", true, get_defined_vars ()))
+								if (!empty($GLOBALS["bp"]->signup) && is_object($GLOBALS["bp"]->signup) && !empty ($_POST) && is_array ($_POST))
+									{
+										foreach(c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)) as $_key => $_value)
+											if(strpos($_key, "ws_plugin__s2member_custom_reg_field_") === 0)
+												$input[str_replace("ws_plugin__s2member_custom_reg_field_", "", $_key)] = $_value;
+
+										$fields_to_validate = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level("auto-detection", "registration");
+										$validation_errors = c_ws_plugin__s2member_custom_reg_fields::validation_errors(!empty($input) ? $input : array(), $fields_to_validate);
+
+										if($validation_errors) foreach($validation_errors as $_field_var => $_error)
+											$GLOBALS["bp"]->signup->errors["custom_reg_field_".$_field_var] = $_error;
+										unset($_field_var, $_error);
+									}
+				}
+
 				/**
 				* Filters Multisite User validation.
 				*
@@ -86,15 +160,17 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
 							if (!is_admin () && isset ($result["user_name"], $result["user_email"], $result["errors"]) && ((preg_match ("/\/wp-signup\.php/", $_SERVER["REQUEST_URI"]) && !empty ($_POST["stage"]) && preg_match ("/^validate-(user|blog)-signup$/", (string)$_POST["stage"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())))
 								{
-									if (in_array ($result["errors"]->get_error_code (), array ("user_name", "user_email", "user_email_used")))
+									$errors =& $result["errors"]; /** @var $errors WP_Error */
+									if (in_array ($errors->get_error_code (), array ("user_name", "user_email", "user_email_used")))
 										if (c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog ($result["user_name"], $result["user_email"]))
-											$result["errors"] = new WP_Error ();
-
+										{
+											unset($errors->errors["user_name"], $errors->errors["user_email"], $errors->errors["user_email_used"]);
+											unset($errors->error_data["user_name"], $errors->error_data["user_email"], $errors->error_data["user_email_used"]);
+										}
 									foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 									do_action ("ws_plugin__s2member_during_ms_validate_user_signup", get_defined_vars ());
 									unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 								}
-
 						return apply_filters ("ws_plugin__s2member_ms_validate_user_signup", $result, get_defined_vars ());
 					}
 				/**
@@ -107,8 +183,6 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				* @since 3.5
 				*
 				* @attaches-to ``add_filter("signup_hidden_fields");``
-				*
-				* @return null
 				*/
 				public static function ms_process_signup_hidden_fields ()
 					{
@@ -124,10 +198,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 
 									do_action ("ws_plugin__s2member_during_ms_process_signup_hidden_fields", get_defined_vars ());
 								}
-
 						do_action ("ws_plugin__s2member_after_ms_process_signup_hidden_fields", get_defined_vars ());
-
-						return /* Return for uniformity. */;
 					}
 				/**
 				* Adds Customs Fields to ``$meta`` on signup.
@@ -167,7 +238,6 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 											if ($key = preg_replace ("/_user_new_/", "_custom_reg_field_", $key))
 												$meta["s2member_ms_signup_meta"][$key] = maybe_unserialize ($value);
 								}
-
 						return apply_filters ("ws_plugin__s2member_ms_process_signup_meta", $meta, get_defined_vars ());
 					}
 				/**
@@ -184,9 +254,9 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @attaches-to ``add_filter("_wpmu_activate_existing_error_");``
 				*
-				* @param obj $_error Expects a `WP_Error` object to be passed through by the Filter.
+				* @param WP_Error $_error Expects a `WP_Error` object to be passed through by the Filter.
 				* @param array $vars Expects the defined variables from the scope of the calling Filter.
-				* @return obj|array If unable to add an existing User, the original ``$_error`` obj is returned.
+				* @return WP_Error|array If unable to add an existing User, the original ``$_error`` obj is returned.
 				* 	Otherwise we return an array of User details for continued processing by the caller.
 				*/
 				public static function ms_activate_existing_user ($_error = FALSE, $vars = FALSE)
@@ -212,7 +282,6 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 												return apply_filters ("ws_plugin__s2member_ms_activate_existing_user", array ("user_id" => $user_id, "password" => $password, "meta" => $meta), get_defined_vars ());
 											}
 								}
-
 						return apply_filters ("ws_plugin__s2member_ms_activate_existing_user", $_error, get_defined_vars ()); // Else, return the standardized error.
 					}
 				/**
@@ -227,14 +296,13 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @attaches-to ``add_action("wpmu_activate_user");``
 				*
-				* @param int|str $user_id A numeric WordPress User ID.
-				* @param str $password Plain text Password should be passed through by the Action Hook.
+				* @param int|string $user_id A numeric WordPress User ID.
+				* @param string $password Plain text Password should be passed through by the Action Hook.
 				* @param array $meta Expects an array of ``$meta`` details, passed through by the Action Hook.
-				* @return null
 				*/
 				public static function configure_user_on_ms_user_activation ($user_id = FALSE, $password = FALSE, $meta = FALSE)
 					{
-						global $pagenow; // Need this to detect the current admin page.
+						global $pagenow; // Detect the current admin page.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_configure_user_on_ms_user_activation", get_defined_vars ());
@@ -248,8 +316,6 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 								}
 
 						do_action ("ws_plugin__s2member_after_configure_user_on_ms_user_activation", get_defined_vars ());
-
-						return /* Return for uniformity. */;
 					}
 				/**
 				* Configures new Users on a Multisite Network installation.
@@ -266,12 +332,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @attaches-to ``add_action("wpmu_activate_blog");``
 				*
-				* @param int|str $blog_id A numeric WordPress Blog ID.
-				* @param int|str $user_id A numeric WordPress User ID.
-				* @param str $password Plain text Password should be passed through by the Action Hook.
-				* @param str $title The title that a User chose during signup; for their new Blog on the Network.
+				* @param int|string $blog_id A numeric WordPress Blog ID.
+				* @param int|string $user_id A numeric WordPress User ID.
+				* @param string $password Plain text Password should be passed through by the Action Hook.
+				* @param string $title The title that a User chose during signup; for their new Blog on the Network.
 				* @param array $meta Expects an array of ``$meta`` details, passed through by the Action Hook.
-				* @return null
 				*/
 				public static function configure_user_on_ms_blog_activation ($blog_id = FALSE, $user_id = FALSE, $password = FALSE, $title = FALSE, $meta = FALSE)
 					{
@@ -285,10 +350,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 									c_ws_plugin__s2member_registrations::configure_user_registration ($user_id, $password, ((isset ($meta["s2member_ms_signup_meta"]) && is_array ($meta["s2member_ms_signup_meta"])) ? $meta["s2member_ms_signup_meta"] : array ()));
 									delete_user_meta ($user_id, "s2member_ms_signup_meta");
 								}
-
 						do_action ("ws_plugin__s2member_after_configure_user_on_ms_blog_activation", get_defined_vars ());
-
-						return /* Return for uniformity. */;
 					}
 				/**
 				* Intersects with ``register_new_user()`` through s2Member's Multisite Networking patch.
@@ -303,10 +365,10 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @attaches-to ``add_filter("registration_errors");``
 				*
-				* @param obj $errors Expects a `WP_Error` object passed in by the Filter.
-				* @param str $user_login Expects the User's Username, passed in by the Filter.
-				* @param str $user_email Expects the User's Email Address, passed in by the Filter.
-				* @return obj A `WP_Error` object, or exits script execution after handling registration redirection.
+				* @param WP_Error $errors Expects a `WP_Error` object passed in by the Filter.
+				* @param string $user_login Expects the User's Username, passed in by the Filter.
+				* @param string $user_email Expects the User's Email Address, passed in by the Filter.
+				* @return WP_Error A `WP_Error` object, or exits script execution after handling registration redirection.
 				*/
 				public static function ms_register_existing_user ($errors = FALSE, $user_login = FALSE, $user_email = FALSE)
 					{
@@ -354,10 +416,10 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				* @package s2Member\Registrations
 				* @since 3.5
 				*
-				* @param str $user_login Expects the User's Username.
-				* @param str $user_email Expects the User's Email Address.
-				* @param str $user_pass Expects the User's plain text Password.
-				* @param int|str $user_id Optional. A numeric WordPress User ID.
+				* @param string $user_login Expects the User's Username.
+				* @param string $user_email Expects the User's Email Address.
+				* @param string $user_pass Expects the User's plain text Password.
+				* @param int|string $user_id Optional. A numeric WordPress User ID.
 				* 	If unspecified, a lookup is performed with ``$user_login`` and ``$user_email``.
 				* @return int|false Returns numeric ``$user_id`` on success, else false on failure.
 				*/
@@ -381,7 +443,6 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 										return apply_filters ("ws_plugin__s2member_ms_create_existing_user", $user_id, get_defined_vars ());
 									}
 							}
-
 						return apply_filters ("ws_plugin__s2member_ms_create_existing_user", false, get_defined_vars ());
 					}
 				/**
@@ -398,12 +459,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*
 				* @attaches-to ``add_action("user_register");``
 				*
-				* @param int|str $user_id A numeric WordPress User ID.
-				* @param str $password Optional in most cases. A User's plain text Password. If unspecified, attempts are made to collect the plain text Password from other sources.
+				* @param int|string $user_id A numeric WordPress User ID.
+				* @param string $password Optional in most cases. A User's plain text Password. If unspecified, attempts are made to collect the plain text Password from other sources.
 				* @param array $meta Optional in most cases. Defaults to false. An array of meta data for a User/Member.
-				* @return null No return value. Returns `null` in possible every scenario.
 				*
-				* @todo Impossible to delete cookies when fired inside: `/wp-activate.php`?
+				* @TODO Impossible to delete cookies when fired inside: `/wp-activate.php`?
 				*/
 				public static function configure_user_registration ($user_id = FALSE, $password = FALSE, $meta = FALSE)
 					{
@@ -1043,9 +1103,6 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_configure_user_registration", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
-
-						return /* Return for uniformity. */;
 					}
 			}
 	}
-?>
