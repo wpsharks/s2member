@@ -112,15 +112,15 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 			if(!is_array($ac_times)) $ac_times = array();
 			$time = (float)time();
 
-			foreach($caps['prev'] as $_cap_removed => $_enabled)
-				if(!array_key_exists($_cap_removed, $caps['now']) || (!$caps['now'][$_cap_removed] && $_enabled))
-					$ac_times[number_format(($time += .0001), 4, '.', '')] = '-'.$_cap_removed;
-			unset($_cap_removed, $_enabled);
+			foreach($caps['prev'] as $_cap => $_enabled)
+				if(!array_key_exists($_cap, $caps['now']) || (!$caps['now'][$_cap] && $_enabled))
+					$ac_times[number_format(($time += .0001), 4, '.', '')] = '-'.$_cap;
+			unset($_cap, $_enabled);
 
-			foreach($caps['now'] as $_cap_added => $_enabled)
-				if($_enabled && (!array_key_exists($_cap_added, $caps['prev']) || !$caps['prev'][$_cap_added]))
-					$ac_times[number_format(($time += .0001), 4, '.', '')] = $_cap_added;
-			unset($_cap_added, $_enabled);
+			foreach($caps['now'] as $_cap => $_enabled)
+				if($_enabled && (!array_key_exists($_cap, $caps['prev']) || !$caps['prev'][$_cap]))
+					$ac_times[number_format(($time += .0001), 4, '.', '')] = $_cap;
+			unset($_cap, $_enabled);
 
 			update_user_option($user_id, 's2member_access_cap_times', $ac_times);
 		}
