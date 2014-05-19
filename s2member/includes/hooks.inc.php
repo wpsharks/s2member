@@ -168,9 +168,9 @@ add_filter("show_password_fields", "c_ws_plugin__s2member_user_securities::hide_
 add_action("add_user_meta", "c_ws_plugin__s2member_access_cap_times::get_user_caps_before_update", 10, 4);
 add_action("update_user_meta", "c_ws_plugin__s2member_access_cap_times::get_user_caps_before_update", 10, 4);
 
-add_action("added_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_time", 10, 4);
-add_action("updated_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_time", 10, 4);
-add_action("deleted_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_time_on_delete", 10, 3);
+add_action("added_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_times", 10, 4);
+add_action("updated_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_times", 10, 4);
+add_action("deleted_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_times_on_delete", 10, 3);
 
 add_filter("cron_schedules", "c_ws_plugin__s2member_cron_jobs::extend_cron_schedules");
 add_action("ws_plugin__s2member_auto_eot_system__schedule", "c_ws_plugin__s2member_auto_eots::auto_eot_system");

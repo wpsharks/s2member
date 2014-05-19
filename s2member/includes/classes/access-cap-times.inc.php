@@ -78,7 +78,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		 * @param string  $meta_key Meta key.
 		 * @param mixed   $meta_value Meta value.
 		 */
-		public static function log_access_cap_time($meta_id, $object_id, $meta_key, $meta_value)
+		public static function log_access_cap_times($meta_id, $object_id, $meta_key, $meta_value)
 		{
 			$wpdb = $GLOBALS['wpdb'];
 			/** @var $wpdb \wpdb For IDEs. */
@@ -140,7 +140,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		 * @param integer $object_id User ID.
 		 * @param string  $meta_key Meta key.
 		 */
-		public static function log_access_cap_time_on_delete($meta_ids, $object_id, $meta_key)
+		public static function log_access_cap_times_on_delete($meta_ids, $object_id, $meta_key)
 		{
 			$wpdb = $GLOBALS['wpdb'];
 			/** @var $wpdb \wpdb For IDEs. */
@@ -158,7 +158,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 					@set_time_limit(900);
 
 			foreach($user_ids as $_user_id)
-				self::log_access_cap_time(0, $_user_id, $meta_key, array());
+				self::log_access_cap_times(0, $_user_id, $meta_key, array());
 			unset($_user_id);
 		}
 
