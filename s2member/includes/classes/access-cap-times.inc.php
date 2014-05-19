@@ -153,7 +153,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 				// $update_ac_times = empty($ac_times) ? FALSE : TRUE;
 				$ac_times_min = !empty($ac_times) ? min(array_keys($ac_times)) : 0;
 				if(($r_time = c_ws_plugin__s2member_registration_times::registration_time()) && (empty($ac_times_min) || $r_time < $ac_times_min))
-					$ac_times[$r_time] = 'level0';
+					$ac_times[(string)($r_time += .0001)] = 'level0';
 
 				$pr_times = get_user_option("s2member_paid_registration_times", $user_id);
 				if(is_array($pr_times))
