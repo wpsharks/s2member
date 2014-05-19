@@ -69,12 +69,11 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 				*
 				* @attaches-to ``add_action("pre_user_query");``
 				*
-				* @param obj $query Expects a `WP_User_Query` object, by reference.
-				* @return null After possibly modifying the ``$query`` object.
+				* @param WP_User_Query $query Expects a `WP_User_Query` object, by reference.
 				*/
 				public static function users_list_query (&$query = FALSE)
 					{
-						global $wpdb; // Need this global object reference.
+						global $wpdb; /** @var $wpdb wpdb */
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_before_users_list_search", get_defined_vars ());
@@ -106,8 +105,6 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_users_list_search", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
-
-						return /* Return for uniformity. */;
 					}
 				/**
 				* Adds columns to the list of Users.
