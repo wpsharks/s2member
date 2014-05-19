@@ -40,6 +40,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		 * @package s2Member\CCAPS
 		 * @since 140514
 		 *
+		 * @attaches-to ``add_action('add_user_meta')``
 		 * @attaches-to ``add_action('update_user_meta')``
 		 *
 		 * @param integer $meta_id Meta row ID in database.
@@ -69,6 +70,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		 * @package s2Member\CCAPS
 		 * @since 140514
 		 *
+		 * @attaches-to ``add_action('added_user_meta')``
 		 * @attaches-to ``add_action('updated_user_meta')``
 		 *
 		 * @param integer $meta_id Meta row ID in database.
