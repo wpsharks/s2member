@@ -40,7 +40,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		 * @package s2Member\CCAPS
 		 * @since 140514
 		 *
-		 * @attaches-to ``add_action('add_user_meta')``
+		 * @attaches-to ``add_action('add_user_meta')`` (indirectly)
 		 * @attaches-to ``add_action('update_user_meta')``
 		 *
 		 * @param integer $meta_id Meta row ID in database.
@@ -65,6 +65,23 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		}
 
 		/**
+		 * Get user caps before udpate.
+		 *
+		 * @package s2Member\CCAPS
+		 * @since 140514
+		 *
+		 * @attaches-to ``add_action('add_user_meta')``
+		 *
+		 * @param integer $object_id User ID.
+		 * @param string  $meta_key Meta key.
+		 * @param mixed   $meta_value Meta value.
+		 */
+		public static function get_user_caps_before_update_on_add($object_id, $meta_key, $meta_value)
+		{
+			self::get_user_caps_before_update(0, $object_id, $meta_key, $meta_value);
+		}
+
+		/**
 		 * Logs access capability times.
 		 *
 		 * @package s2Member\CCAPS
@@ -72,6 +89,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		 *
 		 * @attaches-to ``add_action('added_user_meta')``
 		 * @attaches-to ``add_action('updated_user_meta')``
+		 * @attaches-to ``add_action('deleted_user_meta')`` (indirectly)
 		 *
 		 * @param integer $meta_id Meta row ID in database.
 		 * @param integer $object_id User ID.

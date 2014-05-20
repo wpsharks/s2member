@@ -165,7 +165,7 @@ add_action("personal_options_update", "c_ws_plugin__s2member_users_list::users_l
 add_action("set_user_role", "c_ws_plugin__s2member_registration_times::synchronize_paid_reg_times", 10, 2);
 add_filter("show_password_fields", "c_ws_plugin__s2member_user_securities::hide_password_fields", 10, 2);
 
-add_action("add_user_meta", "c_ws_plugin__s2member_access_cap_times::get_user_caps_before_update", 10, 4);
+add_action("add_user_meta", "c_ws_plugin__s2member_access_cap_times::get_user_caps_before_update_on_add", 10, 3);
 add_action("update_user_meta", "c_ws_plugin__s2member_access_cap_times::get_user_caps_before_update", 10, 4);
 
 add_action("added_user_meta", "c_ws_plugin__s2member_access_cap_times::log_access_cap_times", 10, 4);
