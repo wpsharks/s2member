@@ -84,9 +84,9 @@ button.ws-plugin--s2member-animate-processing:after
 	content           : '';
 
 	float             : right;
-	width             : .5em;
-	height            : .5em;
-	margin            : .25em 0 0 .25em;
+	width             : .8em;
+	height            : .8em;
+	margin            : .25em 0 0 .5em;
 
 	border-radius     : 50%;
 	border            : 1px dashed;
