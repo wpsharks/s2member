@@ -148,6 +148,18 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Changelog ==
 
+= v140520 =
+
+* (s2Member Pro) **`[s2Member-List /]` Shortcode** Amazing new feature! It is now possible to list members using a powerful shortcode, and even make it possible for members to view and search for each other. See [this KB article](http://www.s2member.com/?p=62860) for all the details on this feature. Very cool!
+* (s2Member/s2Member Pro) **Server-Side Validation** For Registration/Profile Fields that you configure on your own (using the s2Member software), there is now support within all areas of the s2Member codebase for both JavaScript and *now server-side validation too*. In the past, all validations applied to custom fields was via JavaScript only. With server-side validation too, now it is impossible for required and/or invalid fields that you configure to go missing. This also resolves a few issues related to spam bots attempting to bypass JavaScript validation. See [this GitHub issue](https://github.com/WebSharks/s2Member/issues/99) if you'd like further details.
+* (s2Member Pro) **Button Processing Animation**. Improving the processing animation used in submit buttons across Pro Forms. Instead of a script-based solution (rather jumpy), we are now taking advantage of CSS3 for a much smoother animation. See [this GitHub issue](https://github.com/WebSharks/s2Member/issues/114) if you'd like further details.
+* (s2Member Pro) **`[s2Drip /]` Shortcode Enhancement** This release adds support for a new `access=""` shortcode attribute that can parse `and` / `or` logic. Also, it is now possible for `[s2Drip /]` to be used with Custom Capabilities too! See [this KB article](http://www.s2member.com/kb/s2drip-shortcode/) for all the details.
+* (s2Member/s2Member Pro) **Bug Fix, Custom Fields UI** This release corrects a bug related to the `jquery/.htaccess` file that ships with s2Member. A symptom was to have issues with the Registration/Profile Fields UI and find a JS error in the browser's developer console. Fixed in this release. See also, [this GitHub issue](https://github.com/WebSharks/s2Member/issues/144#issuecomment-43198045) if you'd like further details.
+* (s2Member Pro) **Bug Fix, Clickbank HTTPS** This release corrects a bug in the default Auto-Return Page for ClickBank, when/if it's served over the `https` protocol. See [this GitHub issue](https://github.com/WebSharks/s2Member/issues/145) if you'd like further details.
+* (s2Member/s2Member Pro) **Sortable User Columns** This release adds support for sortable user columns in the Dashboard, where possible. Things like EOT Time, Registration Time, Last Login Time, Total Logins, etc. NOTE: it is currently NOT possible to sort by Custom Registration/Profile Fields (yet). See [this GitHub issue](https://github.com/WebSharks/s2Member/issues/147) if you'd like further details.
+* (s2Member/s2Member Pro) **Hook Priority for Translations** This release corrects a bug related to Gettext translations. There were a couple of areas within s2Member that weren't picking up all of the translation entries; caused by a conflict in hook priority. Fixed in this release. See [this GitHub issue](https://github.com/WebSharks/s2Member/issues/132) if you'd like further details.
+* (s2Member Pro) **`[s2MOP /]` Shortcode Enhancement** A new Replacement Code was added: `%%REQUIRED_LEVEL_LABEL%%`. See [this KB article](http://www.s2member.com/kb/s2mop-shortcode/) and [this GitHub issue](https://github.com/WebSharks/s2Member/issues/129) if you'd like further details.
+
 = v140423 =
 
 * (s2Member/s2Member Pro) **WP v3.9 Compatibility**. Resolving an incompatibility between s2Member and WP v3.9 where s2Member was attempting to use the jQuery `highlight` effect no longer available by default; starting with WP v3.9. A symptom of this bug was to have problems closing the dialog box when creating new Registration/Profile Fields with s2Member in the WP Dashboard. See also [this GitHub issue](https://github.com/WebSharks/s2Member/issues/108).
@@ -499,101 +511,5 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 = v121213 =
 
-* **(Maintenance Release) Upgrade immediately.**
-* **Updated for compatibility with WordPress® v3.5. Backward compatibility remains for previous versions of WordPress®, as far back as WordPress® v3.2.**
-* (s2Member Pro) **Bug Fix**. An issue first introduced in s2Member® Pro v120517 where we fixed problems with the `maxlength` attribute in Authorize.Net Pro Forms, left a remaining problem. The State/Province field in the Billing Address section of a Pro Form, since s2Member® Pro v120517, has only accepted 2 characters when it should have been capable of accepting up to 40 characters. Fixed in this release.
-* (s2Member / s2Member Pro) **Compatibility**. s2Member's Multsite Network patches now support `/wp-login.php` in WordPress® v3.5. Discussed in [this thread](http://www.s2member.com/forums/topic/fyi-wpmu-3-5-wp-login-php-file-not-verified/#post-34457).
-* (s2Member / s2Member Pro) **Compatibility**. s2Member's login customizations for `/wp-login.php` have been tweaked to support WordPress® v3.5.
-* (s2Member / s2Member Pro) **Checksums**. Each copy of s2Member® and s2Member® Pro now include a `checksum.txt` file in their root plugin directory. This file is used by server-scanning tools provided by WebSharks, Inc. This file simply serves to identify the state of the file structure upon each official release of the software.
-* (s2Member Pro) **Bug Fix**. Free Registration Pro Forms submitted without having payment gateway API credentials configured within s2Member® resulted in an on-site error message when there should NOT be one (because a site owner is dealing with Free Registration only in this scenario). Fixed in this release.
-
-= v121204 =
-
-* **(Maintenance Release) Upgrade immediately.**
-* (s2Member / s2Member Pro) **Bug Fix**. An issue with long billing agreement descriptions under PayPal® Pro (Payflow® Edition) accounts, when coupon codes were being used by customers, was addressed in this release. Symptoms of this bug were errors in s2Member® log files from the Payflow® API, with error code: `11581-Profile description is invalid`. Caused by undocumented length requirements for the billing agreement description under the Payflow® API. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/error-generic-processor-error-11581/page/2/#post-33477).
-* (s2Member / s2Member Pro) **Compatibility**. Updated JW Player code samples for compatibility with JW Player v6. Discussed in [this thread](http://www.s2member.com/forums/topic/jw-player-rtmp-streaming-mp4-amazon-s3/page/2/#post-32074).
-
-= v121201 =
-
-* **(Maintenance Release) Upgrade immediately.**
-* (s2Member / s2Member Pro) **Bug Fix**. Support Rep Cristián Lávaque found a bug in the behavior of s2Member’s Alternative View Restrictions, associated with Category listings in custom menu widgets. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/welcome-page-title-shows-but-no-content/page/2/#post-29802).
-* (s2Member Pro) **Feature Enhancement**. s2Member Pro Forms integrated ONLY with PayPal Express Checkout (`accept="paypal" accept_via_paypal="paypal"`), will no longer display a Billing Method section on the Pro Form, as it's not necessary (there's only one possible option in this case, and it's already depicted by the PayPal button at the bottom of the Pro Form). Many site owners had implemented CSS hacks to hide this section of a Pro Form configured this way, based on [this FAQ article](http://www.s2member.com/faqs/#s2-faqs-paypal-pro-not-required). This hack is no longer necessary - starting with this release.
-* (s2Member Pro) **Bug Fix**. s2Member Pro Forms integrated with Payflow Recurring Billing via PayPal Express Checkout were failing against some accounts with an erroneous error #10422 related to an invalid funding source. With some help from other site owners and the assistance of PayPal technical support, the underlying issue has been fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/paypal-error-36-transaction-failed/page/2/#post-31490).
-* (s2Member Pro) **Compatiblity**. ccBill Buttons can now be generated for amounts exceeding $100.00, so long as prior ccBill approval is obtained from ccBill merchant support. Discussed in [this thread](http://www.s2member.com/forums/topic/cc-bill-button-increase-dollar-amount/#post-31636).
-* (s2Member/s2Member Pro) **Compatiblity**. Updated to support Dynamic Roles introduced in bbPress® v2.2. Discussed in [this thread](http://www.s2member.com/forums/topic/dont-upgrade-to-bbpress-2-2/#post-32523).
-* (s2Member Pro) **Authorize.Net**. True montly billing instead of every 30 days. Fixed in this release. Discussed in [this thread](http://www.s2member.com/forums/topic/1-month-recurring-billing-instead-of-30-days/#post-30420).
-
-= v121023 =
-
-* **(Maintenance Release) Upgrade immediately.**
-* (s2Member / s2Member Pro) **Bug Fix**. A bug related to s2Member's `is_site_root()` method, when fancy permalinks are NOT in use; has been corrected for compatibility with the latest version of WordPress. Please see [this thread](http://www.s2member.com/forums/topic/new-custom-field-default-not-on-old-users/#post-28792) for futher details.
-* (s2Member Pro) **Import/Export Bug Fix**. An issue related to RFC guidelines for escape sequences in CSV files has been addressed in this release. Please see [this thread](http://www.s2member.com/forums/topic/new-custom-field-default-not-on-old-users/#post-28792) for futher details.
-* (s2Member Pro) **ccBill® DataLink Integration**. DataLink integration with ccBill® was updated for improved compatibility across multiple ccBill® sub-accounts.
-* (s2Member Pro) **ccBill® DataLink Integration**. DataLink integration with ccBill® was updated for improved compatibility w/ ccBill® servers running on MST timezone.
-* (s2Member/s2Member Pro) **API Function**. A new API Function was added. See: `s2member_login_ips_for($username)`. Please check the [s2Member® Codex](http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/) for documentation. [This thread](http://www.s2member.com/forums/topic/s2member-restriction-options-unique-ip/#post-20562) may also be of some assistance.
-* (s2Member/s2Member Pro) **404 Error (Bug Fix)**. A former dependency on `l10n.js` from the WordPress® core is no longer necessary. This old dependency has been removed to prevent 404 errors in the latest versions of WordPress®. Please check [this thread](http://www.s2member.com/forums/topic/wordpress-i10n-file-404-from-s2member/#post-20567) for further details.
-* (s2Member Pro) **reCAPTCHA® Bug Fix**. A bug sometimes causing failed reCAPTCHA® responses after PayPal® Express Checkout has been corrected in this release. This occurred during certain scenarios, whenever reCAPTCHA® was enabled for checkout forms, and PayPal Express Checkout was selected as the payment method of choice.
-* (s2Member Pro) **ccBill® DataLink Integration**. DataLink integration with ccBill® was modified to prevent dates in the future from being requested from the DataLink API. ccBill® was responding to some DataLink requests with a failed authentication, which were caused by dates/times in the future; according to MST on the ccBill® side of things.
-
-= v120703 =
-
-* **(Maintenance Release) Upgrade immediately.**
-* (s2Member/s2Member Pro) **Payflow® Express Checkout**. An issue related to Express Checkout (when using the Payflow® API), has been corrected in this release. A bug in previous releases, was causing error messages under certain circumstances that read `Field format error: Invalid PayerID`.
-* (s2Member/s2Member Pro) **WordPress® v3.4**. Standards compliance. Routine maintenance. Re-confirmed compatibility with WordPress® v3.4.
-
-= v120622 =
-
-* **(Maintenance Release) Upgrade immediately.**
-* (s2Member/s2Member Pro) **WordPress® v3.4**. Confirmed compatibility with WordPress® v3.4.
-* (s2Member/s2Member Pro) **Currency Conversion**. This release updates s2Member's currency conversion API, which is powered by Google®. Please see [this thread](http://www.s2member.com/forums/topic/paypal-agreecontinue-sends-to-memb-options/#post-16972) for further details.
-* (s2Member/s2Member Pro) **Payflow® Bug Fix**. This release addresses a bug that existed in s2Member's Payflow® integration with Express Checkout. Resolved in this release. Please see [this thread](http://www.s2member.com/forums/topic/cant-do-recurring-billing-via-paypal-payflow/#post-16966) for further details.
-* (s2Member/s2Member Pro) **Character Encoding**. This release fixes a big in s2Member's character encoding conversion, for IPN responses received from PayPal®. This releases also fixes an issue specifically with the pound sterling symbol `£`, which was causing some transient IPN data to become corrupted, under the right scenario.
-
-= v120608 =
-
-* **(Maintenance Release) Upgrade immediately.**
-* (s2Member/s2Member Pro) **WordPress® v3.4**. Updated for compatibility with the coming release of [WordPress® v3.4](http://wordpress.org/news/2012/06/wordpress-3-4-release-candidate-2/). Additional details available [here](http://wordpress.org/news/2012/06/wordpress-3-4-release-candidate-2/).
-* (s2Member/s2Member Pro) **Payflow® Bug Fix**. This release addresses two bugs that existed in s2Member's Payflow® integration. Resolved in this release. Please see [this thread](http://www.s2member.com/forums/topic/transactions-not-going-through/#post-15896) for further details.
-* (s2Member Pro) **PayPal® Express Checkout**. This release enables "PayPal Account Optional" for PayPal® Express Checkout, via s2Member Pro Forms. In other words, this release makes the PayPal® Express Checkout option through Pro Forms, behave more like a standard PayPal® Button; where a customer is not always required to have a PayPal® account during checkout. This functionality is enabled automatically, there's nothing you need to change in your s2Member® integration. However, we do suggest that you turn "PayPal Account Optional" (on) inside your PayPal® account. Please see [this thread](http://www.s2member.com/forums/topic/paypal-express-for-paypal-pro-user/#post-15892) for further details.
-* (s2Member) **Documentation**. Code samples for Content Dripping have been updated in the Dashboard, in order to correct a date comparison snippet, which was WRONG. Please check your Dashboard under: `s2Member® -› API Scripting -› Content Dripping -› Example #2`, for the updated code sample.
-
-= v120601 =
-
-* **(Maintenance Release) Upgrade immediately.**
-* (s2Member Pro) **ClickBank® Button Shortcodes**. This release works around a bug that has been discovered on the ClickBank® side of things, when a `+` character appears in the `desc=""` attribute of your ClickBank® Button Shortcode. Resolved in this release. Please see [this thread](http://www.s2member.com/forums/topic/clickbank-output-url/#post-15166) for further details.
-* (s2Member Pro) **Payflow® Daily Recurrence (Limitation)**. PayPal® Pro accounts with the Payflow® Edition API, are NOT capable of charging on a `daily` recurring basis. Previous releases of s2Member® Pro mistakenly documented this as being possible. Resolved in this release. PayPal® Pro accounts operating with the Payflow® Edition (and integrated with s2Member®), are only capable of charging recurring fees on the following schedules: `weekly, bi-weekly, monthly, quarterly, or yearly`. This is in large part, a limitation in the Payflow® API, which we hope will be resolved by PayPal® in a future version. Please feel free to contact PayPal® if you'd like to vote for this feature! This limitation does NOT affect existing PayPal® Pro accounts operating exclusively under the PayPal® Pro API (e.g. without Payflow®).
-* (s2Member Pro) **New ccBill® Shortcodes**. s2Member® Pro now includes two new Shortcode Attributes for ccBill® payment button integrations. These include: `sub_account` and `form`. Making it possible to integrate a single installation of s2Member® Pro with multiple ccBill® sub-accounts, and/or multiple ccBill® forms (as they exist in your ccBill® account). For further details, please read the Shortcode documentation, found in your Dashboard under: `s2Member® -› ccBill® Buttons -› Shortcode Attributes (Explained)`.
-* (s2Member/s2Member Pro) **Bug Fix**. A bug related to inaccurate role assignment, under certain scenarios (for administrative accounts). Resolved in this release. Please see [this thread](http://www.s2member.com/forums/topic/inaccurate-role-assignment-in-s2member-pro/#post-14122) for further details.
-
-= v120517 =
-
-* **(Maintenance Release) Upgrade immediately.**
-* (s2Member Pro) **PayPal® Pro Forms**. This release removes all limitations on the maximum length of an initial trial/period. It is now possible to offer any number of days/weeks/months/years for free, or at a different initial rate.
-* (s2Member Pro) **Authorize.Net® Bug Fix**. Max length (i.e. `maxlength=""`) adjusted in Pro Forms integrating with Authorize.Net. Transactions were sometimes failing due to character length restrictions imposed by the Authorize.Net® API. Fixed in this release. Please see [this thread](http://www.s2member.com/forums/topic/customer-charged-but-not-given-access/#post-13454) for further details.
-* (s2Member/s2Member Pro) **JW Player® Code Samples**. Updated code samples for JW Player®, to reduce the possibility of a namespace conflict in configuration variables. For further details, please check [this thread](http://www.s2member.com/forums/topic/jw-player-new-code-conflict/#post-13819).
-
-= v120514 =
-
-* **(Maintenance Release) Upgrade immediately.**
-* (s2Member Pro) **Payflow® API Support**. s2Member® Pro now supports PayPal® Pro accounts operating with the Payflow® edition. It is now possible to process recurring payments through newer PayPal® Pro accounts (e.g. those which may use the new Payflow® API for recurring billing). Please note, this feature should ONLY be used by site owners with a brand new PayPal® Pro account, which has Recurring Billing service enabled under the Payflow® edition. Site owners with existing PayPal® Pro accounts are NOT impacted by this feature, nor should they attempt to use this feature. For further details, please check your Dashboard under: `s2Member® -› PayPal® Options -› Payflow® Account Details`.
-* (s2Member Pro) **Authorize.Net® Shortcode Attribute**. A new Shortcode Attribute `rrt=""`, is available for Authorize.Net® Pro Forms. For further details, please check your Dashboard under: `s2Member® -› Authorize.Net® Forms -› Shortcode Attributes (Explained)`.
-* (s2Member Pro) **Authorize.Net® Bug Fix**. Transactions were sometimes failing due to character length restrictions imposed by the Authorize.Net® API. Fixed in this release. Please see [this thread](http://www.s2member.com/forums/topic/customer-charged-but-not-given-access/#post-13454) for further details.
-* (s2Member/s2Member Pro) **Remote Request Hook**. A few developers requested this. A new WordPress® Hook was added to s2Member's remote connection routine. Search s2Member's source code for Hook name: `ws_plugin__s2member_before_wp_remote_request`.
-* (s2Member Framework) **PayPal® Buttons**. Restrictions limiting the number of days/weeks/months/years allowed in recurring periods for a PayPal® Button have been increased. Max days was increased from `7` to `90`, weeks remains at `52` max, months is up from `12` to `24` max; years increased from `1`, up to `5` years max. This change impacts PayPal® Standard Buttons only, and does NOT affect Pro Forms, which operate on restrictions imposed by the PayPal® Pro API (and these are slightly different).
-* (s2Member/s2Member Pro) **JW Player® Code Samples**. Updated code samples for JW Player®. For further details, please check your Dashboard under: `s2Member® -› Download Options -› JW Player® Code Samples`.
-
-= v120309 =
-
-* (s2Member Pro) **ccBill® Cancellations**. It's now possible for s2Member to pull ccBill® "cancellation" events, from the ccBill® DataLink Service Suite. For further details and configuration options, please check this section of your Dashboard: `s2Member -› ccBill Options -› DataLink Integration`.
-* (s2Member/s2Member Pro) **Bug fix**. Some PHP installations running in safe mode were experiencing `400 Bad Request` errors whenever s2Member's Amazon® CloudFront configuration routines for file downloads were processed. Fixed in this release.
-
-= v120308 =
-
-* (s2Member/s2Member Pro) **Custom Registration/Profile Fields**. Now possible to create a Custom Field that's always hidden, during both registration and any future Profile edits (e.g. for administrative purposes only).
-* (s2Member/s2Member Pro) **Compatibility**. Minor updates for compatibility with the coming release of WordPress® v3.4.
-* (s2Member Pro) **Bug fix**. Broken link in UI leading to: `s2m-pro-extras.zip`. Corrected in this release.
-
-= v120301 - 1.0 =
-
-* ... trimmed away at v111220.
+* ... trimmed away at v121213.
 * Initial release: v1.0.
