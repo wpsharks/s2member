@@ -122,11 +122,8 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 
 				$_s2_caps_prev_now = array();
 				foreach($_caps_prev_now as $_cap => $_enabled)
-				{
-					unset($_caps_prev_now[$_cap]);
 					if(strpos($_cap, 'access_s2member_') === 0)
 						$_s2_caps_prev_now[substr($_cap, 16)] = $_enabled;
-				}
 				$_caps_prev_now = $_s2_caps_prev_now;
 			}
 			unset($_s2_caps_prev_now, $_caps_prev_now, $_role, $_cap, $_enabled);
