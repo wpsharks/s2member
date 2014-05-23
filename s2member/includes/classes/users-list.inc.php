@@ -289,15 +289,19 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 					switch($vars['orderby'])
 						{
 							case 's2member_registration_time':
-								$query->query_orderby = "ORDER BY `user_registered` " . $vars['order'];
+								$query->query_orderby = "ORDER BY CAST(`user_registered` AS UNSIGNED) " . $vars['order'];
 							break;
 
 							case 's2member_subscr_id':
+								$query->query_from .= " LEFT JOIN `" . $wpdb->usermeta . "` `m` ON (" . $wpdb->users . ".ID = `m`.`user_id` AND `m`.`meta_key` = '" . esc_sql($wpdb->prefix . $vars['orderby']) . "')";
+								$query->query_orderby = "ORDER BY `m`.`meta_value` " . $vars['order'];
+							break;
+
 							case 's2member_auto_eot_time':
 							case 's2member_login_counter':
 							case 's2member_last_login_time':
 								$query->query_from .= " LEFT JOIN `" . $wpdb->usermeta . "` `m` ON (" . $wpdb->users . ".ID = `m`.`user_id` AND `m`.`meta_key` = '" . esc_sql($wpdb->prefix . $vars['orderby']) . "')";
-								$query->query_orderby = "ORDER BY `m`.`meta_value` " . $vars['order'];
+								$query->query_orderby = "ORDER BY CAST(`m`.`meta_value` AS UNSIGNED) " . $vars['order'];
 							break;
 						}
 				}
