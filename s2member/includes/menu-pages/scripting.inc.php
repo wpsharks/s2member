@@ -450,8 +450,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<div class="ws-menu-page-group" title="s2Member Content Dripping">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-api-advanced-dripping-section">' . "\n";
-								echo '<h3>Dripping Content (some PHP scripting required)</h3>' . "\n";
-								echo '<p>Content Dripping is the gradual, pre-scheduled release of premium website content to paying Members. This has become increasingly popular, because it allows older Members; those who have paid you more, due to recurring charges; to acquire access to more content progressively; based on their original paid registration time. It also gives you (as the site owner), the ability to launch multiple membership site portals, operating on autopilot, without any direct day-to-day involvement in a content release process. This requires some PHP scripting. In order to use PHP scripting inside your Posts/Pages, you\'ll need to install this handy plugin (<a href="http://wordpress.org/extend/plugins/ezphp/" target="_blank" rel="external">ezPHP</a>).</p>' . "\n";
+								echo '<h3>Dripping Content (some PHP scripting may be required)</h3>' . "\n";
+								echo '<p>Content Dripping is the gradual, pre-scheduled release of premium website content to paying Members. This has become increasingly popular, because it allows older Members; those who have paid you more, due to recurring charges; to acquire access to more content progressively; based on their original paid registration time. It also gives you (as the site owner), the ability to launch multiple membership site portals, operating on autopilot, without any direct day-to-day involvement in a content release process. <strong>The <code>[s2Drip]</code> shortcode is the easiest way to drip content.</strong> The other methods (shown below) require some PHP scripting. In order to use PHP scripting inside your Posts/Pages, you\'ll need to install this handy plugin (<a href="http://wordpress.org/extend/plugins/ezphp/" target="_blank" rel="external">ezPHP</a>).</p>' . "\n";
 								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_advanced_dripping", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -461,7 +461,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p><strong>A very simple way to drip content; via the <code>[s2Drip]</code> Shortcode:</strong></p>' . "\n";
+								echo '<p><strong>A very simple way to drip content; via the <a href="http://www.s2member.com/kb/s2drip-shortcode/" target="_blank" rel="external"><code>[s2Drip]</code></a> Shortcode:</strong></p>' . "\n";
 								if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()) echo '<p><em><strong class="ws-menu-page-hilite">NOTE: the use of <code>[s2Drip]</code> requires s2Member Pro.</strong></em></p>' . "\n";
 								echo '<p>' . c_ws_plugin__s2member_utils_strings::highlight_php (file_get_contents (dirname (__FILE__) . "/code-samples/s2drip-example1.x-php")) . '</p>' . "\n";
 
