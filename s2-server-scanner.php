@@ -2760,7 +2760,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 		if(isset(self::$info_cache[__FUNCTION__]))
 			return self::$info_cache[__FUNCTION__];
 
-		$regex = '/Apache\/(?P<version>[1-9][^\s]*)/i';
+		$regex = '/Apache\/(?P<version>[1-9][0-9]*\.[0-9][^\s]*)/i';
 
 		if(!empty($_SERVER['SERVER_SOFTWARE']) && is_string($_SERVER['SERVER_SOFTWARE']))
 			if(preg_match($regex, $_SERVER['SERVER_SOFTWARE'], $apache))
