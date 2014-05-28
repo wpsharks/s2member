@@ -2773,7 +2773,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 		if(!$this->is_function_possible('shell_exec') || ini_get('open_basedir'))
 			return (self::$info_cache[__FUNCTION__] = ''); // Not possible.
 
-		if(!($httpd_v = shell_exec('/usr/bin/env httpd -v')) && !($httpd_v = shell_exec('/usr/bin/env apachectl -v')))
+		if(!($httpd_v = @shell_exec('/usr/bin/env httpd -v')) && !($httpd_v = @shell_exec('/usr/bin/env apachectl -v')))
 		{
 			$_possible_httpd_locations = array(
 				'/usr/sbin/httpd', '/usr/bin/httpd',
@@ -2782,7 +2782,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				'/usr/local/apache/sbin/httpd', '/usr/local/apache/bin/httpd',
 			);
 			foreach($_possible_httpd_locations as $_httpd_location) if(is_file($_httpd_location))
-				if(($httpd_v = shell_exec(escapeshellarg($_httpd_location).' -v')))
+				if(($httpd_v = @shell_exec(escapeshellarg($_httpd_location).' -v')))
 					break; // All done here.
 			unset($_possible_httpd_locations, $_httpd_location);
 		}

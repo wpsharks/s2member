@@ -65,7 +65,6 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 									$serving_range = true;
 								unset($_header, $_value);
 							}
-
 						$req["file_download"] = ($creating) ? @$create["file_download"] : @$_g["s2member_file_download"];
 						$req["file_download_key"] = ($creating) ? @$create["file_download_key"] : @$_g["s2member_file_download_key"];
 
