@@ -118,7 +118,6 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 								}
 								else unset($fields[$field_var]);
 							}
-
 							if(!empty ($fields))
 								update_user_option($user_id, 's2member_custom_fields', $fields);
 							else // Else delete their Custom Fields?
