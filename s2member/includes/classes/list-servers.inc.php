@@ -146,7 +146,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 									{
 										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]) as $getresponse_list)
 											{
-												$getresponse = array ("function" => __FUNCTION__, "func_get_args" => $args);
+												$getresponse = array ("function" => __FUNCTION__, "func_get_args" => $args, "api_method" => "add_contact");
 
 												if (($getresponse["list_id"] = $getresponse["list"] = trim ($getresponse_list)))
 													{
@@ -180,10 +180,8 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 															if(!$getresponse["api_params"][1]["ip"] || $getresponse["api_params"][1]["ip"] === "unknown") unset($getresponse["api_params"][1]["ip"]);
 															$getresponse["api_request"] = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
 
-															if (is_object($getresponse["api_response"] = // Post JSON-encoded request via getResponse API.
-																              json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"],
-																                                                                   array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error)
-															    && $getresponse["api_response"]->result->queued) $getresponse["api_success"] = $success = true;
+															if (is_object($getresponse["api_response"] = json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"], array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error) && $getresponse["api_response"]->result->queued)
+																$getresponse["api_success"] = $success = true;
 														}
 														$logt = c_ws_plugin__s2member_utilities::time_details ();
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
@@ -328,30 +326,23 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 									{
 										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]) as $getresponse_list)
 											{
-												$getresponse = array ("function" => __FUNCTION__, "func_get_args" => $args, "api_method" => "get_contacts");
+												$getresponse = array ("function" => __FUNCTION__, "func_get_args" => $args, "api_removal_method" => "delete_contact");
 
 												if (($getresponse["list_id"] = $getresponse["list"] = trim ($getresponse_list)))
 													{
+														$getresponse["api_method"]   = "get_contacts";
 														$getresponse["api_headers"]   = array("Content-Type" => "application/json");
-														$getresponse["api_params"]    = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"],
-														                                 array("campaigns" => array($getresponse["list_id"]), "email" => array("EQUALS" => $email)));
+														$getresponse["api_params"]    = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"], array("campaigns" => array($getresponse["list_id"]), "email" => array("EQUALS" => $email)));
 														$getresponse["api_request"]   = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
 
-														if (is_object($getresponse["api_response"] = // Post JSON-encoded request via getResponse API.
-															              json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"],
-															                                                                   array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error)
-														      && ($getresponse["api_response_contact_ids"] = array_keys((array)$getresponse["api_response"]->result))
-																&& ($getresponse["api_response_contact_id"] = $getresponse["api_response_contact_ids"][0]))
+														if (is_object($getresponse["api_response"] = json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"], array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error) && ($getresponse["api_response_contact_ids"] = array_keys((array)$getresponse["api_response"]->result)) && ($getresponse["api_response_contact_id"] = $getresponse["api_response_contact_ids"][0]))
 															{
 																$getresponse["api_method"] = "delete_contact"; // Update method now.
-																$getresponse["api_headers"] = array("Content-Type" => "application/json");
 																$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"], array("contact" => $getresponse["api_response_contact_id"]));
 																$getresponse["api_request"] = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
 
-																if (is_object($getresponse["api_response"] = // Post JSON-encoded request via getResponse API.
-																	              json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"],
-																	                                                                   array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error)
-																    && $getresponse["api_response"]->result->deleted) $getresponse["api_success"] = $success = true;
+																if (is_object($getresponse["api_response"] = json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"], array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error) && $getresponse["api_response"]->result->deleted)
+																	$getresponse["api_success"] = $success = true;
 															}
 														$logt = c_ws_plugin__s2member_utilities::time_details ();
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
