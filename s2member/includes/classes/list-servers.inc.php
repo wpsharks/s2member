@@ -119,7 +119,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														($mailchimp["api_merge_array"] = apply_filters ("ws_plugin__s2member_mailchimp_merge_array", $mailchimp["merge_array"], get_defined_vars ())), // Configured merge array above.
 														($mailchimp["api_email_type"] = apply_filters ("ws_plugin__s2member_mailchimp_email_type", "html", get_defined_vars ())), // Type of email to receive (i.e. html,text,mobile).
 														($mailchimp["api_double_optin"] = apply_filters ("ws_plugin__s2member_mailchimp_double_optin", $double_opt_in, get_defined_vars ())), // Abuse of this may cause account suspension.
-														($mailchimp["api_update_existing"] = apply_filters ("ws_plugin__s2member_mailchimp_update_existing", false, get_defined_vars ())), // Existing subscribers should be updated with this?
+														($mailchimp["api_update_existing"] = apply_filters ("ws_plugin__s2member_mailchimp_update_existing", true, get_defined_vars ())), // Existing subscribers should be updated with this?
 														($mailchimp["api_replace_interests"] = apply_filters ("ws_plugin__s2member_mailchimp_replace_interests", true, get_defined_vars ())), // Replace interest groups? (only if provided).
 														($mailchimp["api_send_welcome"] = apply_filters ("ws_plugin__s2member_mailchimp_send_welcome", false, get_defined_vars ())))) // See documentation. This is a weird option.
 															$mailchimp["api_success"] = $success = true; // Flag indicating that we DO have a successful processing of a new List; affects the function's overall return value.
@@ -142,7 +142,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 													}
 											}
 									}
-
 								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"]) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]))
 									{
 										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]) as $getresponse_list)
@@ -181,7 +180,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 													}
 											}
 									}
-
 								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_aweber_list_ids"]))
 									{
 										foreach (preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_aweber_list_ids"]) as $aweber_list)
@@ -217,7 +215,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 													}
 											}
 									}
-
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_process_list_servers", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -225,7 +222,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 								if /* Back on? */ ($email_configs_were_on)
 									c_ws_plugin__s2member_email_configs::email_config ();
 							}
-
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_process_list_servers", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -306,7 +302,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 													}
 											}
 									}
-
 								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"]) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]))
 									{
 										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]) as $getresponse_list)
@@ -353,7 +348,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 													}
 											}
 									}
-
 								if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_aweber_list_ids"]))
 									{
 										foreach (preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_aweber_list_ids"]) as $aweber_list)
@@ -391,7 +385,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 													}
 											}
 									}
-
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action ("ws_plugin__s2member_during_process_list_server_removals", get_defined_vars ());
 								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -399,7 +392,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 								if /* Back on? */ ($email_configs_were_on)
 									c_ws_plugin__s2member_email_configs::email_config ();
 							}
-
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_process_list_server_removals", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
@@ -465,7 +457,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
 									}
 							}
-
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action ("ws_plugin__s2member_after_auto_process_list_server_removals", get_defined_vars ());
 						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
