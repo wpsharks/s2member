@@ -60,7 +60,7 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 						if(is_email($_p['ws_plugin__s2member_profile_email']) && !email_exists($_p['ws_plugin__s2member_profile_email']))
 						{
 							$userdata['user_email'] = $_p['ws_plugin__s2member_profile_email'];
-							if($userdata['user_email'] !== $user->user_email)
+							if(strcasecmp($userdata['user_email'], $user->user_email) !== 0)
 								$email_change = TRUE;
 						}
 					if(!empty ($_p['ws_plugin__s2member_profile_password1']))
