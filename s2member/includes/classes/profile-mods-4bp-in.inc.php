@@ -33,7 +33,7 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_4bp_in'))
 		 * @package s2Member\Profiles
 		 * @since 3.5
 		 *
-		 * @attaches-to ``add_action('init');``
+		 * @attaches-to ``add_action('xprofile_updated_profile');``
 		 *
 		 * @return null After re-configuring the ``$current_user`` object.
 		 */
