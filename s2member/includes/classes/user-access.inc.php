@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				* @package s2Member\User_Access
 				* @since 3.5
 				*
-				* @param obj $user Optional. A `WP_User` object. Defaults to the current User.
+				* @param object $user Optional. A `WP_User` object. Defaults to the current User.
 				* 	In order to check the current User, you must call this function with no arguments/parameters.
 				* @return str Role ID/Name, or an empty string if they have no Role, or if ``$user`` does not exist, or if no User is currently logged-in.
 				*/
