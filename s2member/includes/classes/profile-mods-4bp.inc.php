@@ -35,7 +35,7 @@ if (!class_exists ("c_ws_plugin__s2member_profile_mods_4bp"))
 				*
 				* @attaches-to ``add_action("init");``
 				*
-				* @return null|inner Return-value of inner routine.
+				* @return null Return-value of inner routine.
 				*/
 				public static function handle_profile_modifications_4bp ()
 					{
