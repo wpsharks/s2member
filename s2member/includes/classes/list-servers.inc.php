@@ -146,23 +146,45 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 									{
 										foreach (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $level . "_getresponse_list_ids"]) as $getresponse_list)
 											{
-												$getresponse = array ("function" => __FUNCTION__, "func_get_args" => $args, "api_method" => "add_contact");
+												$getresponse = array ("function" => __FUNCTION__, "func_get_args" => $args);
 
 												if (($getresponse["list_id"] = $getresponse["list"] = trim ($getresponse_list)))
 													{
-														$getresponse["api_headers"] = array("Content-Type" => "application/json");
-														$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"],
+														$getresponse["api_method"] = "add_contact";
+														$getresponse["api_headers"]   = array("Content-Type" => "application/json");
+														$getresponse["api_params"]    = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"], array("campaigns" => array($getresponse["list_id"]), "email" => array("EQUALS" => $email)));
+														$getresponse["api_request"]   = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
+
+														if (is_object($getresponse["api_response"] = json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"], array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error) && ($getresponse["api_response_contact_ids"] = array_keys((array)$getresponse["api_response"]->result)) && ($getresponse["api_response_contact_id"] = $getresponse["api_response_contact_ids"][0]))
+															{
+																$getresponse["api_method"] = "set_contact_name";
+																$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"], array("contact" => $getresponse["api_response_contact_id"], "name" => trim($fname." ".$lname)));
+																$getresponse["api_request"] = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
+
+																if (is_object($getresponse["api_response"] = json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"], array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error))
+																{
+																	$getresponse["api_method"] = "set_contact_customs";
+																	$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"], array("contact" => $getresponse["api_response_contact_id"], "customs" => apply_filters ("ws_plugin__s2member_getresponse_customs_array", array(), get_defined_vars ())));
+																	$getresponse["api_request"] = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
+
+																	if (is_object($getresponse["api_response"] = json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"], array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error))
+																		 $getresponse["api_success"] = $success = true;
+																}
+															}
+														else // Create a new contact; i.e. they do not exist on this list yet.
+														{
+															$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"],
 														                                 array("name" => trim($fname." ".$lname), "email" => $email, "ip" => $ip,
 														                                       "campaign" => $getresponse["list_id"], "action" => "standard", "cycle_day" => 0,
 														                                       "customs" => apply_filters ("ws_plugin__s2member_getresponse_customs_array", array(), get_defined_vars ())));
-														if(!$getresponse["api_params"][1]["ip"] || $getresponse["api_params"][1]["ip"] === "unknown") unset($getresponse["api_params"][1]["ip"]); // Remove if empty; causes API error.
-														$getresponse["api_request"] = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
+															if(!$getresponse["api_params"][1]["ip"] || $getresponse["api_params"][1]["ip"] === "unknown") unset($getresponse["api_params"][1]["ip"]);
+															$getresponse["api_request"] = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
 
-														if (is_object($getresponse["api_response"] = // Post JSON-encoded request via getResponse API.
-															              json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"],
-															                                                                   array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error)
-														    && $getresponse["api_response"]->result->queued) $getresponse["api_success"] = $success = true;
-
+															if (is_object($getresponse["api_response"] = // Post JSON-encoded request via getResponse API.
+																              json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"],
+																                                                                   array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error)
+															    && $getresponse["api_response"]->result->queued) $getresponse["api_success"] = $success = true;
+														}
 														$logt = c_ws_plugin__s2member_utilities::time_details ();
 														$logv = c_ws_plugin__s2member_utilities::ver_details ();
 														$logm = c_ws_plugin__s2member_utilities::mem_details ();
