@@ -97,6 +97,7 @@ add_filter('registration_errors', 'c_ws_plugin__s2member_registrations::custom_r
 
 add_filter('add_signup_meta', 'c_ws_plugin__s2member_registrations::ms_process_signup_meta');
 add_filter('bp_signup_usermeta', 'c_ws_plugin__s2member_registrations::ms_process_signup_meta');
+add_filter('bp_core_activated_user', 'c_ws_plugin__s2member_registrations::bp_user_activation');
 add_filter('wpmu_validate_user_signup', 'c_ws_plugin__s2member_registrations::ms_validate_user_signup');
 add_action('signup_hidden_fields', 'c_ws_plugin__s2member_registrations::ms_process_signup_hidden_fields');
 add_filter('registration_errors', 'c_ws_plugin__s2member_registrations::ms_register_existing_user', 11, 3);

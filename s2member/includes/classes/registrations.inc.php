@@ -352,6 +352,34 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 								}
 						do_action("ws_plugin__s2member_after_configure_user_on_ms_blog_activation", get_defined_vars ());
 					}
+
+			/**
+			 * Assigns the proper role/ccaps on BP user activation.
+			 *
+			 * @attaches-to `bp_core_activated_user`
+			 *
+			 * @param string|integer $user_id Passed in by hook.
+			 */
+			public static function bp_user_activation($user_id)
+				{
+					foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
+					do_action("ws_plugin__s2member_before_bp_user_activation", get_defined_vars ());
+					unset($__refs, $__v);
+
+					if(is_multisite() || !$user_id) return; // Nothing to do.
+
+					$role = get_user_option('s2member_bp_activation_role', $user_id);
+					$ccaps = get_user_option('s2member_bp_activation_ccaps', $user_id);
+
+					if($role && ($user = new WP_User($user_id)) && $user->ID)
+					{
+						$user->set_role($role);
+						if($ccaps && is_array($ccaps)) foreach($ccaps as $_ccap)
+							$user->add_cap('access_s2member_ccap_'.$_ccap);
+						unset($_ccap); // Housekeeping.
+					}
+				}
+
 				/**
 				* Intersects with ``register_new_user()`` through s2Member's Multisite Networking patch.
 				*
@@ -641,6 +669,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		$pr_times["level" . $level] = (empty($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
 																		update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 																	}
+																if(!is_multisite() && c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())
+																{
+																	update_user_option($user_id, "s2member_bp_activation_role", $role);
+																	update_user_option($user_id, "s2member_bp_activation_ccaps", c_ws_plugin__s2member_user_access::user_access_ccaps($user));
+																}
 																if (($transient = "s2m_" . md5 ("s2member_transient_ipn_signup_vars_" . $subscr_id)) && is_array($ipn_signup_vars = get_transient ($transient)))
 																	{
 																		update_user_option ($user_id, "s2member_ipn_signup_vars", $ipn_signup_vars); // For future reference.
@@ -805,6 +838,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		$pr_times["level" . $level] = (empty($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
 																		update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 																	}
+																if(!is_multisite() && c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())
+																{
+																	update_user_option($user_id, "s2member_bp_activation_role", $role);
+																	update_user_option($user_id, "s2member_bp_activation_ccaps", c_ws_plugin__s2member_user_access::user_access_ccaps($user));
+																}
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action("ws_plugin__s2member_during_configure_user_registration_front_side_free", get_defined_vars ());
 																do_action("ws_plugin__s2member_during_configure_user_registration_front_side", get_defined_vars ());
