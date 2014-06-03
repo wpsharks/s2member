@@ -186,6 +186,45 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 
 						return /* Return for uniformity. */;
 					}
-			}
+				/**
+				 * Filters the Lost Password URL when the call is made from the /wp-login.php system
+				 * and changes the default behavior of wp_lostpassword_url() so that it uses site_url()
+				 * instead of network_site_url(), but only if the current $_SERVER['REQUEST_URI'] differs
+				 * from the Parent Site URL, as returned by network_site_url(). In a non-multisite
+				 * environment, the default WordPress behavior (as of v3.9.1) is used.
+				 *
+				 * @package s2Member\Login_Customizations
+				 * @since 14xxxx
+				 *
+				 * @attaches-to ``add_filter("lostpassword_url");``
+				 *
+				 * @param string $lostpassword_url The lost password page URL.
+				 * @param string $redirect The path to redirect to on login.
+				 *
+				 * @return string Lost password URL.
+				 */
+				public static function lost_password_url($lostpassword_url, $redirect)
+				{
+
+					// Build a URL that we can compare to site_url() and network_site_url()
+					$scheme = (is_ssl()) ? 'https' : 'http';
+					$url    = $scheme.'://'.$_SERVER["HTTP_HOST"].strtok($_SERVER["REQUEST_URI"], '?'); // Request URL minus query vars
+
+					/*
+					 * If the request URI contains wp-login.php but the URL doesn't match the Parent Site URL,
+					 * return the Child Site Lost Password URL instead of the Parent Site Lost Password URL.
+					 */
+					if(basename(strtok($_SERVER['REQUEST_URI'], '?')) === 'wp-login.php' && strpos($url, (string)network_site_url('wp-login.php')) === FALSE && apply_filters("ws_plugin__s2member_tweak_lost_password_url", TRUE, get_defined_vars()))
+					{
+						$args = array('action' => 'lostpassword');
+						if(!empty($redirect))
+							$args['redirect_to'] = $redirect;
+
+						$lostpassword_url = add_query_arg(urlencode_deep($args), site_url('wp-login.php', 'login'));
+					}
+
+					return apply_filters("ws_plugin__s2member_lost_password_url", $lostpassword_url, $redirect, get_defined_vars());
+				}
+		}
 	}
 ?>
