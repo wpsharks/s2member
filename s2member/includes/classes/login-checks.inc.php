@@ -43,13 +43,13 @@ if (!class_exists ("c_ws_plugin__s2member_login_checks"))
 						if(!is_multisite()) return $user_or_wp_error;
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_ms_wp_authenticate_user", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_ms_wp_authenticate_user", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if(is_a($user_or_wp_error, "WP_User") && ($user = $user_or_wp_error) && $user->ID && !is_super_admin($user->ID) && !in_array(get_current_blog_id(), array_keys(get_blogs_of_user($user->ID)), TRUE))
 							$user_or_wp_error = new WP_Error("invalid_username", _x("<strong>ERROR</strong>: Invalid username for this site.", "s2member-front", "s2member"));
 
-						return apply_filters ("ws_plugin__s2member_ms_wp_authenticate_user", $user_or_wp_error, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_ms_wp_authenticate_user", $user_or_wp_error, get_defined_vars ());
 					}
 
 				/**
@@ -69,13 +69,13 @@ if (!class_exists ("c_ws_plugin__s2member_login_checks"))
 							return $user_or_wp_error; // Simultaneous login monitoring not enabled here.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_stop_simultaneous_logins", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_stop_simultaneous_logins", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if(is_a($user_or_wp_error, "WP_User") && ($user = $user_or_wp_error) && $user->ID && !is_super_admin($user->ID) && c_ws_plugin__s2member_login_checks::get_simultaneous_logins($user->user_login) + 1 > $max)
 							$user_or_wp_error = new WP_Error("max_simultaneous_logins", sprintf(_x('<strong>ERROR</strong>: Max simultaneous logins for username: %1$s. Please wait %2$s and try again.', "s2member-front", "s2member"), $user->user_login, $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_simultaneous_logins_timeout"]));
 
-						return apply_filters ("ws_plugin__s2member_stop_simultaneous_logins", $user_or_wp_error, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_stop_simultaneous_logins", $user_or_wp_error, get_defined_vars ());
 					}
 
 				/**
@@ -98,8 +98,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_checks"))
 							return; // Simultaneous login monitoring not enabled here.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_monitor_simultaneous_logins", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_monitor_simultaneous_logins", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$user                         = wp_get_current_user();
 						$username                     = $user->user_login; // The username.
@@ -123,8 +123,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_checks"))
 							return; // Simultaneous login monitoring not enabled here.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_simultaneous_logout", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_simultaneous_logout", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$user                         = wp_get_current_user();
 						$username                     = $user->user_login; // The username.
@@ -145,8 +145,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_checks"))
 						if(!$username) return 0; // Nothing to get; should not happen.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_get_simultaneous_logins", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_get_simultaneous_logins", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$prefix = /* s2Member Transient prefix for all simultaneous login monitoring. */ "s2m_slm_";
                   $transient_entries = $prefix.md5("s2member_simultaneous_login_entries_for_".strtolower((string)$username));
@@ -178,8 +178,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_checks"))
 						if(!$username) return; // Nothing to do; should not happen.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_update_simultaneous_logins", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_update_simultaneous_logins", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$prefix = /* s2Member Transient prefix for all simultaneous login monitoring. */ "s2m_slm_";
                   $transient_entries = $prefix.md5("s2member_simultaneous_login_entries_for_".strtolower((string)$username));
@@ -201,8 +201,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_checks"))
 						set_transient($transient_entries, $entries, strtotime("+".$timeout) - time());
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_update_simultaneous_logins", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_update_simultaneous_logins", get_defined_vars ());
+						unset($__refs, $__v);
 					}
 			}
 	}

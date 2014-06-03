@@ -35,15 +35,15 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
          * @package s2Member\IP_Restrictions
          * @since 3.5
          *
-         * @param str $ip IP Address.
-         * @param str $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
+         * @param string $ip IP Address.
+         * @param string $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
          * @return bool True if IP Restrictions are OK, otherwise this function will exit script execution after issuing a warning.
          */
         public static function ip_restrictions_ok($ip = FALSE, $restriction = FALSE)
         {
             foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
             do_action("ws_plugin__s2member_before_ip_restrictions_ok", get_defined_vars());
-            unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+            unset($__refs, $__v);
 
             if(!apply_filters("ws_plugin__s2member_disable_all_ip_restrictions", false, get_defined_vars())
                 /* Also allow specific exclusions here. */ && !apply_filters("ws_plugin__s2member_disable_specific_ip_restriction", false, get_defined_vars())
@@ -84,7 +84,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
                     foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
                     do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
-                    unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+                    unset($__refs, $__v);
 
 					exit /* Clean exit with 503 error message. */($msg_503);
                 }
@@ -109,7 +109,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
                     foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
                     do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
-                    unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+                    unset($__refs, $__v);
 
                     exit /* Clean exit with 503 error message. */($msg_503);
                 }
@@ -118,7 +118,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
                 {
                     foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
                     do_action("ws_plugin__s2member_during_ip_restrictions_ok_yes", get_defined_vars());
-                    unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+                    unset($__refs, $__v);
 
                     return apply_filters("ws_plugin__s2member_ip_restrictions_ok", true, get_defined_vars());
                 }
@@ -126,7 +126,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
             foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
             do_action("ws_plugin__s2member_during_ip_restrictions_ok_yes", get_defined_vars());
-            unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+            unset($__refs, $__v);
 
             return apply_filters("ws_plugin__s2member_ip_restrictions_ok", true, get_defined_vars());
         }
@@ -136,7 +136,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
          * @package s2Member\IP_Restrictions
          * @since 130407
          *
-         * @param str $restriction Unique IP Restriction name/identifier. Such as Username, or a unique access code.
+         * @param string $restriction Unique IP Restriction name/identifier. Such as Username, or a unique access code.
          * @return bool TRUE if at or above max allowable IPs; else FALSE.
          */
         public static function specific_ip_restriction_at_or_above_max($restriction = FALSE)
@@ -170,7 +170,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
          * @package s2Member\IP_Restrictions
          * @since 3.5
          *
-         * @param str $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
+         * @param string $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
          * @return bool True if the specific IP Restriction is associated with a security breach, else false.
          */
         public static function specific_ip_restriction_breached_security($restriction = FALSE)
@@ -189,7 +189,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
          * @package s2Member\IP_Restrictions
          * @since 3.5
          *
-         * @param str $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
+         * @param string $restriction Unique IP Restriction name/identifier. Such as a Username, or a unique access code.
          * @return bool Always returns a `true` value.
          *
          * @todo Make return value conditional, based on success.

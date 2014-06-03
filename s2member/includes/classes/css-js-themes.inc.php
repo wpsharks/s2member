@@ -49,7 +49,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 						else if(c_ws_plugin__s2member_systematics::is_s2_systematic_use_page())
 							$load = TRUE;
 
-						else if(!empty($_GET[apply_filters ("ws_plugin__s2member_check_force_ssl_get_var_name", "s2-ssl", array())]))
+						else if(!empty($_GET[apply_filters("ws_plugin__s2member_check_force_ssl_get_var_name", "s2-ssl", array())]))
 							$load = TRUE;
 
 						else if(c_ws_plugin__s2member_utils_conds::bp_is_installed()
@@ -84,17 +84,17 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 				*/
 				public static function add_css ()
 					{
-						do_action ("ws_plugin__s2member_before_add_css", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_add_css", get_defined_vars ());
 
 						if(!is_admin () && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js())
 							{
 								$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"];
 
-								wp_enqueue_style ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_css=1&qcABC=1", array (), c_ws_plugin__s2member_utilities::ver_checksum (), "all");
+								wp_enqueue_style ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_css=1&qcABC=1", array(), c_ws_plugin__s2member_utilities::ver_checksum (), "all");
 
-								do_action ("ws_plugin__s2member_during_add_css", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_add_css", get_defined_vars ());
 							}
-						do_action ("ws_plugin__s2member_after_add_css", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_add_css", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -114,7 +114,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 					{
 						global /* Need this for comparisons. */ $pagenow;
 
-						do_action ("ws_plugin__s2member_before_add_js_w_globals", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_add_js_w_globals", get_defined_vars ());
 
 						if ((!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js())
 						    || (is_user_admin () && $pagenow === "profile.php" && !current_user_can ("edit_users")))
@@ -126,15 +126,15 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 										$md5 = /* An MD5 hash based on global key => values. */ WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5;
 										// The MD5 hash allows the script to be cached in the browser until the globals happen to change.
 										// For instance, the global variables may change when a User who is logged-in changes their Profile.
-										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=" . urlencode ($md5) . "&qcABC=1", array ("jquery"), c_ws_plugin__s2member_utilities::ver_checksum (), TRUE);
+										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=" . urlencode ($md5) . "&qcABC=1", array("jquery"), c_ws_plugin__s2member_utilities::ver_checksum (), TRUE);
 									}
 								else // Else if they are not logged in, we distinguish the JavaScript file by NOT including $md5.
 									{ // This essentially creates 2 versions of the script. One while logged in & another when not.
-										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=1&qcABC=1", array ("jquery"), c_ws_plugin__s2member_utilities::ver_checksum (), TRUE);
+										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=1&qcABC=1", array("jquery"), c_ws_plugin__s2member_utilities::ver_checksum (), TRUE);
 									}
-								do_action ("ws_plugin__s2member_during_add_js_w_globals", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_add_js_w_globals", get_defined_vars ());
 							}
-						do_action ("ws_plugin__s2member_after_add_js_w_globals", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_add_js_w_globals", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

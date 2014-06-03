@@ -59,7 +59,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_update_all_options", get_defined_vars()); // If you use this Hook, be sure to use ``wp_verify_nonce()``.
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						if($verified || (!empty($_POST["ws_plugin__s2member_options_save"]) && ($nonce = $_POST["ws_plugin__s2member_options_save"]) && wp_verify_nonce($nonce, "ws-plugin--s2member-options-save")))
 							{
@@ -81,7 +81,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_update_all_options", get_defined_vars()); // If you use this Hook, be sure to use ``wp_verify_nonce()``.
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								unset($__refs, $__v);
 
 								$options = ws_plugin__s2member_configure_options_and_their_defaults(($options = array_merge($options, array("options_version" => (string)($options["options_version"] + 0.001)))));
 								update_option("ws_plugin__s2member_options", $options).((is_multisite() && is_main_site()) ? update_site_option("ws_plugin__s2member_options", $options) : null).update_option("ws_plugin__s2member_cache", array());
@@ -120,7 +120,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_after_update_all_options", get_defined_vars()); // If you use this Hook, be sure to use ``wp_verify_nonce()``.
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						return apply_filters("ws_plugin__s2member_update_all_options", (($updated_all_options) ? true : false), get_defined_vars());
 					}
@@ -262,14 +262,14 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 				* @attaches-to ``add_filter("plugin_action_links");``
 				*
 				* @param array $actions Expects an existing array of actions links, passed in by the Filter.
-				* @param str $plugin_file Expects path to a plugin file. We need to test against this for s2Member.
+				* @param string $plugin_file Expects path to a plugin file. We need to test against this for s2Member.
 				* @return array An array of links, Filtered by this routine.
 				*/
 				public static function _add_settings_link($actions = FALSE, $plugin_file = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("_ws_plugin__s2member_before_add_settings_link", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						if($plugin_file === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["plugin_basename"] && is_array($actions))
 							{
@@ -278,7 +278,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("_ws_plugin__s2member_during_add_settings_link", get_defined_vars());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								unset($__refs, $__v);
 							}
 
 						return apply_filters("_ws_plugin__s2member_add_settings_link", $actions, get_defined_vars());

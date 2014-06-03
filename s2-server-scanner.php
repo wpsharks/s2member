@@ -136,7 +136,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 *    ``websharks_core_v3_deps_x__check_my_server``.
 	 *
 	 * @return boolean|array TRUE if no `issues`.
-	 *    If there ARE `issues`, this returns a multidimensional array (which is NEVER empty).
+	 *    If there ARE `issues`, this returns a multidimensional array(which is NEVER empty).
 	 *    A possible FALSE return value (initially), if an auto-fix is being requested by the site owner.
 	 *    A possible FALSE return value, if invalid types are passed through arguments list.
 	 *

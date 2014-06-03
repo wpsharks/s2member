@@ -35,17 +35,17 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 				*
 				* @attaches-to ``add_action("save_post");``
 				*
-				* @param int|str $post_id Numeric Post/Page ID.
+				* @param int|string $post_id Numeric Post/Page ID.
 				* @return null
 				*/
 				public static function save_meta_boxes ($post_id = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_save_meta_boxes", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_save_meta_boxes", get_defined_vars ());
+						unset($__refs, $__v);
 
-						if ($post_id && !empty ($_POST["ws_plugin__s2member_security_meta_box_save"]) && ($nonce = $_POST["ws_plugin__s2member_security_meta_box_save"]) && wp_verify_nonce ($nonce, "ws-plugin--s2member-security-meta-box-save"))
-							if (!empty ($_POST["ws_plugin__s2member_security_meta_box_save_id"]) && $post_id == $_POST["ws_plugin__s2member_security_meta_box_save_id"] && !empty ($_POST["post_type"]))
+						if ($post_id && !empty($_POST["ws_plugin__s2member_security_meta_box_save"]) && ($nonce = $_POST["ws_plugin__s2member_security_meta_box_save"]) && wp_verify_nonce ($nonce, "ws-plugin--s2member-security-meta-box-save"))
+							if (!empty($_POST["ws_plugin__s2member_security_meta_box_save_id"]) && $post_id == $_POST["ws_plugin__s2member_security_meta_box_save_id"] && !empty($_POST["post_type"]))
 								// We do NOT process historical revisions here; because it causes confusion in the General Options panel for s2Member.
 								{
 									$_p = /* Clean and create a local copy. */ c_ws_plugin__s2member_utils_strings::trim_deep (stripslashes_deep ($_POST));
@@ -66,18 +66,18 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 																if (($i = array_search ($page_id, $pages[$n])) !== false)
 																	unset($pages[$n][$i]);
 
-															if (isset ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]]) && is_array ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]]))
-																if ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]] !== array ("all") && !in_array ("all-page", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]) && !in_array ("all-pages", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
+															if (isset ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]]) && is_array($pages[$_p["ws_plugin__s2member_security_meta_box_level"]]))
+																if ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]] !== array("all") && !in_array("all-page", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]) && !in_array("all-pages", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
 																	array_push ($pages[$_p["ws_plugin__s2member_security_meta_box_level"]], (string)$page_id);
 
-															for ($n = 0, $new_options = array (); $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
-																$new_options = array_merge ($new_options, array ("ws_plugin__s2member_level" . $n . "_pages" => trim (implode (",", $pages[$n]))));
+															for ($n = 0, $new_options = array(); $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+																$new_options = array_merge ($new_options, array("ws_plugin__s2member_level" . $n . "_pages" => trim (implode (",", $pages[$n]))));
 
 															foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-															do_action ("ws_plugin__s2member_during_save_meta_boxes", get_defined_vars ());
-															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+															do_action("ws_plugin__s2member_during_save_meta_boxes", get_defined_vars ());
+															unset($__refs, $__v);
 
-															c_ws_plugin__s2member_menu_pages::update_all_options ($new_options, true, false, array ("page-conflict-warnings"), true);
+															c_ws_plugin__s2member_menu_pages::update_all_options ($new_options, true, false, array("page-conflict-warnings"), true);
 														}
 												}
 
@@ -92,18 +92,18 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 																if (($i = array_search ($post_id, $posts[$n])) !== false)
 																	unset($posts[$n][$i]);
 
-															if (isset ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]]) && is_array ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
-																if ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]] !== array ("all") && !in_array ("all-" . $_p["post_type"], $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]) && !in_array ("all-" . $_p["post_type"] . "s", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
+															if (isset ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]]) && is_array($posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
+																if ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]] !== array("all") && !in_array("all-" . $_p["post_type"], $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]) && !in_array("all-" . $_p["post_type"] . "s", $posts[$_p["ws_plugin__s2member_security_meta_box_level"]]))
 																	array_push ($posts[$_p["ws_plugin__s2member_security_meta_box_level"]], (string)$post_id);
 
-															for ($n = 0, $new_options = array (); $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
-																$new_options = array_merge ($new_options, array ("ws_plugin__s2member_level" . $n . "_posts" => trim (implode (",", $posts[$n]))));
+															for ($n = 0, $new_options = array(); $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+																$new_options = array_merge ($new_options, array("ws_plugin__s2member_level" . $n . "_posts" => trim (implode (",", $posts[$n]))));
 
 															foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-															do_action ("ws_plugin__s2member_during_save_meta_boxes", get_defined_vars ());
-															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+															do_action("ws_plugin__s2member_during_save_meta_boxes", get_defined_vars ());
+															unset($__refs, $__v);
 
-															c_ws_plugin__s2member_menu_pages::update_all_options ($new_options, true, false, array ("page-conflict-warnings"), true);
+															c_ws_plugin__s2member_menu_pages::update_all_options ($new_options, true, false, array("page-conflict-warnings"), true);
 														}
 												}
 
@@ -139,7 +139,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 										}
 								}
 
-						do_action ("ws_plugin__s2member_after_save_meta_boxes", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_save_meta_boxes", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

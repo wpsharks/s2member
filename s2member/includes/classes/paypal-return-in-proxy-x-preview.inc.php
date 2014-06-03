@@ -36,19 +36,19 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_return_in::paypal_return()}.
 				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
 				*/
-				public static function /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */ cp ($vars = array ())
+				public static function /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */ cp ($vars = array())
 					{
 						extract /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */($vars, EXTR_OVERWRITE | EXTR_REFS);
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_during_paypal_return_before_explicit_x_preview", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_during_paypal_return_before_explicit_x_preview", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$paypal["s2member_log"][] = "Test preview of Return Page `proxy_use`: ( `x_preview` ).";
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_during_paypal_return_during_explicit_x_preview", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_during_paypal_return_during_explicit_x_preview", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if /* Using a custom success redirection URL? */ ($custom_success_redirection)
 						{
@@ -65,10 +65,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 							   _x ("Continue (Click Here)", "s2member-front", "s2member"), home_url ("/"));
 						}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_during_paypal_return_after_explicit_x_preview", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_during_paypal_return_after_explicit_x_preview", get_defined_vars ());
+						unset($__refs, $__v);
 
-						return apply_filters ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview", $paypal, get_defined_vars ());
+						return apply_filters("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview", $paypal, get_defined_vars ());
 					}
 			}
 	}

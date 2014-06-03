@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_register"))
 				*/
 				public static function register ()
 					{
-						if (!empty ($_GET["s2member_register"]))
+						if (!empty($_GET["s2member_register"]))
 							{
 								return c_ws_plugin__s2member_register_in::register ();
 							}

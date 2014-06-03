@@ -37,15 +37,15 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 				*/
 				public static function check_ruri_level_access ()
 					{
-						do_action ("ws_plugin__s2member_before_check_ruri_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_check_ruri_level_access", get_defined_vars ());
 
-						$excluded = apply_filters ("ws_plugin__s2member_check_ruri_level_access_excluded", false, get_defined_vars ());
+						$excluded = apply_filters("ws_plugin__s2member_check_ruri_level_access_excluded", false, get_defined_vars ());
 
 						if (!$excluded && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"]) // Has it been excluded?
 							{
 								if (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page ()) // Do NOT touch WordPress Systematics. This excludes all WordPress Systematics.
 									{
-										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false; // Current User's object.
+										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty($user->ID)) ? $user : false; // Current User's object.
 
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri ($user, "root-returns-false")) && preg_match ("/^" . preg_quote ($login_redirection_uri, "/") . "$/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level0")))
 											c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("ruri", $_SERVER["REQUEST_URI"], "level", 0, $_SERVER["REQUEST_URI"], "sys") . exit ();
@@ -62,11 +62,11 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 													}
 											}
 
-										do_action ("ws_plugin__s2member_during_check_ruri_level_access", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_check_ruri_level_access", get_defined_vars ());
 									}
 							}
 
-						do_action ("ws_plugin__s2member_after_check_ruri_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_check_ruri_level_access", get_defined_vars ());
 
 						return; // For uniformity.
 					}
@@ -76,20 +76,20 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 				* @package s2Member\URIs
 				* @since 3.5
 				*
-				* @param str $uris A URI string, or a string of multiple URIs is also fine.
-				* @param obj $user Optional. A `WP_User` object. Defaults to the current User, if logged-in.
-				* @return str Collective string of input URIs, with Replacement Codes having been filled.
+				* @param string $uris A URI string, or a string of multiple URIs is also fine.
+				* @param object $user Optional. A `WP_User` object. Defaults to the current User, if logged-in.
+				* @return string Collective string of input URIs, with Replacement Codes having been filled.
 				*/
 				public static function fill_ruri_level_access_rc_vars ($uris = FALSE, $user = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_fill_ruri_level_access_rc_vars", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_fill_ruri_level_access_rc_vars", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$uris = (string)$uris; // Force ``$uris`` to a string value.
 						$orig_uris = $uris; // Record the original URIs that were passed in; collectively.
 
-						$user = ((is_object ($user) || is_object ($user = (is_user_logged_in ()) ? wp_get_current_user () : false)) && !empty ($user->ID)) ? $user : false;
+						$user = ((is_object ($user) || is_object ($user = (is_user_logged_in ()) ? wp_get_current_user () : false)) && !empty($user->ID)) ? $user : false;
 
 						$user_id = ($user) ? (string)$user->ID : "";
 						$user_login = ($user) ? (string)strtolower ($user->user_login) : "";
@@ -106,7 +106,7 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 						$uris = (strlen ($user_ccaps)) ? preg_replace ("/%%current_user_ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ccaps), $uris) : $uris;
 						$uris = (strlen ($user_logins)) ? preg_replace ("/%%current_user_logins%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_logins), $uris) : $uris;
 
-						return apply_filters ("ws_plugin__s2member_fill_ruri_level_access_rc_vars", $uris, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_fill_ruri_level_access_rc_vars", $uris, get_defined_vars ());
 					}
 			}
 	}

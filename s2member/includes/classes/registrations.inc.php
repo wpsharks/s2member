@@ -44,23 +44,23 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				public static function generate_password ($password = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_generate_password", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_generate_password", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"] || (c_ws_plugin__s2member_utils_conds::pro_is_installed () && c_ws_plugin__s2member_pro_remote_ops::is_remote_op ("create_user")))
 							{
-								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"] && !empty ($_POST["ws_plugin__s2member_custom_reg_field_user_pass1"]))
+								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"] && !empty($_POST["ws_plugin__s2member_custom_reg_field_user_pass1"]))
 									{
 										if (($custom = trim (stripslashes ((string)$_POST["ws_plugin__s2member_custom_reg_field_user_pass1"]))))
 											$password = $custom; // Yes, use s2Member custom Password supplied by User.
 									}
-								else if (c_ws_plugin__s2member_utils_conds::pro_is_installed () && c_ws_plugin__s2member_pro_remote_ops::is_remote_op ("create_user") && !empty ($GLOBALS["ws_plugin__s2member_generate_password_return"]))
+								else if (c_ws_plugin__s2member_utils_conds::pro_is_installed () && c_ws_plugin__s2member_pro_remote_ops::is_remote_op ("create_user") && !empty($GLOBALS["ws_plugin__s2member_generate_password_return"]))
 									{
 										if (($custom = trim (stripslashes ((string)$GLOBALS["ws_plugin__s2member_generate_password_return"]))))
 											$password = $custom; // Yes, use s2Member custom Password supplied by Remote Op.
 									}
 							}
-						return apply_filters ("ws_plugin__s2member_generate_password", ($GLOBALS["ws_plugin__s2member_generate_password_return"] = $password), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_generate_password", ($GLOBALS["ws_plugin__s2member_generate_password_return"] = $password), get_defined_vars ());
 					}
 
 				/**
@@ -84,10 +84,10 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				{
 					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 					do_action("ws_plugin__s2member_before_custom_registration_field_errors", get_defined_vars());
-					unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+					unset($__refs, $__v);
 
 					if (!is_admin () && preg_match ("/\/wp-login\.php/", $_SERVER["REQUEST_URI"]))
-						if (is_wp_error ($errors) && !empty ($_POST) && is_array ($_POST))
+						if (is_wp_error ($errors) && !empty($_POST) && is_array($_POST))
 							{
 								foreach(c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)) as $_key => $_value)
 									if(strpos($_key, "ws_plugin__s2member_custom_reg_field_") === 0)
@@ -100,7 +100,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 									$errors->add("custom_reg_field_".$_field_var, $_error);
 								unset($_field_var, $_error);
 							}
-					return apply_filters ("ws_plugin__s2member_custom_registration_field_errors", $errors, get_defined_vars ());
+					return apply_filters("ws_plugin__s2member_custom_registration_field_errors", $errors, get_defined_vars ());
 				}
 
 				/**
@@ -117,12 +117,12 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				{
 					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 					do_action("ws_plugin__s2member_before_custom_registration_field_errors_4bp", get_defined_vars());
-					unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+					unset($__refs, $__v);
 
 					if (!is_admin () && c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())
-						if(in_array ("registration", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
-							if(apply_filters ("ws_plugin__s2member_custom_registration_fields_4bp_display", true, get_defined_vars ()))
-								if (!empty($GLOBALS["bp"]->signup) && is_object($GLOBALS["bp"]->signup) && !empty ($_POST) && is_array ($_POST))
+						if(in_array("registration", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
+							if(apply_filters("ws_plugin__s2member_custom_registration_fields_4bp_display", true, get_defined_vars ()))
+								if (!empty($GLOBALS["bp"]->signup) && is_object($GLOBALS["bp"]->signup) && !empty($_POST) && is_array($_POST))
 									{
 										foreach(c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)) as $_key => $_value)
 											if(strpos($_key, "ws_plugin__s2member_custom_reg_field_") === 0)
@@ -154,24 +154,24 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				public static function ms_validate_user_signup ($result = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_ms_validate_user_signup", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_ms_validate_user_signup", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
-							if (!is_admin () && isset ($result["user_name"], $result["user_email"], $result["errors"]) && ((preg_match ("/\/wp-signup\.php/", $_SERVER["REQUEST_URI"]) && !empty ($_POST["stage"]) && preg_match ("/^validate-(user|blog)-signup$/", (string)$_POST["stage"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())))
+							if (!is_admin () && isset ($result["user_name"], $result["user_email"], $result["errors"]) && ((preg_match ("/\/wp-signup\.php/", $_SERVER["REQUEST_URI"]) && !empty($_POST["stage"]) && preg_match ("/^validate-(user|blog)-signup$/", (string)$_POST["stage"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())))
 								{
 									$errors =& $result["errors"]; /** @var $errors WP_Error */
-									if (in_array ($errors->get_error_code (), array ("user_name", "user_email", "user_email_used")))
+									if (in_array($errors->get_error_code (), array("user_name", "user_email", "user_email_used")))
 										if (c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog ($result["user_name"], $result["user_email"]))
 										{
 											unset($errors->errors["user_name"], $errors->errors["user_email"], $errors->errors["user_email_used"]);
 											unset($errors->error_data["user_name"], $errors->error_data["user_email"], $errors->error_data["user_email_used"]);
 										}
 									foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-									do_action ("ws_plugin__s2member_during_ms_validate_user_signup", get_defined_vars ());
-									unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+									do_action("ws_plugin__s2member_during_ms_validate_user_signup", get_defined_vars ());
+									unset($__refs, $__v);
 								}
-						return apply_filters ("ws_plugin__s2member_ms_validate_user_signup", $result, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_ms_validate_user_signup", $result, get_defined_vars ());
 					}
 				/**
 				* Adds hidden fields for ``$_POST`` vars on signup.
@@ -186,19 +186,19 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				*/
 				public static function ms_process_signup_hidden_fields ()
 					{
-						do_action ("ws_plugin__s2member_before_ms_process_signup_hidden_fields", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_ms_process_signup_hidden_fields", get_defined_vars ());
 
 						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
-							if (!is_admin () && !empty ($_POST) && is_array ($_POST) && ((preg_match ("/\/wp-signup\.php/", $_SERVER["REQUEST_URI"]) && !empty ($_POST["stage"]) && preg_match ("/^validate-(user|blog)-signup$/", (string)$_POST["stage"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())))
+							if (!is_admin () && !empty($_POST) && is_array($_POST) && ((preg_match ("/\/wp-signup\.php/", $_SERVER["REQUEST_URI"]) && !empty($_POST["stage"]) && preg_match ("/^validate-(user|blog)-signup$/", (string)$_POST["stage"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())))
 								{
 									foreach (c_ws_plugin__s2member_utils_strings::trim_deep (stripslashes_deep ($_POST)) as $key => $value)
 										if (preg_match ("/^ws_plugin__s2member_(custom_reg_field|user_new)_/", $key))
 											if ($key = preg_replace ("/_user_new_/", "_custom_reg_field_", $key))
 												echo '<input type="hidden" name="' . esc_attr ($key) . '" value="' . esc_attr (maybe_serialize ($value)) . '" />' . "\n";
 
-									do_action ("ws_plugin__s2member_during_ms_process_signup_hidden_fields", get_defined_vars ());
+									do_action("ws_plugin__s2member_during_ms_process_signup_hidden_fields", get_defined_vars ());
 								}
-						do_action ("ws_plugin__s2member_after_ms_process_signup_hidden_fields", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_ms_process_signup_hidden_fields", get_defined_vars ());
 					}
 				/**
 				* Adds Customs Fields to ``$meta`` on signup.
@@ -222,23 +222,23 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 						global $pagenow; // Need this to detect the current admin page.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_ms_process_signup_meta", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_ms_process_signup_meta", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
-							if (!empty ($_POST) && is_array ($_POST) && ((is_blog_admin () && $pagenow === "user-new.php") || (!is_admin () && ((preg_match ("/\/wp-signup\.php/", $_SERVER["REQUEST_URI"]) && !empty ($_POST["stage"]) && preg_match ("/^validate-(user|blog)-signup$/", (string)$_POST["stage"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())))))
+							if (!empty($_POST) && is_array($_POST) && ((is_blog_admin () && $pagenow === "user-new.php") || (!is_admin () && ((preg_match ("/\/wp-signup\.php/", $_SERVER["REQUEST_URI"]) && !empty($_POST["stage"]) && preg_match ("/^validate-(user|blog)-signup$/", (string)$_POST["stage"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_register_page ())))))
 								{
 									c_ws_plugin__s2member_email_configs::email_config (); // Configures `From:` header used in notifications.
 
-									$meta["add_to_blog"] = (empty ($meta["add_to_blog"])) ? $current_blog->blog_id : $meta["add_to_blog"];
-									$meta["new_role"] = (empty ($meta["new_role"])) ? get_option ("default_role") : $meta["new_role"];
+									$meta["add_to_blog"] = (empty($meta["add_to_blog"])) ? $current_blog->blog_id : $meta["add_to_blog"];
+									$meta["new_role"] = (empty($meta["new_role"])) ? get_option ("default_role") : $meta["new_role"];
 
 									foreach (c_ws_plugin__s2member_utils_strings::trim_deep (stripslashes_deep ($_POST)) as $key => $value)
 										if (preg_match ("/^ws_plugin__s2member_(custom_reg_field|user_new)_/", $key))
 											if ($key = preg_replace ("/_user_new_/", "_custom_reg_field_", $key))
 												$meta["s2member_ms_signup_meta"][$key] = maybe_unserialize ($value);
 								}
-						return apply_filters ("ws_plugin__s2member_ms_process_signup_meta", $meta, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_ms_process_signup_meta", $meta, get_defined_vars ());
 					}
 				/**
 				* Intersects with ``wpmu_activate_signup()`` through s2Member's Multisite Networking patch.
@@ -262,27 +262,27 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				public static function ms_activate_existing_user ($_error = FALSE, $vars = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_ms_activate_existing_user", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_ms_activate_existing_user", get_defined_vars ());
+						unset($__refs, $__v);
 
 						extract ($vars); // Extract all variables from ``wpmu_activate_signup()`` function.
 
 						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
 							if (!is_admin () && ((preg_match ("/\/wp-activate\.php/", $_SERVER["REQUEST_URI"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_activation_page ())))
 								{
-									if (!empty ($user_id) && !empty ($user_login) && !empty ($user_email) && !empty ($password) && !empty ($meta) && !empty ($meta["add_to_blog"]) && !empty ($meta["new_role"]))
-										if (!empty ($user_already_exists) && c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog ($user_login, $user_email, $meta["add_to_blog"]))
+									if (!empty($user_id) && !empty($user_login) && !empty($user_email) && !empty($password) && !empty($meta) && !empty($meta["add_to_blog"]) && !empty($meta["new_role"]))
+										if (!empty($user_already_exists) && c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog ($user_login, $user_email, $meta["add_to_blog"]))
 											{
 												add_user_to_blog ($meta["add_to_blog"], $user_id, $meta["new_role"]); // Add this User to the specified Blog.
-												wp_update_user (array ("ID" => $user_id, "user_pass" => $password)); // Update Password so it's the same as in the following msg.
+												wp_update_user (array("ID" => $user_id, "user_pass" => $password)); // Update Password so it's the same as in the following msg.
 												wpmu_welcome_user_notification ($user_id, $password, $meta); // Send welcome letter via email just like ``wpmu_activate_signup()`` does.
 
-												do_action ("wpmu_activate_user", $user_id, $password, $meta); // Process Hook that would have been fired inside ``wpmu_activate_signup()``.
+												do_action("wpmu_activate_user", $user_id, $password, $meta); // Process Hook that would have been fired inside ``wpmu_activate_signup()``.
 
-												return apply_filters ("ws_plugin__s2member_ms_activate_existing_user", array ("user_id" => $user_id, "password" => $password, "meta" => $meta), get_defined_vars ());
+												return apply_filters("ws_plugin__s2member_ms_activate_existing_user", array("user_id" => $user_id, "password" => $password, "meta" => $meta), get_defined_vars ());
 											}
 								}
-						return apply_filters ("ws_plugin__s2member_ms_activate_existing_user", $_error, get_defined_vars ()); // Else, return the standardized error.
+						return apply_filters("ws_plugin__s2member_ms_activate_existing_user", $_error, get_defined_vars ()); // Else, return the standardized error.
 					}
 				/**
 				* Configures new Users on a Multisite Network installation.
@@ -305,17 +305,17 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 						global $pagenow; // Detect the current admin page.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_configure_user_on_ms_user_activation", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_configure_user_on_ms_user_activation", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
 							if ((is_blog_admin () && $pagenow === "user-new.php" && isset ($_POST["noconfirmation"])) || (!is_admin () && ((preg_match ("/\/wp-activate\.php/", $_SERVER["REQUEST_URI"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_activation_page ()))))
 								{
-									c_ws_plugin__s2member_registrations::configure_user_registration ($user_id, $password, ((isset ($meta["s2member_ms_signup_meta"]) && is_array ($meta["s2member_ms_signup_meta"])) ? $meta["s2member_ms_signup_meta"] : array ()));
+									c_ws_plugin__s2member_registrations::configure_user_registration ($user_id, $password, ((isset ($meta["s2member_ms_signup_meta"]) && is_array($meta["s2member_ms_signup_meta"])) ? $meta["s2member_ms_signup_meta"] : array()));
 									delete_user_meta ($user_id, "s2member_ms_signup_meta");
 								}
 
-						do_action ("ws_plugin__s2member_after_configure_user_on_ms_user_activation", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_configure_user_on_ms_user_activation", get_defined_vars ());
 					}
 				/**
 				* Configures new Users on a Multisite Network installation.
@@ -341,16 +341,16 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				public static function configure_user_on_ms_blog_activation ($blog_id = FALSE, $user_id = FALSE, $password = FALSE, $title = FALSE, $meta = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_configure_user_on_ms_blog_activation", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_configure_user_on_ms_blog_activation", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
 							if (!is_admin () && ((preg_match ("/\/wp-activate\.php/", $_SERVER["REQUEST_URI"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_activation_page ())))
 								{
-									c_ws_plugin__s2member_registrations::configure_user_registration ($user_id, $password, ((isset ($meta["s2member_ms_signup_meta"]) && is_array ($meta["s2member_ms_signup_meta"])) ? $meta["s2member_ms_signup_meta"] : array ()));
+									c_ws_plugin__s2member_registrations::configure_user_registration ($user_id, $password, ((isset ($meta["s2member_ms_signup_meta"]) && is_array($meta["s2member_ms_signup_meta"])) ? $meta["s2member_ms_signup_meta"] : array()));
 									delete_user_meta ($user_id, "s2member_ms_signup_meta");
 								}
-						do_action ("ws_plugin__s2member_after_configure_user_on_ms_blog_activation", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_configure_user_on_ms_blog_activation", get_defined_vars ());
 					}
 				/**
 				* Intersects with ``register_new_user()`` through s2Member's Multisite Networking patch.
@@ -373,8 +373,8 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				public static function ms_register_existing_user ($errors = FALSE, $user_login = FALSE, $user_email = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_ms_register_existing_user", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_ms_register_existing_user", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
 							if (!is_admin () && /* `/wp-login.php`? */ preg_match ("/\/wp-login\.php/", $_SERVER["REQUEST_URI"]))
@@ -383,20 +383,20 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 										if (($user_id = c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog ($user_login, $user_email)))
 											{
 												foreach ($errors->get_error_codes () as $error_code)
-													if (!in_array ($error_code, array ("username_exists", "email_exists")))
+													if (!in_array($error_code, array("username_exists", "email_exists")))
 														$other_important_errors_exist[] = $error_code;
 
-												if (empty ($other_important_errors_exist)) // Only if/when NO other important errors exist already.
+												if (empty($other_important_errors_exist)) // Only if/when NO other important errors exist already.
 													{
 														$user_pass = wp_generate_password (); // A new Password for this User/Member will be generated now.
 														c_ws_plugin__s2member_registrations::ms_create_existing_user ($user_login, $user_email, $user_pass, $user_id);
 														update_user_option ($user_id, "default_password_nag", true, true); // Setup Password-change nag screen.
 														wp_new_user_notification ($user_id, $user_pass); // Welcome email, just like ``register_new_user()``.
 
-														$redirect_to = (!empty ($_REQUEST["redirect_to"])) ? trim (stripslashes ($_REQUEST["redirect_to"])) : false;
+														$redirect_to = (!empty($_REQUEST["redirect_to"])) ? trim (stripslashes ($_REQUEST["redirect_to"])) : false;
 														$redirect_to = ($redirect_to) ? $redirect_to : add_query_arg ("checkemail", urlencode ("registered"), wp_login_url ());
 
-														do_action ("ws_plugin__s2member_during_ms_register_existing_user", get_defined_vars ());
+														do_action("ws_plugin__s2member_during_ms_register_existing_user", get_defined_vars ());
 
 														wp_safe_redirect ($redirect_to) . exit (); // Safe, like: ``register_new_user()``.
 													}
@@ -405,7 +405,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 								else if (($ms = wpmu_validate_user_signup ($user_login, $user_email)) && isset ($ms["errors"]) && is_wp_error ($ms["errors"]) && $ms["errors"]->get_error_code ())
 									$errors->add ($ms["errors"]->get_error_code (), $ms["errors"]->get_error_message ());
 
-						return apply_filters ("ws_plugin__s2member_ms_register_existing_user", $errors, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_ms_register_existing_user", $errors, get_defined_vars ());
 					}
 				/**
 				* For Multisite Networks, this function is used to add a User to an existing Blog; and to simulate ``wp_create_user()`` behavior.
@@ -426,24 +426,24 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				public static function ms_create_existing_user ($user_login = FALSE, $user_email = FALSE, $user_pass = FALSE, $user_id = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_ms_create_existing_user", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_ms_create_existing_user", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
 							{
 								if (($user_id || ($user_id = c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog ($user_login, $user_email))) && $user_pass)
 									{
 										$role = get_option ("default_role"); // Use default Role.
-										add_existing_user_to_blog (array ("user_id" => $user_id, "role" => $role)); // Add User.
-										wp_update_user (array ("ID" => $user_id, "user_pass" => $user_pass)); // Update to ``$user_pass``.
+										add_existing_user_to_blog (array("user_id" => $user_id, "role" => $role)); // Add User.
+										wp_update_user (array("ID" => $user_id, "user_pass" => $user_pass)); // Update to ``$user_pass``.
 
-										do_action ("ws_plugin__s2member_during_ms_create_existing_user", get_defined_vars ());
-										do_action ("user_register", $user_id); // So s2Member knows a User is registering.
+										do_action("ws_plugin__s2member_during_ms_create_existing_user", get_defined_vars ());
+										do_action("user_register", $user_id); // So s2Member knows a User is registering.
 
-										return apply_filters ("ws_plugin__s2member_ms_create_existing_user", $user_id, get_defined_vars ());
+										return apply_filters("ws_plugin__s2member_ms_create_existing_user", $user_id, get_defined_vars ());
 									}
 							}
-						return apply_filters ("ws_plugin__s2member_ms_create_existing_user", false, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_ms_create_existing_user", false, get_defined_vars ());
 					}
 				/**
 				* Configures all new Users.
@@ -473,8 +473,8 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 						static $email_config, $processed; // Static vars prevent duplicate processing.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_configure_user_registration", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_configure_user_registration", get_defined_vars ());
+						unset($__refs, $__v);
 
 						// With Multisite Networking, we need this to run on `user_register` ahead of `wpmu_activate_[user|blog]`.
 						if (!isset ($email_config) && ($email_config = true)) // Anytime this routine is fired; we configure email.
@@ -485,14 +485,14 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 
 						if (!$processed /* Process only once. Safeguard this routine against duplicate processing via plugins (or even WordPress itself). */)
 
-							if ( /* We MUST have at least ONE of these three arrays. Any of these will do in most cases. */is_array ($_p) || is_array ($meta) || is_array ($rvs))
+							if ( /* We MUST have at least ONE of these three arrays. Any of these will do in most cases. */is_array($_p) || is_array($meta) || is_array($rvs))
 
-								if (!(is_multisite () && is_blog_admin () && $pagenow === "user-new.php" && isset ($_p["noconfirmation"]) && is_super_admin () && !is_array ($meta)))
-									if (!(preg_match ("/\/wp-activate\.php/", $_SERVER["REQUEST_URI"]) && !is_array ($meta)) /* If activating; we absolutely MUST have a ``$meta`` array. */)
-										if (!(c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_activation_page () && !is_array ($meta)) /* If activating; MUST have ``$meta``. */)
-											if (!(c_ws_plugin__s2member_utils_conds::pro_is_installed () && c_ws_plugin__s2member_pro_remote_ops::is_remote_op ("create_user") && !is_array ($rvs)))
+								if (!(is_multisite () && is_blog_admin () && $pagenow === "user-new.php" && isset ($_p["noconfirmation"]) && is_super_admin () && !is_array($meta)))
+									if (!(preg_match ("/\/wp-activate\.php/", $_SERVER["REQUEST_URI"]) && !is_array($meta)) /* If activating; we absolutely MUST have a ``$meta`` array. */)
+										if (!(c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_activation_page () && !is_array($meta)) /* If activating; MUST have ``$meta``. */)
+											if (!(c_ws_plugin__s2member_utils_conds::pro_is_installed () && c_ws_plugin__s2member_pro_remote_ops::is_remote_op ("create_user") && !is_array($rvs)))
 
-												if ($user_id && is_object ($user = new WP_User ($user_id)) && !empty ($user->ID) && ($user_id = $user->ID) && ($processed = true))
+												if ($user_id && is_object ($user = new WP_User ($user_id)) && !empty($user->ID) && ($user_id = $user->ID) && ($processed = true))
 													{
 														settype /* Force arrays here. */ ($_p, "array") . settype ($meta, "array") . settype ($rvs, "array");
 
@@ -510,7 +510,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 															exit (_x ("s2Member security violation. You attempted to POST administrative variables that will NOT be trusted in a NON-administrative zone!", "s2member-front", "s2member"));
 
 														$_pmr = array_merge ($_p, $meta, $rvs); // Merge all of these arrays together now, in this specific order.
-														unset ($_p, $meta, $rvs); // These variables can all be unset now; we have them all in the ``$_pmr`` array.
+														unset($_p, $meta, $rvs); // These variables can all be unset now; we have them all in the ``$_pmr`` array.
 
 														$custom_reg_display_name = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_display_name"]; // Can be configured by the site owner.
 
@@ -538,22 +538,22 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$notes = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_notes"];
 
 																$opt_in = (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_opt_in"]) ? true : false;
-																$opt_in = (!$opt_in && !empty ($_pmr["ws_plugin__s2member_custom_reg_field_opt_in"])) ? true : $opt_in;
+																$opt_in = (!$opt_in && !empty($_pmr["ws_plugin__s2member_custom_reg_field_opt_in"])) ? true : $opt_in;
 
 																if (!($fname = $user->first_name))
-																	if (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_first_name"]))
+																	if (!empty($_pmr["ws_plugin__s2member_custom_reg_field_first_name"]))
 																		$fname = (string)$_pmr["ws_plugin__s2member_custom_reg_field_first_name"];
 
 																if (!$fname) // Also try BuddyPress.
-																	if (!empty ($_pmr["field_1"])) // BuddyPress?
+																	if (!empty($_pmr["field_1"])) // BuddyPress?
 																		$fname = trim (preg_replace ("/ (.*)$/", "", (string)$_pmr["field_1"]));
 
 																if (!($lname = $user->last_name))
-																	if (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_last_name"]))
+																	if (!empty($_pmr["ws_plugin__s2member_custom_reg_field_last_name"]))
 																		$lname = (string)$_pmr["ws_plugin__s2member_custom_reg_field_last_name"];
 
 																if (!$lname) // Also try BuddyPress.
-																	if (!empty ($_pmr["field_1"]) && preg_match ("/^(.+?) (.+)$/", (string)$_pmr["field_1"]))
+																	if (!empty($_pmr["field_1"]) && preg_match ("/^(.+?) (.+)$/", (string)$_pmr["field_1"]))
 																		$lname = trim (preg_replace ("/^(.+?) (.+)$/", "$2", (string)$_pmr["field_1"]));
 
 																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"] && !$fname && $login)
@@ -562,11 +562,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$name = trim ($fname . " " . $lname); // Both names.
 
 																if (!($pass = $password)) // Try s2Member's generator.
-																	if (!empty ($GLOBALS["ws_plugin__s2member_generate_password_return"]))
+																	if (!empty($GLOBALS["ws_plugin__s2member_generate_password_return"]))
 																		$pass = (string)$GLOBALS["ws_plugin__s2member_generate_password_return"];
 
 																if (!$pass) // Also try BuddyPress Password.
-																	if (!empty ($_pmr["signup_password"])) // BuddyPress?
+																	if (!empty($_pmr["signup_password"])) // BuddyPress?
 																		$pass = (string)$_pmr["signup_password"];
 
 																if ($pass) // No Password nag. Update this globally.
@@ -591,13 +591,13 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																if (!$user->display_name || $user->display_name === $user->user_login)
 																	{
 																		if ($custom_reg_display_name === "full" && $name)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $name));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $name));
 																		else if ($custom_reg_display_name === "first" && $fname)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $fname));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $fname));
 																		else if ($custom_reg_display_name === "last" && $lname)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $lname));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $lname));
 																		else if ($custom_reg_display_name === "login" && $login)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $login));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $login));
 																	}
 																if (is_multisite ()) // Should we handle Main Site permissions and Originating Blog ID#?
 																	{
@@ -620,7 +620,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		if (strlen ($ccap = trim (strtolower (preg_replace ("/[^a-z_0-9]/i", "", $ccap)))))
 																			$user->add_cap ("access_s2member_ccap_" . $ccap);
 
-																if (!($fields = array ()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
+																if (!($fields = array()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 																	foreach (json_decode ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 																		{
 																			$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
@@ -631,40 +631,40 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		}
 																unset($field, $field_var, $field_id_class); // Housekeeping.
 
-																if (!empty ($fields)) // Only if NOT empty.
+																if (!empty($fields)) // Only if NOT empty.
 																	update_user_option ($user_id, "s2member_custom_fields", $fields);
 
 																if ($level > 0) // We ONLY process this if they are higher than Level #0.
 																	{
 																		$pr_times = get_user_option ("s2member_paid_registration_times", $user_id);
-																		$pr_times["level"] = (empty ($pr_times["level"])) ? time () : $pr_times["level"];
-																		$pr_times["level" . $level] = (empty ($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
+																		$pr_times["level"] = (empty($pr_times["level"])) ? time () : $pr_times["level"];
+																		$pr_times["level" . $level] = (empty($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
 																		update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 																	}
-																if (($transient = "s2m_" . md5 ("s2member_transient_ipn_signup_vars_" . $subscr_id)) && is_array ($ipn_signup_vars = get_transient ($transient)))
+																if (($transient = "s2m_" . md5 ("s2member_transient_ipn_signup_vars_" . $subscr_id)) && is_array($ipn_signup_vars = get_transient ($transient)))
 																	{
 																		update_user_option ($user_id, "s2member_ipn_signup_vars", $ipn_signup_vars); // For future reference.
 																		delete_transient ($transient); // This can be deleted now.
 																	}
-																if (($transient = "s2m_" . md5 ("s2member_transient_ipn_subscr_payment_" . $subscr_id)) && is_array ($subscr_payment = get_transient ($transient)) && !empty ($subscr_payment["subscr_gateway"]))
+																if (($transient = "s2m_" . md5 ("s2member_transient_ipn_subscr_payment_" . $subscr_id)) && is_array($subscr_payment = get_transient ($transient)) && !empty($subscr_payment["subscr_gateway"]))
 																	{
-																		$proxy = array ("s2member_paypal_proxy" => stripslashes ((string)$subscr_payment["subscr_gateway"]), "s2member_paypal_proxy_verification" => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen ());
-																		c_ws_plugin__s2member_utils_urls::remote (site_url ("/?s2member_paypal_notify=1"), array_merge(stripslashes_deep ($subscr_payment), $proxy), array ("timeout" => 20));
+																		$proxy = array("s2member_paypal_proxy" => stripslashes ((string)$subscr_payment["subscr_gateway"]), "s2member_paypal_proxy_verification" => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen ());
+																		c_ws_plugin__s2member_utils_urls::remote (site_url ("/?s2member_paypal_notify=1"), array_merge(stripslashes_deep ($subscr_payment), $proxy), array("timeout" => 20));
 																		delete_transient ($transient); // This can be deleted now.
 																	}
-																if (($transient = "s2m_" . md5 ("s2member_transient_ipn_subscr_eot_" . $subscr_id)) && is_array ($subscr_eot = get_transient ($transient)) && !empty ($subscr_eot["subscr_gateway"]))
+																if (($transient = "s2m_" . md5 ("s2member_transient_ipn_subscr_eot_" . $subscr_id)) && is_array($subscr_eot = get_transient ($transient)) && !empty($subscr_eot["subscr_gateway"]))
 																	{
-																		$proxy = array ("s2member_paypal_proxy" => stripslashes ((string)$subscr_eot["subscr_gateway"]), "s2member_paypal_proxy_verification" => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen ());
-																		c_ws_plugin__s2member_utils_urls::remote (site_url ("/?s2member_paypal_notify=1"), array_merge(stripslashes_deep ($subscr_eot), $proxy), array ("timeout" => 20));
+																		$proxy = array("s2member_paypal_proxy" => stripslashes ((string)$subscr_eot["subscr_gateway"]), "s2member_paypal_proxy_verification" => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen ());
+																		c_ws_plugin__s2member_utils_urls::remote (site_url ("/?s2member_paypal_notify=1"), array_merge(stripslashes_deep ($subscr_eot), $proxy), array("timeout" => 20));
 																		delete_transient ($transient); // This can be deleted now.
 																	}
 																if (!headers_sent ()) // Only if headers are NOT yet sent. Here we establish both Signup and Payment Tracking Cookies.
 																	@setcookie ("s2member_tracking", ($s2member_tracking = c_ws_plugin__s2member_utils_encryption::encrypt ($subscr_id)), time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . @setcookie ("s2member_tracking", $s2member_tracking, time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN) . ($_COOKIE["s2member_tracking"] = $s2member_tracking);
 
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																do_action ("ws_plugin__s2member_during_configure_user_registration_front_side_paid", get_defined_vars ());
-																do_action ("ws_plugin__s2member_during_configure_user_registration_front_side", get_defined_vars ());
-																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																do_action("ws_plugin__s2member_during_configure_user_registration_front_side_paid", get_defined_vars ());
+																do_action("ws_plugin__s2member_during_configure_user_registration_front_side", get_defined_vars ());
+																unset($__refs, $__v);
 															}
 														else if (!is_admin () && (!c_ws_plugin__s2member_utils_conds::pro_is_installed () || !c_ws_plugin__s2member_pro_remote_ops::is_remote_op ("create_user")))
 															{ /* This routine could be processed through `/wp-login.php?action=register`, `/wp-activate.php`, or `/activate` via BuddyPress`.
@@ -702,22 +702,22 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$notes = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_notes"];
 
 																$opt_in = (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_opt_in"]) ? true : false;
-																$opt_in = (!$opt_in && !empty ($_pmr["ws_plugin__s2member_custom_reg_field_opt_in"])) ? true : $opt_in;
+																$opt_in = (!$opt_in && !empty($_pmr["ws_plugin__s2member_custom_reg_field_opt_in"])) ? true : $opt_in;
 
 																if (!($fname = $user->first_name))
-																	if (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_first_name"]))
+																	if (!empty($_pmr["ws_plugin__s2member_custom_reg_field_first_name"]))
 																		$fname = (string)$_pmr["ws_plugin__s2member_custom_reg_field_first_name"];
 
 																if (!$fname) // Also try BuddyPress.
-																	if (!empty ($_pmr["field_1"])) // BuddyPress?
+																	if (!empty($_pmr["field_1"])) // BuddyPress?
 																		$fname = trim (preg_replace ("/ (.*)$/", "", (string)$_pmr["field_1"]));
 
 																if (!($lname = $user->last_name))
-																	if (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_last_name"]))
+																	if (!empty($_pmr["ws_plugin__s2member_custom_reg_field_last_name"]))
 																		$lname = (string)$_pmr["ws_plugin__s2member_custom_reg_field_last_name"];
 
 																if (!$lname) // Also try BuddyPress.
-																	if (!empty ($_pmr["field_1"]) && preg_match ("/^(.+?) (.+)$/", (string)$_pmr["field_1"]))
+																	if (!empty($_pmr["field_1"]) && preg_match ("/^(.+?) (.+)$/", (string)$_pmr["field_1"]))
 																		$lname = trim (preg_replace ("/^(.+?) (.+)$/", "$2", (string)$_pmr["field_1"]));
 
 																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"] && !$fname && $login)
@@ -726,11 +726,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$name = trim ($fname . " " . $lname); // Both names.
 
 																if (!($pass = $password)) // Try s2Member's generator.
-																	if (!empty ($GLOBALS["ws_plugin__s2member_generate_password_return"]))
+																	if (!empty($GLOBALS["ws_plugin__s2member_generate_password_return"]))
 																		$pass = (string)$GLOBALS["ws_plugin__s2member_generate_password_return"];
 
 																if (!$pass) // Also try BuddyPress Password.
-																	if (!empty ($_pmr["signup_password"])) // BuddyPress?
+																	if (!empty($_pmr["signup_password"])) // BuddyPress?
 																		$pass = (string)$_pmr["signup_password"];
 
 																if ($pass) // No Password nag. Update this globally.
@@ -755,13 +755,13 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																if (!$user->display_name || $user->display_name === $user->user_login)
 																	{
 																		if ($custom_reg_display_name === "full" && $name)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $name));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $name));
 																		else if ($custom_reg_display_name === "first" && $fname)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $fname));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $fname));
 																		else if ($custom_reg_display_name === "last" && $lname)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $lname));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $lname));
 																		else if ($custom_reg_display_name === "login" && $login)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $login));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $login));
 																	}
 																if /* Should we handle Main Site permissions and Originating Blog ID#? */(is_multisite ())
 																	{
@@ -784,7 +784,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		if (strlen ($ccap = trim (strtolower (preg_replace ("/[^a-z_0-9]/i", "", $ccap)))))
 																			$user->add_cap ("access_s2member_ccap_" . $ccap);
 
-																if (!($fields = array ()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
+																if (!($fields = array()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 																	foreach (json_decode ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 																		{
 																			$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
@@ -795,20 +795,20 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		}
 																unset($field, $field_var, $field_id_class); // Housekeeping.
 
-																if (!empty ($fields)) // Only if NOT empty.
+																if (!empty($fields)) // Only if NOT empty.
 																	update_user_option ($user_id, "s2member_custom_fields", $fields);
 
 																if ($level > 0) // We ONLY process this if they are higher than Level#0.
 																	{
 																		$pr_times = get_user_option ("s2member_paid_registration_times", $user_id);
-																		$pr_times["level"] = (empty ($pr_times["level"])) ? time () : $pr_times["level"];
-																		$pr_times["level" . $level] = (empty ($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
+																		$pr_times["level"] = (empty($pr_times["level"])) ? time () : $pr_times["level"];
+																		$pr_times["level" . $level] = (empty($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
 																		update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 																	}
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																do_action ("ws_plugin__s2member_during_configure_user_registration_front_side_free", get_defined_vars ());
-																do_action ("ws_plugin__s2member_during_configure_user_registration_front_side", get_defined_vars ());
-																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																do_action("ws_plugin__s2member_during_configure_user_registration_front_side_free", get_defined_vars ());
+																do_action("ws_plugin__s2member_during_configure_user_registration_front_side", get_defined_vars ());
+																unset($__refs, $__v);
 															}
 														else if ((is_blog_admin () && $pagenow === "user-new.php") || (c_ws_plugin__s2member_utils_conds::pro_is_installed () && c_ws_plugin__s2member_pro_remote_ops::is_remote_op ("create_user")))
 															{ // Can only be processed through `/user-new.php` in the Admin panel, or through Remote Op: `create_user`.
@@ -842,14 +842,14 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$auto_eot_time = ($eot = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_auto_eot_time"]) ? strtotime ($eot) : "";
 																$notes = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_notes"];
 
-																$opt_in = (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_opt_in"])) ? true : false;
+																$opt_in = (!empty($_pmr["ws_plugin__s2member_custom_reg_field_opt_in"])) ? true : false;
 
 																if (!($fname = $user->first_name)) // `Users -› Add New`.
-																	if (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_first_name"]))
+																	if (!empty($_pmr["ws_plugin__s2member_custom_reg_field_first_name"]))
 																		$fname = (string)$_pmr["ws_plugin__s2member_custom_reg_field_first_name"];
 
 																if (!($lname = $user->last_name)) // `Users -› Add New`.
-																	if (!empty ($_pmr["ws_plugin__s2member_custom_reg_field_last_name"]))
+																	if (!empty($_pmr["ws_plugin__s2member_custom_reg_field_last_name"]))
 																		$lname = (string)$_pmr["ws_plugin__s2member_custom_reg_field_last_name"];
 
 																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"] && !$fname && $login)
@@ -858,11 +858,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$name = trim ($fname . " " . $lname); // Both names.
 
 																if (!($pass = $password)) // Try s2Member's generator.
-																	if (!empty ($GLOBALS["ws_plugin__s2member_generate_password_return"]))
+																	if (!empty($GLOBALS["ws_plugin__s2member_generate_password_return"]))
 																		$pass = (string)$GLOBALS["ws_plugin__s2member_generate_password_return"];
 
 																if (!$pass) // Also try the `Users -› Add New` form.
-																	if (!empty ($_pmr["pass1"])) // Field in `/user-new.php`.
+																	if (!empty($_pmr["pass1"])) // Field in `/user-new.php`.
 																		$pass = (string)$_pmr["pass1"];
 
 																if ($pass) // No Password nag. Update this globally.
@@ -887,13 +887,13 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																if (!$user->display_name || $user->display_name === $user->user_login)
 																	{
 																		if ($custom_reg_display_name === "full" && $name)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $name));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $name));
 																		else if ($custom_reg_display_name === "first" && $fname)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $fname));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $fname));
 																		else if ($custom_reg_display_name === "last" && $lname)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $lname));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $lname));
 																		else if ($custom_reg_display_name === "login" && $login)
-																			wp_update_user (array ("ID" => $user_id, "display_name" => $login));
+																			wp_update_user (array("ID" => $user_id, "display_name" => $login));
 																	}
 																if (is_multisite ()) // Should we handle Main Site permissions and Originating Blog ID#?
 																	{
@@ -916,7 +916,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		if (strlen ($ccap = trim (strtolower (preg_replace ("/[^a-z_0-9]/i", "", $ccap)))))
 																			$user->add_cap ("access_s2member_ccap_" . $ccap);
 
-																if (!($fields = array ()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
+																if (!($fields = array()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 																	foreach (json_decode ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 																		{
 																			$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
@@ -927,19 +927,19 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		}
 																unset($field, $field_var, $field_id_class); // Housekeeping.
 
-																if (!empty ($fields)) // Only if NOT empty.
+																if (!empty($fields)) // Only if NOT empty.
 																	update_user_option ($user_id, "s2member_custom_fields", $fields);
 
 																if ($level > 0) // We ONLY process this if they are higher than Level#0.
 																	{
 																		$pr_times = get_user_option ("s2member_paid_registration_times", $user_id);
-																		$pr_times["level"] = (empty ($pr_times["level"])) ? time () : $pr_times["level"];
-																		$pr_times["level" . $level] = (empty ($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
+																		$pr_times["level"] = (empty($pr_times["level"])) ? time () : $pr_times["level"];
+																		$pr_times["level" . $level] = (empty($pr_times["level" . $level])) ? time () : $pr_times["level" . $level];
 																		update_user_option ($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
 																	}
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																do_action ("ws_plugin__s2member_during_configure_user_registration_admin_side", get_defined_vars ());
-																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																do_action("ws_plugin__s2member_during_configure_user_registration_admin_side", get_defined_vars ());
+																unset($__refs, $__v);
 															}
 														if ($processed === "yes") // If registration was processed by one of the routines above.
 															{
@@ -1026,7 +1026,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																																if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																																	foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["registration_notification_recipients"]) as $recipient)
-																																		wp_mail ($recipient, apply_filters ("ws_plugin__s2member_registration_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_registration_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
+																																		wp_mail ($recipient, apply_filters("ws_plugin__s2member_registration_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters("ws_plugin__s2member_registration_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 																															}
 																		if ($email_configs_were_on) // Back on?
 																			c_ws_plugin__s2member_email_configs::email_config ();
@@ -1096,13 +1096,13 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																unset($logt, $logv, $logm, $log4, $_log4, $log2, $logs_dir, $reg_vars); // Housekeeping.
 
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																do_action ("ws_plugin__s2member_during_configure_user_registration", get_defined_vars ());
-																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																do_action("ws_plugin__s2member_during_configure_user_registration", get_defined_vars ());
+																unset($__refs, $__v);
 															}
 													}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_configure_user_registration", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_configure_user_registration", get_defined_vars ());
+						unset($__refs, $__v);
 					}
 			}
 	}

@@ -36,8 +36,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile"))
 				* @attaches-to ``add_shortcode("s2Member-Profile");``
 				*
 				* @param array $attr An array of Attributes.
-				* @param str $content Content inside the Shortcode.
-				* @param str $shortcode The actual Shortcode name itself.
+				* @param string $content Content inside the Shortcode.
+				* @param string $shortcode The actual Shortcode name itself.
 				* @return inner Return-value of inner routine.
 				*/
 				public static function sc_profile ($attr = FALSE, $content = FALSE, $shortcode = FALSE)

@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs"))
 				* @param array $schedules Expects an array of WP_Cron schedules passed in by the Filter.
 				* @return inner Return-value of inner routine.
 				*/
-				public static function extend_cron_schedules ($schedules = array ())
+				public static function extend_cron_schedules ($schedules = array())
 					{
 						return c_ws_plugin__s2member_cron_jobs_in::extend_cron_schedules ($schedules);
 					}
@@ -54,7 +54,7 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs"))
 				*/
 				public static function auto_eot_system_via_cron ()
 					{
-						if (!empty ($_GET["s2member_auto_eot_system_via_cron"]))
+						if (!empty($_GET["s2member_auto_eot_system_via_cron"]))
 							{
 								return c_ws_plugin__s2member_cron_jobs_in::auto_eot_system_via_cron ();
 							}

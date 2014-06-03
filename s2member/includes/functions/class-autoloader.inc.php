@@ -33,7 +33,7 @@ if (!function_exists ("ws_plugin__s2member_classes"))
 		* @package s2Member
 		* @since 3.5
 		*
-		* @param str $class The class that needs to be loaded. Passed in by PHP itself.
+		* @param string $class The class that needs to be loaded. Passed in by PHP itself.
 		* @return null
 		*/
 		function ws_plugin__s2member_classes ($class = FALSE)
@@ -44,7 +44,7 @@ if (!function_exists ("ws_plugin__s2member_classes"))
 				if (strpos ($class, "c_ws_plugin__s2member_") === 0 && strpos ($class, "c_ws_plugin__s2member_pro_") === false)
 					{
 						$c = /* Configures location of classes. */ (!isset ($c)) ? dirname (dirname (__FILE__)) . "/classes" : $c;
-						$c_class_dirs = (!isset ($c_class_dirs)) ? array_merge (array ($c), _ws_plugin__s2member_classes_scan_dirs_r ($c)) : $c_class_dirs;
+						$c_class_dirs = (!isset ($c_class_dirs)) ? array_merge (array($c), _ws_plugin__s2member_classes_scan_dirs_r ($c)) : $c_class_dirs;
 
 						$class = str_replace ("_", "-", str_replace ("c_ws_plugin__s2member_", "", $class));
 
@@ -67,18 +67,18 @@ if (!function_exists ("ws_plugin__s2member_classes"))
 		* @package s2Member
 		* @since 3.5
 		*
-		* @param str $starting_dir The directory to start scanning from.
+		* @param string $starting_dir The directory to start scanning from.
 		* @return str[] An array of class directories.
 		*/
 		function _ws_plugin__s2member_classes_scan_dirs_r ($starting_dir = FALSE)
 			{
-				$dirs = /* Initialize dirs array. */ array ();
+				$dirs = /* Initialize dirs array. */ array();
 
 				foreach (func_get_args () as $starting_dir)
 					if /* Does this directory exist? */ (is_dir ($starting_dir))
 						foreach /* Scan this directory. */ (scandir ($starting_dir) as $dir)
 							if ($dir !== "." && $dir !== ".." && is_dir ($dir = $starting_dir . "/" . $dir))
-								$dirs = array_merge ($dirs, array ($dir), _ws_plugin__s2member_classes_scan_dirs_r ($dir));
+								$dirs = array_merge ($dirs, array($dir), _ws_plugin__s2member_classes_scan_dirs_r ($dir));
 
 				return /* Return array of all directories. */ $dirs;
 			}

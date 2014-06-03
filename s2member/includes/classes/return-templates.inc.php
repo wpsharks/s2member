@@ -33,17 +33,17 @@ if (!class_exists ("c_ws_plugin__s2member_return_templates"))
 				* @package s2Member\Return_Templates
 				* @since 110720
 				*
-				* @param str $template Optional A Subscr. Gateway code should be used as the template name, or `default` is a multipurpose template. Defaults to `default`. Used in template selection.
-				* @param str $response Optional. Response message to fill template with, using the Replacement Code `%%response%%` inside the template file. Defaults to: `Thank you. Please click the link below.`.
-				* @param str $continue_html Optional. The HTML value of the continuation link presented within the template using Replacement Code `%%continue%%`. Defaults to: `Continue`.
-				* @param str $continue_link Optional. The HREF value for the continuation link presented within the template using Replacement Code `%%continue%%`. Defaults to: ``home_url ("/", "http")``.
-				* @return str The full HTML code of the template. All Replacement Codes inside the template file will have already been filled by this routine.
+				* @param string $template Optional A Subscr. Gateway code should be used as the template name, or `default` is a multipurpose template. Defaults to `default`. Used in template selection.
+				* @param string $response Optional. Response message to fill template with, using the Replacement Code `%%response%%` inside the template file. Defaults to: `Thank you. Please click the link below.`.
+				* @param string $continue_html Optional. The HTML value of the continuation link presented within the template using Replacement Code `%%continue%%`. Defaults to: `Continue`.
+				* @param string $continue_link Optional. The HREF value for the continuation link presented within the template using Replacement Code `%%continue%%`. Defaults to: ``home_url ("/", "http")``.
+				* @return string The full HTML code of the template. All Replacement Codes inside the template file will have already been filled by this routine.
 				*/
 				public static function return_template ($template = FALSE, $response = FALSE, $continue_html = FALSE, $continue_link = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_return_template", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_return_template", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$template = ($template) ? $template : "default";
 						$continue_link = ($continue_link) ? $continue_link : home_url ("/", "http");
@@ -68,16 +68,16 @@ if (!class_exists ("c_ws_plugin__s2member_return_templates"))
 						$code = trim (((!$custom_template || !is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? c_ws_plugin__s2member_utilities::evl ($code) : $code));
 
 						$doctype_html_head = c_ws_plugin__s2member_utils_html::doctype_html_head (get_bloginfo ("name"), "ws_plugin__s2member_during_return_template_head_" . (($specific_template) ? basename ($specific_template) : "default-return.php"));
-						$code = preg_replace ("/%%doctype_html_head%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters ("ws_plugin__s2member_return_template_doctype_html_head", $doctype_html_head, get_defined_vars ())), $code);
+						$code = preg_replace ("/%%doctype_html_head%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters("ws_plugin__s2member_return_template_doctype_html_head", $doctype_html_head, get_defined_vars ())), $code);
 
-						$code = preg_replace ("/%%header%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters ("ws_plugin__s2member_return_template_header", sprintf (_x ('[ %s ] <strong><em>says&hellip;</em></strong>', "s2member-front", "s2member"), esc_html ($_SERVER["HTTP_HOST"])), get_defined_vars ())), $code);
+						$code = preg_replace ("/%%header%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters("ws_plugin__s2member_return_template_header", sprintf (_x ('[ %s ] <strong><em>says&hellip;</em></strong>', "s2member-front", "s2member"), esc_html ($_SERVER["HTTP_HOST"])), get_defined_vars ())), $code);
 
-						$code = preg_replace ("/%%response%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters ("ws_plugin__s2member_return_template_response", $response, get_defined_vars ())), $code);
-						$code = preg_replace ("/%%continue%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters ("ws_plugin__s2member_return_template_continue", '<a href="' . esc_attr ($continue_link) . '">' . $continue_html . '</a>', get_defined_vars ())), $code);
-						$code = preg_replace ("/%%support%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters ("ws_plugin__s2member_return_template_support", sprintf (_x ('If you need assistance, please <a href="%s" target="_blank">contact support</a>.', "s2member-front", "s2member"), esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_support_link"])), get_defined_vars ())), $code);
-						$code = preg_replace ("/%%tracking%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters ("ws_plugin__s2member_return_template_tracking", c_ws_plugin__s2member_tracking_codes::generate_all_tracking_codes (), get_defined_vars ())), $code);
+						$code = preg_replace ("/%%response%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters("ws_plugin__s2member_return_template_response", $response, get_defined_vars ())), $code);
+						$code = preg_replace ("/%%continue%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters("ws_plugin__s2member_return_template_continue", '<a href="' . esc_attr ($continue_link) . '">' . $continue_html . '</a>', get_defined_vars ())), $code);
+						$code = preg_replace ("/%%support%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters("ws_plugin__s2member_return_template_support", sprintf (_x ('If you need assistance, please <a href="%s" target="_blank">contact support</a>.', "s2member-front", "s2member"), esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_support_link"])), get_defined_vars ())), $code);
+						$code = preg_replace ("/%%tracking%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (apply_filters("ws_plugin__s2member_return_template_tracking", c_ws_plugin__s2member_tracking_codes::generate_all_tracking_codes (), get_defined_vars ())), $code);
 
-						return apply_filters ("ws_plugin__s2member_return_template", $code, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_return_template", $code, get_defined_vars ());
 					}
 			}
 	}

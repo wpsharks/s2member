@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_pages_rs"))
 				*/
 				public static function display ()
 					{
-						do_action ("ws_plugin__s2member_during_menu_pages_before_right_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_menu_pages_before_right_sections", get_defined_vars ());
 
 						ob_start(); // output buffer these so we can display a toggler conditionally.
 
@@ -96,7 +96,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_pages_rs"))
 								           ((!empty($_GET['page']) && preg_match('/\-(?:start|info)$/', $_GET['page'])) ? ' default-state="open"' : '').'></div>' . "\n".$rs;
 								echo $rs; // output content now; w/ possible toggler.
 							}
-						do_action ("ws_plugin__s2member_during_menu_pages_after_right_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_menu_pages_after_right_sections", get_defined_vars ());
 
 						return /* return for uniformity. */;
 					}

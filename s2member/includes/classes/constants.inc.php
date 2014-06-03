@@ -43,7 +43,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 				*/
 				public static function constants ()
 					{
-						do_action ("ws_plugin__s2member_before_constants", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_constants", get_defined_vars ());
 
 						$links = c_ws_plugin__s2member_cache::cached_page_links ();
 
@@ -57,13 +57,13 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						$subscr_id = ($user) ? get_user_option ("s2member_subscr_id", $user->ID) : "";
 						$subscr_gateway = ($user) ? get_user_option ("s2member_subscr_gateway", $user->ID) : "";
 						$registration_ip = ($user) ? get_user_option ("s2member_registration_ip", $user->ID) : "";
-						$custom_fields = ($user) ? get_user_option ("s2member_custom_fields", $user->ID) : array ();
-						$paid_registration_times = ($user) ? get_user_option ("s2member_paid_registration_times", $user->ID) : array ();
+						$custom_fields = ($user) ? get_user_option ("s2member_custom_fields", $user->ID) : array();
+						$paid_registration_times = ($user) ? get_user_option ("s2member_paid_registration_times", $user->ID) : array();
 						$login_counter = ($user) ? (int)get_user_option ("s2member_login_counter") : -1;
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_during_constants", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_during_constants", get_defined_vars ());
+						unset($__refs, $__v);
 						/**
 						* Current version of s2Member.
 						*
@@ -1007,7 +1007,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see http://codex.wordpress.org/Function_Reference/wp_get_current_user wp_get_current_user()
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_FIELDS"))
-							define ("S2MEMBER_CURRENT_USER_FIELDS", ($c[] = (($user) ? json_encode (array_merge (array ("id" => S2MEMBER_CURRENT_USER_ID, "ip" => S2MEMBER_CURRENT_USER_IP, "reg_ip" => S2MEMBER_CURRENT_USER_REGISTRATION_IP, "email" => S2MEMBER_CURRENT_USER_EMAIL, "login" => S2MEMBER_CURRENT_USER_LOGIN, "first_name" => S2MEMBER_CURRENT_USER_FIRST_NAME, "last_name" => S2MEMBER_CURRENT_USER_LAST_NAME, "display_name" => S2MEMBER_CURRENT_USER_DISPLAY_NAME, "subscr_id" => S2MEMBER_CURRENT_USER_SUBSCR_ID, "subscr_or_wp_id" => S2MEMBER_CURRENT_USER_SUBSCR_OR_WP_ID, "subscr_gateway" => S2MEMBER_CURRENT_USER_SUBSCR_GATEWAY, "custom" => S2MEMBER_CURRENT_USER_CUSTOM), (array)$custom_fields)) : json_encode (array ()))));
+							define ("S2MEMBER_CURRENT_USER_FIELDS", ($c[] = (($user) ? json_encode (array_merge (array("id" => S2MEMBER_CURRENT_USER_ID, "ip" => S2MEMBER_CURRENT_USER_IP, "reg_ip" => S2MEMBER_CURRENT_USER_REGISTRATION_IP, "email" => S2MEMBER_CURRENT_USER_EMAIL, "login" => S2MEMBER_CURRENT_USER_LOGIN, "first_name" => S2MEMBER_CURRENT_USER_FIRST_NAME, "last_name" => S2MEMBER_CURRENT_USER_LAST_NAME, "display_name" => S2MEMBER_CURRENT_USER_DISPLAY_NAME, "subscr_id" => S2MEMBER_CURRENT_USER_SUBSCR_ID, "subscr_or_wp_id" => S2MEMBER_CURRENT_USER_SUBSCR_OR_WP_ID, "subscr_gateway" => S2MEMBER_CURRENT_USER_SUBSCR_GATEWAY, "custom" => S2MEMBER_CURRENT_USER_CUSTOM), (array)$custom_fields)) : json_encode (array()))));
 						/**
 						* Indicates the number of unique Files the current User is allowed to download every X days.
 						*
@@ -2377,7 +2377,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						/*
 						Allows other Constants to be calculated with their checksums included too.
 						*/
-						$c = apply_filters ("ws_plugin__s2member_during_constants_c", $c, get_defined_vars ());
+						$c = apply_filters("ws_plugin__s2member_during_constants_c", $c, get_defined_vars ());
 						/**
 						* Used internally by s2Member to compare the value of all API Constants at once.
 						*
@@ -2391,7 +2391,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						/*
 						Calls the after Hook. Do NOT set Constants here.
 						*/
-						do_action ("ws_plugin__s2member_after_constants", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_constants", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
