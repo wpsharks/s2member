@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 				* @param string $custom Custom String value *(as supplied in Shortcode)*; must start with installation domain name.
 				* @param int|string $item_number An s2Member-generated `item_number` *( i.e. `1` for Level 1, or `level|ccaps|fixed-term`, or `sp|ids|expiration` )*.
 				* @param bool $shrink Optional. Defaults to true. If false, the raw registration link will NOT be reduced in size through the tinyURL API.
-				* @return str|bool A Registration Access Link on success, else false on failure.
+				* @return string|bool A Registration Access Link on success, else false on failure.
 				*/
 				public static function register_link_gen ($subscr_gateway = FALSE, $subscr_id = FALSE, $custom = FALSE, $item_number = FALSE, $shrink = TRUE)
 					{
@@ -95,7 +95,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 				*/
 				public static function reg_cookies_ok ()
 					{
-						global /* Global database object reference. */ $wpdb;
+						global $wpdb; /** @var $wpdb \wpdb */
 
 						do_action("ws_plugin__s2member_before_reg_cookies_ok", get_defined_vars ());
 
