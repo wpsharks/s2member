@@ -186,7 +186,6 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 
 						return /* Return for uniformity. */;
 					}
-
 				/**
 				 * Filters the Lost Password URL when the call is made from the /wp-login.php system
 				 * and changes the default behavior of wp_lostpassword_url() so that it uses site_url()
@@ -221,7 +220,7 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 						if(!empty($redirect))
 							$args['redirect_to'] = $redirect;
 
-						$lostpassword_url = add_query_arg($args, site_url('wp-login.php', 'login'));
+						$lostpassword_url = add_query_arg(urlencode_deep($args), site_url('wp-login.php', 'login'));
 					}
 
 					return apply_filters("ws_plugin__s2member_lost_password_url", $lostpassword_url, $redirect, get_defined_vars());
