@@ -88,9 +88,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 110901
 				*
-				* @param str $string Input string.
+				* @param string $string Input string.
 				* @param int $times Number of escapes. Defaults to 1.
-				* @return str Output string after JavaScript and single quotes are escaped.
+				* @return string Output string after JavaScript and single quotes are escaped.
 				*/
 				public static function esc_js_sq($string = FALSE, $times = FALSE)
 					{

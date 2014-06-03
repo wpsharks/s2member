@@ -34,8 +34,6 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_4bp_in'))
 		 * @since 3.5
 		 *
 		 * @attaches-to ``add_action('xprofile_updated_profile');``
-		 *
-		 * @return null After re-configuring the ``$current_user`` object.
 		 */
 		public static function handle_profile_modifications_4bp()
 		{
