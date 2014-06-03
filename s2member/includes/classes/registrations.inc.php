@@ -216,7 +216,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 				* @param array $meta Expects an array of meta-data to be passed in by the Filter.
 				* @return array Full ``$meta`` array with s2Member Custom Fields included.
 				*/
-				public static function ms_process_signup_meta ($meta = FALSE)
+				public static function ms_process_signup_meta($meta = FALSE)
 					{
 						global /* Multisite Networking. */ $current_site, $current_blog;
 						global $pagenow; // Need this to detect the current admin page.
@@ -231,7 +231,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 									c_ws_plugin__s2member_email_configs::email_config (); // Configures `From:` header used in notifications.
 
 									$meta["add_to_blog"] = (empty($meta["add_to_blog"])) ? $current_blog->blog_id : $meta["add_to_blog"];
-									$meta["new_role"] = (empty($meta["new_role"])) ? get_option ("default_role") : $meta["new_role"];
+									$meta["new_role"] = (empty($meta["new_role"])) ? get_option("default_role") : $meta["new_role"];
 
 									foreach (c_ws_plugin__s2member_utils_strings::trim_deep (stripslashes_deep ($_POST)) as $key => $value)
 										if (preg_match ("/^ws_plugin__s2member_(custom_reg_field|user_new)_/", $key))
@@ -267,15 +267,15 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 
 						extract ($vars); // Extract all variables from ``wpmu_activate_signup()`` function.
 
-						if (is_multisite ()) // This event should ONLY be processed with Multisite Networking.
-							if (!is_admin () && ((preg_match ("/\/wp-activate\.php/", $_SERVER["REQUEST_URI"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed () && bp_is_activation_page ())))
+						if (is_multisite()) // This event should ONLY be processed with Multisite Networking.
+							if (!is_admin () && ((preg_match ("/\/wp-activate\.php/", $_SERVER["REQUEST_URI"])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed() && bp_is_activation_page())))
 								{
 									if (!empty($user_id) && !empty($user_login) && !empty($user_email) && !empty($password) && !empty($meta) && !empty($meta["add_to_blog"]) && !empty($meta["new_role"]))
 										if (!empty($user_already_exists) && c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog ($user_login, $user_email, $meta["add_to_blog"]))
 											{
-												add_user_to_blog ($meta["add_to_blog"], $user_id, $meta["new_role"]); // Add this User to the specified Blog.
-												wp_update_user (array("ID" => $user_id, "user_pass" => $password)); // Update Password so it's the same as in the following msg.
-												wpmu_welcome_user_notification ($user_id, $password, $meta); // Send welcome letter via email just like ``wpmu_activate_signup()`` does.
+												add_user_to_blog($meta["add_to_blog"], $user_id, $meta["new_role"]); // Add this User to the specified Blog.
+												wp_update_user(array("ID" => $user_id, "user_pass" => $password)); // Update Password so it's the same as in the following msg.
+												wpmu_welcome_user_notification($user_id, $password, $meta); // Send welcome letter via email just like ``wpmu_activate_signup()`` does.
 
 												do_action("wpmu_activate_user", $user_id, $password, $meta); // Process Hook that would have been fired inside ``wpmu_activate_signup()``.
 
