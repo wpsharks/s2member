@@ -136,8 +136,8 @@ if(!class_exists('c_ws_plugin__s2member_custom_reg_fields_4bp'))
 
 			if(!$processed && in_array('profile', $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_fields_4bp']))
 				if(apply_filters('ws_plugin__s2member_custom_profile_fields_4bp_display', TRUE, get_defined_vars()))
-					if(bp_is_user_profile() && ((function_exists('bp_is_user_profile_edit') && bp_is_user_profile_edit()) || (function_exists('bp_is_profile_edit') && bp_is_profile_edit())) && (int)bp_get_the_profile_group_id() === 1)
-						if(isset ($bp->displayed_user->id) && ($user_id = $bp->displayed_user->id) && ($processed = TRUE))
+					if(bp_is_user_profile() && bp_is_user_profile_edit() && (integer)bp_get_the_profile_group_id() === 1)
+						if(isset($bp->displayed_user->id) && ($user_id = $bp->displayed_user->id) && ($processed = TRUE))
 						{
 							echo '<input type="hidden" name="ws_plugin__s2member_profile_4bp_save" id="ws-plugin--s2member-profile-4bp-save" value="'.esc_attr(wp_create_nonce('ws-plugin--s2member-profile-4bp-save')).'" />'."\n";
 
@@ -223,7 +223,7 @@ if(!class_exists('c_ws_plugin__s2member_custom_reg_fields_4bp'))
 
 			if(!$processed && in_array('profile-view', $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_fields_4bp']))
 				if(apply_filters('ws_plugin__s2member_custom_profile_field_items_4bp_display', TRUE, get_defined_vars()))
-					if(bp_is_user_profile() && ((function_exists('bp_is_user_profile_edit') && !bp_is_user_profile_edit()) || (function_exists('bp_is_profile_edit') && !bp_is_profile_edit())) && (int)bp_get_the_profile_group_id() === 1)
+					if(bp_is_user_profile() && !bp_is_user_profile_edit() && (integer)bp_get_the_profile_group_id() === 1)
 						if(isset ($bp->displayed_user->id) && ($user_id = $bp->displayed_user->id) && ($processed = TRUE))
 						{
 							foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
@@ -258,7 +258,7 @@ if(!class_exists('c_ws_plugin__s2member_custom_reg_fields_4bp'))
 													}
 													echo '<tr class="ws-plugin--s2member-profile-field-4bp ws-plugin--s2member-profile-4bp-'.esc_attr($field_id_class).' field_'.esc_attr($field_var).'">'."\n";
 													echo '<td class="ws-plugin--s2member-profile-field-4bp ws-plugin--s2member-profile-4bp-'.esc_attr($field_id_class).' field_'.esc_attr($field_var).' label"><span>'.$field['label'].'</span></td>'."\n";
-													echo '<td class="ws-plugin--s2member-profile-field-4bp ws-plugin--s2member-profile-4bp-'.esc_attr($field_id_class).' field_'.esc_attr($field_var).' data">'.c_ws_plugin__s2member_custom_reg_fields::custom_field_gen(__FUNCTION__, $field, 'ws_plugin__s2member_profile_4bp_', 'ws-plugin--s2member-profile-4bp-', 'ws-plugin--s2member-profile-field-4bp', '', '', '', $fields, $fields[$field_var], 'profile-view').'</td>'."\n";
+													echo '<td class="ws-plugin--s2member-profile-field-4bp ws-plugin--s2member-profile-4bp-'.esc_attr($field_id_class).' field_'.esc_attr($field_var).' data">'.c_ws_plugin__s2member_custom_reg_fields::custom_field_gen(__FUNCTION__, $field, 'ws_plugin__s2member_profile_4bp_', 'ws-plugin--s2member-profile-4bp-', 'ws-plugin--s2member-profile-field-4bp', '', '', '', $fields, @$fields[$field_var], 'profile-view').'</td>'."\n";
 													echo '</tr>'."\n";
 												}
 												unset($__refs, $__v);
