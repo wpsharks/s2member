@@ -207,21 +207,22 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 				public static function lost_password_url($lostpassword_url, $redirect)
 				{
 
-					$args = array('action' => 'lostpassword');
-					if(!empty($redirect))
-						$args['redirect_to'] = $redirect;
+					// Build a URL that we can compare to site_url() and network_site_url()
+					$scheme = (is_ssl()) ? 'https' : 'http';
+					$url    = $scheme.'://'.$_SERVER["HTTP_HOST"].strtok($_SERVER["REQUEST_URI"], '?'); // Request URL minus query vars
 
-					// Build the cleaned URL that we can compare to site_url() and network_site_url()
-					$scheme = ((empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) !== 'on') && (empty($_SERVER['SERVER_PORT']) || (integer)$_SERVER['SERVER_PORT'] !== 443)) ? 'http' : 'https';
-					$url    = $scheme.'://'.$_SERVER["SERVER_NAME"].strtok($_SERVER["REQUEST_URI"], '?'); // Request URL minus query vars
+					/*
+					 * If the request URL doesn't match the Parent Site URL, return the Child Site Lost Password URL
+					 * instead of the Parent Site Lost Password URL.
+					 */
+					if(strpos($url, (string)network_site_url('wp-login.php')) === FALSE && apply_filters("ws_plugin__s2member_tweak_lost_password_url", TRUE, get_defined_vars())) {
+						$args = array('action' => 'lostpassword');
+						if(!empty($redirect)) {
+							$args['redirect_to'] = $redirect;
+						}
 
-					// Check if the request URL matches the Parent Site URL (always false if !is_multisite())
-					if(strpos($url, (string)network_site_url('wp-login.php')) === FALSE)
-						// Return the Child Site Lost Password URL instead of Parent Site Lost Password URL
 						$lostpassword_url = add_query_arg($args, site_url('wp-login.php', 'login'));
-					else
-						// Return Parent Site Lost Password URL; this is the normal WordPress behavior as of v3.9.1
-						$lostpassword_url = add_query_arg($args, network_site_url('wp-login.php', 'login'));
+					}
 
 					return apply_filters("ws_plugin__s2member_lost_password_url", $lostpassword_url, $redirect, get_defined_vars());
 				}
