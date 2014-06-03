@@ -32,7 +32,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 				*
 				* @param string $starting_dir A directory to start searching from.
 				* @param string $alt_starting_dir An alternate directory to search from.
-				* @return str|null WordPress directory, else exits script execution on failure.
+				* @return string|null WordPress directory, else exits script execution on failure.
 				*/
 				public static function wp_dir ($starting_dir = FALSE, $alt_starting_dir = FALSE)
 					{
