@@ -194,7 +194,7 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 				 * environment, the default WordPress behavior (as of v3.9.1) is used.
 				 *
 				 * @package s2Member\Login_Customizations
-				 * @since 14xxxx
+				 * @since 140603
 				 *
 				 * @attaches-to ``add_filter("lostpassword_url");``
 				 *
@@ -205,24 +205,18 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 				 */
 				public static function lost_password_url($lostpassword_url, $redirect)
 				{
-
-					// Build a URL that we can compare to site_url() and network_site_url()
-					$scheme = (is_ssl()) ? 'https' : 'http';
+					$scheme = (is_ssl()) ? 'https' : 'http'; // Build a URL that we can compare to site_url() and network_site_url()
 					$url    = $scheme.'://'.$_SERVER["HTTP_HOST"].strtok($_SERVER["REQUEST_URI"], '?'); // Request URL minus query vars
 
-					/*
-					 * If the request URI contains wp-login.php but the URL doesn't match the Parent Site URL,
-					 * return the Child Site Lost Password URL instead of the Parent Site Lost Password URL.
-					 */
-					if(basename(strtok($_SERVER['REQUEST_URI'], '?')) === 'wp-login.php' && strpos($url, (string)network_site_url('wp-login.php')) === FALSE && apply_filters("ws_plugin__s2member_tweak_lost_password_url", TRUE, get_defined_vars()))
+					if(basename(strtok($_SERVER['REQUEST_URI'], '?')) === 'wp-login.php'
+					   && strpos($url, (string)network_site_url('wp-login.php')) === FALSE
+					   && apply_filters("ws_plugin__s2member_tweak_lost_password_url", TRUE, get_defined_vars()))
 					{
 						$args = array('action' => 'lostpassword');
-						if(!empty($redirect))
-							$args['redirect_to'] = $redirect;
+						if(!empty($redirect)) $args['redirect_to'] = $redirect;
 
 						$lostpassword_url = add_query_arg(urlencode_deep($args), site_url('wp-login.php', 'login'));
 					}
-
 					return apply_filters("ws_plugin__s2member_lost_password_url", $lostpassword_url, $redirect, get_defined_vars());
 				}
 		}
