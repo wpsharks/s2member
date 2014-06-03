@@ -33,8 +33,8 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 				* @package s2Member\Systematics
 				* @since 111115
 				*
-				* @param int|str $singular_id Optional. A numeric Post/Page ID in WordPress.
-				* @param str $uri Optional. A request URI to test against.
+				* @param int|string $singular_id Optional. A numeric Post/Page ID in WordPress.
+				* @param string $uri Optional. A request URI to test against.
 				* @return bool True if s2Member Systematic, else false.
 				*/
 				public static function is_s2_systematic_use_specific_page ($singular_id = FALSE, $uri = FALSE)
@@ -55,8 +55,8 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 				* @package s2Member\Systematics
 				* @since 111002
 				*
-				* @param int|str $singular_id Optional. A numeric Post/Page ID in WordPress.
-				* @param str $uri Optional. A request URI to test against.
+				* @param int|string $singular_id Optional. A numeric Post/Page ID in WordPress.
+				* @param string $uri Optional. A request URI to test against.
 				* @return bool True if WordPress Systematic, else false.
 				*/
 				public static function is_wp_systematic_use_specific_page ($singular_id = FALSE, $uri = FALSE)
@@ -81,8 +81,8 @@ if (!class_exists ("c_ws_plugin__s2member_systematics_sp"))
 				* @package s2Member\Systematics
 				* @since 3.5
 				*
-				* @param int|str $singular_id Optional. A numeric Post/Page ID in WordPress.
-				* @param str $uri Optional. A request URI to test against.
+				* @param int|string $singular_id Optional. A numeric Post/Page ID in WordPress.
+				* @param string $uri Optional. A request URI to test against.
 				* @return bool True if Systematic, else false.
 				*
 				* @todo Test URIs against formulated links for Systematic Pages like the Membership Options Page?

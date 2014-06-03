@@ -35,7 +35,7 @@ if (!class_exists ("c_ws_plugin__s2member_meta_box_saves"))
 				*
 				* @attaches-to ``add_action("save_post");``
 				*
-				* @param int|str $post_id Numeric Post/Page ID.
+				* @param int|string $post_id Numeric Post/Page ID.
 				* @return null
 				*/
 				public static function save_meta_boxes ($post_id = FALSE)

@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_posts_sp"))
 				* @package s2Member\Posts
 				* @since 3.5
 				*
-				* @param int|str $post_id Numeric Post ID.
+				* @param int|string $post_id Numeric Post ID.
 				* @param bool $check_user Test permissions against the current User? Defaults to true.
 				* @return null|array Non-empty array (with details) if access is denied, else null if access is allowed.
 				*/

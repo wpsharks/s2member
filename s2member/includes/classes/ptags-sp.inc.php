@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_ptags_sp"))
 				* @package s2Member\Tags
 				* @since 3.5
 				*
-				* @param int|str $_tag Numeric Tag ID, Tag Slug, or Tag Name.
+				* @param int|string $_tag Numeric Tag ID, Tag Slug, or Tag Name.
 				* @param bool $check_user Test permissions against the current User? Defaults to true.
 				* @return null|array Non-empty array (with details) if access is denied, else null if access is allowed.
 				*/

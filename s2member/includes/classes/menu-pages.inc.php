@@ -262,7 +262,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages"))
 				* @attaches-to ``add_filter("plugin_action_links");``
 				*
 				* @param array $actions Expects an existing array of actions links, passed in by the Filter.
-				* @param str $plugin_file Expects path to a plugin file. We need to test against this for s2Member.
+				* @param string $plugin_file Expects path to a plugin file. We need to test against this for s2Member.
 				* @return array An array of links, Filtered by this routine.
 				*/
 				public static function _add_settings_link($actions = FALSE, $plugin_file = FALSE)

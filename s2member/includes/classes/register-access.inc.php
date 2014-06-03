@@ -33,10 +33,10 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 				* @package s2Member\Registrations
 				* @since 3.5
 				*
-				* @param str $subscr_gateway Payment Gateway associated with a Customer.
-				* @param str $subscr_id Unique Subscr. ID associated with Payment Gateway; associated with a Customer.
-				* @param str $custom Custom String value *(as supplied in Shortcode)*; must start with installation domain name.
-				* @param int|str $item_number An s2Member-generated `item_number` *( i.e. `1` for Level 1, or `level|ccaps|fixed-term`, or `sp|ids|expiration` )*.
+				* @param string $subscr_gateway Payment Gateway associated with a Customer.
+				* @param string $subscr_id Unique Subscr. ID associated with Payment Gateway; associated with a Customer.
+				* @param string $custom Custom String value *(as supplied in Shortcode)*; must start with installation domain name.
+				* @param int|string $item_number An s2Member-generated `item_number` *( i.e. `1` for Level 1, or `level|ccaps|fixed-term`, or `sp|ids|expiration` )*.
 				* @param bool $shrink Optional. Defaults to true. If false, the raw registration link will NOT be reduced in size through the tinyURL API.
 				* @return str|bool A Registration Access Link on success, else false on failure.
 				*/

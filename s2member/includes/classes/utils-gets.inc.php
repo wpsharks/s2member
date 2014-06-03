@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param int|str $parent_category A numeric Category ID.
+				* @param int|string $parent_category A numeric Category ID.
 				* @return array Unique array of all Category IDs *(as integers)* in ``$parent_category``.
 				*/
 				public static function get_all_child_category_ids ($parent_category = FALSE)
@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @package s2Member\Utilities
 				* @since 111101
 				*
-				* @param str $tags Tag slugs/names/IDs; comma-delimited.
+				* @param string $tags Tag slugs/names/IDs; comma-delimited.
 				* @return array Unique array of Tag IDs *(as integers)*. With Tag slugs/names converted to IDs.
 				*/
 				public static function get_tags_converted_to_ids ($tags = FALSE)
@@ -109,7 +109,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $post_type Optional. If provided, return all Post IDs of a specific Post Type.
+				* @param string $post_type Optional. If provided, return all Post IDs of a specific Post Type.
 				* 	Otherwise, return all Post IDs that are NOT of these Post Types: `page|attachment|nav_menu_item|revision`.
 				* @return array Unique array of all Post IDs *(as integers)*, including Custom Post Types; or all Post IDs of a specific Post Type.
 				*/

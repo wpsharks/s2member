@@ -56,10 +56,10 @@ if (!class_exists ("c_ws_plugin__s2member_labels"))
 				*
 				* @attaches-to ``add_filter("gettext_with_context");``
 				*
-				* @param str $translation Expects a string; already translated.
-				* @param str $original The original text, passed in by the Filter.
-				* @param str $context Contextual specification for this translation.
-				* @return str The ``$translation``, after translations applied by this routine.
+				* @param string $translation Expects a string; already translated.
+				* @param string $original The original text, passed in by the Filter.
+				* @param string $context Contextual specification for this translation.
+				* @return string The ``$translation``, after translations applied by this routine.
 				*/
 				public static function _label_translations ($translation = FALSE, $original = FALSE, $context = FALSE)
 					{

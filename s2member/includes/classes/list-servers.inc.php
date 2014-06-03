@@ -51,17 +51,17 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				* @package s2Member\List_Servers
 				* @since 3.5
 				*
-				* @param str $role A WordPress Role ID/Name, such as `subscriber`, or `s2member_level1`.
-				* @param int|str $level A numeric s2Member Access Level number.
-				* @param str $login Username for the User.
-				* @param str $pass Plain Text Password for the User.
-				* @param str $email Email Address for the User.
-				* @param str $fname First Name for the User.
-				* @param str $lname Last Name for the User.
-				* @param str $ip IP Address for the User.
+				* @param string $role A WordPress Role ID/Name, such as `subscriber`, or `s2member_level1`.
+				* @param int|string $level A numeric s2Member Access Level number.
+				* @param string $login Username for the User.
+				* @param string $pass Plain Text Password for the User.
+				* @param string $email Email Address for the User.
+				* @param string $fname First Name for the User.
+				* @param string $lname Last Name for the User.
+				* @param string $ip IP Address for the User.
 				* @param bool $opt_in Defaults to false; must be set to true. Indicates the User IS opting in.
 				* @param bool $double_opt_in Defaults to true. If false, no email confirmation is required. Use at your own risk.
-				* @param int|str $user_id A WordPress User ID, numeric string or integer.
+				* @param int|string $user_id A WordPress User ID, numeric string or integer.
 				* @return bool True if at least one List Server is processed successfully, else false.
 				*
 				* @todo Integrate {@link https://labs.aweber.com/docs/php-library-walkthrough AWeber's API}.
@@ -254,16 +254,16 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				* @package s2Member\List_Servers
 				* @since 3.5
 				*
-				* @param str $role A WordPress Role ID/Name, such as `subscriber`, or `s2member_level1`.
-				* @param int|str $level A numeric s2Member Access Level number.
-				* @param str $login Username for the User.
-				* @param str $pass Plain Text Password for the User.
-				* @param str $email Email address for the User.
-				* @param str $fname First Name for the User.
-				* @param str $lname Last Name for the User.
-				* @param str $ip IP Address for the User.
+				* @param string $role A WordPress Role ID/Name, such as `subscriber`, or `s2member_level1`.
+				* @param int|string $level A numeric s2Member Access Level number.
+				* @param string $login Username for the User.
+				* @param string $pass Plain Text Password for the User.
+				* @param string $email Email address for the User.
+				* @param string $fname First Name for the User.
+				* @param string $lname Last Name for the User.
+				* @param string $ip IP Address for the User.
 				* @param bool $opt_out Defaults to false; must be set to true. Indicates the User IS opting out.
-				* @param int|str $user_id A WordPress User ID, numeric string or integer.
+				* @param int|string $user_id A WordPress User ID, numeric string or integer.
 				* @return bool True if at least one List Server is processed successfully, else false.
 				*
 				* @todo Integrate {@link https://labs.aweber.com/docs/php-library-walkthrough AWeber's API}.
@@ -422,13 +422,13 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				* @attaches-to ``add_action("ws_plugin__s2member_during_collective_mods");``
 				* @attaches-to ``add_action("ws_plugin__s2member_during_collective_eots");``
 				*
-				* @param int|str $user_id Required. A WordPress User ID, numeric string or integer.
+				* @param int|string $user_id Required. A WordPress User ID, numeric string or integer.
 				* @param array $vars Required. An array of defined variables passed by the calling Hook.
-				* @param str $event Required. A specific event that triggered this call from the Action Hook.
-				* @param str $event_spec Required. A specific event specification *(a broader classification)*.
-				* @param str $mod_new_role Required if ``$event_spec === "modification"`` (but can be empty). Role the User is being modified to.
-				* @param str $mod_new_user Optional. If ``$event_spec === "modification"``, the new User object with current details.
-				* @param str $mod_old_user Optional. If ``$event_spec === "modification"``, the old/previous User obj with old details.
+				* @param string $event Required. A specific event that triggered this call from the Action Hook.
+				* @param string $event_spec Required. A specific event specification *(a broader classification)*.
+				* @param string $mod_new_role Required if ``$event_spec === "modification"`` (but can be empty). Role the User is being modified to.
+				* @param string $mod_new_user Optional. If ``$event_spec === "modification"``, the new User object with current details.
+				* @param string $mod_old_user Optional. If ``$event_spec === "modification"``, the old/previous User obj with old details.
 				* @return null This function does not have a return value.
 				*/
 				public static function auto_process_list_server_removals ($user_id = FALSE, $vars = FALSE, $event = FALSE, $event_spec = FALSE, $mod_new_role = FALSE, $mod_new_user = FALSE, $mod_old_user = FALSE)

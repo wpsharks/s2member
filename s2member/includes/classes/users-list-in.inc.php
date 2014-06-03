@@ -400,7 +400,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 				* @attaches-to ``add_action("edit_user_profile_update");``
 				* @attaches-to ``add_action("personal_options_update");``
 				*
-				* @param int|str $user_id Expects a numeric WordPress User ID passed in by the Action Hook.
+				* @param int|string $user_id Expects a numeric WordPress User ID passed in by the Action Hook.
 				* @return null
 				*/
 				public static function users_list_update_cols($user_id = FALSE)

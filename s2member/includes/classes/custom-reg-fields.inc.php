@@ -33,18 +33,18 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 				* @package s2Member\Custom_Reg_Fields
 				* @since 3.5
 				*
-				* @param str $_function Function calling upon this routine.
+				* @param string $_function Function calling upon this routine.
 				* @param array $_field The Field array of configuration options.
-				* @param str $_name_prefix The `name=""` attribute prefix.
-				* @param str $_id_prefix The `id=""` attribute prefix.
-				* @param str $_classes Optional. String of space separated classes that will go inside the Field's `class=""` attribute.
-				* @param str $_styles Optional. String of CSS styles that will go inside the Field's `style=""` attribute.
+				* @param string $_name_prefix The `name=""` attribute prefix.
+				* @param string $_id_prefix The `id=""` attribute prefix.
+				* @param string $_classes Optional. String of space separated classes that will go inside the Field's `class=""` attribute.
+				* @param string $_styles Optional. String of CSS styles that will go inside the Field's `style=""` attribute.
 				* @param str|int $_tabindex. Optional numeric tabindex for the `tabindex=""` attribute.
-				* @param str $_attrs Optional. Some additional Field attributes and values.
+				* @param string $_attrs Optional. Some additional Field attributes and values.
 				* @param array $_submission Optional. But should be passed in with any submission data related to this Field. For instance, you might pass in ``$_POST``.
 				* @param str|array $_value Optional. The value of this Field, either by default, or from the ``$_submission`` array.
-				* @param str $_editable_context Optional. One of `profile|profile-view|registration`.
-				* @return str The resulting Custom Field, in HTML format.
+				* @param string $_editable_context Optional. One of `profile|profile-view|registration`.
+				* @return string The resulting Custom Field, in HTML format.
 				*/
 				public static function custom_field_gen($_function = FALSE, $_field = FALSE, $_name_prefix = FALSE, $_id_prefix = FALSE, $_classes = FALSE, $_styles = FALSE, $_tabindex = FALSE, $_attrs = FALSE, $_submission = FALSE, $_value = FALSE, $_editable_context = FALSE)
 					{

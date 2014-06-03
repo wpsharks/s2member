@@ -33,8 +33,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str $key Optional. Attempt to force a specific Key. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-				* @return str Proper encryption/decryption Key. If ``$key`` is passed in, and it validates, we'll return that. Otherwise use a default Key.
+				* @param string $key Optional. Attempt to force a specific Key. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
+				* @return string Proper encryption/decryption Key. If ``$key`` is passed in, and it validates, we'll return that. Otherwise use a default Key.
 				*/
 				public static function key ($key = FALSE)
 					{
@@ -51,10 +51,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $string A string of data to encrypt.
-				* @param str $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
+				* @param string $string A string of data to encrypt.
+				* @param string $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
 				* @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *(recommended)*.
-				* @return str Encrypted string.
+				* @return string Encrypted string.
 				*/
 				public static function encrypt ($string = FALSE, $key = FALSE, $w_md5_cs = TRUE)
 					{
@@ -84,9 +84,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $base64 A string of data to decrypt. Should still be base64 encoded.
-				* @param str $key Optional. Key used originally for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-				* @return str Decrypted string.
+				* @param string $base64 A string of data to decrypt. Should still be base64 encoded.
+				* @param string $key Optional. Key used originally for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
+				* @return string Decrypted string.
 				*/
 				public static function decrypt ($base64 = FALSE, $key = FALSE)
 					{
@@ -120,10 +120,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $string A string of data to encrypt.
-				* @param str $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
+				* @param string $string A string of data to encrypt.
+				* @param string $key Optional. Key used for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
 				* @param bool $w_md5_cs Optional. Defaults to true. When true, an MD5 checksum is used in the encrypted string *(recommended)*.
-				* @return str Encrypted string.
+				* @return string Encrypted string.
 				*/
 				public static function xencrypt ($string = FALSE, $key = FALSE, $w_md5_cs = TRUE)
 					{
@@ -148,9 +148,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_encryption"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $base64 A string of data to decrypt. Should still be base64 encoded.
-				* @param str $key Optional. Key used originally for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
-				* @return str Decrypted string.
+				* @param string $base64 A string of data to decrypt. Should still be base64 encoded.
+				* @param string $key Optional. Key used originally for encryption. Defaults to the one configured for s2Member. Short of that, defaults to: ``wp_salt()``.
+				* @return string Decrypted string.
 				*/
 				public static function xdecrypt ($base64 = FALSE, $key = FALSE)
 					{

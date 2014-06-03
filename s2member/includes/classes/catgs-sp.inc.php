@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_catgs_sp"))
 				* @package s2Member\Categories
 				* @since 3.5
 				*
-				* @param int|str $cat_id Numeric Category ID.
+				* @param int|string $cat_id Numeric Category ID.
 				* @param bool $check_user Test permissions against the current User? Defaults to true.
 				* @return null|array Non-empty array (with details) if access is denied, else null if access is allowed.
 				*/

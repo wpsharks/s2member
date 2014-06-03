@@ -76,9 +76,9 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 				* @package s2Member\URIs
 				* @since 3.5
 				*
-				* @param str $uris A URI string, or a string of multiple URIs is also fine.
+				* @param string $uris A URI string, or a string of multiple URIs is also fine.
 				* @param obj $user Optional. A `WP_User` object. Defaults to the current User, if logged-in.
-				* @return str Collective string of input URIs, with Replacement Codes having been filled.
+				* @return string Collective string of input URIs, with Replacement Codes having been filled.
 				*/
 				public static function fill_ruri_level_access_rc_vars ($uris = FALSE, $user = FALSE)
 					{

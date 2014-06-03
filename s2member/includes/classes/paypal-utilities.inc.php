@@ -117,7 +117,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @return str A Proxy Key. It's an MD5 Hash, 32 chars, URL-safe.
+				* @return string A Proxy Key. It's an MD5 Hash, 32 chars, URL-safe.
 				*/
 				public static function paypal_proxy_key_gen()
 					{
@@ -399,7 +399,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param str $term Expects one of `D|W|M|Y`.
+				* @param string $term Expects one of `D|W|M|Y`.
 				* @return bool|str A full singular description of the term *( i.e. `Day|Week|Month|Year` )*, else false.
 				*/
 				public static function paypal_pro_term($term = FALSE)
@@ -420,8 +420,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @package s2Member\PayPal
 				* @since 120514
 				*
-				* @param str $term Expects one of `D|W|M|Y`.
-				* @param str $period Expects a numeric value.
+				* @param string $term Expects one of `D|W|M|Y`.
+				* @param string $period Expects a numeric value.
 				* @return bool|str A full singular description of the term *( i.e. `DAY|WEEK|BIWK|MONT|QTER|SMYR|YEAR` )*, else false.
 				*
 				* @note Payflow unfortunately does NOT support daily and/or bi-monthly billing.
@@ -453,7 +453,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @package s2Member\PayPal
 				* @since 3.5
 				*
-				* @param str $term Expects one of `Day|Week|Month|Year`.
+				* @param string $term Expects one of `Day|Week|Month|Year`.
 				* @return bool|str A term code *( i.e. `D|W|M|Y` )*, else false.
 				*/
 				public static function paypal_std_term($term = FALSE)
@@ -582,8 +582,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				*
 				* @param str|array $array_or_string Either an array of PayPal post vars, or a string.
 				* 	If it's a string, we make sure it is a valid `period term` combination.
-				* @param str $default Optional. Value if unavailable. Defaults to `0 D`.
-				* @return str A `period1` string if possible, or defaults to `0 D`.
+				* @param string $default Optional. Value if unavailable. Defaults to `0 D`.
+				* @return string A `period1` string if possible, or defaults to `0 D`.
 				*/
 				public static function paypal_pro_period1($array_or_string = FALSE, $default = "0 D")
 					{
@@ -638,8 +638,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				*
 				* @param str|array $array_or_string Either an array of PayPal post vars, or a string.
 				* 	If it's a string, we make sure it is a valid `period term` combination.
-				* @param str $default Optional. Value if unavailable. Defaults to `1 D`.
-				* @return str A `period3` string if possible, or defaults to `1 D`.
+				* @param string $default Optional. Value if unavailable. Defaults to `1 D`.
+				* @return string A `period3` string if possible, or defaults to `1 D`.
 				*/
 				public static function paypal_pro_period3($array_or_string = FALSE, $default = "1 D")
 					{

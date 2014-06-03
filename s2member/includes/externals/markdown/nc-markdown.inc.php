@@ -20,8 +20,8 @@
 * @package WebSharks\Xtnls\Markdown
 * @since x.xx
 *
-* @param str $text Text to be parsed by the Markdown class.
-* @return str HTML output; after having been parsed by the Markdown class.
+* @param string $text Text to be parsed by the Markdown class.
+* @return string HTML output; after having been parsed by the Markdown class.
 */
 function NC_Markdown($text) {
 
