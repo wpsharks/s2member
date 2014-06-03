@@ -184,6 +184,24 @@ if(!class_exists('c_ws_plugin__s2member_custom_reg_fields_4bp'))
 							foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 							do_action('ws_plugin__s2member_during_custom_profile_fields_4bp_after', get_defined_vars());
 							unset($__refs, $__v);
+
+							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in'] && c_ws_plugin__s2member_list_servers::list_servers_integrated())
+							{
+								foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+								do_action('ws_plugin__s2member_during_custom_profile_fields_4bp_before_opt_in', get_defined_vars());
+								unset($__refs, $__v);
+
+								echo '<div class="ws-plugin--s2member-profile-field-4bp ws-plugin--s2member-profile-4bp-opt-in field_opt_in editfield">'."\n";
+								echo '<label for="ws-plugin--s2member-profile-4bp-opt-in">'."\n";
+								echo '<input type="checkbox" name="ws_plugin__s2member_profile_4bp_opt_in" id="ws-plugin--s2member-profile-4bp-opt-in" class="ws-plugin--s2member-profile-field-4bp" value="1" checked="checked" />'."\n";
+								echo $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in_label']."\n";
+								echo '</label>'."\n";
+								echo '</div>'."\n";
+
+								foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+								do_action('ws_plugin__s2member_during_custom_profile_fields_4bp_after_opt_in', get_defined_vars());
+								unset($__refs, $__v);
+							}
 						}
 			do_action('ws_plugin__s2member_after_custom_profile_fields_4bp', get_defined_vars());
 		}
