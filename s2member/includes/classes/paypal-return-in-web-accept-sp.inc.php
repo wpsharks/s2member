@@ -38,14 +38,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_web_accept_sp"))
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
-				public static function /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */ cp ($vars = array ())
+				public static function /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */ cp ($vars = array())
 					{
 						extract /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */($vars, EXTR_OVERWRITE | EXTR_REFS);
 
-						if ((!empty ($paypal["txn_type"]) && preg_match ("/^web_accept$/i", $paypal["txn_type"]))
-						&& (!empty ($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["sp_access_item_number_regex"], $paypal["item_number"]))
-						&& (empty ($paypal["payment_status"]) || empty ($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
-						&& (!empty ($paypal["txn_id"])))
+						if ((!empty($paypal["txn_type"]) && preg_match ("/^web_accept$/i", $paypal["txn_type"]))
+						&& (!empty($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["sp_access_item_number_regex"], $paypal["item_number"]))
+						&& (empty($paypal["payment_status"]) || empty($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
+						&& (!empty($paypal["txn_id"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_before_sp_access", get_defined_vars ());
@@ -69,7 +69,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_web_accept_sp"))
 
 												$paypal["s2member_log"][] = "Transient Tracking Cookie set on ( `web_accept` ) for Specific Post/Page Access.";
 
-												if ($processing && ($code = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_tracking_codes"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
+												if ($processing && ($code = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_tracking_codes"]) && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
 													{
 														if (($code = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $code)) && ($code = preg_replace ("/%%amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["mc_gross"]), $code)) && ($code = preg_replace ("/%%txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["txn_id"]), $code)))
 															if (($code = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["item_number"]), $code)) && ($code = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["item_name"]), $code)))
@@ -88,7 +88,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_web_accept_sp"))
 												do_action("ws_plugin__s2member_during_paypal_return_during_sp_access", get_defined_vars ());
 												unset($__refs, $__v);
 
-												if (apply_filters ("ws_plugin__s2member_immediate_sp_access_redirection", false, get_defined_vars ()))
+												if (apply_filters("ws_plugin__s2member_immediate_sp_access_redirection", false, get_defined_vars ()))
 													{
 														$paypal["s2member_log"][] = "Redirecting Customer immediately to the Specific Post/Page.";
 
@@ -134,9 +134,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_web_accept_sp"))
 								do_action("ws_plugin__s2member_during_paypal_return_after_sp_access", get_defined_vars ());
 								unset($__refs, $__v);
 
-								return apply_filters ("c_ws_plugin__s2member_paypal_return_in_web_accept_sp", $paypal, get_defined_vars ());
+								return apply_filters("c_ws_plugin__s2member_paypal_return_in_web_accept_sp", $paypal, get_defined_vars ());
 							}
-						else return apply_filters ("c_ws_plugin__s2member_paypal_return_in_web_accept_sp", false, get_defined_vars ());
+						else return apply_filters("c_ws_plugin__s2member_paypal_return_in_web_accept_sp", false, get_defined_vars ());
 					}
 			}
 	}

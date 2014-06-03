@@ -69,9 +69,9 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 							{
 								ob_start ();
 
-								if (is_array ($args) && !empty ($args))
+								if (is_array($args) && !empty($args))
 									{
-										$return = call_user_func_array ($function, $args);
+										$return = call_user_func_array($function, $args);
 									}
 								else // There are no additional arguments to pass.
 									{
@@ -152,7 +152,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 								$badge = preg_replace ("/%%display_on_failure%%/i", (($display_on_failure) ? "&amp;display_on_failure=1" : ""), $badge);
 							}
 
-						return (!empty ($badge)) ? $badge : ""; // Return Security Badge.
+						return (!empty($badge)) ? $badge : ""; // Return Security Badge.
 					}
 				/**
 				* Acquires information about memory usage.
@@ -183,7 +183,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				*/
 				public static function mms_options ()
 					{
-						return (is_multisite ()) ? (array)get_site_option ("ws_plugin__s2member_options") : array ();
+						return (is_multisite ()) ? (array)get_site_option ("ws_plugin__s2member_options") : array();
 					}
 				/**
 				* Builds an array of backtrace callers.
@@ -196,8 +196,8 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				*/
 				public static function callers ($debug_backtrace = FALSE)
 					{
-						$callers = array (); // Initialize array.
-						foreach (($debug_backtrace = (is_array ($debug_backtrace)) ? $debug_backtrace : debug_backtrace ()) as $caller)
+						$callers = array(); // Initialize array.
+						foreach (($debug_backtrace = (is_array($debug_backtrace)) ? $debug_backtrace : debug_backtrace ()) as $caller)
 							if (isset ($caller["class"], $caller["function"]) || (!isset ($caller["class"]) && isset ($caller["function"])))
 								$callers[] = (isset ($caller["class"])) ? $caller["class"] . "::" . $caller["function"] : $caller["function"];
 

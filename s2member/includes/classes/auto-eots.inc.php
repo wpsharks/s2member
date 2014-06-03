@@ -41,17 +41,17 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 
 						if (!c_ws_plugin__s2member_auto_eots::delete_auto_eot_system ())
 							{
-								return apply_filters ("ws_plugin__s2member_add_auto_eot_system", false, get_defined_vars ());
+								return apply_filters("ws_plugin__s2member_add_auto_eot_system", false, get_defined_vars ());
 							}
 						else if /* Otherwise, we can schedule? */ (function_exists ("wp_cron"))
 							{
 								wp_schedule_event (time (), "every10m", "ws_plugin__s2member_auto_eot_system__schedule");
 
-								return apply_filters ("ws_plugin__s2member_add_auto_eot_system", true, get_defined_vars ());
+								return apply_filters("ws_plugin__s2member_add_auto_eot_system", true, get_defined_vars ());
 							}
 						else // Otherwise, it would appear that WP-Cron is not available.
 							{
-								return apply_filters ("ws_plugin__s2member_add_auto_eot_system", false, get_defined_vars ());
+								return apply_filters("ws_plugin__s2member_add_auto_eot_system", false, get_defined_vars ());
 							}
 					}
 				/**
@@ -70,11 +70,11 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 							{
 								wp_clear_scheduled_hook /* Since v3.0.3. */ ("ws_plugin__s2member_auto_eot_system__schedule");
 
-								return apply_filters ("ws_plugin__s2member_delete_auto_eot_system", true, get_defined_vars ());
+								return apply_filters("ws_plugin__s2member_delete_auto_eot_system", true, get_defined_vars ());
 							}
 						else // Otherwise, it would appear that WP-Cron is not available.
 							{
-								return apply_filters ("ws_plugin__s2member_delete_auto_eot_system", false, get_defined_vars ());
+								return apply_filters("ws_plugin__s2member_delete_auto_eot_system", false, get_defined_vars ());
 							}
 					}
 				/**
@@ -103,7 +103,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 						include_once ABSPATH . "wp-admin/includes/admin.php";
 
 						@set_time_limit /* Make time for processing a larger userbase. */ (0);
-						@ini_set ("memory_limit", apply_filters ("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
+						@ini_set ("memory_limit", apply_filters("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_auto_eot_system", get_defined_vars ());
@@ -111,9 +111,9 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 
 						if  /* Enabled? */($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"])
 							{
-								$per_process = apply_filters ("ws_plugin__s2member_auto_eot_system_per_process", $per_process, get_defined_vars ());
+								$per_process = apply_filters("ws_plugin__s2member_auto_eot_system_per_process", $per_process, get_defined_vars ());
 
-								if (is_array ($eots = $wpdb->get_results ("SELECT `user_id` AS `ID` FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "s2member_auto_eot_time' AND `meta_value` != '' AND `meta_value` <= '" . esc_sql(strtotime ("now")) . "' LIMIT " . $per_process)))
+								if (is_array($eots = $wpdb->get_results ("SELECT `user_id` AS `ID` FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "s2member_auto_eot_time' AND `meta_value` != '' AND `meta_value` <= '" . esc_sql(strtotime ("now")) . "' LIMIT " . $per_process)))
 									{
 										foreach /* Go through the array of EOTS. We need to (demote|delete) each of them. */ ($eots as $eot)
 											{
@@ -158,7 +158,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																		delete_user_option ($user_id, "s2member_subscr_gateway");
 
 																		delete_user_option ($user_id, "s2member_ipn_signup_vars");
-																		if (!apply_filters ("ws_plugin__s2member_preserve_paid_registration_times", true, get_defined_vars ()))
+																		if (!apply_filters("ws_plugin__s2member_preserve_paid_registration_times", true, get_defined_vars ()))
 																			delete_user_option ($user_id, "s2member_paid_registration_times");
 
 																		delete_user_option ($user_id, "s2member_last_status_scan");
@@ -173,7 +173,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																		if($subscr_gateway && $subscr_id) // Also note the Paid Subscr. Gateway/ID so there is a reference left behind here.
 																			c_ws_plugin__s2member_user_notes::append_user_notes ($user_id, "Paid Subscr. ID @ time of demotion: ".$subscr_gateway." -› ".$subscr_id);
 
-																		if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"] && is_array ($cv = preg_split ("/\|/", $custom)))
+																		if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"] && is_array($cv = preg_split ("/\|/", $custom)))
 																			{
 																				foreach (preg_split ("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"]) as $url) // Handle EOT Notifications.
 
@@ -185,7 +185,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																										if (($url = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($user_reg_ip)), $url)))
 																											if (($url = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($user_id)), $url)))
 																												{
-																													if (is_array ($fields) && !empty ($fields))
+																													if (is_array($fields) && !empty($fields))
 																														foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
 																															if (!($url = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (maybe_serialize ($val))), $url)))
 																																break;
@@ -194,7 +194,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																														c_ws_plugin__s2member_utils_urls::remote ($url);
 																												}
 																			}
-																		if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"] && is_array ($cv = preg_split ("/\|/", $custom)))
+																		if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"] && is_array($cv = preg_split ("/\|/", $custom)))
 																			{
 																				$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status ();
 																				c_ws_plugin__s2member_email_configs::email_config_release ();
@@ -212,7 +212,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																				$msg .= "user_ip: %%user_ip%%\n";
 																				$msg .= "user_id: %%user_id%%\n";
 
-																				if (is_array ($fields) && !empty ($fields))
+																				if (is_array($fields) && !empty($fields))
 																					foreach ($fields as $var => $val)
 																						$msg .= $var . ": %%" . $var . "%%\n";
 
@@ -235,7 +235,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																									if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_reg_ip), $msg)))
 																										if (($msg = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $msg)))
 																											{
-																												if (is_array ($fields) && !empty ($fields))
+																												if (is_array($fields) && !empty($fields))
 																													foreach  /* Custom Registration/Profile Fields. */($fields as $var => $val)
 																														if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
 																															break;
@@ -243,7 +243,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																												if /* Still have a ``$sbj`` and a ``$msg``? */ ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg))))
 
 																													foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"]) as $recipient)
-																														wp_mail ($recipient, apply_filters ("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
+																														wp_mail ($recipient, apply_filters("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 																											}
 																				if /* Back on? */ ($email_configs_were_on)
 																					c_ws_plugin__s2member_email_configs::email_config ();

@@ -111,7 +111,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 										$readme .= $rm . "\n"; // Content.
 										$readme .= '</div>' . "\n";
 
-										return apply_filters ("ws_plugin__s2member_parse_readme", $readme, get_defined_vars ());
+										return apply_filters("ws_plugin__s2member_parse_readme", $readme, get_defined_vars ());
 									}
 								else // Otherwise, we're going for the entire readme file. Here we have lots of work to do.
 									{
@@ -162,7 +162,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 										$readme .= $rm . "\n"; // Content.
 										$readme .= '</div>' . "\n";
 
-										return apply_filters ("ws_plugin__s2member_parse_readme", $readme, get_defined_vars ());
+										return apply_filters("ws_plugin__s2member_parse_readme", $readme, get_defined_vars ());
 									}
 							}
 						else // Just in case readme.txt was deleted by the site owner.
@@ -187,7 +187,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 						$str = preg_replace ("/\<p\>\<li\>/i", '<ul><li>', $str); // Open the list items.
 						$str = preg_replace ("/\<\/li\>\<\/p\>/i", '</li></ul><br />', $str);
 
-						return apply_filters ("_ws_plugin__s2member_parse_readme_specs", $str, get_defined_vars ());
+						return apply_filters("_ws_plugin__s2member_parse_readme_specs", $str, get_defined_vars ());
 					}
 				/**
 				* Parses readme specification keys.
@@ -202,7 +202,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 				*/
 				public static function parse_readme_value ($key = FALSE, $specific_path = FALSE)
 					{
-						static $readme = array (); // For repeated lookups.
+						static $readme = array(); // For repeated lookups.
 
 						if (!($path = $specific_path)) // Was a specific path passed in?
 							{
@@ -215,9 +215,9 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 						do_action("ws_plugin__s2member_before_parse_readme_value", get_defined_vars ());
 						unset($__refs, $__v);
 
-						if (!empty ($readme[$path]) || file_exists ($path))
+						if (!empty($readme[$path]) || file_exists ($path))
 							{
-								if (empty ($readme[$path])) // If not already opened.
+								if (empty($readme[$path])) // If not already opened.
 									{
 										$readme[$path] = file_get_contents ($path); // Get readme.txt file contents.
 										$mb = function_exists ("mb_convert_encoding") ? @mb_convert_encoding ($readme[$path], "UTF-8", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["mb_detection_order"]) : $readme[$path];
@@ -226,7 +226,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 
 								preg_match ("/(^)(" . preg_quote ($key, "/") . ")(\:)( )(.+?)($)/m", $readme[$path], $m);
 
-								return apply_filters ("ws_plugin__s2member_parse_readme_value", ((isset ($m[5]) && strlen ($m[5] = trim ($m[5]))) ? $m[5] : false), get_defined_vars ());
+								return apply_filters("ws_plugin__s2member_parse_readme_value", ((isset ($m[5]) && strlen ($m[5] = trim ($m[5]))) ? $m[5] : false), get_defined_vars ());
 							}
 						else // Nope.
 							return false;

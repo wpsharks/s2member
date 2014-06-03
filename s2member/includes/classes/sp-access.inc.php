@@ -53,7 +53,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 								if ($shrink && ($shorter_url = c_ws_plugin__s2member_utils_urls::shorten ($sp_access_link)))
 									$sp_access_link = $shorter_url . "#" . $_SERVER["HTTP_HOST"];
 							}
-						return apply_filters ("ws_plugin__s2member_sp_access_link_gen", ((!empty ($sp_access_link)) ? $sp_access_link : false), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_sp_access_link_gen", ((!empty($sp_access_link)) ? $sp_access_link : false), get_defined_vars ());
 					}
 				/**
 				* Generates Specific Post/Page Access links via AJAX.
@@ -75,12 +75,12 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 
 						if (current_user_can ("create_users")) // Check privileges as well. Ability to create Users?
 
-							if (!empty ($_POST["ws_plugin__s2member_sp_access_link_via_ajax"]) && is_string ($nonce = $_POST["ws_plugin__s2member_sp_access_link_via_ajax"]) && wp_verify_nonce ($nonce, "ws-plugin--s2member-sp-access-link-via-ajax"))
+							if (!empty($_POST["ws_plugin__s2member_sp_access_link_via_ajax"]) && is_string ($nonce = $_POST["ws_plugin__s2member_sp_access_link_via_ajax"]) && wp_verify_nonce ($nonce, "ws-plugin--s2member-sp-access-link-via-ajax"))
 
 								if (($_p = c_ws_plugin__s2member_utils_strings::trim_deep (stripslashes_deep ($_POST))) && isset ($_p["s2member_sp_access_link_ids"], $_p["s2member_sp_access_link_hours"]))
 									$sp_access_link = c_ws_plugin__s2member_sp_access::sp_access_link_gen ((string)$_p["s2member_sp_access_link_ids"], (string)$_p["s2member_sp_access_link_hours"]);
 
-						exit (apply_filters ("ws_plugin__s2member_sp_access_link_via_ajax", ((!empty ($sp_access_link)) ? $sp_access_link : ""), get_defined_vars ()));
+						exit (apply_filters("ws_plugin__s2member_sp_access_link_via_ajax", ((!empty($sp_access_link)) ? $sp_access_link : ""), get_defined_vars ()));
 					}
 				/**
 				* Handles Specific Post/Page Access authentication.
@@ -99,32 +99,32 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 					{
 						do_action("ws_plugin__s2member_before_sp_access", get_defined_vars ());
 
-						$excluded = apply_filters ("ws_plugin__s2member_sp_access_excluded", false, get_defined_vars ());
+						$excluded = apply_filters("ws_plugin__s2member_sp_access_excluded", false, get_defined_vars ());
 
-						if ($excluded || current_user_can (apply_filters ("ws_plugin__s2member_sp_access_excluded_cap", "edit_posts", get_defined_vars ())))
-							return apply_filters ("ws_plugin__s2member_sp_access", true, get_defined_vars (), "auth-via-exclusion");
+						if ($excluded || current_user_can (apply_filters("ws_plugin__s2member_sp_access_excluded_cap", "edit_posts", get_defined_vars ())))
+							return apply_filters("ws_plugin__s2member_sp_access", true, get_defined_vars (), "auth-via-exclusion");
 
-						else if ($sp_id && is_numeric ($sp_id) && ((!empty ($_GET["s2member_sp_access"]) && ($_g["s2member_sp_access"] = trim (stripslashes ((string)$_GET["s2member_sp_access"]))) && is_array ($sp_access_values = array ($_g["s2member_sp_access"]))) || is_array ($sp_access_values = c_ws_plugin__s2member_sp_access::sp_access_session ())) && !empty ($sp_access_values))
+						else if ($sp_id && is_numeric ($sp_id) && ((!empty($_GET["s2member_sp_access"]) && ($_g["s2member_sp_access"] = trim (stripslashes ((string)$_GET["s2member_sp_access"]))) && is_array($sp_access_values = array($_g["s2member_sp_access"]))) || is_array($sp_access_values = c_ws_plugin__s2member_sp_access::sp_access_session ())) && !empty($sp_access_values))
 							{
 								foreach ($sp_access_values as $sp_access_value) // Supports multiple access values in a session. We go through each of them.
 									{
-										if (is_array ($sp_access = preg_split ("/\:\.\:\|\:\.\:/", c_ws_plugin__s2member_utils_encryption::decrypt ($sp_access_value))))
+										if (is_array($sp_access = preg_split ("/\:\.\:\|\:\.\:/", c_ws_plugin__s2member_utils_encryption::decrypt ($sp_access_value))))
 											{
-												if (count ($sp_access) === 4 && $sp_access[0] === "sp_time_hours" && in_array ($sp_id, preg_split ("/[\r\n\t\s;,]+/", $sp_access[1])))
+												if (count ($sp_access) === 4 && $sp_access[0] === "sp_time_hours" && in_array($sp_id, preg_split ("/[\r\n\t\s;,]+/", $sp_access[1])))
 													{
 														if (is_numeric ($sp_access[2]) && is_numeric ($sp_access[3]) && $sp_access[2] <= strtotime ("now") && ($sp_access[2] + ($sp_access[3] * 3600)) >= strtotime ("now"))
 															{
-																if (!$read_only && !empty ($_g["s2member_sp_access"])) // Add to session?
+																if (!$read_only && !empty($_g["s2member_sp_access"])) // Add to session?
 																	c_ws_plugin__s2member_sp_access::sp_access_session ($_g["s2member_sp_access"]);
 
 																if ($read_only || c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok ($_SERVER["REMOTE_ADDR"], $sp_access_value))
-																	return apply_filters ("ws_plugin__s2member_sp_access", true, get_defined_vars (), "auth-via-link-session");
+																	return apply_filters("ws_plugin__s2member_sp_access", true, get_defined_vars (), "auth-via-link-session");
 															}
 													}
 											}
 									}
 								// Otherwise, authentication was NOT possible via link or session.
-								if (!$read_only && /* A Specific Post/Page Access Link? */ !empty ($_g["s2member_sp_access"]))
+								if (!$read_only && /* A Specific Post/Page Access Link? */ !empty($_g["s2member_sp_access"]))
 									{
 										status_header (503);
 										header ("Content-Type: text/html; charset=UTF-8");
@@ -132,11 +132,11 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 										exit (_x ('<strong>Your Link Expired:</strong><br />Please contact Support if you need assistance.', "s2member-front", "s2member"));
 									}
 								else // Else return false here.
-									return apply_filters ("ws_plugin__s2member_sp_access", false, get_defined_vars (), "no-auth-via-link-session");
+									return apply_filters("ws_plugin__s2member_sp_access", false, get_defined_vars (), "no-auth-via-link-session");
 							}
 
 						else // Else return false here.
-							return apply_filters ("ws_plugin__s2member_sp_access", false, get_defined_vars (), "no-auth-no-link-session");
+							return apply_filters("ws_plugin__s2member_sp_access", false, get_defined_vars (), "no-auth-no-link-session");
 					}
 				/**
 				* Handles Specific Post/Page sessions, by writing access values into a cookie.
@@ -155,7 +155,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 						do_action("ws_plugin__s2member_before_sp_access_session", get_defined_vars ());
 						unset($__refs, $__v);
 
-						$sp_access_values = (!empty ($_COOKIE["s2member_sp_access"])) ? preg_split ("/\:\.\:\|\:\.\:/", (string)$_COOKIE["s2member_sp_access"]) : array ();
+						$sp_access_values = (!empty($_COOKIE["s2member_sp_access"])) ? preg_split ("/\:\.\:\|\:\.\:/", (string)$_COOKIE["s2member_sp_access"]) : array();
 
 						if ($add_sp_access_value && is_string ($add_sp_access_value) && !in_array /* Not in session? */ ($add_sp_access_value, $sp_access_values))
 							{
@@ -173,7 +173,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 								do_action("ws_plugin__s2member_during_sp_access_session", get_defined_vars ());
 								unset($__refs, $__v);
 							}
-						return apply_filters ("ws_plugin__s2member_sp_access_session", $sp_access_values, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_sp_access_session", $sp_access_values, get_defined_vars ());
 					}
 			}
 	}

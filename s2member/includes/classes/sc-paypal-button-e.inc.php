@@ -48,16 +48,16 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 
 						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"])
 							{
-								$cache = /* Are we caching? */ apply_filters ("ws_plugin__s2member_sc_paypal_button_encryption_cache", true, get_defined_vars ());
+								$cache = /* Are we caching? */ apply_filters("ws_plugin__s2member_sc_paypal_button_encryption_cache", true, get_defined_vars ());
 
 								$_code = $vars["_code"]; $attr = $vars["attr"]; // Let's unpack (i.e. use shorter references) to these two important vars.
 
 								if ($cache && ($transient = "s2m_btn_" . md5 ($code . c_ws_plugin__s2member_utilities::ver_checksum ())) && ($cache = get_transient ($transient)))
 									$code = /* Great, so we can use the cached version here to save processing time. The MD5 hash uses ``$code`` and NOT ``$_code``. */ $cache;
 
-								else if /* Are we able to parse hidden input variables? */ (is_array ($inputs = c_ws_plugin__s2member_utils_forms::form_whips_2_array ($_code)) && !empty ($inputs))
+								else if /* Are we able to parse hidden input variables? */ (is_array($inputs = c_ws_plugin__s2member_utils_forms::form_whips_2_array($_code)) && !empty($inputs))
 									{
-										$paypal = array ("METHOD" => "BMCreateButton", "BUTTONCODE" => "ENCRYPTED", "BUTTONTYPE" => (($attr["sp"] || $attr["rr"] === "BN") ? "BUYNOW" : "SUBSCRIBE"));
+										$paypal = array("METHOD" => "BMCreateButton", "BUTTONCODE" => "ENCRYPTED", "BUTTONTYPE" => (($attr["sp"] || $attr["rr"] === "BN") ? "BUYNOW" : "SUBSCRIBE"));
 
 										$i = 0; // Initialize incremental variable counter. PayPal wants these numbered using L_BUTTONVAR{n}; where {n} starts at zero.
 										foreach ($inputs as $input => $value) // Now run through each of the input variables that we parsed from the Full Button Code
@@ -71,7 +71,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 													$i++; // Increment variable counter.
 												}
 
-										if (($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_api_response ($paypal)) && empty ($paypal["__error"]) && !empty ($paypal["WEBSITECODE"]) && ($code = $paypal["WEBSITECODE"]))
+										if (($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_api_response ($paypal)) && empty($paypal["__error"]) && !empty($paypal["WEBSITECODE"]) && ($code = $paypal["WEBSITECODE"]))
 											// Only proceed if we DID get a valid response from the PayPal API. This works as a nice fallback; just in case the API connection fails.
 											{
 												$default_image = "https://www.paypal.com/" . (($attr["lang"]) ? $attr["lang"] : _x ("en_US", "s2member-front paypal-button-lang-code", "s2member")) . "/i/btn/btn_xpressCheckout.gif";
@@ -84,7 +84,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 												$code = ($attr["output"] === "anchor") ? '<a href="' . esc_attr (c_ws_plugin__s2member_utils_forms::form_whips_2_url ($code)) . '"><img src="' . esc_attr (($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image) . '" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>' : $code;
 												$code = ($attr["output"] === "url") ? c_ws_plugin__s2member_utils_forms::form_whips_2_url ($code) : $code;
 
-												($cache && $transient) ? set_transient ($transient, $code, apply_filters ("ws_plugin__s2member_sc_paypal_button_encryption_cache_exp_time", 3600, get_defined_vars ())) : null; // Caching?
+												($cache && $transient) ? set_transient ($transient, $code, apply_filters("ws_plugin__s2member_sc_paypal_button_encryption_cache_exp_time", 3600, get_defined_vars ())) : null; // Caching?
 											}
 									}
 							}

@@ -69,17 +69,17 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 						do_action("ws_plugin__s2member_before_user_capabilities", get_defined_vars ());
 						unset($__refs, $__v);
 
-						if (!empty ($capabilities["access_s2member_ccap_all_ccaps"]) && !empty ($args[0]) && preg_match ("/^access_s2member_ccap_/i", $args[0]) && apply_filters ("ws_plugin__s2member_all_ccaps_enable", true, get_defined_vars ()))
-							$capabilities = array_merge ((array)$capabilities, array ($args[0] => 1));
+						if (!empty($capabilities["access_s2member_ccap_all_ccaps"]) && !empty($args[0]) && preg_match ("/^access_s2member_ccap_/i", $args[0]) && apply_filters("ws_plugin__s2member_all_ccaps_enable", true, get_defined_vars ()))
+							$capabilities = array_merge ((array)$capabilities, array($args[0] => 1));
 
-						else if (!is_multisite () && !empty ($capabilities["administrator"]) && !empty ($args[0]) && preg_match ("/^access_s2member_ccap_/i", $args[0]) && apply_filters ("ws_plugin__s2member_admins_have_all_ccaps", true, get_defined_vars ()))
-							$capabilities = array_merge ((array)$capabilities, array ($args[0] => 1));
+						else if (!is_multisite () && !empty($capabilities["administrator"]) && !empty($args[0]) && preg_match ("/^access_s2member_ccap_/i", $args[0]) && apply_filters("ws_plugin__s2member_admins_have_all_ccaps", true, get_defined_vars ()))
+							$capabilities = array_merge ((array)$capabilities, array($args[0] => 1));
 
-						else if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && (is_super_admin () || !empty ($capabilities["administrator"])) && !empty ($args[0]) && ($args[0] === "edit_user" || $args[0] === "edit_users"))
-							if ($args[0] === "edit_users" || ($args[0] === "edit_user" && !empty ($args[2]) && ((!empty ($args[1]) && (int)$args[1] === (int)$args[2]) || is_user_member_of_blog ($args[2]))))
-								$capabilities = array_merge ((array)$capabilities, array ("edit_users" => 1));
+						else if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && (is_super_admin () || !empty($capabilities["administrator"])) && !empty($args[0]) && ($args[0] === "edit_user" || $args[0] === "edit_users"))
+							if ($args[0] === "edit_users" || ($args[0] === "edit_user" && !empty($args[2]) && ((!empty($args[1]) && (int)$args[1] === (int)$args[2]) || is_user_member_of_blog ($args[2]))))
+								$capabilities = array_merge ((array)$capabilities, array("edit_users" => 1));
 
-						return apply_filters ("ws_plugin__s2member_user_capabilities", $capabilities, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_user_capabilities", $capabilities, get_defined_vars ());
 					}
 				/**
 				* Alters this Filter inside `/wp-admin/user-edit.php`.
@@ -104,7 +104,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 							if (is_super_admin () || (current_user_can ("administrator") && $user_id && is_user_member_of_blog ($user_id)))
 								$allow = true; // Yes, allow Administrators to edit User Profiles.
 
-						return apply_filters ("ws_plugin__s2member_ms_allow_edits", $allow, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_ms_allow_edits", $allow, get_defined_vars ());
 					}
 				/**
 				* Hides Password fields for Demo Users; and deals with Password fields on Multisite Blog Farms.
@@ -129,14 +129,14 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 						unset($__refs, $__v);
 
 						if ($show && is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm ())
-							if (!is_super_admin () && is_object ($user) && !empty ($user->ID) && is_object ($current_user = wp_get_current_user ()) && !empty ($current_user->ID))
+							if (!is_super_admin () && is_object ($user) && !empty($user->ID) && is_object ($current_user = wp_get_current_user ()) && !empty($current_user->ID))
 								if ($user->ID !== $current_user->ID)
 									$show = false;
 
-						if ($show && is_object ($user) && !empty ($user->ID) && $user->user_login === "demo")
+						if ($show && is_object ($user) && !empty($user->ID) && $user->user_login === "demo")
 							$show = false; // Lock Password on Demos.
 
-						return apply_filters ("ws_plugin__s2member_hide_password_fields", $show, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_hide_password_fields", $show, get_defined_vars ());
 					}
 			}
 	}

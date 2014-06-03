@@ -36,11 +36,11 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_billing_agreement_sig
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_notify_in::paypal_notify()}.
 				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
 				*/
-				public static function cp ($vars = array ()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
+				public static function cp ($vars = array()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
 						extract($vars, EXTR_OVERWRITE | EXTR_REFS); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
-						if (!empty ($paypal["txn_type"]) && preg_match ("/^mp_signup$/i", $paypal["txn_type"]))
+						if (!empty($paypal["txn_type"]) && preg_match ("/^mp_signup$/i", $paypal["txn_type"]))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_before_billing_agreement_signup", get_defined_vars ());
@@ -70,10 +70,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_billing_agreement_sig
 								do_action("ws_plugin__s2member_during_paypal_notify_after_billing_agreement_signup", get_defined_vars ());
 								unset($__refs, $__v);
 
-								return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_billing_agreement_signup", $paypal, get_defined_vars ());
+								return apply_filters("c_ws_plugin__s2member_paypal_notify_in_billing_agreement_signup", $paypal, get_defined_vars ());
 							}
 						else
-							return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_billing_agreement_signup", false, get_defined_vars ());
+							return apply_filters("c_ws_plugin__s2member_paypal_notify_in_billing_agreement_signup", false, get_defined_vars ());
 					}
 			}
 	}

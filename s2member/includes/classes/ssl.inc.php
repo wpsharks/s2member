@@ -52,9 +52,9 @@ if (!class_exists ("c_ws_plugin__s2member_ssl"))
 						if (!$forced) // Only force SSL here once. We definitely do NOT need to run this particular routine more than ONE time.
 							if (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page () /* NOT on WordPress Systematics. */)
 								{
-									$s2_ssl_gv = apply_filters ("ws_plugin__s2member_check_force_ssl_get_var_name", "s2-ssl", get_defined_vars ());
+									$s2_ssl_gv = apply_filters("ws_plugin__s2member_check_force_ssl_get_var_name", "s2-ssl", get_defined_vars ());
 									$_g_s2_ssl = (isset ($_GET[$s2_ssl_gv]) && (!strlen ($_GET[$s2_ssl_gv]) || !preg_match ("/^(0|no|off|false)$/i", $_GET[$s2_ssl_gv]))) ? ((!strlen ($_GET[$s2_ssl_gv])) ? true : $_GET[$s2_ssl_gv]) : false;
-									$force_ssl = apply_filters ("ws_plugin__s2member_check_force_ssl", $_g_s2_ssl, get_defined_vars ());
+									$force_ssl = apply_filters("ws_plugin__s2member_check_force_ssl", $_g_s2_ssl, get_defined_vars ());
 
 									if ($force_ssl || ( /* Conditionals will work? */did_action ("wp") && is_singular () && is_object ($post) && ($force_ssl = get_post_meta ($post->ID, "s2member_force_ssl", true))))
 										if (!preg_match ("/^(0|no|off|false)$/i", (string)$force_ssl) && ($forced = true)) // Make sure it's NOT a negative variation.

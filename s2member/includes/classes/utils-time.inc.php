@@ -230,7 +230,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 
 						if ($term_cycle_key && $directive === "recurring") // recurring = Daily, Weekly, Bi-Weekly, Monthly, Bi-Monthly, Quarterly, Yearly, Lifetime.
 							{
-								$paypal_term_cycles = array ("D" => _x ("Daily", "s2member-front", "s2member"), "W" => _x ("Weekly", "s2member-front", "s2member"), "M" => _x ("Monthly", "s2member-front", "s2member"), "Y" => _x ("Yearly", "s2member-front", "s2member"), "L" => _x ("Lifetime", "s2member-front", "s2member"), "DAY" => _x ("Daily", "s2member-front", "s2member"), "WEEK" => _x ("Weekly", "s2member-front", "s2member"), "MONTH" => _x ("Monthly", "s2member-front", "s2member"), "YEAR" => _x ("Yearly", "s2member-front", "s2member"), "Lifetime" => _x ("Lifetime", "s2member-front", "s2member"));
+								$paypal_term_cycles = array("D" => _x ("Daily", "s2member-front", "s2member"), "W" => _x ("Weekly", "s2member-front", "s2member"), "M" => _x ("Monthly", "s2member-front", "s2member"), "Y" => _x ("Yearly", "s2member-front", "s2member"), "L" => _x ("Lifetime", "s2member-front", "s2member"), "DAY" => _x ("Daily", "s2member-front", "s2member"), "WEEK" => _x ("Weekly", "s2member-front", "s2member"), "MONTH" => _x ("Monthly", "s2member-front", "s2member"), "YEAR" => _x ("Yearly", "s2member-front", "s2member"), "Lifetime" => _x ("Lifetime", "s2member-front", "s2member"));
 
 								$term_cycle = isset ($paypal_term_cycles[$term_cycle_key]) ? $paypal_term_cycles[$term_cycle_key] : false;
 
@@ -241,17 +241,17 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 							}
 						else if ($term_cycle_key && $directive === "singular") // singular = Day, Week, Month, Year, Lifetime.
 							{
-								$paypal_term_cycles = array ("D" => _x ("Day", "s2member-front", "s2member"), "W" => _x ("Week", "s2member-front", "s2member"), "M" => _x ("Month", "s2member-front", "s2member"), "Y" => _x ("Year", "s2member-front", "s2member"), "L" => _x ("Lifetime", "s2member-front", "s2member"), "DAY" => _x ("Day", "s2member-front", "s2member"), "WEEK" => _x ("Week", "s2member-front", "s2member"), "MONTH" => _x ("Month", "s2member-front", "s2member"), "YEAR" => _x ("Year", "s2member-front", "s2member"), "Lifetime" => _x ("Lifetime", "s2member-front", "s2member"));
+								$paypal_term_cycles = array("D" => _x ("Day", "s2member-front", "s2member"), "W" => _x ("Week", "s2member-front", "s2member"), "M" => _x ("Month", "s2member-front", "s2member"), "Y" => _x ("Year", "s2member-front", "s2member"), "L" => _x ("Lifetime", "s2member-front", "s2member"), "DAY" => _x ("Day", "s2member-front", "s2member"), "WEEK" => _x ("Week", "s2member-front", "s2member"), "MONTH" => _x ("Month", "s2member-front", "s2member"), "YEAR" => _x ("Year", "s2member-front", "s2member"), "Lifetime" => _x ("Lifetime", "s2member-front", "s2member"));
 
 								$term_cycle = isset ($paypal_term_cycles[$term_cycle_key]) ? $paypal_term_cycles[$term_cycle_key] : false;
 							}
 						else if ($term_cycle_key && $directive === "plural") // plural = Days, Weeks, Months, Years, Lifetimes.
 							{
-								$paypal_term_cycles = array ("D" => _x ("Days", "s2member-front", "s2member"), "W" => _x ("Weeks", "s2member-front", "s2member"), "M" => _x ("Months", "s2member-front", "s2member"), "Y" => _x ("Years", "s2member-front", "s2member"), "L" => _x ("Lifetimes", "s2member-front", "s2member"), "DAY" => _x ("Days", "s2member-front", "s2member"), "WEEK" => _x ("Weeks", "s2member-front", "s2member"), "MONTH" => _x ("Months", "s2member-front", "s2member"), "YEAR" => _x ("Years", "s2member-front", "s2member"), "Lifetime" => _x ("Lifetimes", "s2member-front", "s2member"));
+								$paypal_term_cycles = array("D" => _x ("Days", "s2member-front", "s2member"), "W" => _x ("Weeks", "s2member-front", "s2member"), "M" => _x ("Months", "s2member-front", "s2member"), "Y" => _x ("Years", "s2member-front", "s2member"), "L" => _x ("Lifetimes", "s2member-front", "s2member"), "DAY" => _x ("Days", "s2member-front", "s2member"), "WEEK" => _x ("Weeks", "s2member-front", "s2member"), "MONTH" => _x ("Months", "s2member-front", "s2member"), "YEAR" => _x ("Years", "s2member-front", "s2member"), "Lifetime" => _x ("Lifetimes", "s2member-front", "s2member"));
 
 								$term_cycle = isset ($paypal_term_cycles[$term_cycle_key]) ? $paypal_term_cycles[$term_cycle_key] : false;
 							}
-						return (!empty ($term_cycle)) ? $term_cycle : false;
+						return (!empty($term_cycle)) ? $term_cycle : false;
 					}
 				/**
 				* Converts a "Period Term", and Recurring flag.
@@ -277,7 +277,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						$cycle_singular = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "singular");
 						$cycle_plural = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "plural");
 
-						if ($recurring && in_array ($period_term, array ("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "6 M", "1 Y")))
+						if ($recurring && in_array($period_term, array("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "6 M", "1 Y")))
 							$period_term = strtolower ($cycle_recurring); // Results in an "ly" ending.
 
 						else if ($recurring) // Otherwise, it's recurring; but NOT an "ly" ending.
@@ -318,7 +318,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 						$cycle_singular = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "singular");
 						$cycle_plural = c_ws_plugin__s2member_utils_time::term_cycle ($period_term, "plural");
 
-						if ($recurring && in_array ($period_term, array ("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "6 M", "1 Y")))
+						if ($recurring && in_array($period_term, array("1 D", "1 W", "2 W", "1 M", "2 M", "3 M", "6 M", "1 Y")))
 							$amount_period_term = number_format ($amount, 2, ".", "") . " / " . strtolower ($cycle_recurring);
 
 						else if ($recurring) // Otherwise, it's recurring; but NOT an "ly" ending.

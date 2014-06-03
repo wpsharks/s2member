@@ -48,7 +48,7 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 				{
 					do_action("ws_plugin__s2member_before_membership_options_page", get_defined_vars());
 
-					if(!empty ($_GET["s2member_membership_options_page"]) && is_array($_g = c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_GET))))
+					if(!empty($_GET["s2member_membership_options_page"]) && is_array($_g = c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_GET))))
 						{
 							$args = array(); // Initialize this to an empty array value.
 

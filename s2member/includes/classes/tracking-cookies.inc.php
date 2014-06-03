@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_cookies"))
 				*/
 				public static function delete_tracking_cookie ()
 					{
-						if (!empty ($_GET["s2member_delete_tracking_cookie"]))
+						if (!empty($_GET["s2member_delete_tracking_cookie"]))
 							{
 								return c_ws_plugin__s2member_tracking_cookies_in::delete_tracking_cookie ();
 							}
@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_cookies"))
 				*/
 				public static function delete_sp_tracking_cookie ()
 					{
-						if (!empty ($_GET["s2member_delete_sp_tracking_cookie"]))
+						if (!empty($_GET["s2member_delete_sp_tracking_cookie"]))
 							{
 								return c_ws_plugin__s2member_tracking_cookies_in::delete_sp_tracking_cookie ();
 							}

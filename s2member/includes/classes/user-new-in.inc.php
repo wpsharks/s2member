@@ -97,7 +97,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 								$unfs .= '<tr>' . "\n";
 								$unfs .= '<th><label for="ws-plugin--s2member-user-new-s2member-subscr-gateway">Paid Subscr. Gateway:</label> <a href="#" onclick="alert(\'A Payment Gateway code is associated with the Paid Subscr. ID below. A Paid Subscription ID (or a Buy Now Transaction ID) is only valid for paid Members. Also known as (a Recurring Profile ID, a ClickBank Receipt #, a Google Order ID, an AliPay Trade No.). Under normal circumstances, this is filled automatically by s2Member. This field is ONLY here for Customer Service purposes; just in case you ever need to enter a Paid Subscr. Gateway/ID manually. This field will be empty for Free Subscribers, and/or anyone who is NOT paying you.\\n\\nThe value of Paid Subscr. ID, can be a PayPal Standard `Subscription ID`, or a PayPal Pro `Recurring Profile ID`, or a PayPal `Transaction ID`; depending on the type of sale. Your PayPal account will supply this information. If you\\\'re using Google Wallet, use the Google Order ID. ClickBank provides a Receipt #, ccBill provides a Subscription ID, Authorize.Net provides a Subscription ID, and AliPay provides a Transaction ID. The general rule is... IF there\\\'s a Subscription ID, use that! If there\\\'s NOT, use the Transaction ID.\'); return false;" tabindex="-1">[?]</a></th>' . "\n";
 								$unfs .= '<td><select name="ws_plugin__s2member_user_new_s2member_subscr_gateway" id="ws-plugin--s2member-user-new-s2member-subscr-gateway" style="width:25em;"><option value=""></option>' . "\n";
-								foreach (apply_filters ("ws_plugin__s2member_profile_s2member_subscr_gateways", array ("paypal" => "PayPal (code: paypal)"), get_defined_vars ()) as $gateway => $gateway_name)
+								foreach (apply_filters("ws_plugin__s2member_profile_s2member_subscr_gateways", array("paypal" => "PayPal (code: paypal)"), get_defined_vars ()) as $gateway => $gateway_name)
 									$unfs .= '<option value="' . esc_attr ($gateway) . '"' . (($gateway === $_p["ws_plugin__s2member_user_new_s2member_subscr_gateway"]) ? ' selected="selected"' : '') . '>' . esc_html ($gateway_name) . '</option>' . "\n";
 								$unfs .= '</select>' . "\n";
 								$unfs .= '</td>' . "\n";
@@ -211,16 +211,16 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 													do_action("_ws_plugin__s2member_during_admin_user_new_fields_during_custom_fields_before", get_defined_vars ());
 													unset($__refs, $__v);
 
-													if (in_array ($field["id"], $fields_applicable)) // Field applicable?
+													if (in_array($field["id"], $fields_applicable)) // Field applicable?
 														{
 															$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
 															$field_id_class = preg_replace ("/_/", "-", $field_var);
 
 															foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-															if (apply_filters ("_ws_plugin__s2member_during_admin_user_new_fields_during_custom_fields_display", true, get_defined_vars ()))
+															if (apply_filters("_ws_plugin__s2member_during_admin_user_new_fields_during_custom_fields_display", true, get_defined_vars ()))
 																{
-																	if (!empty ($field["section"]) && $field["section"] === "yes") // Starts a new section?
-																		$unfs .= '<tr><td colspan="2"><div class="ws-plugin--s2member-user-new-divider-section' . ((!empty ($field["sectitle"])) ? '-title' : '') . '">' . ((!empty ($field["sectitle"])) ? $field["sectitle"] : '') . '</div></td></tr>';
+																	if (!empty($field["section"]) && $field["section"] === "yes") // Starts a new section?
+																		$unfs .= '<tr><td colspan="2"><div class="ws-plugin--s2member-user-new-divider-section' . ((!empty($field["sectitle"])) ? '-title' : '') . '">' . ((!empty($field["sectitle"])) ? $field["sectitle"] : '') . '</div></td></tr>';
 
 																	$unfs .= '<tr>' . "\n";
 																	$unfs .= '<th><label for="ws-plugin--s2member-user-new-' . esc_attr ($field_id_class) . '">' . ((preg_match ("/^(checkbox|pre_checkbox)$/", $field["type"])) ? ucwords (preg_replace ("/_/", " ", $field_var)) : $field["label"]) . ':</label></th>' . "\n";
@@ -274,7 +274,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 						do_action("_ws_plugin__s2member_after_admin_user_new_fields", get_defined_vars ());
 						unset($__refs, $__v);
 
-						return apply_filters ("_ws_plugin__s2member_admin_user_new_fields", $buffer, get_defined_vars ());
+						return apply_filters("_ws_plugin__s2member_admin_user_new_fields", $buffer, get_defined_vars ());
 					}
 			}
 	}

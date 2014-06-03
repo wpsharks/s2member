@@ -718,7 +718,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_gzip_conflicts", get_defined_vars());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_custom_capability_files", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_custom_capability_files", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_custom_capability_files", get_defined_vars ());
 

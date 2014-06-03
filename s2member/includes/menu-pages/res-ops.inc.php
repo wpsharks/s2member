@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 
 						do_action("ws_plugin__s2member_during_res_ops_page_before_left_sections", get_defined_vars ());
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_post_level_access", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_post_level_access", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_post_level_access", get_defined_vars ());
 
@@ -97,7 +97,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_post_level_access", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_page_level_access", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_page_level_access", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_page_level_access", get_defined_vars ());
 
@@ -142,7 +142,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_page_level_access", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_tag_level_access", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_tag_level_access", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_tag_level_access", get_defined_vars ());
 
@@ -187,7 +187,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_tag_level_access", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_category_level_access", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_category_level_access", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_category_level_access", get_defined_vars ());
 
@@ -234,7 +234,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_category_level_access", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_uri_level_access", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_uri_level_access", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_uri_level_access", get_defined_vars ());
 
@@ -280,7 +280,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_uri_level_access", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_query_level_access", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_query_level_access", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_query_level_access", get_defined_vars ());
 
@@ -308,8 +308,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								echo '<td>' . "\n";
 								echo '<div class="ws-menu-page-scrollbox" style="height:105px;">' . "\n";
 								echo '<input type="hidden" name="ws_plugin__s2member_filter_wp_query[]" value="update-signal" />' . "\n";
-								foreach (array ("all" => "<strong>Filter ALL WordPress queries</strong>; protecting all Alternative Views.", "searches" => "&#9492;&#9472; Searches (hide protected content in search results)", "feeds" => "&#9492;&#9472; Feeds (hide protected content in standard XML/RSS/ATOM feeds)", "comment-feeds" => "&#9492;&#9472; Comment Feeds (hide comments associated with protected content, in comment feeds)", "nav-menus" => "&#9492;&#9472; Nav Menus (hide protected content in menus generated with <em>WordPress -› Appearance -› Menus</em>)", "pages" => "&#9492;&#9472; Pages (hide protected content in widgets that list Pages)") as $ws_plugin__s2member_temp_s_value => $ws_plugin__s2member_temp_s_label)
-									echo '<input type="checkbox" name="ws_plugin__s2member_filter_wp_query[]" id="ws-plugin--s2member-filter-wp-query-' . esc_attr (preg_replace ("/[^a-z0-9_\-]/", "-", $ws_plugin__s2member_temp_s_value)) . '" value="' . esc_attr ($ws_plugin__s2member_temp_s_value) . '"' . ((in_array ($ws_plugin__s2member_temp_s_value, $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["filter_wp_query"])) ? ' checked="checked"' : '') . ' /> <label for="ws-plugin--s2member-filter-wp-query-' . esc_attr (preg_replace ("/[^a-z0-9_\-]/", "-", $ws_plugin__s2member_temp_s_value)) . '">' . $ws_plugin__s2member_temp_s_label . '</label><br />' . "\n";
+								foreach (array("all" => "<strong>Filter ALL WordPress queries</strong>; protecting all Alternative Views.", "searches" => "&#9492;&#9472; Searches (hide protected content in search results)", "feeds" => "&#9492;&#9472; Feeds (hide protected content in standard XML/RSS/ATOM feeds)", "comment-feeds" => "&#9492;&#9472; Comment Feeds (hide comments associated with protected content, in comment feeds)", "nav-menus" => "&#9492;&#9472; Nav Menus (hide protected content in menus generated with <em>WordPress -› Appearance -› Menus</em>)", "pages" => "&#9492;&#9472; Pages (hide protected content in widgets that list Pages)") as $ws_plugin__s2member_temp_s_value => $ws_plugin__s2member_temp_s_label)
+									echo '<input type="checkbox" name="ws_plugin__s2member_filter_wp_query[]" id="ws-plugin--s2member-filter-wp-query-' . esc_attr (preg_replace ("/[^a-z0-9_\-]/", "-", $ws_plugin__s2member_temp_s_value)) . '" value="' . esc_attr ($ws_plugin__s2member_temp_s_value) . '"' . ((in_array($ws_plugin__s2member_temp_s_value, $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["filter_wp_query"])) ? ' checked="checked"' : '') . ' /> <label for="ws-plugin--s2member-filter-wp-query-' . esc_attr (preg_replace ("/[^a-z0-9_\-]/", "-", $ws_plugin__s2member_temp_s_value)) . '">' . $ws_plugin__s2member_temp_s_label . '</label><br />' . "\n";
 								echo '</div>' . "\n";
 								echo '<strong>Attn Developers:</strong> Filters can be suppressed dynamically, using this technique:<br />' . "\n";
 								echo '<code><a href="http://codex.wordpress.org/Function_Reference/query_posts" target="_blank" rel="external">query_posts</a>("suppress_filters=true");</code><br />' . "\n";
@@ -327,7 +327,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_query_level_access", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_conditionals", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_conditionals", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_conditionals", get_defined_vars ());
 
@@ -378,7 +378,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_conditionals", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_sp_access", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_sp_access", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_sp_access", get_defined_vars ());
 
@@ -421,7 +421,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_sp_access", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_brute_force_restrictions", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_brute_force_restrictions", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_brute_force_restrictions", get_defined_vars ());
 
@@ -449,7 +449,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 
 								echo '<td>' . "\n";
 								echo '<select name="ws_plugin__s2member_max_failed_login_attempts" id="ws-plugin--s2member-max-failed-login-attempts">' . "\n";
-								$ws_plugin__s2member_temp_s = apply_filters ("ws_plugin__s2member_track_failed_logins__exp_time", "30 minutes");
+								$ws_plugin__s2member_temp_s = apply_filters("ws_plugin__s2member_track_failed_logins__exp_time", "30 minutes");
 								echo '<option value="1"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_failed_login_attempts"] == 1) ? ' selected="selected"' : '') . '>Allow 1 failed login attempt ( then punish for ' . $ws_plugin__s2member_temp_s . ' )</option>' . "\n";
 								echo '<option value="2"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_failed_login_attempts"] == 2) ? ' selected="selected"' : '') . '>Allow 2 failed login attempts ( then punish for ' . $ws_plugin__s2member_temp_s . ' )</option>' . "\n";
 								echo '<option value="3"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_failed_login_attempts"] == 3) ? ' selected="selected"' : '') . '>Allow 3 failed login attempts ( then punish for ' . $ws_plugin__s2member_temp_s . ' )</option>' . "\n";
@@ -478,7 +478,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_ip_restrictions", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_ip_restrictions", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_ip_restrictions", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_ip_restrictions", get_defined_vars ());
 
@@ -507,7 +507,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 
 								echo '<td>' . "\n";
 								echo '<select name="ws_plugin__s2member_max_ip_restriction" id="ws-plugin--s2member-max-ip-restriction">' . "\n";
-								$ws_plugin__s2member_temp_s = apply_filters ("ws_plugin__s2member_ip_restrictions__concurrency_time_per_ip", "30 days");
+								$ws_plugin__s2member_temp_s = apply_filters("ws_plugin__s2member_ip_restrictions__concurrency_time_per_ip", "30 days");
 								echo '<option value="1"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"] == 1) ? ' selected="selected"' : '') . '>Allow up to 1 unique IP per Customer ( every ' . $ws_plugin__s2member_temp_s . ' )</option>' . "\n";
 								echo '<option value="2"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"] == 2) ? ' selected="selected"' : '') . '>Allow up to 2 different IPs per Customer ( every ' . $ws_plugin__s2member_temp_s . ' )</option>' . "\n";
 								echo '<option value="3"' . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"] == 3) ? ' selected="selected"' : '') . '>Allow up to 3 different IPs per Customer ( every ' . $ws_plugin__s2member_temp_s . ' )</option>' . "\n";
@@ -572,7 +572,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_res_ops"))
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_after_ip_restrictions", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_slogin_restrictions", c_ws_plugin__s2member_utils_conds::pro_is_installed(), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_res_ops_page_during_left_sections_display_slogin_restrictions", c_ws_plugin__s2member_utils_conds::pro_is_installed(), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_res_ops_page_during_left_sections_before_slogin_restrictions", get_defined_vars ());
 

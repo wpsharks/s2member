@@ -76,7 +76,7 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 
 						do_action("ws_plugin__s2member_before_multisite_ops_notice", get_defined_vars ());
 
-						if (is_multisite () && is_network_admin () && in_array ($pagenow, array ("settings.php")) && !isset ($_GET["page"]))
+						if (is_multisite () && is_network_admin () && in_array($pagenow, array("settings.php")) && !isset ($_GET["page"]))
 							{
 								$notice = "<em>* Note: The s2Member plugin has control over two options on this page.<br /><code>Allow Open Registration = " . esc_html (get_site_option ("registration")) . "</code> and <code>Add New Users = " . esc_html (get_site_option ("add_new_users")) . "</code>.<br />Please check: <code>s2Member -› Multisite (Config)</code>.";
 

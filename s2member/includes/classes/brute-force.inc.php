@@ -49,7 +49,7 @@ if (!class_exists ("c_ws_plugin__s2member_brute_force"))
 
 						if (($max = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_failed_login_attempts"]))
 							{
-								$exp_secs = strtotime ("+" . apply_filters ("ws_plugin__s2member_track_failed_logins__exp_time", "30 minutes", get_defined_vars ())) - time ();
+								$exp_secs = strtotime ("+" . apply_filters("ws_plugin__s2member_track_failed_logins__exp_time", "30 minutes", get_defined_vars ())) - time ();
 								// If you add Filters to this value, you should use a string that is compatible with PHP's strtotime() function.
 
 								$transient = "s2m_ipr_" . md5 ("s2member_transient_failed_login_attempts_" . $_SERVER["REMOTE_ADDR"]);
@@ -84,7 +84,7 @@ if (!class_exists ("c_ws_plugin__s2member_brute_force"))
 							{
 								if ((int)get_transient ("s2m_ipr_" . md5 ("s2member_transient_failed_login_attempts_" . $_SERVER["REMOTE_ADDR"])) > $max)
 									{
-										$exp_secs = strtotime ("+" . apply_filters ("ws_plugin__s2member_track_failed_logins__exp_time", "30 minutes", get_defined_vars ())) - time ();
+										$exp_secs = strtotime ("+" . apply_filters("ws_plugin__s2member_track_failed_logins__exp_time", "30 minutes", get_defined_vars ())) - time ();
 											// If you add Filters to this value, you should use a string that is compatible with PHP's strtotime() function.
 										$about = c_ws_plugin__s2member_utils_time::approx_time_difference (time (), time () + $exp_secs);
 										$errors = new WP_Error ("incorrect_password", sprintf (_x ("Max failed logins. Please wait %s and try again.", "s2member-front", "s2member"), $about));
@@ -94,7 +94,7 @@ if (!class_exists ("c_ws_plugin__s2member_brute_force"))
 										unset($__refs, $__v);
 									}
 							}
-						return apply_filters ("ws_plugin__s2member_stop_brute_force_logins", ((!empty ($errors)) ? $errors : $user), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_stop_brute_force_logins", ((!empty($errors)) ? $errors : $user), get_defined_vars ());
 					}
 			}
 	}

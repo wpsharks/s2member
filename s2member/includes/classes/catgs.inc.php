@@ -41,13 +41,13 @@ if (!class_exists ("c_ws_plugin__s2member_catgs"))
 
 						do_action("ws_plugin__s2member_before_check_catg_level_access", get_defined_vars ());
 
-						$excluded = apply_filters ("ws_plugin__s2member_check_catg_level_access_excluded", false, get_defined_vars ());
+						$excluded = apply_filters("ws_plugin__s2member_check_catg_level_access_excluded", false, get_defined_vars ());
 
 						if (!$excluded && is_category () && ($cat_id = get_query_var ("cat")) && ($cat_id = (int)$cat_id) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 							{
 								if /* Do NOT touch WordPress Systematics. This excludes all WordPress Systematics. */ (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page ())
 									{
-										$user = /* Current User's object. */ (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty ($user->ID)) ? $user : false;
+										$user = /* Current User's object. */ (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty($user->ID)) ? $user : false;
 
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri ($user, "root-returns-false")) && preg_match ("/^" . preg_quote ($login_redirection_uri, "/") . "$/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level0")))
 											c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("catg", $cat_id, "level", 0, $_SERVER["REQUEST_URI"], "sys") . exit ();
@@ -59,7 +59,7 @@ if (!class_exists ("c_ws_plugin__s2member_catgs"))
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_catgs"] === "all" && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 															c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("catg", $cat_id, "level", $n, $_SERVER["REQUEST_URI"]) . exit ();
 
-														else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_catgs"] && in_array ($cat_id, ($catgs = preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_catgs"]))) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
+														else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_catgs"] && in_array($cat_id, ($catgs = preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_catgs"]))) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 															c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("catg", $cat_id, "level", $n, $_SERVER["REQUEST_URI"]) . exit ();
 
 														else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_catgs"] /* Check Category ancestry. */)

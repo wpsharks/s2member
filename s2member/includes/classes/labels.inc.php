@@ -65,13 +65,13 @@ if (!class_exists ("c_ws_plugin__s2member_labels"))
 					{
 						if ($original && $context && stripos ($context, "User role") === 0 && ($role = $original))
 							{
-								if (preg_match ("/^(Free )?Subscriber$/i", $role) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level0_label"]))
+								if (preg_match ("/^(Free )?Subscriber$/i", $role) && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level0_label"]))
 									$translation = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level0_label"];
 
-								else if (preg_match ("/^s2Member Level ([0-9]+)$/i", $role, $m) && !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $m[1] . "_label"]))
+								else if (preg_match ("/^s2Member Level ([0-9]+)$/i", $role, $m) && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $m[1] . "_label"]))
 									$translation = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $m[1] . "_label"];
 
-								$translation = apply_filters ("_ws_plugin__s2member_label_translations", $translation, get_defined_vars ());
+								$translation = apply_filters("_ws_plugin__s2member_label_translations", $translation, get_defined_vars ());
 							}
 
 						return /* Return translation. */ $translation;

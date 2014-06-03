@@ -38,7 +38,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				*/
 				public static function n_dir_seps ($path = FALSE)
 					{
-						return rtrim (preg_replace ("/\/+/", "/", str_replace (array (DIRECTORY_SEPARATOR, "\\", "/"), "/", (string)$path)), "/");
+						return rtrim (preg_replace ("/\/+/", "/", str_replace (array(DIRECTORY_SEPARATOR, "\\", "/"), "/", (string)$path)), "/");
 					}
 				/**
 				* Strips a trailing `/app_data/` sub-directory.
@@ -97,7 +97,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				*/
 				public static function rel_path ($from = FALSE, $to = FALSE, $try_realpaths = TRUE, $use_win_diff_drive_jctn = TRUE)
 					{
-						if ( /* Initialize/validate. */!($rel_path = array ()) && is_string ($from) && strlen ($from) && is_string ($to) && strlen ($to))
+						if ( /* Initialize/validate. */!($rel_path = array()) && is_string ($from) && strlen ($from) && is_string ($to) && strlen ($to))
 							{
 								$from = ($try_realpaths && ($_real_from = realpath ($from))) ? $_real_from : $from; // Try this?
 								$to = ($try_realpaths && ($_real_to = realpath ($to))) ? $_real_to : $to; // Try to find realpath?

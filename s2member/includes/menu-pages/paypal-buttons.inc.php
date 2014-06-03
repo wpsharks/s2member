@@ -46,7 +46,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 						for ($n = 1; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++) // Starting with Level #1 here.
 							{
-								if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_level" . $n . "_buttons") && apply_filters ($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons, true, get_defined_vars ()))
+								if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_level" . $n . "_buttons") && apply_filters($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons, true, get_defined_vars ()))
 									{
 										if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_level" . $n . "_buttons"))
 											do_action($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_levelN_buttons, get_defined_vars ());
@@ -133,7 +133,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 									}
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_modification_buttons", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_modification_buttons", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_modification_buttons", get_defined_vars ());
 
@@ -234,7 +234,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_modification_buttons", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_ccap_buttons", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_ccap_buttons", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_ccap_buttons", get_defined_vars ());
 
@@ -312,7 +312,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_ccap_buttons", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_cancellation_buttons", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_cancellation_buttons", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_cancellation_buttons", get_defined_vars ());
 
@@ -389,7 +389,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_cancellation_buttons", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_reg_links", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_reg_links", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_reg_links", get_defined_vars ());
 
@@ -428,7 +428,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_reg_links", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_sp_buttons", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_sp_buttons", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_sp_buttons", get_defined_vars ());
 
@@ -523,7 +523,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_sp_buttons", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_sp_links", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_sp_links", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_sp_links", get_defined_vars ());
 
@@ -574,7 +574,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_sp_links", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_shortcode_attrs", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_shortcode_attrs", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_shortcode_attrs", get_defined_vars ());
 

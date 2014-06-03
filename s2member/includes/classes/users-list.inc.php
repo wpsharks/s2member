@@ -81,12 +81,12 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 
 						if (is_admin() && !empty($GLOBALS['pagenow']) && $GLOBALS['pagenow'] === 'users.php')
 							if(isset ($query->query_vars) && !is_network_admin ()) // NOT in Network admin panels.
-								if (is_array ($qv = $query->query_vars) && ($s = trim ($qv["search"], "* \t\n\r\0\x0B")) && ($s = "%" . esc_sql (like_escape ($s)) . "%"))
+								if (is_array($qv = $query->query_vars) && ($s = trim ($qv["search"], "* \t\n\r\0\x0B")) && ($s = "%" . esc_sql (like_escape ($s)) . "%"))
 									{
 										$query->query_fields = "SQL_CALC_FOUND_ROWS DISTINCT(`" . $wpdb->users . "`.`ID`)";
 										$query->query_from = " FROM `" . $wpdb->users . "`, `" . $wpdb->usermeta . "`"; // Include meta table also.
 										$query->query_where = " WHERE `" . $wpdb->users . "`.`ID` = `" . $wpdb->usermeta . "`.`user_id`"; // Join w/ meta table.
-										$query->query_where .= " AND (" . apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_before", "", get_defined_vars ());
+										$query->query_where .= " AND (" . apply_filters("ws_plugin__s2member_before_users_list_search_where_or_before", "", get_defined_vars ());
 										$query->query_where .= " (`" . $wpdb->users . "`.`user_login` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_nicename` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`display_name` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_email` LIKE '" . $s . "' OR `" . $wpdb->users . "`.`user_url` LIKE '" . $s . "')";
 										$query->query_where .= " OR ((`" . $wpdb->usermeta . "`.`meta_key` = 'first_name' OR `" . $wpdb->usermeta . "`.`meta_key` = 'last_name') AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 										$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->base_prefix . "s2member_subscr_id' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
@@ -94,13 +94,13 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 										$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->base_prefix . "s2member_custom_fields' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
 										if(apply_filters("ws_plugin__s2member_users_list_search_admin_notes", false, get_defined_vars())) // Off by default; this can get very slow on large sites.
 											$query->query_where .= " OR (`" . $wpdb->usermeta . "`.`meta_key` = '" . $wpdb->base_prefix . "s2member_notes' AND `" . $wpdb->usermeta . "`.`meta_value` LIKE '" . $s . "')";
-										$query->query_where .= apply_filters ("ws_plugin__s2member_before_users_list_search_where_or_after", "", get_defined_vars ()) . ")"; // Leaving room for additional searches here.
+										$query->query_where .= apply_filters("ws_plugin__s2member_before_users_list_search_where_or_after", "", get_defined_vars ()) . ")"; // Leaving room for additional searches here.
 
 										if(is_multisite()) // On a Multisite Network we need to make sure we're searching only users w/ capabilities on this blog.
 											$query->query_where .= " AND `" . $wpdb->users . "`.`ID` IN(SELECT DISTINCT(`user_id`) FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "capabilities')";
 
-										$query->query_from = apply_filters ("ws_plugin__s2member_before_users_list_search_from", $query->query_from, get_defined_vars ());
-										$query->query_where = apply_filters ("ws_plugin__s2member_before_users_list_search_where", $query->query_where, get_defined_vars ());
+										$query->query_from = apply_filters("ws_plugin__s2member_before_users_list_search_from", $query->query_from, get_defined_vars ());
+										$query->query_where = apply_filters("ws_plugin__s2member_before_users_list_search_where", $query->query_where, get_defined_vars ());
 									}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_after_users_list_search", get_defined_vars ());
@@ -125,7 +125,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 
 						$cols["s2member_registration_time"] = "Registration Date";
 
-						if (apply_filters ("ws_plugin__s2member_users_list_cols_display_paid_registration_times", false))
+						if (apply_filters("ws_plugin__s2member_users_list_cols_display_paid_registration_times", false))
 							$cols["s2member_paid_registration_times"] = "Paid Registr. Date";
 
 						$cols["s2member_subscr_id"] = "Paid Subscr. ID";
@@ -152,7 +152,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						do_action("ws_plugin__s2member_during_users_list_cols", get_defined_vars ());
 						unset($__refs, $__v);
 
-						return apply_filters ("ws_plugin__s2member_users_list_cols", $cols, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_users_list_cols", $cols, get_defined_vars ());
 					}
 				/**
 				* Displays column data in the row of details.
@@ -184,7 +184,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						else if ($col === "s2member_paid_registration_times")
 							{
 								$val = ""; // Initialize $val before we begin.
-								if (is_array ($v = get_user_option ("s2member_paid_registration_times", $user_id)))
+								if (is_array($v = get_user_option ("s2member_paid_registration_times", $user_id)))
 									foreach ($v as $level => $time) // Go through each Paid Registration Time.
 										{
 											$time = strtotime (get_date_from_gmt (date ("Y-m-d H:i:s", $time)));
@@ -204,7 +204,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 									if (preg_match ("/^access_s2member_ccap_/", $cap))
 										$ccaps[] = preg_replace ("/^access_s2member_ccap_/", "", $cap);
 
-								$val = (!empty ($ccaps)) ? implode ("<br />", $ccaps) : "—";
+								$val = (!empty($ccaps)) ? implode ("<br />", $ccaps) : "—";
 							}
 						else if($col === "s2member_auto_eot_time")
 							$val = ($v = get_user_option ("s2member_auto_eot_time", $user_id)) ? date("D M jS, Y", (integer)$v) . "<br /><small>@ precisely " . date ("g:i a", (integer)$v)."</small>" : "—";
@@ -219,7 +219,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 								if (isset ($fields[$field_var]) && is_string ($fields[$field_var]) && preg_match ("/^http(s?)\:/i", $fields[$field_var]))
 									$val = '<a href="' . esc_attr ($fields[$field_var]) . '" target="_blank">' . esc_html (substr ($fields[$field_var], strpos ($fields[$field_var], ":") + 3, 25) . "...") . '</a>';
 
-								else if (isset ($fields[$field_var]) && is_array ($fields[$field_var]) && !empty ($fields[$field_var]))
+								else if (isset ($fields[$field_var]) && is_array($fields[$field_var]) && !empty($fields[$field_var]))
 									$val = preg_replace ("/-\|br\|-/", "<br />", esc_html (implode ("-|br|-", $fields[$field_var])));
 
 								else if (isset ($fields[$field_var]) && is_string ($fields[$field_var]) && strlen ($fields[$field_var]))
@@ -241,7 +241,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						}
 						$last_user_id = $user_id; // Record this for internal optimizations.
 
-						return apply_filters ("ws_plugin__s2member_users_list_display_cols", ((strlen ($val)) ? $val : "—"), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_users_list_display_cols", ((strlen ($val)) ? $val : "—"), get_defined_vars ());
 					}
 
 			/**

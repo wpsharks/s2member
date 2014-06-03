@@ -38,14 +38,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
-				public static function cp ($vars = array ()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
+				public static function cp ($vars = array()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
 						extract ($vars, EXTR_OVERWRITE | EXTR_REFS); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
-						if ((!empty ($paypal["txn_type"]) && preg_match ("/^web_accept$/i", $paypal["txn_type"]))
-						&& (!empty ($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["sp_access_item_number_regex"], $paypal["item_number"]))
-						&& (empty ($paypal["payment_status"]) || empty ($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
-						&& (!empty ($paypal["payer_email"])) && (!empty ($paypal["txn_id"])))
+						if ((!empty($paypal["txn_type"]) && preg_match ("/^web_accept$/i", $paypal["txn_type"]))
+						&& (!empty($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["sp_access_item_number_regex"], $paypal["item_number"]))
+						&& (empty($paypal["payment_status"]) || empty($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
+						&& (!empty($paypal["payer_email"])) && (!empty($paypal["txn_id"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_before_sp_access", get_defined_vars ());
@@ -60,7 +60,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
 
-										if (($sp_access_url = c_ws_plugin__s2member_sp_access::sp_access_link_gen ($paypal["sp_ids"], $paypal["hours"])) && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
+										if (($sp_access_url = c_ws_plugin__s2member_sp_access::sp_access_link_gen ($paypal["sp_ids"], $paypal["hours"])) && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
 											{
 												$processing = $during = true; // Yes, we ARE processing this.
 
@@ -68,7 +68,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 													if (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["option_selection1"], $paypal["option_selection1"])) && is_object ($user = new WP_User ($user_id)) && $user->ID)
 														{
 															$sp_references = (array)get_user_option ("s2member_sp_references", $user_id);
-															$_sp_reference = array ("time" => time (), "ids" => $paypal["sp_ids"], "hours" => $paypal["hours"], "url" => $sp_access_url);
+															$_sp_reference = array("time" => time (), "ids" => $paypal["sp_ids"], "hours" => $paypal["hours"], "url" => $sp_access_url);
 															$sp_references = c_ws_plugin__s2member_utils_arrays::array_unique (array_merge ($sp_references, $_sp_reference));
 															update_user_option ($user_id, "s2member_sp_references", $sp_references);
 
@@ -119,12 +119,12 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 																																							$msg = c_ws_plugin__s2member_utilities::evl($msg, get_defined_vars());
 																																						}
 																																					foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($rec) as $recipient) // Go through a possible list of recipients.
-																																						c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($recipient, apply_filters ("ws_plugin__s2member_sp_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_sp_email_msg", $msg, get_defined_vars ()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
+																																						c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($recipient, apply_filters("ws_plugin__s2member_sp_email_sbj", $sbj, get_defined_vars ()), apply_filters("ws_plugin__s2member_sp_email_msg", $msg, get_defined_vars ()), "From: \"" . preg_replace ('/"/', "'", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]) . "\" <" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"] . ">\r\nContent-Type: text/plain; charset=UTF-8") . c_ws_plugin__s2member_email_configs::email_config_release ();
 
 																																					$paypal["s2member_log"][] = "Specific Post/Page Confirmation Email sent to: " . $rec . ".";
 																																				}
 
-												if ($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_urls"] && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
+												if ($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_urls"] && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
 													{
 														foreach (preg_split ("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_urls"]) as $url)
 
@@ -144,7 +144,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 														$paypal["s2member_log"][] = "Specific Post/Page ~ Sale Notification URLs have been processed.";
 													}
 
-												if ($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_recipients"] && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
+												if ($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_recipients"] && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
 													{
 														$msg = $sbj = "(s2Member / API Notification Email) - Specific Post/Page ~ Sale";
 														$msg .= "\n\n"; // Spacing in the message body.
@@ -190,12 +190,12 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 																							if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																								foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_recipients"]) as $recipient)
-																									wp_mail ($recipient, apply_filters ("ws_plugin__s2member_sp_sale_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_sp_sale_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
+																									wp_mail ($recipient, apply_filters("ws_plugin__s2member_sp_sale_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters("ws_plugin__s2member_sp_sale_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 
 														$paypal["s2member_log"][] = "Specific Post/Page ~ Sale Notification Emails have been processed.";
 													}
 
-												if ($processing && $_REQUEST["s2member_paypal_proxy"] && ($url = $_REQUEST["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
+												if ($processing && $_REQUEST["s2member_paypal_proxy"] && ($url = $_REQUEST["s2member_paypal_proxy_return_url"]) && is_array($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
 													{
 														if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)) && ($url = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (rawurlencode ($sp_access_url)), $url)))
 															if (($url = preg_replace ("/%%sp_access_exp%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (c_ws_plugin__s2member_utils_time::approx_time_difference (time (), strtotime ("+" . $paypal["hours"] . " hours")))), $url)))
@@ -214,7 +214,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 														$paypal["s2member_log"][] = "Specific Post/Page Return, a Proxy Return URL is ready.";
 													}
 
-												if ($processing && ($code = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_tracking_codes"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
+												if ($processing && ($code = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_tracking_codes"]) && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
 													{
 														if (($code = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $code)) && ($code = preg_replace ("/%%amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["mc_gross"]), $code)) && ($code = preg_replace ("/%%txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["txn_id"]), $code)))
 															if (($code = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["item_number"]), $code)) && ($code = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["item_name"]), $code)))
@@ -248,10 +248,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 								do_action("ws_plugin__s2member_during_paypal_notify_after_sp_access", get_defined_vars ());
 								unset($__refs, $__v);
 
-								return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp", $paypal, get_defined_vars ());
+								return apply_filters("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp", $paypal, get_defined_vars ());
 							}
 						else
-							return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp", false, get_defined_vars ());
+							return apply_filters("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp", false, get_defined_vars ());
 					}
 			}
 	}

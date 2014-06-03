@@ -44,7 +44,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 						do_action("ws_plugin__s2member_during_logs_page_before_left_sections", get_defined_vars());
 
-						if (apply_filters ("ws_plugin__s2member_during_logs_page_during_left_sections_display_help", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_logs_page_during_left_sections_display_help", true, get_defined_vars ()))
 						{
 							do_action("ws_plugin__s2member_during_logs_page_during_left_sections_before_help", get_defined_vars ());
 

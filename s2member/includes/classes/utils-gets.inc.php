@@ -39,10 +39,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				*/
 				public static function get_all_category_ids ()
 					{
-						if (is_array ($category_ids = /* Uses the WordPress function for this. */ get_all_category_ids ()))
+						if (is_array($category_ids = /* Uses the WordPress function for this. */ get_all_category_ids ()))
 							$category_ids = c_ws_plugin__s2member_utils_arrays::force_integers ($category_ids);
 
-						return (!empty ($category_ids) && is_array ($category_ids)) ? array_unique ($category_ids) : array ();
+						return (!empty($category_ids) && is_array($category_ids)) ? array_unique ($category_ids) : array();
 					}
 				/**
 				* Retrieves a unique array of all child Category IDs, within a specific parent Category.
@@ -55,11 +55,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				*/
 				public static function get_all_child_category_ids ($parent_category = FALSE)
 					{
-						if (is_numeric ($parent_category) && is_array ($child_categories = get_categories ("child_of=" . $parent_category . "&hide_empty=0")))
+						if (is_numeric ($parent_category) && is_array($child_categories = get_categories ("child_of=" . $parent_category . "&hide_empty=0")))
 							foreach ($child_categories as /* Go through child Categories. */ $child_category)
 								$child_category_ids[] = (int)$child_category->term_id;
 
-						return (!empty ($child_category_ids) && is_array ($child_category_ids)) ? array_unique ($child_category_ids) : array ();
+						return (!empty($child_category_ids) && is_array($child_category_ids)) ? array_unique ($child_category_ids) : array();
 					}
 				/**
 				* Retrieves a unique array of all Tag IDs in the database.
@@ -74,7 +74,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 						foreach ((array)get_tags ("hide_empty=0") as $tag)
 							$tag_ids[] = (int)$tag->term_id; // Collect Tag's ID.
 
-						return (!empty ($tag_ids) && is_array ($tag_ids)) ? array_unique ($tag_ids) : array ();
+						return (!empty($tag_ids) && is_array($tag_ids)) ? array_unique ($tag_ids) : array();
 					}
 				/**
 				* Converts a comma-delimited list of: Tag slugs/names/ids, into a unique array of all IDs.
@@ -101,7 +101,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 											$tag_ids[] = (int)$term->term_id;
 									}
 							}
-						return (!empty ($tag_ids) && is_array ($tag_ids)) ? array_unique ($tag_ids) : array ();
+						return (!empty($tag_ids) && is_array($tag_ids)) ? array_unique ($tag_ids) : array();
 					}
 				/**
 				* Retrieves a unique array of all published Post IDs in the database.
@@ -117,10 +117,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 					{
 						global $wpdb; // Need this global DB object reference here.
 
-						if (is_array ($post_ids = $wpdb->get_col ("SELECT `ID` FROM `" . $wpdb->posts . "` WHERE `post_status` = 'publish' AND " . (($post_type) ? "`post_type` = '" . esc_sql ((string)$post_type) . "'" : "`post_type` NOT IN('page','attachment','nav_menu_item','revision')"))))
+						if (is_array($post_ids = $wpdb->get_col ("SELECT `ID` FROM `" . $wpdb->posts . "` WHERE `post_status` = 'publish' AND " . (($post_type) ? "`post_type` = '" . esc_sql ((string)$post_type) . "'" : "`post_type` NOT IN('page','attachment','nav_menu_item','revision')"))))
 							$post_ids = c_ws_plugin__s2member_utils_arrays::force_integers ($post_ids);
 
-						return (!empty ($post_ids) && is_array ($post_ids)) ? array_unique ($post_ids) : array ();
+						return (!empty($post_ids) && is_array($post_ids)) ? array_unique ($post_ids) : array();
 					}
 				/**
 				* Retrieves a unique array of all published Page IDs in the database.
@@ -134,10 +134,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 					{
 						global $wpdb; // Need this global DB object reference here.
 
-						if (is_array ($page_ids = $wpdb->get_col ("SELECT `ID` FROM `" . $wpdb->posts . "` WHERE `post_status` = 'publish' AND `post_type` = 'page'")))
+						if (is_array($page_ids = $wpdb->get_col ("SELECT `ID` FROM `" . $wpdb->posts . "` WHERE `post_status` = 'publish' AND `post_type` = 'page'")))
 							$page_ids = c_ws_plugin__s2member_utils_arrays::force_integers ($page_ids);
 
-						return (!empty ($page_ids) && is_array ($page_ids)) ? array_unique ($page_ids) : array ();
+						return (!empty($page_ids) && is_array($page_ids)) ? array_unique ($page_ids) : array();
 					}
 				/**
 				* Retrieves a unique array of all Singular IDs in the database that require Custom Capabilities.
@@ -151,10 +151,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 					{
 						global $wpdb; // Need this global DB object reference here.
 
-						if (is_array ($singular_ids = $wpdb->get_col ("SELECT `post_id` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = 's2member_ccaps_req' AND `meta_value` != ''")))
+						if (is_array($singular_ids = $wpdb->get_col ("SELECT `post_id` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = 's2member_ccaps_req' AND `meta_value` != ''")))
 							$singular_ids = c_ws_plugin__s2member_utils_arrays::force_integers ($singular_ids);
 
-						return (!empty ($singular_ids) && is_array ($singular_ids)) ? array_unique ($singular_ids) : array ();
+						return (!empty($singular_ids) && is_array($singular_ids)) ? array_unique ($singular_ids) : array();
 					}
 				/**
 				* Retrieves a unique array of unavailable Singular IDs that require Custom Capabilities.
@@ -172,13 +172,13 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 					{
 						global $wpdb; // Need this global DB object reference here.
 
-						if (is_array ($results = $wpdb->get_results ("SELECT `post_id`, `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = 's2member_ccaps_req' AND `meta_value` != ''")))
+						if (is_array($results = $wpdb->get_results ("SELECT `post_id`, `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = 's2member_ccaps_req' AND `meta_value` != ''")))
 							foreach ($results as $r) // Now we need to check Custom Capabilities against ``$user``. If ``$user`` is a valid `WP_User` object, else all are unavailable.
 								{
-									if (!is_object ($user) || empty ($user->ID)) // No ``$user`` object? Maybe not logged-in?.
+									if (!is_object ($user) || empty($user->ID)) // No ``$user`` object? Maybe not logged-in?.
 										$singular_ids[] = (int)$r->post_id; // It's NOT available. There is no ``$user``.
 
-									else if (is_array ($ccaps = /* Make sure we unserialize. */ @unserialize ($r->meta_value)))
+									else if (is_array($ccaps = /* Make sure we unserialize. */ @unserialize ($r->meta_value)))
 										{
 											foreach ($ccaps as $ccap) // Test for Custom Capability Restrictions now.
 												if (strlen ($ccap) && !$user->has_cap ("access_s2member_ccap_" . $ccap))
@@ -188,7 +188,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 													}
 										}
 								}
-						return (!empty ($singular_ids) && is_array ($singular_ids)) ? array_unique ($singular_ids) : array ();
+						return (!empty($singular_ids) && is_array($singular_ids)) ? array_unique ($singular_ids) : array();
 					}
 				/**
 				* Retrieves a unique array of all Singular IDs that require Specific Post/Page Access.
@@ -203,12 +203,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				*/
 				public static function get_all_singular_ids_with_sp ($exclude_conflicts = FALSE)
 					{
-						if (is_array (($singular_ids = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"] && is_array ($singular_ids = preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"]))) ? $singular_ids : array ())))
+						if (is_array(($singular_ids = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"] && is_array($singular_ids = preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"]))) ? $singular_ids : array())))
 							$singular_ids = c_ws_plugin__s2member_utils_arrays::force_integers ($singular_ids);
 
-						if (!empty ($singular_ids) && is_array ($singular_ids) && $exclude_conflicts /* Return ONLY those which are NOT in conflict with other Restrictions? */)
+						if (!empty($singular_ids) && is_array($singular_ids) && $exclude_conflicts /* Return ONLY those which are NOT in conflict with other Restrictions? */)
 							{
-								$x_ids = array ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"], $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"], $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"]);
+								$x_ids = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"], $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"], $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"]);
 
 								$x_ids = array_merge ($x_ids, c_ws_plugin__s2member_utils_gets::get_all_singular_ids_with_ccaps ());
 
@@ -253,9 +253,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 
 										foreach (($posts = preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"])) as $p)
 											if (strpos ($p, "all-") === 0 && preg_match ("/^all-(.+)$/", $p, $m) /* Protecting `all-` of a specific Post Type? */)
-												if ((is_array ($p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids ($m[1])) || (substr($m[1], -1) === "s"
+												if ((is_array($p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids ($m[1])) || (substr($m[1], -1) === "s"
 												   && is_array($_p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids(substr($m[1], 0, -1)))))
-													&& !empty ($p_of_type)) $x_ids = array_merge /* Merge all Posts of this Post Type. */ ($x_ids, $p_of_type);
+													&& !empty($p_of_type)) $x_ids = array_merge /* Merge all Posts of this Post Type. */ ($x_ids, $p_of_type);
 
 										$x_ids = /* Exclude the full list too. */ array_merge ($x_ids, $posts);
 										unset /* Just a little housekeeping here. */ ($posts, $p, $m, $p_of_type);
@@ -278,7 +278,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 								$x_ids = array_unique (c_ws_plugin__s2member_utils_arrays::force_integers ($x_ids));
 								$singular_ids = /* Exclude all of the ``$x_ids`` now. */ array_diff ($singular_ids, $x_ids);
 							}
-						return (!empty ($singular_ids) && is_array ($singular_ids)) ? array_unique ($singular_ids) : array ();
+						return (!empty($singular_ids) && is_array($singular_ids)) ? array_unique ($singular_ids) : array();
 					}
 				/**
 				* Retrieves a unique array of unavailable Singular IDs that require Specific Post/Page Access.
@@ -296,19 +296,19 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				*/
 				public static function get_unavailable_singular_ids_with_sp ($exclude_conflicts = FALSE)
 					{
-						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"] && is_array ($_singular_ids = preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"])))
+						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"] && is_array($_singular_ids = preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"])))
 							foreach ($_singular_ids as $_singular_id) // Now check access to this Singular, against the current Visitor, via read-only ``c_ws_plugin__s2member_sp_access::sp_access()``.
 								if (is_numeric ($_singular_id) && !c_ws_plugin__s2member_sp_access::sp_access ($_singular_id, "read-only"))
 									$singular_ids[] = (int)$_singular_id;
 
-						if (!empty ($singular_ids) && is_array ($singular_ids) /* And, are we excluding conflicts in this instance? */ && $exclude_conflicts)
+						if (!empty($singular_ids) && is_array($singular_ids) /* And, are we excluding conflicts in this instance? */ && $exclude_conflicts)
 							{
 								$all_singular_ids_not_conflicting = c_ws_plugin__s2member_utils_gets::get_all_singular_ids_with_sp ("exclude-conflicts");
 								foreach /* Weed out anything that's in conflict here. */ ($singular_ids as $s => $singular_id)
-									if (!in_array ($singular_id, $all_singular_ids_not_conflicting))
+									if (!in_array($singular_id, $all_singular_ids_not_conflicting))
 										unset($singular_ids[$s]);
 							}
-						return (!empty ($singular_ids) && is_array ($singular_ids)) ? array_unique ($singular_ids) : array ();
+						return (!empty($singular_ids) && is_array($singular_ids)) ? array_unique ($singular_ids) : array();
 					}
 				/**
 				* Retrieves a unique array of all published Singulars, protected with Specific Post/Page Access.
@@ -326,16 +326,16 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				*/
 				public static function get_all_singulars_with_sp ($exclude_conflicts = FALSE)
 					{
-						$singulars = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"] && is_array ($singulars = get_posts ("post_status=publish&post_type=any&include=" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"]))) ? $singulars : array ();
+						$singulars = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"] && is_array($singulars = get_posts ("post_status=publish&post_type=any&include=" . $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"]))) ? $singulars : array();
 
-						if (!empty ($singulars) && is_array ($singulars) /* And, are we excluding conflicts in this instance? */ && $exclude_conflicts)
+						if (!empty($singulars) && is_array($singulars) /* And, are we excluding conflicts in this instance? */ && $exclude_conflicts)
 							{
 								$all_singular_ids_not_conflicting = c_ws_plugin__s2member_utils_gets::get_all_singular_ids_with_sp ("exclude-conflicts");
 								foreach /* Weed out anything that's in conflict here. */ ($singulars as $s => $singular)
-									if (!in_array ($singular->ID, $all_singular_ids_not_conflicting))
+									if (!in_array($singular->ID, $all_singular_ids_not_conflicting))
 										unset($singulars[$s]);
 							}
-						return (!empty ($singulars) && is_array ($singulars)) ? c_ws_plugin__s2member_utils_arrays::array_unique ($singulars) : array ();
+						return (!empty($singulars) && is_array($singulars)) ? c_ws_plugin__s2member_utils_arrays::array_unique ($singulars) : array();
 					}
 				/**
 				* Retrieves a unique array of Singular IDs in the database, within specific term IDs.
@@ -352,10 +352,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 					{
 						global $wpdb; // Need this global DB object reference here.
 
-						if (!empty ($terms) && is_array ($terms) && is_array ($singular_ids = $wpdb->get_col ("SELECT `object_id` FROM `" . $wpdb->term_relationships . "` WHERE `term_taxonomy_id` IN (SELECT `term_taxonomy_id` FROM `" . $wpdb->term_taxonomy . "` WHERE `term_id` IN('" . implode ("','", $terms) . "'))")))
+						if (!empty($terms) && is_array($terms) && is_array($singular_ids = $wpdb->get_col ("SELECT `object_id` FROM `" . $wpdb->term_relationships . "` WHERE `term_taxonomy_id` IN (SELECT `term_taxonomy_id` FROM `" . $wpdb->term_taxonomy . "` WHERE `term_id` IN('" . implode ("','", $terms) . "'))")))
 							$singular_ids = c_ws_plugin__s2member_utils_arrays::force_integers ($singular_ids);
 
-						return (!empty ($singular_ids) && is_array ($singular_ids)) ? array_unique ($singular_ids) : array ();
+						return (!empty($singular_ids) && is_array($singular_ids)) ? array_unique ($singular_ids) : array();
 					}
 			}
 	}

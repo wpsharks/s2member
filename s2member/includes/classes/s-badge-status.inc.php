@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status"))
 				*/
 				public static function s_badge_status ()
 					{
-						if (!empty ($_GET["s2member_s_badge_status"]))
+						if (!empty($_GET["s2member_s_badge_status"]))
 							{
 								c_ws_plugin__s2member_s_badge_status_in::s_badge_status ();
 							}

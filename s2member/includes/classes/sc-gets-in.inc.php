@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_gets_in"))
 
 						$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr); // Force array; trim quote entities.
 
-						$attr = shortcode_atts (array ("constant" => "", "user_field" => "", "user_option" => "", "user_id" => ""), $attr);
+						$attr = shortcode_atts (array("constant" => "", "user_field" => "", "user_option" => "", "user_id" => ""), $attr);
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_get_details_after_shortcode_atts", get_defined_vars ());
@@ -67,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_gets_in"))
 						else if ($attr["user_option"] && (is_user_logged_in () || $attr["user_id"]))
 							$get = get_user_option ($attr["user_option"], (int)$attr["user_id"]);
 
-						return apply_filters ("ws_plugin__s2member_sc_get_details", ((isset ($get)) ? $get : null), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_sc_get_details", ((isset ($get)) ? $get : null), get_defined_vars ());
 					}
 			}
 	}

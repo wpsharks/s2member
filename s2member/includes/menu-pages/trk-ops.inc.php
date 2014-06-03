@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 
 						do_action("ws_plugin__s2member_during_trk_ops_page_before_left_sections", get_defined_vars ());
 
-						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_signup_tracking", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_signup_tracking", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_signup_tracking", get_defined_vars ());
 
@@ -131,7 +131,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_signup_tracking", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_modification_tracking", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_modification_tracking", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_modification_tracking", get_defined_vars ());
 
@@ -228,7 +228,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_modification_tracking", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_ccap_tracking", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_ccap_tracking", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_ccap_tracking", get_defined_vars ());
 
@@ -318,7 +318,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_ccap_tracking", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_sp_tracking", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_sp_tracking", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_sp_tracking", get_defined_vars ());
 
@@ -393,14 +393,14 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_sp_tracking", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_integrations_divider", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_integrations_divider", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_integrations_divider", get_defined_vars ());
 								echo '<div style="border-bottom:1px solid #DFDFDF; margin:-20px 0 20px 0; padding:0;">&nbsp;</div>' . "\n";
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_integrations_divider", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_idev", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_idev", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_idev", get_defined_vars ());
 
@@ -449,7 +449,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_idev", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_shareasale", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_shareasale", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_shareasale", get_defined_vars ());
 
@@ -498,7 +498,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_shareasale", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_other_methods", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_other_methods", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_other_methods", get_defined_vars ());
 

@@ -41,17 +41,17 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 					{
 						do_action("ws_plugin__s2member_before_register", get_defined_vars ());
 
-						if (!empty ($_GET["s2member_register"])) // If they're attempting to access the registration system.
+						if (!empty($_GET["s2member_register"])) // If they're attempting to access the registration system.
 							{
 								while (@ob_end_clean ()); // Clean any existing output buffers.
 
 								$msg_503 = _x ('<strong>Your Link Expired:</strong><br />Please contact Support if you need assistance.', "s2member-front", "s2member");
 
-								if (is_array ($register = preg_split ("/\:\.\:\|\:\.\:/", c_ws_plugin__s2member_utils_encryption::decrypt (trim (stripslashes ((string)$_GET["s2member_register"]))))))
+								if (is_array($register = preg_split ("/\:\.\:\|\:\.\:/", c_ws_plugin__s2member_utils_encryption::decrypt (trim (stripslashes ((string)$_GET["s2member_register"]))))))
 									{
 										if (count ($register) === 6 && $register[0] === "subscr_gateway_subscr_id_custom_item_number_time" /* Does the checksum value match up here? */)
 											{
-												if (is_numeric ($register[5]) && $register[5] <= strtotime ("now") && $register[5] >= strtotime ("-" . apply_filters ("ws_plugin__s2member_register_link_exp_time", "2 days", get_defined_vars ())))
+												if (is_numeric ($register[5]) && $register[5] <= strtotime ("now") && $register[5] >= strtotime ("-" . apply_filters("ws_plugin__s2member_register_link_exp_time", "2 days", get_defined_vars ())))
 													{
 														$_COOKIE["s2member_subscr_gateway"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_utils_encryption::encrypt ($register[1]);
 														$_COOKIE["s2member_subscr_id"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_utils_encryption::encrypt ($register[2]);

@@ -53,7 +53,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 
 						do_action("ws_plugin__s2member_before_paypal_notify", get_defined_vars ());
 
-						if (!empty ($_GET["s2member_paypal_notify"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !empty ($_REQUEST["s2member_paypal_proxy"])))
+						if (!empty($_GET["s2member_paypal_notify"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !empty($_REQUEST["s2member_paypal_proxy"])))
 							{
 								@ignore_user_abort (true); // Important. Continue processing even if/when the connection is broken by the sending party.
 
@@ -66,14 +66,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								if(!empty($_REQUEST["s2member_paypal_proxy"]) && in_array($_REQUEST["s2member_paypal_proxy"], array("alipay", "authnet", "clickbank", "ccbill", "google"), TRUE))
 									${esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy"])))} = &$paypal; // Internal alias by reference.
 
-								if (is_array ($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
+								if (is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
 									{
 										$paypal["s2member_log"][] = "IPN received on: " . date ("D M j, Y g:i:s a T");
-										$paypal["s2member_log"][] = "s2Member POST vars verified " . ((!empty ($paypal["proxy_verified"])) ? "with a Proxy Key" : "through a POST back to PayPal.");
+										$paypal["s2member_log"][] = "s2Member POST vars verified " . ((!empty($paypal["proxy_verified"])) ? "with a Proxy Key" : "through a POST back to PayPal.");
 
 										$payment_status_issues = "/^(failed|denied|expired|refunded|partially_refunded|reversed|reversal|canceled_reversal|voided)$/i";
 
-										$paypal["subscr_gateway"] = (!empty ($_REQUEST["s2member_paypal_proxy"])) ? esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy"]))) : "paypal";
+										$paypal["subscr_gateway"] = (!empty($_REQUEST["s2member_paypal_proxy"])) ? esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy"]))) : "paypal";
 
 										$coupon = (!empty($_REQUEST["s2member_paypal_proxy_coupon"]) && is_array($_REQUEST["s2member_paypal_proxy_coupon"])) ? stripslashes_deep($_REQUEST["s2member_paypal_proxy_coupon"]) : array();
 										$coupon = (isset($coupon["full_coupon_code"], $coupon["coupon_code"], $coupon["affiliate_id"]) && is_string($coupon["full_coupon_code"]) && is_string($coupon["coupon_code"]) && is_string($coupon["affiliate_id"])) ? $coupon : array("full_coupon_code" => "", "coupon_code" => "", "affiliate_id" => "");
@@ -82,18 +82,18 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 											// This is mostly irrelevant, but it helps to keep the logs cleaner.
 											sleep(5); // Wait for Pro Form procesing to complete.
 
-										if (empty ($paypal["custom"]) && !empty ($paypal["recurring_payment_id"])) // Recurring Profile ID.
+										if (empty($paypal["custom"]) && !empty($paypal["recurring_payment_id"])) // Recurring Profile ID.
 											$paypal["custom"] = c_ws_plugin__s2member_utils_users::get_user_custom_with ($paypal["recurring_payment_id"]);
 
-										else if (empty ($paypal["custom"]) && !empty ($paypal["mp_id"])) // Lookup; based on a Billing Agreement ID.
+										else if (empty($paypal["custom"]) && !empty($paypal["mp_id"])) // Lookup; based on a Billing Agreement ID.
 											$paypal["custom"] = c_ws_plugin__s2member_utils_users::get_user_custom_with ($paypal["mp_id"]);
 
-										if (!empty ($paypal["custom"]) && preg_match ("/^" . preg_quote (preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"]), "/") . "/i", $paypal["custom"]))
+										if (!empty($paypal["custom"]) && preg_match ("/^" . preg_quote (preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"]), "/") . "/i", $paypal["custom"]))
 											{
 												$paypal["s2member_log"][] = "s2Member originating domain ( `\$_SERVER[\"HTTP_HOST\"]` ) validated.";
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												if (!apply_filters ("ws_plugin__s2member_during_paypal_notify_conditionals", false, get_defined_vars ()))
+												if (!apply_filters("ws_plugin__s2member_during_paypal_notify_conditionals", false, get_defined_vars ()))
 													{
 														unset($__refs, $__v);
 
@@ -152,13 +152,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 													unset($__refs, $__v);
 											}
 
-										else if (!empty ($paypal["txn_type"]) && preg_match("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]))
+										else if (!empty($paypal["txn_type"]) && preg_match("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]))
 											{
 												$paypal["s2member_log"][] = "Transaction type ( `recurring_payment_profile_cancel` ), but there is no match to an existing account; so verification of `\$_SERVER[\"HTTP_HOST\"]` was not possible.";
 												$paypal["s2member_log"][] = "It's likely this account was just upgraded/downgraded by s2Member Pro; so the Subscr. ID has probably been updated on-site; nothing to worry about here.";
 											}
 
-										else if (!empty ($paypal["txn_type"]) && preg_match("/^recurring_/i", $paypal["txn_type"])) // Otherwise, is this a ^recurring_ txn_type?
+										else if (!empty($paypal["txn_type"]) && preg_match("/^recurring_/i", $paypal["txn_type"])) // Otherwise, is this a ^recurring_ txn_type?
 											$paypal["s2member_log"][] = "Transaction type ( `^recurring_?` ), but there is no match to an existing account; so verification of `\$_SERVER[\"HTTP_HOST\"]` was not possible.";
 
 										else // Else, use the default ``$_SERVER["HTTP_HOST"]`` error.
@@ -175,22 +175,22 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								/*
 								Add IPN proxy (when available) to the ``$paypal`` array.
 								*/
-								if (!empty ($_REQUEST["s2member_paypal_proxy"]))
+								if (!empty($_REQUEST["s2member_paypal_proxy"]))
 									$paypal["s2member_paypal_proxy"] = esc_html(trim(stripslashes((string)$_REQUEST["s2member_paypal_proxy"])));
 								/*
 								Add IPN proxy use vars (when available) to the ``$paypal`` array.
 								*/
-								if (!empty ($_REQUEST["s2member_paypal_proxy_use"]))
+								if (!empty($_REQUEST["s2member_paypal_proxy_use"]))
 									$paypal["s2member_paypal_proxy_use"] = esc_html(trim(stripslashes((string)$_REQUEST["s2member_paypal_proxy_use"])));
 								/*
 								Add IPN proxy coupon vars (when available) to the ``$paypal`` array.
 								*/
-								if (!empty ($_REQUEST["s2member_paypal_proxy_coupon"]))
+								if (!empty($_REQUEST["s2member_paypal_proxy_coupon"]))
 									$paypal["s2member_paypal_proxy_coupon"] = stripslashes_deep((array)$_REQUEST["s2member_paypal_proxy_coupon"]);
 								/*
 								Also add IPN proxy self-verification (when available) to the ``$paypal`` array.
 								*/
-								if (!empty ($_REQUEST["s2member_paypal_proxy_verification"]))
+								if (!empty($_REQUEST["s2member_paypal_proxy_verification"]))
 									$paypal["s2member_paypal_proxy_verification"] = esc_html(trim(stripslashes((string)$_REQUEST["s2member_paypal_proxy_verification"])));
 								/*
 								If debugging/logging is enabled; we need to append ``$paypal`` to the log file.
@@ -219,7 +219,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								header ("Content-Type: text/plain; charset=UTF-8"); // Content-Type text/plain with UTF-8.
 								while (@ob_end_clean ()); // Clean any existing output buffers.
 
-								exit (((!empty ($paypal["s2member_paypal_proxy_return_url"])) ? $paypal["s2member_paypal_proxy_return_url"] : ""));
+								exit (((!empty($paypal["s2member_paypal_proxy_return_url"])) ? $paypal["s2member_paypal_proxy_return_url"] : ""));
 							}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_after_paypal_notify", get_defined_vars ());

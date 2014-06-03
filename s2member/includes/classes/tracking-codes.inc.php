@@ -53,7 +53,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 					{
 						do_action("ws_plugin__s2member_before_display_signup_tracking_codes", get_defined_vars ());
 
-						if ((!empty ($_COOKIE["s2member_tracking"]) && ($subscr_or_txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_tracking"]))) || (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) && ($subscr_or_txn_id = $subscr_id)))
+						if ((!empty($_COOKIE["s2member_tracking"]) && ($subscr_or_txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_tracking"]))) || (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) && ($subscr_or_txn_id = $subscr_id)))
 							{
 								if (($code = get_transient ($transient = "s2m_" . md5 ("s2member_transient_signup_tracking_codes_" . $subscr_or_txn_id))))
 									{
@@ -105,7 +105,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 					{
 						do_action("ws_plugin__s2member_before_display_modification_tracking_codes", get_defined_vars ());
 
-						if ((!empty ($_COOKIE["s2member_tracking"]) && ($subscr_or_txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_tracking"]))) || (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) && ($subscr_or_txn_id = $subscr_id)))
+						if ((!empty($_COOKIE["s2member_tracking"]) && ($subscr_or_txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_tracking"]))) || (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) && ($subscr_or_txn_id = $subscr_id)))
 							{
 								if (($code = get_transient ($transient = "s2m_" . md5 ("s2member_transient_modification_tracking_codes_" . $subscr_or_txn_id))))
 									{
@@ -157,7 +157,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 					{
 						do_action("ws_plugin__s2member_before_display_ccap_tracking_codes", get_defined_vars ());
 
-						if ((!empty ($_COOKIE["s2member_tracking"]) && ($subscr_or_txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_tracking"]))) || (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) && ($subscr_or_txn_id = $subscr_id)))
+						if ((!empty($_COOKIE["s2member_tracking"]) && ($subscr_or_txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_tracking"]))) || (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) && ($subscr_or_txn_id = $subscr_id)))
 							{
 								if (($code = get_transient ($transient = "s2m_" . md5 ("s2member_transient_ccap_tracking_codes_" . $subscr_or_txn_id))))
 									{
@@ -205,7 +205,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 					{
 						do_action("ws_plugin__s2member_before_display_sp_tracking_codes", get_defined_vars ());
 
-						if (!empty ($_COOKIE["s2member_sp_tracking"]) && ($txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_sp_tracking"])))
+						if (!empty($_COOKIE["s2member_sp_tracking"]) && ($txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_sp_tracking"])))
 							{
 								if (($code = get_transient ($transient = "s2m_" . md5 ("s2member_transient_sp_tracking_codes_" . $txn_id))))
 									{
@@ -251,7 +251,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 						c_ws_plugin__s2member_tracking_codes::display_ccap_tracking_codes ();
 						c_ws_plugin__s2member_tracking_codes::display_sp_tracking_codes ();
 
-						return apply_filters ("ws_plugin__s2member_generate_all_tracking_codes", ob_get_clean (), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_generate_all_tracking_codes", ob_get_clean (), get_defined_vars ());
 					}
 			}
 	}

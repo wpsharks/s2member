@@ -45,11 +45,11 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 
 						do_action("ws_plugin__s2member_before_custom_registration_fields_4bp", get_defined_vars ());
 
-						if (!$processed && in_array ("registration", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
-							if (apply_filters ("ws_plugin__s2member_custom_registration_fields_4bp_display", true, get_defined_vars ()))
+						if (!$processed && in_array("registration", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
+							if (apply_filters("ws_plugin__s2member_custom_registration_fields_4bp_display", true, get_defined_vars ()))
 								if (bp_is_register_page () && ($processed = true))
 									{
-										$_p = (!empty ($_POST)) ? c_ws_plugin__s2member_utils_strings::trim_deep (stripslashes_deep ($_POST)) : array ();
+										$_p = (!empty($_POST)) ? c_ws_plugin__s2member_utils_strings::trim_deep (stripslashes_deep ($_POST)) : array();
 
 										if (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"] && ($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level ("auto-detection", "registration"))) || ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_opt_in"] && c_ws_plugin__s2member_list_servers::list_servers_integrated ()))
 											if (($close_section_container = true))
@@ -71,16 +71,16 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 															do_action("ws_plugin__s2member_during_custom_registration_fields_4bp_before_custom_fields", get_defined_vars ());
 															unset($__refs, $__v);
 
-															if /* Field applicable? */ (in_array ($field["id"], $fields_applicable))
+															if /* Field applicable? */ (in_array($field["id"], $fields_applicable))
 																{
 																	$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
 																	$field_id_class = preg_replace ("/_/", "-", $field_var);
 
 																	foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																	if (apply_filters ("ws_plugin__s2member_during_custom_registration_fields_4bp_during_custom_fields_display", true, get_defined_vars ()))
+																	if (apply_filters("ws_plugin__s2member_during_custom_registration_fields_4bp_during_custom_fields_display", true, get_defined_vars ()))
 																		{
-																			if /* Starts a new section? */ (!empty ($field["section"]) && $field["section"] === "yes")
-																				echo '<div class="ws-plugin--s2member-custom-reg-field-4bp-divider-section' . ((!empty ($field["sectitle"])) ? '-title' : '') . '">' . ((!empty ($field["sectitle"])) ? $field["sectitle"] : '') . '</div>';
+																			if /* Starts a new section? */ (!empty($field["section"]) && $field["section"] === "yes")
+																				echo '<div class="ws-plugin--s2member-custom-reg-field-4bp-divider-section' . ((!empty($field["sectitle"])) ? '-title' : '') . '">' . ((!empty($field["sectitle"])) ? $field["sectitle"] : '') . '</div>';
 
 																			echo '<div class="ws-plugin--s2member-custom-reg-field-4bp ws-plugin--s2member-custom-reg-field-4bp-' . esc_attr ($field_id_class) . ' field_' . esc_attr ($field_var) . ' editfield">' . "\n";
 																			echo '<label for="ws-plugin--s2member-custom-reg-field-4bp-' . esc_attr ($field_id_class) . '">' . "\n";
@@ -105,7 +105,7 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 
 												echo '<div class="ws-plugin--s2member-custom-reg-field-4bp field_opt_in editfield">' . "\n";
 												echo '<label for="ws-plugin--s2member-custom-reg-field-4bp-opt-in">' . "\n";
-												echo '<input type="checkbox" name="ws_plugin__s2member_custom_reg_field_opt_in" id="ws-plugin--s2member-custom-reg-field-4bp-opt-in" class="ws-plugin--s2member-custom-reg-field-4bp" value="1"' . (((empty ($_p) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_opt_in"] == 1) || $_p["ws_plugin__s2member_custom_reg_field_opt_in"]) ? ' checked="checked"' : '') . ' />' . "\n";
+												echo '<input type="checkbox" name="ws_plugin__s2member_custom_reg_field_opt_in" id="ws-plugin--s2member-custom-reg-field-4bp-opt-in" class="ws-plugin--s2member-custom-reg-field-4bp" value="1"' . (((empty($_p) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_opt_in"] == 1) || $_p["ws_plugin__s2member_custom_reg_field_opt_in"]) ? ' checked="checked"' : '') . ' />' . "\n";
 												echo $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_opt_in_label"] . "\n";
 												echo '</label>' . "\n";
 												echo '</div>' . "\n";
@@ -144,8 +144,8 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 
 						do_action("ws_plugin__s2member_before_custom_profile_fields_4bp", get_defined_vars ());
 
-						if (!$processed && in_array ("profile", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
-							if (apply_filters ("ws_plugin__s2member_custom_profile_fields_4bp_display", true, get_defined_vars ()))
+						if (!$processed && in_array("profile", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
+							if (apply_filters("ws_plugin__s2member_custom_profile_fields_4bp_display", true, get_defined_vars ()))
 								if (bp_is_user_profile () && (( /* BuddyPress v1.5. */function_exists ("bp_is_user_profile_edit") && bp_is_user_profile_edit ())
 								|| ( /* for BuddyPress < v1.5. */function_exists ("bp_is_profile_edit") && bp_is_profile_edit ())) && (int)bp_get_the_profile_group_id () === 1)
 									if (isset ($bp->displayed_user->id) && ($user_id = $bp->displayed_user->id))
@@ -169,16 +169,16 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 																		do_action("ws_plugin__s2member_during_custom_profile_fields_4bp_before_custom_fields", get_defined_vars ());
 																		unset($__refs, $__v);
 
-																		if /* Field applicable? */ (in_array ($field["id"], $fields_applicable))
+																		if /* Field applicable? */ (in_array($field["id"], $fields_applicable))
 																			{
 																				$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
 																				$field_id_class = preg_replace ("/_/", "-", $field_var);
 
 																				foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																				if (apply_filters ("ws_plugin__s2member_during_custom_profile_fields_4bp_during_custom_fields_display", true, get_defined_vars ()))
+																				if (apply_filters("ws_plugin__s2member_during_custom_profile_fields_4bp_during_custom_fields_display", true, get_defined_vars ()))
 																					{
-																						if /* Starts a new section? */ (!empty ($field["section"]) && $field["section"] === "yes")
-																							echo '<div class="ws-plugin--s2member-profile-field-4bp-divider-section' . ((!empty ($field["sectitle"])) ? '-title' : '') . '">' . ((!empty ($field["sectitle"])) ? $field["sectitle"] : '') . '</div>';
+																						if /* Starts a new section? */ (!empty($field["section"]) && $field["section"] === "yes")
+																							echo '<div class="ws-plugin--s2member-profile-field-4bp-divider-section' . ((!empty($field["sectitle"])) ? '-title' : '') . '">' . ((!empty($field["sectitle"])) ? $field["sectitle"] : '') . '</div>';
 
 																						echo '<div class="ws-plugin--s2member-profile-field-4bp ws-plugin--s2member-profile-4bp-' . esc_attr ($field_id_class) . ' field_' . esc_attr ($field_var) . ' editfield">' . "\n";
 																						echo '<label for="ws-plugin--s2member-profile-4bp-' . esc_attr ($field_id_class) . '">' . "\n";
@@ -221,8 +221,8 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 
 						do_action("ws_plugin__s2member_before_custom_profile_field_items_4bp", get_defined_vars ());
 
-						if (!$processed && in_array ("profile-view", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
-							if (apply_filters ("ws_plugin__s2member_custom_profile_field_items_4bp_display", true, get_defined_vars ()))
+						if (!$processed && in_array("profile-view", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
+							if (apply_filters("ws_plugin__s2member_custom_profile_field_items_4bp_display", true, get_defined_vars ()))
 								if (bp_is_user_profile () && (( /* BuddyPress v1.5. */function_exists ("bp_is_user_profile_edit") && !bp_is_user_profile_edit ())
 								|| ( /* for BuddyPress < v1.5. */function_exists ("bp_is_profile_edit") && !bp_is_profile_edit ())) && (int)bp_get_the_profile_group_id () === 1)
 									if (isset ($bp->displayed_user->id) && ($user_id = $bp->displayed_user->id))
@@ -244,18 +244,18 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 																		do_action("ws_plugin__s2member_during_custom_profile_field_items_4bp_before_custom_fields", get_defined_vars ());
 																		unset($__refs, $__v);
 
-																		if /* Field applicable? */ (in_array ($field["id"], $fields_applicable))
+																		if /* Field applicable? */ (in_array($field["id"], $fields_applicable))
 																			{
 																				$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
 																				$field_id_class = preg_replace ("/_/", "-", $field_var);
 
 																				foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																				if (apply_filters ("ws_plugin__s2member_during_custom_profile_field_items_4bp_during_custom_fields_display", true, get_defined_vars ()))
+																				if (apply_filters("ws_plugin__s2member_during_custom_profile_field_items_4bp_during_custom_fields_display", true, get_defined_vars ()))
 																					{
-																						if /* New section? */ (!empty ($field["section"]) && $field["section"] === "yes")
+																						if /* New section? */ (!empty($field["section"]) && $field["section"] === "yes")
 																							{
 																								echo '<tr class="ws-plugin--s2member-profile-field-4bp-divider-section">' . "\n";
-																								echo '<td colspan="2"><div class="ws-plugin--s2member-profile-field-4bp-divider-section' . ((!empty ($field["sectitle"])) ? '-title' : '') . '">' . ((!empty ($field["sectitle"])) ? $field["sectitle"] : '') . '</div></td>' . "\n";
+																								echo '<td colspan="2"><div class="ws-plugin--s2member-profile-field-4bp-divider-section' . ((!empty($field["sectitle"])) ? '-title' : '') . '">' . ((!empty($field["sectitle"])) ? $field["sectitle"] : '') . '</div></td>' . "\n";
 																								echo '</tr>' . "\n";
 																							}
 

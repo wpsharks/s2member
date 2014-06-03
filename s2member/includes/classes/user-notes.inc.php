@@ -54,7 +54,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 								update_user_option ($user_id, "s2member_notes", $notes);
 							}
 
-						return apply_filters ("ws_plugin__s2member_append_user_notes", ((!empty ($notes)) ? $notes : ""), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_append_user_notes", ((!empty($notes)) ? $notes : ""), get_defined_vars ());
 					}
 				/**
 				* Clear specific notes from a User/Member's account; based on line-by-line regex.
@@ -72,7 +72,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 						do_action("ws_plugin__s2member_before_clear_user_note_lines", get_defined_vars ());
 						unset($__refs, $__v);
 
-						if ($user_id && $regex && is_string ($regex) && ($lines = array ()))
+						if ($user_id && $regex && is_string ($regex) && ($lines = array()))
 							{
 								// Careful here to preserve empty lines.
 								$notes = trim (get_user_option ("s2member_notes", $user_id));
@@ -89,7 +89,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 								update_user_option ($user_id, "s2member_notes", $notes);
 							}
 
-						return apply_filters ("ws_plugin__s2member_clear_user_note_lines", ((!empty ($notes)) ? $notes : ""), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_clear_user_note_lines", ((!empty($notes)) ? $notes : ""), get_defined_vars ());
 					}
 			}
 	}

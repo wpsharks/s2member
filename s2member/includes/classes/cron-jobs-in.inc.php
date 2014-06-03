@@ -38,15 +38,15 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 				* @param array $schedules Expects an array of WP_Cron schedules passed in by the Filter.
 				* @return array Array of WP_Cron schedules after having added a 10 minute cycle.
 				*/
-				public static function extend_cron_schedules ($schedules = array ())
+				public static function extend_cron_schedules ($schedules = array())
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_extend_cron_schedules", get_defined_vars ());
 						unset($__refs, $__v);
 
-						$array = array ("every10m" => array ("interval" => 600, "display" => "Every 10 Minutes"));
+						$array = array("every10m" => array("interval" => 600, "display" => "Every 10 Minutes"));
 
-						return apply_filters ("ws_plugin__s2member_extend_cron_schedules", array_merge ($array, $schedules), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_extend_cron_schedules", array_merge ($array, $schedules), get_defined_vars ());
 					}
 				/**
 				* Allows the Auto-EOT Sytem to be processed through a server-side Cron Job.
@@ -62,7 +62,7 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 					{
 						do_action("ws_plugin__s2member_before_auto_eot_system_via_cron", get_defined_vars ());
 
-						if /* Called through HTTP? */ (!empty ($_GET["s2member_auto_eot_system_via_cron"]))
+						if /* Called through HTTP? */ (!empty($_GET["s2member_auto_eot_system_via_cron"]))
 							{
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"])
 									{

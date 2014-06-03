@@ -44,7 +44,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_forms"))
 									{
 										if (($url = trim ($form_action_m[7]))) // Set URL value dynamically. Now we add values.
 											{
-												foreach ((array)c_ws_plugin__s2member_utils_forms::form_whips_2_array ($form) as $name => $value)
+												foreach ((array)c_ws_plugin__s2member_utils_forms::form_whips_2_array($form) as $name => $value)
 													{
 														if (strlen ($name) && strlen ($value)) // Check $name -› $value lengths.
 
@@ -70,7 +70,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_forms"))
 				* @param string $form A form tag with hidden input fields.
 				* @return array An associative array of all hidden input fields.
 				*/
-				public static function form_whips_2_array ($form = FALSE)
+				public static function form_whips_2_array($form = FALSE)
 					{
 						if (preg_match ("/\<form(.+?)\>/is", $form)) // Is this a form?
 							{

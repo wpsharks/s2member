@@ -38,14 +38,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 				*
 				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
-				public static function /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */ cp ($vars = array ())
+				public static function /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */ cp ($vars = array())
 					{
 						extract /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */($vars, EXTR_OVERWRITE | EXTR_REFS);
 
-						if ((!empty ($paypal["txn_type"]) && preg_match ("/^web_accept$/i", $paypal["txn_type"]))
-						&& (!empty ($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_wo_level_regex"], $paypal["item_number"]))
-						&& (empty ($paypal["payment_status"]) || empty ($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
-						&& (!empty ($paypal["txn_id"]) && ($paypal["subscr_id"] = $paypal["txn_id"])) && (!empty ($paypal["payer_email"])))
+						if ((!empty($paypal["txn_type"]) && preg_match ("/^web_accept$/i", $paypal["txn_type"]))
+						&& (!empty($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_wo_level_regex"], $paypal["item_number"]))
+						&& (empty($paypal["payment_status"]) || empty($payment_status_issues) || !preg_match ($payment_status_issues, $paypal["payment_status"]))
+						&& (!empty($paypal["txn_id"]) && ($paypal["subscr_id"] = $paypal["txn_id"])) && (!empty($paypal["payer_email"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_before_new_ccaps", get_defined_vars ());
@@ -75,7 +75,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 
 																if (is_multisite () && !is_user_member_of_blog ($user_id) /* Must have a Role on this Blog. */)
 																	{
-																		add_existing_user_to_blog(array ("user_id" => $user_id, "role" => get_option ("default_role")));
+																		add_existing_user_to_blog(array("user_id" => $user_id, "role" => get_option ("default_role")));
 																		$user = new WP_User ($user_id);
 																	}
 																if ($paypal["ccaps"] && preg_match ("/^-all/", str_replace ("+", "", $paypal["ccaps"])))
@@ -97,7 +97,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 
 																$paypal["s2member_log"][] = "Transient Tracking Cookie set on ( `web_accept` ) w/ update vars for Capabilities w/o Level.";
 
-																if ($processing && ($code = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_tracking_codes"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"])))
+																if ($processing && ($code = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_tracking_codes"]) && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
 																	{
 																		if (($code = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $code)) && ($code = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["subscr_id"]), $code)))
 																			if (($code = preg_replace ("/%%amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["mc_gross"]), $code)) && ($code = preg_replace ("/%%txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["txn_id"]), $code)))
@@ -113,7 +113,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 																													if (($code = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_reg_ip), $code)))
 																														if (($code = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $code)))
 																															{
-																																if (is_array ($fields) && !empty ($fields))
+																																if (is_array($fields) && !empty($fields))
 																																	foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
 																																		if (!($code = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $code)))
 																																			break;
@@ -130,7 +130,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 																do_action("ws_plugin__s2member_during_paypal_return_during_new_ccaps", get_defined_vars ());
 																unset($__refs, $__v);
 
-																if (($redirection_url_after_capabilities = apply_filters ("ws_plugin__s2member_redirection_url_after_capabilities", false, get_defined_vars ())))
+																if (($redirection_url_after_capabilities = apply_filters("ws_plugin__s2member_redirection_url_after_capabilities", false, get_defined_vars ())))
 																	{
 																		$paypal["s2member_log"][] = "Redirecting Customer to a custom URL after Capabilities: " . $redirection_url_after_capabilities;
 
@@ -192,9 +192,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 								do_action("ws_plugin__s2member_during_paypal_return_after_new_ccaps", get_defined_vars ());
 								unset($__refs, $__v);
 
-								return apply_filters ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level", $paypal, get_defined_vars ());
+								return apply_filters("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level", $paypal, get_defined_vars ());
 							}
-						else return apply_filters ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level", false, get_defined_vars ());
+						else return apply_filters("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level", false, get_defined_vars ());
 					}
 			}
 	}

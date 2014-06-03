@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 						do_action("ws_plugin__s2member_during_api_ops_page_before_left_sections", get_defined_vars ());
 
-						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_signup_notifications", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_signup_notifications", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_signup_notifications", get_defined_vars ());
 
@@ -150,7 +150,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</div>' . "\n";
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_registration_notifications", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_registration_notifications", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_registration_notifications", get_defined_vars ());
 
@@ -251,7 +251,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_registration_notifications", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_payment_notifications", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_payment_notifications", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_payment_notifications", get_defined_vars ());
 
@@ -368,7 +368,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_payment_notifications", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_modification_notifications", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_modification_notifications", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_modification_notifications", get_defined_vars ());
 
@@ -485,7 +485,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</div>' . "\n";
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_cancellation_notifications", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_cancellation_notifications", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_cancellation_notifications", get_defined_vars ());
 
@@ -586,7 +586,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_cancellation_notifications", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_eot_deletion_notifications", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_eot_deletion_notifications", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_eot_deletion_notifications", get_defined_vars ());
 
@@ -687,7 +687,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_eot_deletion_notifications", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_refund_reversal_notifications", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_refund_reversal_notifications", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_refund_reversal_notifications", get_defined_vars ());
 
@@ -789,7 +789,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_refund_reversal_notifications", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_sp_sale_notifications", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_sp_sale_notifications", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_sp_sale_notifications", get_defined_vars ());
 
@@ -891,7 +891,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_sp_sale_notifications", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_sp_refund_reversal_notifications", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_sp_refund_reversal_notifications", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_sp_refund_reversal_notifications", get_defined_vars ());
 

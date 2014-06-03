@@ -49,7 +49,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 							{
 								$notices = (array)get_option ("ws_plugin__s2member_notices");
 
-								array_push ($notices, array ("notice" => $notice, "on_pages" => $on_pages, "error" => $error, "time" => $time, "dismiss" => $dismiss));
+								array_push ($notices, array("notice" => $notice, "on_pages" => $on_pages, "error" => $error, "time" => $time, "dismiss" => $dismiss));
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_enqueue_admin_notice", get_defined_vars ());
@@ -106,7 +106,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 
 						do_action("ws_plugin__s2member_before_admin_notices", get_defined_vars ());
 
-						if (is_admin () && is_array ($notices = get_option ("ws_plugin__s2member_notices")) && !empty ($notices))
+						if (is_admin () && is_array($notices = get_option ("ws_plugin__s2member_notices")) && !empty($notices))
 							{
 								$a = (is_blog_admin ()) ? "blog" : "";
 								$a = (is_user_admin ()) ? "user" : $a;
@@ -114,7 +114,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 								$a =  /* Default Blog Admin. */(!$a) ? "blog" : $a;
 
 								foreach /* Check several things about each Notice. */ ($notices as $i => $notice)
-									foreach (((!$notice["on_pages"]) ? array ("*"): (array)$notice["on_pages"]) as $page)
+									foreach (((!$notice["on_pages"]) ? array("*"): (array)$notice["on_pages"]) as $page)
 										{
 											if /* NO prefix? */ (!preg_match ("/^(.+?)\:/", $page))
 												$page = /* `blog:` */ "blog:" . ltrim ($page, ":");
@@ -122,7 +122,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 											$adms = preg_split ("/\|/", preg_replace ("/\:(.*)$/i", "", $page));
 											$page = preg_replace ("/^([^\:]*)\:/i", "", $page);
 
-											if (empty ($adms) || in_array ("*", $adms) || in_array ($a, $adms))
+											if (empty($adms) || in_array("*", $adms) || in_array($a, $adms))
 												if (!$page || "*" === $page || $pagenow === $page || @$_GET["page"] === $page)
 													{
 														if /* Time to show it? */ (strtotime ("now") >= (int)$notice["time"])
@@ -131,10 +131,10 @@ if (!class_exists ("c_ws_plugin__s2member_admin_notices"))
 																do_action("ws_plugin__s2member_during_admin_notices_before_display", get_defined_vars ());
 																unset($__refs, $__v);
 
-																if (!$notice["dismiss"] || (!empty ($_GET["ws-plugin--s2member-dismiss-admin-notice"]) && $_GET["ws-plugin--s2member-dismiss-admin-notice"] === md5 ($notice["notice"])))
+																if (!$notice["dismiss"] || (!empty($_GET["ws-plugin--s2member-dismiss-admin-notice"]) && $_GET["ws-plugin--s2member-dismiss-admin-notice"] === md5 ($notice["notice"])))
 																	unset /* Clear this administrative notice now? */($notices[$i]);
 
-																if (!$notice["dismiss"] || empty ($_GET["ws-plugin--s2member-dismiss-admin-notice"]) || $_GET["ws-plugin--s2member-dismiss-admin-notice"] !== md5 ($notice["notice"]))
+																if (!$notice["dismiss"] || empty($_GET["ws-plugin--s2member-dismiss-admin-notice"]) || $_GET["ws-plugin--s2member-dismiss-admin-notice"] !== md5 ($notice["notice"]))
 																	c_ws_plugin__s2member_admin_notices::display_admin_notice ($notice["notice"], $notice["error"], $notice["dismiss"]);
 
 																do_action("ws_plugin__s2member_during_admin_notices_after_display", get_defined_vars ());

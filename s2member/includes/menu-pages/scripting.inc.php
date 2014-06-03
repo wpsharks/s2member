@@ -46,7 +46,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 						do_action("ws_plugin__s2member_during_scripting_page_before_left_sections", get_defined_vars ());
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_easy_way", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_easy_way", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_easy_way", get_defined_vars ());
 
@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_easy_way", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_simple_way", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_simple_way", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_simple_way", get_defined_vars ());
 
@@ -233,7 +233,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_simple_way", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_advanced_way", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_advanced_way", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_advanced_way", get_defined_vars ());
 
@@ -302,7 +302,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_advanced_way", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_queries", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_queries", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_queries", get_defined_vars ());
 
@@ -355,7 +355,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_queries", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_custom_capabilities", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_custom_capabilities", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_custom_capabilities", get_defined_vars ());
 
@@ -402,7 +402,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_custom_capabilities", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_custom_capability_files", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_custom_capability_files", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_custom_capability_files", get_defined_vars ());
 
@@ -443,7 +443,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_custom_capability_files", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_advanced_dripping", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_advanced_dripping", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_advanced_dripping", get_defined_vars ());
 
@@ -487,7 +487,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_advanced_dripping", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_profile_modifications", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_profile_modifications", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_profile_modifications", get_defined_vars ());
 
@@ -520,7 +520,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_profile_modifications", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_constants", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_constants", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_constants", get_defined_vars ());
 
@@ -1049,7 +1049,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_constants", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_js_globals", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_js_globals", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_js_globals", get_defined_vars ());
 
@@ -1066,7 +1066,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_js_globals", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_mop_vars", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_mop_vars", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_mop_vars", get_defined_vars ());
 
@@ -1109,7 +1109,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_mop_vars", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_hooks", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_hooks", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_hooks", get_defined_vars ());
 

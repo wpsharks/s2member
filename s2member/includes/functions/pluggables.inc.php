@@ -35,7 +35,7 @@ if (!function_exists ("wp_new_user_notification"))
 					{
 						$args = /* Pulls the arguments passed in to this function. */ func_get_args ();
 
-						return call_user_func_array ("c_ws_plugin__s2member_email_configs::new_user_notification", $args);
+						return call_user_func_array("c_ws_plugin__s2member_email_configs::new_user_notification", $args);
 					}
 				add_filter /* Combine. */ ("wpmu_welcome_user_notification", "wp_new_user_notification", 10, 2);
 			}

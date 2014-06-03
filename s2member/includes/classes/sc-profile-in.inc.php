@@ -48,13 +48,13 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 
 						c_ws_plugin__s2member_no_cache::no_cache_constants (true); // No caching.
 
-						$tabindex = apply_filters ("ws_plugin__s2member_sc_profile_tabindex", 0, get_defined_vars ());
+						$tabindex = apply_filters("ws_plugin__s2member_sc_profile_tabindex", 0, get_defined_vars ());
 
 						if (($user = (is_user_logged_in ()) ? wp_get_current_user () : false) && ($user_id = $user->ID))
 							{
 								$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr);
 
-								$attr = shortcode_atts (array (), $attr); // Possible Attributes. None.
+								$attr = shortcode_atts (array(), $attr); // Possible Attributes. None.
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_before_sc_profile_after_shortcode_atts", get_defined_vars ());
@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 								do_action("ws_plugin__s2member_during_profile_before_fields", get_defined_vars ());
 								unset($__refs, $__v);
 
-								if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_display_username", true, get_defined_vars ()))
+								if (apply_filters("ws_plugin__s2member_during_profile_during_fields_display_username", true, get_defined_vars ()))
 									{
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action("ws_plugin__s2member_during_profile_during_fields_before_username", get_defined_vars ());
@@ -102,7 +102,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 										unset($__refs, $__v);
 									}
 
-								if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_display_email", true, get_defined_vars ()))
+								if (apply_filters("ws_plugin__s2member_during_profile_during_fields_display_email", true, get_defined_vars ()))
 									{
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action("ws_plugin__s2member_during_profile_during_fields_before_email", get_defined_vars ());
@@ -124,7 +124,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"])
 									{
-										if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_display_first_name", true, get_defined_vars ()))
+										if (apply_filters("ws_plugin__s2member_during_profile_during_fields_display_first_name", true, get_defined_vars ()))
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_profile_during_fields_before_first_name", get_defined_vars ());
@@ -144,7 +144,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 												unset($__refs, $__v);
 											}
 
-										if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_display_last_name", true, get_defined_vars ()))
+										if (apply_filters("ws_plugin__s2member_during_profile_during_fields_display_last_name", true, get_defined_vars ()))
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_profile_during_fields_before_last_name", get_defined_vars ());
@@ -164,7 +164,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 												unset($__refs, $__v);
 											}
 
-										if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_display_display_name", true, get_defined_vars ()))
+										if (apply_filters("ws_plugin__s2member_during_profile_during_fields_display_display_name", true, get_defined_vars ()))
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_profile_during_fields_before_display_name", get_defined_vars ());
@@ -185,7 +185,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 											}
 									}
 
-								if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_display_custom_fields", true, get_defined_vars ()))
+								if (apply_filters("ws_plugin__s2member_during_profile_during_fields_display_custom_fields", true, get_defined_vars ()))
 									{
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"]) // Now, do we have Custom Fields?
 											if ($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level ("auto-detection", "profile"))
@@ -204,16 +204,16 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 															do_action("ws_plugin__s2member_during_profile_during_fields_during_custom_fields_before", get_defined_vars ());
 															unset($__refs, $__v);
 
-															if (in_array ($field["id"], $fields_applicable)) // Field applicable?
+															if (in_array($field["id"], $fields_applicable)) // Field applicable?
 																{
 																	$field_var = preg_replace ("/[^a-z0-9]/i", "_", strtolower ($field["id"]));
 																	$field_id_class = preg_replace ("/_/", "-", $field_var);
 
 																	foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																	if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_during_custom_fields_display", true, get_defined_vars ()))
+																	if (apply_filters("ws_plugin__s2member_during_profile_during_fields_during_custom_fields_display", true, get_defined_vars ()))
 																		{
-																			if (!empty ($field["section"]) && $field["section"] === "yes") // Starts a new section?
-																				echo '<tr><td><div class="ws-plugin--s2member-profile-field-divider-section' . ((!empty ($field["sectitle"])) ? '-title' : '') . '">' . ((!empty ($field["sectitle"])) ? $field["sectitle"] : '') . '</div></td></tr>';
+																			if (!empty($field["section"]) && $field["section"] === "yes") // Starts a new section?
+																				echo '<tr><td><div class="ws-plugin--s2member-profile-field-divider-section' . ((!empty($field["sectitle"])) ? '-title' : '') . '">' . ((!empty($field["sectitle"])) ? $field["sectitle"] : '') . '</div></td></tr>';
 
 																			echo '<tr>' . "\n";
 																			echo '<td>' . "\n";
@@ -237,7 +237,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 												}
 									}
 
-								if (apply_filters ("ws_plugin__s2member_during_profile_during_fields_display_password", true, get_defined_vars ()))
+								if (apply_filters("ws_plugin__s2member_during_profile_during_fields_display_password", true, get_defined_vars ()))
 									{
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action("ws_plugin__s2member_during_profile_during_fields_before_password", get_defined_vars ());
@@ -289,7 +289,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_profile_in"))
 
 								$code = ob_get_clean ();
 							}
-						return apply_filters ("ws_plugin__s2member_sc_profile", ((!empty ($code)) ? $code : null), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_sc_profile", ((!empty($code)) ? $code : null), get_defined_vars ());
 					}
 			}
 	}

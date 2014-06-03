@@ -43,7 +43,7 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 
 			do_action('ws_plugin__s2member_before_handle_profile_modifications', get_defined_vars());
 
-			if(!empty($_POST['ws_plugin__s2member_profile_save']) && is_user_logged_in() && is_object($user) && !empty ($user->ID) && ($user_id = $user->ID))
+			if(!empty($_POST['ws_plugin__s2member_profile_save']) && is_user_logged_in() && is_object($user) && !empty($user->ID) && ($user_id = $user->ID))
 			{
 				if(($nonce = $_POST['ws_plugin__s2member_profile_save']) && wp_verify_nonce($nonce, 'ws-plugin--s2member-profile-save'))
 				{
@@ -88,25 +88,25 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 
 								if(!in_array($field['id'], $fields_applicable) || strpos($field['editable'], 'no') === 0)
 								{
-									if(isset($_existing_fields[$field_var]) && ((is_array($_existing_fields[$field_var]) && !empty ($_existing_fields[$field_var])) || (is_string($_existing_fields[$field_var]) && strlen($_existing_fields[$field_var]))))
+									if(isset($_existing_fields[$field_var]) && ((is_array($_existing_fields[$field_var]) && !empty($_existing_fields[$field_var])) || (is_string($_existing_fields[$field_var]) && strlen($_existing_fields[$field_var]))))
 										$fields[$field_var] = $_existing_fields[$field_var];
 									else unset($fields[$field_var]);
 								}
 								else if( // If the field is required but missing; or it was provided but invalid...
 									($field['required'] === 'yes' && (!isset ($_p['ws_plugin__s2member_profile_'.$field_var])
 									                                  || (!is_array($_p['ws_plugin__s2member_profile_'.$field_var]) && !is_string($_p['ws_plugin__s2member_profile_'.$field_var]))
-									                                  || (is_array($_p['ws_plugin__s2member_profile_'.$field_var]) && empty ($_p['ws_plugin__s2member_profile_'.$field_var]))
+									                                  || (is_array($_p['ws_plugin__s2member_profile_'.$field_var]) && empty($_p['ws_plugin__s2member_profile_'.$field_var]))
 									                                  || (is_string($_p['ws_plugin__s2member_profile_'.$field_var]) && !strlen($_p['ws_plugin__s2member_profile_'.$field_var]))))
 									|| (isset($_p['ws_plugin__s2member_profile_'.$field_var]) && c_ws_plugin__s2member_custom_reg_fields::validation_errors(array($field_var => $_p['ws_plugin__s2member_profile_'.$field_var]), array($field)))
 								)
 								{
-									if(isset($_existing_fields[$field_var]) && ((is_array($_existing_fields[$field_var]) && !empty ($_existing_fields[$field_var])) || (is_string($_existing_fields[$field_var]) && strlen($_existing_fields[$field_var]))))
+									if(isset($_existing_fields[$field_var]) && ((is_array($_existing_fields[$field_var]) && !empty($_existing_fields[$field_var])) || (is_string($_existing_fields[$field_var]) && strlen($_existing_fields[$field_var]))))
 										$fields[$field_var] = $_existing_fields[$field_var];
 									else unset($fields[$field_var]);
 								}
 								else if(isset($_p['ws_plugin__s2member_profile_'.$field_var]))
 								{
-									if(((is_array($_p['ws_plugin__s2member_profile_'.$field_var]) && !empty ($_p['ws_plugin__s2member_profile_'.$field_var]))
+									if(((is_array($_p['ws_plugin__s2member_profile_'.$field_var]) && !empty($_p['ws_plugin__s2member_profile_'.$field_var]))
 									    || (is_string($_p['ws_plugin__s2member_profile_'.$field_var]) && strlen($_p['ws_plugin__s2member_profile_'.$field_var])))
 									   && !c_ws_plugin__s2member_custom_reg_fields::validation_errors(array($field_var => $_p['ws_plugin__s2member_profile_'.$field_var]), array($field))
 									)

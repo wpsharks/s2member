@@ -44,7 +44,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 
 						do_action("ws_plugin__s2member_during_start_page_before_left_sections", get_defined_vars ());
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_video_tutorials", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_video_tutorials", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_video_tutorials", get_defined_vars ());
 
@@ -65,7 +65,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_video_tutorials", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_registration_process", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_registration_process", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_registration_process", get_defined_vars ());
 
@@ -86,7 +86,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_registration_process", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_log_reg_form", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_log_reg_form", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_log_reg_form", get_defined_vars ());
 
@@ -107,7 +107,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_log_reg_form", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_login_welcome_page", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_login_welcome_page", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_login_welcome_page", get_defined_vars ());
 
@@ -127,7 +127,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_login_welcome_page", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_membership_options_page", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_membership_options_page", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_membership_options_page", get_defined_vars ());
 
@@ -146,7 +146,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_membership_options_page", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_general_options", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_general_options", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_general_options", get_defined_vars ());
 
@@ -164,7 +164,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_general_options", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_restriction_options", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_restriction_options", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_restriction_options", get_defined_vars ());
 
@@ -184,7 +184,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_restriction_options", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_automation_process", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_automation_process", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_automation_process", get_defined_vars ());
 
@@ -204,7 +204,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_automation_process", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_upgrading_downgrading", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_upgrading_downgrading", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_upgrading_downgrading", get_defined_vars ());
 
@@ -233,7 +233,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_upgrading_downgrading", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_reg_before_checkout", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_reg_before_checkout", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_reg_before_checkout", get_defined_vars ());
 
@@ -253,7 +253,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_reg_before_checkout", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_themes", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_themes", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_themes", get_defined_vars ());
 
@@ -270,7 +270,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_themes", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_pro", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_pro", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_pro", get_defined_vars ());
 
@@ -290,7 +290,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_after_pro", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_start_page_during_left_sections_display_help", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_start_page_during_left_sections_display_help", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_help", get_defined_vars ());
 

@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_info"))
 
 						do_action("ws_plugin__s2member_during_info_page_before_left_sections", get_defined_vars ());
 
-						if (apply_filters ("ws_plugin__s2member_during_info_page_during_left_sections_display_readme", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_info_page_during_left_sections_display_readme", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_info_page_during_left_sections_before_readme", get_defined_vars ());
 
