@@ -46,11 +46,11 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 						echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-options-save")) . '" />' . "\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />' . "\n";
 
-						do_action ("ws_plugin__s2member_during_api_ops_page_before_left_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_api_ops_page_before_left_sections", get_defined_vars ());
 
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_signup_notifications", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_signup_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_signup_notifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Signup Notifications">' . "\n";
 
@@ -60,7 +60,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>This Notification will NOT be processed for Free Subscribers that register without going through your Payment Gateway at all (e.g. they simply register on-site; and there is no checkout whatsoever). This Notification will NOT be processed when an "existing" User/Member pays for a new Subscription <em>(see: Modification Notifications for that scenario)</em>.' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' And, this Notification will NOT be processed on Buy Now transactions for Independent Custom Capabilities <em>(see: Payment Notifications for that scenario)</em>.') . '</p>' . "\n";
 								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Signup Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_signup_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_signup_notifications", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -152,7 +152,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_registration_notifications", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_registration_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_registration_notifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Registration Notifications">' . "\n";
 
@@ -162,7 +162,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>This Notification is ALSO triggered whenever you create a "new" User inside your WordPress Dashboard.</p>' . "\n";
 								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Registration Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_registration_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_registration_notifications", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -248,12 +248,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_registration_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_registration_notifications", get_defined_vars ());
 							}
 
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_payment_notifications", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_payment_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_payment_notifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Payment Notifications">' . "\n";
 
@@ -264,7 +264,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p>Payment Notifications are also triggered whenever a Buy Now purchase for Independent Custom Capabilities takes place.</p>' . "\n" : '';
 								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Payment Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_payment_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_payment_notifications", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -365,12 +365,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_payment_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_payment_notifications", get_defined_vars ());
 							}
 
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_modification_notifications", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_modification_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_modification_notifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Modification Notifications">' . "\n";
 
@@ -381,7 +381,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>This Notification will NOT be processed for "new" Users/Members <em>(see: Signup Notifications for that scenario)</em>.' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' And, this Notification will NOT be processed for Independent Custom Capability purchases <em>(see: Payment Notifications for that scenario)</em>.') . '</p>' . "\n";
 								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Modification Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_modification_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_modification_notifications", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -487,7 +487,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_cancellation_notifications", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_cancellation_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_cancellation_notifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Cancellation Notifications">' . "\n";
 
@@ -499,7 +499,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p><em><strong>*Some Hairy Details*</strong> There might be times whenever you notice that a Member\'s Subscription has been cancelled through your Payment Gateway... but, s2Member continues allowing the User access to your site as a paid Member. Please don\'t be confused by this... in 99.9% of these cases, the reason for this is legitimate. s2Member will only remove the User\'s Membership privileges when an EOT (End Of Term) is processed, a refund occurs, a chargeback occurs, or when a cancellation occurs - which would later result in a delayed Auto-EOT by s2Member.</em></p>' . "\n";
 								echo '<p><em>s2Member will not process an EOT (End Of Term) until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system (based on your configuration). s2Member also calculates one extra day (24 hours) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_cancellation_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_cancellation_notifications", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -583,12 +583,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_cancellation_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_cancellation_notifications", get_defined_vars ());
 							}
 
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_eot_deletion_notifications", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_eot_deletion_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_eot_deletion_notifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="EOT/Deletion Notifications">' . "\n";
 
@@ -601,7 +601,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p><em><strong>*Some Hairy Details*</strong> There might be times whenever you notice that a Member\'s Subscription has been cancelled through your Payment Gateway... but, s2Member continues allowing the User access to your site as a paid Member. Please don\'t be confused by this... in 99.9% of these cases, the reason for this is legitimate. s2Member will only remove the User\'s Membership privileges when an EOT (End Of Term) is processed, a refund occurs, a chargeback occurs, or when a cancellation occurs - which would later result in a delayed Auto-EOT by s2Member.</em></p>' . "\n";
 								echo '<p><em>s2Member will not process an EOT (End Of Term) until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system (based on your configuration). s2Member also calculates one extra day (24 hours) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_eot_deletion_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_eot_deletion_notifications", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -684,12 +684,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_eot_deletion_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_eot_deletion_notifications", get_defined_vars ());
 							}
 
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_refund_reversal_notifications", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_refund_reversal_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_refund_reversal_notifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Refund/Reversal Notifications">' . "\n";
 
@@ -700,7 +700,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>So the distinction is that Refund/Reversal Notifications are ONLY sent under two specific circumstances: 1. You log into your Payment Gateway and refund a payment that is associated with a Subscription. 2. The Customer complains to your Payment Gateway and a chargeback occurs, forcing a Reversal. In both of these cases, an EOT/Deletion Notification will be sent <em>(as described in the previous section)</em>, but since EOT/Deletion is a broader Notification, these Refund/Reversal Notifications are here so you can nail down specific back-office operations in these two specific scenarios.</p>' . "\n";
 								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Refund/Reversal Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_refund_reversal_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_refund_reversal_notifications", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -786,12 +786,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_refund_reversal_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_refund_reversal_notifications", get_defined_vars ());
 							}
 
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_sp_sale_notifications", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_sp_sale_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_sp_sale_notifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Specific Post/Page ~ Sale Notifications">' . "\n";
 
@@ -801,7 +801,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>This is one of only two API Notifications that are sent for Specific Post/Page Access <em>(i.e. this one, and another below, for Refunds/Reversals)</em>. All of the other API Notifications are designed for Membership Level Access' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' and Independent Custom Capabilities') . '. None of the other API Notifications will ever be processed for Specific Post/Page Access. If you intend to respond to events related to Specific Post/Page Access, you MUST use one of the two API Notifications specifically geared to Post/Page Access.</p>' . "\n";
 								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Sale Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_sp_sale_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_sp_sale_notifications", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -888,12 +888,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_sp_sale_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_sp_sale_notifications", get_defined_vars ());
 							}
 
 						if (apply_filters ("ws_plugin__s2member_during_api_ops_page_during_left_sections_display_sp_refund_reversal_notifications", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_sp_refund_reversal_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_before_sp_refund_reversal_notifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Specific Post/Page ~ Refund/Reversal Notifications">' . "\n";
 
@@ -903,7 +903,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<p>This is one of only two Notifications that are sent for Specific Post/Page Access <em>(i.e. this one, and another above, for Sales)</em>. All of the other API Notifications are designed for Membership Level Access' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' and Independent Custom Capabilities') . '. None of the other API Notifications will ever be processed for Specific Post/Page Access. If you intend to respond to events related to Specific Post/Page Access, you MUST use one of the two API Notifications specifically geared to Post/Page Access.</p>' . "\n";
 								echo '<p>Please note, this feature is not to be confused with the PayPal IPN service. PayPal IPN <em>(and other service integrations)</em> are already built into s2Member. They remain active at all times. These Refund/Reversal Notifications are an added layer of functionality, and they are completely optional.</p>' . "\n";
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/building-an-api-notification-handler/" target="_blank" rel="external">Building An API Notification Handler</a>.</p>'."\n";
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_sp_refund_reversal_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_during_sp_refund_reversal_notifications", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -979,10 +979,10 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_sp_refund_reversal_notifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_api_ops_page_during_left_sections_after_sp_refund_reversal_notifications", get_defined_vars ());
 							}
 
-						do_action ("ws_plugin__s2member_during_api_ops_page_after_left_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_api_ops_page_after_left_sections", get_defined_vars ());
 
 						echo '<div class="ws-menu-page-hr"></div>' . "\n";
 

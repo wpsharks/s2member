@@ -48,7 +48,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_before_subscr_modify", get_defined_vars());
-								unset /* Unset defined __refs, __v. */($__refs, $__v);
+								unset($__refs, $__v);
 
 								if(!get_transient($transient_rtn = "s2m_rtn_".md5("s2member_transient_".$_paypal_s)) && set_transient($transient_rtn, time(), 31556926 * 10))
 									{
@@ -86,7 +86,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action("ws_plugin__s2member_during_paypal_return_during_before_subscr_modify", get_defined_vars());
 														do_action("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars(), "rtn-upgrade-downgrade", "modification", "s2member_level".$paypal["level"]);
-														unset /* Unset defined __refs, __v. */($__refs, $__v);
+														unset($__refs, $__v);
 
 														$fields = /* These will be needed in the routines below. */ get_user_option("s2member_custom_fields", $user_id);
 														$user_reg_ip = /* Original IP during Registration. */ get_user_option("s2member_registration_ip", $user_id);
@@ -176,7 +176,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 															}
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action("ws_plugin__s2member_during_paypal_return_during_subscr_modify", get_defined_vars());
-														unset /* Unset defined __refs, __v. */($__refs, $__v);
+														unset($__refs, $__v);
 
 														if(($redirection_url_after_modification = apply_filters("ws_plugin__s2member_redirection_url_after_modification", false, get_defined_vars())))
 															{
@@ -227,7 +227,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level")
 									}
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_after_subscr_modify", get_defined_vars());
-								unset /* Unset defined __refs, __v. */($__refs, $__v);
+								unset($__refs, $__v);
 
 								return apply_filters("c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level", $paypal, get_defined_vars());
 							}

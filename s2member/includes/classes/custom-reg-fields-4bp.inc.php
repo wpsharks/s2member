@@ -43,7 +43,7 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 					{
 						static $processed = /* Process this routine only one time. */ false;
 
-						do_action ("ws_plugin__s2member_before_custom_registration_fields_4bp", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_custom_registration_fields_4bp", get_defined_vars ());
 
 						if (!$processed && in_array ("registration", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
 							if (apply_filters ("ws_plugin__s2member_custom_registration_fields_4bp_display", true, get_defined_vars ()))
@@ -59,8 +59,8 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 													echo '<input type="hidden" name="ws_plugin__s2member_registration" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-registration")) . '" />' . "\n";
 												}
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_custom_registration_fields_4bp_before", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_custom_registration_fields_4bp_before", get_defined_vars ());
+										unset($__refs, $__v);
 
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 											if ($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level ("auto-detection", "registration"))
@@ -68,8 +68,8 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 													foreach (json_decode ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 														{
 															foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-															do_action ("ws_plugin__s2member_during_custom_registration_fields_4bp_before_custom_fields", get_defined_vars ());
-															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+															do_action("ws_plugin__s2member_during_custom_registration_fields_4bp_before_custom_fields", get_defined_vars ());
+															unset($__refs, $__v);
 
 															if /* Field applicable? */ (in_array ($field["id"], $fields_applicable))
 																{
@@ -88,20 +88,20 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 																			echo c_ws_plugin__s2member_custom_reg_fields::custom_field_gen (__FUNCTION__, $field, "ws_plugin__s2member_custom_reg_field_", "ws-plugin--s2member-custom-reg-field-4bp-", "ws-plugin--s2member-custom-reg-field-4bp", "", "", "", $_p, $_p["ws_plugin__s2member_custom_reg_field_" . $field_var], "registration");
 																			echo '</div>' . "\n";
 																		}
-																	unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																	unset($__refs, $__v);
 																}
 
 															foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-															do_action ("ws_plugin__s2member_during_custom_registration_fields_4bp_after_custom_fields", get_defined_vars ());
-															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+															do_action("ws_plugin__s2member_during_custom_registration_fields_4bp_after_custom_fields", get_defined_vars ());
+															unset($__refs, $__v);
 														}
 												}
 
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_opt_in"] && c_ws_plugin__s2member_list_servers::list_servers_integrated ())
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_custom_registration_fields_4bp_before_opt_in", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_custom_registration_fields_4bp_before_opt_in", get_defined_vars ());
+												unset($__refs, $__v);
 
 												echo '<div class="ws-plugin--s2member-custom-reg-field-4bp field_opt_in editfield">' . "\n";
 												echo '<label for="ws-plugin--s2member-custom-reg-field-4bp-opt-in">' . "\n";
@@ -111,19 +111,19 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 												echo '</div>' . "\n";
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_custom_registration_fields_4bp_after_opt_in", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_custom_registration_fields_4bp_after_opt_in", get_defined_vars ());
+												unset($__refs, $__v);
 											}
 
 										if (isset ($close_section_container) && $close_section_container)
 											echo '</div>' . "\n" . '</div>' . "\n";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_custom_registration_fields_4bp_after", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_custom_registration_fields_4bp_after", get_defined_vars ());
+										unset($__refs, $__v);
 									}
 
-						do_action ("ws_plugin__s2member_after_custom_registration_fields_4bp", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_custom_registration_fields_4bp", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -142,7 +142,7 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 						global /* Global BuddyPress object reference. */ $bp;
 						static $processed = /* Process this routine only one time. */ false;
 
-						do_action ("ws_plugin__s2member_before_custom_profile_fields_4bp", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_custom_profile_fields_4bp", get_defined_vars ());
 
 						if (!$processed && in_array ("profile", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
 							if (apply_filters ("ws_plugin__s2member_custom_profile_fields_4bp_display", true, get_defined_vars ()))
@@ -154,8 +154,8 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 												echo '<input type="hidden" name="ws_plugin__s2member_profile_4bp_save" id="ws-plugin--s2member-profile-4bp-save" value="' . esc_attr (wp_create_nonce ("ws-plugin--s2member-profile-4bp-save")) . '" />' . "\n";
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_custom_profile_fields_4bp_before", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_custom_profile_fields_4bp_before", get_defined_vars ());
+												unset($__refs, $__v);
 
 												if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 													if (($level = c_ws_plugin__s2member_user_access::user_access_level (new WP_User ($user_id))) >= 0)
@@ -166,8 +166,8 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 																foreach (json_decode ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 																	{
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																		do_action ("ws_plugin__s2member_during_custom_profile_fields_4bp_before_custom_fields", get_defined_vars ());
-																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																		do_action("ws_plugin__s2member_during_custom_profile_fields_4bp_before_custom_fields", get_defined_vars ());
+																		unset($__refs, $__v);
 
 																		if /* Field applicable? */ (in_array ($field["id"], $fields_applicable))
 																			{
@@ -186,21 +186,21 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 																						echo c_ws_plugin__s2member_custom_reg_fields::custom_field_gen (__FUNCTION__, $field, "ws_plugin__s2member_profile_4bp_", "ws-plugin--s2member-profile-4bp-", "ws-plugin--s2member-profile-field-4bp", "", "", "", $fields, $fields[$field_var], "profile");
 																						echo '</div>' . "\n";
 																					}
-																				unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																				unset($__refs, $__v);
 																			}
 
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																		do_action ("ws_plugin__s2member_during_custom_profile_fields_4bp_after_custom_fields", get_defined_vars ());
-																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																		do_action("ws_plugin__s2member_during_custom_profile_fields_4bp_after_custom_fields", get_defined_vars ());
+																		unset($__refs, $__v);
 																	}
 															}
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_custom_profile_fields_4bp_after", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_custom_profile_fields_4bp_after", get_defined_vars ());
+												unset($__refs, $__v);
 											}
 
-						do_action ("ws_plugin__s2member_after_custom_profile_fields_4bp", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_custom_profile_fields_4bp", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -219,7 +219,7 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 						global /* Global BuddyPress object reference. */ $bp;
 						static $processed = /* Process this routine only one time. */ false;
 
-						do_action ("ws_plugin__s2member_before_custom_profile_field_items_4bp", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_custom_profile_field_items_4bp", get_defined_vars ());
 
 						if (!$processed && in_array ("profile-view", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields_4bp"]))
 							if (apply_filters ("ws_plugin__s2member_custom_profile_field_items_4bp_display", true, get_defined_vars ()))
@@ -229,8 +229,8 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 										if /* Mark as having been processed now. */ (($processed = true))
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_custom_profile_field_items_4bp_before", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_custom_profile_field_items_4bp_before", get_defined_vars ());
+												unset($__refs, $__v);
 
 												if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 													if (($level = c_ws_plugin__s2member_user_access::user_access_level (new WP_User ($user_id))) >= 0)
@@ -241,8 +241,8 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 																foreach (json_decode ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 																	{
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																		do_action ("ws_plugin__s2member_during_custom_profile_field_items_4bp_before_custom_fields", get_defined_vars ());
-																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																		do_action("ws_plugin__s2member_during_custom_profile_field_items_4bp_before_custom_fields", get_defined_vars ());
+																		unset($__refs, $__v);
 
 																		if /* Field applicable? */ (in_array ($field["id"], $fields_applicable))
 																			{
@@ -264,20 +264,20 @@ if (!class_exists ("c_ws_plugin__s2member_custom_reg_fields_4bp"))
 																						echo '<td class="ws-plugin--s2member-profile-field-4bp ws-plugin--s2member-profile-4bp-' . esc_attr ($field_id_class) . ' field_' . esc_attr ($field_var) . ' data">' . c_ws_plugin__s2member_custom_reg_fields::custom_field_gen (__FUNCTION__, $field, "ws_plugin__s2member_profile_4bp_", "ws-plugin--s2member-profile-4bp-", "ws-plugin--s2member-profile-field-4bp", "", "", "", $fields, $fields[$field_var], "profile-view") . '</td>' . "\n";
 																						echo '</tr>' . "\n";
 																					}
-																				unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																				unset($__refs, $__v);
 																			}
 
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																		do_action ("ws_plugin__s2member_during_custom_profile_field_items_4bp_after_custom_fields", get_defined_vars ());
-																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																		do_action("ws_plugin__s2member_during_custom_profile_field_items_4bp_after_custom_fields", get_defined_vars ());
+																		unset($__refs, $__v);
 																	}
 															}
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_custom_profile_field_items_4bp_after", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_custom_profile_field_items_4bp_after", get_defined_vars ());
+												unset($__refs, $__v);
 											}
-						do_action ("ws_plugin__s2member_after_custom_profile_field_items_4bp", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_custom_profile_field_items_4bp", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

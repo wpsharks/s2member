@@ -41,8 +41,8 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 				public static function extend_cron_schedules ($schedules = array ())
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_extend_cron_schedules", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_extend_cron_schedules", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$array = array ("every10m" => array ("interval" => 600, "display" => "Every 10 Minutes"));
 
@@ -60,7 +60,7 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 				*/
 				public static function auto_eot_system_via_cron ()
 					{
-						do_action ("ws_plugin__s2member_before_auto_eot_system_via_cron", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_auto_eot_system_via_cron", get_defined_vars ());
 
 						if /* Called through HTTP? */ (!empty ($_GET["s2member_auto_eot_system_via_cron"]))
 							{
@@ -68,11 +68,11 @@ if (!class_exists ("c_ws_plugin__s2member_cron_jobs_in"))
 									{
 										c_ws_plugin__s2member_auto_eots::auto_eot_system (); // Process.
 
-										do_action ("ws_plugin__s2member_during_auto_eot_system_via_cron", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_auto_eot_system_via_cron", get_defined_vars ());
 									}
 								exit /* Clean exit. */ ();
 							}
-						do_action ("ws_plugin__s2member_after_auto_eot_system_via_cron", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_auto_eot_system_via_cron", get_defined_vars ());
 					}
 			}
 	}

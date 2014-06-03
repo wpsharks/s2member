@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_ptags"))
 					{
 						global $wp_query, $post; // ``get_the_ID()`` is NOT available outside The Loop.
 
-						do_action ("ws_plugin__s2member_before_check_ptag_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_check_ptag_level_access", get_defined_vars ());
 
 						$excluded = apply_filters ("ws_plugin__s2member_check_ptag_level_access_excluded", false, get_defined_vars ());
 
@@ -73,11 +73,11 @@ if (!class_exists ("c_ws_plugin__s2member_ptags"))
 													}
 											}
 
-										do_action ("ws_plugin__s2member_during_check_ptag_level_access", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_check_ptag_level_access", get_defined_vars ());
 									}
 							}
 
-						do_action ("ws_plugin__s2member_after_check_ptag_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_check_ptag_level_access", get_defined_vars ());
 
 						return; // For uniformity.
 					}

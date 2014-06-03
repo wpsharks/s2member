@@ -40,7 +40,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				*/
 				public static function force_default_role ($default_role = FALSE)
 					{
-						do_action ("ws_plugin__s2member_before_force_default_role", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_force_default_role", get_defined_vars ());
 
 						return apply_filters ("ws_plugin__s2member_force_default_role", ($default_role = "subscriber"), get_defined_vars ());
 					}
@@ -57,7 +57,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				*/
 				public static function force_mms_default_role ($default_role = FALSE)
 					{
-						do_action ("ws_plugin__s2member_before_force_mms_default_role", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_force_mms_default_role", get_defined_vars ());
 
 						return apply_filters ("ws_plugin__s2member_force_mms_default_role", ($default_role = "subscriber"), get_defined_vars ());
 					}
@@ -74,7 +74,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				*/
 				public static function force_demotion_role ($demotion_role = FALSE)
 					{
-						do_action ("ws_plugin__s2member_before_force_demotion_role", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_force_demotion_role", get_defined_vars ());
 
 						return apply_filters ("ws_plugin__s2member_force_demotion_role", ($demotion_role = "subscriber"), get_defined_vars ());
 					}
@@ -91,7 +91,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				*/
 				public static function mms_allow_new_users ($allow = FALSE)
 					{
-						do_action ("ws_plugin__s2member_before_mms_allow_new_users", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_mms_allow_new_users", get_defined_vars ());
 
 						return apply_filters ("ws_plugin__s2member_mms_allow_new_users", ($allow = "1"), get_defined_vars ());
 					}
@@ -110,7 +110,7 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 					{
 						global /* For Multisite support. */ $current_site, $current_blog;
 
-						do_action ("ws_plugin__s2member_before_mms_dashboard_blog", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_mms_dashboard_blog", get_defined_vars ());
 
 						$main_site = ((is_multisite ()) ? $current_site->blog_id : "1"); // Forces the Main Site.
 
@@ -132,8 +132,8 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 						global $wpdb; // Global database object reference
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_check_register_access", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_check_register_access", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$by_default = $users_can_register = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["allow_subscribers_in"];
 
@@ -168,8 +168,8 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 						global /* For Multisite support. */ $current_site, $current_blog;
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_check_register_access", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_check_register_access", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$by_default = $users_can_register = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mms_registration_grants"];
 

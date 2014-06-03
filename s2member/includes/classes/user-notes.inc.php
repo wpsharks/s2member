@@ -40,14 +40,14 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 				public static function append_user_notes ($user_id = FALSE, $notes = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_append_user_notes", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_append_user_notes", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if ($user_id && $notes && is_string ($notes)) // Must have these.
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_append_user_notes", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_append_user_notes", get_defined_vars ());
+								unset($__refs, $__v);
 
 								$notes = trim (get_user_option ("s2member_notes", $user_id) . "\n" . $notes);
 
@@ -69,8 +69,8 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 				public static function clear_user_note_lines ($user_id = FALSE, $regex = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_clear_user_note_lines", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_clear_user_note_lines", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if ($user_id && $regex && is_string ($regex) && ($lines = array ()))
 							{
@@ -83,8 +83,8 @@ if (!class_exists ("c_ws_plugin__s2member_user_notes"))
 								$notes = trim (implode ("\n", $lines));
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_clear_user_note_lines", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_clear_user_note_lines", get_defined_vars ());
+								unset($__refs, $__v);
 
 								update_user_option ($user_id, "s2member_notes", $notes);
 							}

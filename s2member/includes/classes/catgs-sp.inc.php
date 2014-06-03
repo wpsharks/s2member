@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_catgs_sp"))
 				*/
 				public static function check_specific_catg_level_access ($cat_id = FALSE, $check_user = TRUE)
 					{
-						do_action ("ws_plugin__s2member_before_check_specific_catg_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_check_specific_catg_level_access", get_defined_vars ());
 
 						$excluded = apply_filters ("ws_plugin__s2member_check_specific_catg_level_access_excluded", false, get_defined_vars ());
 
@@ -79,7 +79,7 @@ if (!class_exists ("c_ws_plugin__s2member_catgs_sp"))
 																	return apply_filters ("ws_plugin__s2member_check_specific_catg_level_access", array ("s2member_level_req" => $n), get_defined_vars ());
 													}
 											}
-										do_action ("ws_plugin__s2member_during_check_specific_catg_level_access", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_check_specific_catg_level_access", get_defined_vars ());
 									}
 							}
 						return apply_filters ("ws_plugin__s2member_check_specific_catg_level_access", null, get_defined_vars ());

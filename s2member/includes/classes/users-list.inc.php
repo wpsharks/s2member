@@ -76,8 +76,8 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						global $wpdb; /** @var $wpdb wpdb */
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_users_list_search", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_users_list_search", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_admin() && !empty($GLOBALS['pagenow']) && $GLOBALS['pagenow'] === 'users.php')
 							if(isset ($query->query_vars) && !is_network_admin ()) // NOT in Network admin panels.
@@ -103,8 +103,8 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 										$query->query_where = apply_filters ("ws_plugin__s2member_before_users_list_search_where", $query->query_where, get_defined_vars ());
 									}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_users_list_search", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_users_list_search", get_defined_vars ());
+						unset($__refs, $__v);
 					}
 				/**
 				* Adds columns to the list of Users.
@@ -120,8 +120,8 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 				public static function users_list_cols ($cols = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_users_list_cols", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_users_list_cols", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$cols["s2member_registration_time"] = "Registration Date";
 
@@ -149,8 +149,8 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						$cols["s2member_last_login_time"] = "Last Login Time";
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_during_users_list_cols", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_during_users_list_cols", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return apply_filters ("ws_plugin__s2member_users_list_cols", $cols, get_defined_vars ());
 					}
@@ -173,8 +173,8 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 						static $fields, $last_fields_id; // Used for optimization.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_users_list_display_cols", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_users_list_display_cols", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$user = (is_object ($user) && $user_id === $last_user_id) ? $user : new WP_User ($user_id);
 

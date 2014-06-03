@@ -55,9 +55,9 @@ if(!class_exists("c_ws_plugin__s2member_mo_page"))
 			 * @since 111101
 			 *
 			 * @param string     $seeking_type Seeking content type. One of: `post|page|catg|ptag|file|ruri`.
-			 * @param str|int $seeking_type_value Seeking content type data. String, or a Post/Page ID.
+			 * @param string|int $seeking_type_value Seeking content type data. String, or a Post/Page ID.
 			 * @param string     $req_type Access requirement type. One of these values: `level|ccap|sp`.
-			 * @param str|int $req_type_value Access requirement. String, or a Post/Page ID.
+			 * @param string|int $req_type_value Access requirement. String, or a Post/Page ID.
 			 * @param string     $seeking_uri The full URI that access was attempted on.
 			 * @param string     $res_type Restriction type that's preventing access.
 			 *   One of: `post|page|catg|ptag|file|ruri|ccap|sp|sys`.

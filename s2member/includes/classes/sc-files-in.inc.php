@@ -44,7 +44,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_get_file", get_defined_vars());
-						unset /* Unset defined __refs, __v. */($__refs, $__v);
+						unset($__refs, $__v);
 
 						$attr = /* Force array; trim quote entities. */ c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr);
 
@@ -52,7 +52,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_get_file_after_shortcode_atts", get_defined_vars());
-						unset /* Unset defined __refs, __v. */($__refs, $__v);
+						unset($__refs, $__v);
 
 						$get_streamer_json = filter_var($attr["get_streamer_json"], FILTER_VALIDATE_BOOLEAN);
 						$get_streamer_array = filter_var($attr["get_streamer_array"], FILTER_VALIDATE_BOOLEAN);
@@ -98,7 +98,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_get_stream", get_defined_vars());
-						unset /* Unset defined __refs, __v. */($__refs, $__v);
+						unset($__refs, $__v);
 
 						$attr = /* Force array; trim quote entities. */ c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr);
 
@@ -107,7 +107,7 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_get_stream_after_shortcode_atts", get_defined_vars());
-						unset /* Unset defined __refs, __v. */($__refs, $__v);
+						unset($__refs, $__v);
 
 						foreach /* Now we need to go through and a `file_` prefix  to certain Attribute keys, for compatibility. */($attr as $key => $value)
 							if(strlen($value) && in_array($key, array("download", "download_key", "stream", "inline", "storage", "remote", "ssl", "rewrite", "rewrite_base")))

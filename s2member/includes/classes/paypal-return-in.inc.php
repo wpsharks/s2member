@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 					{
 						global /* For Multisite support. */ $current_site, $current_blog;
 
-						do_action ("ws_plugin__s2member_before_paypal_return", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_paypal_return", get_defined_vars ());
 
 						if (!empty ($_GET["s2member_paypal_return"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !empty ($_GET["s2member_paypal_proxy"])))
 							{
@@ -70,7 +70,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														if (!apply_filters ("ws_plugin__s2member_during_paypal_return_conditionals", false, get_defined_vars ()))
 															{
-																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																unset($__refs, $__v);
 
 																if (($_paypal_cp = c_ws_plugin__s2member_paypal_return_in_web_accept_sp::cp (get_defined_vars ())))
 																	$paypal = $_paypal_cp;
@@ -96,7 +96,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 																	}
 															}
 														else // Else a custom conditional has been applied by filters.
-															unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+															unset($__refs, $__v);
 													}
 												else // Else, use the default ``$_SERVER["HTTP_HOST"]`` error.
 													{
@@ -182,14 +182,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 											                   FILE_APPEND);
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_return", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_return", get_defined_vars ());
+								unset($__refs, $__v);
 
 								exit /* Clean exit. */ ();
 							}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_paypal_return", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_paypal_return", get_defined_vars ());
+						unset($__refs, $__v);
 					}
 			}
 	}

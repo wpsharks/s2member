@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_ptags_sp"))
 				*/
 				public static function check_specific_ptag_level_access ($_tag = FALSE, $check_user = TRUE)
 					{
-						do_action ("ws_plugin__s2member_before_check_specific_ptag_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_check_specific_ptag_level_access", get_defined_vars ());
 
 						if ($_tag && is_numeric ($_tag) && is_object ($term = get_term_by ("id", $_tag, "post_tag")))
 							{
@@ -94,7 +94,7 @@ if (!class_exists ("c_ws_plugin__s2member_ptags_sp"))
 													}
 											}
 
-										do_action ("ws_plugin__s2member_during_check_specific_ptag_level_access", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_check_specific_ptag_level_access", get_defined_vars ());
 									}
 							}
 

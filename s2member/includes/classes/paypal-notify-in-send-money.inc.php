@@ -43,8 +43,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_send_money"))
 						if (!empty ($paypal["txn_type"]) && preg_match ("/^send_money$/i", $paypal["txn_type"]))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_before_send_money", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_before_send_money", get_defined_vars ());
+								unset($__refs, $__v);
 
 								if (!get_transient ($transient_ipn = "s2m_ipn_" . md5 ("s2member_transient_" . $_paypal_s)) && set_transient ($transient_ipn, time (), 31556926 * 10))
 									{
@@ -55,8 +55,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_send_money"))
 										$paypal["s2member_log"][] = "The `txn_type` does not require any action on the part of s2Member.";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_paypal_notify_during_send_money", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_paypal_notify_during_send_money", get_defined_vars ());
+										unset($__refs, $__v);
 									}
 								else // Else, this is a duplicate IPN. Must stop here.
 									{
@@ -66,8 +66,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_send_money"))
 									}
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_after_send_money", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_after_send_money", get_defined_vars ());
+								unset($__refs, $__v);
 
 								return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_send_money", $paypal, get_defined_vars ());
 							}

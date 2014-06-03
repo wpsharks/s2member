@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 				*/
 				public static function s_badge_status ()
 					{
-						do_action ("ws_plugin__s2member_before_s_badge_status", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_s_badge_status", get_defined_vars ());
 
 						if (!empty ($_GET["s2member_s_badge_status"]))
 							{
@@ -92,7 +92,7 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 								else exit ("-"); // Else, service NOT enabled.
 							}
 
-						do_action ("ws_plugin__s2member_after_s_badge_status", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_s_badge_status", get_defined_vars ());
 					}
 			}
 	}

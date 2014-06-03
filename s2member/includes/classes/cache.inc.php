@@ -42,7 +42,7 @@ if (!class_exists ("c_ws_plugin__s2member_cache"))
 				*/
 				public static function cached_page_links ()
 					{
-						do_action ("ws_plugin__s2member_before_cached_page_links", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_cached_page_links", get_defined_vars ());
 
 						$lwp = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"];
 						$mop = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"];

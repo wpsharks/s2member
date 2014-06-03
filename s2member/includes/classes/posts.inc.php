@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_posts"))
 					{
 						global $post; // ``get_the_ID()`` unavailable outside The Loop.
 
-						do_action ("ws_plugin__s2member_before_check_post_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_check_post_level_access", get_defined_vars ());
 
 						$excluded = apply_filters ("ws_plugin__s2member_check_post_level_access_excluded", false, get_defined_vars ());
 
@@ -107,11 +107,11 @@ if (!class_exists ("c_ws_plugin__s2member_posts"))
 													c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("post", $post_id, "sp", $post_id, $_SERVER["REQUEST_URI"], "sp") . exit ();
 											}
 
-										do_action ("ws_plugin__s2member_during_check_post_level_access", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_check_post_level_access", get_defined_vars ());
 									}
 							}
 
-						do_action ("ws_plugin__s2member_after_check_post_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_check_post_level_access", get_defined_vars ());
 
 						return; // For uniformity.
 					}

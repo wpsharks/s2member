@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				*/
 				public static function list_servers_integrated ()
 					{
-						do_action ("ws_plugin__s2member_before_list_servers_integrated", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_list_servers_integrated", get_defined_vars ());
 
 						for /* Go through each Level; looking for a configured list. */ ($n = 0; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 							if (!empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_mailchimp_list_ids"]) || !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_getresponse_list_ids"]) || !empty ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_aweber_list_ids"]))
@@ -73,8 +73,8 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 						global /* For Multisite support. */ $current_site, $current_blog;
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_process_list_servers", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_process_list_servers", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (c_ws_plugin__s2member_list_servers::list_servers_integrated () && ($args = func_get_args ()) && $role && is_string ($role) && is_numeric ($level) && $login && is_string ($login) && is_string ($pass = (string)$pass) && $email && is_string ($email) && is_email ($email) && is_string ($fname = (string)$fname) && is_string ($lname = (string)$lname) && is_string ($ip = (string)$ip) && is_bool ($opt_in = (bool)$opt_in) && $opt_in && is_bool ($double_opt_in = (bool)$double_opt_in) && $user_id && is_numeric ($user_id) && is_object ($user = new WP_User ($user_id)) && !empty ($user->ID))
 							{
@@ -236,15 +236,15 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 											}
 									}
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_process_list_servers", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_process_list_servers", get_defined_vars ());
+								unset($__refs, $__v);
 
 								if /* Back on? */ ($email_configs_were_on)
 									c_ws_plugin__s2member_email_configs::email_config ();
 							}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_process_list_servers", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_process_list_servers", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return apply_filters ("ws_plugin__s2member_process_list_servers", (isset ($success) && $success), get_defined_vars ());
 					}
@@ -275,8 +275,8 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 						global /* For Multisite support. */ $current_site, $current_blog;
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_process_list_server_removals", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_process_list_server_removals", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (c_ws_plugin__s2member_list_servers::list_servers_integrated () && ($args = func_get_args ()) && $role && is_string ($role) && is_numeric ($level) && $login && is_string ($login) && is_string ($pass = (string)$pass) && $email && is_string ($email) && is_email ($email) && is_string ($fname = (string)$fname) && is_string ($lname = (string)$lname) && is_string ($ip = (string)$ip) && is_bool ($opt_out = (bool)$opt_out) && $opt_out && $user_id && is_numeric ($user_id) && is_object ($user = new WP_User ($user_id)) && !empty ($user->ID))
 							{
@@ -399,15 +399,15 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 											}
 									}
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_process_list_server_removals", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_process_list_server_removals", get_defined_vars ());
+								unset($__refs, $__v);
 
 								if /* Back on? */ ($email_configs_were_on)
 									c_ws_plugin__s2member_email_configs::email_config ();
 							}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_process_list_server_removals", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_process_list_server_removals", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return apply_filters ("ws_plugin__s2member_process_list_server_removals", (isset ($removal_success) && $removal_success), get_defined_vars ());
 					}
@@ -437,8 +437,8 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 						static $auto_processed = /* Process ONE time for each User. */ array ();
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_auto_process_list_server_removals", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_auto_process_list_server_removals", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$custom_reg_auto_op_outs = c_ws_plugin__s2member_utils_strings::wrap_deep ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_auto_opt_outs"], "/^", "$/i");
 
@@ -461,18 +461,18 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 												$transitioned = c_ws_plugin__s2member_list_servers::process_list_servers ($mod_new_role, c_ws_plugin__s2member_user_access::user_access_role_to_level ($mod_new_role), $user->user_login, false, $user->user_email, $user->first_name, $user->last_name, false, true, (($removed) ? false : true), $user->ID);
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_auto_process_list_server_removal_transitions", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_auto_process_list_server_removal_transitions", get_defined_vars ());
+												unset($__refs, $__v);
 											}
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_auto_process_list_server_removals", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_auto_process_list_server_removals", get_defined_vars ());
+										unset($__refs, $__v);
 									}
 							}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_auto_process_list_server_removals", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_auto_process_list_server_removals", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return /* Return for uniformity. */;
 					}

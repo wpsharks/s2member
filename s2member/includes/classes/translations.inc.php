@@ -42,7 +42,7 @@ if (!class_exists ("c_ws_plugin__s2member_translations"))
 						load_plugin_textdomain ("s2member", false, c_ws_plugin__s2member_utils_dirs::rel_path (WP_PLUGIN_DIR, dirname (dirname (__FILE__)) . "/translations"));
 						load_plugin_textdomain ("s2member"); // Allows `.mo` file to be loaded from the `/wp-content/plugins/s2member-[locale].mo`.
 
-						do_action ("ws_plugin__s2member_during_translations_load", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_translations_load", get_defined_vars ());
 
 						add_filter ("gettext", "c_ws_plugin__s2member_translations::translation_mangler", 10, 3);
 

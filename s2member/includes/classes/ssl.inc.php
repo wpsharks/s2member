@@ -47,7 +47,7 @@ if (!class_exists ("c_ws_plugin__s2member_ssl"))
 						static $forced = false; // Only force SSL once.
 						global $post; // We need this global reference to ``$post``.
 
-						do_action ("ws_plugin__s2member_before_check_force_ssl", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_check_force_ssl", get_defined_vars ());
 
 						if (!$forced) // Only force SSL here once. We definitely do NOT need to run this particular routine more than ONE time.
 							if (!c_ws_plugin__s2member_systematics::is_wp_systematic_use_page () /* NOT on WordPress Systematics. */)
@@ -61,7 +61,7 @@ if (!class_exists ("c_ws_plugin__s2member_ssl"))
 											c_ws_plugin__s2member_ssl_in::force_ssl (get_defined_vars ()); // Call inner routine now.
 								}
 
-						do_action ("ws_plugin__s2member_after_check_force_ssl", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_check_force_ssl", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

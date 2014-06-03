@@ -91,7 +91,7 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_login_header_styles", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						$a[] = /* Open style tag, then give Filters a chance below. */ '<style type="text/css">';
 						$i = apply_filters("ws_plugin__s2member_login_header_styles_important", " !important", get_defined_vars());
@@ -143,7 +143,7 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_during_login_header_styles", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						$a = apply_filters("ws_plugin__s2member_login_header_styles_array", $a, get_defined_vars());
 						$s .= /* Now put all array elements together. */ "\n".implode("\n", $a)."\n\n";

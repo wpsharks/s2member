@@ -182,7 +182,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @since 3.5
 				*
 				* @param string $url Full URL with possible query string parameters.
-				* @param str|array $post_vars Optional. Either a string of POST vars, or an array.
+				* @param string|array $post_vars Optional. Either a string of POST vars, or an array.
 				* @param array $args Optional. An array of additional arguments used by ``wp_remote_request()``.
 				* @param bool $return_array Optional. If true, instead of a string, we return an array with elements:
 				* 	`code` *(http response code)*, `message` *(http response message)*, `headers` *(an array of lowercase headers)*, `body` *(the response body string)*, `response` *(full response array)*.
@@ -208,7 +208,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_before_wp_remote_request", get_defined_vars());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								unset($__refs, $__v);
 
 								$response = /* Process remote request via ``wp_remote_request()``. */ wp_remote_request($url, $args);
 
@@ -335,7 +335,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*
 				* @param string $url_uri_query A full URL, a partial URI, or just a query string. Must have an s2Member-generated signature to validate.
 				* @param bool $check_time Optional. Defaults to false. If true, s2Member will also check if the signature has expired, based on ``$exp_secs``.
-				* @param str|int $exp_secs Optional. Defaults to (int)10. If ``$check_time`` is true, s2Member will check if the signature has expired, based on ``$exp_secs``.
+				* @param string|int $exp_secs Optional. Defaults to (int)10. If ``$check_time`` is true, s2Member will check if the signature has expired, based on ``$exp_secs``.
 				* @param string $sig_var Optional. The name of the s2Member-generated signature variable. Defaults to `_s2member_sig`.
 				* @return bool True if the s2Member-generated signature is OK, else false.
 				*/

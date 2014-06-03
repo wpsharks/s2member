@@ -49,7 +49,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_before_subscr_signup", get_defined_vars());
-								unset /* Unset defined __refs, __v. */($__refs, $__v);
+								unset($__refs, $__v);
 
 								if(!get_transient($transient_rtn = "s2m_rtn_".md5("s2member_transient_".$_paypal_s)) && set_transient($transient_rtn, time(), 31556926 * 10))
 									{
@@ -111,7 +111,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_before_subscr_signup_w_update_vars", get_defined_vars());
-												unset /* Unset defined __refs, __v. */($__refs, $__v);
+												unset($__refs, $__v);
 
 												$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `web_accept|subscr_signup|subscr_payment` ) w/ update vars.";
 
@@ -124,7 +124,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action("ws_plugin__s2member_during_paypal_return_during_before_subscr_signup_w_update_vars", get_defined_vars());
 																do_action("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars(), "rtn-upgrade-downgrade", "modification", "s2member_level".$paypal["level"]);
-																unset /* Unset defined __refs, __v. */($__refs, $__v);
+																unset($__refs, $__v);
 
 																$fields = /* These will be needed in the routines below. */ get_user_option("s2member_custom_fields", $user_id);
 																$user_reg_ip = /* Original IP during Registration. */ get_user_option("s2member_registration_ip", $user_id);
@@ -223,7 +223,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 																	}
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action("ws_plugin__s2member_during_paypal_return_during_subscr_signup_w_update_vars", get_defined_vars());
-																unset /* Unset defined __refs, __v. */($__refs, $__v);
+																unset($__refs, $__v);
 
 																if(($redirection_url_after_modification = apply_filters("ws_plugin__s2member_redirection_url_after_modification", false, get_defined_vars())))
 																	{
@@ -263,7 +263,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 													}
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_after_subscr_signup_w_update_vars", get_defined_vars());
-												unset /* Unset defined __refs, __v. */($__refs, $__v);
+												unset($__refs, $__v);
 											}
 										/*
 										New Subscription. Normal Subscription signup, we are not updating anything for a past Subscription.
@@ -272,7 +272,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_before_subscr_signup_wo_update_vars", get_defined_vars());
-												unset /* Unset defined __refs, __v. */($__refs, $__v);
+												unset($__refs, $__v);
 
 												$processing = $during = /* Yes, we ARE processing this new Subscription request. */ true;
 
@@ -308,7 +308,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 													}
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_during_subscr_signup_wo_update_vars", get_defined_vars());
-												unset /* Unset defined __refs, __v. */($__refs, $__v);
+												unset($__refs, $__v);
 
 												if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && is_main_site())
 													{
@@ -358,7 +358,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 													}
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_paypal_return_after_subscr_signup_wo_update_vars", get_defined_vars());
-												unset /* Unset defined __refs, __v. */($__refs, $__v);
+												unset($__refs, $__v);
 											}
 									}
 								else // Page Expired. Duplicate Return-Data.
@@ -373,7 +373,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level"))
 									}
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_after_subscr_signup", get_defined_vars());
-								unset /* Unset defined __refs, __v. */($__refs, $__v);
+								unset($__refs, $__v);
 
 								return apply_filters("c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level", $paypal, get_defined_vars());
 							}

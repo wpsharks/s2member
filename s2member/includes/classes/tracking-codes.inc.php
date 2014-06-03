@@ -51,7 +51,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				*/
 				public static function display_signup_tracking_codes ()
 					{
-						do_action ("ws_plugin__s2member_before_display_signup_tracking_codes", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_display_signup_tracking_codes", get_defined_vars ());
 
 						if ((!empty ($_COOKIE["s2member_tracking"]) && ($subscr_or_txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_tracking"]))) || (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) && ($subscr_or_txn_id = $subscr_id)))
 							{
@@ -62,8 +62,8 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_display_signup_tracking_codes", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_display_signup_tracking_codes", get_defined_vars ());
+										unset($__refs, $__v);
 
 										if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 											{
@@ -76,7 +76,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 									}
 							}
 
-						do_action ("ws_plugin__s2member_after_display_signup_tracking_codes", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_display_signup_tracking_codes", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -103,7 +103,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				*/
 				public static function display_modification_tracking_codes ()
 					{
-						do_action ("ws_plugin__s2member_before_display_modification_tracking_codes", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_display_modification_tracking_codes", get_defined_vars ());
 
 						if ((!empty ($_COOKIE["s2member_tracking"]) && ($subscr_or_txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_tracking"]))) || (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) && ($subscr_or_txn_id = $subscr_id)))
 							{
@@ -114,8 +114,8 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_display_modification_tracking_codes", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_display_modification_tracking_codes", get_defined_vars ());
+										unset($__refs, $__v);
 
 										if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 											{
@@ -128,7 +128,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 									}
 							}
 
-						do_action ("ws_plugin__s2member_after_display_modification_tracking_codes", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_display_modification_tracking_codes", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -155,7 +155,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				*/
 				public static function display_ccap_tracking_codes ()
 					{
-						do_action ("ws_plugin__s2member_before_display_ccap_tracking_codes", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_display_ccap_tracking_codes", get_defined_vars ());
 
 						if ((!empty ($_COOKIE["s2member_tracking"]) && ($subscr_or_txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_tracking"]))) || (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) && ($subscr_or_txn_id = $subscr_id)))
 							{
@@ -166,8 +166,8 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_display_ccap_tracking_codes", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_display_ccap_tracking_codes", get_defined_vars ());
+										unset($__refs, $__v);
 
 										if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 											{
@@ -180,7 +180,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 									}
 							}
 
-						do_action ("ws_plugin__s2member_after_display_ccap_tracking_codes", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_display_ccap_tracking_codes", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -203,7 +203,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 				*/
 				public static function display_sp_tracking_codes ()
 					{
-						do_action ("ws_plugin__s2member_before_display_sp_tracking_codes", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_display_sp_tracking_codes", get_defined_vars ());
 
 						if (!empty ($_COOKIE["s2member_sp_tracking"]) && ($txn_id = c_ws_plugin__s2member_utils_encryption::decrypt ($_COOKIE["s2member_sp_tracking"])))
 							{
@@ -214,8 +214,8 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 										echo '<img src="' . esc_attr (site_url ("/?s2member_delete_sp_tracking_cookie=1")) . '" alt="." style="width:1px; height:1px; border:0;" />' . "\n";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_display_sp_tracking_codes", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_display_sp_tracking_codes", get_defined_vars ());
+										unset($__refs, $__v);
 
 										if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 											{
@@ -228,7 +228,7 @@ if (!class_exists ("c_ws_plugin__s2member_tracking_codes"))
 									}
 							}
 
-						do_action ("ws_plugin__s2member_after_display_sp_tracking_codes", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_display_sp_tracking_codes", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

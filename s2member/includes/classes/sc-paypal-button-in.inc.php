@@ -43,8 +43,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 				public static function sc_paypal_button ($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_sc_paypal_button", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_sc_paypal_button", get_defined_vars ());
+						unset($__refs, $__v);
 
 						c_ws_plugin__s2member_no_cache::no_cache_constants /* No caching on pages that contain this Payment Button. */ (true);
 
@@ -65,8 +65,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 						$attr["ns"] = /* No shipping directive must be 1 for digital items. After shortcode_atts(). */ ($attr["dg"] === "1") ? "1" : $attr["ns"];
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_sc_paypal_button_after_shortcode_atts", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_sc_paypal_button_after_shortcode_atts", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if /* Cancellation Buttons. */ ($attr["cancel"])
 							{
@@ -89,8 +89,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								unset /* Just a little housekeeping */ ($href, $url, $m);
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_sc_paypal_cancellation_button", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_sc_paypal_cancellation_button", get_defined_vars ());
+								unset($__refs, $__v);
 							}
 						else if /* Specific Post/Page Buttons. */ ($attr["sp"])
 							{
@@ -144,8 +144,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								$code = ($attr["output"] === "url") ? c_ws_plugin__s2member_utils_forms::form_whips_2_url ($code) : $code;
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_sc_paypal_sp_button", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_sc_paypal_sp_button", get_defined_vars ());
+								unset($__refs, $__v);
 							}
 						else if /* Independent Custom Capabilities. */ ($attr["level"] === "*")
 							{
@@ -200,8 +200,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								$code = ($attr["output"] === "url") ? c_ws_plugin__s2member_utils_forms::form_whips_2_url ($code) : $code;
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_sc_paypal_ccaps_button", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_sc_paypal_ccaps_button", get_defined_vars ());
+								unset($__refs, $__v);
 							}
 						else // Otherwise, we'll process this Button normally, using Membership routines.
 							{
@@ -283,8 +283,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								$code = ($attr["output"] === "url") ? c_ws_plugin__s2member_utils_forms::form_whips_2_url ($code) : $code;
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								($attr["modify"]) ? do_action ("ws_plugin__s2member_during_sc_paypal_modification_button", get_defined_vars ()) : do_action ("ws_plugin__s2member_during_sc_paypal_button", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								($attr["modify"]) ? do_action("ws_plugin__s2member_during_sc_paypal_modification_button", get_defined_vars ()) : do_action("ws_plugin__s2member_during_sc_paypal_button", get_defined_vars ());
+								unset($__refs, $__v);
 							}
 						$code = c_ws_plugin__s2member_sc_paypal_button_e::sc_paypal_button_encryption ($code, get_defined_vars ());
 

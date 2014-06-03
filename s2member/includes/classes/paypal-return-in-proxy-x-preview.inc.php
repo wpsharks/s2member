@@ -41,14 +41,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 						extract /* Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */($vars, EXTR_OVERWRITE | EXTR_REFS);
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_during_paypal_return_before_explicit_x_preview", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_during_paypal_return_before_explicit_x_preview", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$paypal["s2member_log"][] = "Test preview of Return Page `proxy_use`: ( `x_preview` ).";
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_during_paypal_return_during_explicit_x_preview", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_during_paypal_return_during_explicit_x_preview", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if /* Using a custom success redirection URL? */ ($custom_success_redirection)
 						{
@@ -65,8 +65,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview"))
 							   _x ("Continue (Click Here)", "s2member-front", "s2member"), home_url ("/"));
 						}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_during_paypal_return_after_explicit_x_preview", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_during_paypal_return_after_explicit_x_preview", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return apply_filters ("c_ws_plugin__s2member_paypal_return_in_proxy_x_preview", $paypal, get_defined_vars ());
 					}

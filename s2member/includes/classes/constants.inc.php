@@ -43,7 +43,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 				*/
 				public static function constants ()
 					{
-						do_action ("ws_plugin__s2member_before_constants", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_constants", get_defined_vars ());
 
 						$links = c_ws_plugin__s2member_cache::cached_page_links ();
 
@@ -62,8 +62,8 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						$login_counter = ($user) ? (int)get_user_option ("s2member_login_counter") : -1;
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_during_constants", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_during_constants", get_defined_vars ());
+						unset($__refs, $__v);
 						/**
 						* Current version of s2Member.
 						*
@@ -2391,7 +2391,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						/*
 						Calls the after Hook. Do NOT set Constants here.
 						*/
-						do_action ("ws_plugin__s2member_after_constants", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_constants", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

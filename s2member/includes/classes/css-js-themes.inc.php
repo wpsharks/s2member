@@ -84,7 +84,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 				*/
 				public static function add_css ()
 					{
-						do_action ("ws_plugin__s2member_before_add_css", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_add_css", get_defined_vars ());
 
 						if(!is_admin () && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js())
 							{
@@ -92,9 +92,9 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 
 								wp_enqueue_style ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_css=1&qcABC=1", array (), c_ws_plugin__s2member_utilities::ver_checksum (), "all");
 
-								do_action ("ws_plugin__s2member_during_add_css", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_add_css", get_defined_vars ());
 							}
-						do_action ("ws_plugin__s2member_after_add_css", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_add_css", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -114,7 +114,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 					{
 						global /* Need this for comparisons. */ $pagenow;
 
-						do_action ("ws_plugin__s2member_before_add_js_w_globals", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_add_js_w_globals", get_defined_vars ());
 
 						if ((!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js())
 						    || (is_user_admin () && $pagenow === "profile.php" && !current_user_can ("edit_users")))
@@ -132,9 +132,9 @@ if (!class_exists ("c_ws_plugin__s2member_css_js_themes"))
 									{ // This essentially creates 2 versions of the script. One while logged in & another when not.
 										wp_enqueue_script ("ws-plugin--s2member", $s2o . "?ws_plugin__s2member_js_w_globals=1&qcABC=1", array ("jquery"), c_ws_plugin__s2member_utilities::ver_checksum (), TRUE);
 									}
-								do_action ("ws_plugin__s2member_during_add_js_w_globals", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_add_js_w_globals", get_defined_vars ());
 							}
-						do_action ("ws_plugin__s2member_after_add_js_w_globals", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_add_js_w_globals", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

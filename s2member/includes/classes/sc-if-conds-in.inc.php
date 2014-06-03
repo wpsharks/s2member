@@ -56,8 +56,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 				public static function sc_if_conditionals ($attr = FALSE, $content = FALSE, $shortcode = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_sc_if_conditionals", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_sc_if_conditionals", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$blog_farm_safe = apply_filters ("ws_plugin__s2member_sc_if_conditionals_blog_farm_safe",
 						                                 array ("is_user_logged_in", "is_user_not_logged_in",
@@ -130,8 +130,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_if_conds_in"))
 						$conditional_logic = (!empty ($logicals) && is_array ($logicals) && preg_match ("/^(\|\||OR)$/i", $logicals[0])) ? "OR" : "AND";
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_sc_if_conditionals_after_conditional_logic", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_sc_if_conditionals_after_conditional_logic", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if ($conditional_logic === "AND") // This is the AND variation. This routine analyzes conditionals using AND logic (the default behavior).
 							{

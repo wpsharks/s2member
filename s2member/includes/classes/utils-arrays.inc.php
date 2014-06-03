@@ -132,7 +132,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 									$value = c_ws_plugin__s2member_utils_arrays::remove_nulls ($value);
 
 								else if (is_null /* Is it null? */ ($value))
-									unset ($array[$key]);
+									unset($array[$key]);
 							}
 						return $array;
 					}
@@ -155,7 +155,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 									$value = c_ws_plugin__s2member_utils_arrays::remove_0b_strings ($value);
 
 								else if (is_string ($value) && !strlen ($value))
-									unset ($array[$key]);
+									unset($array[$key]);
 							}
 						return $array;
 					}

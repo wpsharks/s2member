@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 							echo '<title>' . $doctype_html_head_title . '</title>' . "\n";
 
 						if ($doctype_html_head_action) // Add content from Hook?
-							do_action ($doctype_html_head_action, get_defined_vars ());
+							do_action($doctype_html_head_action, get_defined_vars ());
 
 						echo '</head>' . "\n";
 

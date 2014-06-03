@@ -47,8 +47,8 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 						global $pagenow; // Need this to detect the current admin page.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_handle_ms_user_deletions", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_handle_ms_user_deletions", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_multisite () && empty ($processed[$user_id])) // Safeguard this routine against duplicate processing.
 							{
@@ -56,20 +56,20 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 									// Do NOT react on this globally. There are many routines that remove Users for different/minor reasons.
 									{
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_handle_ms_user_deletions_before", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_handle_ms_user_deletions_before", get_defined_vars ());
+										unset($__refs, $__v);
 
 										c_ws_plugin__s2member_user_deletions::handle_user_deletions ($user_id); // Hand this over.
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_handle_ms_user_deletions_after", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_handle_ms_user_deletions_after", get_defined_vars ());
+										unset($__refs, $__v);
 									}
 							}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_handle_ms_user_deletions", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_handle_ms_user_deletions", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return /* Return for uniformity. */;
 					}
@@ -90,8 +90,8 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 						static $processed = array (); // No duplicate processing.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_handle_user_deletions", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_handle_user_deletions", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (empty ($processed[$user_id]) && ($processed[$user_id] = true)) // Safeguard this routine against duplicate processing.
 							{
@@ -105,9 +105,9 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 								$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); // In API Notifications.
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_handle_user_before_deletions", get_defined_vars ());
-								do_action ("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "removal-deletion");
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_handle_user_before_deletions", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "removal-deletion");
+								unset($__refs, $__v);
 
 								delete_user_option ($user_id, "s2member_custom"); // Remove User options (for this Blog).
 								delete_user_option ($user_id, "s2member_subscr_id");
@@ -211,13 +211,13 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 									}
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_handle_user_deletions", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_handle_user_deletions", get_defined_vars ());
+								unset($__refs, $__v);
 							}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_handle_user_deletions", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_handle_user_deletions", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return /* Return for uniformity. */;
 					}

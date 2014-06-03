@@ -39,12 +39,12 @@ if (!class_exists ("c_ws_plugin__s2member_labels"))
 				*/
 				public static function config_label_translations ()
 					{
-						do_action ("ws_plugin__s2member_before_config_label_translations", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_config_label_translations", get_defined_vars ());
 
 						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["apply_label_translations"])
 							add_filter ("gettext_with_context", "c_ws_plugin__s2member_labels::_label_translations", 10, 3);
 
-						do_action ("ws_plugin__s2member_after_config_label_translations", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_config_label_translations", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

@@ -33,7 +33,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				* @package s2Member\SP_Access
 				* @since 3.5
 				*
-				* @param str|int $sp_ids Comma-delimited list of Specific Post/Page IDs *(numerical)*.
+				* @param string|int $sp_ids Comma-delimited list of Specific Post/Page IDs *(numerical)*.
 				* @param int|string $hours Optional. A numeric expiration time for this link, in hours. Defaults to `72`.
 				* @param bool $shrink Optional. Defaults to true. If false, the raw link will NOT be processed by the tinyURL API.
 				* @return str|bool A Specific Post/Page Access Link, or false on failure.
@@ -41,8 +41,8 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				public static function sp_access_link_gen ($sp_ids = FALSE, $hours = 72, $shrink = TRUE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_sp_access_link_gen", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_sp_access_link_gen", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if ((is_string ($sp_ids) || is_numeric ($sp_ids)) && ($sp_ids = preg_replace ("/[^0-9;,]/", "", $sp_ids)) && ($leading_id = preg_replace ("/^([0-9]+).*$/", "$1", $sp_ids)) && is_numeric ($hours))
 							{
@@ -67,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				*/
 				public static function sp_access_link_via_ajax ()
 					{
-						do_action ("ws_plugin__s2member_before_sp_access_link_via_ajax", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_sp_access_link_via_ajax", get_defined_vars ());
 
 						status_header (200); // Send a 200 OK status header.
 						header ("Content-Type: text/plain; charset=UTF-8"); // Content-Type with UTF-8.
@@ -97,7 +97,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				*/
 				public static function sp_access ($sp_id = FALSE, $read_only = FALSE)
 					{
-						do_action ("ws_plugin__s2member_before_sp_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_sp_access", get_defined_vars ());
 
 						$excluded = apply_filters ("ws_plugin__s2member_sp_access_excluded", false, get_defined_vars ());
 
@@ -152,8 +152,8 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				public static function sp_access_session ($add_sp_access_value = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_sp_access_session", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_sp_access_session", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$sp_access_values = (!empty ($_COOKIE["s2member_sp_access"])) ? preg_split ("/\:\.\:\|\:\.\:/", (string)$_COOKIE["s2member_sp_access"]) : array ();
 
@@ -170,8 +170,8 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 								$_COOKIE["s2member_sp_access"] = $cookie; // Real-time cookie updates.
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_sp_access_session", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_sp_access_session", get_defined_vars ());
+								unset($__refs, $__v);
 							}
 						return apply_filters ("ws_plugin__s2member_sp_access_session", $sp_access_values, get_defined_vars ());
 					}

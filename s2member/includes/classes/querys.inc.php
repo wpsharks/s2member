@@ -54,13 +54,13 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_force_query_level_access", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						c_ws_plugin__s2member_querys::query_level_access($wp_query, true);
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_after_force_query_level_access", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						return; // For uniformity.
 					}
@@ -93,7 +93,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_query_level_access", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						c_ws_plugin__s2member_querys::_query_level_access_sys($wp_query); // Systematics.
 
@@ -239,14 +239,14 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												do_action("ws_plugin__s2member_during_query_level_access", get_defined_vars());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												unset($__refs, $__v);
 											}
 									}
 							}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_after_query_level_access", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						$initial_query = false; // No longer.
 
@@ -270,7 +270,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("_ws_plugin__s2member_before_query_level_access_sys", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						if(is_object($wpdb) && is_object($wp_query) && !($suppressing_filters = $wp_query->get("suppress_filters")))
 							if((!is_admin() && ($wp_query->is_search() || $wp_query->is_feed())) || c_ws_plugin__s2member_querys::_is_admin_ajax_search($wp_query))
@@ -283,12 +283,12 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 
 									foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 									do_action("_ws_plugin__s2member_during_query_level_access_sys", get_defined_vars());
-									unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+									unset($__refs, $__v);
 								}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("_ws_plugin__s2member_after_query_level_access_sys", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						return; // For uniformity.
 					}

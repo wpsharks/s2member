@@ -1989,7 +1989,7 @@ if(!function_exists("s2member_file_download_key"))
 * @package s2Member\API_Functions
 * @since 111026
 *
-* @param str|int $user_id Optional. Defaults to the currently logged-in User's ID.
+* @param string|int $user_id Optional. Defaults to the currently logged-in User's ID.
 * @param string $not_counting_this_particular_file Optional. If you want to exclude a particular file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon S3 Bucket *(when applicable)*.
 * @return array An array with the following elements... File Downloads allowed for this User: (int)`allowed`, Download Period for this User in days: (int)`allowed_days`, Files downloaded by this User in the current Period: (int)`currently`, log of all Files downloaded in the current Period, with file names/dates: (array)`log`, archive of all Files downloaded in prior Periods, with file names/dates: (array)`archive`.
 *
@@ -2042,7 +2042,7 @@ if(!function_exists("s2member_user_downloads"))
 * @since 111026
 *
 * @param string $file Required. Location of the file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon S3 Bucket *(when applicable)*.
-* @param str|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
+* @param string|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
 * @param bool $check_archives_too Optional. Defaults to true. When true, s2Member checks its File Download Archive too, instead of ONLY looking at Files downloaded in the current Period. Period is based on your Basic Download Restrictions setting of allowed days across various Levels of Membership, for each respective User/Member. Or, if ``$user_id`` is specified, based solely on a specific User's `allowed_days`, configured in your Basic Download Restrictions, at the User's current Membership Level.
 * @return int The total for this particular ``$file``, based on configuration of function arguments.
 *
@@ -2094,7 +2094,7 @@ if(!function_exists("s2member_total_downloads_of"))
 * @since 111026
 *
 * @param string $file Required. Location of the file, relative to the `/s2member-files/` directory, or relative to the root of your Amazon S3 Bucket *(when applicable)*.
-* @param str|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
+* @param string|int $user_id Optional. If specified, s2Member will return total downloads by a particular User/Member, instead of collectively *(i.e among all Users/Members)*.
 * @param bool $check_archives_too Optional. Defaults to true. When true, s2Member checks its File Download Archive too, instead of ONLY looking at Files downloaded in the current Period. Period is based on your Basic Download Restrictions setting of allowed days across various Levels of Membership, for each respective User/Member. Or, if ``$user_id`` is specified, based solely on a specific User's `allowed_days`, configured in your Basic Download Restrictions, at the User's current Membership Level.
 * @return int The total for this particular ``$file``, based on configuration of function arguments.
 *

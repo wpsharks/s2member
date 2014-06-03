@@ -43,7 +43,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
         {
             foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
             do_action("ws_plugin__s2member_before_ip_restrictions_ok", get_defined_vars());
-            unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+            unset($__refs, $__v);
 
             if(!apply_filters("ws_plugin__s2member_disable_all_ip_restrictions", false, get_defined_vars())
                 /* Also allow specific exclusions here. */ && !apply_filters("ws_plugin__s2member_disable_specific_ip_restriction", false, get_defined_vars())
@@ -84,7 +84,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
                     foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
                     do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
-                    unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+                    unset($__refs, $__v);
 
 					exit /* Clean exit with 503 error message. */($msg_503);
                 }
@@ -109,7 +109,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
                     foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
                     do_action("ws_plugin__s2member_during_ip_restrictions_ok_no", get_defined_vars());
-                    unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+                    unset($__refs, $__v);
 
                     exit /* Clean exit with 503 error message. */($msg_503);
                 }
@@ -118,7 +118,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
                 {
                     foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
                     do_action("ws_plugin__s2member_during_ip_restrictions_ok_yes", get_defined_vars());
-                    unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+                    unset($__refs, $__v);
 
                     return apply_filters("ws_plugin__s2member_ip_restrictions_ok", true, get_defined_vars());
                 }
@@ -126,7 +126,7 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
             foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
             do_action("ws_plugin__s2member_during_ip_restrictions_ok_yes", get_defined_vars());
-            unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+            unset($__refs, $__v);
 
             return apply_filters("ws_plugin__s2member_ip_restrictions_ok", true, get_defined_vars());
         }

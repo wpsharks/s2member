@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 				*/
 				public static function admin_lockout ()
 					{
-						do_action ("ws_plugin__s2member_before_admin_lockouts", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_admin_lockouts", get_defined_vars ());
 
 						if (is_admin () && (!defined ("DOING_AJAX") || !DOING_AJAX) && !current_user_can ("edit_posts") /* Give Filters a chance here too. */)
 							if (apply_filters ("ws_plugin__s2member_admin_lockout", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["force_admin_lockouts"], get_defined_vars ()))
@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 									else // Else we use the Login Welcome Page configured for s2Member.
 										wp_redirect (get_page_link ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"])) . exit ();
 								}
-						do_action ("ws_plugin__s2member_after_admin_lockouts", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_admin_lockouts", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -67,7 +67,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 				*/
 				public static function filter_admin_menu_bar (&$wp_admin_bar = FALSE)
 					{
-						do_action ("ws_plugin__s2member_before_filter_admin_menu_bar", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_filter_admin_menu_bar", get_defined_vars ());
 
 						$uses_nodes = (version_compare (get_bloginfo ("version"), "3.3-RC1", ">=")) ? true : false;
 
@@ -130,7 +130,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 									if (!$uses_nodes && isset /* Have this item? */ ($wp_admin_bar->menu->{"my-account-with-avatar"}["children"]->{"edit-profile"}["href"]))
 										$wp_admin_bar->menu->{"my-account-with-avatar"}["children"]->{"edit-profile"}["href"] = /* Update this item. */ $lwp;
 								}
-						do_action ("ws_plugin__s2member_after_filter_admin_menu_bar", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_filter_admin_menu_bar", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

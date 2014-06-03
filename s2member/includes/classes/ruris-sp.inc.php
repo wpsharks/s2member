@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_ruris_sp"))
 				*/
 				public static function check_specific_ruri_level_access ($uri = FALSE, $check_user = TRUE)
 					{
-						do_action ("ws_plugin__s2member_before_check_specific_ruri_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_check_specific_ruri_level_access", get_defined_vars ());
 
 						$uri = ($uri && is_string ($uri) && ($uri = c_ws_plugin__s2member_utils_urls::parse_uri ($uri))) ? $uri : false;
 
@@ -66,7 +66,7 @@ if (!class_exists ("c_ws_plugin__s2member_ruris_sp"))
 													}
 											}
 
-										do_action ("ws_plugin__s2member_during_check_specific_ruri_level_access", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_check_specific_ruri_level_access", get_defined_vars ());
 									}
 							}
 

@@ -51,7 +51,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 					{
 						global /* For Multisite support. */ $current_site, $current_blog;
 
-						do_action ("ws_plugin__s2member_before_paypal_notify", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_paypal_notify", get_defined_vars ());
 
 						if (!empty ($_GET["s2member_paypal_notify"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !empty ($_REQUEST["s2member_paypal_proxy"])))
 							{
@@ -95,7 +95,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 												if (!apply_filters ("ws_plugin__s2member_during_paypal_notify_conditionals", false, get_defined_vars ()))
 													{
-														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+														unset($__refs, $__v);
 
 														if (($_paypal_cp = c_ws_plugin__s2member_paypal_notify_in_virtual_terminal::cp (get_defined_vars ())))
 															$paypal = $_paypal_cp;
@@ -149,7 +149,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 															$paypal["s2member_log"][] = "Ignoring this IPN request. The `txn_type/status` does NOT require any action on the part of s2Member.";
 													}
 												else // Else a custom conditional has been applied by Filters.
-													unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+													unset($__refs, $__v);
 											}
 
 										else if (!empty ($paypal["txn_type"]) && preg_match("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]))
@@ -212,8 +212,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 											                   FILE_APPEND);
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify", get_defined_vars ());
+								unset($__refs, $__v);
 
 								status_header (200); // Send a 200 OK status header.
 								header ("Content-Type: text/plain; charset=UTF-8"); // Content-Type text/plain with UTF-8.
@@ -222,8 +222,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								exit (((!empty ($paypal["s2member_paypal_proxy_return_url"])) ? $paypal["s2member_paypal_proxy_return_url"] : ""));
 							}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_paypal_notify", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_paypal_notify", get_defined_vars ());
+						unset($__refs, $__v);
 					}
 			}
 	}

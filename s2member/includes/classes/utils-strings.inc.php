@@ -155,7 +155,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @see s2Member\Utilities\c_ws_plugin__s2member_utils_strings::trim_deep()
 				* @see http://php.net/manual/en/function.trim.php
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @param str|bool $chars Optional. Defaults to false, indicating the default trim chars ` \t\n\r\0\x0B`. Or, set to a specific string of chars.
 				* @param str|bool $extra_chars Optional. This is NOT possible with PHP alone, but here you can specify extra chars; in addition to ``$chars``.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up according to arguments passed in.
@@ -173,7 +173,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @see s2Member\Utilities\c_ws_plugin__s2member_utils_strings::trim()
 				* @see http://php.net/manual/en/function.trim.php
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @param str|bool $chars Optional. Defaults to false, indicating the default trim chars ` \t\n\r\0\x0B`. Or, set to a specific string of chars.
 				* @param str|bool $extra_chars Optional. This is NOT possible with PHP alone, but here you can specify extra chars; in addition to ``$chars``.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up according to arguments passed in.
@@ -199,7 +199,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up.
 				*/
 				public static function trim_dq_deep($value = FALSE)
@@ -212,7 +212,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up.
 				*/
 				public static function trim_sq_deep($value = FALSE)
@@ -225,7 +225,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up.
 				*/
 				public static function trim_dsq_deep($value = FALSE)
@@ -240,7 +240,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111011
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all data is trimmed up.
 				*/
 				public static function trim_qts_deep($value = FALSE)
@@ -273,7 +273,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @param string $beg Optional. A string value to wrap at the beginning of each value.
 				* @param string $end Optional. A string value to wrap at the ending of each value.
 				* @param bool $wrap_e Optional. Defaults to false. Should empty strings be wrapped too?
@@ -297,7 +297,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 110926
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @param string $delimiter Optional. If a delimiting character is specified, it will also be escaped via ``preg_quote()``.
 				* @return str|array Either the input string, or the input array; after all data is escaped with ``preg_quote()``.
 				*/
@@ -358,7 +358,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @package s2Member\Utilities
 				* @since 111009
 				*
-				* @param str|array $value Input string or an array is also fine.
+				* @param string|array $value Input string or an array is also fine.
 				* @return array Array of parsed email addresses.
 				*/
 				public static function parse_emails($value = FALSE)
@@ -544,7 +544,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*
 				* @see http://www.faqs.org/rfcs/rfc3986.html
 				*
-				* @param str|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
+				* @param string|array $value Either a string, an array, or a multi-dimensional array, filled with integer and/or string values.
 				* @return str|array Either the input string, or the input array; after all unreserved chars are decoded properly.
 				*/
 				public static function urldecode_ur_chars_deep($value = array())

@@ -306,7 +306,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 								$all_singular_ids_not_conflicting = c_ws_plugin__s2member_utils_gets::get_all_singular_ids_with_sp ("exclude-conflicts");
 								foreach /* Weed out anything that's in conflict here. */ ($singular_ids as $s => $singular_id)
 									if (!in_array ($singular_id, $all_singular_ids_not_conflicting))
-										unset ($singular_ids[$s]);
+										unset($singular_ids[$s]);
 							}
 						return (!empty ($singular_ids) && is_array ($singular_ids)) ? array_unique ($singular_ids) : array ();
 					}
@@ -333,7 +333,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 								$all_singular_ids_not_conflicting = c_ws_plugin__s2member_utils_gets::get_all_singular_ids_with_sp ("exclude-conflicts");
 								foreach /* Weed out anything that's in conflict here. */ ($singulars as $s => $singular)
 									if (!in_array ($singular->ID, $all_singular_ids_not_conflicting))
-										unset ($singulars[$s]);
+										unset($singulars[$s]);
 							}
 						return (!empty ($singulars) && is_array ($singulars)) ? c_ws_plugin__s2member_utils_arrays::array_unique ($singulars) : array ();
 					}

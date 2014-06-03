@@ -39,14 +39,14 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*/
 				public static function email_config ()
 					{
-						do_action ("ws_plugin__s2member_before_email_config", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_email_config", get_defined_vars ());
 
 						c_ws_plugin__s2member_email_configs::email_config_release ();
 
 						add_filter ("wp_mail_from", "c_ws_plugin__s2member_email_configs::_email_config_email");
 						add_filter ("wp_mail_from_name", "c_ws_plugin__s2member_email_configs::_email_config_name");
 
-						do_action ("ws_plugin__s2member_after_email_config", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_email_config", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*/
 				public static function _email_config_email ($email = FALSE)
 					{
-						do_action ("_ws_plugin__s2member_before_email_config_email", get_defined_vars ());
+						do_action("_ws_plugin__s2member_before_email_config_email", get_defined_vars ());
 
 						return apply_filters ("_ws_plugin__s2member_email_config_email", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"], get_defined_vars ());
 					}
@@ -80,7 +80,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*/
 				public static function _email_config_name ($name = FALSE)
 					{
-						do_action ("_ws_plugin__s2member_before_email_config_name", get_defined_vars ());
+						do_action("_ws_plugin__s2member_before_email_config_name", get_defined_vars ());
 
 						return apply_filters ("_ws_plugin__s2member_email_config_name", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"], get_defined_vars ());
 					}
@@ -95,7 +95,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*/
 				public static function email_config_status ($any = FALSE)
 					{
-						do_action ("ws_plugin__s2member_before_email_config_status", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_email_config_status", get_defined_vars ());
 
 						if (has_filter ("wp_mail_from", "c_ws_plugin__s2member_email_configs::_email_config_email") || has_filter ("wp_mail_from_name", "c_ws_plugin__s2member_email_configs::_email_config_name"))
 							return apply_filters ("ws_plugin__s2member_email_config_status", true, get_defined_vars ());
@@ -116,7 +116,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				*/
 				public static function email_config_release ($all = FALSE)
 					{
-						do_action ("ws_plugin__s2member_before_email_config_release", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_email_config_release", get_defined_vars ());
 
 						remove_filter ("wp_mail_from", "c_ws_plugin__s2member_email_configs::_email_config_email");
 						remove_filter ("wp_mail_from_name", "c_ws_plugin__s2member_email_configs::_email_config_name");
@@ -124,7 +124,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 						if /* If ``$all`` is true, remove ALL attached WordPress Filters. */ ($all)
 							remove_all_filters ("wp_mail_from") . remove_all_filters ("wp_mail_from_name");
 
-						do_action ("ws_plugin__s2member_after_email_config_release", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_email_config_release", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -144,8 +144,8 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				public static function ms_nice_email_roles ($message = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_ms_nice_email_roles", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_ms_nice_email_roles", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$message = preg_replace ("/ as a (subscriber|s2member_level[0-9]+)/i", " " . _x ("as a Member", "s2member-front", "s2member"), $message);
 
@@ -179,7 +179,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @package s2Member\Email_Configs
 				* @since 110707
 				*
-				* @param str|int $user_id A numeric WordPress User ID.
+				* @param string|int $user_id A numeric WordPress User ID.
 				* @param string $user_pass Optional. A plain text version of the User's password.
 				* 	If omitted, a new password will be generated automatically.
 				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.
@@ -190,8 +190,8 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				public static function reset_pass_resend_new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user"), $user_email = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_reset_pass_resend_new_user_notification", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_reset_pass_resend_new_user_notification", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if ($user_id && ($user = new WP_User ($user_id)) && !empty ($user->ID) && ($user_id = $user->ID) && is_array ($notify) && !empty ($notify))
 							{
@@ -209,7 +209,7 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				* @package s2Member\Email_Configs
 				* @since 110707
 				*
-				* @param str|int $user_id A numeric WordPress User ID.
+				* @param string|int $user_id A numeric WordPress User ID.
 				* @param string $user_pass Optional. A plain text version of the User's password.
 				* 	If omitted, only the administrative notification will be sent.
 				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.
@@ -219,8 +219,8 @@ if (!class_exists ("c_ws_plugin__s2member_email_configs"))
 				public static function new_user_notification ($user_id = FALSE, $user_pass = FALSE, $notify = array ("user", "admin"), $user_email = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_new_user_notification", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_new_user_notification", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if ($user_id && ($user = new WP_User ($user_id)) && !empty ($user->ID) && ($user_id = $user->ID) && is_array ($notify) && !empty ($notify))
 							{

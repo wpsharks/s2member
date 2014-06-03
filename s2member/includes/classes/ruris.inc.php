@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 				*/
 				public static function check_ruri_level_access ()
 					{
-						do_action ("ws_plugin__s2member_before_check_ruri_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_check_ruri_level_access", get_defined_vars ());
 
 						$excluded = apply_filters ("ws_plugin__s2member_check_ruri_level_access_excluded", false, get_defined_vars ());
 
@@ -62,11 +62,11 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 													}
 											}
 
-										do_action ("ws_plugin__s2member_during_check_ruri_level_access", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_check_ruri_level_access", get_defined_vars ());
 									}
 							}
 
-						do_action ("ws_plugin__s2member_after_check_ruri_level_access", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_check_ruri_level_access", get_defined_vars ());
 
 						return; // For uniformity.
 					}
@@ -83,8 +83,8 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 				public static function fill_ruri_level_access_rc_vars ($uris = FALSE, $user = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_fill_ruri_level_access_rc_vars", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_fill_ruri_level_access_rc_vars", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$uris = (string)$uris; // Force ``$uris`` to a string value.
 						$orig_uris = $uris; // Record the original URIs that were passed in; collectively.

@@ -45,7 +45,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_file_download_access", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						$_g = !empty($_GET) ? $_GET : array();
 						$_g = c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_g));
@@ -313,7 +313,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 
 											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 											do_action("ws_plugin__s2member_during_file_download_access", get_defined_vars());
-											unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+											unset($__refs, $__v);
 
 											if($using_amazon_storage && $using_amazon_cf_storage && ($serving || ($creating && $url_to_storage_source)))
 												{
@@ -541,7 +541,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_create_file_download_url", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						$config = (is_array($config)) ? $config : /* This absolutely MUST be an array. */ array();
 
@@ -555,7 +555,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_create_file_download_url", get_defined_vars());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								unset($__refs, $__v);
 
 								$extension = strtolower(substr($config["file_download"], strrpos($config["file_download"], ".") + 1));
 								$streaming = (isset($config["file_stream"])) ? filter_var($config["file_stream"], FILTER_VALIDATE_BOOLEAN) : ((in_array($extension, preg_split("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_stream_extensions"]))) ? true : false);
@@ -591,7 +591,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_check_file_remote_authorization", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						$_g = c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep(((!empty($_GET)) ? $_GET : array())));
 
@@ -638,7 +638,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("_ws_plugin__s2member_before_check_file_download_key", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						if($file && is_string($file) && ($file = trim($file, "/")) && $key && is_string($key))
 							{

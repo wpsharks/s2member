@@ -42,8 +42,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 				public static function login_redirect ($username = FALSE, $user = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_login_redirect", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_login_redirect", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_string($username) && $username && is_object ($user) && !empty ($user->ID) && ($user_id = $user->ID))
 							{
@@ -80,8 +80,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 										if (!$obey_redirect_to || empty ($_REQUEST["redirect_to"]) || !is_string ($_REQUEST["redirect_to"]) || $_REQUEST["redirect_to"] === admin_url () || preg_match ("/^\/?wp-admin\/?$/", $_REQUEST["redirect_to"]))
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_login_redirect", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_login_redirect", get_defined_vars ());
+												unset($__refs, $__v);
 
 												if($redirect && is_string ($redirect)) $redirect = $redirect; // Custom?
 
@@ -109,8 +109,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 									}
 							}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_login_redirect", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_login_redirect", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return /* Return for uniformity. */;
 					}
@@ -127,8 +127,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 				public static function login_redirection_url ($user = FALSE, $root_returns_false = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_login_redirection_url", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_login_redirection_url", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$url = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"];
 						$url = c_ws_plugin__s2member_login_redirects::fill_login_redirect_rc_vars ($url, $user, $root_returns_false);
@@ -148,8 +148,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 				public static function login_redirection_uri ($user = FALSE, $root_returns_false = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_login_redirection_uri", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_login_redirection_uri", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (($url = c_ws_plugin__s2member_login_redirects::login_redirection_url ($user, $root_returns_false)))
 							$uri = c_ws_plugin__s2member_utils_urls::parse_uri ($url);
@@ -170,8 +170,8 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 				public static function fill_login_redirect_rc_vars ($url = FALSE, $user = FALSE, $root_returns_false = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_fill_login_redirect_rc_vars", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_fill_login_redirect_rc_vars", get_defined_vars ());
+						unset($__refs, $__v);
 
 						$url = /* Force ``$url`` to a string value. */ (string)$url;
 						$orig_url = /* Record the original URL that was passed in. */ $url;

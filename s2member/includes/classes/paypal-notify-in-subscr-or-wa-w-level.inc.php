@@ -49,8 +49,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 						&& (!empty ($paypal["payer_email"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_before_subscr_signup", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_before_subscr_signup", get_defined_vars ());
+								unset($__refs, $__v);
 
 								if (!get_transient ($transient_ipn = "s2m_ipn_" . md5 ("s2member_transient_" . $_paypal_s)) && set_transient ($transient_ipn, time (), 31556926 * 10))
 									{
@@ -84,8 +84,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 											// PayPal will not allow the `modify=1|2` parameter to be used in those scenarios, because technically there is no billing to update; only the account.
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_paypal_notify_before_subscr_signup_w_update_vars", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_paypal_notify_before_subscr_signup_w_update_vars", get_defined_vars ());
+												unset($__refs, $__v);
 
 												$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `web_accept|subscr_signup` ) w/ update vars.";
 
@@ -96,9 +96,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 																$processing = $modifying = $during = /* Yes, we ARE processing this. */ true;
 
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																do_action ("ws_plugin__s2member_during_paypal_notify_during_before_subscr_signup_w_update_vars", get_defined_vars ());
-																do_action ("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars (), "ipn-upgrade-downgrade", "modification", "s2member_level" . $paypal["level"]);
-																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																do_action("ws_plugin__s2member_during_paypal_notify_during_before_subscr_signup_w_update_vars", get_defined_vars ());
+																do_action("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars (), "ipn-upgrade-downgrade", "modification", "s2member_level" . $paypal["level"]);
+																unset($__refs, $__v);
 
 																$fields =  /* These will be needed in the routines below. */get_user_option ("s2member_custom_fields", $user_id);
 																$user_reg_ip =  /* Original IP during Registration. */get_user_option ("s2member_registration_ip", $user_id);
@@ -375,16 +375,16 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 																																}
 																	}
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																do_action ("ws_plugin__s2member_during_paypal_notify_during_subscr_signup_w_update_vars", get_defined_vars ());
-																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_signup_w_update_vars", get_defined_vars ());
+																unset($__refs, $__v);
 															}
 														else $paypal["s2member_log"][] = "Unable to modify Subscription. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
 													}
 												else $paypal["s2member_log"][] = "Unable to modify Subscription. Could not get the existing User ID from the DB. Please check the `on0` and `os0` variables in your Button Code.";
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_paypal_notify_after_subscr_signup_w_update_vars", get_defined_vars ());
-												unset  /* Unset defined __refs, __v. */($__refs, $__v);
+												do_action("ws_plugin__s2member_during_paypal_notify_after_subscr_signup_w_update_vars", get_defined_vars ());
+												unset($__refs, $__v);
 											}
 										/*
 										New Subscription. Normal Subscription signup, we are not updating anything for a past Subscription.
@@ -392,8 +392,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 										else // Else this is a normal Subscription signup, we are not updating anything.
 											{
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_paypal_notify_before_subscr_signup_wo_update_vars", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_paypal_notify_before_subscr_signup_wo_update_vars", get_defined_vars ());
+												unset($__refs, $__v);
 
 												$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `web_accept|subscr_signup` ) w/o update vars.";
 
@@ -542,14 +542,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 																										}
 															}
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-														do_action ("ws_plugin__s2member_during_paypal_notify_during_subscr_signup_wo_update_vars", get_defined_vars ());
-														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+														do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_signup_wo_update_vars", get_defined_vars ());
+														unset($__refs, $__v);
 													}
 												else $paypal["s2member_log"][] = "Unable to generate Registration URL for Membership Access. Possible data corruption within the IPN response.";
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_paypal_notify_after_subscr_signup_wo_update_vars", get_defined_vars ());
-												unset  /* Unset defined __refs, __v. */($__refs, $__v);
+												do_action("ws_plugin__s2member_during_paypal_notify_after_subscr_signup_wo_update_vars", get_defined_vars ());
+												unset($__refs, $__v);
 											}
 										if ($processing && $_REQUEST["s2member_paypal_proxy"] && ($url = $_REQUEST["s2member_paypal_proxy_return_url"]) && is_array ($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
 											{
@@ -744,8 +744,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_after_subscr_signup", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_after_subscr_signup", get_defined_vars ());
+								unset($__refs, $__v);
 
 								return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level", $paypal, get_defined_vars ());
 							}

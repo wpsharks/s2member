@@ -48,8 +48,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 						&& (!empty ($paypal["txn_id"]) && ($paypal["subscr_id"] = $paypal["txn_id"])) && (!empty ($paypal["payer_email"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_return_before_new_ccaps", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_return_before_new_ccaps", get_defined_vars ());
+								unset($__refs, $__v);
 
 								if (!get_transient ($transient_rtn = "s2m_rtn_" . md5 ("s2member_transient_" . $_paypal_s)) && set_transient ($transient_rtn, time (), 31556926 * 10))
 									{
@@ -127,8 +127,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 																								}
 																	}
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																do_action ("ws_plugin__s2member_during_paypal_return_during_new_ccaps", get_defined_vars ());
-																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																do_action("ws_plugin__s2member_during_paypal_return_during_new_ccaps", get_defined_vars ());
+																unset($__refs, $__v);
 
 																if (($redirection_url_after_capabilities = apply_filters ("ws_plugin__s2member_redirection_url_after_capabilities", false, get_defined_vars ())))
 																	{
@@ -189,8 +189,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 											_x ("Back To Home Page", "s2member-front", "s2member"), home_url ("/"));
 									}
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_return_after_new_ccaps", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_return_after_new_ccaps", get_defined_vars ());
+								unset($__refs, $__v);
 
 								return apply_filters ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level", $paypal, get_defined_vars ());
 							}

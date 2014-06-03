@@ -47,8 +47,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 						&& (!empty ($paypal["subscr_id"])) && (!empty ($paypal["payer_email"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_before_subscr_modify", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_before_subscr_modify", get_defined_vars ());
+								unset($__refs, $__v);
 
 								if (!get_transient ($transient_ipn = "s2m_ipn_" . md5 ("s2member_transient_" . $_paypal_s)) && set_transient ($transient_ipn, time (), 31556926 * 10))
 									{
@@ -77,9 +77,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 														$processing = $modifying = $during = true; // Yes, we ARE processing this.
 
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-														do_action ("ws_plugin__s2member_during_paypal_notify_during_before_subscr_modify", get_defined_vars ());
-														do_action ("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars (), "ipn-upgrade-downgrade", "modification", "s2member_level" . $paypal["level"]);
-														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+														do_action("ws_plugin__s2member_during_paypal_notify_during_before_subscr_modify", get_defined_vars ());
+														do_action("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars (), "ipn-upgrade-downgrade", "modification", "s2member_level" . $paypal["level"]);
+														unset($__refs, $__v);
 
 														$fields = get_user_option ("s2member_custom_fields", $user_id); // These will be needed in the routines below.
 														$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); // Original IP during Registration.
@@ -336,8 +336,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 																							}
 															}
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-														do_action ("ws_plugin__s2member_during_paypal_notify_during_subscr_modify", get_defined_vars ());
-														unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+														do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_modify", get_defined_vars ());
+														unset($__refs, $__v);
 													}
 												else
 													$paypal["s2member_log"][] = "Unable to modify Subscription. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
@@ -352,8 +352,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_after_subscr_modify", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_after_subscr_modify", get_defined_vars ());
+								unset($__refs, $__v);
 
 								return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_subscr_modify_w_level", $paypal, get_defined_vars ());
 							}

@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 				*/
 				public static function register ()
 					{
-						do_action ("ws_plugin__s2member_before_register", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_register", get_defined_vars ());
 
 						if (!empty ($_GET["s2member_register"])) // If they're attempting to access the registration system.
 							{
@@ -68,7 +68,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 																setcookie ("s2member_custom", $_COOKIE["s2member_custom"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_custom", $_COOKIE["s2member_custom"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
 																setcookie ("s2member_item_number", $_COOKIE["s2member_item_number"], time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . setcookie ("s2member_item_number", $_COOKIE["s2member_item_number"], time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN);
 
-																do_action ("ws_plugin__s2member_during_register", get_defined_vars ());
+																do_action("ws_plugin__s2member_during_register", get_defined_vars ());
 
 																if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && is_main_site () && ($location = c_ws_plugin__s2member_utils_urls::wp_signup_url ()))
 																	{
@@ -97,7 +97,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 									status_header(503) . header ("Content-Type: text/html; charset=UTF-8") . exit ($msg_503);
 							}
 
-						do_action ("ws_plugin__s2member_after_register", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_register", get_defined_vars ());
 					}
 			}
 	}

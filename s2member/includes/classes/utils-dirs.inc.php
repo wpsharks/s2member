@@ -133,7 +133,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 													}
 											}
 
-								unset ($_real_from, $_real_to, $_from_drive, $_to_drive, $_from_drive_jctn, $_sys_temp_dir_jctn, $_jctn, $_from_drive_jctn_exists, $_jctn_dir, $_m);
+								unset($_real_from, $_real_to, $_from_drive, $_to_drive, $_from_drive_jctn, $_sys_temp_dir_jctn, $_jctn, $_from_drive_jctn_exists, $_jctn_dir, $_m);
 
 								$rel_path = $to; // Re-initialize. Start ``$rel_path`` as the value of the ``$to`` array.
 

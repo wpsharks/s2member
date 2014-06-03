@@ -78,7 +78,7 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects_r"))
 				*/
 				public static function remove_login_redirect_filters ()
 					{
-						do_action ("ws_plugin__s2member_before_remove_login_redirect_filters", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_remove_login_redirect_filters", get_defined_vars ());
 
 						if (!apply_filters ("ws_plugin__s2member_allow_other_login_redirect_filters", false, get_defined_vars ()))
 							{
@@ -86,9 +86,9 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects_r"))
 								add_filter ("login_redirect", "c_ws_plugin__s2member_login_redirects_r::_empty_login_redirect_filter");
 								add_filter ("login_redirect", "c_ws_plugin__s2member_login_redirects_r::_http_login_redirect_filter");
 
-								do_action ("ws_plugin__s2member_during_remove_login_redirect_filters", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_remove_login_redirect_filters", get_defined_vars ());
 							}
-						do_action ("ws_plugin__s2member_after_remove_login_redirect_filters", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_remove_login_redirect_filters", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

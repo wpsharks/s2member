@@ -114,4 +114,4 @@ $ws_plugin__s2member_temp_s_base = (!empty ($base)) ? $base : c_ws_plugin__s2mem
 # Disallow directory indexing here.
 	Options -Indexes
 
-<?php unset ($ws_plugin__s2member_temp_s_base); ?>
+<?php unset($ws_plugin__s2member_temp_s_base); ?>

@@ -43,8 +43,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 				public static function sc_paypal_button_encryption ($code = FALSE, $vars = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_sc_paypal_button_encryption", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_sc_paypal_button_encryption", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"])
 							{

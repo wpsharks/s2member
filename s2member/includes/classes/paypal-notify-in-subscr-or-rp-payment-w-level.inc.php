@@ -51,8 +51,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 						&& (!empty ($paypal["txn_id"])) && (!empty ($paypal["mc_gross"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_before_subscr_payment", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_before_subscr_payment", get_defined_vars ());
+								unset($__refs, $__v);
 
 								if (!get_transient ($transient_ipn = "s2m_ipn_" . md5 ("s2member_transient_" . $_paypal_s)) && set_transient ($transient_ipn, time (), 31556926 * 10))
 									{
@@ -188,8 +188,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 													}
 
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-												do_action ("ws_plugin__s2member_during_paypal_notify_during_subscr_payment", get_defined_vars ());
-												unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+												do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_payment", get_defined_vars ());
+												unset($__refs, $__v);
 											}
 										else // Otherwise, we need to re-generate/store this IPN into a Transient Queue. Then re-process it on registration.
 											{
@@ -214,8 +214,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 									}
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_after_subscr_payment", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_after_subscr_payment", get_defined_vars ());
+								unset($__refs, $__v);
 
 								return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level", $paypal, get_defined_vars ());
 							}

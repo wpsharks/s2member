@@ -720,7 +720,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 						if (apply_filters ("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_custom_capability_files", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_custom_capability_files", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_custom_capability_files", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Custom Capability &amp; Member Level Files">' . "\n";
 
@@ -728,7 +728,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								echo '<h3>Restricting Files, Based On Custom Capabilities</h3>' . "\n";
 								echo '<p>If you\'re NOT familiar with Custom Capabilities yet, please read: <code>Dashboard -› s2Member -› API Scripting -› Custom Capability Packages</code>. Once you understand the basic concept of Custom Capabilities &amp; Protected File Downloads, you\'ll see that (by default) s2Member does NOT handle File Download Protection with respect to Custom Capabilities. That\'s where Custom Capability Sub-directories come in.</p>' . "\n";
 								echo '<p>You can create Custom Capability Sub-directories under: <code>' . esc_html (c_ws_plugin__s2member_utils_dirs::doc_root_path ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '</code>. For instance, if you have a Custom Capability <code>music</code>, you can place protected files that should ONLY be accessible to Members with <code>access_s2member_ccap_music</code>, inside: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-ccap-music/</code>. Some examples are provided below.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_custom_capability_files", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_custom_capability_files", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -751,7 +751,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_custom_capability_files", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_custom_capability_files", get_defined_vars ());
 							}
 
 						do_action("ws_plugin__s2member_during_down_ops_page_after_left_sections", get_defined_vars());

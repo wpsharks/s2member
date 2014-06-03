@@ -51,8 +51,8 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 							}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_parse_readme", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_parse_readme", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (file_exists ($path)) // Give hooks a chance.
 							{
@@ -181,7 +181,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 				*/
 				public static function _parse_readme_specs ($str = FALSE)
 					{
-						do_action ("_ws_plugin__s2member_before_parse_readme_specs", get_defined_vars ());
+						do_action("_ws_plugin__s2member_before_parse_readme_specs", get_defined_vars ());
 
 						$str = preg_replace ("/(\<p\>|^)(.+?)(\:)( )(.+?)($|\<\/p\>)/mi", "$1" . '<li><strong>' . "$2" . '</strong>' . "$3" . '&nbsp;&nbsp;&nbsp;&nbsp;<code>' . "$5" . '</code></li>' . "$6", $str);
 						$str = preg_replace ("/\<p\>\<li\>/i", '<ul><li>', $str); // Open the list items.
@@ -212,8 +212,8 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 							}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_parse_readme_value", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_parse_readme_value", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (!empty ($readme[$path]) || file_exists ($path))
 							{

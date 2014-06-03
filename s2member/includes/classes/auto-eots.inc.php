@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 				*/
 				public static function add_auto_eot_system ()
 					{
-						do_action ("ws_plugin__s2member_before_add_auto_eot_system", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_add_auto_eot_system", get_defined_vars ());
 
 						if (!c_ws_plugin__s2member_auto_eots::delete_auto_eot_system ())
 							{
@@ -64,7 +64,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 				*/
 				public static function delete_auto_eot_system ()
 					{
-						do_action ("ws_plugin__s2member_before_delete_auto_eot_system", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_delete_auto_eot_system", get_defined_vars ());
 
 						if /* Is `wp_cron()` even available? */ (function_exists ("wp_cron"))
 							{
@@ -106,8 +106,8 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 						@ini_set ("memory_limit", apply_filters ("admin_memory_limit", WP_MAX_MEMORY_LIMIT));
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_auto_eot_system", get_defined_vars ());
-						unset  /* Unset defined __refs, __v. */($__refs, $__v);
+						do_action("ws_plugin__s2member_before_auto_eot_system", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if  /* Enabled? */($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"])
 							{
@@ -138,10 +138,10 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																		$existing_role = c_ws_plugin__s2member_user_access::user_access_role ($user);
 
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																		do_action ("ws_plugin__s2member_during_auto_eot_system_during_before_demote", get_defined_vars ());
-																		do_action ("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars (), $eot_del_type, "modification", $demotion_role);
-																		do_action ("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "modification");
-																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																		do_action("ws_plugin__s2member_during_auto_eot_system_during_before_demote", get_defined_vars ());
+																		do_action("ws_plugin__s2member_during_collective_mods", $user_id, get_defined_vars (), $eot_del_type, "modification", $demotion_role);
+																		do_action("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "modification");
+																		unset($__refs, $__v);
 
 																		if  /* Only if NOT the existing Role. */($existing_role !== $demotion_role)
 																			$user->set_role /* Give User the demotion Role. */ ($demotion_role);
@@ -249,17 +249,17 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																					c_ws_plugin__s2member_email_configs::email_config ();
 																			}
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																		do_action ("ws_plugin__s2member_during_auto_eot_system_during_demote", get_defined_vars ());
-																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																		do_action("ws_plugin__s2member_during_auto_eot_system_during_demote", get_defined_vars ());
+																		unset($__refs, $__v);
 																	}
 																else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "delete")
 																	{
 																		$eot_del_type = $GLOBALS["ws_plugin__s2member_eot_del_type"] = "auto-eot-cancellation-expiration-deletion";
 
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																		do_action ("ws_plugin__s2member_during_auto_eot_system_during_before_delete", get_defined_vars ());
-																		do_action ("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "removal-deletion");
-																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																		do_action("ws_plugin__s2member_during_auto_eot_system_during_before_delete", get_defined_vars ());
+																		do_action("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "removal-deletion");
+																		unset($__refs, $__v);
 
 																		if  /* Multisite does NOT actually delete; ONLY removes. */(is_multisite ())
 																			{
@@ -272,12 +272,12 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																			wp_delete_user /* `c_ws_plugin__s2member_user_deletions::handle_user_deletions()` */ ($user_id);
 
 																		foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																		do_action ("ws_plugin__s2member_during_auto_eot_system_during_delete", get_defined_vars ());
-																		unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																		do_action("ws_plugin__s2member_during_auto_eot_system_during_delete", get_defined_vars ());
+																		unset($__refs, $__v);
 																	}
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-																do_action ("ws_plugin__s2member_during_auto_eot_system", get_defined_vars ());
-																unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+																do_action("ws_plugin__s2member_during_auto_eot_system", get_defined_vars ());
+																unset($__refs, $__v);
 															}
 													}
 											}
@@ -287,8 +287,8 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 						c_ws_plugin__s2member_utils_logs::cleanup_expired_s2m_transients /* Cleanup. */ ();
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_auto_eot_system", get_defined_vars ());
-						unset  /* Unset defined __refs, __v. */($__refs, $__v);
+						do_action("ws_plugin__s2member_after_auto_eot_system", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return /* Return for uniformity. */;
 					}

@@ -49,8 +49,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 						&& (!empty ($paypal["payer_email"])) && (!empty ($paypal["parent_txn_id"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_before_sp_refund_reversal", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_before_sp_refund_reversal", get_defined_vars ());
+								unset($__refs, $__v);
 
 								if (!get_transient ($transient_ipn = "s2m_ipn_" . md5 ("s2member_transient_" . $_paypal_s)) && set_transient ($transient_ipn, time (), 31556926 * 10))
 									{
@@ -128,8 +128,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 											}
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_paypal_notify_during_sp_refund_reversal", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_paypal_notify_during_sp_refund_reversal", get_defined_vars ());
+										unset($__refs, $__v);
 									}
 								else // Else, this is a duplicate IPN. Must stop here.
 									{
@@ -139,8 +139,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 									}
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_paypal_notify_after_sp_refund_reversal", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_paypal_notify_after_sp_refund_reversal", get_defined_vars ());
+								unset($__refs, $__v);
 
 								return apply_filters ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal", $paypal, get_defined_vars ());
 							}
