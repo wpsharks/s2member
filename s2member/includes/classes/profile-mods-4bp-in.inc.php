@@ -106,8 +106,15 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_4bp_in'))
 					$level = c_ws_plugin__s2member_user_access::user_access_role_to_level($role);
 
 					if(!empty($_p['ws_plugin__s2member_profile_4bp_opt_in']) && $role && $level >= 0)
-						c_ws_plugin__s2member_list_servers::process_list_servers($role, $level, $user->user_login, ((!empty($userdata['user_pass'])) ? $userdata['user_pass'] : ''), $user->user_email, $user->first_name, $user->last_name, $_SERVER['REMOTE_ADDR'], TRUE, TRUE, $user_id);
-					else c_ws_plugin__s2member_list_servers::process_list_server_removals($role, $level, $user->user_login, ((!empty($userdata['user_pass'])) ? $userdata['user_pass'] : ''), $user->user_email, $user->first_name, $user->last_name, $_SERVER['REMOTE_ADDR'], TRUE, $user_id);
+					{
+						update_user_option($user_id, 's2member_opt_in', '1');
+						c_ws_plugin__s2member_list_servers::process_list_servers($role, $level, $user->user_login, '', $user->user_email, $user->first_name, $user->last_name, $_SERVER['REMOTE_ADDR'], TRUE, TRUE, $user_id);
+					}
+					else if($role && $level >= 0)
+					{
+						update_user_option($user_id, 's2member_opt_in', '0');
+						c_ws_plugin__s2member_list_servers::process_list_server_removals($role, $level, $user->user_login, '', $user->user_email, $user->first_name, $user->last_name, $_SERVER['REMOTE_ADDR'], TRUE, $user_id);
+					}
 				}
 			}
 			do_action('ws_plugin__s2member_after_handle_profile_modifications_4bp', get_defined_vars());

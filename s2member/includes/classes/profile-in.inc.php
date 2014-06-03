@@ -220,7 +220,7 @@ if(!class_exists('c_ws_plugin__s2member_profile_in'))
 						echo '<tr>'."\n";
 						echo '<td>'."\n";
 						echo '<label for="ws-plugin--s2member-profile-opt-in">'."\n";
-						echo '<input type="checkbox" name="ws_plugin__s2member_profile_opt_in" id="ws-plugin--s2member-profile-opt-in" class="ws-plugin--s2member-profile-field" value="1" checked="checked" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+						echo '<input type="checkbox" name="ws_plugin__s2member_profile_opt_in" id="ws-plugin--s2member-profile-opt-in" class="ws-plugin--s2member-profile-field" value="1"'.((get_user_option('s2member_opt_in', $user_id)) ? ' checked="checked"' : '').' tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 						echo $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in_label']."\n";
 						echo '</label>'."\n";
 						echo '</td>'."\n";

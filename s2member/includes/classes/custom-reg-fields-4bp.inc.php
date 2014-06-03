@@ -193,7 +193,7 @@ if(!class_exists('c_ws_plugin__s2member_custom_reg_fields_4bp'))
 
 								echo '<div class="ws-plugin--s2member-profile-field-4bp ws-plugin--s2member-profile-4bp-opt-in field_opt_in editfield">'."\n";
 								echo '<label for="ws-plugin--s2member-profile-4bp-opt-in">'."\n";
-								echo '<input type="checkbox" name="ws_plugin__s2member_profile_4bp_opt_in" id="ws-plugin--s2member-profile-4bp-opt-in" class="ws-plugin--s2member-profile-field-4bp" value="1" checked="checked" />'."\n";
+								echo '<input type="checkbox" name="ws_plugin__s2member_profile_4bp_opt_in" id="ws-plugin--s2member-profile-4bp-opt-in" class="ws-plugin--s2member-profile-field-4bp" value="1"'.((get_user_option('s2member_opt_in', $user_id)) ? ' checked="checked"' : '').' />'."\n";
 								echo $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in_label']."\n";
 								echo '</label>'."\n";
 								echo '</div>'."\n";
