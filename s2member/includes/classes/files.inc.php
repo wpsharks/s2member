@@ -176,7 +176,7 @@ if(!class_exists("c_ws_plugin__s2member_files"))
 				* @package s2Member\Files
 				* @since 3.5
 				*
-				* @param obj $user Optional. A `WP_User` object. Defaults to the current User's object.
+				* @param object $user Optional. A `WP_User` object. Defaults to the current User's object.
 				* @param string $not_counting_this_particular_file Optional. If you want to exclude a particular file,
 				* 	relative to the `/s2member-files/` directory, or relative to the root of your Amazon S3 Bucket *(when applicable)*.
 				* @param array $user_log Optional. Prevents another database connection *(i.e. the User's log does not need to be pulled again)*.

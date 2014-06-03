@@ -33,7 +33,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 				* @package s2Member\Meta_Boxes
 				* @since 3.5
 				*
-				* @param obj $post Post/Page object.
+				* @param object $post Post/Page object.
 				* @return null
 				*/
 				public static function security_meta_box($post = FALSE)

@@ -60,7 +60,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				* @package s2Member\User_Access
 				* @since 3.5
 				*
-				* @param obj $user Optional. A `WP_User` object. Defaults to the current User.
+				* @param object $user Optional. A `WP_User` object. Defaults to the current User.
 				* 	In order to check the current User, you must call this function with no arguments/parameters.
 				* @return array Array of Custom Capabilities, or an empty array if they have no Custom Capabilities, or if ``$user`` does not exist, or if no User is currently logged-in.
 				*/
@@ -91,7 +91,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				* @package s2Member\User_Access
 				* @since 3.5
 				*
-				* @param obj $user Optional. A `WP_User` object. Defaults to the current User.
+				* @param object $user Optional. A `WP_User` object. Defaults to the current User.
 				* 	In order to check the current User, you must call this function with no arguments/parameters.
 				* @return int Access Level#, `-1` if ``$user`` does not exist, or if no User is currently logged-in.
 				*/
@@ -151,7 +151,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				* @package s2Member\User_Access
 				* @since 3.5
 				*
-				* @param obj $user Optional. A `WP_User` object. Defaults to the current User.
+				* @param object $user Optional. A `WP_User` object. Defaults to the current User.
 				* 	In order to check the current User, you must call this function with no arguments/parameters.
 				* @return string Access Level Label, empty string if ``$user`` does not exist, or if no User is currently logged-in.
 				*/

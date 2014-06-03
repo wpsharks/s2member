@@ -36,7 +36,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 				* @attaches-to ``add_action("edit_user_profile");``
 				* @attaches-to ``add_action("show_user_profile");``
 				*
-				* @param obj $user Expects a `WP_User` object passed in by the Action Hook.
+				* @param object $user Expects a `WP_User` object passed in by the Action Hook.
 				* @return null
 				*/
 				public static function users_list_edit_cols($user = FALSE)

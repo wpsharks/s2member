@@ -165,7 +165,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_gets"))
 				* @package s2Member\Utilities
 				* @since 111101
 				*
-				* @param obj $user Optional. A `WP_User` object. If this is a valid `WP_User` object, test against this ``$user``, else all are unavailable.
+				* @param object $user Optional. A `WP_User` object. If this is a valid `WP_User` object, test against this ``$user``, else all are unavailable.
 				* @return array Unique array of all Singular IDs *(as integers)* NOT available to ``$user``, due to Custom Capability Restrictions.
 				*/
 				public static function get_unavailable_singular_ids_with_ccaps ($user = FALSE)

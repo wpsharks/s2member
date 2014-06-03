@@ -70,7 +70,7 @@ if (!class_exists ("c_ws_plugin__s2member_brute_force"))
 				*
 				* @attaches-to ``add_filter("authenticate");``
 				*
-				* @param obj $user Expects a WP_User object, or possibly a null value.
+				* @param object $user Expects a WP_User object, or possibly a null value.
 				* 	This parameter value is simply passed through this routine.
 				* @return obj|null Either null, the ``$user`` obj, or a `WP_Error` obj.
 				*/

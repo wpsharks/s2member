@@ -62,7 +62,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_lockouts"))
 				*
 				* @attaches-to ``add_action("admin_bar_menu");``
 				*
-				* @param obj $wp_admin_bar Expects the ``$wp_admin_bar``, by reference; passed in by the Action Hook.
+				* @param object $wp_admin_bar Expects the ``$wp_admin_bar``, by reference; passed in by the Action Hook.
 				* @return null After modifying ``$wp_admin_var``.
 				*/
 				public static function filter_admin_menu_bar (&$wp_admin_bar = FALSE)

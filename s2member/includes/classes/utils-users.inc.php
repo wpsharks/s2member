@@ -201,7 +201,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_users"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param obj $user Optional. A `WP_User` object.
+				* @param object $user Optional. A `WP_User` object.
 				* 	In order to check the current User, you must call this function with no arguments/parameters.
 				* @return int|str|bool If possible, the User's Paid Subscr. ID, else their WordPress User ID, else false.
 				*/

@@ -141,7 +141,7 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 				* @package s2Member\Login_Redirects
 				* @since 3.5
 				*
-				* @param obj $user Optional. A WP_User object. Defaults to the current User, if logged-in.
+				* @param object $user Optional. A WP_User object. Defaults to the current User, if logged-in.
 				* @param bool $root_returns_false Defaults to false. True if the function should return false when a URI is reduced to the site root.
 				* @return str|bool A Special Login Redirection URI with Replacement Codes having been parsed, or false if ``$root_returns_false = true`` and the URI is the site root.
 				*/
@@ -163,7 +163,7 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 				* @since 3.5
 				*
 				* @param string $url A URL with possible Replacement Codes in it.
-				* @param obj $user Optional. A `WP_User` object. Defaults to the current User, if logged-in.
+				* @param object $user Optional. A `WP_User` object. Defaults to the current User, if logged-in.
 				* @param bool $root_returns_false Defaults to false. True if the function should return false when a URL is reduced to the site root.
 				* @return str|bool A Special Login Redirection URL with Replacement Codes having been parsed, or false if ``$root_returns_false = true`` and the URL is the site root.
 				*/

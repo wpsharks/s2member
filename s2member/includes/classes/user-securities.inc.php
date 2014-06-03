@@ -119,7 +119,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_securities"))
 				* @attaches-to ``add_filter("show_password_fields");``
 				*
 				* @param bool $show Expects boolean value passed through by the Filter.
-				* @param obj $user Expects a `WP_User` object passed through by the Filter.
+				* @param object $user Expects a `WP_User` object passed through by the Filter.
 				* @return bool False if the Password is locked for this User, else existing value.
 				*/
 				public static function hide_password_fields ($show = TRUE, $user = FALSE)

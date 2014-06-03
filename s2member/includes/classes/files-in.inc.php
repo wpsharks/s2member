@@ -584,7 +584,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 				*
 				* @attaches-to ``add_filter("ws_plugin__s2member_check_file_download_access_user");``
 				*
-				* @param obj $user Expects a WP_User object passed in by the Filter.
+				* @param object $user Expects a WP_User object passed in by the Filter.
 				* @return obj A `WP_User` object, possibly obtained through Header Authorization.
 				*/
 				public static function check_file_remote_authorization($user = FALSE)

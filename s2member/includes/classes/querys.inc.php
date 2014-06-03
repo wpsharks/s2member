@@ -47,7 +47,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*
 				* @attaches-to ``add_action("pre_get_posts");``
 				*
-				* @param obj $wp_query Expects ``$wp_query`` by reference.
+				* @param object $wp_query Expects ``$wp_query`` by reference.
 				* @return null
 				*/
 				public static function force_query_level_access(&$wp_query = FALSE)
@@ -75,7 +75,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				*
 				* @attaches-to ``add_action("pre_get_posts");``
 				*
-				* @param obj $wp_query Expects ``$wp_query`` by reference, from the Filter.
+				* @param object $wp_query Expects ``$wp_query`` by reference, from the Filter.
 				* @param bool $force Optional. Defaults to false. If true, we bypass all standard conditions.
 				* 	However, s2Member will NEVER bypass `supress_filters`.
 				* @return null
@@ -261,7 +261,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				* @package s2Member\Queries
 				* @since 3.5
 				*
-				* @param obj $wp_query Expects ``$wp_query`` by reference.
+				* @param object $wp_query Expects ``$wp_query`` by reference.
 				* @return null
 				*/
 				public static function _query_level_access_sys(&$wp_query = FALSE)
@@ -338,7 +338,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				* @attaches-to ``add_filter("comment_feed_where");``
 				*
 				* @param string $cwhere Expects the SQL `WHERE` portion to be passed through by the Filter.
-				* @param obj $wp_query Expects ``$wp_query`` by reference, from the Filter.
+				* @param object $wp_query Expects ``$wp_query`` by reference, from the Filter.
 				* @return string The revised ``$cwhere`` string.
 				*/
 				public static function _query_level_access_coms($cwhere = FALSE, &$wp_query = FALSE)
@@ -363,7 +363,7 @@ if(!class_exists("c_ws_plugin__s2member_querys"))
 				* @package s2Member\Queries
 				* @since 110912
 				*
-				* @param obj $wp_query Expects ``$wp_query`` by reference.
+				* @param object $wp_query Expects ``$wp_query`` by reference.
 				* @return bool True if it's an AJAX search via `admin-ajax.php`, else false.
 				*/
 				public static function _is_admin_ajax_search(&$wp_query = FALSE)
