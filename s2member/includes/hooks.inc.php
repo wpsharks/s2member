@@ -117,6 +117,7 @@ add_action("login_head", "c_ws_plugin__s2member_login_customizations::login_head
 add_filter("login_headerurl", "c_ws_plugin__s2member_login_customizations::login_header_url");
 add_filter("login_headertitle", "c_ws_plugin__s2member_login_customizations::login_header_title");
 add_action("login_footer", "c_ws_plugin__s2member_login_customizations::login_footer_design");
+add_filter("lostpassword_url", "c_ws_plugin__s2member_login_customizations::lost_password_url", 10, 2);
 
 add_action("login_footer", "c_ws_plugin__s2member_tracking_codes::display_signup_tracking_codes");
 add_action("wp_footer", "c_ws_plugin__s2member_tracking_codes::display_signup_tracking_codes");

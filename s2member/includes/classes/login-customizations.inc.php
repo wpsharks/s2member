@@ -186,6 +186,45 @@ if(!class_exists("c_ws_plugin__s2member_login_customizations"))
 
 						return /* Return for uniformity. */;
 					}
-			}
+
+				/**
+				 * Filters the Lost Password URL and changes the default behavior of
+				 * wp_lostpassword_url() so that it uses site_url() instead of network_site_url(),
+				 * but only if the current $_SERVER['REQUEST_URI'] differs from the Parent Site URL,
+				 * as returned by network_site_url(). In a non-multisite environment, the default
+				 * WordPress behavior (as of v3.9.1) is used.
+				 *
+				 * @package s2Member\Login_Customizations
+				 * @since 14xxxx
+				 *
+				 * @attaches-to ``add_filter("lostpassword_url");``
+				 *
+				 * @param string $lostpassword_url The lost password page URL.
+				 * @param string $redirect The path to redirect to on login.
+				 *
+				 * @return string Lost password URL.
+				 */
+				public static function lost_password_url($lostpassword_url, $redirect)
+				{
+
+					$args = array('action' => 'lostpassword');
+					if(!empty($redirect))
+						$args['redirect_to'] = $redirect;
+
+					// Build the cleaned URL that we can compare to site_url() and network_site_url()
+					$scheme = ((empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) !== 'on') && (empty($_SERVER['SERVER_PORT']) || (integer)$_SERVER['SERVER_PORT'] !== 443)) ? 'http' : 'https';
+					$url    = $scheme.'://'.$_SERVER["SERVER_NAME"].strtok($_SERVER["REQUEST_URI"], '?'); // Request URL minus query vars
+
+					// Check if the request URL matches the Parent Site URL (always false if !is_multisite())
+					if(strpos($url, (string)network_site_url('wp-login.php')) === FALSE)
+						// Return the Child Site Lost Password URL instead of Parent Site Lost Password URL
+						$lostpassword_url = add_query_arg($args, site_url('wp-login.php', 'login'));
+					else
+						// Return Parent Site Lost Password URL; this is the normal WordPress behavior as of v3.9.1
+						$lostpassword_url = add_query_arg($args, network_site_url('wp-login.php', 'login'));
+
+					return apply_filters("ws_plugin__s2member_lost_password_url", $lostpassword_url, $redirect, get_defined_vars());
+				}
+		}
 	}
 ?>
