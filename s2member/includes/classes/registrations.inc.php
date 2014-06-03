@@ -371,6 +371,9 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 					$role = get_user_option('s2member_bp_activation_role', $user_id);
 					$ccaps = get_user_option('s2member_bp_activation_ccaps', $user_id);
 
+					delete_user_option($user_id, 's2member_bp_activation_role');
+					delete_user_option($user_id, 's2member_bp_activation_ccaps');
+
 					if($role && ($user = new WP_User($user_id)) && $user->ID)
 					{
 						$user->set_role($role);
