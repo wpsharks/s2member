@@ -124,11 +124,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_time"))
 				*/
 				public static function auto_eot_time ($user_id = FALSE, $period1 = FALSE, $period3 = FALSE, $eotper = FALSE, $lpt = FALSE, $ext = FALSE)
 					{
+						$eot_grace_time = (integer)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_grace_time"];
+						$eot_grace_time = (integer)apply_filters("ws_plugin__s2member_eot_grace_time", $eot_grace_time, get_defined_vars());
+
 						if ($user_id && ($user = new WP_User ($user_id)) && $user->ID) // Valid user_id?
 							{
-								$eot_grace_time = (integer)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_grace_time"];
-								$eot_grace_time = (integer)apply_filters("ws_plugin__s2member_eot_grace_time", $eot_grace_time, get_defined_vars());
-
 								$registration_time = strtotime ($user->user_registered);
 								$last_payment_time = get_user_option ("s2member_last_payment_time", $user_id);
 								$last_payment_time = ((int)$lpt) ? (int)$lpt : (int)$last_payment_time;
