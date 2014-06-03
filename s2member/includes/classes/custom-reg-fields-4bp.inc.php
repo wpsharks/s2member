@@ -82,7 +82,7 @@ if(!class_exists('c_ws_plugin__s2member_custom_reg_fields_4bp'))
 											echo '<div class="ws-plugin--s2member-custom-reg-field-4bp ws-plugin--s2member-custom-reg-field-4bp-'.esc_attr($field_id_class).' field_'.esc_attr($field_var).' editfield">'."\n";
 											echo '<label for="ws-plugin--s2member-custom-reg-field-4bp-'.esc_attr($field_id_class).'">'."\n";
 											echo '<span'.((preg_match('/^(checkbox|pre_checkbox)$/', $field['type'])) ? ' style="display:none;"' : '').'>'.$field['label'].(($field['required'] === 'yes') ? ' *' : '').'</span></label>'."\n";
-											echo c_ws_plugin__s2member_custom_reg_fields::custom_field_gen(__FUNCTION__, $field, 'ws_plugin__s2member_custom_reg_field_', 'ws-plugin--s2member-custom-reg-field-4bp-', 'ws-plugin--s2member-custom-reg-field-4bp', '', '', '', $_p, $_p['ws_plugin__s2member_custom_reg_field_'.$field_var], 'registration');
+											echo c_ws_plugin__s2member_custom_reg_fields::custom_field_gen(__FUNCTION__, $field, 'ws_plugin__s2member_custom_reg_field_', 'ws-plugin--s2member-custom-reg-field-4bp-', 'ws-plugin--s2member-custom-reg-field-4bp', '', '', '', $_p, @$_p['ws_plugin__s2member_custom_reg_field_'.$field_var], 'registration');
 											echo '</div>'."\n";
 										}
 										unset($__refs, $__v);
