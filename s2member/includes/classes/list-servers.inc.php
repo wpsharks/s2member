@@ -110,6 +110,8 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														else // Else, it's just a List ID.
 															$mailchimp["list_id"] = $mailchimp["list"];
 
+														$fname = (!$fname) ? ucwords (strstr($email, '@', TRUE)) : $fname; $lname = (!$lname) ? '-' : $lname;
+														$name = ($fname || $lname) ? trim ($fname . " " . $lname) : ucwords (preg_replace ("/^(.+?)@.+/", "$1", $email));
 														$mailchimp["merge_array"] = array("MERGE1" => $fname, "MERGE2" => $lname, "OPTIN_IP" => $ip, "OPTIN_TIME" => date ("Y-m-d H:i:s"));
 														$mailchimp["merge_array"] = (!empty($mailchimp["interest_groups"])) ? array_merge ($mailchimp["merge_array"], $mailchimp["interest_groups"]) : $mailchimp["merge_array"];
 														$mailchimp["merge_array"] = apply_filters( /* Deprecated. */"ws_plugin__s2member_mailchimp_array", $mailchimp["merge_array"], get_defined_vars ());
@@ -154,11 +156,12 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														$getresponse["api_headers"]   = array("Content-Type" => "application/json");
 														$getresponse["api_params"]    = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"], array("campaigns" => array($getresponse["list_id"]), "email" => array("EQUALS" => $email)));
 														$getresponse["api_request"]   = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
+														$name = ($fname || $lname) ? trim ($fname . " " . $lname) : ucwords (preg_replace ("/^(.+?)@.+/", "$1", $email));
 
 														if (is_object($getresponse["api_response"] = json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"], array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error) && ($getresponse["api_response_contact_ids"] = array_keys((array)$getresponse["api_response"]->result)) && ($getresponse["api_response_contact_id"] = $getresponse["api_response_contact_ids"][0]))
 															{
 																$getresponse["api_method"] = "set_contact_name";
-																$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"], array("contact" => $getresponse["api_response_contact_id"], "name" => trim($fname." ".$lname)));
+																$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"], array("contact" => $getresponse["api_response_contact_id"], "name" => $name));
 																$getresponse["api_request"] = json_encode(array("method" => $getresponse["api_method"], "params" => $getresponse["api_params"], "id" => uniqid("", TRUE)));
 
 																if (is_object($getresponse["api_response"] = json_decode(c_ws_plugin__s2member_utils_urls::remote("https://api2.getresponse.com", $getresponse["api_request"], array("headers" => $getresponse["api_headers"])))) && empty($getresponse["api_response"]->error))
@@ -174,7 +177,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 														else // Create a new contact; i.e. they do not exist on this list yet.
 														{
 															$getresponse["api_params"] = array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["getresponse_api_key"],
-														                                 array("name" => trim($fname." ".$lname), "email" => $email, "ip" => $ip,
+														                                 array("name" => $name, "email" => $email, "ip" => $ip,
 														                                       "campaign" => $getresponse["list_id"], "action" => "standard", "cycle_day" => 0,
 														                                       "customs" => apply_filters("ws_plugin__s2member_getresponse_customs_array", array(), get_defined_vars ())));
 															if(!$getresponse["api_params"][1]["ip"] || $getresponse["api_params"][1]["ip"] === "unknown") unset($getresponse["api_params"][1]["ip"]);
@@ -210,7 +213,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 													{
 														$aweber["bcc"] = apply_filters("ws_plugin__s2member_aweber_bcc", false, get_defined_vars ());
 														$aweber["pass_inclusion"] = (apply_filters("ws_plugin__s2member_aweber_pass_inclusion", false, get_defined_vars ()) && $pass) ? "\nPass: " . $pass : false;
-														$buyer = ($fname || $lname) ? trim ($fname . " " . $lname) : /* Must have. AWeber's PayPal Email Parser chokes on an empty value. */ ucwords (preg_replace ("/^(.+?)@.+/", "$1", $email));
+														$name = $buyer = ($fname || $lname) ? trim ($fname . " " . $lname) : /* Must have. AWeber's PayPal Email Parser chokes on an empty value. */ ucwords (preg_replace ("/^(.+?)@.+/", "$1", $email));
 
 														if ($aweber["wp_mail_response"] = wp_mail ($aweber["list_id"] . "@aweber.com", // AWeber List ID converts to email address @aweber.com.
 														($aweber["wp_mail_sbj"] = apply_filters("ws_plugin__s2member_aweber_sbj", "s2Member Subscription Request", get_defined_vars ())), // These Filters make it possible to customize these emails.
