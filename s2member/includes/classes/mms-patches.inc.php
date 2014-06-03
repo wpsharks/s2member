@@ -35,22 +35,22 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 				*
 				* @attaches-to ``add_filter("update_feedback");``
 				*
-				* @param str $message Expects message string passed through by the Filter.
-				* @return str Message after having been Filtered by this routine.
+				* @param string $message Expects message string passed through by the Filter.
+				* @return string Message after having been Filtered by this routine.
 				*/
 				public static function sync_mms_patches ($message = FALSE)
 					{
 						global $pagenow; // Need access to this global var.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_sync_mms_patches", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_sync_mms_patches", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_multisite () && is_network_admin () && $pagenow === "update-core.php")
 							if ($message === "Upgrading database&#8230;" && c_ws_plugin__s2member_mms_patches::mms_patches ())
-								apply_filters ("update_feedback", "s2 Multisite patches applied&#8230;");
+								apply_filters("update_feedback", "s2 Multisite patches applied&#8230;");
 
-						return apply_filters ("ws_plugin__s2member_sync_mms_patches", $message, get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_sync_mms_patches", $message, get_defined_vars ());
 					}
 				/**
 				* Handles patches on a Multisite Network installation.
@@ -64,13 +64,13 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 				public static function mms_patches ($display_notices = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_mms_patches", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_mms_patches", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (is_multisite () && is_admin () && is_main_site () && $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["configured"])
 							if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["mms_auto_patch"] && (!defined ("DISALLOW_FILE_MODS") || !DISALLOW_FILE_MODS))
 								{
-									do_action ("ws_plugin__s2member_during_mms_patches_before", get_defined_vars ());
+									do_action("ws_plugin__s2member_during_mms_patches_before", get_defined_vars ());
 
 									$wp_login_file = ABSPATH . "wp-login.php"; // This works for WordPress 3.0, 3.1, all the way up to 3.7. WordPress 3.1+ uses: `site_url('wp-signup.php')`. WordPress 3.5+ uses: `network_site_url('wp-signup.php')`. WordPress v3.7 uses `$sign_up_url`.
 									$wp_login_section = "/(\s+)(wp_redirect( *?)\(( *?)apply_filters( *?)\(( *?)['\"]wp_signup_location['\"]( *?),( *?)(site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|network_site_url( *?)\(( *?)['\"]wp-signup\.php['\"]( *?)\)|get_bloginfo( *?)\(['\"]wpurl['\"]\)( *?)\.( *?)['\"]\/wp-signup\.php['\"]|\\\$sign_?up_url)( *?)\)( *?)\)( *?);)(\s+)(exit( *?);)/";
@@ -138,12 +138,12 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 
 									$ran_mms_patches = true; // Flag indicating this routine was indeed processed.
 
-									do_action ("ws_plugin__s2member_during_mms_patches_after", get_defined_vars ());
+									do_action("ws_plugin__s2member_during_mms_patches_after", get_defined_vars ());
 								}
 
-						do_action ("ws_plugin__s2member_after_mms_patches", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_mms_patches", get_defined_vars ());
 
-						return !empty ($ran_mms_patches) ? $ran_mms_patches : false;
+						return !empty($ran_mms_patches) ? $ran_mms_patches : false;
 					}
 			}
 	}

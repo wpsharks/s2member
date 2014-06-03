@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_css_js"))
 				*/
 				public static function menu_pages_css ()
 					{
-						if (!empty ($_GET["ws_plugin__s2member_menu_pages_css"]))
+						if (!empty($_GET["ws_plugin__s2member_menu_pages_css"]))
 							{
 								return c_ws_plugin__s2member_admin_css_js_in::menu_pages_css ();
 							}
@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_admin_css_js"))
 				*/
 				public static function menu_pages_js ()
 					{
-						if (!empty ($_GET["ws_plugin__s2member_menu_pages_js"]))
+						if (!empty($_GET["ws_plugin__s2member_menu_pages_js"]))
 							{
 								return c_ws_plugin__s2member_admin_css_js_in::menu_pages_js ();
 							}

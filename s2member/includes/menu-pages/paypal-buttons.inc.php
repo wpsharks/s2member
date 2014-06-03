@@ -42,14 +42,14 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 						echo '<tr class="ws-menu-page-table-tr">' . "\n";
 						echo '<td class="ws-menu-page-table-l">' . "\n";
 
-						do_action ("ws_plugin__s2member_during_paypal_buttons_page_before_left_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_paypal_buttons_page_before_left_sections", get_defined_vars ());
 
 						for ($n = 1; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++) // Starting with Level #1 here.
 							{
-								if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_level" . $n . "_buttons") && apply_filters ($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons, true, get_defined_vars ()))
+								if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_level" . $n . "_buttons") && apply_filters($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_levelN_buttons, true, get_defined_vars ()))
 									{
 										if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_level" . $n . "_buttons"))
-											do_action ($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_levelN_buttons, get_defined_vars ());
+											do_action($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_levelN_buttons, get_defined_vars ());
 
 										echo '<div class="ws-menu-page-group" title="PayPal Buttons For Level #' . $n . ' Access">' . "\n";
 
@@ -59,7 +59,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 										echo '<p><em><strong>Please note:</strong> buttons are NOT saved here. This is only a Button Generator. Once you\'ve generated your Button, copy/paste it into your Membership Options Page. If you lose your Button Code, you\'ll need to come back &amp; re-generate a new one. If you\'re in Sandbox Test-Mode, and you\'re NOT using the Shortcode Format, please remember to come back and re-generate your Buttons before you go live.</em></p>' . "\n";
 
 										if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_level" . $n . "_buttons"))
-											do_action ($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_levelN_buttons, get_defined_vars ());
+											do_action($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_levelN_buttons, get_defined_vars ());
 
 										echo '<table class="form-table">' . "\n";
 										echo '<tbody>' . "\n";
@@ -89,7 +89,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 										echo '<form onsubmit="return false;">' . "\n";
 
 										if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_levelN_buttons_before_shortcode = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_level" . $n . "_buttons_before_shortcode"))
-											do_action ($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_levelN_buttons_before_shortcode, get_defined_vars ());
+											do_action($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_levelN_buttons_before_shortcode, get_defined_vars ());
 
 										echo '<strong>WordPress Shortcode:</strong> (recommended for both the WordPress Visual &amp; HTML Editors)<br />' . "\n";
 										$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-checkout-button-shortcode.php")));
@@ -129,13 +129,13 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 										echo '</div>' . "\n";
 
 										if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_level" . $n . "_buttons"))
-											do_action ($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_levelN_buttons, get_defined_vars ());
+											do_action($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_levelN_buttons, get_defined_vars ());
 									}
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_modification_buttons", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_modification_buttons", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_modification_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_modification_buttons", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="PayPal Subscr Modification Buttons">' . "\n";
 
@@ -148,7 +148,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<p><em><strong>*Make It More User-Friendly*</strong> You can make the Subscription Modification Process, more user-friendly, by setting up a <a href="#" onclick="alert(\'Optional. This can be configured inside your PayPal account. PayPal allows you to create Custom Page Styles, and assign a unique name to them. You can add your own header image and color selection to the checkout form. Once you\\\'ve created a Custom Page Style at PayPal, you can tell s2Member to use that Page Style whenever you generate your Button Code.\'); return false;">Custom Page Style at PayPal</a>, specifically for Subscription Modification Buttons. Use a custom header image, with a brief explanation to the Customer. Something like, "Log into PayPal", "You can Modify your Subscription!".</em></p>' . "\n";
 								echo '<p><em><strong>*Integrating Conditionals*</strong> Since each Modification Button is configured for a specific Level, you may want to create multiple Modification Buttons, one for each combination you intend to make available. s2Member\'s API Conditionals can help you display the proper Button to each Customer, based on the status of their existing account. For further details, see: <code>s2Member -› API Scripting</code>.</em></p>' . "\n";
 								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p><em><strong>*Independent Custom Capabilities*</strong> If you just want to sell an existing Member new Custom Capabilities, without affecting their paid Subscription in any way, please see the next Button Generator: <code>Capability (Buy Now) Buttons</code>. Independent Capability Buttons facilitate Buy Now functionality, specifically for Custom Capabilities, without affecting the Customer\'s primary Subscription and Membership Level Access.</em></p>' . "\n" : '';
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_modification_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_modification_buttons", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -191,7 +191,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<td colspan="2">' . "\n";
 								echo '<form onsubmit="return false;">' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_modification_buttons_before_shortcode", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_modification_buttons_before_shortcode", get_defined_vars ());
 								echo '<strong>WordPress Shortcode:</strong> (recommended for both the WordPress Visual &amp; HTML Editors)<br />' . "\n";
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-checkout-button-shortcode.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%level%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ("1")), $ws_plugin__s2member_temp_s);
@@ -231,12 +231,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_modification_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_modification_buttons", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_ccap_buttons", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_ccap_buttons", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_ccap_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_ccap_buttons", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="PayPal Capability (Buy Now) Buttons">' . "\n";
 
@@ -248,7 +248,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<p>Very simple. All you do is customize the form fields provided, for each set of Custom Capabilities that you plan to sell. Then press (Generate Button Code). These special PayPal Buttons are customized to work with s2Member seamlessly. The Customer will be granted additional access to one or more Custom Capabilities that you specify; while the Customer\'s Membership Level Access and any existing paid Subscription they may already have with you, will remain completely unaffected.</p>' . "\n";
 								echo '<p><em><strong>*Important Note*</strong> Independent Custom Capability Buttons should ONLY be displayed to existing Users/Members, and they MUST be logged-in, BEFORE clicking this Button. Otherwise, post-processing of their transaction will fail to recognize the Customer\'s existing account within WordPress. Please display this Button only to Users/Members that are already logged into their account (perhaps in your Login Welcome Page for s2Member), or in another location where you can be absolutely sure that a User/Member is logged in. s2Member\'s Simple Conditionals could also be used to ensure a User/Member is logged in, by wrapping your Shortcode within a Conditional test. For further details, please see: <code>s2Member -› API Scripting -› Simple Conditionals</code>.</em></p>' . "\n";
 								echo '<p><em><strong>Please note:</strong> buttons are NOT saved here. This is only a Button Generator. Once you\'ve generated your Button, copy/paste it into your WordPress Editor. If you lose your Button Code, you\'ll need to come back &amp; re-generate a new one. If you\'re in Sandbox Test-Mode, and you\'re NOT using the Shortcode Format, please remember to come back and re-generate your Buttons before you go live.</em></p>' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_ccap_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_ccap_buttons", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -275,7 +275,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<td colspan="2">' . "\n";
 								echo '<form onsubmit="return false;">' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_ccap_buttons_before_shortcode", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_ccap_buttons_before_shortcode", get_defined_vars ());
 								echo '<strong>WordPress Shortcode:</strong> (recommended for both the WordPress Visual &amp; HTML Editors)<br />' . "\n";
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-ccaps-checkout-button-shortcode.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($_SERVER["HTTP_HOST"])), $ws_plugin__s2member_temp_s);
@@ -309,12 +309,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_ccap_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_ccap_buttons", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_cancellation_buttons", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_cancellation_buttons", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_cancellation_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_cancellation_buttons", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="PayPal Subscr Cancellation Buttons">' . "\n";
 
@@ -325,7 +325,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<p><em><strong>*Understanding Cancellations*</strong> It\'s important to realize that a Cancellation is not an EOT (End Of Term). All that happens during a Cancellation event, is that billing is stopped, and it\'s understood that the Customer is going to lose access, at some point in the future. This does NOT mean, that access will be revoked immediately. A separate EOT event will automatically handle a (demotion or deletion) later, at the appropriate time; which could be several days, or even a year after the Cancellation took place.</em></p>' . "\n";
 								echo '<p><em><strong>*Some Hairy Details*</strong> There might be times whenever you notice that a Member\'s Subscription has been cancelled through PayPal... but, s2Member continues allowing the User access to your site as a paid Member. Please don\'t be confused by this... in 99.9% of these cases, the reason for this is legitimate. s2Member will only remove the User\'s Membership privileges when an EOT (End Of Term) is processed, a refund occurs, a chargeback occurs, or when a cancellation occurs - which would later result in a delayed Auto-EOT by s2Member.</em></p>' . "\n";
 								echo '<p><em>s2Member will not process an EOT (End Of Term) until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system (based on your configuration). s2Member also calculates one extra day (24 hours) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_cancellation_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_cancellation_buttons", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -357,7 +357,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<td colspan="2">' . "\n";
 								echo '<form onsubmit="return false;">' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_cancellation_buttons_before_shortcode", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_cancellation_buttons_before_shortcode", get_defined_vars ());
 								echo '<strong>WordPress Shortcode:</strong> (recommended for both the WordPress Visual &amp; HTML Editors)<br />' . "\n";
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-cancellation-button-shortcode.php")));
 								echo '<input type="text" autocomplete="off" id="ws-plugin--s2member-cancellation-shortcode" value="' . format_to_edit ($ws_plugin__s2member_temp_s) . '" onclick="this.select ();" class="monospace" />' . "\n";
@@ -386,19 +386,19 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_cancellation_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_cancellation_buttons", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_reg_links", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_reg_links", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_reg_links", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_reg_links", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="PayPal Member Registration Access Links">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-reg-links-section">' . "\n";
 								echo '<h3>Registration Access Link Generator (for Customer Service)</h3>' . "\n";
 								echo '<p>s2Member automatically generates Registration Access Links for your Customers after checkout, and also sends them a link in a Confirmation Email. However, if you ever need to deal with a Customer Service issue that requires a new Registration Access Link to be created manually, you can use this tool for that. Alternatively, you can create their account yourself/manually by going to <code>Users -› Add New</code>. Either of these methods will work fine.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_reg_links", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_reg_links", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -425,12 +425,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_reg_links", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_reg_links", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_sp_buttons", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_sp_buttons", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_sp_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_sp_buttons", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="PayPal Specific Post/Page (Buy Now) Buttons">' . "\n";
 
@@ -441,7 +441,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<p>Specific Post/Page Access, is sort of like selling a product. Only, instead of shipping anything to the Customer, you just give them access to a specific Post/Page on your site; one that you created in WordPress. A Specific Post/Page that is protected by s2Member, might contain a download link for your eBook, access to file &amp; music downloads, access to additional support services, and the list goes on and on. The possibilities with this are endless; as long as your digital product can be delivered through access to a WordPress Post/Page that you\'ve created. To protect Specific Posts/Pages, please see: <code>s2Member -› Restriction Options -› Specific Post/Page Access</code>. Once you\'ve configured your Specific Post/Page Restrictions, those Posts/Pages will be available in the menus below.</p>' . "\n";
 								echo '<p>Very simple. All you do is customize the form fields provided, for each Post/Page that you plan to sell. Then press (Generate Button Code). These special PayPal Buttons are customized to work with s2Member seamlessly. You can even Package Additional Posts/Pages together into one transaction.</p>' . "\n";
 								echo '<p><em><strong>Please note:</strong> buttons are NOT saved here. This is only a Button Generator. Once you\'ve generated your Button, copy/paste it into your WordPress Editor. If you lose your Button Code, you\'ll need to come back &amp; re-generate a new one. If you\'re in Sandbox Test-Mode, and you\'re NOT using the Shortcode Format, please remember to come back and re-generate your Buttons before you go live.</em></p>' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_sp_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_sp_buttons", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -486,7 +486,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<td colspan="2">' . "\n";
 								echo '<form onsubmit="return false;">' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_sp_buttons_before_shortcode", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_sp_buttons_before_shortcode", get_defined_vars ());
 								echo '<strong>WordPress Shortcode:</strong> (recommended for both the WordPress Visual &amp; HTML Editors)<br />' . "\n";
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-sp-checkout-button-shortcode.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_ds (esc_attr ($_SERVER["HTTP_HOST"])), $ws_plugin__s2member_temp_s);
@@ -520,19 +520,19 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_sp_buttons", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_sp_buttons", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_sp_links", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_sp_links", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_sp_links", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_sp_links", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="PayPal Specific Post/Page Access Links">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-sp-links-section">' . "\n";
 								echo '<h3>Specific Post/Page Access Link Generator (for Customer Service)</h3>' . "\n";
 								echo '<p>s2Member automatically generates Specific Post/Page Access Links for your Customers after checkout, and also sends them a link in a Confirmation Email. However, if you ever need to deal with a Customer Service issue that requires a new Specific Post/Page Access Link to be created manually, you can use this tool for that.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_sp_links", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_sp_links", get_defined_vars ());
 
 								echo '<table class="form-table">' . "\n";
 								echo '<tbody>' . "\n";
@@ -571,19 +571,19 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_sp_links", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_sp_links", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_shortcode_attrs", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_display_shortcode_attrs", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_shortcode_attrs", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_shortcode_attrs", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Shortcode Attributes (Explained)">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-shortcode-attrs-section">' . "\n";
 								echo '<h3>Shortcode Attributes (Explained In Full Detail)</h3>' . "\n";
 								echo '<p>When you generate a Button Code, s2Member will make a <a href="http://codex.wordpress.org/Shortcode_API#Overview" target="_blank" rel="external">Shortcode</a> available to you. Like most Shortcodes for WordPress, s2Member reads Attributes in your Shortcode. These Attributes will be pre-configured by one of s2Member\'s Button Generators automatically; so there really is nothing more you need to do. However, many site owners like to know exactly how these Shortcode Attributes work. Below, is a brief overview of each possible Shortcode Attribute.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_shortcode_attrs", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_shortcode_attrs", get_defined_vars ());
 
 								echo '<table class="form-table" style="margin-top:0;">' . "\n";
 								echo '<tbody>' . "\n";
@@ -617,7 +617,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<li><code>ta="0.00"</code> Trial Amount. Only valid w/ Membership Level Access. Must be <code>0</code> when <code>rt="L"</code> or when <code>rr="BN"</code>.</li>' . "\n";
 								echo '<li><code>tp="0"</code> Trial Period. Only valid w/ Membership Level Access. Must be <code>0</code> when <code>rt="L"</code> or when <code>rr="BN"</code>.</li>' . "\n";
 								echo '<li><code>tt="D"</code> Trial Term. Only valid w/ Membership Level Access. Possible values: <code>D</code> = Days, <code>W</code> = Weeks, <code>M</code> = Months, <code>Y</code> = Years.</li>' . "\n";
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_shortcode_attrs_lis", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_shortcode_attrs_lis", get_defined_vars ());
 								echo '</ul>' . "\n";
 								echo '</td>' . "\n";
 
@@ -628,10 +628,10 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_shortcode_attrs", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_after_shortcode_attrs", get_defined_vars ());
 							}
 
-						do_action ("ws_plugin__s2member_during_paypal_buttons_page_after_left_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_paypal_buttons_page_after_left_sections", get_defined_vars ());
 
 						echo '</td>' . "\n";
 

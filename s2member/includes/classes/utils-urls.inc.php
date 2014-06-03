@@ -33,7 +33,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @return str Full URL to `/wp-signup.php`.
+				* @return string Full URL to `/wp-signup.php`.
 				*/
 				public static function wp_signup_url()
 					{
@@ -45,7 +45,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @return str Full URL to `/wp-login.php?action=register`.
+				* @return string Full URL to `/wp-login.php?action=register`.
 				*/
 				public static function wp_register_url()
 					{
@@ -74,7 +74,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*
 				* @attaches-to ``add_filter("ws_plugin__s2member_content_redirect_status");``
 				*
-				* @param int|str $status A numeric redirection status code.
+				* @param int|string $status A numeric redirection status code.
 				* @return int|str A numeric status redirection code, possibly modified to a value of `302`.
 				*
 				* @see http://en.wikipedia.org/wiki/Web_browser_engine
@@ -97,8 +97,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str $url_uri_query A full URL, a partial URI, or just the query string.
-				* @return str A full URL, a partial URI, or just the query string; after having been encoded by this routine.
+				* @param string $url_uri_query A full URL, a partial URI, or just the query string.
+				* @return string A full URL, a partial URI, or just the query string; after having been encoded by this routine.
 				*/
 				public static function e_amps($url_uri_query = FALSE)
 					{
@@ -110,8 +110,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str $url_uri_query A full URL, a partial URI, or just the query string.
-				* @return str A full URL, a partial URI, or just the query string; after having been normalized by this routine.
+				* @param string $url_uri_query A full URL, a partial URI, or just the query string.
+				* @return string A full URL, a partial URI, or just the query string; after having been normalized by this routine.
 				*/
 				public static function n_amps($url_uri_query = FALSE)
 					{
@@ -127,8 +127,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $url_uri Either a full URL, or a partial URI.
-				* @return str A valid URI, starting with `/` on success, else an empty string.
+				* @param string $url_uri Either a full URL, or a partial URI.
+				* @return string A valid URI, starting with `/` on success, else an empty string.
 				*/
 				public static function parse_uri($url_uri = FALSE)
 					{
@@ -149,7 +149,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 111017
 				*
-				* @param str $url_uri Either a full URL, or a partial URI to parse.
+				* @param string $url_uri Either a full URL, or a partial URI to parse.
 				* @param bool|int $component Optional. See PHP documentation on ``parse_url()`` function.
 				* @param bool $clean_path Defaults to true. s2Member will cleanup any return array `path`.
 				* @return str|array|bool The return value from PHP's ``parse_url()`` function.
@@ -181,8 +181,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $url Full URL with possible query string parameters.
-				* @param str|array $post_vars Optional. Either a string of POST vars, or an array.
+				* @param string $url Full URL with possible query string parameters.
+				* @param string|array $post_vars Optional. Either a string of POST vars, or an array.
 				* @param array $args Optional. An array of additional arguments used by ``wp_remote_request()``.
 				* @param bool $return_array Optional. If true, instead of a string, we return an array with elements:
 				* 	`code` *(http response code)*, `message` *(http response message)*, `headers` *(an array of lowercase headers)*, `body` *(the response body string)*, `response` *(full response array)*.
@@ -208,7 +208,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_before_wp_remote_request", get_defined_vars());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								unset($__refs, $__v);
 
 								$response = /* Process remote request via ``wp_remote_request()``. */ wp_remote_request($url, $args);
 
@@ -239,8 +239,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 111002
 				*
-				* @param str $url A full/long URL to be shortened.
-				* @param str $api_sp Optional. A specific URL shortening API to use. Defaults to that which is configured in the s2Member Dashboard. Normally `tiny_url`, by default.
+				* @param string $url A full/long URL to be shortened.
+				* @param string $api_sp Optional. A specific URL shortening API to use. Defaults to that which is configured in the s2Member Dashboard. Normally `tiny_url`, by default.
 				* @param bool $try_backups Defaults to true. If a failure occurs with the first API, we'll try others until we have success.
 				* @return str|bool The shortened URL on success, else false on failure.
 				*/
@@ -282,9 +282,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str $url_uri_query A full URL, a partial URI, or just the query string; to remove s2Member-generated signatures from.
-				* @param str $sig_var Optional. The name of the s2Member-generated signature variable. Defaults to `_s2member_sig`.
-				* @return str A full URL, a partial URI, or just the query string; without any s2Member-generated signatures.
+				* @param string $url_uri_query A full URL, a partial URI, or just the query string; to remove s2Member-generated signatures from.
+				* @param string $sig_var Optional. The name of the s2Member-generated signature variable. Defaults to `_s2member_sig`.
+				* @return string A full URL, a partial URI, or just the query string; without any s2Member-generated signatures.
 				*/
 				public static function remove_s2member_sigs($url_uri_query = FALSE, $sig_var = FALSE)
 					{
@@ -300,9 +300,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str $url_uri_query A full URL, a partial URI, or just a query string; to append the s2Member-generated signature onto.
-				* @param str $sig_var Optional. The name of the s2Member-generated signature variable. Defaults to `_s2member_sig`.
-				* @return str A full URL, a partial URI, or just a query string; with an s2Member-generated signature.
+				* @param string $url_uri_query A full URL, a partial URI, or just a query string; to append the s2Member-generated signature onto.
+				* @param string $sig_var Optional. The name of the s2Member-generated signature variable. Defaults to `_s2member_sig`.
+				* @return string A full URL, a partial URI, or just a query string; with an s2Member-generated signature.
 				*/
 				public static function add_s2member_sig($url_uri_query = FALSE, $sig_var = FALSE)
 					{
@@ -333,10 +333,10 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @package s2Member\Utilities
 				* @since 111106
 				*
-				* @param str $url_uri_query A full URL, a partial URI, or just a query string. Must have an s2Member-generated signature to validate.
+				* @param string $url_uri_query A full URL, a partial URI, or just a query string. Must have an s2Member-generated signature to validate.
 				* @param bool $check_time Optional. Defaults to false. If true, s2Member will also check if the signature has expired, based on ``$exp_secs``.
-				* @param str|int $exp_secs Optional. Defaults to (int)10. If ``$check_time`` is true, s2Member will check if the signature has expired, based on ``$exp_secs``.
-				* @param str $sig_var Optional. The name of the s2Member-generated signature variable. Defaults to `_s2member_sig`.
+				* @param string|int $exp_secs Optional. Defaults to (int)10. If ``$check_time`` is true, s2Member will check if the signature has expired, based on ``$exp_secs``.
+				* @param string $sig_var Optional. The name of the s2Member-generated signature variable. Defaults to `_s2member_sig`.
 				* @return bool True if the s2Member-generated signature is OK, else false.
 				*/
 				public static function s2member_sig_ok($url_uri_query = FALSE, $check_time = FALSE, $exp_secs = FALSE, $sig_var = FALSE)

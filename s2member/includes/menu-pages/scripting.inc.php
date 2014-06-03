@@ -44,28 +44,28 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 						echo '<tr class="ws-menu-page-table-tr">' . "\n";
 						echo '<td class="ws-menu-page-table-l">' . "\n";
 
-						do_action ("ws_plugin__s2member_during_scripting_page_before_left_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_scripting_page_before_left_sections", get_defined_vars ());
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_easy_way", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_easy_way", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_easy_way", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_easy_way", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="The Extremely Easy Way">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-api-easy-way-section">' . "\n";
 								echo '<h3>The Extremely Easy Way (no scripting required)</h3>' . "\n";
 								echo '<p>From your s2Member Restriction Options panel, you may restrict access to certain Posts, Pages, Tags, Categories, and/or URIs based on a Member\'s Level. The s2Member Restriction Options panel makes it easy for you. All you do is type in the basics of what you want to restrict access to, and those sections of your site will be off limits to non-Members. That being said, there are times when you might need to have greater control over which portions of your site can be viewed by non-Members, or Members at different Levels; with different Capabilities. This is where API Scripting with Conditionals comes in.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_easy_way", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_easy_way", get_defined_vars ());
 								echo '</div>' . "\n";
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_easy_way", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_easy_way", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_simple_way", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_simple_way", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_simple_way", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_simple_way", get_defined_vars ());
 
 								if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 									{
@@ -75,7 +75,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<h3>Simple Conditionals (via WordPress Shortcodes)</h3>' . "\n";
 										echo '<p>In an effort to give you even more control over access restrictions, s2Member makes Simple Conditionals available to you from within WordPress, using Shortcodes that are fully compatible with both the Visual Editor, and also the HTML Tab in WordPress. In this section, we\'ll demonstrate several functions that are possible using Shortcodes: <strong><code>is_user_logged_in()</code></strong>, <strong><code>is_user_not_logged_in()</code></strong>, <strong><code>user_is(user_id, role)</code></strong>, <strong><code>user_is_not(user_id, role)</code></strong>, <strong><code>user_can(user_id, capability)</code></strong>, <strong><code>user_cannot(user_id, capability)</code></strong>, <strong><code>current_user_is(role)</code></strong>, <strong><code>current_user_is_not(role)</code></strong>, <strong><code>current_user_can(capability)</code></strong>, <strong><code>current_user_cannot(capability)</code></strong>. To make use of these functions, please follow our code samples below. Using Shortcodes, it\'s easy to build Simple Conditionals within your content; based on a Member\'s Level, or even based on Custom Capabilities. s2Member\'s Shortcodes can be used inside a Post/Page, and also inside Text Widgets.</p>' . "\n";
 										echo '<p><em>There are <strong>two different Shortcodes</strong> being demonstrated here:<br /><strong>1. <code>s2If</code></strong> (for testing simple conditional expressions).<br /><strong>2. <code>s2Get</code></strong> (to get an API Constant value, a Custom Field, or meta key).</em></p>' . "\n";
-										do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_simple_way_farm", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_simple_way_farm", get_defined_vars ());
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -154,7 +154,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<p>In an effort to give you even more control over access restrictions, s2Member makes Simple Conditionals available to you from within WordPress, using Shortcodes that are fully compatible with both the Visual Editor, and also the HTML Tab in WordPress. In this section, we\'ll demonstrate several functions that are possible using Shortcodes: <strong><code>is_user_logged_in()</code></strong>, <strong><code>is_user_not_logged_in()</code></strong>, <strong><code>user_is(user_id, role)</code></strong>, <strong><code>user_is_not(user_id, role)</code></strong>, <strong><code>user_can(user_id, capability)</code></strong>, <strong><code>user_cannot(user_id, capability)</code></strong>, <strong><code>current_user_is(role)</code></strong>, <strong><code>current_user_is_not(role)</code></strong>, <strong><code>current_user_can(capability)</code></strong>, <strong><code>current_user_cannot(capability)</code></strong>, <strong><code>current_user_is_for_blog(blog_id,role)</code></strong>, <strong><code>current_user_is_not_for_blog(blog_id,role)</code></strong>, <strong><code>current_user_can_for_blog(blog_id,capability)</code></strong>, <strong><code>current_user_cannot_for_blog(blog_id,capability)</code></strong>. To make use of these functions, please follow our code samples below. Using Shortcodes, it\'s easy to build Simple Conditionals within your content; based on a Member\'s Level, or even based on Custom Capabilities. s2Member\'s Shortcodes can be used inside a Post/Page, and also inside Text Widgets.</p>' . "\n";
 										echo '<p><em>There are <strong>two different Shortcodes</strong> being demonstrated here:<br /><strong>1. <code>s2If</code></strong> (for testing simple conditional expressions).<br /><strong>2. <code>s2Get</code></strong> (to get an API Constant value, a Custom Field, or meta key).</em></p>' . "\n";
 										echo '<p>Please see this KB article to learn more: <a href="http://www.s2member.com/kb/simple-shortcode-conditionals/" target="_blank" rel="external">s2Member Simple Shortcode Conditionals</a></p>' . "\n";
-										do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_simple_way", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_simple_way", get_defined_vars ());
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -230,12 +230,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '</div>' . "\n";
 									}
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_simple_way", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_simple_way", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_advanced_way", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_advanced_way", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_advanced_way", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_advanced_way", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Advanced/PHP Conditionals">' . "\n";
 
@@ -243,7 +243,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<h3>The Advanced Way (some PHP scripting required)</h3>' . "\n";
 								echo '<p>In an effort to give you even more control over access restrictions, s2Member makes some PHP functions, and also some PHP Constants, available to you from within WordPress. In this section, we\'ll demonstrate several functions: <strong><code>is_user_logged_in()</code></strong>, <strong><code>is_user_not_logged_in()</code></strong>, <strong><code>user_is(user_id, role)</code></strong>, <strong><code>user_is_not(user_id, role)</code></strong>, <strong><code>user_can(user_id, capability)</code></strong>, <strong><code>user_cannot(user_id, capability)</code></strong>, <strong><code>current_user_is("role")</code></strong>, <strong><code>current_user_is_not("role")</code></strong>, <strong><code>current_user_can("capability")</code></strong>, <strong><code>current_user_cannot("capability")</code></strong>, <strong><code>current_user_is_for_blog($blog_id,"role")</code></strong>, <strong><code>current_user_is_not_for_blog($blog_id,"role")</code></strong>, <strong><code>current_user_can_for_blog($blog_id,"capability")</code></strong>, &amp; <strong><code>current_user_cannot_for_blog($blog_id,"capability")</code></strong>. To make use of these functions, please follow our PHP code samples below. Using PHP, is a very powerful way to build Advanced Conditionals within your content; based on a Member\'s Level, Custom Capabilities, and/or other factors. In order to use PHP scripting inside your Posts/Pages, you\'ll need to install this handy plugin (<a href="http://wordpress.org/extend/plugins/ezphp/" target="_blank" rel="external">ezPHP</a>).</p>' . "\n";
 								echo '<p>See also this related KB article: <a href="http://www.s2member.com/kb/simple-shortcode-conditionals/" target="_blank" rel="external">s2Member Simple Shortcode Conditionals</a></p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_advanced_way", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_advanced_way", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -299,12 +299,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_advanced_way", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_advanced_way", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_queries", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_queries", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_queries", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_queries", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Advanced/PHP Query Conditionals">' . "\n";
 
@@ -312,7 +312,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<h3>Advanced Query Conditionals (some PHP scripting required)</h3>' . "\n";
 								echo '<p>s2Member provides several built-in API Functions that are tailored to meet the needs of developers integrating s2Member into their themes. Such as: <strong><code>is_protected_by_s2member($id, "[category,tag,post,page,singular,uri]")</code></strong>, <strong><code>is_permitted_by_s2member($id, "[category,tag,post,page,singular,uri]")</code></strong>, <strong><code>is_category_protected_by_s2member($cat_id)</code></strong>, <strong><code>is_category_permitted_by_s2member($cat_id)</code></strong>, <strong><code>is_tag_protected_by_s2member($tag_id [slug or tag name])</code></strong>, <strong><code>is_tag_permitted_by_s2member($tag_id [slug or tag name])</code></strong>, <strong><code>is_post_protected_by_s2member($post_id)</code></strong>, <strong><code>is_post_permitted_by_s2member($post_id)</code></strong>, <strong><code>is_page_protected_by_s2member($page_id)</code></strong>, <strong><code>is_page_permitted_by_s2member($page_id)</code></strong>, <strong><code>is_uri_protected_by_s2member($uri [or full url])</code></strong>, <strong><code>is_uri_permitted_by_s2member($uri [ or full url])</code></strong>.</p>' . "\n";
 								echo '<p>In addition, there are two special functions that can be applied by theme authors before making custom queries: <strong><code>attach_s2member_query_filters()</code></strong>, <strong><code>detach_s2member_query_filters()</code></strong>. These can be used before and after a call to <strong><code>query_posts()</code></strong> for example. s2Member will automatically filter all protected content (not available to the current User/Member).</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_queries", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_queries", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -352,12 +352,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_queries", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_queries", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_custom_capabilities", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_custom_capabilities", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_custom_capabilities", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_custom_capabilities", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Custom Capabilities (Packages)">' . "\n";
 
@@ -380,7 +380,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<p><strong>*New*</strong> In the latest versions of s2Member, you can automatically require certain Custom Capabilities on a per Post/Page basis. So now, s2Member <em>(if you prefer)</em> CAN handle Custom Capabilities for you automatically! Whenever you edit a Post/Page <em>(i.e. there is a Meta Box for s2Member in your Post/Page editing station)</em>... you can tell s2Member to require certain Custom Capabilities that you type in, using comma-delimited format. In other words, you will need to type in some of the trigger words that you used whenever you created your Payment Buttons/Forms. This way paying Members will have the Custom Capabilities to view different kinds of content that you offer.</p>' . "\n";
 								echo '<p><strong>*New*</strong> By default, a Checkout Button or Form generated by s2Member is designed to (Add) Custom Capabilities to any that may or may not already exist for a particular User/Member. However, starting with s2Member v110815+, you can tell s2Member to (Remove All) Custom Capabilities, and then (Add) only the new ones that you specify. This is accomplished on a per Form/Button basis by preceding your comma-delimited list of Custom Capabilities with `-all`. For further details on this topic, click the <a href="#" onclick="alert(\'*ADVANCED TIP: You can specifiy a list of Custom Capabilities that will be (Added) with this purchase. Or, you could tell s2Member to (Remove All) Custom Capabilities that may or may not already exist for a particular Member, and (Add) only the new ones that you specify. To do this, just start your list of Custom Capabilities with `-all`.\\n\\nSo instead of just (Adding) Custom Capabilities:\\nmusic,videos,archives,gifts\\n\\nYou could (Remove All) that may already exist, and then (Add) new ones:\\n-all,calendar,forums,tools\\n\\nOr to just (Remove All) and (Add) nothing:\\n-all\'); return false;" tabindex="-1">[?]</a> icon next to the Custom Capabilities field in any Button/Form Generator supplied by s2Member.</p>' . "\n";
 								echo '<p><strong>*New*</strong> Independent Custom Capabilities. You can now sell one or more Custom Capabilities using Buy Now functionality, to "existing" Users/Members, regardless of which Membership Level they have on your site <em>(i.e. you could even sell Independent Custom Capabilities to Users at Membership Level #0, normally referred to as Free Subscribers, if you like)</em>. So this is quite flexible. For further details, please check your Dashboard, under: <code>s2Member -› PayPal Buttons -› Capability (Buy Now) Buttons</code>.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_custom_capabilities", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_custom_capabilities", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -399,12 +399,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_custom_capabilities", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_custom_capabilities", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_custom_capability_files", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_custom_capability_files", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_custom_capability_files", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_custom_capability_files", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Custom Capability &amp; Member Level Files">' . "\n";
 
@@ -412,7 +412,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<h3>Restricting Files, Based On Custom Capabilities</h3>' . "\n";
 								echo '<p>If you\'re NOT familiar with Custom Capabilities yet, please read the section above, titled: <code>Custom Capability Packages</code>, and also see: <code>s2Member -› Download Options</code>, both as primers; BEFORE you read this section. Once you understand the basic concept of Custom Capabilities &amp; Protected File Downloads, you\'ll see that (by default) s2Member does NOT handle File Download Protection with respect to Custom Capabilities. That\'s where Custom Capability Sub-directories come in.</p>' . "\n";
 								echo '<p>You can create Custom Capability Sub-directories under: <code>' . esc_html (c_ws_plugin__s2member_utils_dirs::doc_root_path ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '</code>. For instance, if you have a Custom Capability <code>music</code>, you can place protected files that should ONLY be accessible to Members with <code>access_s2member_ccap_music</code>, inside: <code>/' . esc_html (c_ws_plugin__s2member_utils_dirs::basename_dir_app_data ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])) . '/access-s2member-ccap-music/</code>. Some examples are provided below.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_custom_capability_files", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_custom_capability_files", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -440,19 +440,19 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_custom_capability_files", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_custom_capability_files", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_advanced_dripping", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_advanced_dripping", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_advanced_dripping", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_advanced_dripping", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="s2Member Content Dripping">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-api-advanced-dripping-section">' . "\n";
 								echo '<h3>Dripping Content (some PHP scripting may be required)</h3>' . "\n";
 								echo '<p>Content Dripping is the gradual, pre-scheduled release of premium website content to paying Members. This has become increasingly popular, because it allows older Members; those who have paid you more, due to recurring charges; to acquire access to more content progressively; based on their original paid registration time. It also gives you (as the site owner), the ability to launch multiple membership site portals, operating on autopilot, without any direct day-to-day involvement in a content release process. <strong>The <a href="http://www.s2member.com/kb/s2drip-shortcode/" target="_blank" rel="external"><code>[s2Drip]</code> shortcode</a> is the easiest way to drip content.</strong> The other methods (shown below) require some PHP scripting. In order to use PHP scripting inside your Posts/Pages, you\'ll need to install this handy plugin (<a href="http://wordpress.org/extend/plugins/ezphp/" target="_blank" rel="external">ezPHP</a>).</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_advanced_dripping", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_advanced_dripping", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -484,12 +484,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_advanced_dripping", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_advanced_dripping", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_profile_modifications", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_profile_modifications", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_profile_modifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_profile_modifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Member Profile Modifications">' . "\n";
 
@@ -498,7 +498,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<p>s2Member can be configured to redirect Members away from the <a href="' . esc_attr (admin_url ("/profile.php")) . '" target="_blank" rel="external">default Profile Editing Panel</a> that is built into WordPress. When/if a Member attempts to access the default Profile Editing Panel, they\'ll instead, be redirected to the Login Welcome Page that you\'ve configured through s2Member. <strong>Why would I redirect?</strong> Unless you\'ve made some drastic modifications to your WordPress installation, the default Profile Editing Panel that ships with WordPress, is NOT really suited for public access, even by a Member. See: <code>s2Member -› General Options -› Profile Modifications</code>.</p>' . "\n";
 								echo '<p>So instead of using this default Profile Editing Panel; s2Member creates an added layer of functionality, on top of WordPress. It does this by providing you (as the site owner), with a special Shortcode: <code>[s2Member-Profile /]</code> that you can place into your Login Welcome Page, or any Post/Page for that matter (even into a Text Widget). This Shortcode produces an Inline Profile Editing Form that supports all aspects of s2Member, including Password changes; and any Custom Registration/Profile Fields that you\'ve configured with s2Member.</p>' . "\n";
 								echo '<p>Alternatively, s2Member also gives you the ability to send your Members to a <a href="' . esc_attr (site_url ("/?s2member_profile=1")) . '" target="_blank" rel="external">special Stand-Alone version</a>. This Stand-Alone version has been designed (with a bare-bones format), intentionally. This makes it possible for you to <a href="#" onclick="if(!window.open(\'' . site_url ("/?s2member_profile=1") . '\', \'_popup\', \'width=600,height=400,left=100,screenX=100,top=100,screenY=100,location=0,menubar=0,toolbar=0,status=0,scrollbars=1,resizable=1\')) alert(\'Please disable popup blockers and try again!\'); return false;" rel="external">open it up in a popup window</a>, or embed it into your Login Welcome Page using an IFRAME. Code samples are provided below.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_profile_modifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_profile_modifications", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -517,12 +517,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_profile_modifications", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_profile_modifications", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_constants", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_constants", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_constants", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_constants", get_defined_vars ());
 
 								if (is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ())
 									{
@@ -532,7 +532,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<h3>Using s2Get w/ s2Member API Constants</h3>' . "\n";
 										echo '<p>A Constant, is an identifier (a name) for a simple value. Below is a comprehensive list that includes all of the defined Constants available to you. We recommend using some of these Constants in the creation of your Login Welcome Page; which is described in the s2Member General Options Panel. These are NOT required, but you can get pretty creative with your Login Welcome Page if you know how to use the <code>[s2Get constant="" /]</code> Shortcode for WordPress.</p>' . "\n";
 										echo '<p>For example, you might use <code>[s2Get constant="S2MEMBER_CURRENT_USER_ACCESS_LABEL" /]</code> to display the type of Membership a Customer has.</em></p>' . "\n";
-										do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_constants_farm", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_constants_farm", get_defined_vars ());
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -736,7 +736,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_list_of_api_constants_farm", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_list_of_api_constants_farm", get_defined_vars ());
 
 										echo '<p><strong>S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON0</strong> ... This auto-fills the <code>on0</code> value in PayPal Button Codes. If a Button Code is presented to a logged-in Member, this will auto-fill the value for the <code>on0</code> input variable, with the string: <code>"Referencing Customer ID"</code>. Otherwise, it will be set to a default value of: <code>"Originating Domain"</code>.</p>' . "\n";
 										echo '<p><strong>S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS0</strong> ... This auto-fills the <code>os0</code> value in PayPal Button Codes. If a Button Code is presented to a logged-in Member, this will auto-fill the value for the <code>os0</code> input variable, with the value of <code>S2MEMBER_CURRENT_USER_SUBSCR_OR_WP_ID</code>. Otherwise, it will be set to a default value of <code>$_SERVER["HTTP_HOST"]</code> <em>(the originating domain name)</em>.</p>' . "\n";
@@ -758,7 +758,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '<h3>You Have Access To PHP Constants (some PHP scripting required)</h3>' . "\n";
 										echo '<p>A Constant, is an identifier <em>(i.e. a name)</em> for a simple value in PHP scripting. Below is a comprehensive list that includes all of the PHP defined Constants available to you. All of these Constants are also available through JavaScript as Global Variables. Example code has been provided in the documentation below. If you\'re a web developer, we suggest using some of these Constants in the creation of your Login Welcome Page; which is described in the s2Member General Options Panel. These are NOT required, but you can get pretty creative with the Login Welcome Page, if you know a little PHP.</p>' . "\n";
 										echo '<p>If you don\'t know any PHP, you can use the <code>[s2Get constant="NAME_OF_CONSTANT" /]</code> Shortcode for WordPress. For example, you might use <code>[s2Get constant="S2MEMBER_CURRENT_USER_ACCESS_LABEL" /]</code> to display the type of Membership a Customer has. The <code>[s2Get constant="" /]</code> Shortcode will work for any of the API Constants documented below.</p>' . "\n";
-										do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_constants", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_constants", get_defined_vars ());
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -1029,7 +1029,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_list_of_api_constants", get_defined_vars ());
+										do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_list_of_api_constants", get_defined_vars ());
 
 										echo '<p><strong>S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON0</strong> ... This auto-fills the <code>on0</code> value in PayPal Button Codes. If a Button Code is presented to a logged-in Member, this will auto-fill the value for the <code>on0</code> input variable, with the string: <code>"Referencing Customer ID"</code>. Otherwise, it will be set to a default value of: <code>"Originating Domain"</code>.</p>' . "\n";
 										echo '<p><strong>S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS0</strong> ... This auto-fills the <code>os0</code> value in PayPal Button Codes. If a Button Code is presented to a logged-in Member, this will auto-fill the value for the <code>os0</code> input variable, with the value of <code>S2MEMBER_CURRENT_USER_SUBSCR_OR_WP_ID</code>. Otherwise, it will be set to a default value of <code>$_SERVER["HTTP_HOST"]</code> <em>(the originating domain name)</em>.</p>' . "\n";
@@ -1046,29 +1046,29 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 										echo '</div>' . "\n";
 									}
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_constants", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_constants", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_js_globals", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_js_globals", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_js_globals", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_js_globals", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="s2Member JS/API Globals">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-api-js-globals-section">' . "\n";
 								echo '<h3>You Also Have Access To JS Globals (some JavaScript knowledge required)</h3>' . "\n";
 								echo '<p>Unless noted otherwise, all of the PHP Constants, are also available through JavaScript, as Global Variables <em>(with the exact same names/types as their PHP counterparts)</em>. s2Member automatically loads it\'s compressed JavaScript API into your theme for WordPress. s2Member is very intelligent about the way it loads <em>(and maintains)</em> it\'s JavaScript API. You can rely on the JavaScript Globals, the same way you rely on PHP Constants. The only exceptions are related to security. Variables that include private server-side details, like Identity Tokens and other API service credentials, will be excluded automatically.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_js_globals", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_js_globals", get_defined_vars ());
 								echo '</div>' . "\n";
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_js_globals", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_js_globals", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_mop_vars", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_mop_vars", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_mop_vars", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_mop_vars", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Membership Options Page / Variables">' . "\n";
 
@@ -1076,7 +1076,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<h3>Membership Options Page Variables (some scripting required)</h3>' . "\n";
 								echo '<p>At the core of s2Member, is it\'s ability to protect content <em>(i.e. Posts, Pages, Tags, Categories, URI word fragments, etc)</em>. Whenever a public User, or even an existing Member attempts to access an area of your site that is unavailable to them; either because they are not logged-in, not a paying Member at all; or maybe they are logged-in, but they don\'t have access to content you\'ve protected at a higher Membership Level; s2Member will always redirect these unauthenticated requests to your Membership Options Page.</p>' . "\n";
 								echo '<p>So your Membership Options Page is a key element of your site. It serves as the focal point of your s2Member installation. Understanding this, you can see it becomes important for s2Member to provide information about what the User/Member was attempting to access <em>(before they were redirected to the Membership Options Page)</em>. This is where s2Member\'s MOP Vars come in <em>(i.e. Membership Options Page Variables)</em>. Whenever s2Member redirects a User/Member to your Membership Options Page, it will include these important MOP Variables in the query string of the URL. These Variables can be used to provide more informative messages; or even to provide a different set of Membership Options <em>(e.g. Payment Buttons)</em>, based on what a User/Member was attempting to access.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_mop_vars", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_mop_vars", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -1106,12 +1106,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_mop_vars", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_mop_vars", get_defined_vars ());
 							}
 
-						if (apply_filters ("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_hooks", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_hooks", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_hooks", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_hooks", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-group" title="Hooks/Filters (For Developers)">' . "\n";
 
@@ -1119,7 +1119,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<h3>WP Hooks For Theme/Plugin Developers (scripting required)</h3>' . "\n";
 								echo '<p>In addition to its API Constants, s2Member also makes several Hooks/Filters available throughout its framework. This makes it possible to build onto <em>(or even modify)</em> s2Member in lots of different ways. If you need to add custom processing routines, modify the behavior of existing processing routines, or tinker with things otherwise; you should use API Hooks/Filters. API Hooks &amp; Filters, give you the ability to "hook into", and/or "filter" processing routines, with files/functions of your own; instead of editing the s2Member plugin files directly. If you don\'t use a Hook/Filter, and instead, you edit the plugin files for s2Member, you\'ll have to merge all of your changes every time a new version of s2Member is released. If you create custom processing routines, you could place those routines into a PHP file here: <code>/wp-content/mu-plugins/s2-hacks.php</code>. If you don\'t have an <code>/mu-plugins/</code> directory, please create one. These are <em>(mu)</em> <a href="http://codex.wordpress.org/Must_Use_Plugins" target="_blank" rel="external">MUST USE plugins</a>, which are loaded into WordPress automatically; that\'s what you want!</p>' . "\n";
 								echo '<p><strong>Attn Developers:</strong> There are simply too many Hooks/Filters spread throughout s2Member\'s framework <em>(over 1000 total)</em>. Rather than documenting each Hook/Filter, it is easier to browse through the files inside: <code>/s2member/includes/classes/</code>. Inspecting Hooks/Filters in this way, also leads you to a better understanding of how they work. One way to save time, is to run a search for <code>do_action</code> and/or <code>apply_filters</code>. If you\'re new to the concept of Hooks/Filters for WordPress/s2Member, we suggest <a href="http://www.s2member.com/codex/#src_doc_overview_description" target="_blank" rel="external">this article</a> as a primer. The <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a> also contains information about all Hooks/Filters that come with s2Member.</p>' . "\n";
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_hooks", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_hooks", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -1129,10 +1129,10 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_hooks", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_hooks", get_defined_vars ());
 							}
 
-						do_action ("ws_plugin__s2member_during_scripting_page_after_left_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_scripting_page_after_left_sections", get_defined_vars ());
 
 						echo '</td>' . "\n";
 

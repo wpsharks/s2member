@@ -42,7 +42,7 @@ if(!class_exists("c_ws_plugin__s2member_mo_page"))
 			 */
 			public static function membership_options_page()
 				{
-					if(!empty ($_GET["s2member_membership_options_page"]))
+					if(!empty($_GET["s2member_membership_options_page"]))
 						{
 							return c_ws_plugin__s2member_mo_page_in::membership_options_page();
 						}
@@ -54,12 +54,12 @@ if(!class_exists("c_ws_plugin__s2member_mo_page"))
 			 * @package s2Member\Membership_Options_Page
 			 * @since 111101
 			 *
-			 * @param str     $seeking_type Seeking content type. One of: `post|page|catg|ptag|file|ruri`.
-			 * @param str|int $seeking_type_value Seeking content type data. String, or a Post/Page ID.
-			 * @param str     $req_type Access requirement type. One of these values: `level|ccap|sp`.
-			 * @param str|int $req_type_value Access requirement. String, or a Post/Page ID.
-			 * @param str     $seeking_uri The full URI that access was attempted on.
-			 * @param str     $res_type Restriction type that's preventing access.
+			 * @param string     $seeking_type Seeking content type. One of: `post|page|catg|ptag|file|ruri`.
+			 * @param string|int $seeking_type_value Seeking content type data. String, or a Post/Page ID.
+			 * @param string     $req_type Access requirement type. One of these values: `level|ccap|sp`.
+			 * @param string|int $req_type_value Access requirement. String, or a Post/Page ID.
+			 * @param string     $seeking_uri The full URI that access was attempted on.
+			 * @param string     $res_type Restriction type that's preventing access.
 			 *   One of: `post|page|catg|ptag|file|ruri|ccap|sp|sys`.
 			 *   Defaults to ``$seeking_type``.
 			 *

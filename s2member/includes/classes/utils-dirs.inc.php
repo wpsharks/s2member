@@ -33,12 +33,12 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @package s2Member\Utilities
 				* @since 111017
 				*
-				* @param str $path Directory or file path.
-				* @return str Directory or file path, after having been normalized by this routine.
+				* @param string $path Directory or file path.
+				* @return string Directory or file path, after having been normalized by this routine.
 				*/
 				public static function n_dir_seps ($path = FALSE)
 					{
-						return rtrim (preg_replace ("/\/+/", "/", str_replace (array (DIRECTORY_SEPARATOR, "\\", "/"), "/", (string)$path)), "/");
+						return rtrim (preg_replace ("/\/+/", "/", str_replace (array(DIRECTORY_SEPARATOR, "\\", "/"), "/", (string)$path)), "/");
 					}
 				/**
 				* Strips a trailing `/app_data/` sub-directory.
@@ -46,8 +46,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $path Directory or file path.
-				* @return str Directory or file path without `/app_data/`.
+				* @param string $path Directory or file path.
+				* @return string Directory or file path without `/app_data/`.
 				*/
 				public static function strip_dir_app_data ($path = FALSE)
 					{
@@ -59,8 +59,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @package s2Member\Utilities
 				* @since 110815
 				*
-				* @param str $path Directory or file path.
-				* @return str Basename; including a possible `/app_data/` directory.
+				* @param string $path Directory or file path.
+				* @return string Basename; including a possible `/app_data/` directory.
 				*/
 				public static function basename_dir_app_data ($path = FALSE)
 					{
@@ -74,8 +74,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @package s2Member\Utilities
 				* @since 110815
 				*
-				* @param str $path Directory or file path.
-				* @return str Shorther path, from document root.
+				* @param string $path Directory or file path.
+				* @return string Shorther path, from document root.
 				*/
 				public static function doc_root_path ($path = FALSE)
 					{
@@ -89,15 +89,15 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @package s2Member\Utilities
 				* @since 110815
 				*
-				* @param str $from The full directory path to calculate a relative path `from`.
-				* @param str $to The full directory or file path, which this routine will build a relative path `to`.
+				* @param string $from The full directory path to calculate a relative path `from`.
+				* @param string $to The full directory or file path, which this routine will build a relative path `to`.
 				* @param bool $try_realpaths Defaults to true. When true, try to acquire ``realpath()``, thereby resolving all relative paths and/or symlinks in ``$from`` and ``$to`` args.
 				* @param bool $use_win_diff_drive_jctn Defaults to true. When true, we'll work around issues with different drives on Windows by trying to create a directory junction.
-				* @return str String with the relative path to: ``$to``.
+				* @return string String with the relative path to: ``$to``.
 				*/
 				public static function rel_path ($from = FALSE, $to = FALSE, $try_realpaths = TRUE, $use_win_diff_drive_jctn = TRUE)
 					{
-						if ( /* Initialize/validate. */!($rel_path = array ()) && is_string ($from) && strlen ($from) && is_string ($to) && strlen ($to))
+						if ( /* Initialize/validate. */!($rel_path = array()) && is_string ($from) && strlen ($from) && is_string ($to) && strlen ($to))
 							{
 								$from = ($try_realpaths && ($_real_from = realpath ($from))) ? $_real_from : $from; // Try this?
 								$to = ($try_realpaths && ($_real_to = realpath ($to))) ? $_real_to : $to; // Try to find realpath?
@@ -133,7 +133,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 													}
 											}
 
-								unset ($_real_from, $_real_to, $_from_drive, $_to_drive, $_from_drive_jctn, $_sys_temp_dir_jctn, $_jctn, $_from_drive_jctn_exists, $_jctn_dir, $_m);
+								unset($_real_from, $_real_to, $_from_drive, $_to_drive, $_from_drive_jctn, $_sys_temp_dir_jctn, $_jctn, $_from_drive_jctn_exists, $_jctn_dir, $_m);
 
 								$rel_path = $to; // Re-initialize. Start ``$rel_path`` as the value of the ``$to`` array.
 
@@ -164,8 +164,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @package s2Member\Utilities
 				* @since 111013
 				*
-				* @param str $jctn Directory location of the Junction (i.e. the link).
-				* @param str $target Target directory that this Junction will connect to.
+				* @param string $jctn Directory location of the Junction (i.e. the link).
+				* @param string $target Target directory that this Junction will connect to.
 				* @return bool True if created successfully, or already exists, else false.
 				*/
 				public static function create_win_jctn ($jctn = FALSE, $target = FALSE)
@@ -192,7 +192,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @package s2Member\Utilities
 				* @since 111017
 				*
-				* @param str $fallback Defaults to true. If true, fallback on WordPress routine if not available, or if not writable.
+				* @param string $fallback Defaults to true. If true, fallback on WordPress routine if not available, or if not writable.
 				* @return str|bool Full string path to a writable temp directory, else false on failure.
 				*/
 				public static function get_temp_dir ($fallback = TRUE)

@@ -33,8 +33,8 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $code A string of data, possibly with embedded PHP code.
-				* @return str Output after PHP evaluation.
+				* @param string $code A string of data, possibly with embedded PHP code.
+				* @return string Output after PHP evaluation.
 				*/
 				public static function evl ($code = FALSE, $vars = array())
 					{
@@ -56,8 +56,8 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $function Name of a function to call upon.
-				* @return str Output after call to function.
+				* @param string $function Name of a function to call upon.
+				* @return string Output after call to function.
 				* 	Any output is buffered and returned.
 				*/
 				public static function get ($function = FALSE)
@@ -69,9 +69,9 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 							{
 								ob_start ();
 
-								if (is_array ($args) && !empty ($args))
+								if (is_array($args) && !empty($args))
 									{
-										$return = call_user_func_array ($function, $args);
+										$return = call_user_func_array($function, $args);
 									}
 								else // There are no additional arguments to pass.
 									{
@@ -91,7 +91,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @return str String with `[version]-[pro version]-[consolidated checksum]`.
+				* @return string String with `[version]-[pro version]-[consolidated checksum]`.
 				*/
 				public static function ver_checksum ()
 					{
@@ -107,7 +107,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				 * @package s2Member\Utilities
 				 * @since 130210
 				 *
-				 * @return str String with time representation (in UTC time).
+				 * @return string String with time representation (in UTC time).
 				 */
 				public static function time_details ()
 					{
@@ -122,7 +122,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @return str String with `PHP vX.XX :: WordPress vX.XX :: s2Member vX.XX :: s2Member Pro vX.XX`.
+				* @return string String with `PHP vX.XX :: WordPress vX.XX :: s2Member vX.XX :: s2Member Pro vX.XX`.
 				*/
 				public static function ver_details ()
 					{
@@ -137,10 +137,10 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $v A variation number to display. Defaults to `1`.
+				* @param string $v A variation number to display. Defaults to `1`.
 				* @param bool $no_cache Defaults to false. If true, the HTML markup will contain query string params that prevent caching.
 				* @param bool $display_on_failure. Defaults to false. True if we need to display the "NOT yet verified" version inside admin panels.
-				* @return str HTML markup for display of s2Member Security Badge.
+				* @return string HTML markup for display of s2Member Security Badge.
 				*/
 				public static function s_badge_gen ($v = "1", $no_cache = FALSE, $display_on_failure = FALSE)
 					{
@@ -152,7 +152,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 								$badge = preg_replace ("/%%display_on_failure%%/i", (($display_on_failure) ? "&amp;display_on_failure=1" : ""), $badge);
 							}
 
-						return (!empty ($badge)) ? $badge : ""; // Return Security Badge.
+						return (!empty($badge)) ? $badge : ""; // Return Security Badge.
 					}
 				/**
 				* Acquires information about memory usage.
@@ -160,7 +160,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				* @package s2Member\Utilities
 				* @since 110815
 				*
-				* @return str String with `Memory x MB :: Real Memory x MB :: Peak Memory x MB :: Real Peak Memory x MB`.
+				* @return string String with `Memory x MB :: Real Memory x MB :: Peak Memory x MB :: Real Peak Memory x MB`.
 				*/
 				public static function mem_details ()
 					{
@@ -183,7 +183,7 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				*/
 				public static function mms_options ()
 					{
-						return (is_multisite ()) ? (array)get_site_option ("ws_plugin__s2member_options") : array ();
+						return (is_multisite ()) ? (array)get_site_option ("ws_plugin__s2member_options") : array();
 					}
 				/**
 				* Builds an array of backtrace callers.
@@ -196,8 +196,8 @@ if (!class_exists ("c_ws_plugin__s2member_utilities"))
 				*/
 				public static function callers ($debug_backtrace = FALSE)
 					{
-						$callers = array (); // Initialize array.
-						foreach (($debug_backtrace = (is_array ($debug_backtrace)) ? $debug_backtrace : debug_backtrace ()) as $caller)
+						$callers = array(); // Initialize array.
+						foreach (($debug_backtrace = (is_array($debug_backtrace)) ? $debug_backtrace : debug_backtrace ()) as $caller)
 							if (isset ($caller["class"], $caller["function"]) || (!isset ($caller["class"]) && isset ($caller["function"])))
 								$callers[] = (isset ($caller["class"])) ? $caller["class"] . "::" . $caller["function"] : $caller["function"];
 

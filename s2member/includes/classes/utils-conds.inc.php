@@ -91,7 +91,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 				* @since 3.5
 				*
 				* @param array $cats An array of Category IDs.
-				* @param int|str $post_id A numeric WordPress Post ID.
+				* @param int|string $post_id A numeric WordPress Post ID.
 				* @return bool True if the Post is inside a desendant of at least one of the specified Categories; else false.
 				*/
 				public static function in_descendant_category($cats = FALSE, $post_id = FALSE)
@@ -110,7 +110,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $url_uri Either a full URL, or a partial URI to test.
+				* @param string $url_uri Either a full URL, or a partial URI to test.
 				* @return bool True if the URL or URI leads to the site root, else false.
 				*/
 				public static function is_site_root($url_uri = FALSE)

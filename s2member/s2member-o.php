@@ -47,5 +47,5 @@ if (($ws_plugin__s2member_o["wp_dir"] = c_ws_plugin__s2member_utils_s2o::wp_dir 
 		else // Else fallback on full WordPress.
 			require($ws_plugin__s2member_o["wp_dir"] . "/wp-load.php");
 	}
-unset ($ws_plugin__s2member_o);
+unset($ws_plugin__s2member_o);
 ?>

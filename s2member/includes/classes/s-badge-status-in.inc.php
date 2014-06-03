@@ -39,9 +39,9 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 				*/
 				public static function s_badge_status ()
 					{
-						do_action ("ws_plugin__s2member_before_s_badge_status", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_s_badge_status", get_defined_vars ());
 
-						if (!empty ($_GET["s2member_s_badge_status"]))
+						if (!empty($_GET["s2member_s_badge_status"]))
 							{
 								status_header (200); // Send a 200 OK status.
 
@@ -71,7 +71,7 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 																							{
 																								if (defined ("DB_USER") && DB_USER && defined ("DB_PASSWORD") && DB_PASSWORD && DB_USER !== DB_PASSWORD)
 																									{
-																										if ((!apply_filters ("ws_plugin__s2member_disable_all_ip_restrictions", false, get_defined_vars ()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"])
+																										if ((!apply_filters("ws_plugin__s2member_disable_all_ip_restrictions", false, get_defined_vars ()) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_ip_restriction"])
 																												|| ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_simultaneous_logins"]) /* Either of these are acceptable. */)
 																											if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["max_failed_login_attempts"])
 																												{
@@ -92,7 +92,7 @@ if (!class_exists ("c_ws_plugin__s2member_s_badge_status_in"))
 								else exit ("-"); // Else, service NOT enabled.
 							}
 
-						do_action ("ws_plugin__s2member_after_s_badge_status", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_s_badge_status", get_defined_vars ());
 					}
 			}
 	}

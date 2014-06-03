@@ -56,18 +56,18 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $regex A regular expression to look for inside the array.
+				* @param string $regex A regular expression to look for inside the array.
 				* @return bool True if the regular expression matched at least one value in the array, else false.
 				*/
-				public static function regex_in_array ($regex = FALSE, $array = FALSE)
+				public static function regex_in_array($regex = FALSE, $array = FALSE)
 					{
-						if (is_string ($regex) && strlen ($regex) && is_array ($array))
+						if (is_string ($regex) && strlen ($regex) && is_array($array))
 							{
 								foreach ($array as $value)
 									{
-										if (is_array ($value) /* Recursive function call? */)
+										if (is_array($value) /* Recursive function call? */)
 											{
-												if (c_ws_plugin__s2member_utils_arrays::regex_in_array ($regex, $value))
+												if (c_ws_plugin__s2member_utils_arrays::regex_in_array($regex, $value))
 													return true;
 											}
 										else if (is_string ($value) /* Must be a string. */)
@@ -87,19 +87,19 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $string A string to test against.
+				* @param string $string A string to test against.
 				* @param array $array An array of regex patterns to match against ``$string``.
 				* @return bool True if at least one regular expression in the ``$array`` matched ``$string``, else false.
 				*/
-				public static function in_regex_array ($string = FALSE, $array = FALSE)
+				public static function in_regex_array($string = FALSE, $array = FALSE)
 					{
-						if (is_string ($string) && strlen ($string) && is_array ($array))
+						if (is_string ($string) && strlen ($string) && is_array($array))
 							{
 								foreach ($array as $value)
 									{
-										if (is_array ($value) /* Recursive function call. */)
+										if (is_array($value) /* Recursive function call. */)
 											{
-												if (c_ws_plugin__s2member_utils_arrays::in_regex_array ($string, $value))
+												if (c_ws_plugin__s2member_utils_arrays::in_regex_array($string, $value))
 													return true;
 											}
 										else if (is_string ($value) /* Must be a string. */)
@@ -128,11 +128,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 
 						foreach ($array as $key => &$value)
 							{
-								if (is_array ($value) /* Recursive function call here. */)
+								if (is_array($value) /* Recursive function call here. */)
 									$value = c_ws_plugin__s2member_utils_arrays::remove_nulls ($value);
 
 								else if (is_null /* Is it null? */ ($value))
-									unset ($array[$key]);
+									unset($array[$key]);
 							}
 						return $array;
 					}
@@ -151,11 +151,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 
 						foreach ($array as $key => &$value)
 							{
-								if (is_array ($value) /* Recursive function call here. */)
+								if (is_array($value) /* Recursive function call here. */)
 									$value = c_ws_plugin__s2member_utils_arrays::remove_0b_strings ($value);
 
 								else if (is_string ($value) && !strlen ($value))
-									unset ($array[$key]);
+									unset($array[$key]);
 							}
 						return $array;
 					}
@@ -174,7 +174,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 
 						foreach ($array as &$value)
 							{
-								if (is_array ($value) /* Recursive function call here. */)
+								if (is_array($value) /* Recursive function call here. */)
 									$value = c_ws_plugin__s2member_utils_arrays::force_strings ($value);
 
 								else if (!is_string ($value) /* String? */)
@@ -197,7 +197,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 
 						foreach ($array as &$value)
 							{
-								if (is_array ($value) /* Recursive function call here. */)
+								if (is_array($value) /* Recursive function call here. */)
 									$value = c_ws_plugin__s2member_utils_arrays::force_integers ($value);
 
 								else if (!is_integer ($value) /* Integer? */)
@@ -222,7 +222,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 						ksort /* Sort by key. */ ($array, $flags);
 
 						foreach ($array as &$value)
-							if (is_array ($value) /* Recursive function call here. */)
+							if (is_array($value) /* Recursive function call here. */)
 								$value = c_ws_plugin__s2member_utils_arrays::ksort_deep ($value, $flags);
 
 						return /* Now return the array. */ $array;

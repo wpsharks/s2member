@@ -84,7 +84,7 @@ function ws_plugin__s2member_trim_deep ($data = FALSE)
 *
 * @see s2Member\Utilities\c_ws_plugin__s2member_utils_urls::remote()
 */
-function ws_plugin__s2member_remote ($url = FALSE, $post_vars = FALSE, $args = array ())
+function ws_plugin__s2member_remote ($url = FALSE, $post_vars = FALSE, $args = array())
 	{
 		return c_ws_plugin__s2member_utils_urls::remote ($url, $post_vars, $args);
 	}

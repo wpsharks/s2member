@@ -33,13 +33,13 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 				* @package s2Member\Readmes
 				* @since 3.5
 				*
-				* @param str $specific_path Optional. Path to a specific readme file to parse. Defaults to that of the software itself.
+				* @param string $specific_path Optional. Path to a specific readme file to parse. Defaults to that of the software itself.
 				* 	When/if a readme-dev.txt file is available, that will be used instead of the default readme.txt.
-				* @param str $specific_section Optional. The title of a specific section to parse, instead of the entire file.
+				* @param string $specific_section Optional. The title of a specific section to parse, instead of the entire file.
 				* @param bool $_blank_targets Optional. Defaults to true. If false, no target attribute is used.
 				* @param bool $process_wp_syntax Optional. Defaults to false.
 				* 	If true, and WP Syntax is installed; it will be used to parse code samples.
-				* @return str Parsed readme file, or a parsed readme file section; based on parameter configuration.
+				* @return string Parsed readme file, or a parsed readme file section; based on parameter configuration.
 				*/
 				public static function parse_readme ($specific_path = FALSE, $specific_section = FALSE, $_blank_targets = TRUE, $process_wp_syntax = FALSE)
 					{
@@ -51,8 +51,8 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 							}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_parse_readme", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_parse_readme", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if (file_exists ($path)) // Give hooks a chance.
 							{
@@ -111,7 +111,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 										$readme .= $rm . "\n"; // Content.
 										$readme .= '</div>' . "\n";
 
-										return apply_filters ("ws_plugin__s2member_parse_readme", $readme, get_defined_vars ());
+										return apply_filters("ws_plugin__s2member_parse_readme", $readme, get_defined_vars ());
 									}
 								else // Otherwise, we're going for the entire readme file. Here we have lots of work to do.
 									{
@@ -162,7 +162,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 										$readme .= $rm . "\n"; // Content.
 										$readme .= '</div>' . "\n";
 
-										return apply_filters ("ws_plugin__s2member_parse_readme", $readme, get_defined_vars ());
+										return apply_filters("ws_plugin__s2member_parse_readme", $readme, get_defined_vars ());
 									}
 							}
 						else // Just in case readme.txt was deleted by the site owner.
@@ -176,18 +176,18 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 				* @package s2Member\Readmes
 				* @since 3.5
 				*
-				* @param str $str A string *(i.e. the specs section)*.
-				* @return str Parsed specs. With HTML markup for list item display.
+				* @param string $str A string *(i.e. the specs section)*.
+				* @return string Parsed specs. With HTML markup for list item display.
 				*/
 				public static function _parse_readme_specs ($str = FALSE)
 					{
-						do_action ("_ws_plugin__s2member_before_parse_readme_specs", get_defined_vars ());
+						do_action("_ws_plugin__s2member_before_parse_readme_specs", get_defined_vars ());
 
 						$str = preg_replace ("/(\<p\>|^)(.+?)(\:)( )(.+?)($|\<\/p\>)/mi", "$1" . '<li><strong>' . "$2" . '</strong>' . "$3" . '&nbsp;&nbsp;&nbsp;&nbsp;<code>' . "$5" . '</code></li>' . "$6", $str);
 						$str = preg_replace ("/\<p\>\<li\>/i", '<ul><li>', $str); // Open the list items.
 						$str = preg_replace ("/\<\/li\>\<\/p\>/i", '</li></ul><br />', $str);
 
-						return apply_filters ("_ws_plugin__s2member_parse_readme_specs", $str, get_defined_vars ());
+						return apply_filters("_ws_plugin__s2member_parse_readme_specs", $str, get_defined_vars ());
 					}
 				/**
 				* Parses readme specification keys.
@@ -195,14 +195,14 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 				* @package s2Member\Readmes
 				* @since 3.5
 				*
-				* @param str $key A key *(within the specs section)*.
-				* @param str $specific_path Optional. Path to a specific readme file to parse. Defaults to that of the software itself.
+				* @param string $key A key *(within the specs section)*.
+				* @param string $specific_path Optional. Path to a specific readme file to parse. Defaults to that of the software itself.
 				* 	When/if a readme-dev.txt file is available, that will be used instead of the default readme.txt.
 				* @return str|bool The value of the key, else false if not found.
 				*/
 				public static function parse_readme_value ($key = FALSE, $specific_path = FALSE)
 					{
-						static $readme = array (); // For repeated lookups.
+						static $readme = array(); // For repeated lookups.
 
 						if (!($path = $specific_path)) // Was a specific path passed in?
 							{
@@ -212,12 +212,12 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 							}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_parse_readme_value", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_parse_readme_value", get_defined_vars ());
+						unset($__refs, $__v);
 
-						if (!empty ($readme[$path]) || file_exists ($path))
+						if (!empty($readme[$path]) || file_exists ($path))
 							{
-								if (empty ($readme[$path])) // If not already opened.
+								if (empty($readme[$path])) // If not already opened.
 									{
 										$readme[$path] = file_get_contents ($path); // Get readme.txt file contents.
 										$mb = function_exists ("mb_convert_encoding") ? @mb_convert_encoding ($readme[$path], "UTF-8", $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["mb_detection_order"]) : $readme[$path];
@@ -226,7 +226,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 
 								preg_match ("/(^)(" . preg_quote ($key, "/") . ")(\:)( )(.+?)($)/m", $readme[$path], $m);
 
-								return apply_filters ("ws_plugin__s2member_parse_readme_value", ((isset ($m[5]) && strlen ($m[5] = trim ($m[5]))) ? $m[5] : false), get_defined_vars ());
+								return apply_filters("ws_plugin__s2member_parse_readme_value", ((isset ($m[5]) && strlen ($m[5] = trim ($m[5]))) ? $m[5] : false), get_defined_vars ());
 							}
 						else // Nope.
 							return false;

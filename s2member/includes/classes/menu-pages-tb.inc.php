@@ -37,7 +37,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_pages_tb"))
 				*/
 				public static function display ()
 					{
-						do_action ("ws_plugin__s2member_during_menu_pages_before_toolbox_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_menu_pages_before_toolbox_sections", get_defined_vars ());
 
 						ob_start(); // output buffer these so we can display a toggler conditionally.
 
@@ -74,7 +74,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_pages_tb"))
 								$links = '<div class="links">'.$links.'</div>';
 								echo $links; // output content now; w/ possible toggler.
 							}
-						do_action ("ws_plugin__s2member_during_menu_pages_after_toolbox_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_menu_pages_after_toolbox_sections", get_defined_vars ());
 
 						return /* return for uniformity. */;
 					}

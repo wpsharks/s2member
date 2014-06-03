@@ -37,9 +37,9 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 				* @package s2Member\Utilities
 				* @since 110720
 				*
-				* @param str $doctype_html_head_title Optional. The title of the HTML document being generated.
-				* @param str $doctype_html_head_action Optional. An action Hook to process during HEAD generation.
-				* @return str A DOCTYPE tag along with the HEAD section and title tag, configured by parameters.
+				* @param string $doctype_html_head_title Optional. The title of the HTML document being generated.
+				* @param string $doctype_html_head_action Optional. An action Hook to process during HEAD generation.
+				* @return string A DOCTYPE tag along with the HEAD section and title tag, configured by parameters.
 				*/
 				public static function doctype_html_head ($doctype_html_head_title = FALSE, $doctype_html_head_action = FALSE)
 					{
@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 							echo '<title>' . $doctype_html_head_title . '</title>' . "\n";
 
 						if ($doctype_html_head_action) // Add content from Hook?
-							do_action ($doctype_html_head_action, get_defined_vars ());
+							do_action($doctype_html_head_action, get_defined_vars ());
 
 						echo '</head>' . "\n";
 

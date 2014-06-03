@@ -35,41 +35,41 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 				*
 				* @attaches-to ``add_action("remove_user_from_blog");``
 				*
-				* @param int|str $user_id Numeric WordPress User ID.
-				* @param int|str $blog_id Numeric WordPress Blog ID.
+				* @param int|string $user_id Numeric WordPress User ID.
+				* @param int|string $blog_id Numeric WordPress Blog ID.
 				* @param bool $s2says Optional. Defaults to false. If true, it's definitely OK to process this deletion?
 				* 	The ``$s2says`` flag can be used when/if the routine is called directly for whatever reason.
 				* @return null
 				*/
 				public static function handle_ms_user_deletions ($user_id = FALSE, $blog_id = FALSE, $s2says = FALSE)
 					{
-						static $processed = array (); // No duplicate processing.
+						static $processed = array(); // No duplicate processing.
 						global $pagenow; // Need this to detect the current admin page.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_handle_ms_user_deletions", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_handle_ms_user_deletions", get_defined_vars ());
+						unset($__refs, $__v);
 
-						if (is_multisite () && empty ($processed[$user_id])) // Safeguard this routine against duplicate processing.
+						if (is_multisite () && empty($processed[$user_id])) // Safeguard this routine against duplicate processing.
 							{
 								if (($s2says || (is_blog_admin () && $pagenow === "users.php")) && ($processed[$user_id] = true))
 									// Do NOT react on this globally. There are many routines that remove Users for different/minor reasons.
 									{
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_handle_ms_user_deletions_before", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_handle_ms_user_deletions_before", get_defined_vars ());
+										unset($__refs, $__v);
 
 										c_ws_plugin__s2member_user_deletions::handle_user_deletions ($user_id); // Hand this over.
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-										do_action ("ws_plugin__s2member_during_handle_ms_user_deletions_after", get_defined_vars ());
-										unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+										do_action("ws_plugin__s2member_during_handle_ms_user_deletions_after", get_defined_vars ());
+										unset($__refs, $__v);
 									}
 							}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_handle_ms_user_deletions", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_handle_ms_user_deletions", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return /* Return for uniformity. */;
 					}
@@ -82,21 +82,21 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 				* @attaches-to ``add_action("delete_user");``
 				* @attaches-to ``add_action("wpmu_delete_user");``
 				*
-				* @param int|str $user_id Numeric WordPress User ID.
+				* @param int|string $user_id Numeric WordPress User ID.
 				* @return null
 				*/
 				public static function handle_user_deletions ($user_id = FALSE)
 					{
-						static $processed = array (); // No duplicate processing.
+						static $processed = array(); // No duplicate processing.
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_handle_user_deletions", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_handle_user_deletions", get_defined_vars ());
+						unset($__refs, $__v);
 
-						if (empty ($processed[$user_id]) && ($processed[$user_id] = true)) // Safeguard this routine against duplicate processing.
+						if (empty($processed[$user_id]) && ($processed[$user_id] = true)) // Safeguard this routine against duplicate processing.
 							{
 								$eot_del_type = // Configure EOT/Del type (possibly through a global variable made available in other routines).
-								(!empty ($GLOBALS["ws_plugin__s2member_eot_del_type"])) ? // Is the global available for use?
+								(!empty($GLOBALS["ws_plugin__s2member_eot_del_type"])) ? // Is the global available for use?
 								$GLOBALS["ws_plugin__s2member_eot_del_type"] : "user-removal-deletion"; // Else use default.
 
 								$custom = get_user_option ("s2member_custom", $user_id); // An EOT Notification is triggered, EVEN if empty.
@@ -105,9 +105,9 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 								$user_reg_ip = get_user_option ("s2member_registration_ip", $user_id); // In API Notifications.
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_handle_user_before_deletions", get_defined_vars ());
-								do_action ("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "removal-deletion");
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_handle_user_before_deletions", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_collective_eots", $user_id, get_defined_vars (), $eot_del_type, "removal-deletion");
+								unset($__refs, $__v);
 
 								delete_user_option ($user_id, "s2member_custom"); // Remove User options (for this Blog).
 								delete_user_option ($user_id, "s2member_subscr_id");
@@ -132,7 +132,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 								delete_user_option ($user_id, "s2member_login_counter");
 								delete_user_option ($user_id, "s2member_notes");
 
-								if (is_object ($user = new WP_User ($user_id)) && $user->ID && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"] && is_array ($cv = preg_split ("/\|/", $custom)))
+								if (is_object ($user = new WP_User ($user_id)) && $user->ID && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"] && is_array($cv = preg_split ("/\|/", $custom)))
 									{
 										foreach (preg_split ("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"]) as $url) // Handle EOT Notifications on user deletion.
 
@@ -144,7 +144,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 																if (($url = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($user_reg_ip)), $url)))
 																	if (($url = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($user_id)), $url)))
 																		{
-																			if (is_array ($fields) && !empty ($fields))
+																			if (is_array($fields) && !empty($fields))
 																				foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
 																					if (!($url = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (maybe_serialize ($val))), $url)))
 																						break;
@@ -154,7 +154,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 																		}
 									}
 
-								if (is_object ($user = new WP_User ($user_id)) && $user->ID && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"] && is_array ($cv = preg_split ("/\|/", $custom)))
+								if (is_object ($user = new WP_User ($user_id)) && $user->ID && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"] && is_array($cv = preg_split ("/\|/", $custom)))
 									{
 										$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status ();
 										c_ws_plugin__s2member_email_configs::email_config_release ();
@@ -172,7 +172,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 										$msg .= "user_ip: %%user_ip%%\n";
 										$msg .= "user_id: %%user_id%%\n";
 
-										if (is_array ($fields) && !empty ($fields))
+										if (is_array($fields) && !empty($fields))
 											foreach ($fields as $var => $val)
 												$msg .= $var . ": %%" . $var . "%%\n";
 
@@ -195,7 +195,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 															if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_reg_ip), $msg)))
 																if (($msg = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $msg)))
 																	{
-																		if (is_array ($fields) && !empty ($fields))
+																		if (is_array($fields) && !empty($fields))
 																			foreach /* Custom Registration/Profile Fields. */ ($fields as $var => $val)
 																				if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
 																					break;
@@ -203,7 +203,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 																		if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
 																			foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"]) as $recipient)
-																				wp_mail ($recipient, apply_filters ("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters ("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
+																				wp_mail ($recipient, apply_filters("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 																	}
 
 										if ($email_configs_were_on) // Back on?
@@ -211,13 +211,13 @@ if (!class_exists ("c_ws_plugin__s2member_user_deletions"))
 									}
 
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action ("ws_plugin__s2member_during_handle_user_deletions", get_defined_vars ());
-								unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+								do_action("ws_plugin__s2member_during_handle_user_deletions", get_defined_vars ());
+								unset($__refs, $__v);
 							}
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_after_handle_user_deletions", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_after_handle_user_deletions", get_defined_vars ());
+						unset($__refs, $__v);
 
 						return /* Return for uniformity. */;
 					}

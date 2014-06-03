@@ -33,14 +33,14 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 				* @package s2Member\Meta_Boxes
 				* @since 3.5
 				*
-				* @param obj $post Post/Page object.
+				* @param object $post Post/Page object.
 				* @return null
 				*/
 				public static function security_meta_box($post = FALSE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_security_meta_box", get_defined_vars());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						unset($__refs, $__v);
 
 						if(is_object($post) && ($post_id = $post->ID) && (($post->post_type === "page" && current_user_can("edit_page", $post_id)) || current_user_can("edit_post", $post_id)))
 							{

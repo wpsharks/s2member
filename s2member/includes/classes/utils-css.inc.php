@@ -33,8 +33,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_css"))
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @param str $css A string of CSS.
-				* @return str String of CSS, after compression.
+				* @param string $css A string of CSS.
+				* @return string String of CSS, after compression.
 				*/
 				public static function compress_css ($css = FALSE)
 					{
@@ -72,7 +72,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_css"))
 				* @since 3.5
 				*
 				* @param array $m Array of matches from ``preg_replace_callback()``.
-				* @return str Shortened hex code when possible, full hex code when not possible.
+				* @return string Shortened hex code when possible, full hex code when not possible.
 				*/
 				public static function _compress_css_c3 ($m = FALSE)
 					{

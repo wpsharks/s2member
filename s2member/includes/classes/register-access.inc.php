@@ -33,18 +33,18 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 				* @package s2Member\Registrations
 				* @since 3.5
 				*
-				* @param str $subscr_gateway Payment Gateway associated with a Customer.
-				* @param str $subscr_id Unique Subscr. ID associated with Payment Gateway; associated with a Customer.
-				* @param str $custom Custom String value *(as supplied in Shortcode)*; must start with installation domain name.
-				* @param int|str $item_number An s2Member-generated `item_number` *( i.e. `1` for Level 1, or `level|ccaps|fixed-term`, or `sp|ids|expiration` )*.
+				* @param string $subscr_gateway Payment Gateway associated with a Customer.
+				* @param string $subscr_id Unique Subscr. ID associated with Payment Gateway; associated with a Customer.
+				* @param string $custom Custom String value *(as supplied in Shortcode)*; must start with installation domain name.
+				* @param int|string $item_number An s2Member-generated `item_number` *( i.e. `1` for Level 1, or `level|ccaps|fixed-term`, or `sp|ids|expiration` )*.
 				* @param bool $shrink Optional. Defaults to true. If false, the raw registration link will NOT be reduced in size through the tinyURL API.
-				* @return str|bool A Registration Access Link on success, else false on failure.
+				* @return string|bool A Registration Access Link on success, else false on failure.
 				*/
 				public static function register_link_gen ($subscr_gateway = FALSE, $subscr_id = FALSE, $custom = FALSE, $item_number = FALSE, $shrink = TRUE)
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action ("ws_plugin__s2member_before_register_link_gen", get_defined_vars ());
-						unset /* Unset defined __refs, __v. */ ($__refs, $__v);
+						do_action("ws_plugin__s2member_before_register_link_gen", get_defined_vars ());
+						unset($__refs, $__v);
 
 						if ($subscr_gateway && is_string ($subscr_gateway) && $subscr_id && is_string ($subscr_id) && $custom && is_string ($custom) && $item_number && (is_string ($item_number) || is_numeric ($item_number)))
 							{
@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 									$register_link = $shorter_url . "#" . $_SERVER["HTTP_HOST"];
 							}
 
-						return apply_filters ("ws_plugin__s2member_register_link_gen", ((!empty ($register_link)) ? $register_link : false), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_register_link_gen", ((!empty($register_link)) ? $register_link : false), get_defined_vars ());
 					}
 				/**
 				* Generates Registration Access Links via AJAX.
@@ -70,7 +70,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 				*/
 				public static function reg_access_link_via_ajax ()
 					{
-						do_action ("ws_plugin__s2member_before_reg_access_link_via_ajax", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_reg_access_link_via_ajax", get_defined_vars ());
 
 						status_header(200); // Send a 200 OK status header.
 						header("Content-Type: text/plain; charset=UTF-8"); // Content-Type with UTF-8.
@@ -78,12 +78,12 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 
 						if (current_user_can ("create_users")) // Check privileges as well. Ability to create Users?
 
-							if (!empty ($_POST["ws_plugin__s2member_reg_access_link_via_ajax"]) && is_string ($nonce = $_POST["ws_plugin__s2member_reg_access_link_via_ajax"]) && wp_verify_nonce ($nonce, "ws-plugin--s2member-reg-access-link-via-ajax"))
+							if (!empty($_POST["ws_plugin__s2member_reg_access_link_via_ajax"]) && is_string ($nonce = $_POST["ws_plugin__s2member_reg_access_link_via_ajax"]) && wp_verify_nonce ($nonce, "ws-plugin--s2member-reg-access-link-via-ajax"))
 
 								if (($_p = c_ws_plugin__s2member_utils_strings::trim_deep (stripslashes_deep ($_POST))) && isset ($_p["s2member_reg_access_link_subscr_gateway"], $_p["s2member_reg_access_link_subscr_id"], $_p["s2member_reg_access_link_custom"], $_p["s2member_reg_access_link_item_number"]))
 									$register_link = c_ws_plugin__s2member_register_access::register_link_gen ((string)$_p["s2member_reg_access_link_subscr_gateway"], (string)$_p["s2member_reg_access_link_subscr_id"], (string)$_p["s2member_reg_access_link_custom"], (string)$_p["s2member_reg_access_link_item_number"]);
 
-						exit(apply_filters ("ws_plugin__s2member_reg_access_link_via_ajax", ((!empty ($register_link)) ? $register_link : ""), get_defined_vars ()));
+						exit(apply_filters("ws_plugin__s2member_reg_access_link_via_ajax", ((!empty($register_link)) ? $register_link : ""), get_defined_vars ()));
 					}
 				/**
 				* Checks registration cookies.
@@ -95,15 +95,15 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 				*/
 				public static function reg_cookies_ok ()
 					{
-						global /* Global database object reference. */ $wpdb;
+						global $wpdb; /** @var $wpdb \wpdb */
 
-						do_action ("ws_plugin__s2member_before_reg_cookies_ok", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_reg_cookies_ok", get_defined_vars ());
 
 						if (isset ($_COOKIE["s2member_subscr_gateway"], $_COOKIE["s2member_subscr_id"], $_COOKIE["s2member_custom"], $_COOKIE["s2member_item_number"]))
 							if (($subscr_gateway = c_ws_plugin__s2member_utils_encryption::decrypt ((string)$_COOKIE["s2member_subscr_gateway"])) && ($subscr_id = c_ws_plugin__s2member_utils_encryption::decrypt ((string)$_COOKIE["s2member_subscr_id"])) && preg_match ("/^" . preg_quote (preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"]), "/") . "/i", ($custom = c_ws_plugin__s2member_utils_encryption::decrypt ((string)$_COOKIE["s2member_custom"]))) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], ($item_number = c_ws_plugin__s2member_utils_encryption::decrypt ((string)$_COOKIE["s2member_item_number"]))) && !$wpdb->get_var ("SELECT `user_id` FROM `" . $wpdb->usermeta . "` WHERE `meta_key` = '" . $wpdb->prefix . "s2member_subscr_id' AND `meta_value` = '" . esc_sql($subscr_id) . "' LIMIT 1"))
-								$reg_cookies_ok = $reg_cookies = array ("subscr_gateway" => $subscr_gateway, "subscr_id" => $subscr_id, "custom" => $custom, "item_number" => $item_number);
+								$reg_cookies_ok = $reg_cookies = array("subscr_gateway" => $subscr_gateway, "subscr_id" => $subscr_id, "custom" => $custom, "item_number" => $item_number);
 
-						return apply_filters ("ws_plugin__s2member_reg_cookies_ok", ((isset ($reg_cookies_ok) && $reg_cookies_ok && !empty ($reg_cookies)) ? $reg_cookies : false), get_defined_vars ());
+						return apply_filters("ws_plugin__s2member_reg_cookies_ok", ((isset ($reg_cookies_ok) && $reg_cookies_ok && !empty($reg_cookies)) ? $reg_cookies : false), get_defined_vars ());
 					}
 			}
 	}

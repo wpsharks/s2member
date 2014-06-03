@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 					{
 						global $pagenow; // Need this global variable.
 
-						do_action ("ws_plugin__s2member_before_general_ops_notice", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_general_ops_notice", get_defined_vars ());
 
 						if (is_blog_admin () && $pagenow === "options-general.php" && !isset ($_GET["page"]) && !is_multisite ()) // Multisite does NOT provide these options.
 							{
@@ -51,12 +51,12 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 								$js .= "jQuery(document).ready(function(\$){ \$('input#users_can_register, select#default_role').attr('disabled', 'disabled'); });";
 								$js .= '</script>';
 
-								do_action ("ws_plugin__s2member_during_general_ops_notice", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_general_ops_notice", get_defined_vars ());
 
 								c_ws_plugin__s2member_admin_notices::enqueue_admin_notice ($notice . $js, "blog:" . $pagenow);
 							}
 
-						do_action ("ws_plugin__s2member_after_general_ops_notice", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_general_ops_notice", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -74,9 +74,9 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 					{
 						global $pagenow; // Need this global variable.
 
-						do_action ("ws_plugin__s2member_before_multisite_ops_notice", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_multisite_ops_notice", get_defined_vars ());
 
-						if (is_multisite () && is_network_admin () && in_array ($pagenow, array ("settings.php")) && !isset ($_GET["page"]))
+						if (is_multisite () && is_network_admin () && in_array($pagenow, array("settings.php")) && !isset ($_GET["page"]))
 							{
 								$notice = "<em>* Note: The s2Member plugin has control over two options on this page.<br /><code>Allow Open Registration = " . esc_html (get_site_option ("registration")) . "</code> and <code>Add New Users = " . esc_html (get_site_option ("add_new_users")) . "</code>.<br />Please check: <code>s2Member -› Multisite (Config)</code>.";
 
@@ -84,12 +84,12 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 								$js .= "jQuery(document).ready(function(\$){ \$('input[name=registration], input#add_new_users').attr('disabled', 'disabled'); });";
 								$js .= '</script>';
 
-								do_action ("ws_plugin__s2member_during_multisite_ops_notice", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_multisite_ops_notice", get_defined_vars ());
 
 								c_ws_plugin__s2member_admin_notices::enqueue_admin_notice ($notice . $js, "network:" . $pagenow);
 							}
 
-						do_action ("ws_plugin__s2member_after_multisite_ops_notice", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_multisite_ops_notice", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}
@@ -107,11 +107,11 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 					{
 						global $pagenow; // Need this global variable.
 
-						do_action ("ws_plugin__s2member_before_reading_ops_notice", get_defined_vars ());
+						do_action("ws_plugin__s2member_before_reading_ops_notice", get_defined_vars ());
 
 						if (is_blog_admin () && $pagenow === "options-reading.php" && !isset ($_GET["page"]))
 							{
-								do_action ("ws_plugin__s2member_during_reading_ops_notice", get_defined_vars ()); // Now check for conflicts.
+								do_action("ws_plugin__s2member_during_reading_ops_notice", get_defined_vars ()); // Now check for conflicts.
 
 								if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"] && (string)get_option ("page_on_front") === $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"]
 								&& ($notice = '<strong>NOTE:</strong> Your Membership Options Page for s2Member is currently configured as your Home Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this.'))
@@ -130,7 +130,7 @@ if (!class_exists ("c_ws_plugin__s2member_op_notices"))
 									c_ws_plugin__s2member_admin_notices::enqueue_admin_notice ($notice, "blog:" . $pagenow, true);
 							}
 
-						do_action ("ws_plugin__s2member_after_reading_ops_notice", get_defined_vars ());
+						do_action("ws_plugin__s2member_after_reading_ops_notice", get_defined_vars ());
 
 						return /* Return for uniformity. */;
 					}

@@ -46,21 +46,21 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_info"))
 
 						echo '<a href="' . esc_attr (add_query_arg ("c_check_ver", urlencode (c_ws_plugin__s2member_readmes::parse_readme_value ("Version")), c_ws_plugin__s2member_readmes::parse_readme_value ("Plugin URI"))) . '" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/images/brand-updates.png" class="ws-menu-page-brand-updates" alt="." /></a>' . "\n";
 
-						do_action ("ws_plugin__s2member_during_info_page_before_left_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_info_page_before_left_sections", get_defined_vars ());
 
-						if (apply_filters ("ws_plugin__s2member_during_info_page_during_left_sections_display_readme", true, get_defined_vars ()))
+						if (apply_filters("ws_plugin__s2member_during_info_page_during_left_sections_display_readme", true, get_defined_vars ()))
 							{
-								do_action ("ws_plugin__s2member_during_info_page_during_left_sections_before_readme", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_info_page_during_left_sections_before_readme", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-readme">' . "\n";
-								do_action ("ws_plugin__s2member_during_info_page_during_left_sections_during_readme", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_info_page_during_left_sections_during_readme", get_defined_vars ());
 								echo c_ws_plugin__s2member_readmes::parse_readme () . "\n";
 								echo '</div>' . "\n";
 
-								do_action ("ws_plugin__s2member_during_info_page_during_left_sections_after_readme", get_defined_vars ());
+								do_action("ws_plugin__s2member_during_info_page_during_left_sections_after_readme", get_defined_vars ());
 							}
 
-						do_action ("ws_plugin__s2member_during_info_page_after_left_sections", get_defined_vars ());
+						do_action("ws_plugin__s2member_during_info_page_after_left_sections", get_defined_vars ());
 
 						echo '</td>' . "\n";
 

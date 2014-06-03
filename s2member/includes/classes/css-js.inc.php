@@ -39,7 +39,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js"))
 				*/
 				public static function css ()
 					{
-						if (!empty ($_GET["ws_plugin__s2member_css"]))
+						if (!empty($_GET["ws_plugin__s2member_css"]))
 							{
 								return c_ws_plugin__s2member_css_js_in::css ();
 							}
@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_css_js"))
 				*/
 				public static function js_w_globals ()
 					{
-						if (!empty ($_GET["ws_plugin__s2member_js_w_globals"]))
+						if (!empty($_GET["ws_plugin__s2member_js_w_globals"]))
 							{
 								return c_ws_plugin__s2member_css_js_in::js_w_globals ();
 							}
