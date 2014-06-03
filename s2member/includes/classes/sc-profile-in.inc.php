@@ -229,30 +229,13 @@ if(!class_exists('c_ws_plugin__s2member_sc_profile_in'))
 							unset($__refs, $__v);
 						}
 				}
-				if($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in'] && c_ws_plugin__s2member_list_servers::list_servers_integrated())
-				{
-					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-					do_action('ws_plugin__s2member_during_profile_during_fields_before_opt_in', get_defined_vars());
-					unset($__refs, $__v);
-
-					echo '<tr>'."\n";
-					echo '<td>'."\n";
-					echo '<label for="ws-plugin--s2member-profile-opt-in">'."\n";
-					echo '<input type="checkbox" name="ws_plugin__s2member_profile_opt_in" id="ws-plugin--s2member-profile-opt-in" class="ws-plugin--s2member-profile-field" value="1"'.((get_user_option('s2member_opt_in', $user_id)) ? ' checked="checked"' : '').' tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
-					echo $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in_label']."\n";
-					echo '</label>'."\n";
-					echo '</td>'."\n";
-					echo '</tr>'."\n";
-
-					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-					do_action('ws_plugin__s2member_during_profile_during_fields_after_opt_in', get_defined_vars());
-					unset($__refs, $__v);
-				}
 				if(apply_filters('ws_plugin__s2member_during_profile_during_fields_display_password', TRUE, get_defined_vars()))
 				{
 					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 					do_action('ws_plugin__s2member_during_profile_during_fields_before_password', get_defined_vars());
 					unset($__refs, $__v);
+
+					echo '<tr><td><div class="ws-plugin--s2member-profile-field-divider-section"></div></td></tr>';
 
 					echo '<tr>'."\n";
 					echo '<td>'."\n";
@@ -274,6 +257,27 @@ if(!class_exists('c_ws_plugin__s2member_sc_profile_in'))
 
 					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 					do_action('ws_plugin__s2member_during_profile_during_fields_after_password', get_defined_vars());
+					unset($__refs, $__v);
+				}
+				if($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in'] && c_ws_plugin__s2member_list_servers::list_servers_integrated())
+				{
+					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+					do_action('ws_plugin__s2member_during_profile_during_fields_before_opt_in', get_defined_vars());
+					unset($__refs, $__v);
+
+					echo '<tr><td><div class="ws-plugin--s2member-profile-field-divider-section"></div></td></tr>';
+
+					echo '<tr>'."\n";
+					echo '<td>'."\n";
+					echo '<label for="ws-plugin--s2member-profile-opt-in">'."\n";
+					echo '<input type="checkbox" name="ws_plugin__s2member_profile_opt_in" id="ws-plugin--s2member-profile-opt-in" class="ws-plugin--s2member-profile-field" value="1"'.((get_user_option('s2member_opt_in', $user_id)) ? ' checked="checked"' : '').' tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+					echo $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in_label']."\n";
+					echo '</label>'."\n";
+					echo '</td>'."\n";
+					echo '</tr>'."\n";
+
+					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+					do_action('ws_plugin__s2member_during_profile_during_fields_after_opt_in', get_defined_vars());
 					unset($__refs, $__v);
 				}
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;

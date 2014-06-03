@@ -111,7 +111,7 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 															$mailchimp["list_id"] = $mailchimp["list"];
 
 														$mailchimp["merge_array"] = array("MERGE1" => $fname, "MERGE2" => $lname, "OPTIN_IP" => $ip, "OPTIN_TIME" => date ("Y-m-d H:i:s"));
-														$mailchimp["merge_array"] = ($mailchimp["interest_groups"]) ? array_merge ($mailchimp["merge_array"], $mailchimp["interest_groups"]) : $mailchimp["merge_array"];
+														$mailchimp["merge_array"] = (!empty($mailchimp["interest_groups"])) ? array_merge ($mailchimp["merge_array"], $mailchimp["interest_groups"]) : $mailchimp["merge_array"];
 														$mailchimp["merge_array"] = apply_filters( /* Deprecated. */"ws_plugin__s2member_mailchimp_array", $mailchimp["merge_array"], get_defined_vars ());
 														// Filter: `ws_plugin__s2member_mailchimp_array` deprecated in v110523. Please use Filter: `ws_plugin__s2member_mailchimp_merge_array`.
 
@@ -429,7 +429,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 				* @param string $mod_new_role Required if ``$event_spec === "modification"`` (but can be empty). Role the User is being modified to.
 				* @param string $mod_new_user Optional. If ``$event_spec === "modification"``, the new User object with current details.
 				* @param string $mod_old_user Optional. If ``$event_spec === "modification"``, the old/previous User obj with old details.
-				* @return null This function does not have a return value.
 				*/
 				public static function auto_process_list_server_removals ($user_id = FALSE, $vars = FALSE, $event = FALSE, $event_spec = FALSE, $mod_new_role = FALSE, $mod_new_user = FALSE, $mod_old_user = FALSE)
 					{
@@ -473,8 +472,6 @@ if (!class_exists ("c_ws_plugin__s2member_list_servers"))
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_after_auto_process_list_server_removals", get_defined_vars ());
 						unset($__refs, $__v);
-
-						return /* Return for uniformity. */;
 					}
 			}
 	}
