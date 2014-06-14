@@ -70,7 +70,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 											{
 												foreach (preg_split ("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_urls"]) as $url)
 
-													if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)) && ($url = preg_replace ("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["parent_txn_id"])), $url)))
+													if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace ("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["parent_txn_id"])), $url)))
 														if (($url = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_number"])), $url)) && ($url = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_name"])), $url)))
 															if (($url = preg_replace ("/%%-amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["mc_gross"])), $url)) && ($url = preg_replace ("/%%-fee%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["mc_fee"])), $url)))
 																if (($url = preg_replace ("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["first_name"])), $url)) && ($url = preg_replace ("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["last_name"])), $url)))

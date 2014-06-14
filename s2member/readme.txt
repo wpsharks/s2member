@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 140603
-Stable tag: 140603
+Version: 140614
+Stable tag: 140614
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -142,11 +142,16 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v140603 =
+= v140614 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v140614 =
+
+* (s2Member/s2Member Pro) **Quick Cache Compat.** This release makes it possible for Quick Cache to cache content protected by s2Member. If, and only if, you have [Quick Cache Pro](http://www.websharks-inc.com/product/quick-cache/) configured to enable user-specific caching; i.e. to cache when users are logged into the site. See [this GitHub issue](https://github.com/websharks/s2member/issues/172) if you'd like further details.
+* (s2Member Pro) **ClickBank API Compat.** This release brings s2Member's ClickBank integration into full compatibility with a recent change in the ClickBank API. Under the right conditions, a symptom of this bug was to see an error regarding an unexpected `txnType` upon returning from checkout via ClickBank. Resolved in this release. See [this GitHub issue](https://github.com/websharks/s2member/issues/199) if you'd like further details.
 
 = v140603 =
 

@@ -128,7 +128,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 													{
 														foreach (preg_split ("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_urls"]) as $url)
 
-															if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)) && ($url = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (rawurlencode ($sp_access_url)), $url)))
+															if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (rawurlencode ($sp_access_url)), $url)))
 																if (($url = preg_replace ("/%%sp_access_exp%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (c_ws_plugin__s2member_utils_time::approx_time_difference (time (), strtotime ("+" . $paypal["hours"] . " hours")))), $url)))
 																	if (($url = preg_replace ("/%%amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["mc_gross"])), $url)) && ($url = preg_replace ("/%%txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["txn_id"])), $url)))
 																		if (($url = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_number"])), $url)) && ($url = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_name"])), $url)))
@@ -197,7 +197,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_web_accept_sp"))
 
 												if ($processing && $_REQUEST["s2member_paypal_proxy"] && ($url = $_REQUEST["s2member_paypal_proxy_return_url"]) && is_array($cv = preg_split ("/\|/", $paypal["custom"]))) // A Proxy is requesting a Return URL?
 													{
-														if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)) && ($url = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (rawurlencode ($sp_access_url)), $url)))
+														if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace ("/%%sp_access_url%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (rawurlencode ($sp_access_url)), $url)))
 															if (($url = preg_replace ("/%%sp_access_exp%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (c_ws_plugin__s2member_utils_time::approx_time_difference (time (), strtotime ("+" . $paypal["hours"] . " hours")))), $url)))
 																if (($url = preg_replace ("/%%amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["mc_gross"])), $url)) && ($url = preg_replace ("/%%txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["txn_id"])), $url)))
 																	if (($url = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_number"])), $url)) && ($url = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_name"])), $url)))

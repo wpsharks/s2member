@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  140603\n"
+"Project-Id-Version:  140614\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2014-06-03 20:19:55+00:00\n"
+"POT-Creation-Date: 2014-06-14 15:47:41+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1615,7 +1615,7 @@ msgctxt "s2member-front"
 msgid "Level %s Member"
 msgstr ""
 
-#: s2member/includes/templates/badges/s-badge.php:23
+#: s2member/includes/templates/badges/s-badge.php:22
 msgctxt "s2member-front"
 msgid "s2Member&reg; ( Security for WordPress&reg; )"
 msgstr ""
@@ -3665,7 +3665,7 @@ msgctxt "s2member-front"
 msgid "<div>Sorry, your Coupon is N/A, invalid or expired.</div>"
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/clickbank/clickbank-return-in.inc.php:181
+#: s2member-pro/includes/classes/gateways/clickbank/clickbank-return-in.inc.php:184
 msgctxt "s2member-front"
 msgid ""
 "ERROR: Unexpected txnType. Please contact Support for assistance.\n"
@@ -3673,7 +3673,7 @@ msgid ""
 "The ClickBank txnType did not match a required action."
 msgstr ""
 
-#: s2member-pro/includes/classes/gateways/clickbank/clickbank-return-in.inc.php:216
+#: s2member-pro/includes/classes/gateways/clickbank/clickbank-return-in.inc.php:219
 msgctxt "s2member-front"
 msgid ""
 "ERROR: Unable to verify POST vars. Please contact Support for assistance.\n"

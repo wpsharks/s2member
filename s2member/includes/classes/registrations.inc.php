@@ -988,7 +988,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 
 																	foreach (preg_split ("/[\r\n\t]+/", $urls) as $url) // Notify each of the URLs.
 
-																		if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)))
+																		if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)))
 																			if (($url = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($role)), $url)))
 																				if (($url = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($level)), $url)))
 																					if (($url = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($ccaps)), $url)))
@@ -1077,7 +1077,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 
 																if (!empty($GLOBALS["ws_plugin__s2member_registration_return_url"]) && ($url = $GLOBALS["ws_plugin__s2member_registration_return_url"]))
 
-																	if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim($cv[$1]))', $url)))
+																	if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)))
 																		if (($url = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($role)), $url)))
 																			if (($url = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($level)), $url)))
 																				if (($url = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($ccaps)), $url)))

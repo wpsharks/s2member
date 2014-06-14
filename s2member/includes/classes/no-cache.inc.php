@@ -93,8 +93,12 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 			unset($__refs, $__v); // Housekeeping.
 
 			if(!$once && (empty($_GET['qcAC']) || !filter_var($_GET['qcAC'], FILTER_VALIDATE_BOOLEAN))
-			   && ($no_cache || (is_user_logged_in() && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
-			       || c_ws_plugin__s2member_systematics::is_s2_systematic_use_page())
+			   && (
+					$no_cache === TRUE // Forces no-cache constants; if `TRUE` explicitly.
+					|| ($no_cache === 'restricted' && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
+					|| (is_user_logged_in() && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
+					|| c_ws_plugin__s2member_systematics::is_s2_systematic_use_page()
+				)
 			)
 			{
 				/**

@@ -49,26 +49,26 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 									{
 										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty($user->ID)) ? $user : false; // Current User's object.
 
-										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"] && $page_id === (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"] && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level0")) && $page_id !== (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
+										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"] && $page_id === (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"] && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level0")) && $page_id !== (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 											c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", 0, $_SERVER["REQUEST_URI"], "sys") . exit ();
 
-										else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri ($user, "root-returns-false")) && preg_match ("/^" . preg_quote ($login_redirection_uri, "/") . "$/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level0")) && $page_id !== (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
+										else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri ($user, "root-returns-false")) && preg_match ("/^" . preg_quote ($login_redirection_uri, "/") . "$/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level0")) && $page_id !== (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 											c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", 0, $_SERVER["REQUEST_URI"], "sys") . exit ();
 
-										else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"] && $page_id === (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"] && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level0")) && $page_id !== (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
+										else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"] && $page_id === (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_limit_exceeded_page"] && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level0")) && $page_id !== (int)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"])
 											c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", 0, $_SERVER["REQUEST_URI"], "sys") . exit ();
 
 										else if (!c_ws_plugin__s2member_systematics::is_systematic_use_page ()) // Never restrict Systematics. However, there are 3 exceptions above.
 											{
 												for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Page Level restrictions. Go through each Level.
 													{
-														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_pages"] === "all" && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
+														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_pages"] === "all" && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 															c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"]) . exit ();
 
-														else if (strpos ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"], "all-") && (in_array("all-page", preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"])) || in_array("all-pages", preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"]))) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
+														else if (strpos ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"], "all-") && (in_array("all-page", preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"])) || in_array("all-pages", preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_posts"]))) && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 															c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"], "post") . exit ();
 
-														else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_pages"] && in_array($page_id, preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_pages"])) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
+														else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_pages"] && in_array($page_id, preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_pages"])) && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 															c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"]) . exit ();
 													}
 
@@ -76,10 +76,10 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 													{
 														for ($n = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n >= 0; $n--) // Tag Level restrictions (possibly through Page Tagger). Go through each Level.
 															{
-																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ptags"] === "all" && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
+																if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ptags"] === "all" && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 																	c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"], "ptag") . exit ();
 
-																else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ptags"] && has_tag (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ptags"])) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
+																else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ptags"] && has_tag (preg_split ("/[\r\n\t;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ptags"])) && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 																	c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"], "ptag") . exit ();
 															}
 													}
@@ -89,18 +89,18 @@ if (!class_exists ("c_ws_plugin__s2member_pages"))
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"]) // URIs configured at this Level?
 
 															foreach (preg_split ("/[\r\n\t]+/", c_ws_plugin__s2member_ruris::fill_ruri_level_access_rc_vars ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"], $user)) as $str)
-																if ($str && preg_match ("/" . preg_quote ($str, "/") . "/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
+																if ($str && preg_match ("/" . preg_quote ($str, "/") . "/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 																	c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "level", $n, $_SERVER["REQUEST_URI"], "ruri") . exit ();
 													}
 
-												if (is_array($ccaps_req = get_post_meta ($page_id, "s2member_ccaps_req", true)) && !empty($ccaps_req) && c_ws_plugin__s2member_no_cache::no_cache_constants (true))
+												if (is_array($ccaps_req = get_post_meta ($page_id, "s2member_ccaps_req", true)) && !empty($ccaps_req) && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted'))
 													{
 														foreach ($ccaps_req as $ccap) // The ``$user`` MUST satisfy ALL Custom Capability requirements. Stored as an array of Custom Capabilities.
 															if (strlen ($ccap) && (!$user || !$user->has_cap ("access_s2member_ccap_" . $ccap)) /* Does this ``$user``, have this Custom Capability? */)
 																c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "ccap", $ccap, $_SERVER["REQUEST_URI"], "ccap") . exit ();
 													}
 
-												if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"] && in_array($page_id, preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"])) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && !c_ws_plugin__s2member_sp_access::sp_access ($page_id))
+												if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"] && in_array($page_id, preg_split ("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["specific_ids"])) && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && !c_ws_plugin__s2member_sp_access::sp_access ($page_id))
 													c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("page", $page_id, "sp", $page_id, $_SERVER["REQUEST_URI"], "sp") . exit ();
 											}
 

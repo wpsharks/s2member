@@ -47,7 +47,7 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 									{
 										$user = (is_user_logged_in () && is_object ($user = wp_get_current_user ()) && !empty($user->ID)) ? $user : false; // Current User's object.
 
-										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri ($user, "root-returns-false")) && preg_match ("/^" . preg_quote ($login_redirection_uri, "/") . "$/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level0")))
+										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri ($user, "root-returns-false")) && preg_match ("/^" . preg_quote ($login_redirection_uri, "/") . "$/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level0")))
 											c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("ruri", $_SERVER["REQUEST_URI"], "level", 0, $_SERVER["REQUEST_URI"], "sys") . exit ();
 
 										else if (!c_ws_plugin__s2member_systematics::is_systematic_use_page ()) // Do NOT protect Systematics. However, there is 1 exception above ^.
@@ -57,7 +57,7 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"]) // URIs configured at this Level?
 
 															foreach (preg_split ("/[\r\n\t]+/", c_ws_plugin__s2member_ruris::fill_ruri_level_access_rc_vars ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_ruris"], $user)) as $str)
-																if ($str && preg_match ("/" . preg_quote ($str, "/") . "/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants (true) && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
+																if ($str && preg_match ("/" . preg_quote ($str, "/") . "/", $_SERVER["REQUEST_URI"]) && c_ws_plugin__s2member_no_cache::no_cache_constants ('restricted') && (!$user || !$user->has_cap ("access_s2member_level" . $n)))
 																	c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars /* Configure MOP Vars here. */ ("ruri", $_SERVER["REQUEST_URI"], "level", $n, $_SERVER["REQUEST_URI"]) . exit ();
 													}
 											}
