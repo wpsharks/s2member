@@ -15,10 +15,13 @@
 */
 jQuery(document).ready(function($)
 	{
-		var esc_attr = esc_html = /* Convert special characters. */ function(str)
-			{
-				return String(str).replace(/"/g, '&quot;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
-			};
+		var esc_attr = esc_html = function(string/* Convert special characters. */)
+		{
+			if(/[&\<\>"']/.test(string = String(string)))
+				string = string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+					string = string.replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+			return string;
+		};
 		if(location.href.match /* Any & all s2Member pages. */(/page\=ws-plugin--s2member/))
 			{
 				$('input.ws-plugin--s2member-update-roles-button, input.ws-plugin--s2member-reset-roles-button').click(function()
