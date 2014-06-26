@@ -15,7 +15,7 @@
 * @package WebSharks\Menu Pages
 * @since x.xx
 */
-@import url('//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css');
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
 
 /*
 Align these with menu page.
@@ -568,7 +568,7 @@ td.ws-menu-page-table-r div.ws-menu-page-others img
 }
 table.ws-menu-page-table img.ws-menu-page-brand-icon
 {
-	border         : 0px;
+	border         : 0;
 	float          : right;
 	width          : 128px;
 	height         : 128px;
@@ -577,7 +577,7 @@ table.ws-menu-page-table img.ws-menu-page-brand-icon
 }
 table.ws-menu-page-table img.ws-menu-page-brand-updates
 {
-	border         : 0px;
+	border         : 0;
 	float          : right;
 	width          : 155px;
 	height         : 40px;

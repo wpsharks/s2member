@@ -44,7 +44,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages_updates"))
 										echo '➘ <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Knowledge Base")).'" target="_blank" rel="external">More updates...</a>'."\n";
 										echo '</div>'."\n";
 									}
-
 								echo '<div class="ws-menu-page-r-group-header">'."\n";
 								echo '   <i class="fa fa-envelope"></i> s2 Updates'."\n";
 								echo '</div>'."\n";
@@ -66,17 +65,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_pages_updates"))
 								echo '<div id="ws-updates-div-email">'."\n";
 								echo '<label for="ws-updates-email">Email Address: *</label><br />'."\n";
 								echo '<input type="text" aria-required="true" autocomplete="off" name="EMAIL" id="ws-updates-email" value="'.format_to_edit($user->user_email).'" />'."\n";
-								echo '</div>'."\n";
-
-								if(!is_ssl() && !c_ws_plugin__s2member_utils_conds::is_localhost())
-									{
-										echo '<div id="ws-updates-div-subs">'."\n";
-										echo '<script type="text/javascript" src="http://websharks-inc.us1.list-manage.com/subscriber-count?b=31&u=8c67d547-edf6-41c5-807d-2d2d0e6cffd1&id=19e9d213bc"></script>'."\n";
-										echo '</div>'."\n";
-									}
-
-								echo '<div id="ws-updates-div-priv">'."\n";
-								echo '(<a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Privacy URI")).'" target="_blank">privacy policy</a>)'."\n";
 								echo '</div>'."\n";
 
 								echo '<div id="ws-updates-div-submit">'."\n";
