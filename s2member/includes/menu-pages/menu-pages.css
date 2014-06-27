@@ -198,7 +198,7 @@ div.ws-menu-page .ws-menu-page-hilite
 	background    : #DFF0DF;
 
 	border-radius : 3px;
-	padding       : 0.2em;
+	padding       : 0 0.2em;
 }
 div.ws-menu-page .ws-menu-page-bright-hilite
 {
@@ -206,7 +206,7 @@ div.ws-menu-page .ws-menu-page-bright-hilite
 	background    : #EBF084;
 
 	border-radius : 3px;
-	padding       : 0.2em;
+	padding       : 0 0.2em;
 }
 div.ws-menu-page .ws-menu-page-error-hilite
 {
@@ -214,7 +214,7 @@ div.ws-menu-page .ws-menu-page-error-hilite
 	background    : #962722;
 
 	border-radius : 3px;
-	padding       : 0.2em;
+	padding       : 0 0.2em;
 }
 div.ws-menu-page img.ws-menu-page-img-16
 {
@@ -338,23 +338,23 @@ div.ws-menu-page .error
 }
 div.ws-menu-page .info
 {
-	border     : 1px solid #35558A;
 	background : #C9E0FA;
+	border     : 1px solid #35558A;
 }
 div.ws-menu-page .notice
 {
-	border     : 1px solid #E6DB55;
 	background : #FFFBCC;
+	border     : 1px solid #E6DB55;
 }
 div.ws-menu-page .warning
 {
-	border     : 1px solid #D29A04;
 	background : #FADDAB;
+	border     : 1px solid #D29A04;
 }
 div.ws-menu-page .error
 {
-	border     : 1px solid #711E1E;
 	background : #FABBC6;
+	border     : 1px solid #711E1E;
 }
 div.ws-menu-page .monospace
 {
@@ -456,9 +456,7 @@ table.ws-menu-page-table .info,
 table.ws-menu-page-table .warning,
 table.ws-menu-page-table .error
 {
-	font-size  : 100%;
-	font-style : italic;
-
+	font-size  : 80%;
 	padding    : 5px;
 	margin     : 1em 0 1em 0;
 }
@@ -819,20 +817,9 @@ div.ws-menu-page-updates div#creditfooter
 }
 div.ws-menu-page-updates div#ws-updates-div-fname,
 div.ws-menu-page-updates div#ws-updates-div-lname,
-div.ws-menu-page-updates div#ws-updates-div-email,
-div.ws-menu-page-updates div#ws-updates-div-subs,
-div.ws-menu-page-updates div#ws-updates-div-priv
+div.ws-menu-page-updates div#ws-updates-div-email
 {
 	margin : 0 0 10px 0;
-}
-div.ws-menu-page-updates div#ws-updates-div-subs
-{
-	margin : 15px 0 0 0;
-}
-div.ws-menu-page-updates div#ws-updates-div-priv
-{
-	font-size : 80%;
-	margin    : 0 0 5px 0;
 }
 div.ws-menu-page-updates input[type = "text"],
 div.ws-menu-page-updates input[type = "password"],

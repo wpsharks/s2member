@@ -471,7 +471,7 @@ jQuery(document)
 				       $($obj).removeClass('ws-plugin--s2member-animate-processing');
 			       else $($obj).addClass('ws-plugin--s2member-animate-processing');
 		       };
-		       window.ws_plugin__s2member_escAttr = function(string)
+		       window.ws_plugin__s2member_escAttr = window.ws_plugin__s2member_escHtml = function(string)
 		       {
 			       if(/[&\<\>"']/.test(string = String(string)))
 				       string = string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
