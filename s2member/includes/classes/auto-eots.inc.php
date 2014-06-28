@@ -154,6 +154,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 
 																		delete_user_option ($user_id, "s2member_custom");
 																		delete_user_option ($user_id, "s2member_subscr_id");
+																		delete_user_option ($user_id, "s2member_subscr_cid");
 																		delete_user_option ($user_id, "s2member_subscr_baid");
 																		delete_user_option ($user_id, "s2member_subscr_gateway");
 
