@@ -99,12 +99,12 @@ if (!class_exists ("c_ws_plugin__s2member_ruris"))
 						$user_ccaps = (string)implode ("-", c_ws_plugin__s2member_user_access::user_access_ccaps ($user));
 						$user_logins = ($user) ? (string)(int)get_user_option ("s2member_login_counter", $user_id) : "-1";
 
-						$uris = (strlen ($user_login)) ? preg_replace ("/%%current_user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_login), $uris) : $uris;
-						$uris = (strlen ($user_id)) ? preg_replace ("/%%current_user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $uris) : $uris;
-						$uris = (strlen ($user_level)) ? preg_replace ("/%%current_user_level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_level), $uris) : $uris;
-						$uris = (strlen ($user_role)) ? preg_replace ("/%%current_user_role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_role), $uris) : $uris;
-						$uris = (strlen ($user_ccaps)) ? preg_replace ("/%%current_user_ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ccaps), $uris) : $uris;
-						$uris = (strlen ($user_logins)) ? preg_replace ("/%%current_user_logins%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_logins), $uris) : $uris;
+						$uris = (strlen ($user_login)) ? preg_replace ("/%%current_user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_login), $uris) : $uris;
+						$uris = (strlen ($user_id)) ? preg_replace ("/%%current_user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_id), $uris) : $uris;
+						$uris = (strlen ($user_level)) ? preg_replace ("/%%current_user_level%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_level), $uris) : $uris;
+						$uris = (strlen ($user_role)) ? preg_replace ("/%%current_user_role%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_role), $uris) : $uris;
+						$uris = (strlen ($user_ccaps)) ? preg_replace ("/%%current_user_ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_ccaps), $uris) : $uris;
+						$uris = (strlen ($user_logins)) ? preg_replace ("/%%current_user_logins%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_logins), $uris) : $uris;
 
 						return apply_filters("ws_plugin__s2member_fill_ruri_level_access_rc_vars", $uris, get_defined_vars ());
 					}

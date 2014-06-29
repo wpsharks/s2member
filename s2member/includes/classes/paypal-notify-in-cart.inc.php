@@ -65,7 +65,6 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_cart"))
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `cart` ).";
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
-
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_after_cart", get_defined_vars ());
 								unset($__refs, $__v);
@@ -76,4 +75,3 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_cart"))
 					}
 			}
 	}
-?>

@@ -142,7 +142,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				* @param string $string Input string.
 				* @return string Output string, after characters NOT on a standard U.S. keyboard have been stripped.
 				*/
-				public static function strip_2_kb_chars($string = FALSE)
+				public static function strip_2_kb_chars($string = '')
 					{
 						return preg_replace("/[^0-9A-Z\r\n\t\s`\=\[\]\\\;',\.\/~\!@#\$%\^&\*\(\)_\+\|\}\{\:\"\?\>\<\-]/i", "", remove_accents((string)$string));
 					}
