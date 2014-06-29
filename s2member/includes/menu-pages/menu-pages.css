@@ -114,7 +114,10 @@ div.ws-menu-page > h2:after
 }
 div.ws-menu-page code
 {
-	font-family : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+	border-radius : 3px;
+	padding       : 1px 5px 1px 5px;
+	background    : rgba(255, 255, 255, 0.25);
+	font-family   : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
 }
 div.ws-menu-page pre.code
 {
@@ -184,8 +187,8 @@ div.ws-menu-page .ws-menu-page-center
 div.ws-menu-page ul.ws-menu-page-li-margins > li,
 div.ws-menu-page ol.ws-menu-page-li-margins > li
 {
-	margin-top    : 10px;
-	margin-bottom : 10px;
+	margin-top    : 8px;
+	margin-bottom : 8px;
 }
 div.ws-menu-page ul.ws-menu-page-li-margins > li:first-child,
 div.ws-menu-page ol.ws-menu-page-li-margins > li:first-child
