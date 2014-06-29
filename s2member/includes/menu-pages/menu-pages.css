@@ -184,8 +184,18 @@ div.ws-menu-page .ws-menu-page-center
 div.ws-menu-page ul.ws-menu-page-li-margins > li,
 div.ws-menu-page ol.ws-menu-page-li-margins > li
 {
-	margin-top    : 5px;
-	margin-bottom : 5px;
+	margin-top    : 10px;
+	margin-bottom : 10px;
+}
+div.ws-menu-page ul.ws-menu-page-li-margins > li:first-child,
+div.ws-menu-page ol.ws-menu-page-li-margins > li:first-child
+{
+	margin-top : 0;
+}
+div.ws-menu-page ul.ws-menu-page-li-margins > li:last-child,
+div.ws-menu-page ol.ws-menu-page-li-margins > li:last-child
+{
+	margin-bottom : 0;
 }
 div.ws-menu-page div.ws-menu-page-hr
 {
