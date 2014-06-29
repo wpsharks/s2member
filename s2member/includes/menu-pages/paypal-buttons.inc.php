@@ -590,7 +590,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<tr style="padding-top:0;">' . "\n";
 
 								echo '<td style="padding-top:0;">' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>cancel="0"</code> Cancellation Button. Only valid w/ Membership Level Access. Possible values: <code>0</code> = this is NOT a Cancellation Button, <code>1</code> = this IS a Cancellation Button.</li>' . "\n";
 								echo '<li><code>cc="USD"</code> 3 character Currency Code. Not valid when <code>cancel="1"</code>.</li>' . "\n";
 								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<li><code>ccaps="music,videos"</code> A comma-delimited list of Custom Capabilities. Only valid w/ Membership Level Access and/or Independent Custom Capabilities.</li>' . "\n" : '';

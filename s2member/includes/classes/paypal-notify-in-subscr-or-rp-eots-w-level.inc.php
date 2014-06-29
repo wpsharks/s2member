@@ -59,8 +59,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 								if(!get_transient($transient_ipn = "s2m_ipn_".md5("s2member_transient_".$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
 									{
-										$is_refund = (preg_match("/^refunded$/i", $paypal["payment_status"]) && $paypal["parent_txn_id"]);
-										$is_reversal = (preg_match("/^(reversed|reversal)$/i", $paypal["payment_status"]) && $paypal["parent_txn_id"]);
+										$is_refund = (preg_match("/^refunded$/i", $paypal["payment_status"]) && !empty($paypal["parent_txn_id"]));
+										$is_reversal = (preg_match("/^(reversed|reversal)$/i", $paypal["payment_status"]) && !empty($paypal["parent_txn_id"]));
 										$is_reversal = (!$is_reversal) ? (preg_match("/^new_case$/i", $paypal["txn_type"]) && preg_match("/^chargeback$/i", $paypal["case_type"])) : $is_reversal;
 										$is_refund_or_reversal = ($is_refund || $is_reversal); // If either of the previous tests above evaluated to true; then it's obviously a Refund and/or a Reversal.
 										$is_partial_refund = // Partial refund detection. All refunds processed against Subscriptions are considered partials. Full refunds occur only against Buy Now transactions.
