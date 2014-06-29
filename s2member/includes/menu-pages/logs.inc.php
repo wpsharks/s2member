@@ -196,7 +196,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 							echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-							echo '<ul>'."\n";
+							echo '<ul class="ws-menu-page-li-margins">'."\n";
 							foreach(c_ws_plugin__s2member_utils_logs::$log_file_descriptions as $_k => $_v)
 								echo '<li style="font-family:\'Georgia\', serif;"><code><strong>'.esc_html(preg_replace('/^\/|\/$/', '', $_k)).'.log</strong></code> &nbsp;&nbsp; '.esc_html($_v["long"]).'</li>'."\n";
 							unset($_k, $_v); // Housekeeping.

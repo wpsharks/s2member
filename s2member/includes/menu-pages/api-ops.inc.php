@@ -80,7 +80,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<textarea name="ws_plugin__s2member_signup_notification_urls" id="ws-plugin--s2member-signup-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["signup_notification_urls"]) . '</textarea><br />' . "\n";
 								echo 'Signup Notifications take place silently behind-the-scene, using an HTTP connection.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%subscr_id%%</code> = The Paid Subscription ID, which remains constant throughout any &amp; all future payments. [ <a href="#" onclick="alert(\'There is one exception. If you are selling Lifetime or Fixed-Term (non-recurring) access, using Buy Now functionality; the %%subscr_id%% is actually set to the Transaction ID for the purchase. Payment Gateways do not provide a specific Subscription ID for Buy Now purchases. Since Lifetime &amp; Fixed-Term Subscriptions are NOT recurring (i.e. there is only ONE payment), using the Transaction ID as the Subscription ID is a graceful way to deal with this minor conflict.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_baid%%</code> = Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that require a Billing Agreement. This is the Subscription\'s Billing Agreement ID, which remains constant throughout any &amp; all future payments. [ <a href="#" onclick="alert(\'Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that require a Billing Agreement. In all other cases, the %%subscr_baid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% in most cases.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_cid%%</code> = Applicable only with Stripe integration. This is the Customer\'s ID in Stripe, which remains constant throughout any &amp; all future payments. Each Stripe Customer has this Customer ID; and also a Subscription and/or Transaction ID [ <a href="#" onclick="alert(\'Applicable only when you integrate s2Member with Stripe. In all other cases, the %%subscr_cid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% when running anything other than Stripe.\\n\\nEach Stripe Customer has a Customer ID; and also a Subscription and/or Transaction ID. See %%subscr_id%% for further details.\'); return false;">?</a> ]</li>' . "\n";
@@ -101,7 +101,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
 									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
-									echo '<ul>' . "\n";
+									echo '<ul class="ws-menu-page-li-margins">' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
 									echo '<li><code>%%coupon_affiliate_id%%</code> = This is the end of an Affiliate Coupon Code <em>(i.e. the referring affiliate\'s ID)</em>. This is only applicable if an Affiliate Coupon Code is accepted by your configuration of s2Member.</li>' . "\n";
@@ -109,7 +109,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								}
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -184,7 +184,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<textarea name="ws_plugin__s2member_registration_notification_urls" id="ws-plugin--s2member-registration-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["registration_notification_urls"]) . '</textarea><br />' . "\n";
 								echo 'Registration Notifications take place silently behind-the-scene, using an HTTP connection.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%role%%</code> = The Role ID <code>(subscriber, s2member_level[0-9]+, administrator, editor, author, contributor)</code>.</li>' . "\n";
 								echo '<li><code>%%level%%</code> = The Level number <code>(0, 1, 2, 3, 4)</code>. (<em>deprecated, no longer recommended; use <code>%%role%%</code></em>)</li>' . "\n";
 								echo '<li><code>%%ccaps%%</code> = Custom Capabilities. Ex: <code>music,videos,free_gift</code> (<em>in comma-delimited format</em>).</li>' . "\n";
@@ -200,7 +200,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
@@ -208,7 +208,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -286,7 +286,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<textarea name="ws_plugin__s2member_payment_notification_urls" id="ws-plugin--s2member-payment-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["payment_notification_urls"]) . '</textarea><br />' . "\n";
 								echo 'Payment Notifications take place silently behind-the-scene, using an HTTP connection.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%subscr_id%%</code> = The Paid Subscription ID, which remains constant throughout any &amp; all future payments. [ <a href="#" onclick="alert(\'There are some exceptions. If you are selling Lifetime or Fixed-Term (non-recurring) access, and/or Independent Custom Capabilities, using Buy Now functionality; the %%subscr_id%% is actually set to the Transaction ID for the payment.\\n\\nPayment Gateways do not provide a specific Subscription ID for Buy Now purchases. Since Lifetime &amp; Fixed-Term Subscriptions are NOT recurring (i.e. there is only ONE payment), which goes for Independent Custom Capability purchases too; using the Transaction ID as the Subscription ID is a graceful way to deal with this minor conflict.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_baid%%</code> = Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that require a Billing Agreement. This is the Subscription\'s Billing Agreement ID, which remains constant throughout any &amp; all future payments. [ <a href="#" onclick="alert(\'Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that require a Billing Agreement. In all other cases, the %%subscr_baid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% in most cases.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_cid%%</code> = Applicable only with Stripe integration. This is the Customer\'s ID in Stripe, which remains constant throughout any &amp; all future payments. Each Stripe Customer has this Customer ID; and also a Subscription and/or Transaction ID [ <a href="#" onclick="alert(\'Applicable only when you integrate s2Member with Stripe. In all other cases, the %%subscr_cid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% when running anything other than Stripe.\\n\\nEach Stripe Customer has a Customer ID; and also a Subscription and/or Transaction ID. See %%subscr_id%% for further details.\'); return false;">?</a> ]</li>' . "\n";
@@ -311,7 +311,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								{
 									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong><br />' . "\n";
 									echo '<em>These are ONLY included with payments that occur during checkout. They will NOT be provided with any future recurring payments.</em>'."\n";
-									echo '<ul>' . "\n";
+									echo '<ul class="ws-menu-page-li-margins">' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
 									echo '<li><code>%%coupon_affiliate_id%%</code> = This is the end of an Affiliate Coupon Code <em>(i.e. the referring affiliate\'s ID)</em>. This is only applicable if an Affiliate Coupon Code is accepted by your configuration of s2Member.</li>' . "\n";
@@ -319,7 +319,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								}
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
@@ -327,7 +327,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -405,7 +405,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<textarea name="ws_plugin__s2member_modification_notification_urls" id="ws-plugin--s2member-modification-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_notification_urls"]) . '</textarea><br />' . "\n";
 								echo 'Modification Notifications take place silently behind-the-scene, using an HTTP connection.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%subscr_id%%</code> = The Paid Subscription ID, which remains constant throughout any &amp; all future payments. [ <a href="#" onclick="alert(\'There is one exception. If you are selling Lifetime or Fixed-Term (non-recurring) access, using Buy Now functionality; the %%subscr_id%% is actually set to the Transaction ID for the purchase. Payment Gateways do not provide a specific Subscription ID for Buy Now purchases. Since Lifetime &amp; Fixed-Term Subscriptions are NOT recurring (i.e. there is only ONE payment), using the Transaction ID as the Subscription ID is a graceful way to deal with this minor conflict.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_baid%%</code> = Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that require a Billing Agreement. This is the Subscription\'s Billing Agreement ID, which remains constant throughout any &amp; all future payments. [ <a href="#" onclick="alert(\'Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that require a Billing Agreement. In all other cases, the %%subscr_baid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% in most cases.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_cid%%</code> = Applicable only with Stripe integration. This is the Customer\'s ID in Stripe, which remains constant throughout any &amp; all future payments. Each Stripe Customer has this Customer ID; and also a Subscription and/or Transaction ID [ <a href="#" onclick="alert(\'Applicable only when you integrate s2Member with Stripe. In all other cases, the %%subscr_cid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% when running anything other than Stripe.\\n\\nEach Stripe Customer has a Customer ID; and also a Subscription and/or Transaction ID. See %%subscr_id%% for further details.\'); return false;">?</a> ]</li>' . "\n";
@@ -432,7 +432,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
 									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
-									echo '<ul>' . "\n";
+									echo '<ul class="ws-menu-page-li-margins">' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
 									echo '<li><code>%%coupon_affiliate_id%%</code> = This is the end of an Affiliate Coupon Code <em>(i.e. the referring affiliate\'s ID)</em>. This is only applicable if an Affiliate Coupon Code is accepted by your configuration of s2Member.</li>' . "\n";
@@ -440,7 +440,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								}
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
@@ -448,7 +448,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -525,7 +525,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<textarea name="ws_plugin__s2member_cancellation_notification_urls" id="ws-plugin--s2member-cancellation-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_urls"]) . '</textarea><br />' . "\n";
 								echo 'Cancellation Notifications take place silently behind-the-scene, using an HTTP connection.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%subscr_id%%</code> = The Paid Subscription ID, which remained constant throughout the lifetime of the Membership. [ <a href="#" onclick="alert(\'There is one exception. If you are selling Lifetime or Fixed-Term (non-recurring) access, using Buy Now functionality; the %%subscr_id%% is actually set to the original Transaction ID for the purchase. Payment Gateways do not provide a specific Subscription ID for Buy Now purchases. Since Lifetime &amp; Fixed-Term Subscriptions are NOT recurring (i.e. there was only ONE payment), using the Transaction ID as the Subscription ID is a graceful way to deal with this minor conflict.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_baid%%</code> = Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that required a Billing Agreement. This is the Subscription\'s Billing Agreement ID, which remained constant throughout the lifetime of the Membership. [ <a href="#" onclick="alert(\'Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that required a Billing Agreement. In all other cases, the %%subscr_baid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% in most cases.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_cid%%</code> = Applicable only with Stripe integration. This is the Customer\'s ID in Stripe, which remained constant throughout the lifetime of the Membership. Each Stripe Customer has this Customer ID; and also a Subscription and/or Transaction ID [ <a href="#" onclick="alert(\'Applicable only when you integrate s2Member with Stripe. In all other cases, the %%subscr_cid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% when running anything other than Stripe.\\n\\nEach Stripe Customer has a Customer ID; and also a Subscription and/or Transaction ID. See %%subscr_id%% for further details.\'); return false;">?</a> ]</li>' . "\n";
@@ -541,7 +541,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
@@ -549,7 +549,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -629,7 +629,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<textarea name="ws_plugin__s2member_eot_del_notification_urls" id="ws-plugin--s2member-eot-del-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"]) . '</textarea><br />' . "\n";
 								echo 'EOT/Deletion Notifications take place silently behind-the-scene, using an HTTP connection.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%eot_del_type%%</code> = The type of event that triggered this Notification. [ <a href="#" onclick="alert(\'List of possible values:\\n\\nuser-removal-deletion (i.e. manual removal/deletion)\\nauto-eot-cancellation-expiration-demotion\\nauto-eot-cancellation-expiration-deletion\\nipn-cancellation-expiration-demotion\\nipn-cancellation-expiration-deletion\\nipn-refund-reversal-demotion\\nipn-refund-reversal-deletion\'); return false;">list of possible values</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_id%%</code> = The Paid Subscription ID, which remained constant throughout the lifetime of the Membership. [ <a href="#" onclick="alert(\'There is one exception. If you are selling Lifetime or Fixed-Term (non-recurring) access, using Buy Now functionality; the %%subscr_id%% is actually set to the original Transaction ID for the purchase. Payment Gateways do not provide a specific Subscription ID for Buy Now purchases. Since Lifetime &amp; Fixed-Term Subscriptions are NOT recurring (i.e. there was only ONE payment), using the Transaction ID as the Subscription ID is a graceful way to deal with this minor conflict.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_baid%%</code> = Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that required a Billing Agreement. This is the Subscription\'s Billing Agreement ID, which remained constant throughout the lifetime of the Membership. [ <a href="#" onclick="alert(\'Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that required a Billing Agreement. In all other cases, the %%subscr_baid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% in most cases.\'); return false;">?</a> ]</li>' . "\n";
@@ -644,7 +644,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
@@ -652,7 +652,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -730,7 +730,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<textarea name="ws_plugin__s2member_ref_rev_notification_urls" id="ws-plugin--s2member-ref-rev-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_urls"]) . '</textarea><br />' . "\n";
 								echo 'Refund/Reversal Notifications take place silently behind-the-scene, using an HTTP connection.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%subscr_id%%</code> = The Paid Subscription ID, which remained constant throughout the lifetime of the Membership. [ <a href="#" onclick="alert(\'There is one exception. If you are selling Lifetime or Fixed-Term (non-recurring) access, using Buy Now functionality; the %%subscr_id%% is actually set to the original Transaction ID for the purchase. Payment Gateways do not provide a specific Subscription ID for Buy Now purchases. Since Lifetime &amp; Fixed-Term Subscriptions are NOT recurring (i.e. there was only ONE payment), using the Transaction ID as the Subscription ID is a graceful way to deal with this minor conflict.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_baid%%</code> = Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that required a Billing Agreement. This is the Subscription\'s Billing Agreement ID, which remained constant throughout the lifetime of the Membership. [ <a href="#" onclick="alert(\'Applicable only with PayPal Pro (Payflow Edition); and only for Express Checkout transactions that required a Billing Agreement. In all other cases, the %%subscr_baid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% in most cases.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%subscr_cid%%</code> = Applicable only with Stripe integration. This is the Customer\'s ID in Stripe, which remained constant throughout the lifetime of the Membership. Each Stripe Customer has this Customer ID; and also a Subscription and/or Transaction ID [ <a href="#" onclick="alert(\'Applicable only when you integrate s2Member with Stripe. In all other cases, the %%subscr_cid%% is simply set to the %%subscr_id%% value; i.e. it is a duplicate of %%subscr_id%% when running anything other than Stripe.\\n\\nEach Stripe Customer has a Customer ID; and also a Subscription and/or Transaction ID. See %%subscr_id%% for further details.\'); return false;">?</a> ]</li>' . "\n";
@@ -748,7 +748,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
@@ -756,7 +756,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -833,7 +833,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<textarea name="ws_plugin__s2member_sp_sale_notification_urls" id="ws-plugin--s2member-sp-sale-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_sale_notification_urls"]) . '</textarea><br />' . "\n";
 								echo 'Specific Post/Page ~ Sale Notifications take place silently behind-the-scene, using an HTTP connection.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%sp_access_url%%</code> = The full URL (generated by s2Member) where the Customer can gain access.</li>' . "\n";
 								echo '<li><code>%%sp_access_exp%%</code> = Human readable expiration for <code>%%sp_access_url%%</code>. Ex: <em>(link expires in <code>%%sp_access_exp%%</code>)</em>.</li>' . "\n";
 								echo '<li><code>%%txn_id%%</code> = The Paid Transaction ID. Payment Gateways assign a unique identifier for every purchase.</li>' . "\n";
@@ -851,7 +851,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
 									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
-									echo '<ul>' . "\n";
+									echo '<ul class="ws-menu-page-li-margins">' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
 									echo '<li><code>%%coupon_affiliate_id%%</code> = This is the end of an Affiliate Coupon Code <em>(i.e. the referring affiliate\'s ID)</em>. This is only applicable if an Affiliate Coupon Code is accepted by your configuration of s2Member.</li>' . "\n";
@@ -859,7 +859,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								}
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -936,7 +936,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '<textarea name="ws_plugin__s2member_sp_ref_rev_notification_urls" id="ws-plugin--s2member-sp-ref-rev-notification-urls" rows="3" wrap="off">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_urls"]) . '</textarea><br />' . "\n";
 								echo 'Specific Post/Page ~ Refund/Reversal Notifications take place silently behind-the-scene, using an HTTP connection.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%parent_txn_id%%</code> = The Parent Transaction ID, associated with the original payment being refunded/reversed.</li>' . "\n";
 								echo '<li><code>%%parent_txn_cid%%</code> = Applicable only with Stripe integration. This is the Customer\'s ID in Stripe. Each Stripe Customer has this Customer ID; and also a Transaction ID associated with their purchase of the Specific Post/Page [ <a href="#" onclick="alert(\'Applicable only when you integrate s2Member with Stripe. In all other cases, the %%parent_txn_cid%% is simply set to the %%parent_txn_id%% value; i.e. it is a duplicate of %%parent_txn_id%% when running anything other than Stripe.\\n\\nEach Stripe Customer has a Customer ID; and also a Transaction ID. See %%parent_txn_id%% for further details.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%-amount%%</code> = The Negative Amount of the payment, that was refunded or reversed back to the Customer.</li>' . "\n";
@@ -951,7 +951,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_api_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";

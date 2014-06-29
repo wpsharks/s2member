@@ -81,7 +81,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<textarea name="ws_plugin__s2member_signup_tracking_codes" id="ws-plugin--s2member-signup-tracking-codes" rows="8" wrap="off" spellcheck="false" class="monospace">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["signup_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' (or even PHP)') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google Analytics code works just fine, AdSense performance tracking, as well as Yahoo tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%subscr_id%%</code> = The Paid Subscription ID, which remains constant throughout any &amp; all future payments. [ <a href="#" onclick="alert(\'There is one exception. If you are selling Lifetime or Fixed-Term (non-recurring) access, using Buy Now functionality; the %%subscr_id%% is actually set to the Transaction ID for the purchase. Payment Gateways do not provide a specific Subscription ID for Buy Now purchases. Since Lifetime &amp; Fixed-Term Subscriptions are NOT recurring (i.e. there is only ONE payment), using the Transaction ID as the Subscription ID is a graceful way to deal with this minor conflict.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%initial%%</code> = The Initial Fee charged during signup. If you offered a 100% Free Trial Period, this will be <code>0</code>. [ <a href="#" onclick="alert(\'This will always represent the amount of money the Customer spent, whenever they initially signed up, no matter what. If a Customer signs up, under the terms of a 100% Free Trial Period, this will be 0.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%regular%%</code> = The Regular Amount of the Subscription. If you offer something 100% free, this will be <code>0</code>. [ <a href="#" onclick="alert(\'This is how much the Subscription costs after an Initial Period expires. If you did NOT offer an Initial Period at a different price, %%initial%% and %%regular%% will be equal to the same thing.\'); return false;">?</a> ]</li>' . "\n";
@@ -100,7 +100,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
 									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
-									echo '<ul>' . "\n";
+									echo '<ul class="ws-menu-page-li-margins">' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
 									echo '<li><code>%%coupon_affiliate_id%%</code> = This is the end of an Affiliate Coupon Code <em>(i.e. the referring affiliate\'s ID)</em>. This is only applicable if an Affiliate Coupon Code is accepted by your configuration of s2Member.</li>' . "\n";
@@ -108,7 +108,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								}
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -164,7 +164,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<textarea name="ws_plugin__s2member_modification_tracking_codes" id="ws-plugin--s2member-modification-tracking-codes" rows="8" wrap="off" spellcheck="false" class="monospace">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["modification_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' (or even PHP)') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google Analytics code works just fine, AdSense performance tracking, as well as Yahoo tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%subscr_id%%</code> = The Paid Subscription ID, which remains constant throughout any &amp; all future payments. [ <a href="#" onclick="alert(\'There is one exception. If you are selling Lifetime or Fixed-Term (non-recurring) access, using Buy Now functionality; the %%subscr_id%% is actually set to the Transaction ID for the purchase. Payment Gateways do not provide a specific Subscription ID for Buy Now purchases. Since Lifetime &amp; Fixed-Term Subscriptions are NOT recurring (i.e. there is only ONE payment), using the Transaction ID as the Subscription ID is a graceful way to deal with this minor conflict.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%initial%%</code> = The Initial Fee charged during signup. If you offered a 100% Free Trial Period, this will be <code>0</code>. [ <a href="#" onclick="alert(\'This will always represent the amount of money the Customer spent, whenever they initially signed up, no matter what. If a Customer signs up, under the terms of a 100% Free Trial Period, this will be 0.\'); return false;">?</a> ]</li>' . "\n";
 								echo '<li><code>%%regular%%</code> = The Regular Amount of the Subscription. If you offer something 100% free, this will be <code>0</code>. [ <a href="#" onclick="alert(\'This is how much the Subscription costs after an Initial Period expires. If you did NOT offer an Initial Period at a different price, %%initial%% and %%regular%% will be equal to the same thing.\'); return false;">?</a> ]</li>' . "\n";
@@ -189,7 +189,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
 									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
-									echo '<ul>' . "\n";
+									echo '<ul class="ws-menu-page-li-margins">' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
 									echo '<li><code>%%coupon_affiliate_id%%</code> = This is the end of an Affiliate Coupon Code <em>(i.e. the referring affiliate\'s ID)</em>. This is only applicable if an Affiliate Coupon Code is accepted by your configuration of s2Member.</li>' . "\n";
@@ -197,7 +197,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								}
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
@@ -205,7 +205,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -258,7 +258,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<textarea name="ws_plugin__s2member_ccap_tracking_codes" id="ws-plugin--s2member-ccap-tracking-codes" rows="8" wrap="off" spellcheck="false" class="monospace">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' (or even PHP)') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google Analytics code works just fine, AdSense performance tracking, as well as Yahoo tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%txn_id%%</code> = The Payment Transaction ID, which is always unique for each payment received.</li>' . "\n";
 								echo '<li><code>%%amount%%</code> = The Amount of the payment. If you offer something 100% free, this will be <code>0</code>.</li>' . "\n";
 								echo '<li><code>%%first_name%%</code> = The First Name of the Customer who purchased the Independent Custom Capabilities.</li>' . "\n";
@@ -279,7 +279,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
 									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
-									echo '<ul>' . "\n";
+									echo '<ul class="ws-menu-page-li-margins">' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
 									echo '<li><code>%%coupon_affiliate_id%%</code> = This is the end of an Affiliate Coupon Code <em>(i.e. the referring affiliate\'s ID)</em>. This is only applicable if an Affiliate Coupon Code is accepted by your configuration of s2Member.</li>' . "\n";
@@ -287,7 +287,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								}
 
 								echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>' . "\n";
 								echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>' . "\n";
 								echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>' . "\n";
@@ -295,7 +295,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '</ul>' . "\n";
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
@@ -347,7 +347,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								echo '<textarea name="ws_plugin__s2member_sp_tracking_codes" id="ws-plugin--s2member-sp-tracking-codes" rows="8" wrap="off" spellcheck="false" class="monospace">' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_tracking_codes"]) . '</textarea><br />' . "\n";
 								echo 'Any valid XHTML / JavaScript' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? '' : ' (or even PHP)') . ' code will work just fine here. Just try not to put anything here that would actually be visible to the Customer. Things like 1x1 pixel images that load up silently and/or JavaScript tracking routines will be fine. Google Analytics code works just fine, AdSense performance tracking, as well as Yahoo tracking and other affiliate network codes are all OK here.<br /><br />' . "\n";
 								echo '<strong>You can also use these special Replacement Codes if you need them:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%txn_id%%</code> = The Paid Transaction ID. Payment Gateways assign a unique identifier for every purchase.</li>' . "\n";
 								echo '<li><code>%%amount%%</code> = The full Amount that you charged for Specific Post/Page Access. If you offer something 100% free, this will be <code>0</code>.</li>' . "\n";
 								echo '<li><code>%%first_name%%</code> = The First Name of the Customer who purchased Specific Post/Page Access.</li>' . "\n";
@@ -362,7 +362,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
 									echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>' . "\n";
-									echo '<ul>' . "\n";
+									echo '<ul class="ws-menu-page-li-margins">' . "\n";
 									echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (e.g. the full Coupon Code).</li>' . "\n";
 									echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>' . "\n";
 									echo '<li><code>%%coupon_affiliate_id%%</code> = This is the end of an Affiliate Coupon Code <em>(i.e. the referring affiliate\'s ID)</em>. This is only applicable if an Affiliate Coupon Code is accepted by your configuration of s2Member.</li>' . "\n";
@@ -370,7 +370,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_trk_ops"))
 								}
 
 								echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>' . "\n";
-								echo '<ul>' . "\n";
+								echo '<ul class="ws-menu-page-li-margins">' . "\n";
 								echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>' . "\n";
 								echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="' . esc_html ($_SERVER["HTTP_HOST"]) . '|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>' . "\n";
 								echo '</ul>' . "\n";
