@@ -54,6 +54,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 										if (($custom = trim (stripslashes ((string)$_POST["ws_plugin__s2member_custom_reg_field_user_pass1"]))))
 											$password = $custom; // Yes, use s2Member custom Password supplied by User.
 									}
+								else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"] && !empty($GLOBALS['ws_plugin__s2member_registration_vars']) &&  !empty($GLOBALS['ws_plugin__s2member_registration_vars']['ws_plugin__s2member_custom_reg_field_user_pass1']))
+									{
+										if (($custom = trim ((string)$GLOBALS['ws_plugin__s2member_registration_vars']['ws_plugin__s2member_custom_reg_field_user_pass1'])))
+											$password = $custom; // Yes, use s2Member custom Password supplied by User.
+									}
 								else if (c_ws_plugin__s2member_utils_conds::pro_is_installed () && c_ws_plugin__s2member_pro_remote_ops::is_remote_op ("create_user") && !empty($GLOBALS["ws_plugin__s2member_generate_password_return"]))
 									{
 										if (($custom = trim (stripslashes ((string)$GLOBALS["ws_plugin__s2member_generate_password_return"]))))
