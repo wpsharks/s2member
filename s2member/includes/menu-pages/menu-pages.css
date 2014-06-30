@@ -37,9 +37,9 @@ div.ws-menu-page
 	margin        : 25px 25px 25px 5px;
 
 	border-radius : 5px;
-	background    : #FFFFFF;
-	border        : 1px solid #A1ACBE;
+	border        : 1px solid #999999;
 	box-shadow    : 0 0 8px 0 rgba(0, 0, 0, 0.2) !important;
+	background    : #FFFFFF url('<?php echo $i; ?>/trans-bg.png') repeat left top;
 }
 div.ws-menu-page a
 {
@@ -526,8 +526,8 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .toggler
 	top                 : 0;
 	right               : 0;
 
-	background          : #8EA7BD;
-	box-shadow          : 0 0 0 2px #FFFFFF;
+	background          : #8EA7BD url('<?php echo $i; ?>/trans-bg.png') repeat left top;
+	box-shadow          : 0 0 0 1px #FFFFFF;
 	border-radius       : 3px;
 
 	cursor              : pointer;
@@ -537,7 +537,7 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .toggler
 }
 table.ws-menu-page-table td.ws-menu-page-table-r > .toggler:hover
 {
-	background : #74808B;
+	background-color : #74808B;
 }
 table.ws-menu-page-table td.ws-menu-page-table-r > .wrapper
 {
