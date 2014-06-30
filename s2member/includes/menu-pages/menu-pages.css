@@ -534,7 +534,7 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .toggler
 	top                 : 0;
 	right               : 0;
 
-	background          : #8EA7BD url('<?php echo $i; ?>/trans-bg.png') repeat left top;
+	background          : #0E4152 url('<?php echo $i; ?>/trans-bg.png') repeat left top;
 	box-shadow          : 0 0 0 1px #FFFFFF;
 	border-radius       : 3px;
 
@@ -545,7 +545,7 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .toggler
 }
 table.ws-menu-page-table td.ws-menu-page-table-r > .toggler:hover
 {
-	background-color : #74808B;
+	background-color : #0D1F2F;
 }
 table.ws-menu-page-table td.ws-menu-page-table-r > .wrapper
 {
