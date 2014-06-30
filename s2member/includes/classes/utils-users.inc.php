@@ -61,26 +61,26 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 		 * @package s2Member\Utilities
 		 * @since 3.5
 		 *
-		 * @param string $subscr_or_txn_id Either a Paid Subscr. ID, or a Paid Transaction ID.
+		 * @param string $subscr_txn_baid_cid_id Either a Paid Subscr. ID, or a Paid Transaction ID.
 		 * @param string $os0 Optional. A second lookup parameter, usually the `os0` value for PayPal integrations.
 		 *
 		 * @return string|bool The Custom String value on success, else false on failure.
 		 */
-		public static function get_user_custom_with($subscr_or_txn_id = '', $os0 = '')
+		public static function get_user_custom_with($subscr_txn_baid_cid_id = '', $os0 = '')
 		{
 			global $wpdb;
 			/** @var wpdb $wpdb */
 
-			if($subscr_or_txn_id && $os0) // This case includes some additional routines that can use the ``$os0`` value.
+			if($subscr_txn_baid_cid_id && $os0) // This case includes some additional routines that can use the ``$os0`` value.
 			{
-				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND (`meta_value` = '".esc_sql($subscr_or_txn_id)."' OR `meta_value` = '".esc_sql($os0)."') LIMIT 1"))
+				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND (`meta_value` = '".esc_sql($subscr_txn_baid_cid_id)."' OR `meta_value` = '".esc_sql($os0)."') LIMIT 1"))
 				   || ($q = $wpdb->get_row("SELECT `ID` AS `user_id` FROM `".$wpdb->users."` WHERE `ID` = '".esc_sql($os0)."' LIMIT 1"))
 				) if(($custom = get_user_option("s2member_custom", $q->user_id)))
 					return $custom;
 			}
-			else if($subscr_or_txn_id) // Otherwise, if all we have is a Subscr./Txn. ID value.
+			else if($subscr_txn_baid_cid_id) // Otherwise, if all we have is a Subscr./Txn. ID value.
 			{
-				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND `meta_value` = '".esc_sql($subscr_or_txn_id)."' LIMIT 1")))
+				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND `meta_value` = '".esc_sql($subscr_txn_baid_cid_id)."' LIMIT 1")))
 					if(($custom = get_user_option("s2member_custom", $q->user_id)))
 						return $custom;
 			}
@@ -95,25 +95,25 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 		 * @package s2Member\Utilities
 		 * @since 3.5
 		 *
-		 * @param string $subscr_or_txn_id Either a Paid Subscr. ID, or a Paid Transaction ID.
+		 * @param string $subscr_txn_baid_cid_id Either a Paid Subscr. ID, or a Paid Transaction ID.
 		 * @param string $os0 Optional. A second lookup parameter, usually the `os0` value for PayPal integrations.
 		 *
-		 * @return int|bool A WordPress User ID on success, else false on failure.
+		 * @return integer|bool A WordPress User ID on success, else false on failure.
 		 */
-		public static function get_user_id_with($subscr_or_txn_id = '', $os0 = '')
+		public static function get_user_id_with($subscr_txn_baid_cid_id = '', $os0 = '')
 		{
 			global $wpdb;
 			/** @var wpdb $wpdb */
 
-			if($subscr_or_txn_id && $os0) // This case includes some additional routines that can use the ``$os0`` value.
+			if($subscr_txn_baid_cid_id && $os0) // This case includes some additional routines that can use the ``$os0`` value.
 			{
-				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND (`meta_value` = '".esc_sql($subscr_or_txn_id)."' OR `meta_value` = '".esc_sql($os0)."') LIMIT 1"))
+				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND (`meta_value` = '".esc_sql($subscr_txn_baid_cid_id)."' OR `meta_value` = '".esc_sql($os0)."') LIMIT 1"))
 				   || ($q = $wpdb->get_row("SELECT `ID` AS `user_id` FROM `".$wpdb->users."` WHERE `ID` = '".esc_sql($os0)."' LIMIT 1"))
 				) return $q->user_id;
 			}
-			else if($subscr_or_txn_id) // Otherwise, if all we have is a Subscr./Txn. ID value.
+			else if($subscr_txn_baid_cid_id) // Otherwise, if all we have is a Subscr./Txn. ID value.
 			{
-				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND `meta_value` = '".esc_sql($subscr_or_txn_id)."' LIMIT 1")))
+				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND `meta_value` = '".esc_sql($subscr_txn_baid_cid_id)."' LIMIT 1")))
 					return $q->user_id;
 			}
 			return FALSE; // Otherwise, return false.
@@ -127,26 +127,26 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 		 * @package s2Member\Utilities
 		 * @since 3.5
 		 *
-		 * @param string $subscr_or_txn_id Either a Paid Subscr. ID, or a Paid Transaction ID.
+		 * @param string $subscr_txn_baid_cid_id Either a Paid Subscr. ID, or a Paid Transaction ID.
 		 * @param string $os0 Optional. A second lookup parameter, usually the `os0` value for PayPal integrations.
 		 *
 		 * @return int|bool A User's Email Address on success, else false on failure.
 		 */
-		public static function get_user_email_with($subscr_or_txn_id = FALSE, $os0 = FALSE)
+		public static function get_user_email_with($subscr_txn_baid_cid_id = '', $os0 = '')
 		{
 			global $wpdb;
 			/** @var wpdb $wpdb */
 
-			if($subscr_or_txn_id && $os0) // This case includes some additional routines that can use the ``$os0`` value.
+			if($subscr_txn_baid_cid_id && $os0) // This case includes some additional routines that can use the ``$os0`` value.
 			{
-				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND (`meta_value` = '".esc_sql($subscr_or_txn_id)."' OR `meta_value` = '".esc_sql($os0)."') LIMIT 1"))
+				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND (`meta_value` = '".esc_sql($subscr_txn_baid_cid_id)."' OR `meta_value` = '".esc_sql($os0)."') LIMIT 1"))
 				   || ($q = $wpdb->get_row("SELECT `ID` AS `user_id` FROM `".$wpdb->users."` WHERE `ID` = '".esc_sql($os0)."' LIMIT 1"))
 				) if(is_object($user = new WP_User ($q->user_id)) && !empty($user->ID) && ($email = $user->user_email))
 					return $email;
 			}
-			else if($subscr_or_txn_id) // Otherwise, if all we have is a Subscr./Txn. ID value.
+			else if($subscr_txn_baid_cid_id) // Otherwise, if all we have is a Subscr./Txn. ID value.
 			{
-				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND `meta_value` = '".esc_sql($subscr_or_txn_id)."' LIMIT 1")))
+				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND `meta_value` = '".esc_sql($subscr_txn_baid_cid_id)."' LIMIT 1")))
 					if(is_object($user = new WP_User ($q->user_id)) && !empty($user->ID) && ($email = $user->user_email))
 						return $email;
 			}
@@ -156,31 +156,30 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 		/**
 		 * Retrieves IPN Signup Vars & validates their Subscription ID.
 		 *
-		 * The ``$user_id`` can be passed in directly; or a lookup can be performed with ``$subscr_id``.
-		 *
 		 * @package s2Member\Utilities
 		 * @since 3.5
 		 *
 		 * @param integer|string $user_id Optional. A numeric WordPress User ID.
 		 *
-		 * @param string         $subscr_id Optional. Can be used instead of passing in a ``$user_id``.
-		 *   If ``$subscr_id`` is passed in, it has to match the one found inside the resulting IPN Signup Vars collected by this routine.
+		 * @param string         $subscr_txn_baid_cid_id Optional. Can be used instead of passing in a ``$user_id``.
+		 *   If ``$subscr_baid_cid_id`` is passed in, it has to match the one found inside the resulting IPN Signup Vars collected by this routine.
 		 *   If neither of these parameters are passed in, the current User is assumed instead, obtained through ``wp_get_current_user()``.
 		 *
 		 * @return array|bool A User's IPN Signup Vars on success, else false on failure.
 		 */
-		public static function get_user_ipn_signup_vars($user_id = 0, $subscr_id = '')
+		public static function get_user_ipn_signup_vars($user_id = 0, $subscr_txn_baid_cid_id = '')
 		{
-			if($user_id || ($subscr_id && ($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($subscr_id)))
-			   || (!$user_id && !$subscr_id && is_object($user = wp_get_current_user()) && !empty($user->ID) && ($user_id = $user->ID))
+			if($user_id || ($subscr_txn_baid_cid_id && ($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($subscr_txn_baid_cid_id)))
+			   || (!$user_id && !$subscr_txn_baid_cid_id && is_object($user = wp_get_current_user()) && !empty($user->ID) && ($user_id = $user->ID))
 			)
 			{
-				$_subscr_id   = get_user_option("s2member_subscr_id", $user_id);
 				$_subscr_baid = get_user_option("s2member_subscr_baid", $user_id);
+				$_subscr_cid  = get_user_option("s2member_subscr_cid", $user_id);
+				$_subscr_id   = get_user_option("s2member_subscr_id", $user_id);
 
-				if($_subscr_id && (!$subscr_id || $subscr_id === $_subscr_id || $subscr_id === $_subscr_baid) && ($subscr_id = $_subscr_id))
+				if($_subscr_id && (!$subscr_txn_baid_cid_id || $subscr_txn_baid_cid_id === $_subscr_id || $subscr_txn_baid_cid_id === $_subscr_baid || $subscr_txn_baid_cid_id === $_subscr_cid))
 					if(is_array($ipn_signup_vars = get_user_option("s2member_ipn_signup_vars", $user_id)))
-						if($ipn_signup_vars["subscr_id"] === $subscr_id)
+						if($ipn_signup_vars["subscr_id"] === $_subscr_id)
 							return $ipn_signup_vars;
 			}
 			return FALSE; // Otherwise, return false.
@@ -196,15 +195,15 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 		 *
 		 * @param string     $var Required. The requested Signup Var.
 		 * @param int|string $user_id Optional. A numeric WordPress User ID.
-		 * @param string     $subscr_id Optional. Can be used instead of passing in a ``$user_id``.
+		 * @param string     $subscr_txn_baid_cid_id Optional. Can be used instead of passing in a ``$user_id``.
 		 *   If ``$subscr_id`` is passed in, it has to match the one found inside the resulting IPN Signup Vars collected by this routine.
 		 *   If neither of these parameters are passed in, the current User is assumed instead, obtained through ``wp_get_current_user()``.
 		 *
 		 * @return mixed|bool A User's IPN Signup Var on success, else false on failure.
 		 */
-		public static function get_user_ipn_signup_var($var = '', $user_id = 0, $subscr_id = '')
+		public static function get_user_ipn_signup_var($var = '', $user_id = 0, $subscr_txn_baid_cid_id = '')
 		{
-			if(!empty($var) && is_array($user_ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars($user_id, $subscr_id)))
+			if(!empty($var) && is_array($user_ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars($user_id, $subscr_txn_baid_cid_id)))
 			{
 				if(isset($user_ipn_signup_vars[$var]))
 					return $user_ipn_signup_vars[$var];
