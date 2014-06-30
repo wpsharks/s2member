@@ -18,6 +18,14 @@
 @import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
 
 /*
+Alter WordPress wrap on s2Member menu pages.
+*/
+body[class*='s2member'] #wpwrap
+{
+	background : #B4B4B4;
+}
+
+/*
 Align these with menu page.
 */
 div.updated, div.error
@@ -37,7 +45,7 @@ div.ws-menu-page
 	margin        : 25px 25px 25px 5px;
 
 	border-radius : 5px;
-	border        : 1px solid #999999;
+	border        : 1px solid #333333;
 	box-shadow    : 0 0 8px 0 rgba(0, 0, 0, 0.2) !important;
 	background    : #FFFFFF url('<?php echo $i; ?>/trans-bg.png') repeat left top;
 }
