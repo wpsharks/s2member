@@ -56,7 +56,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 									{
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `web_accept|subscr_signup` ).";
 
-										list ($paypal["level"], $paypal["ccaps"], $paypal["eotper"]) = preg_split ("/\:/", $paypal["item_number"], 3);
+										@list ($paypal["level"], $paypal["ccaps"], $paypal["eotper"]) = preg_split ("/\:/", $paypal["item_number"], 3);
 
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
@@ -743,7 +743,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level"
 												set_transient ("s2m_" . md5 ("s2member_transient_ipn_subscr_payment_" . $paypal["subscr_id"]), $ipn, 43200);
 											}
 										if ($processing // Store signup vars now? If the User already exists in the database, we can go ahead and store these right now.
-										&& (($user_id && is_object ($user) && $user->ID) || (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"], $paypal["option_selection1"])) && is_object ($user = new WP_User ($user_id)) && $user->ID)))
+										&& ((!empty($user_id) && !empty($user) && is_object ($user) && $user->ID) || (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"], $paypal["option_selection1"])) && is_object ($user = new WP_User ($user_id)) && $user->ID)))
 											{
 												$paypal["s2member_log"][] = "Storing IPN signup vars now. These are associated with a User's account record; for future reference.";
 
