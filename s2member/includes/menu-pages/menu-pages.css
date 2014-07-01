@@ -22,7 +22,7 @@ Alter WordPress wrap on s2Member menu pages.
 */
 body[class*='s2member'] #wpwrap
 {
-	background : #B4B4B4;
+	background : #C7C7C7;
 }
 
 /*
