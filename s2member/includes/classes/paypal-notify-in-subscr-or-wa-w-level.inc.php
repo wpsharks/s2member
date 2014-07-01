@@ -37,8 +37,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 		 *
 		 * @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
 		 */
-		public static function /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */
-		cp($vars = array())
+		public static function cp($vars = array() /* Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``. */)
 		{
 			extract($vars, EXTR_OVERWRITE | EXTR_REFS); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
@@ -66,8 +65,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 					$paypal['ip'] = (preg_match('/ip address/i', $paypal['option_name2']) && $paypal['option_selection2']) ? $paypal['option_selection2'] : '';
 					$paypal['ip'] = (!$paypal['ip'] && preg_match('/^[a-z0-9]+~[0-9\.]+$/i', $paypal['invoice'])) ? preg_replace('/^[a-z0-9]+~/i', '', $paypal['invoice']) : $paypal['ip'];
 
-					$paypal['period1']    = (preg_match('/^[1-9]/', $paypal['period1'])) ? $paypal['period1'] : '0 D';
-					$paypal['mc_amount1'] = (strlen($paypal['mc_amount1']) && $paypal['mc_amount1'] > 0) ? $paypal['mc_amount1'] : '0.00';
+					$paypal['period1']    = (isset($paypal['period1']) && preg_match('/^[1-9]/', $paypal['period1'])) ? $paypal['period1'] : '0 D';
+					$paypal['mc_amount1'] = (isset($paypal['mc_amount1']) && $paypal['mc_amount1'] > 0) ? $paypal['mc_amount1'] : '0.00';
 
 					if(preg_match('/^web_accept$/i', $paypal['txn_type']) /* Conversions for lifetime & fixed-term sales. */)
 					{
@@ -75,10 +74,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 						$paypal['mc_amount3'] = $paypal['mc_gross']; // The 'Buy Now' amount is the full gross.
 					}
 					$paypal['initial_term'] = (preg_match('/^[1-9]/', $paypal['period1'])) ? $paypal['period1'] : '0 D';
-					$paypal['initial']      = (strlen($paypal['mc_amount1']) && preg_match('/^[1-9]/', $paypal['period1'])) ? $paypal['mc_amount1'] : $paypal['mc_amount3'];
+					$paypal['initial']      = isset($paypal['mc_amount1'][0]) && preg_match('/^[1-9]/', $paypal['period1']) ? $paypal['mc_amount1'] : $paypal['mc_amount3'];
 					$paypal['regular']      = $paypal['mc_amount3']; // This is the regular payment amount that is charged to the customer. always required by PayPal.
 					$paypal['regular_term'] = $paypal['period3']; // This is just set to keep a standard; this way both initial_term & regular_term are available.
-					$paypal['recurring']    = ($paypal['recurring']) ? $paypal['mc_amount3'] : '0'; // If non-recurring, this should be zero, otherwise regular.
+					$paypal['recurring']    = !empty($paypal['recurring']) ? $paypal['mc_amount3'] : '0'; // If non-recurring, this should be zero, otherwise regular.
 
 					$ipn_signup_vars = $paypal; // Create array of IPN signup vars w/o s2member_log.
 					unset($ipn_signup_vars['s2member_log']);
