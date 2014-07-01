@@ -1135,7 +1135,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$logt = c_ws_plugin__s2member_utilities::time_details ();
 																$logv = c_ws_plugin__s2member_utilities::ver_details ();
 																$logm = c_ws_plugin__s2member_utilities::mem_details ();
-																$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . $_SERVER["HTTP_USER_AGENT"];
+																$log4 = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] . "\nUser-Agent: " . @$_SERVER["HTTP_USER_AGENT"];
 																$log4 = (is_multisite () && !is_main_site ()) ? ($_log4 = $current_blog->domain . $current_blog->path) . "\n" . $log4 : $log4;
 																$log2 = (is_multisite () && !is_main_site ()) ? "reg-handler-4-" . trim (preg_replace ("/[^a-z0-9]/i", "-", $_log4), "-") . ".log" : "reg-handler.log";
 
