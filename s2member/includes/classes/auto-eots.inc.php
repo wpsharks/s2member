@@ -231,7 +231,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																				$msg .= "cv8: %%cv8%%\n";
 																				$msg .= "cv9: %%cv9%%";
 
-																				if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)) && ($msg = preg_replace ("/%%eot_del_type%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ("auto-eot-cancellation-expiration-demotion"), $msg)) && ($msg = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($subscr_id), $msg)))
+																				if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim(@$cv[$1])', $msg)) && ($msg = preg_replace ("/%%eot_del_type%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ("auto-eot-cancellation-expiration-demotion"), $msg)) && ($msg = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($subscr_id), $msg)))
 																					if (($msg = preg_replace ("/%%subscr_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($subscr_baid), $msg)) && ($msg = preg_replace ("/%%subscr_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($subscr_cid), $msg)))
 																						if (($msg = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user->first_name), $msg)) && ($msg = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user->last_name), $msg)))
 																							if (($msg = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (trim ($user->first_name . " " . $user->last_name)), $msg)))

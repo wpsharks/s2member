@@ -159,7 +159,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_
 														$msg .= "cv8: %%cv8%%\n";
 														$msg .= "cv9: %%cv9%%";
 
-														if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)) && ($msg = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["subscr_id"]), $msg)))
+														if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim(@$cv[$1])', $msg)) && ($msg = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["subscr_id"]), $msg)))
 															if (($msg = preg_replace ("/%%subscr_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["subscr_baid"]), $msg)) && ($msg = preg_replace ("/%%subscr_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["subscr_cid"]), $msg)))
 																if (($msg = preg_replace ("/%%amount%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["mc_gross"]), $msg)) && ($msg = preg_replace ("/%%txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["txn_id"]), $msg)))
 																	if (($msg = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["item_number"]), $msg)) && ($msg = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["item_name"]), $msg)))

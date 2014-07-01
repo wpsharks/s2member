@@ -1059,7 +1059,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		$msg .= "cv8: %%cv8%%\n";
 																		$msg .= "cv9: %%cv9%%";
 
-																		if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)))
+																		if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim(@$cv[$1])', $msg)))
 																			if (($msg = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($role), $msg)))
 																				if (($msg = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($level), $msg)))
 																					if (($msg = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($ccaps), $msg)))

@@ -99,7 +99,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 
 																if ($processing && ($code = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ccap_tracking_codes"]) && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
 																	{
-																		if (($code = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $code)) && ($code = preg_replace ("/%%(?:subscr|txn)_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["txn_id"]), $code)))
+																		if (($code = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim(@$cv[$1])', $code)) && ($code = preg_replace ("/%%(?:subscr|txn)_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["txn_id"]), $code)))
 																			if (($code = preg_replace ("/%%(?:subscr|txn)_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["txn_baid"]), $code)) && ($code = preg_replace ("/%%(?:subscr|txn)_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["txn_cid"]), $code)))
 																				if (($code = preg_replace ("/%%amount%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["mc_gross"]), $code)) && ($code = preg_replace ("/%%txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["txn_id"]), $code)))
 																					if (($code = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["item_number"]), $code)) && ($code = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["item_name"]), $code)))
