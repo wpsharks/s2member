@@ -186,12 +186,12 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects"))
 						$user_ccaps = (string)implode ("-", c_ws_plugin__s2member_user_access::user_access_ccaps ($user));
 						$user_logins = ($user) ? (string)(int)get_user_option ("s2member_login_counter", $user_id) : "-1";
 
-						$url = preg_replace ("/%%current_user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_login), $url);
-						$url = preg_replace ("/%%current_user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $url);
-						$url = preg_replace ("/%%current_user_level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_level), $url);
-						$url = preg_replace ("/%%current_user_role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_role), $url);
-						$url = preg_replace ("/%%current_user_ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_ccaps), $url);
-						$url = preg_replace ("/%%current_user_logins%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_logins), $url);
+						$url = preg_replace ("/%%current_user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_login), $url);
+						$url = preg_replace ("/%%current_user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_id), $url);
+						$url = preg_replace ("/%%current_user_level%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_level), $url);
+						$url = preg_replace ("/%%current_user_role%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_role), $url);
+						$url = preg_replace ("/%%current_user_ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_ccaps), $url);
+						$url = preg_replace ("/%%current_user_logins%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_logins), $url);
 
 						if ( /* Only if s2Member's fault » */$url !== $orig_url && (!($parse = c_ws_plugin__s2member_utils_urls::parse_url ($url, -1, false)) || (!empty($parse["path"]) && strpos ($parse["path"], "//") !== false)))
 							$url = /* Defaults to Home Page. We don't return invalid URLs produced by empty Replacement Codes ( i.e. with `//` ). */ site_url ("/");

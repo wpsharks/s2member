@@ -15,7 +15,15 @@
 * @package WebSharks\Menu Pages
 * @since x.xx
 */
-@import url('//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css');
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
+
+/*
+Alter WordPress wrap on s2Member menu pages.
+*/
+body[class*='s2member'] #wpwrap
+{
+	background : #B4B4B4;
+}
 
 /*
 Align these with menu page.
@@ -37,9 +45,9 @@ div.ws-menu-page
 	margin        : 25px 25px 25px 5px;
 
 	border-radius : 5px;
-	background    : #FFFFFF;
-	border        : 1px solid #A1ACBE;
+	border        : 1px solid #333333;
 	box-shadow    : 0 0 8px 0 rgba(0, 0, 0, 0.2) !important;
+	background    : #FFFFFF url('<?php echo $i; ?>/trans-bg.png') repeat left top;
 }
 div.ws-menu-page a
 {
@@ -114,7 +122,10 @@ div.ws-menu-page > h2:after
 }
 div.ws-menu-page code
 {
-	font-family : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
+	border-radius : 3px;
+	padding       : 1px 5px 1px 5px;
+	background    : rgba(255, 255, 255, 0.25);
+	font-family   : 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace;
 }
 div.ws-menu-page pre.code
 {
@@ -181,6 +192,22 @@ div.ws-menu-page .ws-menu-page-center
 	margin-right : auto;
 	display      : block;
 }
+div.ws-menu-page ul.ws-menu-page-li-margins > li,
+div.ws-menu-page ol.ws-menu-page-li-margins > li
+{
+	margin-top    : 8px;
+	margin-bottom : 8px;
+}
+div.ws-menu-page ul.ws-menu-page-li-margins > li:first-child,
+div.ws-menu-page ol.ws-menu-page-li-margins > li:first-child
+{
+	margin-top : 0;
+}
+div.ws-menu-page ul.ws-menu-page-li-margins > li:last-child,
+div.ws-menu-page ol.ws-menu-page-li-margins > li:last-child
+{
+	margin-bottom : 0;
+}
 div.ws-menu-page div.ws-menu-page-hr
 {
 	height      : 1px;
@@ -198,7 +225,7 @@ div.ws-menu-page .ws-menu-page-hilite
 	background    : #DFF0DF;
 
 	border-radius : 3px;
-	padding       : 0.2em;
+	padding       : 0 0.2em;
 }
 div.ws-menu-page .ws-menu-page-bright-hilite
 {
@@ -206,7 +233,7 @@ div.ws-menu-page .ws-menu-page-bright-hilite
 	background    : #EBF084;
 
 	border-radius : 3px;
-	padding       : 0.2em;
+	padding       : 0 0.2em;
 }
 div.ws-menu-page .ws-menu-page-error-hilite
 {
@@ -214,7 +241,7 @@ div.ws-menu-page .ws-menu-page-error-hilite
 	background    : #962722;
 
 	border-radius : 3px;
-	padding       : 0.2em;
+	padding       : 0 0.2em;
 }
 div.ws-menu-page img.ws-menu-page-img-16
 {
@@ -338,23 +365,23 @@ div.ws-menu-page .error
 }
 div.ws-menu-page .info
 {
-	border     : 1px solid #35558A;
 	background : #C9E0FA;
+	border     : 1px solid #35558A;
 }
 div.ws-menu-page .notice
 {
-	border     : 1px solid #E6DB55;
 	background : #FFFBCC;
+	border     : 1px solid #E6DB55;
 }
 div.ws-menu-page .warning
 {
-	border     : 1px solid #D29A04;
 	background : #FADDAB;
+	border     : 1px solid #D29A04;
 }
 div.ws-menu-page .error
 {
-	border     : 1px solid #711E1E;
 	background : #FABBC6;
+	border     : 1px solid #711E1E;
 }
 div.ws-menu-page .monospace
 {
@@ -456,11 +483,9 @@ table.ws-menu-page-table .info,
 table.ws-menu-page-table .warning,
 table.ws-menu-page-table .error
 {
-	font-size  : 100%;
-	font-style : italic;
-
-	padding    : 5px;
-	margin     : 1em 0 1em 0;
+	font-size : 80%;
+	padding   : 5px;
+	margin    : 1em 0 1em 0;
 }
 table.ws-menu-page-table ul,
 table.ws-menu-page-table ol
@@ -509,8 +534,8 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .toggler
 	top                 : 0;
 	right               : 0;
 
-	background          : #8EA7BD;
-	box-shadow          : 0 0 0 2px #FFFFFF;
+	background          : #0E4152 url('<?php echo $i; ?>/trans-bg.png') repeat left top;
+	box-shadow          : 0 0 0 1px #FFFFFF;
 	border-radius       : 3px;
 
 	cursor              : pointer;
@@ -520,7 +545,7 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .toggler
 }
 table.ws-menu-page-table td.ws-menu-page-table-r > .toggler:hover
 {
-	background : #74808B;
+	background-color : #0D1F2F;
 }
 table.ws-menu-page-table td.ws-menu-page-table-r > .wrapper
 {
@@ -536,8 +561,8 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .wrapper
 	left          : 25px;
 
 	border-radius : 5px;
-	background    : #B2BFCA;
-	border        : 1px solid #656F79;
+	background    : #D3D3D3 url('<?php echo $i; ?>/trans-bg.png') repeat left top;
+	box-shadow    : 0 0 1px 1px rgba(0, 0, 0, 0.25) inset;
 
 	display       : none;
 }
@@ -568,7 +593,7 @@ td.ws-menu-page-table-r div.ws-menu-page-others img
 }
 table.ws-menu-page-table img.ws-menu-page-brand-icon
 {
-	border         : 0px;
+	border         : 0;
 	float          : right;
 	width          : 128px;
 	height         : 128px;
@@ -577,7 +602,7 @@ table.ws-menu-page-table img.ws-menu-page-brand-icon
 }
 table.ws-menu-page-table img.ws-menu-page-brand-updates
 {
-	border         : 0px;
+	border         : 0;
 	float          : right;
 	width          : 155px;
 	height         : 40px;
@@ -819,20 +844,9 @@ div.ws-menu-page-updates div#creditfooter
 }
 div.ws-menu-page-updates div#ws-updates-div-fname,
 div.ws-menu-page-updates div#ws-updates-div-lname,
-div.ws-menu-page-updates div#ws-updates-div-email,
-div.ws-menu-page-updates div#ws-updates-div-subs,
-div.ws-menu-page-updates div#ws-updates-div-priv
+div.ws-menu-page-updates div#ws-updates-div-email
 {
 	margin : 0 0 10px 0;
-}
-div.ws-menu-page-updates div#ws-updates-div-subs
-{
-	margin : 15px 0 0 0;
-}
-div.ws-menu-page-updates div#ws-updates-div-priv
-{
-	font-size : 80%;
-	margin    : 0 0 5px 0;
 }
 div.ws-menu-page-updates input[type = "text"],
 div.ws-menu-page-updates input[type = "password"],

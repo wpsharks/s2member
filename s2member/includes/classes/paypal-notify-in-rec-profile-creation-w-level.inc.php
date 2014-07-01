@@ -44,7 +44,9 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_rec_profile_creation_
 						&& ((!empty($paypal["item_number"]) || ($paypal["item_number"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_number ($paypal))) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"]))
 						&& (!empty($paypal["subscr_id"]) || ($paypal["subscr_id"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id ($paypal)))
 						&& (!empty($paypal["item_name"]) || ($paypal["item_name"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_name ($paypal)))
-						&& (!empty($paypal["payer_email"]) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_email_with ($paypal["subscr_id"]))))
+						&& (!empty($paypal["payer_email"]) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_email_with ($paypal["subscr_id"])))
+						&& (!empty($paypal["subscr_baid"]) || ($paypal["subscr_baid"] = $paypal["subscr_id"]))
+						&& (!empty($paypal["subscr_cid"]) || ($paypal["subscr_cid"] = $paypal["subscr_id"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_before_recurring_payment_profile_created", get_defined_vars ());
@@ -69,16 +71,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_rec_profile_creation_
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `recurring_payment_profile_created` ).";
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
-
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_after_recurring_payment_profile_created", get_defined_vars ());
 								unset($__refs, $__v);
 
 								return apply_filters("c_ws_plugin__s2member_paypal_notify_in_rec_profile_creation_w_level", $paypal, get_defined_vars ());
 							}
-						else
-							return apply_filters("c_ws_plugin__s2member_paypal_notify_in_rec_profile_creation_w_level", false, get_defined_vars ());
+						else return apply_filters("c_ws_plugin__s2member_paypal_notify_in_rec_profile_creation_w_level", false, get_defined_vars ());
 					}
 			}
 	}
-?>

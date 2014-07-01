@@ -54,6 +54,11 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 										if (($custom = trim (stripslashes ((string)$_POST["ws_plugin__s2member_custom_reg_field_user_pass1"]))))
 											$password = $custom; // Yes, use s2Member custom Password supplied by User.
 									}
+								else if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"] && !empty($GLOBALS['ws_plugin__s2member_registration_vars']) &&  !empty($GLOBALS['ws_plugin__s2member_registration_vars']['ws_plugin__s2member_custom_reg_field_user_pass1']))
+									{
+										if (($custom = trim ((string)$GLOBALS['ws_plugin__s2member_registration_vars']['ws_plugin__s2member_custom_reg_field_user_pass1'])))
+											$password = $custom; // Yes, use s2Member custom Password supplied by User.
+									}
 								else if (c_ws_plugin__s2member_utils_conds::pro_is_installed () && c_ws_plugin__s2member_pro_remote_ops::is_remote_op ("create_user") && !empty($GLOBALS["ws_plugin__s2member_generate_password_return"]))
 									{
 										if (($custom = trim (stripslashes ((string)$GLOBALS["ws_plugin__s2member_generate_password_return"]))))
@@ -537,7 +542,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																	$_p[$_key] = $_value; // Add each of these key conversions.
 														unset /* Just a little housekeeping here. */ ($_key, $_value);
 
-														if (!is_admin () && (isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_id"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_baid"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_custom"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_ccaps"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_auto_eot_time"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_notes"])))
+														if (!is_admin () && (isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_id"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_baid"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_subscr_cid"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_custom"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_ccaps"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_auto_eot_time"]) || isset ($_p["ws_plugin__s2member_custom_reg_field_s2member_notes"])))
 															exit (_x ("s2Member security violation. You attempted to POST administrative variables that will NOT be trusted in a NON-administrative zone!", "s2member-front", "s2member"));
 
 														$_pmr = array_merge ($_p, $meta, $rvs); // Merge all of these arrays together now, in this specific order.
@@ -561,6 +566,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$ip = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_registration_ip"];
 																$ip = (!$ip) ? $_SERVER["REMOTE_ADDR"] : $ip; // Else use environment variable.
 																$subscr_baid = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_baid"];
+																$subscr_cid = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_cid"];
 																$cv = preg_split ("/\|/", $custom);
 
 																if (!($auto_eot_time = "") && $eotper) // If a specific EOT Period is included.
@@ -610,6 +616,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																update_user_option ($user_id, "s2member_subscr_gateway", $subscr_gateway);
 																update_user_option ($user_id, "s2member_subscr_id", $subscr_id);
 																update_user_option ($user_id, "s2member_subscr_baid", $subscr_baid);
+																update_user_option ($user_id, "s2member_subscr_cid", $subscr_cid);
 																update_user_option ($user_id, "s2member_custom", $custom);
 																update_user_option ($user_id, "s2member_notes", $notes);
 
@@ -695,7 +702,9 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		delete_transient ($transient); // This can be deleted now.
 																	}
 																if (!headers_sent ()) // Only if headers are NOT yet sent. Here we establish both Signup and Payment Tracking Cookies.
-																	@setcookie ("s2member_tracking", ($s2member_tracking = c_ws_plugin__s2member_utils_encryption::encrypt ($subscr_id)), time () + 31556926, COOKIEPATH, COOKIE_DOMAIN) . @setcookie ("s2member_tracking", $s2member_tracking, time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN) . ($_COOKIE["s2member_tracking"] = $s2member_tracking);
+																	@setcookie("s2member_tracking", ($s2member_tracking = c_ws_plugin__s2member_utils_encryption::encrypt($subscr_id)), time () + 31556926, COOKIEPATH, COOKIE_DOMAIN).
+																	 @setcookie("s2member_tracking", $s2member_tracking, time () + 31556926, SITECOOKIEPATH, COOKIE_DOMAIN).
+																	   ($_COOKIE["s2member_tracking"] = $s2member_tracking);
 
 																foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 																do_action("ws_plugin__s2member_during_configure_user_registration_front_side_paid", get_defined_vars ());
@@ -731,6 +740,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$custom = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_custom"];
 																$subscr_id = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_id"];
 																$subscr_baid = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_baid"];
+																$subscr_cid = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_cid"];
 																$subscr_gateway = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway"];
 																$cv = preg_split ("/\|/", (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_custom"]);
 
@@ -779,6 +789,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																update_user_option ($user_id, "s2member_subscr_gateway", $subscr_gateway);
 																update_user_option ($user_id, "s2member_subscr_id", $subscr_id);
 																update_user_option ($user_id, "s2member_subscr_baid", $subscr_baid);
+																update_user_option ($user_id, "s2member_subscr_cid", $subscr_cid);
 																update_user_option ($user_id, "s2member_custom", $custom);
 																update_user_option ($user_id, "s2member_notes", $notes);
 
@@ -877,6 +888,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																$custom = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_custom"];
 																$subscr_id = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_id"];
 																$subscr_baid = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_baid"];
+																$subscr_cid = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_cid"];
 																$subscr_gateway = (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway"];
 																$cv = preg_split ("/\|/", (string)@$_pmr["ws_plugin__s2member_custom_reg_field_s2member_custom"]);
 
@@ -916,6 +928,7 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																update_user_option ($user_id, "s2member_subscr_gateway", $subscr_gateway);
 																update_user_option ($user_id, "s2member_subscr_id", $subscr_id);
 																update_user_option ($user_id, "s2member_subscr_baid", $subscr_baid);
+																update_user_option ($user_id, "s2member_subscr_cid", $subscr_cid);
 																update_user_option ($user_id, "s2member_custom", $custom);
 																update_user_option ($user_id, "s2member_notes", $notes);
 
@@ -989,21 +1002,21 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																	foreach (preg_split ("/[\r\n\t]+/", $urls) as $url) // Notify each of the URLs.
 
 																		if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)))
-																			if (($url = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($role)), $url)))
-																				if (($url = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($level)), $url)))
-																					if (($url = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($ccaps)), $url)))
-																						if (($url = preg_replace ("/%%auto_eot_time%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($auto_eot_time)), $url)))
-																							if (($url = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($fname)), $url)))
-																								if (($url = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($lname)), $url)))
-																									if (($url = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($name)), $url)))
-																										if (($url = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($email)), $url)))
-																											if (($url = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($login)), $url)))
-																												if (($url = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($pass)), $url)))
-																													if (($url = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($ip)), $url)))
-																														if (($url = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($user_id)), $url)))
+																			if (($url = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($role)), $url)))
+																				if (($url = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($level)), $url)))
+																					if (($url = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($ccaps)), $url)))
+																						if (($url = preg_replace ("/%%auto_eot_time%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($auto_eot_time)), $url)))
+																							if (($url = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($fname)), $url)))
+																								if (($url = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($lname)), $url)))
+																									if (($url = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($name)), $url)))
+																										if (($url = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($email)), $url)))
+																											if (($url = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($login)), $url)))
+																												if (($url = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($pass)), $url)))
+																													if (($url = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($ip)), $url)))
+																														if (($url = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($user_id)), $url)))
 																															{
 																																foreach ($fields as $var => $val) // Custom Fields.
-																																	if (!($url = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (maybe_serialize ($val))), $url)))
+																																	if (!($url = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode (maybe_serialize ($val))), $url)))
 																																		break;
 
 																																if (($url = trim (preg_replace ("/%%(.+?)%%/i", "", $url))))
@@ -1047,21 +1060,21 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																		$msg .= "cv9: %%cv9%%";
 
 																		if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)))
-																			if (($msg = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($role), $msg)))
-																				if (($msg = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($level), $msg)))
-																					if (($msg = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($ccaps), $msg)))
-																						if (($msg = preg_replace ("/%%auto_eot_time%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($auto_eot_time), $msg)))
-																							if (($msg = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($fname), $msg)))
-																								if (($msg = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($lname), $msg)))
-																									if (($msg = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($name), $msg)))
-																										if (($msg = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($email), $msg)))
-																											if (($msg = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($login), $msg)))
-																												if (($msg = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($pass), $msg)))
-																													if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($ip), $msg)))
-																														if (($msg = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($user_id), $msg)))
+																			if (($msg = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($role), $msg)))
+																				if (($msg = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($level), $msg)))
+																					if (($msg = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($ccaps), $msg)))
+																						if (($msg = preg_replace ("/%%auto_eot_time%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($auto_eot_time), $msg)))
+																							if (($msg = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($fname), $msg)))
+																								if (($msg = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($lname), $msg)))
+																									if (($msg = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($name), $msg)))
+																										if (($msg = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($email), $msg)))
+																											if (($msg = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($login), $msg)))
+																												if (($msg = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($pass), $msg)))
+																													if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($ip), $msg)))
+																														if (($msg = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user_id), $msg)))
 																															{
 																																foreach ($fields as $var => $val) // Custom Fields.
-																																	if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (maybe_serialize ($val)), $msg)))
+																																	if (!($msg = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (maybe_serialize ($val)), $msg)))
 																																		break;
 
 																																if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
@@ -1078,21 +1091,21 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																if (!empty($GLOBALS["ws_plugin__s2member_registration_return_url"]) && ($url = $GLOBALS["ws_plugin__s2member_registration_return_url"]))
 
 																	if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)))
-																		if (($url = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($role)), $url)))
-																			if (($url = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($level)), $url)))
-																				if (($url = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($ccaps)), $url)))
-																					if (($url = preg_replace ("/%%auto_eot_time%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($auto_eot_time)), $url)))
-																						if (($url = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($fname)), $url)))
-																							if (($url = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($lname)), $url)))
-																								if (($url = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($name)), $url)))
-																									if (($url = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($email)), $url)))
-																										if (($url = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($login)), $url)))
-																											if (($url = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($pass)), $url)))
-																												if (($url = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($ip)), $url)))
-																													if (($url = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($user_id)), $url)))
+																		if (($url = preg_replace ("/%%role%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($role)), $url)))
+																			if (($url = preg_replace ("/%%level%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($level)), $url)))
+																				if (($url = preg_replace ("/%%ccaps%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($ccaps)), $url)))
+																					if (($url = preg_replace ("/%%auto_eot_time%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($auto_eot_time)), $url)))
+																						if (($url = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($fname)), $url)))
+																							if (($url = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($lname)), $url)))
+																								if (($url = preg_replace ("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($name)), $url)))
+																									if (($url = preg_replace ("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($email)), $url)))
+																										if (($url = preg_replace ("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($login)), $url)))
+																											if (($url = preg_replace ("/%%user_pass%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($pass)), $url)))
+																												if (($url = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($ip)), $url)))
+																													if (($url = preg_replace ("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($user_id)), $url)))
 																														{
 																															foreach ($fields as $var => $val) // Custom Fields.
-																																if (!($url = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (maybe_serialize ($val))), $url)))
+																																if (!($url = preg_replace ("/%%" . preg_quote ($var, "/") . "%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode (maybe_serialize ($val))), $url)))
 																																	break;
 
 																															if (($url = trim ($url))) // Preserve remaining Replacements; because the parent routine may perform replacements too.

@@ -64,16 +64,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_virtual_terminal"))
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `virtual_terminal` ).";
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
-
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_after_virtual_terminal", get_defined_vars ());
 								unset($__refs, $__v);
 
 								return apply_filters("c_ws_plugin__s2member_paypal_notify_in_virtual_terminal", $paypal, get_defined_vars ());
 							}
-						else
-							return apply_filters("c_ws_plugin__s2member_paypal_notify_in_virtual_terminal", false, get_defined_vars ());
+						else return apply_filters("c_ws_plugin__s2member_paypal_notify_in_virtual_terminal", false, get_defined_vars ());
 					}
 			}
 	}
-?>

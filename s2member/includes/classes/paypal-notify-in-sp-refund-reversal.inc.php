@@ -35,8 +35,6 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 				*
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_notify_in::paypal_notify()}.
 				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
-				*
-				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
 				public static function cp ($vars = array()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
@@ -46,7 +44,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 						|| (!empty($paypal["payment_status"]) && preg_match ("/^(refunded|reversed|reversal)$/i", $paypal["payment_status"])) /* The "txn_type" is irrelevant in these special situations. */)
 						&& ((!empty($paypal["item_number"]) || ($paypal["item_number"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_number ($paypal))) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["sp_access_item_number_regex"], $paypal["item_number"]))
 						&& (!empty($paypal["item_name"]) || ($paypal["item_name"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_name ($paypal)) || ($paypal["item_name"] = $_SERVER["HTTP_HOST"]))
-						&& (!empty($paypal["payer_email"])) && (!empty($paypal["parent_txn_id"])))
+						&& (!empty($paypal["payer_email"])) && (!empty($paypal["parent_txn_id"])) && (!empty($paypal["parent_txn_baid"]) || ($paypal["parent_txn_baid"] = $paypal["parent_txn_id"]))
+						&& (!empty($paypal["parent_txn_cid"]) || ($paypal["parent_txn_cid"] = $paypal["parent_txn_id"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_before_sp_refund_reversal", get_defined_vars ());
@@ -70,26 +69,28 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 											{
 												foreach (preg_split ("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_urls"]) as $url)
 
-													if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace ("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["parent_txn_id"])), $url)))
-														if (($url = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_number"])), $url)) && ($url = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["item_name"])), $url)))
-															if (($url = preg_replace ("/%%-amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["mc_gross"])), $url)) && ($url = preg_replace ("/%%-fee%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["mc_fee"])), $url)))
-																if (($url = preg_replace ("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["first_name"])), $url)) && ($url = preg_replace ("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["last_name"])), $url)))
-																	if (($url = preg_replace ("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode (trim ($paypal["first_name"] . " " . $paypal["last_name"]))), $url)))
-																		if (($url = preg_replace ("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["payer_email"])), $url)))
-																			if (($url = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (urlencode ($paypal["ip"])), $url)))
+													if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace ("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["parent_txn_id"])), $url)))
+														if (($url = preg_replace ("/%%parent_txn_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["parent_txn_baid"])), $url)) && ($url = preg_replace ("/%%parent_txn_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["parent_txn_cid"])), $url)))
+															if (($url = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["item_number"])), $url)) && ($url = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["item_name"])), $url)))
+																if (($url = preg_replace ("/%%-amount%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["mc_gross"])), $url)) && ($url = preg_replace ("/%%-fee%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["mc_fee"])), $url)))
+																	if (($url = preg_replace ("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["first_name"])), $url)) && ($url = preg_replace ("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["last_name"])), $url)))
+																		if (($url = preg_replace ("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode (trim ($paypal["first_name"] . " " . $paypal["last_name"]))), $url)))
+																			if (($url = preg_replace ("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["payer_email"])), $url)))
+																				if (($url = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["ip"])), $url)))
 
-																				if (($url = trim (preg_replace ("/%%(.+?)%%/i", "", $url))))
-																					c_ws_plugin__s2member_utils_urls::remote ($url);
+																					if (($url = trim (preg_replace ("/%%(.+?)%%/i", "", $url))))
+																						c_ws_plugin__s2member_utils_urls::remote ($url);
 
 												$paypal["s2member_log"][] = "Specific Post/Page ~ Refund/Reversal Notification URLs have been processed.";
 											}
-
 										if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_recipients"] && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
 											{
 												$msg = $sbj = "(s2Member / API Notification Email) - Specific Post/Page ~ Refund/Reversal";
 												$msg .= "\n\n"; // Spacing in the message body.
 
 												$msg .= "parent_txn_id: %%parent_txn_id%%\n";
+												$msg .= "parent_txn_baid: %%parent_txn_baid%%\n";
+												$msg .= "parent_txn_cid: %%parent_txn_cid%%\n";
 												$msg .= "item_number: %%item_number%%\n";
 												$msg .= "item_name: %%item_name%%\n";
 												$msg .= "-amount: %%-amount%%\n";
@@ -111,22 +112,22 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 												$msg .= "cv8: %%cv8%%\n";
 												$msg .= "cv9: %%cv9%%";
 
-												if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)) && ($msg = preg_replace ("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["parent_txn_id"]), $msg)))
-													if (($msg = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["item_number"]), $msg)) && ($msg = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["item_name"]), $msg)))
-														if (($msg = preg_replace ("/%%-amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["mc_gross"]), $msg)) && ($msg = preg_replace ("/%%-fee%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["mc_fee"]), $msg)))
-															if (($msg = preg_replace ("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["first_name"]), $msg)) && ($msg = preg_replace ("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["last_name"]), $msg)))
-																if (($msg = preg_replace ("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds (trim ($paypal["first_name"] . " " . $paypal["last_name"])), $msg)))
-																	if (($msg = preg_replace ("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["payer_email"]), $msg)))
-																		if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds ($paypal["ip"]), $msg)))
+												if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)) && ($msg = preg_replace ("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["parent_txn_id"]), $msg)))
+													if (($msg = preg_replace ("/%%parent_txn_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["parent_txn_baid"]), $msg)) && ($msg = preg_replace ("/%%parent_txn_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["parent_txn_cid"]), $msg)))
+														if (($msg = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["item_number"]), $msg)) && ($msg = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["item_name"]), $msg)))
+															if (($msg = preg_replace ("/%%-amount%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["mc_gross"]), $msg)) && ($msg = preg_replace ("/%%-fee%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["mc_fee"]), $msg)))
+																if (($msg = preg_replace ("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["first_name"]), $msg)) && ($msg = preg_replace ("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["last_name"]), $msg)))
+																	if (($msg = preg_replace ("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (trim ($paypal["first_name"] . " " . $paypal["last_name"])), $msg)))
+																		if (($msg = preg_replace ("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["payer_email"]), $msg)))
+																			if (($msg = preg_replace ("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["ip"]), $msg)))
 
-																			if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
+																				if ($sbj && ($msg = trim (preg_replace ("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
-																				foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_recipients"]) as $recipient)
-																					wp_mail ($recipient, apply_filters("ws_plugin__s2member_sp_ref_rev_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters("ws_plugin__s2member_sp_ref_rev_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
+																					foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sp_ref_rev_notification_recipients"]) as $recipient)
+																						wp_mail ($recipient, apply_filters("ws_plugin__s2member_sp_ref_rev_notification_email_sbj", $sbj, get_defined_vars ()), apply_filters("ws_plugin__s2member_sp_ref_rev_notification_email_msg", $msg, get_defined_vars ()), "Content-Type: text/plain; charset=UTF-8");
 
 												$paypal["s2member_log"][] = "Specific Post/Page ~ Refund/Reversal Notification Emails have been processed.";
 											}
-
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 										do_action("ws_plugin__s2member_during_paypal_notify_during_sp_refund_reversal", get_defined_vars ());
 										unset($__refs, $__v);
@@ -137,16 +138,13 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal"))
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback` ).";
 										$paypal["s2member_log"][] = "Duplicate IPN. Already processed. This IPN will be ignored.";
 									}
-
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_after_sp_refund_reversal", get_defined_vars ());
 								unset($__refs, $__v);
 
 								return apply_filters("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal", $paypal, get_defined_vars ());
 							}
-						else
-							return apply_filters("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal", false, get_defined_vars ());
+						else return apply_filters("c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal", false, get_defined_vars ());
 					}
 			}
 	}
-?>

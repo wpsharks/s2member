@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 								c_ws_plugin__s2member_email_configs::email_config_release (); // Release s2Member Filters.
 
 								$paypal = array(); // Initialize PayPal array; we also reference this with a variable for a possible proxy handler.
-								if(!empty($_REQUEST["s2member_paypal_proxy"]) && in_array($_REQUEST["s2member_paypal_proxy"], array("alipay", "authnet", "clickbank", "ccbill", "google"), TRUE))
+								if(!empty($_REQUEST["s2member_paypal_proxy"]) && in_array($_REQUEST["s2member_paypal_proxy"], array("alipay", "stripe", "authnet", "clickbank", "ccbill", "google"), TRUE))
 									${esc_html(trim(stripslashes($_REQUEST["s2member_paypal_proxy"])))} = &$paypal; // Internal alias by reference.
 
 								if (is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
@@ -151,13 +151,11 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 												else // Else a custom conditional has been applied by Filters.
 													unset($__refs, $__v);
 											}
-
 										else if (!empty($paypal["txn_type"]) && preg_match("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]))
 											{
 												$paypal["s2member_log"][] = "Transaction type ( `recurring_payment_profile_cancel` ), but there is no match to an existing account; so verification of `\$_SERVER[\"HTTP_HOST\"]` was not possible.";
 												$paypal["s2member_log"][] = "It's likely this account was just upgraded/downgraded by s2Member Pro; so the Subscr. ID has probably been updated on-site; nothing to worry about here.";
 											}
-
 										else if (!empty($paypal["txn_type"]) && preg_match("/^recurring_/i", $paypal["txn_type"])) // Otherwise, is this a ^recurring_ txn_type?
 											$paypal["s2member_log"][] = "Transaction type ( `^recurring_?` ), but there is no match to an existing account; so verification of `\$_SERVER[\"HTTP_HOST\"]` was not possible.";
 
@@ -227,4 +225,3 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in"))
 					}
 			}
 	}
-?>

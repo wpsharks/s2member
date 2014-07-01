@@ -35,8 +35,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 				*
 				* @param array $vars Required. An array of defined variables passed by {@link s2Member\PayPal\c_ws_plugin__s2member_paypal_notify_in::paypal_notify()}.
 				* @return array|bool The original ``$paypal`` array passed in (extracted) from ``$vars``, or false when conditions do NOT apply.
-				*
-				* @todo Optimize with ``empty()`` and ``isset()``.
 				*/
 				public static function cp($vars = array()) // Conditional phase for ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 					{
@@ -51,7 +49,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 						&& (!empty($paypal["period3"]) || ($paypal["period3"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_period3($paypal, false)) || empty($recurring) || ($paypal["period3"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("period3", false, $paypal["subscr_id"])) || ($paypal["period3"] = "1 D"))
 						&& ((!empty($paypal["item_number"]) || ($paypal["item_number"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_number($paypal)) || ($paypal["item_number"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_number", false, $paypal["subscr_id"])) || ($paypal["item_number"] = "1")) && preg_match($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"]))
 						&& (!empty($paypal["item_name"]) || ($paypal["item_name"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_name($paypal)) || ($paypal["item_name"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_name", false, $paypal["subscr_id"])) || ($paypal["item_name"] = $_SERVER["HTTP_HOST"]))
-						&& (!empty($paypal["payer_email"]) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("payer_email", false, $paypal["subscr_id"])) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_email_with($paypal["subscr_id"]))))
+						&& (!empty($paypal["payer_email"]) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("payer_email", false, $paypal["subscr_id"])) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_email_with($paypal["subscr_id"])))
+						&& (!empty($paypal["subscr_baid"]) || ($paypal["subscr_baid"] = $paypal["subscr_id"]))
+						&& (!empty($paypal["subscr_cid"]) || ($paypal["subscr_cid"] = $paypal["subscr_id"])))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_before_subscr_eot", get_defined_vars());
@@ -59,8 +59,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 								if(!get_transient($transient_ipn = "s2m_ipn_".md5("s2member_transient_".$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
 									{
-										$is_refund = (preg_match("/^refunded$/i", $paypal["payment_status"]) && $paypal["parent_txn_id"]);
-										$is_reversal = (preg_match("/^(reversed|reversal)$/i", $paypal["payment_status"]) && $paypal["parent_txn_id"]);
+										$is_refund = (preg_match("/^refunded$/i", $paypal["payment_status"]) && !empty($paypal["parent_txn_id"]));
+										$is_reversal = (preg_match("/^(reversed|reversal)$/i", $paypal["payment_status"]) && !empty($paypal["parent_txn_id"]));
 										$is_reversal = (!$is_reversal) ? (preg_match("/^new_case$/i", $paypal["txn_type"]) && preg_match("/^chargeback$/i", $paypal["case_type"])) : $is_reversal;
 										$is_refund_or_reversal = ($is_refund || $is_reversal); // If either of the previous tests above evaluated to true; then it's obviously a Refund and/or a Reversal.
 										$is_partial_refund = // Partial refund detection. All refunds processed against Subscriptions are considered partials. Full refunds occur only against Buy Now transactions.
@@ -125,6 +125,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																				delete_user_option($user_id, "s2member_custom");
 																				delete_user_option($user_id, "s2member_subscr_id");
 																				delete_user_option($user_id, "s2member_subscr_baid");
+																				delete_user_option($user_id, "s2member_subscr_cid");
 																				delete_user_option($user_id, "s2member_subscr_gateway");
 
 																				delete_user_option($user_id, "s2member_ipn_signup_vars");
@@ -147,23 +148,23 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																					{
 																						foreach(preg_split("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_urls"]) as $url) // Handle EOT Notifications.
 
-																							if(($url = preg_replace("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace("/%%eot_del_type%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($eot_del_type)), $url)) && ($url = preg_replace("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["subscr_id"])), $url)))
-																								if(($url = preg_replace("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user->first_name)), $url)) && ($url = preg_replace("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user->last_name)), $url)))
-																									if(($url = preg_replace("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode(trim($user->first_name." ".$user->last_name))), $url)))
-																										if(($url = preg_replace("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user->user_email)), $url)))
-																											if(($url = preg_replace("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user->user_login)), $url)))
-																												if(($url = preg_replace("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user_reg_ip)), $url)))
-																													if(($url = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user_id)), $url)))
-																														{
-																															if(is_array($fields) && !empty($fields))
-																																foreach($fields as $var => $val) // Custom Registration/Profile Fields.
-																																	if(!($url = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode(maybe_serialize($val))), $url)))
-																																		break;
+																							if(($url = preg_replace("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace("/%%eot_del_type%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["subscr_id"])), $url)))
+																								if(($url = preg_replace("/%%subscr_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["subscr_baid"])), $url)) && ($url = preg_replace("/%%subscr_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["subscr_cid"])), $url)))
+																									if(($url = preg_replace("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
+																										if(($url = preg_replace("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name." ".$user->last_name))), $url)))
+																											if(($url = preg_replace("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_email)), $url)))
+																												if(($url = preg_replace("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_login)), $url)))
+																													if(($url = preg_replace("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_reg_ip)), $url)))
+																														if(($url = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
+																															{
+																																if(is_array($fields) && !empty($fields))
+																																	foreach($fields as $var => $val) // Custom Registration/Profile Fields.
+																																		if(!($url = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
+																																			break;
 
-																															if(($url = trim(preg_replace("/%%(.+?)%%/i", "", $url))))
-																																c_ws_plugin__s2member_utils_urls::remote($url);
-																														}
-
+																																if(($url = trim(preg_replace("/%%(.+?)%%/i", "", $url))))
+																																	c_ws_plugin__s2member_utils_urls::remote($url);
+																															}
 																						$paypal["s2member_log"][] = "EOT/Deletion Notification URLs have been processed.";
 																					}
 																				if($processing && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
@@ -173,6 +174,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 																						$msg .= "eot_del_type: %%eot_del_type%%\n";
 																						$msg .= "subscr_id: %%subscr_id%%\n";
+																						$msg .= "subscr_baid: %%subscr_baid%%\n";
+																						$msg .= "subscr_cid: %%subscr_cid%%\n";
 																						$msg .= "user_first_name: %%user_first_name%%\n";
 																						$msg .= "user_last_name: %%user_last_name%%\n";
 																						$msg .= "user_full_name: %%user_full_name%%\n";
@@ -196,25 +199,25 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																						$msg .= "cv8: %%cv8%%\n";
 																						$msg .= "cv9: %%cv9%%";
 
-																						if(($msg = preg_replace("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)) && ($msg = preg_replace("/%%eot_del_type%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($eot_del_type), $msg)) && ($msg = preg_replace("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["subscr_id"]), $msg)))
-																							if(($msg = preg_replace("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user->first_name), $msg)) && ($msg = preg_replace("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user->last_name), $msg)))
-																								if(($msg = preg_replace("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(trim($user->first_name." ".$user->last_name)), $msg)))
-																									if(($msg = preg_replace("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user->user_email), $msg)))
-																										if(($msg = preg_replace("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user->user_login), $msg)))
-																											if(($msg = preg_replace("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user_reg_ip), $msg)))
-																												if(($msg = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user_id), $msg)))
-																													{
-																														if(is_array($fields) && !empty($fields))
-																															foreach($fields as $var => $val) // Custom Registration/Profile Fields.
-																																if(!($msg = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(maybe_serialize($val)), $msg)))
-																																	break;
+																						if(($msg = preg_replace("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)) && ($msg = preg_replace("/%%eot_del_type%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($eot_del_type), $msg)) && ($msg = preg_replace("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["subscr_id"]), $msg)))
+																							if(($msg = preg_replace("/%%subscr_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["subscr_baid"]), $msg)) && ($msg = preg_replace("/%%subscr_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["subscr_cid"]), $msg)))
+																								if(($msg = preg_replace("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($user->first_name), $msg)) && ($msg = preg_replace("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($user->last_name), $msg)))
+																									if(($msg = preg_replace("/%%user_full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(trim($user->first_name." ".$user->last_name)), $msg)))
+																										if(($msg = preg_replace("/%%user_email%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($user->user_email), $msg)))
+																											if(($msg = preg_replace("/%%user_login%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($user->user_login), $msg)))
+																												if(($msg = preg_replace("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $msg)))
+																													if(($msg = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $msg)))
+																														{
+																															if(is_array($fields) && !empty($fields))
+																																foreach($fields as $var => $val) // Custom Registration/Profile Fields.
+																																	if(!($msg = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $msg)))
+																																		break;
 
-																														if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
+																															if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
-																															foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"]) as $recipient)
-																																wp_mail($recipient, apply_filters("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=UTF-8");
-																													}
-
+																																foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_del_notification_recipients"]) as $recipient)
+																																	wp_mail($recipient, apply_filters("ws_plugin__s2member_eot_del_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_eot_del_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=UTF-8");
+																														}
 																						$paypal["s2member_log"][] = "EOT/Deletion Notification Emails have been processed.";
 																					}
 																				foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -239,7 +242,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																						// This will automatically trigger `eot_del_notification_urls` as well.
 																						c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions($user_id, $current_blog->blog_id, "s2says");
 																					}
-
 																				else // Otherwise, we can actually delete them.
 																					// This will automatically trigger `eot_del_notification_urls` as well.
 																					wp_delete_user($user_id); // `c_ws_plugin__s2member_user_deletions::handle_user_deletions()`
@@ -270,8 +272,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																		unset($__refs, $__v);
 																	}
 															}
-														else
-															$paypal["s2member_log"][] = "Unable to (demote|delete) Member. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
+														else $paypal["s2member_log"][] = "Unable to (demote|delete) Member. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
 													}
 												else if($is_delayed_eot && !get_user_option("s2member_auto_eot_time", $user_id))
 													{
@@ -290,8 +291,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 																do_action("ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delayed", get_defined_vars());
 																unset($__refs, $__v);
 															}
-														else
-															$paypal["s2member_log"][] = "Ignoring Delayed EOT. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
+														else $paypal["s2member_log"][] = "Ignoring Delayed EOT. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.";
 													}
 												else if(!$is_refund_or_reversal || $is_delayed_eot)
 													$paypal["s2member_log"][] = "Skipping (demote|delete) Member, for now. An Auto-EOT Time is already set for this account. When an Auto-EOT Time has been recorded, s2Member will handle EOT (demote|delete) events using it's own Auto-EOT System - internally.";
@@ -312,7 +312,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 												$ipn = array("txn_type" => "subscr_eot"); // Create a simulated IPN response for txn_type=subscr_eot.
 
 												foreach($paypal as $var => $val)
-													if(in_array($var, array("subscr_gateway", "subscr_id", "custom", "invoice", "payer_email", "first_name", "last_name", "item_name", "item_number", /* Exclude; might be defaults. "period1", "period3", */ "option_name1", "option_selection1", "option_name2", "option_selection2")))
+													if(in_array($var, array("subscr_gateway", "subscr_id", "subscr_baid", "subscr_cid", "custom", "invoice", "payer_email", "first_name", "last_name", "item_name", "item_number", /* Exclude; might be defaults. "period1", "period3", */ "option_name1", "option_selection1", "option_name2", "option_selection2")))
 														$ipn[$var] = $val;
 
 												$paypal["s2member_log"][] = "Re-generating. This IPN will go into a Transient Queue; and be re-processed during registration.";
@@ -326,7 +326,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										Since this routine ignores the processing check, it is *possible* that Refund/Reversal Notification URLs will be contacted more than once.
 											If you're writing scripts that depend on Refund/Reversal Notifications, please keep this in mind.
 										*/
-										if($is_refund_or_reversal) // Here we access this variable that was previously assigned as a quick method of Refund/Reversal detection.
+										if($is_refund_or_reversal) // Previously assigned as a quick method of Refund/Reversal detection.
 											{
 												$fields = ($user_id) ? get_user_option("s2member_custom_fields", $user_id) : array(); // These will be needed below.
 												$user_reg_ip = ($user_id) ? get_user_option("s2member_registration_ip", $user_id) : ""; // Needed below.
@@ -336,24 +336,24 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 													{
 														foreach(preg_split("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_urls"]) as $url)
 
-															if(($url = preg_replace("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["subscr_id"])), $url)) && ($url = preg_replace("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["parent_txn_id"])), $url)))
-																if(($url = preg_replace("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["item_number"])), $url)) && ($url = preg_replace("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["item_name"])), $url)))
-																	if(($url = preg_replace("/%%-amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["mc_gross"])), $url)) && ($url = preg_replace("/%%-fee%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["mc_fee"])), $url)))
-																		if(($url = preg_replace("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["first_name"])), $url)) && ($url = preg_replace("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["last_name"])), $url)))
-																			if(($url = preg_replace("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode(trim($paypal["first_name"]." ".$paypal["last_name"]))), $url)))
-																				if(($url = preg_replace("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($paypal["payer_email"])), $url)))
-																					if(($url = preg_replace("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user_reg_ip)), $url)))
-																						if(($url = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode($user_id)), $url)))
-																							{
-																								if(is_array($fields) && !empty($fields))
-																									foreach($fields as $var => $val) // Custom Registration/Profile Fields.
-																										if(!($url = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(urlencode(maybe_serialize($val))), $url)))
-																											break;
+															if(($url = preg_replace("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["subscr_id"])), $url)) && ($url = preg_replace("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["parent_txn_id"])), $url)))
+																if(($url = preg_replace("/%%subscr_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["subscr_baid"])), $url)) && ($url = preg_replace("/%%subscr_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["subscr_cid"])), $url)))
+																	if(($url = preg_replace("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["item_number"])), $url)) && ($url = preg_replace("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["item_name"])), $url)))
+																		if(($url = preg_replace("/%%-amount%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["mc_gross"])), $url)) && ($url = preg_replace("/%%-fee%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["mc_fee"])), $url)))
+																			if(($url = preg_replace("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["first_name"])), $url)) && ($url = preg_replace("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["last_name"])), $url)))
+																				if(($url = preg_replace("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($paypal["first_name"]." ".$paypal["last_name"]))), $url)))
+																					if(($url = preg_replace("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal["payer_email"])), $url)))
+																						if(($url = preg_replace("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_reg_ip)), $url)))
+																							if(($url = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
+																								{
+																									if(is_array($fields) && !empty($fields))
+																										foreach($fields as $var => $val) // Custom Registration/Profile Fields.
+																											if(!($url = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
+																												break;
 
-																								if(($url = trim(preg_replace("/%%(.+?)%%/i", "", $url))))
-																									c_ws_plugin__s2member_utils_urls::remote($url);
-																							}
-
+																									if(($url = trim(preg_replace("/%%(.+?)%%/i", "", $url))))
+																										c_ws_plugin__s2member_utils_urls::remote($url);
+																								}
 														$paypal["s2member_log"][] = "Refund/Reversal Notification URLs have been processed.";
 													}
 												if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_recipients"] && is_array($cv = preg_split("/\|/", $paypal["custom"])))
@@ -362,6 +362,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 														$msg .= "\n\n"; // Spacing in the message body.
 
 														$msg .= "subscr_id: %%subscr_id%%\n";
+														$msg .= "subscr_baid: %%subscr_baid%%\n";
+														$msg .= "subscr_cid: %%subscr_cid%%\n";
 														$msg .= "parent_txn_id: %%parent_txn_id%%\n";
 														$msg .= "item_number: %%item_number%%\n";
 														$msg .= "item_name: %%item_name%%\n";
@@ -389,26 +391,26 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 														$msg .= "cv8: %%cv8%%\n";
 														$msg .= "cv9: %%cv9%%";
 
-														if(($msg = preg_replace("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)) && ($msg = preg_replace("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["subscr_id"]), $msg)) && ($msg = preg_replace("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["parent_txn_id"]), $msg)))
-															if(($msg = preg_replace("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["item_number"]), $msg)) && ($msg = preg_replace("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["item_name"]), $msg)))
-																if(($msg = preg_replace("/%%-amount%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["mc_gross"]), $msg)) && ($msg = preg_replace("/%%-fee%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["mc_fee"]), $msg)))
-																	if(($msg = preg_replace("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["first_name"]), $msg)) && ($msg = preg_replace("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["last_name"]), $msg)))
-																		if(($msg = preg_replace("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(trim($paypal["first_name"]." ".$paypal["last_name"])), $msg)))
-																			if(($msg = preg_replace("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($paypal["payer_email"]), $msg)))
-																				if(($msg = preg_replace("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user_reg_ip), $msg)))
-																					if(($msg = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_ds($user_id), $msg)))
-																						{
-																							if(is_array($fields) && !empty($fields))
-																								foreach($fields as $var => $val) // Custom Registration/Profile Fields.
-																									if(!($msg = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_ds(maybe_serialize($val)), $msg)))
-																										break;
+														if(($msg = preg_replace("/%%cv([0-9]+)%%/ei", 'trim($cv[$1])', $msg)) && ($msg = preg_replace("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["subscr_id"]), $msg)) && ($msg = preg_replace("/%%parent_txn_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["parent_txn_id"]), $msg)))
+															if(($msg = preg_replace("/%%subscr_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["subscr_baid"]), $msg)) && ($msg = preg_replace("/%%subscr_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["subscr_cid"]), $msg)))
+																if(($msg = preg_replace("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["item_number"]), $msg)) && ($msg = preg_replace("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["item_name"]), $msg)))
+																	if(($msg = preg_replace("/%%-amount%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["mc_gross"]), $msg)) && ($msg = preg_replace("/%%-fee%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["mc_fee"]), $msg)))
+																		if(($msg = preg_replace("/%%first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["first_name"]), $msg)) && ($msg = preg_replace("/%%last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["last_name"]), $msg)))
+																			if(($msg = preg_replace("/%%full_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(trim($paypal["first_name"]." ".$paypal["last_name"])), $msg)))
+																				if(($msg = preg_replace("/%%payer_email%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($paypal["payer_email"]), $msg)))
+																					if(($msg = preg_replace("/%%user_ip%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $msg)))
+																						if(($msg = preg_replace("/%%user_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $msg)))
+																							{
+																								if(is_array($fields) && !empty($fields))
+																									foreach($fields as $var => $val) // Custom Registration/Profile Fields.
+																										if(!($msg = preg_replace("/%%".preg_quote($var, "/")."%%/i", c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $msg)))
+																											break;
 
-																							if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
+																								if($sbj && ($msg = trim(preg_replace("/%%(.+?)%%/i", "", $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
-																								foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_recipients"]) as $recipient)
-																									wp_mail($recipient, apply_filters("ws_plugin__s2member_ref_rev_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_ref_rev_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=UTF-8");
-																						}
-
+																									foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["ref_rev_notification_recipients"]) as $recipient)
+																										wp_mail($recipient, apply_filters("ws_plugin__s2member_ref_rev_notification_email_sbj", $sbj, get_defined_vars()), apply_filters("ws_plugin__s2member_ref_rev_notification_email_msg", $msg, get_defined_vars()), "Content-Type: text/plain; charset=UTF-8");
+																							}
 														$paypal["s2member_log"][] = "Refund/Reversal Notification Emails have been processed.";
 													}
 												foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -432,4 +434,3 @@ if(!class_exists("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 					}
 			}
 	}
-?>
