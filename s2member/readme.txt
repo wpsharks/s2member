@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 140614
-Stable tag: 140614
+Version: 140630
+Stable tag: 140630
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -142,11 +142,20 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v140614 =
+= v140630 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v140630 =
+
+- (s2Member Pro) **Stripe Payment Gateway** Hooray! s2Member Pro now integrates with [Stripe](http://www.s2member.com/r/stripe). s2Member Pro Forms, Coupon Codes, Tax Settings, Checkout Options, and all of the other great features provided by s2Member Pro are now compatible with Stripe. To enable Stripe in your installation of s2Member, please see: `Dashboard ⥱ s2Member ⥱ Other Gateways ⥱ Stripe`.
+
+  We expect Stripe to become the most popular payment gateway integration for s2Member Pro over the next few months. Stripe is nearly free; it's easier to setup, easier to maintain; and just more flexible overall in our opinion.
+
+  _See also: [this GitHub issue](https://github.com/websharks/s2member/issues/177) where  efforts to integrate with Stripe took place. A quick tutorial video and KB articles will come soon at s2Member.com; once beta testing is complete._
+- (s2Member Pro) **Bug Fix; [s2MOP /]** This release corrects a bug in the `[s2MOP /]` `restriction_type` attribute. See [this GitHub issue](https://github.com/websharks/s2member/issues/204) if you'd like further details.
 
 = v140614 =
 
