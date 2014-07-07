@@ -46,6 +46,10 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 			return apply_filters('ws_plugin__s2member_list_servers_integrated', FALSE, get_defined_vars());
 		}
 
+		public static function process_list_servers_against_current_user()
+		{
+		}
+
 		/**
 		 * Processes List Server integrations for s2Member.
 		 *
