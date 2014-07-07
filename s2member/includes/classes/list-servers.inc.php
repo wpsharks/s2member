@@ -48,6 +48,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 
 		public static function process_list_servers_against_current_user()
 		{
+			// TODO
 		}
 
 		/**
