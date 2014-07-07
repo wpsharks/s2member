@@ -107,8 +107,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 										$mailchimp['interest_groups'] = array('GROUPINGS' => array(array('name' => $mailchimp['interest_groups_title'], 'groups' => implode(',', $mailchimp['interest_groups']))));
 
 								if(empty($mailchimp['list_id']) /* Need to double-check this. If empty, skip over this entry. */)
-									continue;
-								// Continue to next List, if there is one.
+									continue; // Continue to next List, if there is one.
 							}
 							else $mailchimp['list_id'] = $mailchimp['list']; // Else, it's just a List ID.
 
@@ -223,8 +222,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 								($aweber['wp_mail_sbj'] = apply_filters('ws_plugin__s2member_aweber_sbj', 's2Member Subscription Request', get_defined_vars())), // These Filters make it possible to customize these emails.
 								($aweber['wp_mail_msg'] = apply_filters('ws_plugin__s2member_aweber_msg', 's2Member Subscription Request'."\n".'s2Member w/ PayPal Email ID'."\n".'Ad Tracking: s2Member-'.((is_multisite() && !is_main_site()) ? $current_blog->domain.$current_blog->path : $_SERVER['HTTP_HOST'])."\n".'EMail Address: '.$email."\n".'Buyer: '.$buyer."\n".'Full Name: '.trim($fname.' '.$lname)."\n".'First Name: '.$fname."\n".'Last Name: '.$lname."\n".'IP Address: '.$ip."\n".'User ID: '.$user_id."\n".'Login: '.$login.$aweber['pass_inclusion']."\n".'Role: '.$role."\n".'Level: '.$level."\n".'CCaps: '.$ccaps."\n".' - end.', get_defined_vars())),
 								($aweber['wp_mail_headers'] = 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'.(($aweber['bcc']) ? "\r\n".'Bcc: '.$aweber['bcc'] : '')."\r\n".'Content-Type: text/plain; charset=UTF-8'))
-							)
-								$aweber['wp_mail_success'] = $success = TRUE; // Flag indicating that we DO have a successful processing of a new List; affects the function's overall return value.
+							) $aweber['wp_mail_success'] = $success = TRUE; // Flag indicating that we DO have a successful processing of a new List; affects the function's overall return value.
 
 							$logt = c_ws_plugin__s2member_utilities::time_details();
 							$logv = c_ws_plugin__s2member_utilities::ver_details();
@@ -387,8 +385,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 							if($aweber['wp_mail_removal_response'] = wp_mail($aweber['list_id'].'@aweber.com', // AWeber List ID converts to email address @aweber.com.
 								($aweber['wp_mail_removal_sbj'] = apply_filters('ws_plugin__s2member_aweber_removal_sbj', 'REMOVE#'.$email.'#s2Member#'.$aweber['list_id'], get_defined_vars())), // Bug fix. AWeber does not like dots (possibly other chars) in the Ad Tracking field. Now using just: `s2Member`.
 								($aweber['wp_mail_removal_msg'] = 'REMOVE'), ($aweber['wp_mail_removal_headers'] = 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'.(($aweber['removal_bcc']) ? "\r\n".'Bcc: '.$aweber['removal_bcc'] : '')."\r\n".'Content-Type: text/plain; charset=UTF-8'))
-							)
-								$aweber['wp_mail_removal_success'] = $removal_success = TRUE; // Flag indicating that we DO have a successful removal; affects the function's overall return value.
+							) $aweber['wp_mail_removal_success'] = $removal_success = TRUE; // Flag indicating that we DO have a successful removal; affects the function's overall return value.
 
 							c_ws_plugin__s2member_email_configs::email_config_release( /* Release. */);
 
