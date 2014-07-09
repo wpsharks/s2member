@@ -262,7 +262,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 				*/
 				public static function trim_html($string = FALSE)
 					{
-						$whitespace = '\0\x0B|\s|&nbsp;|\<br\>|\<br\s*\/\>|\<p\>(?:&nbsp;)*\<\/p\>';
+						$whitespace = '&nbsp;|\<br\>|\<br\s*\/\>|\<p\>(?:&nbsp;)*\<\/p\>';
 						return preg_replace('/^(?:'.$whitespace.')+|(?:'.$whitespace.')+$/', '', (string)$string);
 					}
 				/**
