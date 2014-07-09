@@ -444,7 +444,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		 * @param string     $mod_new_user Optional. If ``$event_spec === 'modification'``, the new User object with current details.
 		 * @param string     $mod_old_user Optional. If ``$event_spec === 'modification'``, the old/previous User obj with old details.
 		 */
-		public static function auto_process_list_server_removals($user_id, $vars, $event, $event_spec, $mod_new_role, $mod_new_user = NULL, $mod_old_user = NULL)
+		public static function auto_process_list_server_removals($user_id, $vars, $event, $event_spec, $mod_new_role = NULL, $mod_new_user = NULL, $mod_old_user = NULL)
 		{
 			global $current_site, $current_blog; // For Multisite support.
 			static $auto_processed = array( /* Process ONE time for each User. */);
