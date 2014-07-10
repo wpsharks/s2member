@@ -143,7 +143,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['max_simultaneous_logins']         = '0';
 		$default_options['max_simultaneous_logins_timeout'] = '30 minutes';
 
-		$default_options['run_deactivation_routines'] = '0';
+		$default_options['run_uninstall_routines'] = '0';
 
 		$default_options['custom_reg_fields']       = '';
 		$default_options['custom_reg_names']        = '1';
@@ -340,6 +340,10 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		*/
 		$GLOBALS['WS_PLUGIN__']['s2member']['o'] = array_merge($default_options, (($options !== FALSE) ? (array)$options : (array)get_option('ws_plugin__s2member_options')));
 		/*
+		 * Ditch this old option key; no longer in use.
+		 */
+		if(isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['run_deactivation_routines'])) unset($GLOBALS['WS_PLUGIN__']['s2member']['o']['run_deactivation_routines']);
+		/*
 		This builds an MD5 checksum for the full array of options. This also includes the config checksum and the current set of default options.
 		*/
 		$checksum = md5(($checksum_prefix = $GLOBALS['WS_PLUGIN__']['s2member']['c']['checksum'].serialize($default_options)).serialize(array_merge($GLOBALS['WS_PLUGIN__']['s2member']['o'], array('options_checksum' => 0))));
@@ -392,7 +396,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 				else if($key === 'max_simultaneous_logins_timeout' && (!is_string($value) || !strlen($value)))
 					$value = $default_options[$key];
 
-				else if($key === 'run_deactivation_routines' && (!is_string($value) || !is_numeric($value)))
+				else if($key === 'run_uninstall_routines' && (!is_string($value) || !is_numeric($value)))
 					$value = $default_options[$key];
 
 				else if($key === 'custom_reg_fields' && (!is_string($value) || !strlen($value)))

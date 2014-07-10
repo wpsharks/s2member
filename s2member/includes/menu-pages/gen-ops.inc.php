@@ -48,23 +48,23 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 					do_action("ws_plugin__s2member_during_gen_ops_page_before_left_sections", get_defined_vars());
 
-					if(apply_filters("ws_plugin__s2member_during_gen_ops_page_during_left_sections_display_deactivation", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site() || is_super_admin()), get_defined_vars()))
+					if(apply_filters("ws_plugin__s2member_during_gen_ops_page_during_left_sections_display_uninstall", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site() || is_super_admin()), get_defined_vars()))
 						{
-							do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_before_deactivation", get_defined_vars());
+							do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_before_uninstall", get_defined_vars());
 
-							echo '<div class="ws-menu-page-group" title="Deactivation Safeguards"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["run_deactivation_routines"]) ? ' default-state="open"' : '').'>'."\n";
+							echo '<div class="ws-menu-page-group" title="Plugin Deletion Safeguards"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["run_uninstall_routines"]) ? ' default-state="open"' : '').'>'."\n";
 
-							echo '<div class="ws-menu-page-section ws-plugin--s2member-deactivation-section">'."\n";
-							echo '<h3>Deactivation Safeguards (highly recommended)</h3>'."\n";
-							echo (is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site() && is_super_admin()) ? '<p><em class="ws-menu-page-hilite">On a Multisite Blog Farm, this panel is ONLY visible to YOU, as a Super Administrator. s2Member automatically Safeguards everything on a Multisite Blog Farm. However, as the Super Administrator, you may turn this off; on a per-Blog basis. For example, if you\'re going to de-activate s2Member on this particular Blog, you can turn OFF the Safeguards below, so that s2Member will completely erase itself.</em></p>'."\n" : '<p>By default, s2Member will retain all of it\'s Roles, Capabilities, and your Configuration Options when/if you deactivate s2Member from the Plugins Menu in WordPress. However, if you would like for s2Member to erase itself completely, please choose: <code>No (upon deactivation, erase all data/options)</code>.</p>'."\n";
-							do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_deactivation", get_defined_vars());
+							echo '<div class="ws-menu-page-section ws-plugin--s2member-uninstall-section">'."\n";
+							echo '<h3>Plugin Deletion Safeguards (highly recommended)</h3>'."\n";
+							echo '<p>By default, s2Member will retain all of it\'s Roles, Capabilities, and your Configuration Options when/if you delete s2Member from the Plugins Menu in WordPress. However, if you would like for s2Member to erase itself completely, please choose: <code>No (upon deletion, erase all data/options)</code>.</p>';
+							do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_uninstall", get_defined_vars());
 
 							echo '<table class="form-table">'."\n";
 							echo '<tbody>'."\n";
 							echo '<tr>'."\n";
 
 							echo '<th>'."\n";
-							echo '<label for="ws-plugin--s2member-run-deactivation-routines">'."\n";
+							echo '<label for="ws-plugin--s2member-run-uninstall-routines">'."\n";
 							echo 'Safeguard s2Member Data/Options?'."\n";
 							echo '</label>'."\n";
 							echo '</th>'."\n";
@@ -73,9 +73,9 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 							echo '<tr>'."\n";
 
 							echo '<td>'."\n";
-							echo '<select name="ws_plugin__s2member_run_deactivation_routines" id="ws-plugin--s2member-run-deactivation-routines">'."\n";
-							echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["run_deactivation_routines"]) ? ' selected="selected"' : '').'>Yes (safeguard all data/options)</option>'."\n";
-							echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["run_deactivation_routines"]) ? ' selected="selected"' : '').'>No (upon deactivation, erase all data/options)</option>'."\n";
+							echo '<select name="ws_plugin__s2member_run_uninstall_routines" id="ws-plugin--s2member-run-uninstall-routines">'."\n";
+							echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["run_uninstall_routines"]) ? ' selected="selected"' : '').'>Yes (safeguard all data/options)</option>'."\n";
+							echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["run_uninstall_routines"]) ? ' selected="selected"' : '').'>No (upon deletion, erase all data/options)</option>'."\n";
 							echo '</select><br />'."\n";
 							echo 'Recommended setting: (<code>Yes, safeguard all data/options</code>)'."\n";
 							echo '</td>'."\n";
@@ -87,7 +87,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 							echo '</div>'."\n";
 
-							do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_after_deactivation", get_defined_vars());
+							do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_after_uninstall", get_defined_vars());
 						}
 
 					if(apply_filters("ws_plugin__s2member_during_gen_ops_page_during_left_sections_display_security", TRUE, get_defined_vars()))
