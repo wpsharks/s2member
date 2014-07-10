@@ -285,6 +285,30 @@ div.ws-menu-page select:focus, div.ws-menu-page textarea:focus
 {
 	background : #637041;
 }
+div.ws-menu-page input::-webkit-input-placeholder
+{
+	color       : rgba(255, 255, 255, 0.2);
+	font-style  : italic;
+	padding-top : 3px;
+}
+div.ws-menu-page input::-moz-placeholder
+{
+	color       : rgba(255, 255, 255, 0.2);
+	font-style  : italic;
+	padding-top : 3px;
+}
+div.ws-menu-page input:-moz-placeholder
+{
+	color       : rgba(255, 255, 255, 0.2);
+	font-style  : italic;
+	padding-top : 3px;
+}
+div.ws-menu-page input:-ms-input-placeholder
+{
+	color       : rgba(255, 255, 255, 0.2);
+	font-style  : italic;
+	padding-top : 3px;
+}
 div.ws-menu-page input[disabled],
 div.ws-menu-page select[disabled],
 div.ws-menu-page textarea[disabled]
