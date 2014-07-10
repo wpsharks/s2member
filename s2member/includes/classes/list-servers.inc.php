@@ -46,11 +46,6 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 			return apply_filters('ws_plugin__s2member_list_servers_integrated', FALSE, get_defined_vars());
 		}
 
-		public static function process_list_servers_against_current_user()
-		{
-			// TODO
-		}
-
 		/**
 		 * Processes List Server integrations for s2Member.
 		 *
@@ -258,6 +253,34 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 			unset($__refs, $__v);
 
 			return apply_filters('ws_plugin__s2member_process_list_servers', (isset ($success) && $success), get_defined_vars());
+		}
+
+		/**
+		 * See {@link process_list_servers()} for further details about this wrapper.
+		 *
+		 * @param bool $opt_in Defaults to false; must be set to true. Indicates the User IS opting in.
+		 * @param bool $double_opt_in Defaults to true. If false, no email confirmation is required. Use at your own risk.
+		 *
+		 * @return bool True if at least one List Server is processed successfully, else false.
+		 */
+		public static function process_list_servers_against_current_user($opt_in = TRUE, $double_opt_in = TRUE, $clean_user_cache = TRUE)
+		{
+			if($clean_user_cache) clean_user_cache(get_current_user_id());
+
+			$user = wp_get_current_user();
+
+			return self::process_list_servers(
+				($role = c_ws_plugin__s2member_user_access::user_access_role($user)),
+				($level = c_ws_plugin__s2member_user_access::user_access_level($user)),
+				($login = $user->user_login),
+				($pass = $user->user_pass),
+				($email = $user->user_email),
+				($fname = $user->first_name),
+				($lname = $user->last_name),
+				($ip = $_SERVER['REMOTE_ADDR']),
+				($opt_in = $opt_in), ($double_opt_in = $double_opt_in),
+				($user_id = $user->ID)
+			);
 		}
 
 		/**
