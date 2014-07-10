@@ -247,6 +247,8 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 
 				if($email_configs_were_on)
 					c_ws_plugin__s2member_email_configs::email_config();
+
+				if($user_id) update_user_option($user_id, 's2member_opt_in', '1');
 			}
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_after_process_list_servers', get_defined_vars());
@@ -440,6 +442,8 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 
 				if($email_configs_were_on)
 					c_ws_plugin__s2member_email_configs::email_config();
+
+				if($user_id) update_user_option($user_id, 's2member_opt_in', '0');
 			}
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_after_process_list_server_removals', get_defined_vars());
