@@ -125,10 +125,11 @@ if(!class_exists('c_ws_plugin__s2member_user_securities'))
 		 *
 		 * @param bool    $show Expects boolean value passed through by the Filter.
 		 * @param WP_User $user Expects a `WP_User` object passed through by the Filter.
+		 *    If this is NOT passed (it isn't always), then we assume the current user.
 		 *
 		 * @return bool False if the Password is locked for this User, else existing value.
 		 */
-		public static function hide_password_fields($show, $user)
+		public static function hide_password_fields($show, $user = NULL)
 		{
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_hide_password_fields', get_defined_vars());
