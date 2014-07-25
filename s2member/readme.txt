@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 140630
-Stable tag: 140630
+Version: 140725
+Stable tag: 140725
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -11,12 +11,13 @@ WP® Multisite Compatible: yes
 Multisite Blog Farm Compatible: yes
 
 PayPal® Standard Compatible: yes
+Stripe™ Compatible: yes w/s2Member® Pro
 PayPal® Pro Compatible: yes w/s2Member® Pro
 Authorize.Net® Compatible: yes w/s2Member® Pro
 Google® Checkout Compatible: yes w/s2Member® Pro
 ClickBank® Compatible: yes w/s2Member® Pro
 
-Tested up to: 3.9
+Tested up to: 4.0
 Requires at least: 3.3
 
 Copyright: © 2009 WebSharks, Inc.
@@ -50,13 +51,29 @@ s2Member® — a powerful (free) membership plugin for WordPress®. Protect memb
 
 == Description ==
 
+The s2Member® Framework (free) integrates with PayPal® Website Payments Standard (also free), and supports "Buy Now" and "Subscriptions".
+
+= Reasons to upgrade to "s2Member® Pro" =
+
+- Stripe™ integration via Pro Forms (one-step checkout).
+- PayPal Pro™ integration via Pro Forms (one-step checkout).
+- Authorize.Net™ integration via Pro Forms (one-step checkout).
+- Plus ClickBank™ and Google Wallet™ button integrations too :-)
+- Unlimited Membership Levels, Coupon Codes, Pro API, and more!
+
+You can learn more about this powerful membership management system for WordPress at [s2Member.com](http://www.s2member.com/pro/) ~ Or watch the quick video below.
+
 [youtube http://www.youtube.com/watch?v=2C3Lan7vxw0 /]
 
-The s2Member® Framework (free) integrates with PayPal® Website Payments Standard (also free), and fully supports recurring billing. s2Member supports custom Pages for registration (including Custom Registration/Profile Fields), account access, and a lot more. s2Member is compatible with Multisite Networking too, and even with BuddyPress and bbPress. With the s2Member® Pro add-on (an optional paid upgrade), you can add support for unlimited Membership Levels, PayPal® Website Payments Pro (w/ Pro Forms to facilitate on-site credit card processing), Authorize.Net® (also with Pro Forms), Google® Checkout, ClickBank®, advanced User Import/Export tools, the ability to use Coupon Codes, and many other enhancements. Videos available at: [s2Member.com / Videos](http://www.s2member.com/videos/).
+If you're serious about membership management in WordPress, you want s2Member! s2Member supports custom Pages for registration (including Custom Registration/Profile Fields), account access, and a whole lot more. s2Member is compatible with Multisite Networking too, and even with BuddyPress and bbPress.
+
+With the s2Member® Pro add-on (an optional paid upgrade), you can add support for unlimited Membership Levels, Stripe™ (w/ Pro Forms to facilitate on-site credit card processing), PayPal® Website Payments Pro (also with Pro Forms), Authorize.Net® (also with Pro Forms), Google® Checkout, ClickBank®, advanced User Import/Export tools, the ability to use Coupon Codes, and many other enhancements. Videos available at: [s2Member.com / Videos](http://www.s2member.com/videos/).
 
 s2Member supports Free Subscribers (at Level #0), and up to four primary Membership Levels [1-4] (unlimited with s2Member® Pro). You can label your Membership Levels anything you like. The defaults are Free, Bronze, Silver, Gold, and Platinum. s2Member also supports an unlimited number of Custom Capability Packages. Custom Capabilities are an easy way to extend s2Member in creative ways. Custom Capabilities allow you to create an unlimited number of Membership Packages, all with different Capabilities and prices.
 
-s2Member allows you to protect Pages, Posts, Tags, Categories, URIs, URI word fragments, URI Replacement Codes for BuddyPress, Specific Post/Page "Buy Now" Access, and even portions of content within Posts/Pages/themes/plugins. All settings are configurable through the s2Member Options panel. This makes s2Member VERY easy to integrate into any site powered by WordPress®. With s2Member, you can also protect downloadable files, using restrictions to control how many downloads can occur within a certain amount of time; all based on Membership Level or even Custom Capabilities. sMember® can even integrate with Amazon® S3 and CloudFront (optional) for serving protected audio/video streams over an RTMP protocol.
+s2Member allows you to protect Pages, Posts, Tags, Categories, URIs, URI word fragments, URI Replacement Codes for BuddyPress, Specific Post/Page "Buy Now" Access, and even portions of content within Posts/Pages/themes/plugins. All settings are configurable through the s2Member Options panel. This makes s2Member VERY easy to integrate into any site powered by WordPress®.
+
+With s2Member, you can also protect downloadable files, using restrictions to control how many downloads can occur within a certain amount of time; all based on Membership Level or even Custom Capabilities. sMember® can even integrate with Amazon® S3 and CloudFront (optional) for serving protected audio/video streams over an RTMP protocol.
 
 You can learn more about s2Member® at [s2Member.com](http://www.s2member.com/).
 
@@ -142,11 +159,35 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v140630 =
+= v140725 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v140725 =
+
+* (s2Member Pro) **NEW: Stripe Pro Forms (Beta)** Holy hula hoop! s2Member now has a deep integration with Stripe for on-site credit card processing that uses a Stripe overlay. Stripe is an almost-free service that is super easy to setup and work with. We think you'll find that Stripe is quickly becoming the MOST popular of all payment gateways in the industry. A few bugs have [already been zapped](https://github.com/websharks/s2member/issues?milestone=5&page=1&state=closed) prior to this release after some initial beta testing was completed over the last few weeks. Everything is looking great so far, but please do [report any new issues via GitHub](https://github.com/websharks/s2member/issues?page=1&state=open).
+
+  **If you are an s2Member Pro site owner** you can upgrade to the latest version of s2Member Pro at anytime you like; then enable Stripe as an additional payment gateway option. See: `Dashboard ⥱ s2Member Pro ⥱ Other Gateways`.
+
+  **Questions About Stripe?** Please watch [this video](http://www.s2member.com/videos/) by Lead Develoer Jason Caldwell regarding s2Member's new integration with Stripe payment processing. It's never been easier! Jason answers several questions about Stripe in this video also. You might _also_ find it interesting to hear the [latest news regarding Stripe and Bitcoin](https://stripe.com/blog/bitcoin-the-stripe-perspective). We look forward to supporting Bitcoin in s2Member (via Stripe) very soon.
+
+* (s2Member Pro) **NEW: Advanced Import/Export Tools Option** This release introduces a new "Advanced" set of user import/export tools. We think you'll find this to be an extremely helpful and much more powerful way to deal with user import/export in WordPress. Please see `Dashboard ⥱ s2Member ⥱ Import/Export` and click the link to enable the new Advanced Import/Export Tools. See also: [this KB article](http://www.s2member.com/kb/advanced-import-tools/) which documents the new tools. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/149) if you'd like further details about the development behind this new feature.
+* (s2Member Pro) **ClickBank Bug Fix** Nillable fields causing some issues (only under one specific scenario) after a recent change in the ClickBank API. Fixed in this release. See [this GitHub issue](https://github.com/websharks/s2member/issues/250) if you would like further detais.
+* (s2Member Pro) **Compatibility** Resolved a minor single-quote issue in the Visual Editor. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/228) if you'd like further details.
+* (s2Member/s2Member Pro) **Bug Fix** Non-HTML whitespace being trimmed inside the `[s2If /]` shortcode. Resolved in this release. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/224) if you'd like further details.
+* (s2Member Pro) **Pro Forms Bug Fix** Related to List Server processing during an upgrade. This bug impacted all payment gateways integrated with s2Member's Pro Forms; including PayPal, Authorize.Net and now Stripe. Resolved in this release. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/216) if you'd like further details.
+* (s2Member Pro) An `array_intersect()` error in the `[s2MOP /]` shortcode under the right conditions. Fixed in this release. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/204) if you'd like further details.
+* (s2Member Pro) **Enhancement** Free Registration Pro Forms can now be included in a list of nested Checkout Option drop-downs. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/197) if you'd like further details. See also: `Dashboard ⥱ s2Member ⥱ [Your Payment Gateway] Pro Forms ⥱ Checkout Options`; where there is more information about how to use Checkout Options with s2Member Pro Forms.
+* (s2Member/s2Member Pro) **Bug Fix / List Servers** This release corrects a bug that may cause members to be unsubscribed from a List Server if they forget to check the box again while editing their profile. In the previous release we introduced a feature that allows the checkbox to be pre-checked if the user already chose to subscribe once before. However, the internal tracking for this was not as reliable as it could be. There is still more work to be done on this front, but the immediate issue has now been resolved. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/196) if you'd like further details.
+* (s2Member/s2Member Pro) **WP_DEBUG Compat.** Some older portions of s2Member's codebase were cleaned up and reformatted in this update. This is an ongoing process to bring s2Member into full compatibility with `WP_DEBUG` mode in WordPress. This is intended to help other developers in the WP community. Much progress has been made on this front now, but still some more work to do. We will continue to update s2Member's codebase little-by-little with each release.
+* (s2Member/s2Member Pro) **Uninstall vs. Deactivation** s2Member has always made a strong effort to cleanup after itself should you decide (for whatever reason) to uninstall it. However, we are also very concerned with preserving any data associated with such a powerful plugin that comes with so many options. Nobody wants accidental data loss, right!?
+
+
+  In the past, s2Member came with a feature called "Deactivation Safeguards". These (if disabled) attached themselves to a plugin "deactivation" hook within WordPress and they would uninstall s2Member when you deactivated the plugin. Starting with this release ,s2Member's Deactivation routines have been changed. We now attach them to the WordPress "uninstall" hook — which is triggered only on plugin deletion.
+
+  In this way, deactivating s2Member will never result in a loss of any data. Instead of "Deactivation Safeguards", s2Member now calls this feature "Plugin Deletion Safeguards". In short, to tell s2Member to uninstall itself (including any data/options associated with s2Member), you can simply disable s2Member's Plugin Deletion Safeguards under: `s2Member ⥱ General Options`, and then deactivate _and delete_ the s2Member plugin entirely. Whenever you delete the plugin this automatically and silently triggers s2Member's uninstaller which cleans up after itself nicely :-)
 
 = v140630 =
 
