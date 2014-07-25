@@ -101,8 +101,10 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_4bp_in'))
 					unset($__refs, $__v);
 
 					clean_user_cache($user_id);
-					$user = new WP_User($user_id);
-					(function_exists('setup_userdata')) ? setup_userdata() : NULL;
+					wp_cache_delete($user_id, 'user_meta');
+					$user = new WP_User($user_id); // Fresh object.
+					if(function_exists('setup_userdata')) setup_userdata();
+
 					$role  = c_ws_plugin__s2member_user_access::user_access_role($user);
 					$level = c_ws_plugin__s2member_user_access::user_access_role_to_level($role);
 

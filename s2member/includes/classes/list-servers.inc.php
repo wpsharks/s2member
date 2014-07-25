@@ -262,14 +262,19 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		 *
 		 * @param bool $opt_in Defaults to false; must be set to true. Indicates the User IS opting in.
 		 * @param bool $double_opt_in Defaults to true. If false, no email confirmation is required. Use at your own risk.
+		 * @param bool $clean_user_cache Defaults to true; i.e. we start from a fresh copy of the current user.
 		 *
 		 * @return bool True if at least one List Server is processed successfully, else false.
 		 */
 		public static function process_list_servers_against_current_user($opt_in = TRUE, $double_opt_in = TRUE, $clean_user_cache = TRUE)
 		{
-			if($clean_user_cache) clean_user_cache(get_current_user_id());
-
-			$user = wp_get_current_user();
+			if($clean_user_cache) // Start from a fresh user object here?
+			{
+				clean_user_cache(get_current_user_id());
+				wp_cache_delete(get_current_user_id(), 'user_meta');
+				$user = new WP_User(get_current_user_id());
+			}
+			else $user = wp_get_current_user();
 
 			return self::process_list_servers(
 				($role = c_ws_plugin__s2member_user_access::user_access_role($user)),
