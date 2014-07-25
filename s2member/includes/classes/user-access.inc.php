@@ -37,11 +37,11 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				* @package s2Member\User_Access
 				* @since 3.5
 				*
-				* @param object $user Optional. A `WP_User` object. Defaults to the current User.
+				* @param \WP_User $user Optional. A `WP_User` object. Defaults to the current User.
 				* 	In order to check the current User, you must call this function with no arguments/parameters.
 				* @return string Role ID/Name, or an empty string if they have no Role, or if ``$user`` does not exist, or if no User is currently logged-in.
 				*/
-				public static function user_access_role ($user = FALSE)
+				public static function user_access_role ($user = NULL)
 					{
 						if ((func_num_args () && (!is_object ($user) || empty($user->ID))) || (!func_num_args () && !$user && (!is_object ($user = (is_user_logged_in ()) ? wp_get_current_user () : false) || empty($user->ID))))
 							{
@@ -60,11 +60,11 @@ if (!class_exists ("c_ws_plugin__s2member_user_access"))
 				* @package s2Member\User_Access
 				* @since 3.5
 				*
-				* @param object $user Optional. A `WP_User` object. Defaults to the current User.
+				* @param \WP_User $user Optional. A `WP_User` object. Defaults to the current User.
 				* 	In order to check the current User, you must call this function with no arguments/parameters.
 				* @return array Array of Custom Capabilities, or an empty array if they have no Custom Capabilities, or if ``$user`` does not exist, or if no User is currently logged-in.
 				*/
-				public static function user_access_ccaps ($user = FALSE)
+				public static function user_access_ccaps ($user = NULL)
 					{
 						if ((func_num_args () && (!is_object ($user) || empty($user->ID))) || (!func_num_args () && !$user && (!is_object ($user = (is_user_logged_in ()) ? wp_get_current_user () : false) || empty($user->ID))))
 							{
