@@ -55,7 +55,7 @@ The s2Member® Framework (free) integrates with PayPal® Website Payments Standa
 
 = Reasons to upgrade to "s2Member® Pro" =
 
-- Stripe™ integration via Pro Forms (one-step checkout).
+- Stripe™ integration via Pro Forms ~ [video intro](http://www.s2member.com/videos/L0aJz4-9mNanxemFZ_3G2-SIn-xAoiwD/).
 - PayPal Pro™ integration via Pro Forms (one-step checkout).
 - Authorize.Net™ integration via Pro Forms (one-step checkout).
 - Plus ClickBank™ and Google Wallet™ button integrations too :-)
