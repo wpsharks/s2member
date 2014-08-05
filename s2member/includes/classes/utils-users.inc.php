@@ -40,15 +40,8 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 			global $wpdb;
 			/** @var wpdb $wpdb */
 
-			$wpdb_handle = $wpdb->dbh;
-			/** @var resource $wpdb_handle */
-
-			$q1    = mysql_query("SELECT SQL_CALC_FOUND_ROWS `".$wpdb->users."`.`ID` FROM `".$wpdb->users."`, `".$wpdb->usermeta."` WHERE `".$wpdb->users."`.`ID` = `".$wpdb->usermeta."`.`user_id` AND `".$wpdb->usermeta."`.`meta_key` = '".esc_sql($wpdb->prefix."capabilities")."' LIMIT 1", $wpdb_handle);
-			$q2    = mysql_query("SELECT FOUND_ROWS()", $wpdb_handle);
-			$users = (int)mysql_result($q2, 0);
-
-			mysql_free_result($q2);
-			mysql_free_result($q1);
+			$wpdb->query("SELECT SQL_CALC_FOUND_ROWS `".$wpdb->users."`.`ID` FROM `".$wpdb->users."`, `".$wpdb->usermeta."` WHERE `".$wpdb->users."`.`ID` = `".$wpdb->usermeta."`.`user_id` AND `".$wpdb->usermeta."`.`meta_key` = '".esc_sql($wpdb->prefix."capabilities")."' LIMIT 1");
+			$users = (int)$wpdb->get_var("SELECT FOUND_ROWS()");
 
 			return $users;
 		}
@@ -68,8 +61,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 		 */
 		public static function get_user_custom_with($subscr_txn_baid_cid_id = '', $os0 = '')
 		{
-			global $wpdb;
-			/** @var wpdb $wpdb */
+			global $wpdb; /** @var wpdb $wpdb */
 
 			if($subscr_txn_baid_cid_id && $os0) // This case includes some additional routines that can use the ``$os0`` value.
 			{
