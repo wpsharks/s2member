@@ -178,6 +178,7 @@ add_filter('cron_schedules', 'c_ws_plugin__s2member_cron_jobs::extend_cron_sched
 add_action('ws_plugin__s2member_auto_eot_system__schedule', 'c_ws_plugin__s2member_auto_eots::auto_eot_system');
 
 add_action('wp_ajax_ws_plugin__s2member_update_roles_via_ajax', 'c_ws_plugin__s2member_roles_caps::update_roles_via_ajax');
+add_action('wp_ajax_ws_plugin__s2member_update_remote_ops_key_via_ajax', 'c_ws_plugin__s2member_pro_remote_ops::update_remote_ops_key_via_ajax');
 
 add_action('wp_ajax_ws_plugin__s2member_sp_access_link_via_ajax', 'c_ws_plugin__s2member_sp_access::sp_access_link_via_ajax');
 add_action('wp_ajax_ws_plugin__s2member_reg_access_link_via_ajax', 'c_ws_plugin__s2member_register_access::reg_access_link_via_ajax');
