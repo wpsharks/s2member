@@ -750,6 +750,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		{
 			do_action('ws_plugin__s2member_before_scripting_page', get_defined_vars());
 
+			c_ws_plugin__s2member_menu_pages::update_all_options();
+
 			include_once dirname(dirname(__FILE__)).'/menu-pages/scripting.inc.php';
 
 			do_action('ws_plugin__s2member_after_scripting_page', get_defined_vars());
