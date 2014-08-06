@@ -45,7 +45,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		 * @package s2Member\Menu_Pages
 		 * @since 3.5
 		 *
-		 * @param array      $new_options Optional. Force feed an array of new options. Defaults to ``$_POST`` vars.
+		 * @param null|array $new_options Optional. Force feed an array of new options. Defaults to ``$_POST`` vars.
 		 *   If ``$new_options`` are passed in, be SURE that you've already applied ``stripslashes_deep()``.
 		 * @param bool       $verified Optional. Defaults to false. If true, ``wp_verify_nonce()`` is skipped in this routine.
 		 * @param bool       $update_other Optional. Defaults to true. If false, other option-dependent routines will not be processed.
@@ -55,7 +55,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		 *
 		 * @return bool True if all s2Member options were updated successfully, else false.
 		 */
-		public static function update_all_options($new_options = array(), $verified = FALSE, $update_other = TRUE, $display_notices = TRUE, $enqueue_notices = FALSE, $request_refresh = FALSE)
+		public static function update_all_options($new_options = NULL, $verified = FALSE, $update_other = TRUE, $display_notices = TRUE, $enqueue_notices = FALSE, $request_refresh = FALSE)
 		{
 			$updated_all_options = FALSE; // Initializing this variable here makes it an available reference-variable to Hooks/Filters.
 
