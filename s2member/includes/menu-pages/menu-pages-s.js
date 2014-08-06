@@ -22,6 +22,26 @@ jQuery(document).ready(function($)
 					string = string.replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 			return string;
 		};
+		ws_plugin__s2member_generateSecurityKey = /* Generates a unique Security Key. */ function(obj)
+			{
+				if(!obj) obj = '#ws-plugin--s2member-sec-encryption-key';
+
+				var mt_rand = /* The JS equivalent to mt_rand(). */ function(min, max)
+					{
+						min = (arguments.length < 1) ? 0 : min;
+						max = (arguments.length < 2) ? 2147483647 : max;
+
+						return Math.floor(Math.random() * (max-min+1))+min;
+					};
+				var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#%^&*()';
+
+				for(var i = 0, key = ''; i < 64; i++)
+					key += chars.substr(mt_rand(0, chars.length-1), 1);
+
+				$(obj).val(key);
+
+				return false;
+			};
 		if(location.href.match /* Any & all s2Member pages. */(/page\=ws-plugin--s2member/))
 			{
 				$('input.ws-plugin--s2member-update-roles-button, input.ws-plugin--s2member-reset-roles-button').click(function()
@@ -102,25 +122,6 @@ jQuery(document).ready(function($)
 			}
 		if(location.href.match(/page\=ws-plugin--s2member-gen-ops/))
 			{
-				ws_plugin__s2member_generateSecurityKey = /* Generates a unique Security Key. */ function()
-					{
-						var mt_rand = /* The JS equivalent to mt_rand(). */ function(min, max)
-							{
-								min = (arguments.length < 1) ? 0 : min;
-								max = (arguments.length < 2) ? 2147483647 : max;
-
-								return Math.floor(Math.random() * (max-min+1))+min;
-							};
-
-						var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
-
-						for(var i = 0, key = ''; i < 64; i++)
-							key += chars.substr(mt_rand(0, chars.length-1), 1);
-
-						$('input#ws-plugin--s2member-sec-encryption-key').val(key);
-
-						return false;
-					};
 				ws_plugin__s2member_enableSecurityKey = /* Allow Security Key editing?? */ function()
 					{
 						if(confirm('Edit Key? Are you sure?\nThis could break your installation!\n\n*Note* If you\'ve been testing s2Member, feel free to change this Key before you go live. Just don\'t go live, and then change it. You\'ll have unhappy Customers. Data corruption WILL occur! For your safety, s2Member keeps a history of the last 10 Keys that you\'ve used. If you get yourself into a real situation, s2Member will let you revert back to a previous Key.'))
