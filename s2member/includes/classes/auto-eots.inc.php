@@ -169,6 +169,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 																		delete_user_option ($user_id, "s2member_auto_eot_time");
 
 																		delete_user_option ($user_id, "s2member_file_download_access_log");
+																		delete_user_option ($user_id, "s2member_authnet_payment_failures");
 
 																		c_ws_plugin__s2member_user_notes::append_user_notes ($user_id, "Demoted by s2Member: " . date ("D M j, Y g:i a T"));
 
