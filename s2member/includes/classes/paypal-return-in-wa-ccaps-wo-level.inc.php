@@ -183,11 +183,11 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level"))
 									{
 										$paypal["s2member_log"][] = "Page Expired. Duplicate Return-Data.";
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `web_accept` ) w/ update vars for Capabilities w/o Level.";
-										$paypal["s2member_log"][] = "Page Expired. Redirecting Customer to the Home Page (after displaying an error message).";
+										$paypal['s2member_log'][] = 'Page Expired. Instructing customer to check their email for further details about how to obtain access to what they purchased.';
 
-										echo c_ws_plugin__s2member_return_templates::return_template ($paypal["subscr_gateway"],
-											_x ('<strong>Page Expired:</strong> Duplicate Return-Data.<br />Please contact Support if you need any assistance.', "s2member-front", "s2member"),
-											_x ("Back To Home Page", "s2member-front", "s2member"), home_url ("/"));
+										echo c_ws_plugin__s2member_return_templates::return_template($paypal['subscr_gateway'],
+					                                                             '<strong>'._x('Thank you! Please check your email for further details regarding your purchase.', 's2member-front', 's2member').'</strong>',
+					                                                             _x('Return to Home Page', 's2member-front', 's2member'), home_url("/"));
 									}
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_return_after_new_ccaps", get_defined_vars ());
