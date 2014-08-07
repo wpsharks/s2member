@@ -65,7 +65,7 @@ if(!class_exists("c_ws_plugin__s2member_registration_times"))
 		 *
 		 * @return int A Unix timestamp, indicating Registration Time, else `0` on failure.
 		 */
-		public static function registration_time($user_id = FALSE)
+		public static function registration_time($user_id = 0)
 		{
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action("ws_plugin__s2member_before_registration_time", get_defined_vars());
