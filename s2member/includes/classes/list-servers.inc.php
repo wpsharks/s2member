@@ -458,6 +458,38 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		}
 
 		/**
+		 * See {@link process_list_server_removals()} for further details about this wrapper.
+		 *
+		 * @param bool $opt_out Defaults to false; must be set to true. Indicates the User IS opting out.
+		 * @param bool $clean_user_cache Defaults to true; i.e. we start from a fresh copy of the current user.
+		 *
+		 * @return bool True if at least one List Server removal is processed successfully, else false.
+		 */
+		public static function process_list_server_removals_against_current_user($opt_out = TRUE, $clean_user_cache = TRUE)
+		{
+			if($clean_user_cache) // Start from a fresh user object here?
+			{
+				clean_user_cache(get_current_user_id());
+				wp_cache_delete(get_current_user_id(), 'user_meta');
+				$user = new WP_User(get_current_user_id());
+			}
+			else $user = wp_get_current_user();
+
+			return self::process_list_server_removals(
+				($role = c_ws_plugin__s2member_user_access::user_access_role($user)),
+				($level = c_ws_plugin__s2member_user_access::user_access_level($user)),
+				($login = $user->user_login),
+				($pass = $user->user_pass),
+				($email = $user->user_email),
+				($fname = $user->first_name),
+				($lname = $user->last_name),
+				($ip = $_SERVER['REMOTE_ADDR']),
+				($opt_out = $opt_out),
+				($user_id = $user->ID)
+			);
+		}
+
+		/**
 		 * Listens to Collective EOT/MOD Events processed internally by s2Member.
 		 *
 		 * This is only applicable when ``['custom_reg_auto_opt_outs']`` contains related Event(s).
