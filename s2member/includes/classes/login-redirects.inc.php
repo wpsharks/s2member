@@ -44,7 +44,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 		{
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_login_redirect', get_defined_vars());
-			unset($__refs, $__v);
+			unset($__refs, $__v); // Housekeeping.
 
 			if(is_string($username) && $username && is_object($user) && !empty($user->ID) && ($user_id = $user->ID))
 			{
@@ -77,13 +77,20 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 					}
 				if(($redirect = apply_filters('ws_plugin__s2member_login_redirect', (($user->has_cap('edit_posts')) ? FALSE : TRUE), get_defined_vars())))
 				{
-					$obey_redirect_to = apply_filters('ws_plugin__s2member_obey_login_redirect_to', TRUE, get_defined_vars()); // By default, we obey this.
+					$obey_redirect_to = apply_filters('ws_plugin__s2member_obey_login_redirect_to', TRUE, get_defined_vars());
 
-					if(!$obey_redirect_to || empty($_REQUEST['redirect_to']) || !is_string($_REQUEST['redirect_to']) || $_REQUEST['redirect_to'] === admin_url() || preg_match('/^\/?wp-admin\/?$/', $_REQUEST['redirect_to']))
+					if($obey_redirect_to && (empty($_REQUEST['redirect_to']) || !is_string($_REQUEST['redirect_to']) || $_REQUEST['redirect_to'] === admin_url() || preg_match('/^\/?wp-admin\/?$/', $_REQUEST['redirect_to'])))
+						$obey_redirect_to = FALSE; // Do not obey default redirect_to locations; like those inside the default admin area.
+
+					else if($obey_redirect_to && !empty($_REQUEST['redirect_to_automatic']) && is_string($redirect))
+						$obey_redirect_to = FALSE; // Do not obey automatic redirects when a custom redirection filter applies.
+					// ↑ NOTE: this will apply to s2Member Pro's One-Time-Offers (Upon Login) also.
+
+					if(!$obey_redirect_to) // Only if we are NOT obeying the `redirect_to` variable.
 					{
 						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 						do_action('ws_plugin__s2member_during_login_redirect', get_defined_vars());
-						unset($__refs, $__v);
+						unset($__refs, $__v); // Housekeeping.
 
 						if($redirect && is_string($redirect)) $redirect = $redirect;
 
@@ -112,7 +119,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 			}
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_after_login_redirect', get_defined_vars());
-			unset($__refs, $__v);
+			unset($__refs, $__v); // Housekeeping.
 		}
 
 		/**
@@ -130,7 +137,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 		{
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_login_redirection_url', get_defined_vars());
-			unset($__refs, $__v);
+			unset($__refs, $__v); // Housekeeping.
 
 			$url = $GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_override'];
 			$url = c_ws_plugin__s2member_login_redirects::fill_login_redirect_rc_vars($url, $user, $root_returns_false);
@@ -153,7 +160,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 		{
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_login_redirection_uri', get_defined_vars());
-			unset($__refs, $__v);
+			unset($__refs, $__v); // Housekeeping.
 
 			if(($url = c_ws_plugin__s2member_login_redirects::login_redirection_url($user, $root_returns_false)))
 				$uri = c_ws_plugin__s2member_utils_urls::parse_uri($url);
@@ -177,7 +184,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 		{
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_fill_login_redirect_rc_vars', get_defined_vars());
-			unset($__refs, $__v);
+			unset($__refs, $__v); // Housekeeping.
 
 			$url      = (string)$url; // Force ``$url`` to a string value.
 			$orig_url = $url; // Record the original URL that was passed in.
