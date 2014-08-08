@@ -265,13 +265,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 					}
 					foreach(($posts = preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) as $p)
 						if(strpos($p, 'all-') === 0 && preg_match('/^all-(.+)$/', $p, $m) /* Protecting `all-` of a specific Post Type? */)
-							if((is_array($p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids($m[1])) || (substr($m[1], -1) === 's'
-							                                                                                         && is_array($_p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids(substr($m[1], 0, -1)))))
-							   && !empty($p_of_type)
-							) $x_ids = array_merge($x_ids, $p_of_type);
-					// Merge all Posts of this Post Type.
+							if((is_array($p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids($m[1])) || (substr($m[1], -1) === 's' && is_array($_p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids(substr($m[1], 0, -1))))) && !empty($p_of_type))
+								$x_ids = array_merge($x_ids, $p_of_type); // Merge all Posts of this Post Type.
 
-					$x_ids = array_merge($x_ids, $posts);
+					$x_ids = array_merge($x_ids, $posts); // Merge together.
 					unset ($posts, $p, $m, $p_of_type); // Just a little housekeeping here.
 				}
 				for($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++)
@@ -283,7 +280,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 					}
 					$pages = preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_pages']);
 
-					$x_ids = array_merge($x_ids, $pages);
+					$x_ids = array_merge($x_ids, $pages); // Merge.
 					unset ($pages); // Just a little housekeeping here.
 				}
 				$x_ids        = array_unique(c_ws_plugin__s2member_utils_arrays::force_integers($x_ids));
@@ -319,7 +316,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 				$all_singular_ids_not_conflicting = c_ws_plugin__s2member_utils_gets::get_all_singular_ids_with_sp('exclude-conflicts');
 				foreach($singular_ids as $s => $singular_id) // Weed out anything that's in conflict here.
 					if(!in_array($singular_id, $all_singular_ids_not_conflicting))
-						unset($singular_ids[$s]);
+						unset($singular_ids[$s]); // Housekeeping.
 			}
 			return (!empty($singular_ids) && is_array($singular_ids)) ? array_unique($singular_ids) : array();
 		}
@@ -348,7 +345,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 				$all_singular_ids_not_conflicting = c_ws_plugin__s2member_utils_gets::get_all_singular_ids_with_sp('exclude-conflicts');
 				foreach($singulars as $s => $singular) // Weed out anything that's in conflict here.
 					if(!in_array($singular->ID, $all_singular_ids_not_conflicting))
-						unset($singulars[$s]);
+						unset($singulars[$s]); // Housekeeping.
 			}
 			return (!empty($singulars) && is_array($singulars)) ? c_ws_plugin__s2member_utils_arrays::array_unique($singulars) : array();
 		}
