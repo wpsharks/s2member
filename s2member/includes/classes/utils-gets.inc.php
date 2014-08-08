@@ -132,6 +132,33 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 		}
 
 		/**
+		 * Retrieves a unique array of all published Child Post IDs in the database.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 3.5
+		 *
+		 * @param int|string|array $parent_ids One or more parent IDs to collect children for.
+		 *
+		 * @param string           $post_type Optional. If provided, return all Post IDs of a specific Post Type.
+		 *   Otherwise, return all Post IDs that are NOT of these Post Types: `page|attachment|nav_menu_item|revision`.
+		 *
+		 * @return array Unique array of all Child Post IDs *(as integers)*, including Custom Post Types; or all Child Post IDs of a specific Post Type.
+		 */
+		public static function get_all_child_post_ids($parent_ids = array(), $post_type = '')
+		{
+			/** @var wpdb $wpdb WordPress DB object instance. */
+			global $wpdb; // Global DB object reference.
+
+			if(($parent_ids = (array)$parent_ids)) // Force an array value.
+				if(is_array($post_ids = $wpdb->get_col("SELECT `ID` FROM `".$wpdb->posts."` WHERE `post_status` = 'publish'".
+				                                       " AND ".($post_type ? "`post_type` = '".esc_sql((string)$post_type)."'" : "`post_type` NOT IN('page','attachment','nav_menu_item','revision')").
+				                                       " AND `post_parent` IN('".implode("','", $parent_ids)."')"))
+				) $post_ids = c_ws_plugin__s2member_utils_arrays::force_integers($post_ids);
+
+			return (!empty($post_ids) && is_array($post_ids)) ? array_unique($post_ids) : array();
+		}
+
+		/**
 		 * Retrieves a unique array of all published Page IDs in the database.
 		 *
 		 * @package s2Member\Utilities

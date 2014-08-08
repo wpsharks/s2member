@@ -124,6 +124,11 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 
 						if((is_user_logged_in() && is_object($user = wp_get_current_user()) && !empty($user->ID) && ($user_id = $user->ID)) || !($user = FALSE))
 						{
+							$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE);
+							$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
+							$bbpress_forum_post_type     = $bbpress_installed ? bbp_forum_post_type() : ''; // Acquire the current post type for forums.
+							$bbpress_topic_post_type     = $bbpress_installed ? bbp_topic_post_type() : ''; // Acquire the current post type for topics.
+
 							if(!$user && ($_lwp = (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page']))
 							{
 								$wp_query->set('post__in', array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__in')), array($_lwp))));
@@ -202,10 +207,13 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] && (!$user || !current_user_can('access_s2member_level'.$n)))
 								{
 									foreach(($_posts = preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) as $_p)
+									{
 										if(strpos($_p, 'all-') === 0 && preg_match('/^all-(.+?)$/', $_p, $_m)) // Protecting `all-` of a specific Post Type?
 											if((is_array($_p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids($_m[1])) || (substr($_m[1], -1) === 's' && is_array($_p_of_type = c_ws_plugin__s2member_utils_gets::get_all_post_ids(substr($_m[1], 0, -1))))) && !empty($_p_of_type))
 												$_posts = array_merge($_posts, $_p_of_type); // Merge all Posts of this Post Type.
-
+									}
+									if($bbpress_restrictions_enable && $bbpress_installed)
+										$_posts = array_merge($_posts, c_ws_plugin__s2member_utils_gets::get_all_child_post_ids($_posts, $bbpress_topic_post_type));
 									$_posts = array_unique(c_ws_plugin__s2member_utils_arrays::force_integers($_posts)); // Force integers.
 
 									$wp_query->set('post__in', array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__in')), $_posts)));
