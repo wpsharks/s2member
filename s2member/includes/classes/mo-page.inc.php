@@ -63,7 +63,7 @@ if(!class_exists("c_ws_plugin__s2member_mo_page"))
 			 *   One of: `post|page|catg|ptag|file|ruri|ccap|sp|sys`.
 			 *   Defaults to ``$seeking_type``.
 			 *
-			 * @return inner Return-value of inner routine.
+			 * @return bool Return-value of inner routine.
 			 */
 			public static function wp_redirect_w_mop_vars($seeking_type = FALSE, $seeking_type_value = FALSE, $req_type = FALSE, $req_type_value = FALSE, $seeking_uri = FALSE, $res_type = FALSE)
 				{
