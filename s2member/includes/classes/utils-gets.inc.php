@@ -187,7 +187,15 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			if(is_array($results = $wpdb->get_results("SELECT `post_id`, `meta_value` FROM `".$wpdb->postmeta."` WHERE `meta_key` = 's2member_ccaps_req' AND `meta_value` != ''")))
+			if(is_array($results = $wpdb->get_results("SELECT `".$wpdb->postmeta."`.`post_id`, `".$wpdb->postmeta."`.`meta_value` `".$wpdb->posts."`.`post_type`".
+			                                          " FROM `".$wpdb->posts."`, `".$wpdb->postmeta."` WHERE `".$wpdb->posts."`.`ID` = `".$wpdb->postmeta."`.`post_id`".
+			                                          " `".$wpdb->postmeta."`.`meta_key` = 's2member_ccaps_req' AND `".$wpdb->postmeta."`.`meta_value` != ''")))
+			{
+				$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE);
+				$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
+				$bbpress_forum_post_type     = $bbpress_installed ? bbp_forum_post_type() : ''; // Acquire the current post type for forums.
+				$bbpress_topic_post_type     = $bbpress_installed ? bbp_topic_post_type() : ''; // Acquire the current post type for topics.
+
 				foreach($results as $r) // Now we need to check Custom Capabilities against ``$user``. If ``$user`` is a valid `WP_User` object, else all are unavailable.
 				{
 					if(!is_object($user) || empty($user->ID)) // No ``$user`` object? Maybe not logged-in?.
@@ -202,7 +210,16 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 								break; // Break now, no need to continue in this loop.
 							}
 					}
+					if($bbpress_restrictions_enable && $bbpress_installed && $r->post_type === $bbpress_forum_post_type)
+						if(!empty($singular_ids) && in_array((int)$r->post_id, $singular_ids, TRUE))
+						{
+							if(is_array($child_results = $wpdb->get_results("SELECT `".$wpdb->posts."`.`ID` as `post_id` FROM `".$wpdb->posts."`".
+							                                                " WHERE `".$wpdb->posts."`.`post_parent` = '".esc_sql($r->post_id)."'".
+							                                                " AND `".$wpdb->posts."`.`post_type` = '".esc_sql($bbpress_topic_post_type)."'")))
+								foreach($child_results as $child_r) $singular_ids[] = (int)$child_r->post_id;
+						}
 				}
+			}
 			return (!empty($singular_ids) && is_array($singular_ids)) ? array_unique($singular_ids) : array();
 		}
 

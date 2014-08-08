@@ -54,8 +54,8 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 
 					else if(!c_ws_plugin__s2member_systematics::is_systematic_use_page()) // However, there is the one exception above.
 					{
+						$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE);
 						$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
-						$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE, get_defined_vars());
 						$bbpress_forum_post_type     = $bbpress_installed ? bbp_forum_post_type() : ''; // Acquire the current post type for forums.
 						$bbpress_topic_post_type     = $bbpress_installed ? bbp_topic_post_type() : ''; // Acquire the current post type for topics.
 						$bbpress_topic_forum_id      = $bbpress_installed && $post->post_type === $bbpress_topic_post_type ? bbp_get_topic_forum_id($post->ID) : 0;
