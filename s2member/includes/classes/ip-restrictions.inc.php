@@ -76,8 +76,9 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
                     header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=UTF-8");
                     while (@ob_end_clean ()); // Clean any existing output buffers.
 
-                    $custom_template = (file_exists (TEMPLATEPATH . "/" . "ip-restrictions.php")) ? TEMPLATEPATH . "/" . "ip-restrictions.php" : false;
-                    $custom_template = (file_exists (WP_CONTENT_DIR . "/" . "ip-restrictions.php")) ? WP_CONTENT_DIR . "/" . "ip-restrictions.php" :  $custom_template;
+                    $custom_template = (is_file (TEMPLATEPATH . "/" . "ip-restrictions.php")) ? TEMPLATEPATH . "/" . "ip-restrictions.php" : '';
+                    $custom_template = (is_file (get_stylesheet_directory() . "/" . "ip-restrictions.php")) ? get_stylesheet_directory() . "/" . "ip-restrictions.php" : $custom_template;
+                    $custom_template = (is_file (WP_CONTENT_DIR . "/" . "ip-restrictions.php")) ? WP_CONTENT_DIR . "/" . "ip-restrictions.php" :  $custom_template;
 
                     $msg_503 = trim(file_get_contents((($custom_template) ? $custom_template : dirname(dirname(__FILE__))."/templates/errors/ip-restrictions.php")));
                     $msg_503 = trim(((!$custom_template || !is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? c_ws_plugin__s2member_utilities::evl($msg_503) : $msg_503));
@@ -101,8 +102,9 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
                     header /* Content-Type text/html with UTF-8. */("Content-Type: text/html; charset=UTF-8");
                     while (@ob_end_clean ()); // Clean any existing output buffers.
 
-                    $custom_template = (file_exists (TEMPLATEPATH . "/" . "ip-restrictions.php")) ? TEMPLATEPATH . "/" . "ip-restrictions.php" : false;
-                    $custom_template = (file_exists (WP_CONTENT_DIR . "/" . "ip-restrictions.php")) ? WP_CONTENT_DIR . "/" . "ip-restrictions.php" :  $custom_template;
+                    $custom_template = (is_file (TEMPLATEPATH . "/" . "ip-restrictions.php")) ? TEMPLATEPATH . "/" . "ip-restrictions.php" : '';
+                    $custom_template = (is_file (get_stylesheet_directory() . "/" . "ip-restrictions.php")) ? get_stylesheet_directory() . "/" . "ip-restrictions.php" : $custom_template;
+                    $custom_template = (is_file (WP_CONTENT_DIR . "/" . "ip-restrictions.php")) ? WP_CONTENT_DIR . "/" . "ip-restrictions.php" :  $custom_template;
 
                     $msg_503 = trim(file_get_contents((($custom_template) ? $custom_template : dirname(dirname(__FILE__))."/templates/errors/ip-restrictions.php")));
                     $msg_503 = trim(((!$custom_template || !is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? c_ws_plugin__s2member_utilities::evl($msg_503) : $msg_503));
@@ -113,7 +115,6 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
                     exit /* Clean exit with 503 error message. */($msg_503);
                 }
-
                 else // OK, this looks legitimate. Apply Filters here and return true.
                 {
                     foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -123,7 +124,6 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
                     return apply_filters("ws_plugin__s2member_ip_restrictions_ok", true, get_defined_vars());
                 }
             }
-
             foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
             do_action("ws_plugin__s2member_during_ip_restrictions_ok_yes", get_defined_vars());
             unset($__refs, $__v);
@@ -298,4 +298,3 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
         }
     }
 }
-?>

@@ -121,10 +121,11 @@ if(!class_exists("c_ws_plugin__s2member_sc_files_in"))
 							{
 								$_get = c_ws_plugin__s2member_files::create_file_download_url($config, TRUE);
 
-								if(is_array($_get) && !empty($_get) && $attr["player"] && file_exists($template = dirname(dirname(__FILE__))."/templates/players/".$attr["player"].".php") && $attr["player_id"] && $attr["player_path"])
+								if(is_array($_get) && !empty($_get) && $attr["player"] && is_file($template = dirname(dirname(__FILE__))."/templates/players/".$attr["player"].".php") && $attr["player_id"] && $attr["player_path"])
 									{
-										$template = (file_exists(TEMPLATEPATH."/".basename($template))) ? TEMPLATEPATH."/".basename($template) : $template;
-										$template = (file_exists(WP_CONTENT_DIR."/".basename($template))) ? WP_CONTENT_DIR."/".basename($template) : $template;
+										$template = (is_file(TEMPLATEPATH."/".basename($template))) ? TEMPLATEPATH."/".basename($template) : $template;
+										$template = (is_file(get_stylesheet_directory()."/".basename($template))) ? get_stylesheet_directory()."/".basename($template) : $template;
+										$template = (is_file(WP_CONTENT_DIR."/".basename($template))) ? WP_CONTENT_DIR."/".basename($template) : $template;
 
 										if(strpos($attr["player"], "jwplayer-v6") === 0)
 											{
