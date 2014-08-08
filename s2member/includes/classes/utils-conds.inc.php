@@ -40,6 +40,35 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 						return (defined("WS_PLUGIN__S2MEMBER_PRO_VERSION") && did_action("ws_plugin__s2member_pro_loaded"));
 					}
 				/**
+				* Determines whether or not bbPress is installed.
+				*
+				* @package s2Member\Utilities
+				* @since 140807
+				*
+				* @param bool $query_active_plugins Optional. If true, this conditional will query active plugins too. Defaults to true if {@link s2Member\WS_PLUGIN__S2MEMBER_ONLY} is true, else false.
+				* @return bool True if bbPress is installed, else false.
+				*/
+				public static function bbp_is_installed($query_active_plugins = NULL)
+					{
+						if(function_exists('bbpress'))
+							return true; // Quickest/easiest way to determine.
+
+						$s2o = (defined("WS_PLUGIN__S2MEMBER_ONLY") && WS_PLUGIN__S2MEMBER_ONLY) ? true : false;
+
+						if(($query_active_plugins = (!isset($query_active_plugins) && $s2o) ? true : $query_active_plugins))
+							{
+								$bbpress = "bbpress/bbpress.php"; // bbPress.
+
+								$active_plugins = (is_multisite()) ? wp_get_active_network_plugins() : array();
+								$active_plugins = array_unique(array_merge($active_plugins, wp_get_active_and_valid_plugins()));
+
+								foreach($active_plugins as $active_plugin) // Search.
+									if(plugin_basename($active_plugin) === $bbpress)
+										return true; // bbPress active.
+							}
+						return false; // Default return false.
+					}
+				/**
 				* Determines whether or not BuddyPress is installed.
 				*
 				* @package s2Member\Utilities

@@ -54,12 +54,19 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 
 					else if(!c_ws_plugin__s2member_systematics::is_systematic_use_page()) // Do NOT protect Systematics. However, there is 1 exception above.
 					{
+						$bbpress_installed       = c_ws_plugin__s2member_utils_conds::bbp_is_installed();
+						$bbpress_forum_post_type = $bbpress_installed ? bbp_forum_post_type() : '';
+						$bbpress_topic_post_type = $bbpress_installed ? bbp_topic_post_type() : '';
+
 						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Post Level restrictions (including Custom Post Types). Go through each Level.
 						{
 							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] === 'all' && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI']).exit ();
 
 							else if(strpos($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'], 'all-') !== FALSE && (in_array('all-'.$post->post_type, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) || in_array('all-'.$post->post_type.'s', preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts']))) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
+								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI']).exit ();
+
+							else if($bbpress_installed && strpos($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'], 'all-') !== FALSE && (in_array('all-'.$post->post_type, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) || in_array('all-'.$post->post_type.'s', preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts']))) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI']).exit ();
 
 							else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] && in_array($post_id, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
