@@ -52,13 +52,14 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_override'] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri($user, 'root-returns-false')) && preg_match('/^'.preg_quote($login_redirection_uri, '/').'$/', $_SERVER['REQUEST_URI']) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level0')))
 						c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', 0, $_SERVER['REQUEST_URI'], 'sys').exit ();
 
-					else if(!c_ws_plugin__s2member_systematics::is_systematic_use_page()) // Do NOT protect Systematics. However, there is 1 exception above.
+					else if(!c_ws_plugin__s2member_systematics::is_systematic_use_page()) // However, there is the one exception above.
 					{
 						$bbpress_installed       = c_ws_plugin__s2member_utils_conds::bbp_is_installed();
 						$bbpress_forum_post_type = $bbpress_installed ? bbp_forum_post_type() : '';
 						$bbpress_topic_post_type = $bbpress_installed ? bbp_topic_post_type() : '';
+						$bbpress_topic_forum_id  = $bbpress_installed && $post->post_type === $bbpress_topic_post_type ? bbp_get_topic_forum_id($post->ID) : 0;
 
-						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Post Level restrictions (including Custom Post Types). Go through each Level.
+						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Post Level restrictions.
 						{
 							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] === 'all' && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI']).exit ();
@@ -72,7 +73,15 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 							else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] && in_array($post_id, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI']).exit ();
 						}
-						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Category Level restrictions. Go through each Level.
+						if($bbpress_installed && $bbpress_topic_forum_id) for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Forum restrictions.
+						{
+							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] === 'all' && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
+								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI'], 'catg').exit ();
+
+							else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] && (in_category(($catgs = preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'])), $post_id) || c_ws_plugin__s2member_utils_conds::in_descendant_category($catgs, $post_id)) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
+								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI'], 'catg').exit ();
+						}
+						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Category Level restrictions.
 						{
 							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] === 'all' && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI'], 'catg').exit ();
@@ -82,7 +91,7 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 						}
 						if(has_tag()) // Here we take a look to see if this Post has any Tags. If so, we need to run the full set of routines against Tags also.
 						{
-							for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Tag Level restrictions. Go through each Level.
+							for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Tag Level restrictions.
 							{
 								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags'] === 'all' && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 									c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI'], 'ptag').exit ();
@@ -91,7 +100,7 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 									c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI'], 'ptag').exit ();
 							}
 						}
-						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // URIs. Go through each Level.
+						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // URIs.
 						{
 							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ruris']) // URIs configured at this Level?
 
