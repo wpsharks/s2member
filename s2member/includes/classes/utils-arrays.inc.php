@@ -191,7 +191,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 				* @param array $array An input array.
 				* @return array Returns the ``$array`` after having forced it to set of integer values.
 				*/
-				public static function force_integers ($array = FALSE)
+				public static function force_integers ($array = array())
 					{
 						$array = (array)$array;
 
