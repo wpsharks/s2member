@@ -54,8 +54,8 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 
 					else if(!c_ws_plugin__s2member_systematics::is_systematic_use_page()) // However, there is the one exception above.
 					{
-						$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE, get_defined_vars());
 						$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
+						$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE, get_defined_vars());
 						$bbpress_forum_post_type     = $bbpress_installed ? bbp_forum_post_type() : ''; // Acquire the current post type for forums.
 						$bbpress_topic_post_type     = $bbpress_installed ? bbp_topic_post_type() : ''; // Acquire the current post type for topics.
 						$bbpress_topic_forum_id      = $bbpress_installed && $post->post_type === $bbpress_topic_post_type ? bbp_get_topic_forum_id($post->ID) : 0;
@@ -113,6 +113,13 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 								if(strlen($ccap) && (!$user || !$user->has_cap('access_s2member_ccap_'.$ccap)) /* Does this ``$user``, have this Custom Capability? */)
 									c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'ccap', $ccap, $_SERVER['REQUEST_URI'], 'ccap').exit ();
 						}
+						if($bbpress_restrictions_enable && $bbpress_installed && $post->post_type === $bbpress_topic_post_type && $bbpress_topic_forum_id)
+							if(is_array($ccaps_req = get_post_meta($bbpress_topic_forum_id, 's2member_ccaps_req', TRUE)) && !empty($ccaps_req) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted'))
+							{
+								foreach($ccaps_req as $ccap) // The ``$user`` MUST satisfy ALL Custom Capability requirements. Stored as an array of Custom Capabilities.
+									if(strlen($ccap) && (!$user || !$user->has_cap('access_s2member_ccap_'.$ccap)) /* Does this ``$user``, have this Custom Capability? */)
+										c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $bbpress_topic_forum_id, 'ccap', $ccap, $_SERVER['REQUEST_URI'], 'ccap').exit ();
+							}
 						if($GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'] && in_array($post_id, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'])) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && !c_ws_plugin__s2member_sp_access::sp_access($post_id))
 							c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'sp', $post_id, $_SERVER['REQUEST_URI'], 'sp').exit ();
 					}

@@ -57,8 +57,8 @@ if(!class_exists('c_ws_plugin__s2member_posts_sp'))
 
 					else if(!c_ws_plugin__s2member_systematics_sp::is_systematic_use_specific_page($post->ID, $post_uri)) // However, there is the one exception above.
 					{
-						$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE, get_defined_vars());
 						$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
+						$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE, get_defined_vars());
 						$bbpress_forum_post_type     = $bbpress_installed ? bbp_forum_post_type() : ''; // Acquire the current post type for forums.
 						$bbpress_topic_post_type     = $bbpress_installed ? bbp_topic_post_type() : ''; // Acquire the current post type for topics.
 						$bbpress_topic_forum_id      = $bbpress_installed && $post->post_type === $bbpress_topic_post_type ? bbp_get_topic_forum_id($post->ID) : 0;
@@ -116,6 +116,13 @@ if(!class_exists('c_ws_plugin__s2member_posts_sp'))
 								if(strlen($ccap) && (!$check_user || !$user || !$user->has_cap('access_s2member_ccap_'.$ccap)))
 									return apply_filters('ws_plugin__s2member_check_specific_post_level_access', array('s2member_ccap_req' => $ccap), get_defined_vars());
 						}
+						if($bbpress_restrictions_enable && $bbpress_installed && $post->post_type === $bbpress_topic_post_type && $bbpress_topic_forum_id)
+							if(is_array($ccaps_req = get_post_meta($bbpress_topic_forum_id, 's2member_ccaps_req', TRUE)) && !empty($ccaps_req))
+							{
+								foreach($ccaps_req as $ccap) // The $user MUST satisfy ALL Custom Capabilities. Serialized array.
+									if(strlen($ccap) && (!$check_user || !$user || !$user->has_cap('access_s2member_ccap_'.$ccap)))
+										return apply_filters('ws_plugin__s2member_check_specific_post_level_access', array('s2member_ccap_req' => $ccap), get_defined_vars());
+							}
 						if($GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'] && in_array($post->ID, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'])) && (!$check_user || !c_ws_plugin__s2member_sp_access::sp_access($post->ID, 'read-only')))
 							return apply_filters('ws_plugin__s2member_check_specific_post_level_access', array('s2member_sp_req' => $post->ID), get_defined_vars());
 					}
