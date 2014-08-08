@@ -54,10 +54,11 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 
 					else if(!c_ws_plugin__s2member_systematics::is_systematic_use_page()) // However, there is the one exception above.
 					{
-						$bbpress_installed       = c_ws_plugin__s2member_utils_conds::bbp_is_installed();
-						$bbpress_forum_post_type = $bbpress_installed ? bbp_forum_post_type() : '';
-						$bbpress_topic_post_type = $bbpress_installed ? bbp_topic_post_type() : '';
-						$bbpress_topic_forum_id  = $bbpress_installed && $post->post_type === $bbpress_topic_post_type ? bbp_get_topic_forum_id($post->ID) : 0;
+						$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE, get_defined_vars());
+						$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
+						$bbpress_forum_post_type     = $bbpress_installed ? bbp_forum_post_type() : ''; // Acquire the current post type for forums.
+						$bbpress_topic_post_type     = $bbpress_installed ? bbp_topic_post_type() : ''; // Acquire the current post type for topics.
+						$bbpress_topic_forum_id      = $bbpress_installed && $post->post_type === $bbpress_topic_post_type ? bbp_get_topic_forum_id($post->ID) : 0;
 
 						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Post Level restrictions.
 						{
@@ -67,20 +68,18 @@ if(!class_exists('c_ws_plugin__s2member_posts'))
 							else if(strpos($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'], 'all-') !== FALSE && (in_array('all-'.$post->post_type, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) || in_array('all-'.$post->post_type.'s', preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts']))) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI']).exit ();
 
-							else if($bbpress_installed && $post->post_type === $bbpress_topic_post_type && strpos($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'], 'all-') !== FALSE && (in_array('all-'.$bbpress_forum_post_type, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) || in_array('all-'.$bbpress_forum_post_type.'s', preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts']))) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
+							else if($bbpress_restrictions_enable && $bbpress_installed && $post->post_type === $bbpress_topic_post_type && strpos($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'], 'all-') !== FALSE && (in_array('all-'.$bbpress_forum_post_type, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) || in_array('all-'.$bbpress_forum_post_type.'s', preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts']))) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI']).exit ();
 
 							else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] && in_array($post_id, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI']).exit ();
 						}
-						if($bbpress_installed && $bbpress_topic_forum_id) for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Forum restrictions.
-						{
-							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] === 'all' && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI'], 'catg').exit ();
-
-							else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] && (in_category(($catgs = preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'])), $post_id) || c_ws_plugin__s2member_utils_conds::in_descendant_category($catgs, $post_id)) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-								c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $post_id, 'level', $n, $_SERVER['REQUEST_URI'], 'catg').exit ();
-						}
+						if($bbpress_restrictions_enable && $bbpress_installed && $post->post_type === $bbpress_topic_post_type && $bbpress_topic_forum_id)
+							for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Forum restrictions.
+							{
+								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] && in_array($bbpress_topic_forum_id, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
+									c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('post', $bbpress_topic_forum_id, 'level', $n, $_SERVER['REQUEST_URI']).exit ();
+							}
 						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Category Level restrictions.
 						{
 							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] === 'all' && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
