@@ -85,7 +85,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 				else if(!empty($_get))
 					$get = $_get;
 			}
-			return apply_filters('ws_plugin__s2member_sc_get_file', ((isset($get)) ? $get : NULL), get_defined_vars());
+			return apply_filters('ws_plugin__s2member_sc_get_file', isset($get) ? $get : NULL, get_defined_vars());
 		}
 
 		/**
@@ -198,7 +198,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 					}
 				}
 			}
-			return apply_filters('ws_plugin__s2member_sc_get_stream', ((isset($get)) ? $get : NULL), get_defined_vars());
+			return apply_filters('ws_plugin__s2member_sc_get_stream', isset($get) ? $get : NULL, get_defined_vars());
 		}
 	}
 }
