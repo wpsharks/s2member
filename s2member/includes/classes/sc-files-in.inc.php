@@ -120,6 +120,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 			                             'player'               => 'jwplayer-v6-rtmp', 'player_id' => 's2-stream-'.md5(uniqid('', TRUE)),
 			                             'player_path'          => '/jwplayer/jwplayer.js', 'player_key' => '', 'player_title' => '',
 			                             'player_image'         => '', 'player_mediaid' => '', 'player_description' => '', 'player_captions' => '',
+			                             'player_resolutions'   => '', // A comma-delimited list of resolution options.
 
 			                             // Layout
 			                             'player_controls'      => 'yes', 'player_skin' => '', 'player_stretching' => 'uniform',
