@@ -150,6 +150,11 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 			if(!empty($config) && isset($config['file_download'])) // Looking for a File Download URL?
 			{
+				if($attr['player_resolutions']) // There are multiple variations of the file; in various resolutions?
+					foreach(preg_split('/[,;\s]+/', $attr['player_resolutions'], NULL, PREG_SPLIT_NO_EMPTY) as $_resolution)
+					{
+						// @TODO Need to finish this up.
+					}
 				$_get = c_ws_plugin__s2member_files::create_file_download_url($config, TRUE);
 
 				if(is_array($_get) && !empty($_get) && $attr['player'] && is_file($template = dirname(dirname(__FILE__)).'/templates/players/'.$attr['player'].'.php') && $attr['player_id'] && $attr['player_path'])
