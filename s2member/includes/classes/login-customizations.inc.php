@@ -99,10 +99,11 @@ if(!class_exists('c_ws_plugin__s2member_login_customizations'))
 			$i   = apply_filters('ws_plugin__s2member_login_header_styles_important', ' !important', get_defined_vars());
 			$a   = apply_filters('ws_plugin__s2member_login_header_styles_array_after_open', $a, get_defined_vars());
 
-			$a[] = 'html, body { border:0'.$i.'; background:none'.$i.'; }';
+			$a[] = 'html, body { border:0'.$i.'; padding: 10px; background:none'.$i.'; }';
 			$a[] = 'html { background-color:#'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_reg_background_color'].$i.'; }';
 			$a[] = 'html { background-image:url('.$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_reg_background_image'].')'.$i.'; }';
 			$a[] = 'html { background-repeat:'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_reg_background_image_repeat'].$i.'; }';
+			$a[] = '@media (max-width: 767px) { html, body { background-size: contain '.$i.'; } }';
 
 			$a[] = 'body, body * { font-size:'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_reg_font_size'].$i.'; }';
 			$a[] = 'body, body * { font-family:'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_reg_font_family'].$i.'; }';
