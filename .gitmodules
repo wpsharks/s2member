@@ -1,0 +1,3 @@
+[submodule "s2member-pro"]
+	path = s2member-pro
+	url = https://github.com/websharks/s2member-pro

@@ -58,6 +58,4 @@ Icon?
 # We also need to update the WebSharks™ Core `dirs_files::ignore()` method if this changes.
 
 # Others
-/s2m-pro-extras
-/s2member-pro
 /s2member.php
