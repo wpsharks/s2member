@@ -33,13 +33,13 @@ if(basename(__FILE__) !== 'deps-x.php'
 	 * @noinspection PhpUndefinedClassInspection / Well aware of this.
 	 */
 	$websharks_core_v3_deps_x__check_my_server = new websharks_core_v3_deps_x__check_my_server();
-	/**
+	/*
 	 * Attempt to load WordPress.
 	 */
 	if(!defined('WPINC')) // Try to load the closest WordPress installation.
 		if(($___WP_LOAD = $websharks_core_v3_deps_x__check_my_server->get_wp_load()))
 			include_once $___WP_LOAD;
-	/**
+	/*
 	 * Run automatic ``check()``.
 	 */
 	$websharks_core_v3_deps_x__check_my_server->check();
@@ -64,7 +64,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	/**
 	 * @var string Current version.
 	 */
-	public $version = '140511';
+	public $version = '140811';
 
 	/**
 	 * @var array A static cache (for all instances).
@@ -2103,64 +2103,88 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	/**
 	 * Calculates the MD5 checksum for an entire directory recursively.
 	 *
-	 * @param string  $dir The directory we should begin with.
+	 * @param string      $dir The directory we should begin with.
 	 *
-	 * @param boolean $ignore_vcs_dirs Optional. Defaults to a TRUE value.
-	 *    By default, we ignore VCS directories (e.g. `.git`, `.svn` and `.bzr`).
-	 *
-	 * @param boolean $ignore_readme_files Optional. Defaults to a TRUE value.
+	 * @param boolean     $ignore_readme_files Optional. Defaults to a TRUE value.
 	 *    By default, we ignore README files (e.g. `readme.txt` and `readme.md`).
 	 *
-	 * @param string  $root_dir Internal parameter. Defaults to an empty string, indicating the current ``$dir``.
-	 *    Recursive calls to this method will automatically pass this value, indicating the main root directory value.
+	 *    NOTE: No matter what this is set to, we always exclude our default globs.
+	 *       See: {@link dir_file_ignore()} for further details on this.
+	 *
+	 * @param null|string $___root_dir Do NOT pass this. For internal use only.
 	 *
 	 * @return string An MD5 checksum established collectively, based on all directories/files.
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
-	 *
-	 * @wp-assertion This is tested via WordPress.
 	 */
-	public function dir_checksum($dir, $ignore_vcs_dirs = TRUE, $ignore_readme_files = TRUE, $root_dir = '')
+	public function dir_checksum($dir, $ignore_readme_files = TRUE, $___root_dir = NULL)
 	{
-		if(is_string($dir) && $dir && is_string($root_dir))
-		{
-			$checksums = array(); // Initialize array.
-
-			if(!is_dir($dir) || !is_readable($dir) || !($handle = opendir($dir)))
-				throw new exception(
-					sprintf(self::i18n('Unable to read directory: `%1$s`'), $dir)
+		if(!isset($___root_dir)) // Only for the initial caller.
+			if(!is_string($dir) || !$dir || !is_bool($ignore_readme_files) || (isset($___root_dir) && !is_string($___root_dir)))
+				throw new exception( // Fail here; detected invalid arguments.
+					sprintf(self::i18n('Invalid arguments: `%1$s`'), print_r(func_get_args(), TRUE))
 				);
-			$dir          = $this->n_dir_seps(realpath($dir));
-			$root_dir     = (!$root_dir) ? $dir : $this->n_dir_seps(realpath($root_dir));
-			$relative_dir = preg_replace('/^'.preg_quote($root_dir, '/').'(?:\/|$)/', '', $dir);
+		$checksums   = array(); // Initialize array.
+		$dir         = $this->n_dir_seps((string)realpath($dir));
+		$___root_dir = !isset($___root_dir) ? $dir : $___root_dir;
 
-			if($ignore_vcs_dirs && in_array(basename($dir), array('.git', '.svn', '.bzr'), TRUE))
-				return ''; // Ignore this VCS directory.
-
-			$checksums[$relative_dir] = md5($relative_dir); // Establish relative directory checksum.
-
-			while(($entry = readdir($handle)) !== FALSE)
-				if($entry !== '.' && $entry !== '..') // Ignore single/double dots.
-					if($entry !== 'checksum.txt' || $dir !== $root_dir) // Skip in root directory.
-						if(!$ignore_readme_files || !in_array(strtolower($entry), array('readme.txt', 'readme.md'), TRUE))
-						{
-							if(is_dir($dir.'/'.$entry))
-								$checksums[$relative_dir.'/'.$entry] = $this->dir_checksum($dir.'/'.$entry, $ignore_vcs_dirs, $ignore_readme_files, $root_dir);
-							else $checksums[$relative_dir.'/'.$entry] = md5($relative_dir.'/'.$entry.md5_file($dir.'/'.$entry));
-						}
-			closedir($handle); // Close directory handle now.
-
-			ksort($checksums, SORT_STRING); // In case order changes from one server to another.
-
-			return md5(implode('', $checksums));
-		}
-		else // Throw exception (invalid arguments).
-		{
-			$args = func_get_args();
+		if(!$dir || !is_dir($dir) || !is_readable($dir))
 			throw new exception(
-				sprintf(self::i18n('Invalid arguments: `%1$s`'), print_r($args, TRUE))
+				sprintf(self::i18n('Unable to read directory: `%1$s`'), $dir)
 			);
-		}
+		if($dir !== $___root_dir && $this->dir_file_ignore($dir))
+			return ''; // Ignoring this directory.
+
+		if(!($handle = opendir($dir)))
+			throw new exception(
+				sprintf(self::i18n('Unable to open directory: `%1$s`'), $dir)
+			);
+		// Mark each directory in case it happens to be empty. We count empty directories too.
+		$relative_dir             = preg_replace('/^'.preg_quote($___root_dir, '/').'(?:\/|$)/', '', $dir);
+		$checksums[$relative_dir] = md5($relative_dir); // Establish relative directory checksum.
+
+		// Scan each directory and include each file that it contains; except files we ignore.
+		while(($entry = readdir($handle)) !== FALSE) if($entry !== '.' && $entry !== '..') // Ignore dots.
+			if($entry !== 'checksum.txt' || $dir !== $___root_dir) // Skip `checksum.txt` in the root directory.
+				if(!$ignore_readme_files || !in_array(strtolower($entry), array('readme.txt', 'readme.md'), TRUE))
+				{
+					if(is_dir($dir.'/'.$entry)) // Recursively scan each sub-directory.
+						$checksums[$relative_dir.'/'.$entry] = $this->dir_checksum($dir.'/'.$entry, $ignore_readme_files, $___root_dir);
+
+					else if(!$this->dir_file_ignore($dir.'/'.$entry)) // If NOT ignoring this file.
+						$checksums[$relative_dir.'/'.$entry] = md5($relative_dir.'/'.$entry.md5_file($dir.'/'.$entry));
+				}
+		closedir($handle); // Close directory handle now.
+
+		ksort($checksums, SORT_STRING); // In case order changes from one server to another.
+
+		return md5(implode('', $checksums));
+	}
+
+	/**
+	 * Determines if a directory/file should be ignored.
+	 *
+	 * @param string $dir_file The directory/file we are checking.
+	 *
+	 * @return boolean TRUE if the directory/file should be ignored; FALSE otherwise.
+	 *
+	 * @throws exception If invalid types are passed through arguments list.
+	 */
+	public function dir_file_ignore($dir_file)
+	{
+		if(!is_string($dir_file) || !$dir_file)
+			throw new exception( // Fail here; detected invalid arguments.
+				sprintf(self::i18n('Invalid arguments: `%1$s`'), print_r(func_get_args(), TRUE))
+			);
+		if(!strlen($dir_file_basename = basename($dir_file)))
+			return TRUE; // Ignore, it has no basename.
+
+		foreach(explode(';', '.~*;*~;*.bak;.idea;*.iml;*.ipr;*.iws;*.sublime-workspace;*.sublime-project;.git;.gitignore;.gitattributes;CVS;.cvsignore;.svn;_svn;.bzr;.bzrignore;.hg;.hgignore;SCCS;RCS;$RECYCLE.BIN;Desktop.ini;Thumbs.db;ehthumbs.db;.Spotlight-V100;.AppleDouble;.LSOverride;.DS_Store;.Trashes;Icon'."\r".';._*;.elasticbeanstalk') as $_glob)
+			if(fnmatch($_glob, $dir_file_basename, FNM_CASEFOLD))
+				return TRUE; // Yes, we are ignoring this.
+		unset($_glob); // Housekeeping.
+
+		return FALSE; // Not ignoring (default behavior).
 	}
 
 	/**
@@ -2184,19 +2208,16 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 				return self::i18n(
 					'WordPress NOT loaded up.'
 				);
-
 			else if(!did_action('init'))
 				return self::i18n(
 					'WordPress `init` action hook has NOT fired yet.'.
 					' Unable to check permissions.'
 				);
-
 			else if(!is_super_admin())
 				return self::i18n(
 					'Current user is NOT logged into WordPress,'.
 					' or is NOT a WordPress Super Admin.'
 				);
-
 			switch(strtolower($fixable_issue)) // Attempt auto-fix.
 			{
 				case 'wp_memory_limit':
