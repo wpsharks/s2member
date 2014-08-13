@@ -249,7 +249,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 							$_total_player_sources, $_player_sources_counter, $_is_first_file_download_url, $_is_last_file_download_url,
 							$_file_download_url_label, $_file_download_url);
 
-						$player = preg_replace('/%%sources%%/', $player_sources, $player);
+						$player = preg_replace('/%%player_sources%%/', $player_sources, $player);
 
 						$player = preg_replace('/%%player_id%%/', $attr['player_id'], $player);
 						$player = preg_replace('/%%player_path%%/', $attr['player_path'], $player);
