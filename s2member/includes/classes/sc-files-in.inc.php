@@ -194,8 +194,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 						$_total_player_sources   = count($file_download_urls); // Total sources.
 						$_player_sources_counter = 1; // Player sources counter; needed by the loop below.
+						$player_sources          = ''; // Initialize player sources; empty string.
 
-						$player_sources = '['; // Initialize the JSON array of player sources.
 						foreach($file_download_urls as $_file_download_url_label => $_file_download_url)
 						{
 							$_is_first_file_download_url = $_player_sources_counter <= 1;
@@ -253,7 +253,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 							}
 							$_player_sources_counter++; // Increment the counter.
 						}
-						$player_sources = trim($player_sources, ',').']'; // Close sources.
+						$player_sources = '['.trim($player_sources, ',').']'; // Build array.
 
 						unset($_first_file_download_url, $_last_file_download_url, // Housekeeping.
 							$_total_player_sources, $_player_sources_counter, $_is_first_file_download_url, $_is_last_file_download_url,
