@@ -42,7 +42,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 						echo '<tr class="ws-menu-page-table-tr">'."\n";
 						echo '<td class="ws-menu-page-table-l">'."\n";
 
-						echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">'."\n";
+						echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form" action="'.esc_attr(remove_query_arg('ws_plugin__s2member_cf_options_reset')).'">'."\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_amazon_cf_files_distros_auto_config_status" id="ws-plugin--s2member-amazon-cf-files-distros-auto-config-status" value="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distros_auto_config_status"]).'" />'."\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />'."\n";
@@ -303,7 +303,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_files_access_key" id="ws-plugin--s2member-amazon-s3-files-access-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_access_key"]).'" /><br />'."\n";
-								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code>.'."\n";
+								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code>.<br />'."\n";
+								echo '<em><small>Amazon suggests creating a new IAM user. Use the Keys for that IAM user here.</small></em>'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -320,8 +321,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_files_secret_key" id="ws-plugin--s2member-amazon-s3-files-secret-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_secret_key"]).'" /><br />'."\n";
-								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys (leading to: Legacy Security Credentials)</code>.<br />'."\n";
-								echo 'Amazon is deprecating Secret Access Keys, but they ARE still required for digitally signed URLs.'."\n";
+								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code>.<br />'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -381,7 +381,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_amazon_cf_files_private_key_id" id="ws-plugin--s2member-amazon-cf-files-private-key-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key_id"]).'" data-s-prev-config-value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key_id"]).'" /><br />'."\n";
-								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Key Pairs</code>.'."\n";
+								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› CloudFront Key Pairs</code>.'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -399,7 +399,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								echo '<td>'."\n";
 								echo '<input type="hidden" name="ws_plugin__s2member_amazon_cf_files_private_key" id="ws-plugin--s2member-amazon-cf-files-private-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key"]).'" data-s-prev-config-value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key"]).'" />'."\n";
 								echo '<textarea name="ws_plugin__s2member_amazon_cf_files_private_key_entry" id="ws-plugin--s2member-amazon-cf-files-private-key-entry" rows="3" wrap="off" spellcheck="false" class="monospace">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key"]).'</textarea><br />'."\n";
-								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Key Pairs</code>.<br />'."\n";
+								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› CloudFront Key Pairs</code>.<br />'."\n";
 								echo '<em>* Note, s2Member needs your <strong>Private Key file</strong>, NOT your Public Key file.</em>'."\n";
 								echo '</td>'."\n";
 
@@ -474,8 +474,26 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								echo '</tbody>'."\n";
 								echo '</table>'."\n";
 								echo '</div>'."\n";
-								echo '</div>'."\n";
 
+								echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+								echo '<table class="form-table" style="margin-top:0;">'."\n";
+								echo '<tbody>'."\n";
+								echo '<tr>'."\n";
+
+								echo '<td>'."\n";
+								echo '<h3>Completely Reset CloudFront Configuration?</h3>'."\n";
+								echo '<div style="float:right; margin:0 0 0 25px;">'."\n";
+								echo '   <button type="button" onclick="if(confirm(\'Are you sure?\')) location.href = \''.c_ws_plugin__s2member_utils_strings::esc_js_sq(add_query_arg(urlencode_deep(array('ws_plugin__s2member_cf_options_reset' => wp_create_nonce('ws-plugin--s2member-cf-options-reset'))))).'\';">Reset CloudFront Configuration</button>'."\n";
+								echo '</div>'."\n";
+								echo '<p>If you need to start all over again, you can click this button to reset your existing s2Member/CloudFront configuration. <em><strong>However, please note:</strong> you will still need to log into your AWS CloudFront Console (at some point) and remove any existing CloudFront Distributions and/or Origin Access Identities that were previously generated with s2Member; i.e. resetting your configuration here will allow you to start over with s2Member using a new set of CF Distros, but it does NOT delete anything on the AWS side.</em></p>'."\n";
+								echo '</td>'."\n";
+
+								echo '</tr>'."\n";
+								echo '</tbody>'."\n";
+								echo '</table>'."\n";
+
+								echo '</div>'."\n";
 								echo '</div>'."\n";
 
 								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_amazon_cf", get_defined_vars());
@@ -629,6 +647,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								echo '<li><code>player="jwplayer-v6-rtmp"</code> Required. Current supported players in this Shortcode include: <code>jwplayer-v6</code> (works with any audio/video file, and you do NOT need to have Amazon  S3 or CloudFront integrated for this to work), <code>jwplayer-v6-rtmp</code> (streams with the RTMP protocol, plus there is a full download fallback of the source file if streaming is not possible on a particular device; this requires both Amazon S3 and CloudFront integration), <code>jwplayer-v6-rtmp-only</code> (streams with the RTMP protocol only, with no access to the source file, only to the RTMP stream; this requires both Amazon S3 and CloudFront integration).</li>'."\n";
 								echo '<li><code>player_id=""</code> Optional. HTML div ID for the audio/video player. Defaults to a unique ID generated by s2Member for each instance of your Shortcode.</li>'."\n";
 								echo '<li><code>player_path="/jwplayer/jwplayer.js"</code> Required. Path to the player\'s JavaScript file (ex: <code>/jwplayer/jwplayer.js</code> — you should upload the <a href="http://www.longtailvideo.com/players/" target="_blank" rel="external">/jwplayer</a> folder to the root of your web directory).</li>'."\n";
+								echo '<li><code>player_resolutions=""</code> Optional. This is a comma-delimited list of all available resolution options (should you decide to offer more than just one file download at a single resolution). Please review the full list of Shortcode Attributes (i.e. click the "Shortcode Attributes (Explained)" tab) in <a href="http://www.s2member.com/kb/jwplayer-s2stream-shortcodes/#using-s2stream-shortcodes" target="_blank" rel="external">this KB article</a> for further details, requirements, and an example of use.</li>'."\n";
 								echo '<li><code>player_{setting}=""</code> Optional. Any additional configuration attributes supported by your audio/video player, prefixed with <code>player_</code>. For JW Player v6, see <a href="http://www.longtailvideo.com/support/jw-player/28839/embedding-the-player" target="_blank" rel="external">this article please</a>. Examples: <code>player_width="480"</code>, <code>player_height="270"</code>, <code>player_title="My Video"</code>, <code>player_description="A video about something."</code>, <code>player_image="http://www.example.com/wp-content/uploads/video-preview.jpg"</code>, <code>player_mediaid="video_ei0wsx23"</code>, <code>player_autostart="true"</code>, <code>player_skin="/jwplayer/my-skin.xml"</code>, <code>player_key="my-license-key"</code>, <code>player_captions="{file:\'/assets/captions-en.vtt\',label:\'English\'}"</code> (<em>With <a href="http://www.longtailvideo.com/support/jw-player/28845/adding-video-captions" target="_blank" rel="external">Captions</a>, you can exclude the square array brackets to avoid Shortcode parsing issues. s2Member will automatically wrap your Caption objects with square array brackets.</em>). Please note that "Advanced Options Blocks" listed on <a href="http://www.longtailvideo.com/support/jw-player/28839/embedding-the-player" target="_blank" rel="external">this page</a> are NOT supported here. For those, please use: <code>player_option_blocks=""</code> (see below).</li>'."\n";
 								echo '<li><code>player_option_blocks=""</code> Optional. Any "Advanced Option Blocks" supported by your audio/video player. For JW Player v6, see <a href="http://www.longtailvideo.com/support/jw-player/28839/embedding-the-player" target="_blank" rel="external">this article please</a>. Here are some examples: <code>player_option_blocks="sharing:{}"</code>, <code>player_option_blocks="sharing:{}, logo: {file: \'/logo.png\', link: \'http://example.com\'}"</code>. Or: <code>player_option_blocks="c2hhcmluZzoge30="</code> (base64 encoded version of <code>sharing:{}</code>). Please note that "Advanced Options Blocks" can be defined in plain text or with a <a href="http://www.base64encode.org/" target="_blank" rel="external">base64 encoded string</a>. Advanced Option Blocks are JavaScript objects with properties. If you have trouble defining JavaScript object properties inside a Shortcode Attribute, please use <a href="http://www.base64encode.org/" target="_blank" rel="external">this tool</a> to base64 encode your Advanced Option Blocks, so that you end up with a string that\'s compatible with Shortcode Attributes.</li>'."\n";
 								echo '<li>Please check the <strong>Shortcode Attributes</strong> Tab in <a href="http://www.s2member.com/kb/jwplayer-s2stream-shortcodes/#using-s2stream-shortcodes" target="_blank" rel="external">this KB article</a> for further details on everything here.</li>'."\n";
