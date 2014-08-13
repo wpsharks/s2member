@@ -509,7 +509,6 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 												}
 										}
 								}
-
 							else if /* We only need this section when/if we're actually serving. */($serving && $req["file_download"])
 							{
 								status_header(503);
@@ -555,7 +554,7 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 							{
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_create_file_download_url", get_defined_vars());
-								unset($__refs, $__v);
+								unset($__refs, $__v); // Housekeeping.
 
 								$extension = strtolower(substr($config["file_download"], strrpos($config["file_download"], ".") + 1));
 								$streaming = (isset($config["file_stream"])) ? filter_var($config["file_stream"], FILTER_VALIDATE_BOOLEAN) : ((in_array($extension, preg_split("/[\r\n\t\s;,]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["file_download_stream_extensions"]))) ? true : false);
@@ -573,7 +572,6 @@ if(!class_exists("c_ws_plugin__s2member_files_in"))
 								else // Else return URL string ( ``$get_streamer_array`` is false ).
 									$return = /* Else return URL string. */ $_url;
 							}
-
 						return apply_filters("ws_plugin__s2member_create_file_download_url", ((isset($return)) ? $return : false), get_defined_vars());
 					}
 				/**

@@ -154,23 +154,32 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 				{
 					$file_download_extension               = strtolower(ltrim((string)strrchr(basename($config['file_download']), '.'), '.'));
 					$file_download_resolution_wo_extension = substr($config['file_download'], 0, -strlen($file_download_extension + 1) /* For the dot. */);
-					$file_download_wo_resolution_extension = preg_replace('/\-R[0-9]$/i', '', $file_download_resolution_wo_extension);
+					$file_download_wo_resolution_extension = preg_replace('/\-r[0-9]+([^.]*)$/i', '', $file_download_resolution_wo_extension); // e.g. `r720p-HD` is removed here.
 
 					$file_download_resolutions[] = array(); // Initialize the array of resolutions.
 					foreach(preg_split('/[,;\s]+/', $attr['player_resolutions'], NULL, PREG_SPLIT_NO_EMPTY) as $_player_resolution)
-						$file_download_resolutions[ltrim($_player_resolution, 'Rr')] = $file_download_wo_resolution_extension.'-'.urlencode(ltrim($_player_resolution, 'Rr')).'.'.$file_download_extension;
+					{
+						$_player_resolution                             = ltrim($_player_resolution, 'Rr'); // Remove R|r prefix.
+						$file_download_resolutions[$_player_resolution] = $file_download_wo_resolution_extension.'-r'.$_player_resolution.'.'.$file_download_extension;
+					}
 					unset($_player_resolution); // Housekeeping.
 
-					$file_download_urls = array(); // Initialize array.
+					$file_download_urls = array(); // Initialize array of all file download urls.
 					foreach($file_download_resolutions as $_player_resolution => $_file_download_resolution) // NOTE: these ARE in a specific order.
-						if(!($file_download_urls[str_replace(array('_', '-'), ' ', $_player_resolution)] = c_ws_plugin__s2member_files::create_file_download_url(array_merge($config, array('file_download' => $_file_download_resolution)), TRUE)))
-							// @TODO we need to count files with the same name (but different resolutions) only one time.
-							return apply_filters('ws_plugin__s2member_sc_get_stream', NULL, get_defined_vars()); // Failure.
-					unset($_player_resolution, $_file_download_resolution); // Housekeeping.
-				}
-				else $file_download_urls = array(c_ws_plugin__s2member_files::create_file_download_url($config, TRUE));
+					{
+						$_file_download_config = array_merge($config, array('file_download' => $_file_download_resolution));
 
-				if(is_array($file_download_urls) && $file_download_urls && $attr['player'] && is_file($template = dirname(dirname(__FILE__)).'/templates/players/'.$attr['player'].'.php') && $attr['player_id'] && $attr['player_path'])
+						if($file_download_urls) // If this is a ANOTHER resolution, don't count it against the user.
+							$_file_download_config = array_merge($_file_download_config, array('count_against_user' => 'no'));
+
+						if(!($file_download_urls[str_replace(array('_', '-'), ' ', $_player_resolution)] = c_ws_plugin__s2member_files::create_file_download_url($_file_download_config, TRUE)))
+							return apply_filters('ws_plugin__s2member_sc_get_stream', NULL, get_defined_vars()); // Failure.
+					}
+					unset($_player_resolution, $_file_download_resolution, $_file_download_config); // Housekeeping.
+				}
+				else $file_download_urls = array(c_ws_plugin__s2member_files::create_file_download_url($config, TRUE)); // Default behavior.
+
+				if($file_download_urls && $attr['player'] && is_file($template = dirname(dirname(__FILE__)).'/templates/players/'.$attr['player'].'.php') && $attr['player_id'] && $attr['player_path'])
 				{
 					$template = (is_file(TEMPLATEPATH.'/'.basename($template))) ? TEMPLATEPATH.'/'.basename($template) : $template;
 					$template = (is_file(get_stylesheet_directory().'/'.basename($template))) ? get_stylesheet_directory().'/'.basename($template) : $template;
