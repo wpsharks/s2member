@@ -623,6 +623,12 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		{
 			do_action('ws_plugin__s2member_before_down_ops_page', get_defined_vars());
 
+			if(!empty($_REQUEST['ws_plugin__s2member_cf_options_reset'])
+			   && wp_verify_nonce($_REQUEST['ws_plugin__s2member_cf_options_reset'], 'ws-plugin--s2member-cf-options-reset'))
+			{
+				c_ws_plugin__s2member_files_in::reset_aws_cf_config_values();
+				wp_redirect(remove_query_arg('ws_plugin__s2member_cf_options_reset')).exit();
+			}
 			c_ws_plugin__s2member_menu_pages::update_all_options();
 
 			$files_dir = $GLOBALS['WS_PLUGIN__']['s2member']['c']['files_dir'];

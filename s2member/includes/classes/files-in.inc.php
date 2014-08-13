@@ -1425,9 +1425,6 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 		{
 			c_ws_plugin__s2member_menu_pages::update_all_options(
 				array(
-					'ws_plugin__s2member_amazon_s3_files_bucket'                     => '',
-					'ws_plugin__s2member_amazon_s3_files_access_key'                 => '',
-					'ws_plugin__s2member_amazon_s3_files_secret_key'                 => '',
 					'ws_plugin__s2member_amazon_cf_files_private_key'                => '',
 					'ws_plugin__s2member_amazon_cf_files_private_key_id'             => '',
 					'ws_plugin__s2member_amazon_cf_files_distros_access_id'          => '',
