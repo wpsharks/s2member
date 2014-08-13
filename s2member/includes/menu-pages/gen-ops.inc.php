@@ -125,6 +125,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 							echo '</tr>'."\n";
 							echo '</tbody>'."\n";
 							echo '</table>'."\n";
+
+							echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+							echo '<h3>Additional Details Regarding this Key:</h3>'."\n";
+							echo '<p>Your Security Encryption Key is used throughout s2Member\'s source code for many different things. However, MOST (not all, but most) uses of this Key are related to transactional processing within a particular session; so changing the Key won\'t really impact these scenarios in any significant way. Your Security Encryption Key is simply there to enhance security of data that is being transmitted in these cases.</p>'."\n";
+							echo '<p>That said, there are a few scenarios where use of your Security Encryption Key is more long-term. These include: Specific Post/Page Access Links, Registration Access Links, and it can also have a long-term impact on IPN communication because some data analyzed by s2Member includes a checksum that depends on your Key. If the Key changes, it could cause future IPN data (i.e. data from your payment gateway) to fail validation.</p>'."\n";
+
 							echo '</div>'."\n";
 
 							echo '</div>'."\n";
