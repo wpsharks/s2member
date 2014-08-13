@@ -233,7 +233,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-remote-authorization-section">'."\n";
 				echo '<h3>Remote Header Authorization (optional)</h3>'."\n";
-				echo '<p>This can be enabled on a case-by-case basis. Just add this to the end of your download links: <code>&amp;s2member_file_remote=yes</code>. Shortcode alternative: <code>[s2File download="example-file.zip" remote="yes" /]</code>.</p>'."\n";
+				echo '<p>This can be enabled on a case-by-case basis. Just add this to the end of your download links: <code>&amp;s2member_file_remote=yes</code></p>'."\n";
+				echo '<p>Shortcode alternative: <code>[s2File download="example-file.zip" remote="yes" /]</code></p>'."\n";
 				echo '<p>Remote Header Authorization allows access to file downloads through an entirely different approach. Instead of asking the Member to log into your site through a browser, a Member will be prompted automatically, to log in through HTTP Header Authorization prompts; which is the same technique used in more traditional security systems via .htaccess files. In other words, Remote Header Authorization makes it possible for your Members to access files through remote applications that may NOT use a browser. This is often the case when a Member needs to access protected files through a software client like iTunes; typical with podcasts. See <a href="http://www.s2member.com/videos/71F49478D6983A9C/" target="_blank" rel="external">tutorial video here</a> for details about how to setup a Podcast for iTunes.</p>'."\n";
 				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_remote_authorization", get_defined_vars());
 				echo '</div>'."\n";
@@ -298,7 +299,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_files_access_key" id="ws-plugin--s2member-amazon-s3-files-access-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_access_key"]).'" /><br />'."\n";
-				echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code>.<br />'."\n";
+				echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code><br />'."\n";
 				echo '<em><small>Amazon suggests creating a new IAM user. Use the Keys for that IAM user here.</small></em>'."\n";
 				echo '</td>'."\n";
 
@@ -316,7 +317,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_files_secret_key" id="ws-plugin--s2member-amazon-s3-files-secret-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_secret_key"]).'" /><br />'."\n";
-				echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code>.<br />'."\n";
+				echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code><br />'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -375,7 +376,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_amazon_cf_files_private_key_id" id="ws-plugin--s2member-amazon-cf-files-private-key-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key_id"]).'" data-s-prev-config-value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key_id"]).'" /><br />'."\n";
-				echo 'See: <code>Amazon Web Services Account -› Security Credentials -› CloudFront Key Pairs</code>.'."\n";
+				echo 'See: <code>Amazon Web Services Account -› Security Credentials -› CloudFront Key Pairs</code>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -393,7 +394,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<td>'."\n";
 				echo '<input type="hidden" name="ws_plugin__s2member_amazon_cf_files_private_key" id="ws-plugin--s2member-amazon-cf-files-private-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key"]).'" data-s-prev-config-value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key"]).'" />'."\n";
 				echo '<textarea name="ws_plugin__s2member_amazon_cf_files_private_key_entry" id="ws-plugin--s2member-amazon-cf-files-private-key-entry" rows="3" wrap="off" spellcheck="false" class="monospace">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key"]).'</textarea><br />'."\n";
-				echo 'See: <code>Amazon Web Services Account -› Security Credentials -› CloudFront Key Pairs</code>.<br />'."\n";
+				echo 'See: <code>Amazon Web Services Account -› Security Credentials -› CloudFront Key Pairs</code><br />'."\n";
 				echo '<em>* Note, s2Member needs your <strong>Private Key file</strong>, NOT your Public Key file.</em>'."\n";
 				echo '</td>'."\n";
 
