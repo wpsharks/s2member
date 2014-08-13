@@ -303,7 +303,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_files_access_key" id="ws-plugin--s2member-amazon-s3-files-access-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_access_key"]).'" /><br />'."\n";
-								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code>.'."\n";
+								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code>.<br />'."\n";
+								echo '<em><small>Amazon suggests creating a new IAM user. Use the Keys for that IAM user here.</small></em>'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -320,8 +321,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_files_secret_key" id="ws-plugin--s2member-amazon-s3-files-secret-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_secret_key"]).'" /><br />'."\n";
-								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys (leading to: Legacy Security Credentials)</code>.<br />'."\n";
-								echo 'Amazon is deprecating Secret Access Keys, but they ARE still required for digitally signed URLs.'."\n";
+								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Access Keys</code>.<br />'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -381,7 +381,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 								echo '<td>'."\n";
 								echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_amazon_cf_files_private_key_id" id="ws-plugin--s2member-amazon-cf-files-private-key-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key_id"]).'" data-s-prev-config-value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key_id"]).'" /><br />'."\n";
-								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Key Pairs</code>.'."\n";
+								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› CloudFront Key Pairs</code>.'."\n";
 								echo '</td>'."\n";
 
 								echo '</tr>'."\n";
@@ -399,7 +399,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								echo '<td>'."\n";
 								echo '<input type="hidden" name="ws_plugin__s2member_amazon_cf_files_private_key" id="ws-plugin--s2member-amazon-cf-files-private-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key"]).'" data-s-prev-config-value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key"]).'" />'."\n";
 								echo '<textarea name="ws_plugin__s2member_amazon_cf_files_private_key_entry" id="ws-plugin--s2member-amazon-cf-files-private-key-entry" rows="3" wrap="off" spellcheck="false" class="monospace">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_private_key"]).'</textarea><br />'."\n";
-								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› Key Pairs</code>.<br />'."\n";
+								echo 'See: <code>Amazon Web Services Account -› Security Credentials -› CloudFront Key Pairs</code>.<br />'."\n";
 								echo '<em>* Note, s2Member needs your <strong>Private Key file</strong>, NOT your Public Key file.</em>'."\n";
 								echo '</td>'."\n";
 
