@@ -544,7 +544,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 					$return = array('streamer' => $streamer, 'prefix' => $extension.':', 'file' => preg_replace('/^'.preg_quote($streamer, '/').'\//', '', $_url), 'url' => preg_replace('/^.+?\:/', (($ssl) ? 'https:' : 'http:'), $url));
 
 				else if($get_streamer_array && $streaming && is_array($ups = c_ws_plugin__s2member_utils_urls::parse_url($_url)) && isset($ups['scheme'], $ups['host']) && ($streamer = $ups['scheme'].'://'.$ups['host'].((!empty($ups['port'])) ? ':'.$ups['port'] : '')) && ($url = c_ws_plugin__s2member_files_in::check_file_download_access(array_merge($config, array('file_stream' => FALSE, 'check_user' => FALSE, 'count_against_user' => FALSE)))))
-					$return = array('streamer' => $streamer, 'prefix' => $extension.':', 'file' => preg_replace('/^'.preg_quote($streamer, '/').'\//', '', $_url), 'url' => preg_replace('/^.+?\:/', (($ssl) ? 'https:' : 'http:'), $url));
+					$return = array('streamer' => $streamer, 'prefix' => '', 'file' => preg_replace('/^'.preg_quote($streamer, '/').'\//', '', $_url), 'url' => preg_replace('/^.+?\:/', (($ssl) ? 'https:' : 'http:'), $url));
 
 				else if($get_streamer_array) // If streamer, we MUST return false here; unable to acquire streamer/file.
 					$return = FALSE; // We MUST return false here, unable to acquire streamer/file.
