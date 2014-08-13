@@ -163,8 +163,9 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 					$file_download_urls = array(); // Initialize array.
 					foreach($file_download_resolutions as $_player_resolution => $_file_download_resolution) // NOTE: these ARE in a specific order.
-						// @TODO we need to count files with the same name (but different resolutions) only one time. Also, we need to check for failures here.
-						$file_download_urls[str_replace(array('_', '-'), ' ', $_player_resolution)] = c_ws_plugin__s2member_files::create_file_download_url(array_merge($config, array('file_download' => $_file_download_resolution)), TRUE);
+						if(!($file_download_urls[str_replace(array('_', '-'), ' ', $_player_resolution)] = c_ws_plugin__s2member_files::create_file_download_url(array_merge($config, array('file_download' => $_file_download_resolution)), TRUE)))
+							// @TODO we need to count files with the same name (but different resolutions) only one time.
+							return apply_filters('ws_plugin__s2member_sc_get_stream', NULL, get_defined_vars()); // Failure.
 					unset($_player_resolution, $_file_download_resolution); // Housekeeping.
 				}
 				else $file_download_urls = array(c_ws_plugin__s2member_files::create_file_download_url($config, TRUE));
