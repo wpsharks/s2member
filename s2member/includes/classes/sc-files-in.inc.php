@@ -170,7 +170,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 						$_file_download_config = array_merge($config, array('file_download' => $_file_download_resolution));
 
 						if($file_download_urls) // If this is a ANOTHER resolution, don't count it against the user.
-							$_file_download_config = array_merge($_file_download_config, array('count_against_user' => 'no'));
+							$_file_download_config = array_merge($_file_download_config, array('check_user' => FALSE, 'count_against_user' => FALSE));
 
 						if(!($file_download_urls[str_replace(array('_', '-'), ' ', $_player_resolution)] = c_ws_plugin__s2member_files::create_file_download_url($_file_download_config, TRUE)))
 							return apply_filters('ws_plugin__s2member_sc_get_stream', NULL, get_defined_vars()); // Failure.

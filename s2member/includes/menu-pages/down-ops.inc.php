@@ -42,7 +42,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 						echo '<tr class="ws-menu-page-table-tr">'."\n";
 						echo '<td class="ws-menu-page-table-l">'."\n";
 
-						echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">'."\n";
+						echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form" action="'.esc_attr(remove_query_arg('ws_plugin__s2member_cf_options_reset')).'">'."\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_amazon_cf_files_distros_auto_config_status" id="ws-plugin--s2member-amazon-cf-files-distros-auto-config-status" value="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distros_auto_config_status"]).'" />'."\n";
 						echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />'."\n";
@@ -473,26 +473,27 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 								echo '</tr>'."\n";
 								echo '</tbody>'."\n";
 								echo '</table>'."\n";
+								echo '</div>'."\n";
 
 								echo '<div class="ws-menu-page-hr"></div>'."\n";
 
 								echo '<table class="form-table" style="margin-top:0;">'."\n";
 								echo '<tbody>'."\n";
 								echo '<tr>'."\n";
+
 								echo '<td>'."\n";
 								echo '<h3>Completely Reset CloudFront Configuration?</h3>'."\n";
-								echo '<p>If you need to start all over again, you can click this button to reset your existing s2Member/CloudFront configuration. <strong>However, please note</strong> that you will still need to log into your AWS CloudFront Console and remove any existing CloudFront Distributions that were previously generated with s2Member; i.e. resetting your configuration here will allow you to start over with s2Member, but it does NOT reset anything on the AWS side of things.</p>'."\n";
 								echo '<div style="float:right; margin:0 0 0 25px;">'."\n";
-								echo '<button type="button" onclick="if(confirm(\'Are you sure?\')) location.href = \''.c_ws_plugin__s2member_utils_strings::esc_js_sq(add_query_arg(urlencode_deep(array('ws_plugin__s2member_cf_options_reset' => wp_create_nonce("ws-plugin--s2member-cf-options-reset"))))).'\';">Reset CloudFront Configuration</button>'."\n";
+								echo '   <button type="button" onclick="if(confirm(\'Are you sure?\')) location.href = \''.c_ws_plugin__s2member_utils_strings::esc_js_sq(add_query_arg(urlencode_deep(array('ws_plugin__s2member_cf_options_reset' => wp_create_nonce('ws-plugin--s2member-cf-options-reset'))))).'\';">Reset CloudFront Configuration</button>'."\n";
 								echo '</div>'."\n";
+								echo '<p>If you need to start all over again, you can click this button to reset your existing s2Member/CloudFront configuration. <em><strong>However, please note:</strong> you will still need to log into your AWS CloudFront Console (at some point) and remove any existing CloudFront Distributions that were previously generated with s2Member; i.e. resetting your configuration here will allow you to start over with s2Member using a new set of CF Distros, but it does NOT delete anything on the AWS side.</em></p>'."\n";
 								echo '</td>'."\n";
+
 								echo '</tr>'."\n";
 								echo '</tbody>'."\n";
 								echo '</table>'."\n";
 
 								echo '</div>'."\n";
-								echo '</div>'."\n";
-
 								echo '</div>'."\n";
 
 								do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_amazon_cf", get_defined_vars());
