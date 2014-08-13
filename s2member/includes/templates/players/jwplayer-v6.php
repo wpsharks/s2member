@@ -21,10 +21,7 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 
 					captions: %%player_captions%%,
 
-					sources: // Available sources.
-						[
-							{file: '%%url%%'}
-						]
+					sources: %%player_sources%%
 				}],
 
 			controls: %%player_controls%%,
