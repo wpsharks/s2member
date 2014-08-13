@@ -148,69 +148,142 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 			unset($key, $value); // Ditch these now. We don't want these bleeding into Hooks/Filters anyway.
 
-			if(!empty($config) && isset($config['download'])) // Looking for a File Download URL?
+			if(!empty($config) && isset($config['file_download'])) // Looking for a File Download URL?
 			{
 				if($attr['player_resolutions']) // There are multiple variations of the file; in various resolutions?
 				{
-					// @TODO I need to finish this up.
-					$download_extension               = strtolower(ltrim((string)strrchr(basename($config['download']), '.'), '.'));
-					$download_resolution_wo_extension = substr($config['download'], 0, -strlen($download_extension + 1) /* For the dot. */);
-					$download_wo_resolution_extension = preg_replace('/\-R[0-9]$/i', '', $download_resolution_wo_extension);
+					$file_download_extension               = strtolower(ltrim((string)strrchr(basename($config['file_download']), '.'), '.'));
+					$file_download_resolution_wo_extension = substr($config['file_download'], 0, -strlen($file_download_extension + 1) /* For the dot. */);
+					$file_download_wo_resolution_extension = preg_replace('/\-R[0-9]$/i', '', $file_download_resolution_wo_extension);
 
-					$download_resolutions[] = array(); // Initialize the array of resolutions.
+					$file_download_resolutions[] = array(); // Initialize the array of resolutions.
 					foreach(preg_split('/[,;\s]+/', $attr['player_resolutions'], NULL, PREG_SPLIT_NO_EMPTY) as $_player_resolution)
-						$download_resolutions[] = $download_wo_resolution_extension.'-'.urlencode(ltrim($_player_resolution, 'Rr')).'.'.$download_extension;
-				}
-				$_get = c_ws_plugin__s2member_files::create_file_download_url($config, TRUE);
+						$file_download_resolutions[ltrim($_player_resolution, 'Rr')] = $file_download_wo_resolution_extension.'-'.urlencode(ltrim($_player_resolution, 'Rr')).'.'.$file_download_extension;
+					unset($_player_resolution); // Housekeeping.
 
-				if(is_array($_get) && !empty($_get) && $attr['player'] && is_file($template = dirname(dirname(__FILE__)).'/templates/players/'.$attr['player'].'.php') && $attr['player_id'] && $attr['player_path'])
+					$file_download_urls = array(); // Initialize array.
+					foreach($file_download_resolutions as $_player_resolution => $_file_download_resolution) // NOTE: these ARE in a specific order.
+						// @TODO we need to count files with the same name (but different resolutions) only one time. Also, we need to check for failures here.
+						$file_download_urls[str_replace(array('_', '-'), ' ', $_player_resolution)] = c_ws_plugin__s2member_files::create_file_download_url(array_merge($config, array('file_download' => $_file_download_resolution)), TRUE);
+					unset($_player_resolution, $_file_download_resolution); // Housekeeping.
+				}
+				else $file_download_urls = array(c_ws_plugin__s2member_files::create_file_download_url($config, TRUE));
+
+				if(is_array($file_download_urls) && $file_download_urls && $attr['player'] && is_file($template = dirname(dirname(__FILE__)).'/templates/players/'.$attr['player'].'.php') && $attr['player_id'] && $attr['player_path'])
 				{
 					$template = (is_file(TEMPLATEPATH.'/'.basename($template))) ? TEMPLATEPATH.'/'.basename($template) : $template;
 					$template = (is_file(get_stylesheet_directory().'/'.basename($template))) ? get_stylesheet_directory().'/'.basename($template) : $template;
 					$template = (is_file(WP_CONTENT_DIR.'/'.basename($template))) ? WP_CONTENT_DIR.'/'.basename($template) : $template;
 
-					if(strpos($attr['player'], 'jwplayer-v6') === 0)
+					if(strpos($attr['player'], 'jwplayer-v6') === 0) // JW Player is currently the only supported player.
 					{
-						$get = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($template)));
+						$player = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($template)));
 
-						$get = preg_replace('/%%streamer%%/', $_get['streamer'], $get);
-						$get = preg_replace('/%%prefix%%/', $_get['prefix'], $get);
-						$get = preg_replace('/%%file%%/', $_get['file'], $get);
-						$get = preg_replace('/%%url%%/', $_get['url'], $get);
+						$_first_file_download_url = array(); // Holds the first one.
+						$_last_file_download_url  = array(); // Holds the last one.
 
-						$get = preg_replace('/%%player_id%%/', $attr['player_id'], $get);
-						$get = preg_replace('/%%player_path%%/', $attr['player_path'], $get);
-						$get = preg_replace('/%%player_key%%/', $attr['player_key'], $get);
+						$_total_player_sources   = count($file_download_urls); // Total sources.
+						$_player_sources_counter = 1; // Player sources counter; needed by the loop below.
 
-						$get = preg_replace('/%%player_title%%/', $attr['player_title'], $get);
-						$get = preg_replace('/%%player_image%%/', $attr['player_image'], $get);
+						$player_sources = '['; // Initialize the JSON array of player sources.
+						foreach($file_download_urls as $_file_download_url_label => $_file_download_url)
+						{
+							$_is_first_file_download_url = $_player_sources_counter <= 1;
+							$_is_last_file_download_url  = $_player_sources_counter >= $_total_player_sources;
 
-						$get = preg_replace('/%%player_mediaid%%/', $attr['player_mediaid'], $get);
-						$get = preg_replace('/%%player_description%%/', $attr['player_description'], $get);
+							switch($attr['player'])// See: <http://wsharks.com/1Bd6tKy>
+							{
+								case 'jwplayer-v6': // Default w/ a direct URL (very simple).
+
+									$player_sources .= ',{'; // Open this source; JSON object properties.
+									$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['url'])."'";
+									if(is_string($_file_download_url_label)) $player_sources .= ",'label': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url_label)."'";
+									if($_is_first_file_download_url) $player_sources .= ",'default': 'true'";
+									$player_sources .= '}'; // Close this source.
+
+									break; // Break switch loop.
+
+								case 'jwplayer-v6-rtmp': // RTMP w/ downloadable fallback (mobile compatibility).
+
+									$player_sources .= ',{'; // Open this source; JSON object properties.
+									$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['streamer'].'/'.$_file_download_url['prefix'].$_file_download_url['file'])."'";
+									if(is_string($_file_download_url_label)) $player_sources .= ",'label': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url_label)."'";
+									if($_is_first_file_download_url) $player_sources .= ",'default': 'true'";
+									$player_sources .= '}'; // Close this source.
+
+									if($_is_last_file_download_url) // Provide an downloadable fallback option also.
+									{
+										$player_sources .= ',{'; // Open this source; JSON object properties.
+										$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['url'])."'";
+										$player_sources .= '}'; // Close this source.
+									}
+									break; // Break switch loop.
+
+								case 'jwplayer-v6-rtmp-only': // RTMP streaming only.
+
+									$player_sources .= ',{'; // Open this source; JSON object properties.
+									$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['streamer'].'/'.$_file_download_url['prefix'].$_file_download_url['file'])."'";
+									if(is_string($_file_download_url_label)) $player_sources .= ",'label': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url_label)."'";
+									if($_is_first_file_download_url) $player_sources .= ",'default': 'true'";
+									$player_sources .= '}'; // Close this source.
+
+									break; // Break switch loop.
+							}
+							if($_is_first_file_download_url) // Record first one; also run back compat. replacements.
+							{
+								$_first_file_download_url = $_file_download_url; // Record for use later.
+								$player                   = preg_replace('/%%streamer%%/', $_file_download_url['streamer'], $player);
+								$player                   = preg_replace('/%%prefix%%/', $_file_download_url['prefix'], $player);
+								$player                   = preg_replace('/%%file%%/', $_file_download_url['file'], $player);
+								$player                   = preg_replace('/%%url%%/', $_file_download_url['url'], $player);
+							}
+							if($_is_last_file_download_url) // Record last one; which could be the same as the first one.
+							{
+								$_last_file_download_url = $_file_download_url; // Record for use later.
+							}
+							$_player_sources_counter++; // Increment the counter.
+						}
+						$player_sources = trim($player_sources, ',').']'; // Close sources.
+
+						unset($_first_file_download_url, $_last_file_download_url, // Housekeeping.
+							$_total_player_sources, $_player_sources_counter, $_is_first_file_download_url, $_is_last_file_download_url,
+							$_file_download_url_label, $_file_download_url);
+
+						$player = preg_replace('/%%sources%%/', $player_sources, $player);
+
+						$player = preg_replace('/%%player_id%%/', $attr['player_id'], $player);
+						$player = preg_replace('/%%player_path%%/', $attr['player_path'], $player);
+						$player = preg_replace('/%%player_key%%/', $attr['player_key'], $player);
+
+						$player = preg_replace('/%%player_title%%/', $attr['player_title'], $player);
+						$player = preg_replace('/%%player_image%%/', $attr['player_image'], $player);
+
+						$player = preg_replace('/%%player_mediaid%%/', $attr['player_mediaid'], $player);
+						$player = preg_replace('/%%player_description%%/', $attr['player_description'], $player);
 
 						if(($attr['player_captions'] = c_ws_plugin__s2member_utils_strings::trim($attr['player_captions'], NULL, '[]')))
-							$get = preg_replace('/%%player_captions%%/', '['.((strpos($attr['player_captions'], ':') !== FALSE) ? $attr['player_captions'] : base64_decode($attr['player_captions'])).']', $get);
-						else $get = preg_replace('/%%player_captions%%/', '[]', $get);
+							$player = preg_replace('/%%player_captions%%/', '['.((strpos($attr['player_captions'], ':') !== FALSE) ? $attr['player_captions'] : base64_decode($attr['player_captions'])).']', $player);
+						else $player = preg_replace('/%%player_captions%%/', '[]', $player);
 
-						$get = preg_replace('/%%player_controls%%/', ((filter_var($attr['player_controls'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $get);
-						$get = preg_replace('/%%player_width%%/', ((strpos($attr['player_width'], '%') !== FALSE) ? "'".$attr['player_width']."'" : (integer)$attr['player_width']), $get);
-						$get = preg_replace('/%%player_height%%/', (($attr['player_aspectratio']) ? "''" : ((strpos($attr['player_height'], '%') !== FALSE) ? "'".$attr['player_height']."'" : (integer)$attr['player_height'])), $get);
-						$get = preg_replace('/%%player_aspectratio%%/', $attr['player_aspectratio'], $get);
-						$get = preg_replace('/%%player_stretching%%/', $attr['player_stretching'], $get);
-						$get = preg_replace('/%%player_skin%%/', $attr['player_skin'], $get);
+						$player = preg_replace('/%%player_controls%%/', ((filter_var($attr['player_controls'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_width%%/', ((strpos($attr['player_width'], '%') !== FALSE) ? "'".$attr['player_width']."'" : (integer)$attr['player_width']), $player);
+						$player = preg_replace('/%%player_height%%/', (($attr['player_aspectratio']) ? "''" : ((strpos($attr['player_height'], '%') !== FALSE) ? "'".$attr['player_height']."'" : (integer)$attr['player_height'])), $player);
+						$player = preg_replace('/%%player_aspectratio%%/', $attr['player_aspectratio'], $player);
+						$player = preg_replace('/%%player_stretching%%/', $attr['player_stretching'], $player);
+						$player = preg_replace('/%%player_skin%%/', $attr['player_skin'], $player);
 
-						$get = preg_replace('/%%player_autostart%%/', ((filter_var($attr['player_autostart'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $get);
-						$get = preg_replace('/%%player_fallback%%/', ((filter_var($attr['player_fallback'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $get);
-						$get = preg_replace('/%%player_mute%%/', ((filter_var($attr['player_mute'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $get);
-						$get = preg_replace('/%%player_repeat%%/', ((filter_var($attr['player_repeat'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $get);
-						$get = preg_replace('/%%player_startparam%%/', $attr['player_startparam'], $get);
-						$get = preg_replace('/%%player_primary%%/', $attr['player_primary'], $get);
+						$player = preg_replace('/%%player_autostart%%/', ((filter_var($attr['player_autostart'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_fallback%%/', ((filter_var($attr['player_fallback'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_mute%%/', ((filter_var($attr['player_mute'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_repeat%%/', ((filter_var($attr['player_repeat'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_startparam%%/', $attr['player_startparam'], $player);
+						$player = preg_replace('/%%player_primary%%/', $attr['player_primary'], $player);
 
-						$get = preg_replace('/%%player_option_blocks%%/', ((strpos($attr['player_option_blocks'], ':') !== FALSE) ? $attr['player_option_blocks'] : base64_decode($attr['player_option_blocks'])), $get);
+						$player = preg_replace('/%%player_option_blocks%%/', ((strpos($attr['player_option_blocks'], ':') !== FALSE) ? $attr['player_option_blocks'] : base64_decode($attr['player_option_blocks'])), $player);
 					}
 				}
 			}
-			return apply_filters('ws_plugin__s2member_sc_get_stream', isset($get) ? $get : NULL, get_defined_vars());
+			return apply_filters('ws_plugin__s2member_sc_get_stream', isset($player) ? $player : NULL, get_defined_vars());
 		}
 	}
 }
