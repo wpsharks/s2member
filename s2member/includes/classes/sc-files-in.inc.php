@@ -148,13 +148,19 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 			unset($key, $value); // Ditch these now. We don't want these bleeding into Hooks/Filters anyway.
 
-			if(!empty($config) && isset($config['file_download'])) // Looking for a File Download URL?
+			if(!empty($config) && isset($config['download'])) // Looking for a File Download URL?
 			{
 				if($attr['player_resolutions']) // There are multiple variations of the file; in various resolutions?
-					foreach(preg_split('/[,;\s]+/', $attr['player_resolutions'], NULL, PREG_SPLIT_NO_EMPTY) as $_resolution)
-					{
-						// @TODO Need to finish this up.
-					}
+				{
+					// @TODO I need to finish this up.
+					$download_extension               = strtolower(ltrim((string)strrchr(basename($config['download']), '.'), '.'));
+					$download_resolution_wo_extension = substr($config['download'], 0, -strlen($download_extension + 1) /* For the dot. */);
+					$download_wo_resolution_extension = preg_replace('/\-R[0-9]$/i', '', $download_resolution_wo_extension);
+
+					$download_resolutions[] = array(); // Initialize the array of resolutions.
+					foreach(preg_split('/[,;\s]+/', $attr['player_resolutions'], NULL, PREG_SPLIT_NO_EMPTY) as $_player_resolution)
+						$download_resolutions[] = $download_wo_resolution_extension.'-'.urlencode(ltrim($_player_resolution, 'Rr')).'.'.$download_extension;
+				}
 				$_get = c_ws_plugin__s2member_files::create_file_download_url($config, TRUE);
 
 				if(is_array($_get) && !empty($_get) && $attr['player'] && is_file($template = dirname(dirname(__FILE__)).'/templates/players/'.$attr['player'].'.php') && $attr['player_id'] && $attr['player_path'])
