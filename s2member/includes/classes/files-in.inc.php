@@ -275,8 +275,8 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 
 						$key = ($req['file_download_key'] && is_string($req['file_download_key'])) ? $req['file_download_key'] : FALSE;
 
-						$stream  = (isset($req['file_stream'])) ? filter_var($req['file_stream'], FILTER_VALIDATE_BOOLEAN) : ((in_array($extension, preg_split('/[\r\n\t\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_stream_extensions']))) ? TRUE : FALSE);
-						$inline  = (!$stream && isset($req['file_inline'])) ? filter_var($req['file_inline'], FILTER_VALIDATE_BOOLEAN) : (($stream || in_array($extension, preg_split('/[\r\n\t\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_inline_extensions']))) ? TRUE : FALSE);
+						$stream  = (isset($req['file_stream'])) ? filter_var($req['file_stream'], FILTER_VALIDATE_BOOLEAN) : ((in_array($extension, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_stream_extensions']))) ? TRUE : FALSE);
+						$inline  = (!$stream && isset($req['file_inline'])) ? filter_var($req['file_inline'], FILTER_VALIDATE_BOOLEAN) : (($stream || in_array($extension, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_inline_extensions']))) ? TRUE : FALSE);
 						$ssl     = (isset($req['file_ssl'])) ? filter_var($req['file_ssl'], FILTER_VALIDATE_BOOLEAN) : ((is_ssl()) ? TRUE : FALSE);
 						$storage = ($req['file_storage'] && is_string($req['file_storage'])) ? strtolower($req['file_storage']) : FALSE;
 						$remote  = (isset($req['file_remote'])) ? filter_var($req['file_remote'], FILTER_VALIDATE_BOOLEAN) : FALSE;
@@ -524,33 +524,33 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 
 			$config = (is_array($config)) ? $config : array(); // This absolutely MUST be an array.
 
-			$config['file_download']     = (isset($config['file_download']) && is_string($config['file_download'])) ? trim($config['file_download'], '/') : @$config['file_download'];
-			$config['file_download_key'] = (isset($config['file_download']) && is_string($config['file_download']) && !empty($config['file_download_key'])) ? c_ws_plugin__s2member_files::file_download_key($config['file_download'], ((in_array($config['file_download_key'], array('ip-forever', 'universal', 'cache-compatible'))) ? $config['file_download_key'] : FALSE)) : @$config['file_download_key'];
+			$config['file_download']     = (isset($config['file_download']) && is_string($config['file_download'])) ? trim($config['file_download'], '/') : '';
+			$config['file_download_key'] = (!empty($config['file_download_key']) && is_string($config['file_download'])) ? c_ws_plugin__s2member_files::file_download_key($config['file_download'], ((in_array($config['file_download_key'], array('ip-forever', 'universal', 'cache-compatible'))) ? $config['file_download_key'] : FALSE)) : '';
 
 			$config['url_to_storage_source'] = ($get_streamer_array) ? TRUE : @$config['url_to_storage_source']; // Force a streaming URL here via ``$get_streamer_array``?
 			$config['file_stream']           = ($get_streamer_array) ? TRUE : @$config['file_stream']; // Force a streaming URL here via ``$get_streamer_array``?
 
-			if(($_url = c_ws_plugin__s2member_files_in::check_file_download_access(($create_file_download_url = $config)))) // Successfully created a URL to the file?
+			if(($url_ = c_ws_plugin__s2member_files_in::check_file_download_access(($config)))) // Successfully created a URL to the file?
 			{
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_create_file_download_url', get_defined_vars());
 				unset($__refs, $__v); // Housekeeping.
 
 				$extension = strtolower(substr($config['file_download'], strrpos($config['file_download'], '.') + 1));
-				$streaming = (isset($config['file_stream'])) ? filter_var($config['file_stream'], FILTER_VALIDATE_BOOLEAN) : ((in_array($extension, preg_split('/[\r\n\t\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_stream_extensions']))) ? TRUE : FALSE);
+				$streaming = (isset($config['file_stream'])) ? filter_var($config['file_stream'], FILTER_VALIDATE_BOOLEAN) : ((in_array($extension, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_stream_extensions']))) ? TRUE : FALSE);
 				$ssl       = (isset($config['file_ssl'])) ? filter_var($config['file_ssl'], FILTER_VALIDATE_BOOLEAN) : ((is_ssl()) ? TRUE : FALSE);
 
-				if($get_streamer_array && $streaming && ($cfx = '/cfx/st') && ($cfx_pos = strpos($_url, $cfx)) !== FALSE && ($streamer = substr($_url, 0, $cfx_pos + strlen($cfx))) && ($url = c_ws_plugin__s2member_files_in::check_file_download_access(array_merge($config, array('file_stream' => FALSE, 'check_user' => FALSE, 'count_against_user' => FALSE)))))
-					$return = array('streamer' => $streamer, 'prefix' => $extension.':', 'file' => preg_replace('/^'.preg_quote($streamer, '/').'\//', '', $_url), 'url' => preg_replace('/^.+?\:/', (($ssl) ? 'https:' : 'http:'), $url));
+				if($get_streamer_array && $streaming && ($cfx = '/cfx/st') && ($cfx_pos = strpos($url_, $cfx)) !== FALSE && ($streamer = substr($url_, 0, $cfx_pos + strlen($cfx))) && ($url = c_ws_plugin__s2member_files_in::check_file_download_access(array_merge($config, array('file_stream' => FALSE, 'check_user' => FALSE, 'count_against_user' => FALSE)))))
+					$return = array('streamer' => $streamer, 'prefix' => $extension.':', 'file' => preg_replace('/^'.preg_quote($streamer, '/').'\//', '', $url_), 'url' => preg_replace('/^.+?\:/', (($ssl) ? 'https:' : 'http:'), $url));
 
-				else if($get_streamer_array && $streaming && is_array($ups = c_ws_plugin__s2member_utils_urls::parse_url($_url)) && isset($ups['scheme'], $ups['host']) && ($streamer = $ups['scheme'].'://'.$ups['host'].((!empty($ups['port'])) ? ':'.$ups['port'] : '')) && ($url = c_ws_plugin__s2member_files_in::check_file_download_access(array_merge($config, array('file_stream' => FALSE, 'check_user' => FALSE, 'count_against_user' => FALSE)))))
-					$return = array('streamer' => $streamer, 'prefix' => '', 'file' => preg_replace('/^'.preg_quote($streamer, '/').'\//', '', $_url), 'url' => preg_replace('/^.+?\:/', (($ssl) ? 'https:' : 'http:'), $url));
+				else if($get_streamer_array && $streaming && is_array($ups = c_ws_plugin__s2member_utils_urls::parse_url($url_)) && isset($ups['scheme'], $ups['host']) && ($streamer = $ups['scheme'].'://'.$ups['host'].((!empty($ups['port'])) ? ':'.$ups['port'] : '')) && ($url = c_ws_plugin__s2member_files_in::check_file_download_access(array_merge($config, array('file_stream' => FALSE, 'check_user' => FALSE, 'count_against_user' => FALSE)))))
+					$return = array('streamer' => $streamer, 'prefix' => '', 'file' => preg_replace('/^'.preg_quote($streamer, '/').'\//', '', $url_), 'url' => preg_replace('/^.+?\:/', (($ssl) ? 'https:' : 'http:'), $url));
 
 				else if($get_streamer_array) // If streamer, we MUST return false here; unable to acquire streamer/file.
 					$return = FALSE; // We MUST return false here, unable to acquire streamer/file.
 
 				else // Else return URL string ( ``$get_streamer_array`` is false ).
-					$return = $_url; // Else return URL string.
+					$return = $url_; // Else return URL string.
 			}
 			return apply_filters('ws_plugin__s2member_create_file_download_url', ((isset($return)) ? $return : FALSE), get_defined_vars());
 		}
