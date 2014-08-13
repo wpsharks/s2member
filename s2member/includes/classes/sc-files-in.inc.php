@@ -259,8 +259,6 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 							$_total_player_sources, $_player_sources_counter, $_is_first_file_download_url, $_is_last_file_download_url,
 							$_file_download_url_label, $_file_download_url);
 
-						$player = preg_replace('/%%player_sources%%/', $player_sources, $player);
-
 						$player = preg_replace('/%%player_id%%/', $attr['player_id'], $player);
 						$player = preg_replace('/%%player_path%%/', $attr['player_path'], $player);
 						$player = preg_replace('/%%player_key%%/', $attr['player_key'], $player);
@@ -274,6 +272,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 						if(($attr['player_captions'] = c_ws_plugin__s2member_utils_strings::trim($attr['player_captions'], NULL, '[]')))
 							$player = preg_replace('/%%player_captions%%/', '['.((strpos($attr['player_captions'], ':') !== FALSE) ? $attr['player_captions'] : base64_decode($attr['player_captions'])).']', $player);
 						else $player = preg_replace('/%%player_captions%%/', '[]', $player);
+
+						$player = preg_replace('/%%player_sources%%/', $player_sources, $player); // Sources are constructed dynamically.
 
 						$player = preg_replace('/%%player_controls%%/', ((filter_var($attr['player_controls'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
 						$player = preg_replace('/%%player_width%%/', ((strpos($attr['player_width'], '%') !== FALSE) ? "'".$attr['player_width']."'" : (integer)$attr['player_width']), $player);
