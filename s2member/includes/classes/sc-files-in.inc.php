@@ -153,7 +153,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 				if($attr['player_resolutions']) // There are multiple variations of the file; in various resolutions?
 				{
 					$file_download_extension               = strtolower(ltrim((string)strrchr(basename($config['file_download']), '.'), '.'));
-					$file_download_resolution_wo_extension = substr($config['file_download'], 0, -strlen($file_download_extension + 1) /* For the dot. */);
+					$file_download_resolution_wo_extension = substr($config['file_download'], 0, -(strlen($file_download_extension) + 1) /* For the dot. */);
 					$file_download_wo_resolution_extension = preg_replace('/\-r[0-9]+([^.]*)$/i', '', $file_download_resolution_wo_extension); // e.g. `r720p-HD` is removed here.
 
 					$file_download_resolutions[] = array(); // Initialize the array of resolutions.
