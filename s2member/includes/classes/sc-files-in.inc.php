@@ -208,7 +208,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 						$player_resolution_bitrates = apply_filters('ws_plugin__s2member_sc_get_stream_resolution_bitrates', $player_resolution_bitrates, get_defined_vars());
 
 						$player_resolution_sources_smil_file_id       = md5(serialize($attr).$_SERVER['REMOTE_ADDR']); // Initialize SMIL ID.
-						$player_resolution_sources_smil_file_url      = home_url('/?s2member_rsf_file='.urlencode($player_resolution_sources_smil_file_id).'&s2member_rsf_file_ip='.urlencode($_SERVER['REMOTE_ADDR']));
+						$player_resolution_sources_smil_file_url      = home_url('/s2member-rsf-file.smil?s2member_rsf_file='.urlencode($player_resolution_sources_smil_file_id).'&s2member_rsf_file_ip='.urlencode($_SERVER['REMOTE_ADDR']));
 						$player_resolution_sources_smil_file_url      = c_ws_plugin__s2member_utils_urls::add_s2member_sig($player_resolution_sources_smil_file_url);
 						$player_resolution_sources_smil_file_contents = ''; // Initialize player sources SMIL file contents.
 						$player_sources                               = ''; // Initialize player sources; empty string.
@@ -247,7 +247,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 										}
 										$_file_download_url['smil']['height'] = (integer)$_file_download_url_label; // e.g. `720p-HD` becomes `720`.
 										if(!$_file_download_url['smil']['height']) $_file_download_url['smil']['height'] = 720; // Use a default height if invalid.
-										$_file_download_url['smil']['width'] = round(($_file_download_url['smil']['height'] / $player_resolution_aspect_ratio_h) * $player_resolution_aspect_ratio_w);
+										$_file_download_url['smil']['width'] = ceil(($_file_download_url['smil']['height'] / $player_resolution_aspect_ratio_h) * $player_resolution_aspect_ratio_w);
 
 										$_file_download_url['smil']['system-bitrate'] = '1'; // Default value.
 										if(!empty($player_resolution_bitrates[$_file_download_url['smil']['height']]))
