@@ -242,7 +242,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 										{
 											$player_sources .= ',{'; // Open this source; JSON object properties.
 											$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($player_resolution_sources_smil_file_url)."'";
-											if($_is_first_file_download_url) $player_sources .= ",'default': 'TRUE'";
+											if($_is_first_file_download_url) $player_sources .= ",'default': 'true'";
 											$player_sources .= '}'; // Close this source.
 										}
 										$_file_download_url['smil']['height'] = (integer)$_file_download_url_label; // e.g. `720p-HD` becomes `720`.
@@ -263,7 +263,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 										$player_sources .= ',{'; // Open this source; JSON object properties.
 										$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['streamer'].'/'.$_file_download_url['prefix'].$_file_download_url['file'])."'";
 										if(is_string($_file_download_url_label)) $player_sources .= ",'label': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url_label)."'";
-										if($_is_first_file_download_url) $player_sources .= ",'default': 'TRUE'";
+										if($_is_first_file_download_url) $player_sources .= ",'default': 'true'";
 										$player_sources .= '}'; // Close this source.
 									}
 									if($_is_last_file_download_url && $attr['player'] === 'jwplayer-v6-rtmp') // Provide a fallback also.
