@@ -126,8 +126,8 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 						{
 							$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE);
 							$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
-							$bbpress_forum_post_type     = $bbpress_installed ? bbp_forum_post_type() : ''; // Acquire the current post type for forums.
-							$bbpress_topic_post_type     = $bbpress_installed ? bbp_topic_post_type() : ''; // Acquire the current post type for topics.
+							$bbpress_forum_post_type     = $bbpress_installed ? bbp_get_forum_post_type() : ''; // Acquire the current post type for forums.
+							$bbpress_topic_post_type     = $bbpress_installed ? bbp_get_topic_post_type() : ''; // Acquire the current post type for topics.
 
 							if(!$user && ($_lwp = (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page']))
 							{
