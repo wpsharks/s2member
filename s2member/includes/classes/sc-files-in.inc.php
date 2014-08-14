@@ -150,7 +150,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 			if(!empty($config) && isset($config['file_download'])) // Looking for a File Download URL?
 			{
-				if($attr['player_resolutions'] && c_ws_plugin__s2member_utils_conds::pro_is_installed())
+				if($attr['player_resolutions'] && c_ws_plugin__s2member_utils_conds::pro_is_installed() /* Pro serves SMIL files. */)
 				{
 					$file_download_extension               = strtolower(ltrim((string)strrchr(basename($config['file_download']), '.'), '.'));
 					$file_download_resolution_wo_extension = substr($config['file_download'], 0, -(strlen($file_download_extension) + 1) /* For the dot. */);
@@ -191,15 +191,35 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 						$_first_file_download_url = array(); // Holds the first one.
 						$_last_file_download_url  = array(); // Holds the last one.
+						$_uses_rtmp_streamers     = FALSE; // Streamers use RTMP?
 
 						$_total_player_sources   = count($file_download_urls); // Total sources.
 						$_player_sources_counter = 1; // Player sources counter; needed by the loop below.
-						$player_sources          = ''; // Initialize player sources; empty string.
+
+						$player_resolution_aspect_ratio_w = 16; // Default aspect ratio width.
+						$player_resolution_aspect_ratio_h = 9; // Default aspect ratio in height.
+						if($attr['player_aspectratio'] && preg_match('/^[0-9]+\:[0-9]+$/', $attr['player_aspectratio']))
+							list($player_resolution_aspect_ratio_w, $player_resolution_aspect_ratio_h) = explode(':', $attr['player_aspectratio']);
+						$player_resolution_aspect_ratio_w = (integer)$player_resolution_aspect_ratio_w; // Force integer value.
+						$player_resolution_aspect_ratio_h = (integer)$player_resolution_aspect_ratio_h; // Force integer value.
+
+						// See: <http://wsharks.com/1yzjAl6> and <http://wsharks.com/1yzkhea> regarging the SMIL bitrate hints given here.
+						$player_resolution_bitrates = array(2160 => '35000000', 1440 => '10000000', 1080 => '8000000', 720 => '5000000', 640 => '2499999', 480 => '2500000', 360 => '1000000', 320 => '999999', 240 => '500000', 180 => '300000');
+						$player_resolution_bitrates = apply_filters('ws_plugin__s2member_sc_get_stream_resolution_bitrates', $player_resolution_bitrates, get_defined_vars());
+
+						$player_resolution_sources_smil_file_id       = md5(serialize($attr).$_SERVER['REMOTE_ADDR']); // Initialize SMIL ID.
+						$player_resolution_sources_smil_file_url      = home_url('/?s2member_resolution_smil_file='.urlencode($player_resolution_sources_smil_file_id));
+						$player_resolution_sources_smil_file_url      = c_ws_plugin__s2member_utils_urls::add_s2member_sig($player_resolution_sources_smil_file_url);
+						$player_resolution_sources_smil_file_contents = ''; // Initialize player sources SMIL file contents.
+						$player_sources                               = ''; // Initialize player sources; empty string.
 
 						foreach($file_download_urls as $_file_download_url_label => $_file_download_url)
 						{
 							$_is_first_file_download_url = $_player_sources_counter <= 1;
 							$_is_last_file_download_url  = $_player_sources_counter >= $_total_player_sources;
+
+							if($_is_first_file_download_url) // We base this conditional on the first streamer.
+								$_uses_rtmp_streamers = stripos($_file_download_url['streamer'], 'rtmp') === 0;
 
 							switch($attr['player'])// See: <http://wsharks.com/1Bd6tKy>
 							{
@@ -214,29 +234,44 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 									break; // Break switch loop.
 
 								case 'jwplayer-v6-rtmp': // RTMP w/ downloadable fallback (mobile compatibility).
+								case 'jwplayer-v6-rtmp-only': // RTMP streaming only (flash player only).
 
-									$player_sources .= ',{'; // Open this source; JSON object properties.
-									$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['streamer'].'/'.$_file_download_url['prefix'].$_file_download_url['file'])."'";
-									if(is_string($_file_download_url_label)) $player_sources .= ",'label': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url_label)."'";
-									if($_is_first_file_download_url) $player_sources .= ",'default': 'TRUE'";
-									$player_sources .= '}'; // Close this source.
+									if($attr['player_resolutions'] && $_total_player_sources > 1 && $_uses_rtmp_streamers)
+									{
+										if($_is_first_file_download_url) // The first source is the SMIL file.
+										{
+											$player_sources .= ',{'; // Open this source; JSON object properties.
+											$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($player_resolution_sources_smil_file_url)."'";
+											if($_is_first_file_download_url) $player_sources .= ",'default': 'TRUE'";
+											$player_sources .= '}'; // Close this source.
+										}
+										$_file_download_url['smil']['height'] = (integer)$_file_download_url_label; // e.g. `720p-HD` becomes `720`.
+										if(!$_file_download_url['smil']['height']) $_file_download_url['smil']['height'] = 720; // Use a default height if invalid.
+										$_file_download_url['smil']['width'] = round(($_file_download_url['smil']['height'] / $player_resolution_aspect_ratio_h) * $player_resolution_aspect_ratio_w);
 
-									if($_is_last_file_download_url) // Provide an downloadable fallback option also.
+										$_file_download_url['smil']['system-bitrate'] = '1'; // Default value.
+										if(!empty($player_resolution_bitrates[$_file_download_url['smil']['height']]))
+											$_file_download_url['smil']['system-bitrate'] = $player_resolution_bitrates[$_file_download_url['smil']['height']];
+
+										$player_resolution_sources_smil_file_contents .= '<video src="'.esc_attr($_file_download_url['file']).'"'.
+										                                                 ' width="'.esc_attr($_file_download_url['smil']['width']).'"'.
+										                                                 ' height="'.esc_attr($_file_download_url['smil']['height']).'"'.
+										                                                 ' system-bitrate="'.esc_attr($_file_download_url['smil']['system-bitrate']).'" />';
+									}
+									else // Build them inline; i.e. don't create a SMIL file in this case; not necessary.
+									{
+										$player_sources .= ',{'; // Open this source; JSON object properties.
+										$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['streamer'].'/'.$_file_download_url['prefix'].$_file_download_url['file'])."'";
+										if(is_string($_file_download_url_label)) $player_sources .= ",'label': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url_label)."'";
+										if($_is_first_file_download_url) $player_sources .= ",'default': 'TRUE'";
+										$player_sources .= '}'; // Close this source.
+									}
+									if($_is_last_file_download_url && $attr['player'] === 'jwplayer-v6-rtmp') // Provide a fallback also.
 									{
 										$player_sources .= ',{'; // Open this source; JSON object properties.
 										$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['url'])."'";
 										$player_sources .= '}'; // Close this source.
 									}
-									break; // Break switch loop.
-
-								case 'jwplayer-v6-rtmp-only': // RTMP streaming only.
-
-									$player_sources .= ',{'; // Open this source; JSON object properties.
-									$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['streamer'].'/'.$_file_download_url['prefix'].$_file_download_url['file'])."'";
-									if(is_string($_file_download_url_label)) $player_sources .= ",'label': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url_label)."'";
-									if($_is_first_file_download_url) $player_sources .= ",'default': 'TRUE'";
-									$player_sources .= '}'; // Close this source.
-
 									break; // Break switch loop.
 							}
 							if($_is_first_file_download_url) // Record first one; also run back compat. replacements.
@@ -255,7 +290,15 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 						}
 						$player_sources = '['.trim($player_sources, ',').']'; // Build array.
 
-						unset($_first_file_download_url, $_last_file_download_url, // Housekeeping.
+						if($player_resolution_sources_smil_file_contents && $_first_file_download_url) // Build SMIL file.
+						{
+							$player_resolution_sources_smil_file_contents = '<smil>'. // See: <http://wsharks.com/1ruqGVu>
+							                                                ' <head><meta base="'.esc_attr($_first_file_download_url['streamer']).'" /></head>'.
+							                                                ' <body><switch>'.$player_resolution_sources_smil_file_contents.'</switch></body>'.
+							                                                '</smil>';
+							set_transient('s2m_rsf_'.$player_resolution_sources_smil_file_id, $player_resolution_sources_smil_file_contents, 86400);
+						}
+						unset($_first_file_download_url, $_last_file_download_url, $_uses_rtmp_streamers, // Housekeeping.
 							$_total_player_sources, $_player_sources_counter, $_is_first_file_download_url, $_is_last_file_download_url,
 							$_file_download_url_label, $_file_download_url);
 
