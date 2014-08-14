@@ -318,17 +318,17 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 						$player = preg_replace('/%%player_sources%%/', $player_sources, $player); // Sources are constructed dynamically.
 
-						$player = preg_replace('/%%player_controls%%/', ((filter_var($attr['player_controls'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
+						$player = preg_replace('/%%player_controls%%/', ((filter_var($attr['player_controls'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
 						$player = preg_replace('/%%player_width%%/', ((strpos($attr['player_width'], '%') !== FALSE) ? "'".$attr['player_width']."'" : (integer)$attr['player_width']), $player);
 						$player = preg_replace('/%%player_height%%/', (($attr['player_aspectratio']) ? "''" : ((strpos($attr['player_height'], '%') !== FALSE) ? "'".$attr['player_height']."'" : (integer)$attr['player_height'])), $player);
 						$player = preg_replace('/%%player_aspectratio%%/', $attr['player_aspectratio'], $player);
 						$player = preg_replace('/%%player_stretching%%/', $attr['player_stretching'], $player);
 						$player = preg_replace('/%%player_skin%%/', $attr['player_skin'], $player);
 
-						$player = preg_replace('/%%player_autostart%%/', ((filter_var($attr['player_autostart'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
-						$player = preg_replace('/%%player_fallback%%/', ((filter_var($attr['player_fallback'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
-						$player = preg_replace('/%%player_mute%%/', ((filter_var($attr['player_mute'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
-						$player = preg_replace('/%%player_repeat%%/', ((filter_var($attr['player_repeat'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
+						$player = preg_replace('/%%player_autostart%%/', ((filter_var($attr['player_autostart'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_fallback%%/', ((filter_var($attr['player_fallback'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_mute%%/', ((filter_var($attr['player_mute'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_repeat%%/', ((filter_var($attr['player_repeat'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
 						$player = preg_replace('/%%player_startparam%%/', $attr['player_startparam'], $player);
 						$player = preg_replace('/%%player_primary%%/', $attr['player_primary'], $player);
 
