@@ -208,7 +208,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 						$player_resolution_bitrates = apply_filters('ws_plugin__s2member_sc_get_stream_resolution_bitrates', $player_resolution_bitrates, get_defined_vars());
 
 						$player_resolution_sources_smil_file_id       = md5(serialize($attr).$_SERVER['REMOTE_ADDR']); // Initialize SMIL ID.
-						$player_resolution_sources_smil_file_url      = home_url('/?s2member_resolution_smil_file='.urlencode($player_resolution_sources_smil_file_id));
+						$player_resolution_sources_smil_file_url      = home_url('/?s2member_rsf_file='.urlencode($player_resolution_sources_smil_file_id).'&s2member_rsf_file_ip='.urlencode($_SERVER['REMOTE_ADDR']));
 						$player_resolution_sources_smil_file_url      = c_ws_plugin__s2member_utils_urls::add_s2member_sig($player_resolution_sources_smil_file_url);
 						$player_resolution_sources_smil_file_contents = ''; // Initialize player sources SMIL file contents.
 						$player_sources                               = ''; // Initialize player sources; empty string.
