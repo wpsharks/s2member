@@ -150,7 +150,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 			if(!empty($config) && isset($config['file_download'])) // Looking for a File Download URL?
 			{
-				if($attr['player_resolutions']) // There are multiple variations of the file; in various resolutions?
+				if($attr['player_resolutions'] && c_ws_plugin__s2member_utils_conds::pro_is_installed())
 				{
 					$file_download_extension               = strtolower(ltrim((string)strrchr(basename($config['file_download']), '.'), '.'));
 					$file_download_resolution_wo_extension = substr($config['file_download'], 0, -(strlen($file_download_extension) + 1) /* For the dot. */);
@@ -218,7 +218,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 									$player_sources .= ',{'; // Open this source; JSON object properties.
 									$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['streamer'].'/'.$_file_download_url['prefix'].$_file_download_url['file'])."'";
 									if(is_string($_file_download_url_label)) $player_sources .= ",'label': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url_label)."'";
-									if($_is_first_file_download_url) $player_sources .= ",'default': 'true'";
+									if($_is_first_file_download_url) $player_sources .= ",'default': 'TRUE'";
 									$player_sources .= '}'; // Close this source.
 
 									if($_is_last_file_download_url) // Provide an downloadable fallback option also.
@@ -234,7 +234,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 									$player_sources .= ',{'; // Open this source; JSON object properties.
 									$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['streamer'].'/'.$_file_download_url['prefix'].$_file_download_url['file'])."'";
 									if(is_string($_file_download_url_label)) $player_sources .= ",'label': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url_label)."'";
-									if($_is_first_file_download_url) $player_sources .= ",'default': 'true'";
+									if($_is_first_file_download_url) $player_sources .= ",'default': 'TRUE'";
 									$player_sources .= '}'; // Close this source.
 
 									break; // Break switch loop.
@@ -275,17 +275,17 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 						$player = preg_replace('/%%player_sources%%/', $player_sources, $player); // Sources are constructed dynamically.
 
-						$player = preg_replace('/%%player_controls%%/', ((filter_var($attr['player_controls'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_controls%%/', ((filter_var($attr['player_controls'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
 						$player = preg_replace('/%%player_width%%/', ((strpos($attr['player_width'], '%') !== FALSE) ? "'".$attr['player_width']."'" : (integer)$attr['player_width']), $player);
 						$player = preg_replace('/%%player_height%%/', (($attr['player_aspectratio']) ? "''" : ((strpos($attr['player_height'], '%') !== FALSE) ? "'".$attr['player_height']."'" : (integer)$attr['player_height'])), $player);
 						$player = preg_replace('/%%player_aspectratio%%/', $attr['player_aspectratio'], $player);
 						$player = preg_replace('/%%player_stretching%%/', $attr['player_stretching'], $player);
 						$player = preg_replace('/%%player_skin%%/', $attr['player_skin'], $player);
 
-						$player = preg_replace('/%%player_autostart%%/', ((filter_var($attr['player_autostart'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
-						$player = preg_replace('/%%player_fallback%%/', ((filter_var($attr['player_fallback'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
-						$player = preg_replace('/%%player_mute%%/', ((filter_var($attr['player_mute'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
-						$player = preg_replace('/%%player_repeat%%/', ((filter_var($attr['player_repeat'], FILTER_VALIDATE_BOOLEAN)) ? 'true' : 'false'), $player);
+						$player = preg_replace('/%%player_autostart%%/', ((filter_var($attr['player_autostart'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
+						$player = preg_replace('/%%player_fallback%%/', ((filter_var($attr['player_fallback'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
+						$player = preg_replace('/%%player_mute%%/', ((filter_var($attr['player_mute'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
+						$player = preg_replace('/%%player_repeat%%/', ((filter_var($attr['player_repeat'], FILTER_VALIDATE_BOOLEAN)) ? 'TRUE' : 'FALSE'), $player);
 						$player = preg_replace('/%%player_startparam%%/', $attr['player_startparam'], $player);
 						$player = preg_replace('/%%player_primary%%/', $attr['player_primary'], $player);
 
