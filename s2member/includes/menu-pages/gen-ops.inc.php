@@ -249,7 +249,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 							echo '<tr>'."\n";
 
 							echo '<td>'."\n";
-							echo '<textarea name="ws_plugin__s2member_wp_footer_code" id="ws-plugin--s2member-wp-footer-code" rows="8" wrap="off" spellcheck="false" class="monospace">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["wp_footer_code"]).'</textarea><br />'."\n";
+							echo '<textarea name="ws_plugin__s2member_wp_footer_code" id="ws-plugin--s2member-wp-footer-code" rows="8" wrap="off" spellcheck="false">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["wp_footer_code"]).'</textarea><br />'."\n";
 							echo 'Any valid XHTML / JavaScript'.((is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site()) ? '' : ' (or even PHP)').' code will work just fine here.'."\n";
 							echo '</td>'."\n";
 
@@ -1428,10 +1428,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 							echo '<div class="ws-menu-page-hr"></div>'."\n";
 
 							echo '<p><strong>Shortcode (copy/paste)</strong>, for an Inline Profile Modification Form:<br />'."\n";
-							echo '<p><input type="text" autocomplete="off" value="'.format_to_edit('[s2Member-Profile /]').'" class="monospace" onclick="this.select ();" /></p>'."\n";
+							echo '<p><input type="text" autocomplete="off" value="'.format_to_edit('[s2Member-Profile /]').'" onclick="this.select ();" /></p>'."\n";
 
 							echo '<p style="margin-top:20px;"><strong>Stand-Alone (copy/paste)</strong>, for popup window:</p>'."\n";
-							echo '<p><input type="text" autocomplete="off" value="'.format_to_edit(preg_replace("/\<\?php echo S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL; \?\>/", c_ws_plugin__s2member_utils_strings::esc_refs(site_url("/?s2member_profile=1")), file_get_contents(dirname(__FILE__)."/code-samples/current-user-profile-modification-page-url-2-ops.x-php"))).'" class="monospace" onclick="this.select ();" /></p>'."\n";
+							echo '<p><input type="text" autocomplete="off" value="'.format_to_edit(preg_replace("/\<\?php echo S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL; \?\>/", c_ws_plugin__s2member_utils_strings::esc_refs(site_url("/?s2member_profile=1")), file_get_contents(dirname(__FILE__)."/code-samples/current-user-profile-modification-page-url-2-ops.x-php"))).'" onclick="this.select ();" /></p>'."\n";
 							echo '</div>'."\n";
 
 							echo '</div>'."\n";

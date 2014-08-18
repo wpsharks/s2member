@@ -503,7 +503,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 								echo '<p><strong>Shortcode:</strong> for an Inline Profile Modification Form:<br />' . "\n";
-								echo '<p><input type="text" autocomplete="off" value="' . format_to_edit ('[s2Member-Profile /]') . '" class="monospace" onclick="this.select ();" /></p>' . "\n";
+								echo '<p><input type="text" autocomplete="off" value="' . format_to_edit ('[s2Member-Profile /]') . '" onclick="this.select ();" /></p>' . "\n";
 
 								echo '<p style="margin-top:20px;"><strong>Stand-Alone / Code Sample</strong> (standard link tag):</p>' . "\n";
 								echo '<p><input type="text" autocomplete="off" value="' . format_to_edit (preg_replace ("/\<\?php echo S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL; \?\>/", c_ws_plugin__s2member_utils_strings::esc_refs (site_url ("/?s2member_profile=1")), file_get_contents (dirname (__FILE__) . "/code-samples/current-user-profile-modification-page-url-1-ops.x-php"))) . '" class="monospace" onclick="this.select ();" /></p>' . "\n";
