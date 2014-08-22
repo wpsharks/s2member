@@ -78,7 +78,7 @@ if(!class_exists('c_ws_plugin__s2member_admin_lockouts'))
 					$id    = 's2-site-name'; // Give this a special/unique ID.
 					$title = wp_html_excerpt(get_bloginfo('name'), 42); // A brief excerpt.
 					$title = ($title !== get_bloginfo('name')) ? trim($title).'&hellip;' : $title;
-					$href  = site_url('/'); // Change to front page.
+					$href  = home_url('/'); // Change to front page.
 
 					$wp_admin_bar->add_node(array('id' => $id, 'title' => $title, 'href' => $href));
 					$wp_admin_bar->remove_node('site-name');

@@ -62,7 +62,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				public static function bp_register_url()
 					{
 						if( /* If BuddyPress is installed. */c_ws_plugin__s2member_utils_conds::bp_is_installed())
-							return site_url(((function_exists("bp_get_signup_slug")) ? bp_get_signup_slug()."/" : BP_REGISTER_SLUG."/"));
+							return home_url(((function_exists("bp_get_signup_slug")) ? bp_get_signup_slug()."/" : BP_REGISTER_SLUG."/"));
 
 						return /* Default return false. */ false;
 					}
