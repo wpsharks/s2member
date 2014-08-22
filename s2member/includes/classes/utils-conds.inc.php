@@ -148,6 +148,11 @@ if(!class_exists("c_ws_plugin__s2member_utils_conds"))
 							{
 								$parse["path"] = (!empty($parse["path"])) ? ((strpos($parse["path"], "/") === 0) ? $parse["path"] : "/".$parse["path"]) : "/";
 
+								if(empty($parse["host"]) || strcasecmp($parse["host"], c_ws_plugin__s2member_utils_urls::parse_url(home_url(), PHP_URL_HOST)) === 0)
+									if($parse["path"] === "/" || rtrim($parse["path"], "/") === rtrim(c_ws_plugin__s2member_utils_urls::parse_url(home_url(), PHP_URL_PATH), "/"))
+										if(get_option("permalink_structure") || (empty($_GET["post_id"]) && empty($_GET["page_id"]) && empty($_GET["p"])))
+											return true;
+
 								if(empty($parse["host"]) || strcasecmp($parse["host"], c_ws_plugin__s2member_utils_urls::parse_url(site_url(), PHP_URL_HOST)) === 0)
 									if($parse["path"] === "/" || rtrim($parse["path"], "/") === rtrim(c_ws_plugin__s2member_utils_urls::parse_url(site_url(), PHP_URL_PATH), "/"))
 										if(get_option("permalink_structure") || (empty($_GET["post_id"]) && empty($_GET["page_id"]) && empty($_GET["p"])))
