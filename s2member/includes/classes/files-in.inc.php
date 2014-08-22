@@ -350,7 +350,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 							$url .= (isset($req['file_remote'])) ? (($remote) ? '&s2member_file_remote=yes' : '&s2member_file_remote=no') : '';
 							$url .= (isset($req['skip_confirmation'])) ? (($skip_confirmation) ? '&s2member_skip_confirmation=yes' : '&s2member_skip_confirmation=no') : '';
 
-							$url = site_url('/?'.ltrim($url.'&s2member_file_download=/'.$_url_e_file, '&'));
+							$url = home_url('/?'.ltrim($url.'&s2member_file_download=/'.$_url_e_file, '&'));
 							$url = ($ssl) ? preg_replace('/^https?/', 'https', $url) : preg_replace('/^https?/', 'http', $url);
 
 							return apply_filters('ws_plugin__s2member_file_download_access_url', $url, get_defined_vars());

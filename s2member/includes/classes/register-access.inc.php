@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_register_access"))
 							{
 								$register = c_ws_plugin__s2member_utils_encryption::encrypt ("subscr_gateway_subscr_id_custom_item_number_time:.:|:.:" . $subscr_gateway . ":.:|:.:" . $subscr_id . ":.:|:.:" . $custom . ":.:|:.:" . $item_number . ":.:|:.:" . strtotime ("now"));
 
-								$register_link = site_url ("/?s2member_register=" . urlencode ($register)); // Generate long URL/link.
+								$register_link = home_url ("/?s2member_register=" . urlencode ($register)); // Generate long URL/link.
 
 								if ($shrink && ($shorter_url = c_ws_plugin__s2member_utils_urls::shorten ($register_link)))
 									$register_link = $shorter_url . "#" . $_SERVER["HTTP_HOST"];

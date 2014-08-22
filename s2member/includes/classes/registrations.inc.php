@@ -692,13 +692,13 @@ if (!class_exists ("c_ws_plugin__s2member_registrations"))
 																if (($transient = "s2m_" . md5 ("s2member_transient_ipn_subscr_payment_" . $subscr_id)) && is_array($subscr_payment = get_transient ($transient)) && !empty($subscr_payment["subscr_gateway"]))
 																	{
 																		$proxy = array("s2member_paypal_proxy" => stripslashes ((string)$subscr_payment["subscr_gateway"]), "s2member_paypal_proxy_verification" => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen ());
-																		c_ws_plugin__s2member_utils_urls::remote (site_url ("/?s2member_paypal_notify=1"), array_merge(stripslashes_deep ($subscr_payment), $proxy), array("timeout" => 20));
+																		c_ws_plugin__s2member_utils_urls::remote (home_url ("/?s2member_paypal_notify=1"), array_merge(stripslashes_deep ($subscr_payment), $proxy), array("timeout" => 20));
 																		delete_transient ($transient); // This can be deleted now.
 																	}
 																if (($transient = "s2m_" . md5 ("s2member_transient_ipn_subscr_eot_" . $subscr_id)) && is_array($subscr_eot = get_transient ($transient)) && !empty($subscr_eot["subscr_gateway"]))
 																	{
 																		$proxy = array("s2member_paypal_proxy" => stripslashes ((string)$subscr_eot["subscr_gateway"]), "s2member_paypal_proxy_verification" => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen ());
-																		c_ws_plugin__s2member_utils_urls::remote (site_url ("/?s2member_paypal_notify=1"), array_merge(stripslashes_deep ($subscr_eot), $proxy), array("timeout" => 20));
+																		c_ws_plugin__s2member_utils_urls::remote (home_url ("/?s2member_paypal_notify=1"), array_merge(stripslashes_deep ($subscr_eot), $proxy), array("timeout" => 20));
 																		delete_transient ($transient); // This can be deleted now.
 																	}
 																if (!headers_sent ()) // Only if headers are NOT yet sent. Here we establish both Signup and Payment Tracking Cookies.

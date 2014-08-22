@@ -1371,7 +1371,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see `Dashboard -› s2Member -› General Options -› Profile Modifications`
 						*/
 						if (!defined ("S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL"))
-							define ("S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL", ($c[] = (string)site_url ("/?s2member_profile=1")));
+							define ("S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL", ($c[] = (string)home_url ("/?s2member_profile=1")));
 						/**
 						* A URL, which leads to the Download Limit Exceeded Page; as configured by the site owner.
 						*
@@ -1859,7 +1859,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see `Dashboard -› s2Member -› PayPal Options -› IPN Integration`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_NOTIFY_URL"))
-							define ("S2MEMBER_PAYPAL_NOTIFY_URL", ($c[] = (string)site_url ("/?s2member_paypal_notify=1")));
+							define ("S2MEMBER_PAYPAL_NOTIFY_URL", ($c[] = (string)home_url ("/?s2member_paypal_notify=1")));
 						/**
 						* Full URL to PayPal Auto-Return/PDT handler, provided by s2Member.
 						*
@@ -1887,7 +1887,7 @@ if (!class_exists ("c_ws_plugin__s2member_constants"))
 						* @see `Dashboard -› s2Member -› PayPal Options -› Auto-Return/PDT Integration`
 						*/
 						if (!defined ("S2MEMBER_PAYPAL_RETURN_URL"))
-							define ("S2MEMBER_PAYPAL_RETURN_URL", ($c[] = (string)site_url ("/?s2member_paypal_return=1")));
+							define ("S2MEMBER_PAYPAL_RETURN_URL", ($c[] = (string)home_url ("/?s2member_paypal_return=1")));
 						/**
 						* PayPal Business Email Address; as configured by the site owner.
 						*
