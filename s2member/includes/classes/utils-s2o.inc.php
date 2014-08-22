@@ -60,7 +60,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_s2o"))
 				* @param string $o_file Location of calling `*-o.php` file.
 				* @return str|bool WordPress settings, else false on failure.
 				*/
-				public static function wp_settings_as ($wp_dir = FALSE, $o_file = FALSE)
+				public static function wp_settings_as ($wp_dir = '', $o_file = '')
 					{
 						if ($wp_dir && is_dir ($wp_dir) && is_readable (($wp_settings = $wp_dir . "/wp-settings.php")) && $o_file && file_exists ($o_file) && ($_wp_settings = trim (file_get_contents ($wp_settings))))
 							{
