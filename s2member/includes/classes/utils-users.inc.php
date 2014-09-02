@@ -14,10 +14,10 @@
  * @package s2Member\Utilities
  * @since 3.5
  */
-if(realpath(__FILE__) === realpath($_SERVER["SCRIPT_FILENAME"]))
-	exit ("Do not access this file directly.");
+if(realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME']))
+	exit ('Do not access this file directly.');
 
-if(!class_exists("c_ws_plugin__s2member_utils_users"))
+if(!class_exists('c_ws_plugin__s2member_utils_users'))
 {
 	/**
 	 * User utilities.
@@ -61,19 +61,20 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 		 */
 		public static function get_user_custom_with($subscr_txn_baid_cid_id = '', $os0 = '')
 		{
-			global $wpdb; /** @var wpdb $wpdb */
+			global $wpdb;
+			/** @var wpdb $wpdb */
 
 			if($subscr_txn_baid_cid_id && $os0) // This case includes some additional routines that can use the ``$os0`` value.
 			{
 				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND (`meta_value` = '".esc_sql($subscr_txn_baid_cid_id)."' OR `meta_value` = '".esc_sql($os0)."') LIMIT 1"))
 				   || ($q = $wpdb->get_row("SELECT `ID` AS `user_id` FROM `".$wpdb->users."` WHERE `ID` = '".esc_sql($os0)."' LIMIT 1"))
-				) if(($custom = get_user_option("s2member_custom", $q->user_id)))
+				) if(($custom = get_user_option('s2member_custom', $q->user_id)))
 					return $custom;
 			}
 			else if($subscr_txn_baid_cid_id) // Otherwise, if all we have is a Subscr./Txn. ID value.
 			{
 				if(($q = $wpdb->get_row("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE (`meta_key` = '".$wpdb->prefix."s2member_subscr_id' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_baid' OR `meta_key` = '".$wpdb->prefix."s2member_subscr_cid' OR `meta_key` = '".$wpdb->prefix."s2member_first_payment_txn_id') AND `meta_value` = '".esc_sql($subscr_txn_baid_cid_id)."' LIMIT 1")))
-					if(($custom = get_user_option("s2member_custom", $q->user_id)))
+					if(($custom = get_user_option('s2member_custom', $q->user_id)))
 						return $custom;
 			}
 			return FALSE; // Otherwise, return false.
@@ -165,13 +166,13 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 			   || (!$user_id && !$subscr_txn_baid_cid_id && is_object($user = wp_get_current_user()) && !empty($user->ID) && ($user_id = $user->ID))
 			)
 			{
-				$_subscr_baid = get_user_option("s2member_subscr_baid", $user_id);
-				$_subscr_cid  = get_user_option("s2member_subscr_cid", $user_id);
-				$_subscr_id   = get_user_option("s2member_subscr_id", $user_id);
+				$_subscr_baid = get_user_option('s2member_subscr_baid', $user_id);
+				$_subscr_cid  = get_user_option('s2member_subscr_cid', $user_id);
+				$_subscr_id   = get_user_option('s2member_subscr_id', $user_id);
 
 				if($_subscr_id && (!$subscr_txn_baid_cid_id || $subscr_txn_baid_cid_id === $_subscr_id || $subscr_txn_baid_cid_id === $_subscr_baid || $subscr_txn_baid_cid_id === $_subscr_cid))
-					if(is_array($ipn_signup_vars = get_user_option("s2member_ipn_signup_vars", $user_id)))
-						if($ipn_signup_vars["subscr_id"] === $_subscr_id)
+					if(is_array($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id)))
+						if($ipn_signup_vars['subscr_id'] === $_subscr_id)
 							return $ipn_signup_vars;
 			}
 			return FALSE; // Otherwise, return false.
@@ -223,7 +224,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 			   || (!func_num_args() && (!is_object($user = (is_user_logged_in()) ? wp_get_current_user() : FALSE) || empty($user->ID)))
 			) return FALSE; // The ``$user`` was passed in but is NOT an object; or nobody is logged in.
 
-			return ($subscr_id = get_user_option("s2member_subscr_id", $user->ID)) ? $subscr_id : $user->ID;
+			return ($subscr_id = get_user_option('s2member_subscr_id', $user->ID)) ? $subscr_id : $user->ID;
 		}
 
 		/**
@@ -334,39 +335,42 @@ if(!class_exists("c_ws_plugin__s2member_utils_users"))
 				else if(isset ($user->data->{$wpdb->prefix.$field_id}))
 					return $user->data->{$wpdb->prefix.$field_id};
 
-				else if(strcasecmp($field_id, "full_name") === 0)
-					return trim($user->first_name." ".$user->last_name);
+				else if(strcasecmp($field_id, 'full_name') === 0)
+					return trim($user->first_name.' '.$user->last_name);
 
-				else if(preg_match("/^(email|user_email)$/i", $field_id))
+				else if(preg_match('/^(email|user_email)$/i', $field_id))
 					return $user->user_email;
 
-				else if(preg_match("/^(login|user_login)$/i", $field_id))
+				else if(preg_match('/^(login|user_login)$/i', $field_id))
 					return $user->user_login;
 
-				else if(strcasecmp($field_id, "s2member_access_role") === 0)
+				else if(preg_match('/^(s2member_)?registration_time$/i', $field_id))
+					return $user->user_registered;
+
+				else if(strcasecmp($field_id, 's2member_access_role') === 0)
 					return c_ws_plugin__s2member_user_access::user_access_role($user);
 
-				else if(strcasecmp($field_id, "s2member_access_level") === 0)
+				else if(strcasecmp($field_id, 's2member_access_level') === 0)
 					return c_ws_plugin__s2member_user_access::user_access_level($user);
 
-				else if(strcasecmp($field_id, "s2member_access_label") === 0)
+				else if(strcasecmp($field_id, 's2member_access_label') === 0)
 					return c_ws_plugin__s2member_user_access::user_access_label($user);
 
-				else if(strcasecmp($field_id, "s2member_access_ccaps") === 0)
+				else if(strcasecmp($field_id, 's2member_access_ccaps') === 0)
 					return c_ws_plugin__s2member_user_access::user_access_ccaps($user);
 
-				else if(strcasecmp($field_id, "ip") === 0 && is_object($current_user) && !empty($current_user->ID) && $current_user->ID === ($user_id = $user->ID))
-					return $_SERVER["REMOTE_ADDR"];
+				else if(strcasecmp($field_id, 'ip') === 0 && is_object($current_user) && !empty($current_user->ID) && $current_user->ID === ($user_id = $user->ID))
+					return $_SERVER['REMOTE_ADDR'];
 
-				else if(strcasecmp($field_id, "s2member_registration_ip") === 0 || strcasecmp($field_id, "reg_ip") === 0 || strcasecmp($field_id, "ip") === 0)
-					return get_user_option("s2member_registration_ip", $user_id);
+				else if(strcasecmp($field_id, 's2member_registration_ip') === 0 || strcasecmp($field_id, 'reg_ip') === 0 || strcasecmp($field_id, 'ip') === 0)
+					return get_user_option('s2member_registration_ip', $user_id);
 
-				else if(strcasecmp($field_id, "s2member_subscr_or_wp_id") === 0)
-					return ($subscr_id = get_user_option("s2member_subscr_id", $user_id)) ? $subscr_id : $user_id;
+				else if(strcasecmp($field_id, 's2member_subscr_or_wp_id') === 0)
+					return ($subscr_id = get_user_option('s2member_subscr_id', $user_id)) ? $subscr_id : $user_id;
 
-				else if(is_array($fields = get_user_option("s2member_custom_fields", $user_id)))
-					if(isset ($fields[preg_replace("/[^a-z0-9]/i", "_", strtolower($field_id))]))
-						return $fields[preg_replace("/[^a-z0-9]/i", "_", strtolower($field_id))];
+				else if(is_array($fields = get_user_option('s2member_custom_fields', $user_id)))
+					if(isset ($fields[preg_replace('/[^a-z0-9]/i', '_', strtolower($field_id))]))
+						return $fields[preg_replace('/[^a-z0-9]/i', '_', strtolower($field_id))];
 			}
 			return FALSE; // Otherwise, return false.
 		}
