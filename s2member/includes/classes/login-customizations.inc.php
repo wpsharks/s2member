@@ -119,6 +119,7 @@ if(!class_exists('c_ws_plugin__s2member_login_customizations'))
 
 			$a[] = 'div#login form p { margin:2px 0 16px 0'.$i.'; }'; // Handles paragraph margins inside the form.
 			$a[] = 'div#login form input[type="text"], div#login form input[type="email"], div#login form input[type="password"], div#login form textarea, div#login form select { margin:0'.$i.'; padding:3px'.$i.'; border-radius:3px'.$i.'; box-sizing:border-box'.$i.'; width:100%'.$i.'; background:#FBFBFB repeat scroll 0 0'.$i.'; border:1px solid #E5E5E5'.$i.'; font-size:'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_reg_font_field_size'].$i.'; font-weight:normal'.$i.'; color:#333333'.$i.'; }';
+			$a[] = '@supports (-moz-appearance: none){ div#login form select { font-size:'.min((integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_reg_font_field_size'], 15).'px'.$i.'; } }'; // Mozilla doesn't like the larger font size. This corrects that issue in Firefox.
 			$a[] = 'div#login form label { cursor:pointer'.$i.'; } div#login form label.ws-plugin--s2member-custom-reg-field-op-l { opacity:0.7'.$i.'; font-size:90%'.$i.'; vertical-align:middle'.$i.'; }';
 			$a[] = 'div#login form input[type="checkbox"], div#login form input[type="radio"] { margin:0 3px 0 0'.$i.'; vertical-align:middle'.$i.'; }';
 			$a[] = 'div#login form input#ws-plugin--s2member-custom-reg-field-user-pass2[type="password"] { margin-top:5px'.$i.'; }';
