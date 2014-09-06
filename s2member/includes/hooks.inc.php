@@ -55,6 +55,7 @@ add_action('init', 'c_ws_plugin__s2member_login_checks::monitor_simultaneous_log
 add_action('admin_init', 'c_ws_plugin__s2member_menu_pages::log_file_downloader');
 add_action('admin_init', 'c_ws_plugin__s2member_menu_pages::logs_zip_downloader');
 
+add_filter('bbp_has_replies_query', 'c_ws_plugin__s2member_querys::_bbp_flag_has_replies');
 add_action('pre_get_posts', 'c_ws_plugin__s2member_security::security_gate_query', 100);
 
 add_action('wp', 'c_ws_plugin__s2member_ssl::check_force_ssl', 1);

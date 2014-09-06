@@ -83,25 +83,29 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 		 *
 		 * @todo Make it possible to force filtering, even when used in combination with Query Conditionals and ``get_posts()``, which auto-supresses.
 		 *   Or, perhaps strengthen the existing ``$force`` parameter in this regard.
+		 *
+		 * @see Workaround for bbPress and the `s` key. See: <http://bit.ly/1obLpv4>
 		 */
 		public static function query_level_access(&$wp_query = NULL, $force = FALSE)
 		{
 			global $wpdb; // Global DB object reference.
 			static $initial_query = TRUE; // Tracks the initial query.
-			c_ws_plugin__s2member_querys::$current_wp_query = & $wp_query;
+			c_ws_plugin__s2member_querys::$current_wp_query = &$wp_query;
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_query_level_access', get_defined_vars());
 			unset($__refs, $__v); // Housekeeping.
 
-			c_ws_plugin__s2member_querys::_query_level_access_sys($wp_query); // Systematics.
+			if(is_object($wp_query) && !$wp_query->get('___s2_is_bbp_has_replies'))
+				// Workaround for bbPress and the `s` key. See: <http://bit.ly/1obLpv4>
+				c_ws_plugin__s2member_querys::_query_level_access_sys($wp_query); // Systematics.
 
 			remove_filter('comment_feed_where', 'c_ws_plugin__s2member_querys::_query_level_access_coms', 100, 2);
 			remove_filter('wp_get_nav_menu_items', 'c_ws_plugin__s2member_querys::_query_level_access_navs', 100);
 
 			if(is_object($wpdb) && is_object($wp_query) && (($o = $GLOBALS['WS_PLUGIN__']['s2member']['o']['filter_wp_query']) || $force))
 			{
-				if(!is_admin() || c_ws_plugin__s2member_querys::_is_admin_ajax_search($wp_query))
+				if((!is_admin() || c_ws_plugin__s2member_querys::_is_admin_ajax_search($wp_query)) && !$wp_query->get('___s2_is_bbp_has_replies') /* See: <http://bit.ly/1obLpv4> */)
 				{
 					$suppressing_filters = $wp_query->get('suppress_filters'); // Filter suppression on?
 					if(!$suppressing_filters && $force // Forcing this routine bypasses all of these other conditionals. Works with API function ``attach_s2member_query_filters()``.
@@ -305,7 +309,7 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 		public static function _query_level_access_navs($items = array())
 		{
 			global $wpdb; // Global DB object reference.
-			$wp_query = & c_ws_plugin__s2member_querys::$current_wp_query;
+			$wp_query = &c_ws_plugin__s2member_querys::$current_wp_query;
 
 			if(is_array($items) && !empty($items) && is_object($wpdb) && is_object($wp_query) && $wp_query->get('suppress_filters') !== 'n/a')
 			{
@@ -403,7 +407,26 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 				else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_pages'] && !current_user_can('access_s2member_level'.$n))
 					$excludes = array_merge($excludes, c_ws_plugin__s2member_utils_arrays::force_integers(preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_pages'])));
 			}
-			return $excludes;
+			return apply_filters('_ws_plugin__s2member_query_level_access_list_pages', $excludes, get_defined_vars());
+		}
+
+		/**
+		 * Flags a WP Query has being a `bbp_has_replies()` query.
+		 *
+		 * @package s2Member\Queries
+		 * @since 140906
+		 *
+		 * @attaches-to ``add_filter('bbp_has_replies_query');``
+		 *
+		 * @param array $args Query arguments passed by the filter.
+		 *
+		 * @return array The array of ``$args``.
+		 *
+		 * @see Workaround for bbPress and the `s` key. See: <http://bit.ly/1obLpv4>
+		 */
+		public static function _bbp_flag_has_replies($args)
+		{
+			return array_merge($args, array('___s2_is_bbp_has_replies' => TRUE));
 		}
 	}
 }
