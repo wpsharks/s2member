@@ -33,13 +33,18 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 		 * @package s2Member\Utilities
 		 * @since 3.5
 		 *
-		 * @uses {@link http://codex.wordpress.org/Function_Reference/get_all_category_ids get_all_category_ids()}
+		 * @uses {@link http://codex.wordpress.org/Function_Reference/get_terms get_terms()}
 		 *
 		 * @return array Unique array of all Category IDs *(as integers)*.
 		 */
 		public static function get_all_category_ids()
 		{
-			if(is_array($category_ids = get_all_category_ids())) // Use a WP function for this.
+			if(!($category_ids = wp_cache_get('all_category_ids', 'category')))
+			{
+				$category_ids = get_terms('category', array('fields' => 'ids', 'get' => 'all'));
+				wp_cache_add('all_category_ids', $category_ids, 'category');
+			}
+			if(is_array($category_ids)) // Use a WP function for this.
 				$category_ids = c_ws_plugin__s2member_utils_arrays::force_integers((array)$category_ids);
 
 			return (!empty($category_ids) && is_array($category_ids)) ? array_unique($category_ids) : array();
