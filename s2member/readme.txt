@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 140816
-Stable tag: 140816
+Version: 140909
+Stable tag: 140909
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -159,11 +159,25 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v140816 =
+= v140909 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v140909 =
+
+- (s2Member/s2Member Pro) **Compatibility:** Several instances of `site_url()` (a WordPress core function) have been converted to `home_url()` instead. This provides better compatibility with WordPress installations running from a sub-directory. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/293) if you'd like further details.
+- (s2Member Pro) **Bug Fix:** Ampersands; i.e. `&` symbols in a ClickBank button `desc=""` attribute are now converted to the word `and` automatically. The symbol itself causes issues in ClickBank's IPN processing. Fixed in this release. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/253) if you'd like further details.
+- (s2Member) **Bug Fix:** Improving compatibility with Mozilla/Firefox for the default `wp-login.php?action=register` handler. This release corrects an issue where `<select>` fields contained text with too large a font-size for Mozilla browsers to deal with. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/244) if you'd like further details.
+- (s2Member) **WP v4.0 / bbPress Compat.** A conflict between WordPress v4.0, bbPress v2.5.4 and the previous release of s2Member has been resolved. A symptom of this issue was to see the leading topic post missing from your bbPress forum threads.
+
+  This was a complex issue related to changes in the most recent copy of WordPress where `WP_Query::$is_search` is flagged as `TRUE` when the `s` key `isset()` instead of `!empty()`. s2Member has implemented a workaround so that the conflict will no longer cause this problem for site owners running s2Member/bbPress.
+
+  However, please note that some other 3rd-party plugins may still conflict in this way; when running the latest version of bbPress under WordPress v4.0. We are working to notify bbPress and other plugin authors about this issue; just to help others avoid the problem. While unconfirmed, some site owners reported that the Relevanssi search plugin may have some trouble with this also.
+  For further details, please see <http://bbpress.org/?p=151839>. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/321) if you'd like all of the details regarding this workaround in the s2Member software.
+- (s2Member) **WP v4.0 Compat.** Updating s2Member's use of the now-deprecated `get_all_category_ids()`. Using `get_terms()` instead. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/322) if you'd like further details.
+- (s2Member Pro) **Stripe Bug Fix:** This release corrects an issue with Stripe Pro Forms and a `$0` trial period. A symptom of this bug was to find a customer's  Stripe token value missing from their Customer object in the Stripe Dashboard. This issue impacted Pro Forms whenever a 100% free trial was offered (i.e. with a `$0` sale amount). Resolved by this release. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/326) if you'd like the details.
 
 = v140816 =
 
