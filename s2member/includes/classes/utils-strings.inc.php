@@ -559,6 +559,16 @@ if(!class_exists("c_ws_plugin__s2member_utils_strings"))
 							}
 						return str_replace(array("%2D", "%2E", "%5F", "%7E"), array("-", ".", "_", "~"), (string)$value);
 					}
+
+				public static function like_escape($string)
+				{
+					global $wpdb; // Global DB object reference.
+
+					if(method_exists($wpdb, 'esc_like'))
+						return $wpdb->esc_like($string);
+
+					return like_escape($string); // Deprecated in WP v4.0.
+				}
 			}
 	}
 ?>

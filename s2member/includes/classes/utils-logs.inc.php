@@ -187,7 +187,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 
 			if(!$stagger || is_float($stagger = time() / 2)) // Stagger this routine?
 			{
-				if(is_array($expired_s2m_transients = $wpdb->get_results("SELECT * FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(like_escape('_transient_timeout_s2m_'))."%' AND `option_value` < '".esc_sql(time())."' LIMIT 5")) && !empty($expired_s2m_transients))
+				if(is_array($expired_s2m_transients = $wpdb->get_results("SELECT * FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape('_transient_timeout_s2m_'))."%' AND `option_value` < '".esc_sql(time())."' LIMIT 5")) && !empty($expired_s2m_transients))
 				{
 					foreach($expired_s2m_transients as $expired_s2m_transient) // Delete the _timeout, and also the transient entry name itself.
 						if(($id = $expired_s2m_transient->option_id) && ($name = preg_replace('/_transient_timeout_/i', '_transient_', $expired_s2m_transient->option_name, 1)))

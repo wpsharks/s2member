@@ -204,8 +204,8 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
             $transient_entries = $prefix.md5("s2member_ip_restrictions_".(string)$restriction."_entries");
             $transient_security_breach = $prefix.md5("s2member_ip_restrictions_".(string)$restriction."_security_breach");
 
-            $wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '%".esc_sql(like_escape($transient_entries))."'");
-            $wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '%".esc_sql(like_escape($transient_security_breach))."'");
+            $wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '%".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape($transient_entries))."'");
+            $wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '%".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape($transient_security_breach))."'");
 
             do_action("ws_plugin__s2member_after_delete_reset_specific_ip_restrictions", get_defined_vars());
 
@@ -260,8 +260,8 @@ if(!class_exists("c_ws_plugin__s2member_ip_restrictions"))
 
             do_action("ws_plugin__s2member_before_delete_reset_all_ip_restrictions", get_defined_vars());
 
-            $wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(like_escape("_transient_s2m_ipr_"))."%'");
-            $wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(like_escape("_transient_timeout_s2m_ipr_"))."%'");
+            $wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape("_transient_s2m_ipr_"))."%'");
+            $wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape("_transient_timeout_s2m_ipr_"))."%'");
 
             do_action("ws_plugin__s2member_after_delete_reset_all_ip_restrictions", get_defined_vars());
 
