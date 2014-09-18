@@ -246,7 +246,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			/** @var wpdb $wpdb */
 
 			if($user_login && $user_email) // Only if we have both of these.
-				if(($user_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->users."` WHERE `user_login` LIKE '".esc_sql(like_escape($user_login))."' AND `user_email` LIKE '".esc_sql(like_escape($user_email))."' LIMIT 1")))
+				if(($user_id = $wpdb->get_var("SELECT `ID` FROM `".$wpdb->users."` WHERE `user_login` LIKE '".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape($user_login))."' AND `user_email` LIKE '".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape($user_email))."' LIMIT 1")))
 					return $user_id; // Return the associated WordPress ID.
 
 			return FALSE; // Otherwise, return false.

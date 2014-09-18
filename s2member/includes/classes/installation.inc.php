@@ -213,11 +213,11 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 				if(is_multisite() && is_main_site() /* Site options? */)
 					delete_site_option('ws_plugin__s2member_options');
 
-				$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '%".esc_sql(like_escape('s2member_'))."%'");
-				$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(like_escape('_transient_s2m_'))."%'");
-				$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(like_escape('_transient_timeout_s2m_'))."%'");
-				$wpdb->query("DELETE FROM `".$wpdb->postmeta."` WHERE `meta_key` LIKE '%".esc_sql(like_escape('s2member_'))."%'");
-				$wpdb->query("DELETE FROM `".$wpdb->usermeta."` WHERE `meta_key` LIKE '%".esc_sql(like_escape('s2member_'))."%'");
+				$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '%".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape('s2member_'))."%'");
+				$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape('_transient_s2m_'))."%'");
+				$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape('_transient_timeout_s2m_'))."%'");
+				$wpdb->query("DELETE FROM `".$wpdb->postmeta."` WHERE `meta_key` LIKE '%".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape('s2member_'))."%'");
+				$wpdb->query("DELETE FROM `".$wpdb->usermeta."` WHERE `meta_key` LIKE '%".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape('s2member_'))."%'");
 
 				do_action('ws_plugin__s2member_during_uninstall', get_defined_vars());
 			}

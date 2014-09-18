@@ -81,7 +81,7 @@ if (!class_exists ("c_ws_plugin__s2member_users_list"))
 
 						if (is_admin() && !empty($GLOBALS['pagenow']) && $GLOBALS['pagenow'] === 'users.php')
 							if(isset ($query->query_vars) && !is_network_admin ()) // NOT in Network admin panels.
-								if (is_array($qv = $query->query_vars) && ($s = trim ($qv["search"], "* \t\n\r\0\x0B")) && ($s = "%" . esc_sql (like_escape ($s)) . "%"))
+								if (is_array($qv = $query->query_vars) && ($s = trim ($qv["search"], "* \t\n\r\0\x0B")) && ($s = "%" . esc_sql (c_ws_plugin__s2member_utils_strings::like_escape ($s)) . "%"))
 									{
 										$query->query_fields = "SQL_CALC_FOUND_ROWS DISTINCT(`" . $wpdb->users . "`.`ID`)";
 										$query->query_from = " FROM `" . $wpdb->users . "`, `" . $wpdb->usermeta . "`"; // Include meta table also.
