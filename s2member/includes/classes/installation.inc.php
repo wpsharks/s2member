@@ -51,7 +51,7 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 					mkdir($files_dir, 0777, TRUE);
 
 			if(is_dir($files_dir) && is_writable($files_dir))
-				if(!file_exists($htaccess = $files_dir.'/.htaccess') || !apply_filters('ws_plugin__s2member_preserve_files_dir_htaccess', FALSE, get_defined_vars()))
+				if(!is_file($htaccess = $files_dir.'/.htaccess') || !apply_filters('ws_plugin__s2member_preserve_files_dir_htaccess', !is_writable($files_dir.'/.htaccess'), get_defined_vars()))
 					file_put_contents($htaccess, trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($GLOBALS['WS_PLUGIN__']['s2member']['c']['files_dir_htaccess']))));
 
 			c_ws_plugin__s2member_files::write_no_gzip_into_root_htaccess(); // Handle the root `.htaccess` file as well now, for GZIP exclusions.
@@ -61,7 +61,7 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 					mkdir($logs_dir, 0777, TRUE);
 
 			if(is_dir($logs_dir) && is_writable($logs_dir))
-				if(!file_exists($htaccess = $logs_dir.'/.htaccess') || !apply_filters('ws_plugin__s2member_preserve_logs_dir_htaccess', FALSE, get_defined_vars()))
+				if(!is_file($htaccess = $logs_dir.'/.htaccess') || !apply_filters('ws_plugin__s2member_preserve_logs_dir_htaccess', !is_writable($logs_dir.'/.htaccess'), get_defined_vars()))
 					file_put_contents($htaccess, trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir_htaccess']))));
 
 			(!is_array(get_option('ws_plugin__s2member_cache'))) ? update_option('ws_plugin__s2member_cache', array()) : NULL;
