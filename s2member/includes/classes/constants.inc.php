@@ -883,7 +883,7 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			 * @see `$_SERVER['REMOTE_ADDR']`
 			 */
 			if(!defined('S2MEMBER_CURRENT_USER_IP'))
-				define ('S2MEMBER_CURRENT_USER_IP', ($c[] = (string)$_SERVER['REMOTE_ADDR']));
+				define ('S2MEMBER_CURRENT_USER_IP', ($c[] = (string)@$_SERVER['REMOTE_ADDR']));
 
 			/**
 			 * IP Address the current User had during registration.
