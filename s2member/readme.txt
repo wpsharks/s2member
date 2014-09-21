@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 140909
-Stable tag: 140909
+Version: 140921
+Stable tag: 140921
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -159,11 +159,17 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v140909 =
+= v140921 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v140921 =
+
+- (s2Member/s2Member Pro) **WP v4 over SSL Compat.** A compatibility issue with the `home_url()` function in the latest release of WordPress has been resolved with this release. Some site owners reported that their s2Member menu pages were appearing without any CSS/JavaScript being loaded; i.e. the graphical UI was not appearing as one would expect under certain scenarios.
+- (s2Member/s2Member Pro) **WP v4 Compat.** This release brings s2Member up-to-date with the latest changes to the `like_escape()` function in WP v4.0. The `like_escape()` function is now deprecated in favor of `wpdb::esc_like()`. s2Member has been updated in this release, but also remains compatible with previous versions of WordPress. See [this GitHub issue](https://github.com/websharks/s2member/issues/329) if you'd like further details.
+- (s2Member Pro) **[s2MOP /] Shortcode Enhancment** The `[s2MOP /]` shortcode allows for a new `required_value=""` attribute. Please see [this KB article](http://www.s2member.com/kb/s2mop-shortcode/) for details about the `[s2MOP /]` shortcode. See also: [this GitHub issue](https://github.com/websharks/s2member-pro/issues/51) if you'd like further details.
 
 = v140909 =
 

@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  140909\n"
+"Project-Id-Version:  140921\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2014-09-09 20:33:14+00:00\n"
+"POT-Creation-Date: 2014-09-21 09:50:11+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1085,217 +1085,217 @@ msgctxt "s2member-front"
 msgid "(for this site)"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:53
+#: s2member/includes/classes/utils-time.inc.php:55
 msgctxt "s2member-front"
 msgid "less than a minute"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:54
+#: s2member/includes/classes/utils-time.inc.php:56
 msgctxt "s2member-front"
 msgid "1 minute"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:55
+#: s2member/includes/classes/utils-time.inc.php:57
 msgctxt "s2member-front"
 msgid "%s minute"
 msgid_plural "%s minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: s2member/includes/classes/utils-time.inc.php:56
+#: s2member/includes/classes/utils-time.inc.php:58
 msgctxt "s2member-front"
 msgid "about 1 hour"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:62
+#: s2member/includes/classes/utils-time.inc.php:64
 msgctxt "s2member-front"
 msgid "1 hour"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:63
+#: s2member/includes/classes/utils-time.inc.php:65
 msgctxt "s2member-front"
 msgid "%s hour"
 msgid_plural "%s hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: s2member/includes/classes/utils-time.inc.php:64
+#: s2member/includes/classes/utils-time.inc.php:66
 msgctxt "s2member-front"
 msgid "about 1 day"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:70
+#: s2member/includes/classes/utils-time.inc.php:72
 msgctxt "s2member-front"
 msgid "1 day"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:71
+#: s2member/includes/classes/utils-time.inc.php:73
 msgctxt "s2member-front"
 msgid "%s day"
 msgid_plural "%s days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: s2member/includes/classes/utils-time.inc.php:72
+#: s2member/includes/classes/utils-time.inc.php:74
 msgctxt "s2member-front"
 msgid "about 1 week"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:78
+#: s2member/includes/classes/utils-time.inc.php:80
 msgctxt "s2member-front"
 msgid "1 week"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:79
+#: s2member/includes/classes/utils-time.inc.php:81
 msgctxt "s2member-front"
 msgid "%s week"
 msgid_plural "%s weeks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: s2member/includes/classes/utils-time.inc.php:80
+#: s2member/includes/classes/utils-time.inc.php:82
 msgctxt "s2member-front"
 msgid "about 1 month"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:86
+#: s2member/includes/classes/utils-time.inc.php:88
 msgctxt "s2member-front"
 msgid "1 month"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:87
+#: s2member/includes/classes/utils-time.inc.php:89
 msgctxt "s2member-front"
 msgid "%s month"
 msgid_plural "%s months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: s2member/includes/classes/utils-time.inc.php:88
+#: s2member/includes/classes/utils-time.inc.php:90
 msgctxt "s2member-front"
 msgid "about 1 year"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:94
+#: s2member/includes/classes/utils-time.inc.php:96
 msgctxt "s2member-front"
 msgid "1 year"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:95
+#: s2member/includes/classes/utils-time.inc.php:97
 msgctxt "s2member-front"
 msgid "%s year"
 msgid_plural "%s years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: s2member/includes/classes/utils-time.inc.php:233
+#: s2member/includes/classes/utils-time.inc.php:241
 msgctxt "s2member-front"
 msgid "Daily"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:233
+#: s2member/includes/classes/utils-time.inc.php:241
 msgctxt "s2member-front"
 msgid "Weekly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:233
+#: s2member/includes/classes/utils-time.inc.php:241
 msgctxt "s2member-front"
 msgid "Monthly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:233
+#: s2member/includes/classes/utils-time.inc.php:241
 msgctxt "s2member-front"
 msgid "Yearly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:233
-#: s2member/includes/classes/utils-time.inc.php:244
+#: s2member/includes/classes/utils-time.inc.php:241
+#: s2member/includes/classes/utils-time.inc.php:252
 msgctxt "s2member-front"
 msgid "Lifetime"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:237
+#: s2member/includes/classes/utils-time.inc.php:245
 msgctxt "s2member-front"
 msgid "Bi-Weekly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:238
+#: s2member/includes/classes/utils-time.inc.php:246
 msgctxt "s2member-front"
 msgid "Bi-Monthly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:239
+#: s2member/includes/classes/utils-time.inc.php:247
 msgctxt "s2member-front"
 msgid "Quarterly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:240
+#: s2member/includes/classes/utils-time.inc.php:248
 msgctxt "s2member-front"
 msgid "Semi-Yearly"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:244
+#: s2member/includes/classes/utils-time.inc.php:252
 msgctxt "s2member-front"
 msgid "Day"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:244
+#: s2member/includes/classes/utils-time.inc.php:252
 msgctxt "s2member-front"
 msgid "Week"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:244
+#: s2member/includes/classes/utils-time.inc.php:252
 msgctxt "s2member-front"
 msgid "Month"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:244
+#: s2member/includes/classes/utils-time.inc.php:252
 msgctxt "s2member-front"
 msgid "Year"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:250
+#: s2member/includes/classes/utils-time.inc.php:258
 msgctxt "s2member-front"
 msgid "Days"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:250
+#: s2member/includes/classes/utils-time.inc.php:258
 msgctxt "s2member-front"
 msgid "Weeks"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:250
+#: s2member/includes/classes/utils-time.inc.php:258
 msgctxt "s2member-front"
 msgid "Months"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:250
+#: s2member/includes/classes/utils-time.inc.php:258
 msgctxt "s2member-front"
 msgid "Years"
 msgstr ""
 
-#: s2member/includes/classes/utils-time.inc.php:250
+#: s2member/includes/classes/utils-time.inc.php:258
 msgctxt "s2member-front"
 msgid "Lifetimes"
 msgstr ""
 
 #. translators: Each cycle ( i.e. `each day/week/month` or `every 2
 #. days/weeks/months`, etc. ). Cycles are translated elsewhere.
-#: s2member/includes/classes/utils-time.inc.php:285
-#: s2member/includes/classes/utils-time.inc.php:326
+#: s2member/includes/classes/utils-time.inc.php:295
+#: s2member/includes/classes/utils-time.inc.php:338
 msgctxt "s2member-front"
 msgid "each %2$s"
 msgid_plural "every %1$s %3$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: s2member/includes/classes/utils-time.inc.php:288
+#: s2member/includes/classes/utils-time.inc.php:298
 msgctxt "s2member-front"
 msgid "lifetime"
 msgstr ""
 
 #. translators: Membership cycle ( i.e. `1 day/week/month` or `2
 #. days/weeks/months`, etc. ). Most of this is translated elsewhere.
-#: s2member/includes/classes/utils-time.inc.php:292
+#: s2member/includes/classes/utils-time.inc.php:302
 msgctxt "s2member-front"
 msgid "%1$s %2$s"
 msgid_plural "%1$s %3$s"
@@ -1304,7 +1304,7 @@ msgstr[1] ""
 
 #. translators: Cycle ( i.e. `for 1 day/week/month` or `for 2
 #. days/weeks/months`, etc. ). Most of this is translated elsewhere.
-#: s2member/includes/classes/utils-time.inc.php:333
+#: s2member/includes/classes/utils-time.inc.php:345
 msgctxt "s2member-front"
 msgid "for %1$s %2$s"
 msgid_plural "for %1$s %3$s"
