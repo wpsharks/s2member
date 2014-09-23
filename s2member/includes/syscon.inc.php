@@ -562,7 +562,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 				else if($key === 'specific_ids' && (!is_string($value) || !($value = trim(preg_replace('/[^0-9,]/', '', $value), ','))))
 					$value = $default_options[$key];
 
-				else if($key === 'triggers_immediate_eot' && (!is_string($value) || !preg_match('/^(?:none|refunds|reversals|refunds,reversals)$/', $value)))
+				else if($key === 'triggers_immediate_eot' && (!is_string($value) || !preg_match('/^(?:none|refunds|reversals|refunds,reversals|refunds,partial_refunds,reversals)$/', $value)))
 					$value = $default_options[$key];
 
 				else if($key === 'membership_eot_behavior' && (!is_string($value) || !preg_match('/^(?:demote|delete)$/', $value)))
