@@ -586,6 +586,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 			$GLOBALS['WS_PLUGIN__']['s2member']['o']['options_checksum'] = md5($checksum_prefix.serialize(array_merge($GLOBALS['WS_PLUGIN__']['s2member']['o'], array('options_checksum' => 0))));
 		}
+		$GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in_label'] = _x($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in_label'], 's2member-front', 's2member');
+
 		return apply_filters_ref_array('ws_plugin__s2member_options', array(&$GLOBALS['WS_PLUGIN__']['s2member']['o']));
 	}
 }
