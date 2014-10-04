@@ -25,7 +25,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 	 * @since 141004
 	 * @package s2Member\List_Servers
 	 */
-	class c_ws_plugin__s2member_mailchimp
+	class c_ws_plugin__s2member_mailchimp extends c_ws_plugin__s2member_list_server_base
 	{
 		/**
 		 * Subscribe.
@@ -39,19 +39,8 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		 */
 		public static function subscribe($args)
 		{
-			$defaults = array(
-				'role'          => '',
-				'level'         => '',
-				'login'         => '',
-				'pass'          => '',
-				'email'         => '',
-				'fname'         => '',
-				'lname'         => '',
-				'ip'            => '',
-				'opt_in'        => FALSE,
-				'double_opt_in' => FALSE,
-				'user_id'       => 0
-			);
+			if(!($args = self::validate_args($args)))
+				return FALSE; // Invalid args.
 		}
 
 		/**
@@ -66,18 +55,8 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		 */
 		public static function unsubscribe($args)
 		{
-			$defaults = array(
-				'role'    => '',
-				'level'   => '',
-				'login'   => '',
-				'pass'    => '',
-				'email'   => '',
-				'fname'   => '',
-				'lname'   => '',
-				'ip'      => '',
-				'opt_out' => FALSE,
-				'user_id' => 0
-			);
+			if(!($args = self::validate_args($args)))
+				return FALSE; // Invalid args.
 		}
 
 		/**
@@ -93,19 +72,11 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		 */
 		public static function transition($old_args, $new_args)
 		{
-			$defaults = array(
-				'role'          => '',
-				'level'         => '',
-				'login'         => '',
-				'pass'          => '',
-				'email'         => '',
-				'fname'         => '',
-				'lname'         => '',
-				'ip'            => '',
-				'opt_in'        => FALSE,
-				'double_opt_in' => FALSE,
-				'user_id'       => 0
-			);
+			if(!($old_args = self::validate_args($old_args)))
+				return FALSE; // Invalid args.
+
+			if(!($new_args = self::validate_args($new_args)))
+				return FALSE; // Invalid args.
 		}
 	}
 }
