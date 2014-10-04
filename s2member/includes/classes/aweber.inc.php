@@ -1,6 +1,6 @@
 <?php
 /**
- * MailChimp
+ * AWeber
  *
  * Copyright: © 2009-2011
  * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -17,15 +17,15 @@
 if(realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME']))
 	exit('Do not access this file directly.');
 
-if(!class_exists('c_ws_plugin__s2member_mailchimp'))
+if(!class_exists('c_ws_plugin__s2member_aweber'))
 {
 	/**
-	 * MailChimp
+	 * AWeber
 	 *
 	 * @since 141004
 	 * @package s2Member\List_Servers
 	 */
-	class c_ws_plugin__s2member_mailchimp
+	class c_ws_plugin__s2member_aweber
 	{
 		/**
 		 * Subscribe.
