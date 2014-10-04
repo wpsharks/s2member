@@ -41,7 +41,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		{
 			$defaults = array(
 				'role'          => '',
-				'level'         => 0,
+				'level'         => '',
 				'login'         => '',
 				'pass'          => '',
 				'email'         => '',
@@ -68,7 +68,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		{
 			$defaults = array(
 				'role'    => '',
-				'level'   => 0,
+				'level'   => '',
 				'login'   => '',
 				'pass'    => '',
 				'email'   => '',
@@ -95,7 +95,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		{
 			$defaults = array(
 				'role'          => '',
-				'level'         => 0,
+				'level'         => '',
 				'login'         => '',
 				'pass'          => '',
 				'email'         => '',
