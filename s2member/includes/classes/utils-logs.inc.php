@@ -28,10 +28,183 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 	class c_ws_plugin__s2member_utils_logs
 	{
 		/**
+		 * Logs an entry.
+		 *
+		 * @since 130315
+		 * @package s2Member\Utilities
+		 *
+		 * @param string $slug The file name; i.e. a slug.
+		 *    e.g. `mailchimp-api`, `s2-http-api-debug`.
+		 *
+		 * @param mixed  $data The data to log.
+		 */
+		public static function log_entry($slug, $data)
+		{
+			if(!($slug = trim((string)$slug)))
+				return; // Not possible.
+
+			if(!$data) return; // Nothing to log.
+
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs'])
+				return; // Nothing to do; logging not enabled right now.
+
+			if(!is_dir($logs_dir = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir']))
+				return; // Log directory does not exist at this time.
+
+			if(!is_writable($logs_dir)) return; // Not writable.
+
+			$logt = c_ws_plugin__s2member_utilities::time_details();
+			$logv = c_ws_plugin__s2member_utilities::ver_details();
+			$logm = c_ws_plugin__s2member_utilities::mem_details();
+
+			$log4 = ''; // Initialize.
+			if(is_multisite() && !is_main_site()) // Child blog in a multisite network?
+				$log4 .= $GLOBALS['current_blog']->domain.$GLOBALS['current_blog']->path."\n";
+			$log4 .= @$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI']."\n";
+			$log4 .= 'User-Agent: '.@$_SERVER['HTTP_USER_AGENT'];
+
+			$log2 = $slug.'-api.log'; // Initialize.
+			if(is_multisite() && !is_main_site()) // Child blog in a multisite network?
+				$log2 = $slug.'-api-4-'.trim(preg_replace('/[^a-z0-9]/i', '-', $GLOBALS['current_blog']->domain.$GLOBALS['current_blog']->path), '-').'.log';
+
+			c_ws_plugin__s2member_utils_logs::archive_oversize_log_files();
+
+			file_put_contents($logs_dir.'/'.$log2,
+			                  'LOG ENTRY: '.$logt."\n".$logv."\n".$logm."\n".$log4."\n".
+			                  c_ws_plugin__s2member_utils_logs::conceal_private_info(print_r($data, TRUE))."\n\n",
+			                  FILE_APPEND); // Append to an existing log file; if exists.
+		}
+
+		/**
+		 * Logs HTTP communication (if enabled).
+		 *
+		 * @since 120212
+		 * @package s2Member\Utilities
+		 *
+		 * @attaches-to `http_api_debug` hook.
+		 *
+		 * @param mixed $response Passed by action.
+		 * @param mixed $state Passed by action.
+		 * @param mixed $class Passed by action.
+		 * @param mixed $args Passed by action.
+		 * @param mixed $url Passed by action.
+		 */
+		public static function http_api_debug($response = NULL, $state = NULL, $class = NULL, $args = NULL, $url = NULL)
+		{
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs'])
+				return; // Logging is NOT enabled in this case.
+
+			$http_api_debug = array(
+				'state' => $state, 'transport_class' => $class,
+				'args'  => $args, 'url' => $url, 'response' => $response
+			);
+			if(!empty($args['s2member']) || strpos($url, 's2member') !== FALSE)
+				self::log_entry('s2-http-api-debug', $http_api_debug);
+
+			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs_extensive'])
+				self::log_entry('wp-http-api-debug', $http_api_debug);
+		}
+
+		/**
+		 * Attempts to conceal private details in log entries.
+		 *
+		 * @since 130315
+		 * @package s2Member\Utilities
+		 *
+		 * @param string $log_entry The log entry we need to conceal private details in.
+		 *
+		 * @return string Filtered string with some data X'd out :-)
+		 */
+		public static function conceal_private_info($log_entry)
+		{
+			if(!($log_entry = trim((string)$log_entry)))
+				return $log_entry; // Nothing to do.
+
+			$log_entry = preg_replace('/\b([3456][0-9]{10,11})([0-9]{4})\b/', 'xxxxxxxxxxxx'.'$2', $log_entry);
+
+			$log_entry = preg_replace('/(\'.*pass_?(?:word)?(?:[0-9]+)?\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/pass'.'$3', $log_entry);
+			$log_entry = preg_replace('/([&?][^&]*pass_?(?:word)?(?:[0-9]+)?\=)([^&]+)/', '$1'.'xxxxxxxx/pass', $log_entry);
+
+			$log_entry = preg_replace('/(\'api_?(?:key|secret)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/api/key/sec'.'$3', $log_entry);
+			$log_entry = preg_replace('/([&?][^&]api_?(?:key|secret)\=)([^&]+)/', '$1'.'xxxxxxxx/api/key/sec', $log_entry);
+
+			$log_entry = preg_replace('/(\'(?:PWD|SIGNATURE)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/PWD/SIG'.'$3', $log_entry);
+			$log_entry = preg_replace('/([&?][^&](?:PWD|SIGNATURE)\=)([^&]+)/', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
+
+			$log_entry = preg_replace('/(\'(?:x_login|x_tran_key)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/key/tran'.'$3', $log_entry);
+			$log_entry = preg_replace('/([&?][^&](?:x_login|x_tran_key)\=)([^&]+)/', '$1'.'xxxxxxxx/key/tran', $log_entry);
+
+			return $log_entry; // With some private info concealed now.
+		}
+
+		/**
+		 * Archives logs to prevent HUGE files from building up over time.
+		 *
+		 * @since 3.5
+		 * @package s2Member\Utilities
+		 *
+		 * @param bool $stagger Defaults to a `TRUE` value.
+		 *
+		 * @return bool Always returns a `TRUE` value.
+		 */
+		public static function archive_oversize_log_files($stagger = TRUE)
+		{
+			if($stagger && !is_float($stagger = time() / 2))
+				return TRUE; // Bypass this time.
+
+			if(!is_dir($dir = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir']) || !is_writable($dir))
+				return TRUE; // Not necessary; directory is nonexistent or not writable.
+
+			if(!($log_files = scandir($dir)) || !shuffle($log_files))
+				return TRUE; // No files; not necessary.
+
+			$counter = 1; // Initialize archiving counter.
+			$max     = apply_filters('ws_plugin__s2member_oversize_log_file_bytes', 2097152, get_defined_vars());
+
+			foreach($log_files as $file) // Go through each log file. Up to 25 files at a time.
+			{
+				if(preg_match('/\.log$/i', $file) && !preg_match('/\-ARCHIVED\-/i', $file) && is_file($dir_file = $dir.'/'.$file))
+					if(filesize($dir_file) > $max && is_writable($dir_file)) // The file must be writable.
+						if($log = preg_replace('/\.log$/i', '', $dir_file)) // Strip .log before renaming.
+							rename($dir_file, $log.'-ARCHIVED-'.date('m-d-Y').'-'.time().'.log');
+
+				if(($counter = $counter + 1) > 25) // Up to 25 files at a time.
+					break; // Stop for now.
+			}
+			return TRUE; // Always returns a `TRUE` value.
+		}
+
+		/**
+		 * Removes expired Transients inserted into the database by s2Member.
+		 *
+		 * @since 3.5
+		 * @package s2Member\Utilities
+		 *
+		 * @param bool $stagger Defaults to a `TRUE` value.
+		 *
+		 * @return bool Always returns a `TRUE` value.
+		 */
+		public static function cleanup_expired_s2m_transients($stagger = TRUE)
+		{
+			global $wpdb;
+			/** @var wpdb $wpdb */
+
+			if($stagger && !is_float($stagger = time() / 2))
+				return TRUE; // Bypass this time.
+
+			if(($expired_s2m_transients = $wpdb->get_results("SELECT * FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape('_transient_timeout_s2m_'))."%' AND `option_value` < '".esc_sql(time())."' LIMIT 5")))
+				foreach($expired_s2m_transients as $_expired_s2m_transient) // Delete the _timeout, and also the transient entry name itself.
+					if(($_id = $_expired_s2m_transient->option_id) && ($_name = preg_replace('/_transient_timeout_/i', '_transient_', $_expired_s2m_transient->option_name, 1)))
+						$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE (`option_id` = '".esc_sql($_id)."' OR `option_name` = '".esc_sql($_name)."')");
+
+			return TRUE; // Always returns a `TRUE` value.
+		}
+
+		/**
 		 * Array of log file descriptions.
 		 *
-		 * @package s2Member\Utilities
 		 * @since 120214
+		 * @package s2Member\Utilities
 		 *
 		 * @var array Array of log file descriptions.
 		 */
@@ -65,165 +238,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 
 		  '/mailchimp\-api/'       => array('short' => 'MailChimp API communication.', 'long' => 'This log file records all of s2Member\'s communication with MailChimp APIs.'),
 		  '/aweber\-api/'          => array('short' => 'AWeber API communication.', 'long' => 'This log file records all of s2Member\'s communication with AWeber APIs.'),
+		  '/getresponse\-api/'     => array('short' => 'GetResponse API communication.', 'long' => 'This log file records all of s2Member\'s communication with GetResponse APIs.'),
 
 		  '/reg\-handler/'         => array('short' => 'User registrations processed by s2Member.', 'long' => 'This log file records all User/Member registrations processed by s2Member (either directly or indirectly). This includes both free and paid registrations. It also logs registrations that occur as a result of new Users/Members being created from the Dashboard by a site owner. It also includes registrations that occur through the s2Member Pro Remote Operations API.'),
 
 		  '/s2\-http\-api\-debug/' => array('short' => 'All outgoing HTTP connections related to s2Member.', 'long' => 'This log file records all outgoing WP_Http connections that are specifically related to s2Member. This log file can be extremely helpful. It includes technical details about remote HTTP connections that are not available in other log files.'),
 		  '/wp\-http\-api\-debug/' => array('short' => 'All outgoing WordPress HTTP connections.', 'long' => 'This log file records all outgoing HTTP connections processed by the WP_Http class. This includes everything processed by WordPress; even things unrelated to s2Member. This log file can be extremely helpful. It includes technical details about remote HTTP connections that are not available in other log files.'),
 		);
-
-		/**
-		 * Logs HTTP communication (if enabled).
-		 *
-		 * @package s2Member\Utilities
-		 * @since 120212
-		 */
-		public static function http_api_debug($response = NULL, $state = NULL, $class = NULL, $args = NULL, $url = NULL)
-		{
-			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs'])
-				return; // Logging is NOT enabled in this case.
-
-			$is_s2member = (!empty($args['s2member']) || strpos($url, 's2member') !== FALSE) ? TRUE : FALSE;
-
-			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs_extensive'] && !$is_s2member)
-				return; // Extensive logging is NOT enabled in this case.
-
-			global $current_site, $current_blog; // For Multisite support.
-
-			$http_api_debug = array(
-				'state'           => $state,
-				'transport_class' => $class,
-				'args'            => $args,
-				'url'             => $url,
-				'response'        => $response
-			);
-			$logt           = c_ws_plugin__s2member_utilities::time_details();
-			$logv           = c_ws_plugin__s2member_utilities::ver_details();
-			$logm           = c_ws_plugin__s2member_utilities::mem_details();
-
-			$log4 = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."\n".'User-Agent: '.$_SERVER['HTTP_USER_AGENT'];
-			$log4 = (is_multisite() && !is_main_site()) ? ($_log4 = $current_blog->domain.$current_blog->path)."\n".$log4 : $log4;
-			$log2 = (is_multisite() && !is_main_site()) ? 'http-api-debug-4-'.trim(preg_replace('/[^a-z0-9]/i', '-', (!empty($_log4) ? $_log4 : '')), '-').'.log' : 'http-api-debug.log';
-
-			$http_api_debug_conceal_private_info = c_ws_plugin__s2member_utils_logs::conceal_private_info(var_export($http_api_debug, TRUE));
-
-			if(is_dir($logs_dir = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir']))
-				if(is_writable($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files())
-				{
-					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs_extensive'])
-						file_put_contents($logs_dir.'/wp-'.$log2,
-						                  'LOG ENTRY: '.$logt."\n".$logv."\n".$logm."\n".$log4."\n".
-						                  $http_api_debug_conceal_private_info."\n\n",
-						                  FILE_APPEND);
-
-					if($is_s2member) // Log s2Member HTTP connections separately.
-						file_put_contents($logs_dir.'/s2-'.$log2,
-						                  'LOG ENTRY: '.$logt."\n".$logv."\n".$logm."\n".$log4."\n".
-						                  $http_api_debug_conceal_private_info."\n\n",
-						                  FILE_APPEND);
-				}
-		}
-
-		/**
-		 * Archives logs to prevent HUGE files from building up over time.
-		 *
-		 * This routine is staggered to conserve resources.
-		 * This is called by all logging routines for s2Member.
-		 *
-		 * @package s2Member\Utilities
-		 * @since 3.5
-		 *
-		 * @param bool $stagger Optional. Defaults to true. If false, the routine will run, regardless.
-		 *
-		 * @return bool Always returns true.
-		 */
-		public static function archive_oversize_log_files($stagger = TRUE)
-		{
-			if(!$stagger || is_float($stagger = time() / 2)) // Stagger this routine?
-			{
-				if(is_dir($dir = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir']) && is_writable($dir))
-				{
-					$max = apply_filters('ws_plugin__s2member_oversize_log_file_bytes', 2097152, get_defined_vars());
-
-					$log_files = scandir($dir);
-					shuffle($log_files);
-					$counter = 1;
-
-					foreach($log_files as $file) // Go through each log file. Up to 25 files at a time.
-					{
-						if(preg_match('/\.log$/i', $file) && !preg_match('/\-ARCHIVED\-/i', $file) && is_file($dir_file = $dir.'/'.$file))
-						{
-							if(filesize($dir_file) > $max && is_writable($dir_file)) // The file must be writable.
-								if($log = preg_replace('/\.log$/i', '', $dir_file)) // Strip .log before renaming.
-									rename($dir_file, $log.'-ARCHIVED-'.date('m-d-Y').'-'.time().'.log');
-						}
-						if(($counter = $counter + 1) > 25) // Up to 25 files at a time.
-							break; // Stop for now.
-					}
-				}
-			}
-			return TRUE;
-		}
-
-		/**
-		 * Removes expired Transients inserted into the database by s2Member.
-		 *
-		 * This routine is staggered to conserve resources.
-		 * Only 5 Transients are deleted each time.
-		 *
-		 * This is called by s2Member's Auto-EOT System, every 10 minutes.
-		 *
-		 * @package s2Member\Utilities
-		 * @since 3.5
-		 *
-		 * @param bool $stagger Optional. Defaults to true. If false, the routine will run, regardless.
-		 *
-		 * @return bool Always returns true.
-		 */
-		public static function cleanup_expired_s2m_transients($stagger = TRUE)
-		{
-			global $wpdb;
-			/** @var wpdb $wpdb */
-
-			if(!$stagger || is_float($stagger = time() / 2)) // Stagger this routine?
-			{
-				if(is_array($expired_s2m_transients = $wpdb->get_results("SELECT * FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql(c_ws_plugin__s2member_utils_strings::like_escape('_transient_timeout_s2m_'))."%' AND `option_value` < '".esc_sql(time())."' LIMIT 5")) && !empty($expired_s2m_transients))
-				{
-					foreach($expired_s2m_transients as $expired_s2m_transient) // Delete the _timeout, and also the transient entry name itself.
-						if(($id = $expired_s2m_transient->option_id) && ($name = preg_replace('/_transient_timeout_/i', '_transient_', $expired_s2m_transient->option_name, 1)))
-							$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE (`option_id` = '".esc_sql($id)."' OR `option_name` = '".esc_sql($name)."')");
-				}
-			}
-			return TRUE;
-		}
-
-		/**
-		 * Attempts to conceal private details in log entries.
-		 *
-		 * @package s2Member\Utilities
-		 * @since 130315
-		 *
-		 * @param string $log_entry The log entry we need to conceal private details in.
-		 *
-		 * @return string Filtered string with some data X'd out :-)
-		 */
-		public static function conceal_private_info($log_entry)
-		{
-			$log_entry = preg_replace('/\b([3456][0-9]{10,11})([0-9]{4})\b/', 'xxxxxxxxxxxx'.'$2', (string)$log_entry);
-
-			$log_entry = preg_replace('/(\'.*pass_?(?:word)?(?:[0-9]+)?\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/pass'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&]*pass_?(?:word)?(?:[0-9]+)?\=)([^&]+)/', '$1'.'xxxxxxxx/pass', $log_entry);
-
-			$log_entry = preg_replace('/(\'api_?(?:key|secret)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/api/key/sec'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&]api_?(?:key|secret)\=)([^&]+)/', '$1'.'xxxxxxxx/api/key/sec', $log_entry);
-
-			$log_entry = preg_replace('/(\'(?:PWD|SIGNATURE)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/PWD/SIG'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&](?:PWD|SIGNATURE)\=)([^&]+)/', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
-
-			$log_entry = preg_replace('/(\'(?:x_login|x_tran_key)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/key/tran'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&](?:x_login|x_tran_key)\=)([^&]+)/', '$1'.'xxxxxxxx/key/tran', $log_entry);
-
-			return $log_entry;
-		}
 	}
 }
