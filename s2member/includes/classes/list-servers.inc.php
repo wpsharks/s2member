@@ -66,9 +66,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		 *
 		 * @return bool True if at least one List Server is processed successfully, else false.
 		 *
-		 * @todo Integrate {@link https://labs.aweber.com/docs/php-library-walkthrough AWeber's API}.
-		 * @todo Add a separate option for mail debugging; or consolidate?
-		 * @todo Integrate AWeber API (much like the MailChimp API).
+		 * @TODO Break this part into separate class files.
 		 */
 		public static function process_list_servers($role = '', $level = '', $login = '', $pass = '', $email = '', $fname = '', $lname = '', $ip = '', $opt_in = FALSE, $double_opt_in = TRUE, $user_id = 0)
 		{
@@ -309,9 +307,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		 *
 		 * @return bool True if at least one List Server is processed successfully, else false.
 		 *
-		 * @todo Integrate {@link https://labs.aweber.com/docs/php-library-walkthrough AWeber's API}.
-		 * @todo Add a separate option for mail debugging; or consolidate?
-		 * @todo Integrate AWeber API (much like the MailChimp API).
+		 * @TODO Break this part into separate class files.
 		 */
 		public static function process_list_server_removals($role = '', $level = '', $login = '', $pass = '', $email = '', $fname = '', $lname = '', $ip = '', $opt_out = FALSE, $user_id = 0)
 		{
@@ -507,6 +503,8 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		 * @param string     $mod_new_role Required if ``$event_spec === 'modification'`` (but can be empty). Role the User is being modified to.
 		 * @param string     $mod_new_user Optional. If ``$event_spec === 'modification'``, the new User object with current details.
 		 * @param string     $mod_old_user Optional. If ``$event_spec === 'modification'``, the old/previous User obj with old details.
+		 *
+		 * @TODO Geez Louise! Refactor, refactor!!!!!
 		 */
 		public static function auto_process_list_server_removals($user_id, $vars, $event, $event_spec, $mod_new_role = NULL, $mod_new_user = NULL, $mod_old_user = NULL)
 		{
