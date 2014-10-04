@@ -48,9 +48,6 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
 
-			$args->fname       = !$args->fname ? ucwords(strstr($args->email, '@', TRUE)) : $args->fname;
-			$args->lname       = !$args->lname ? '-' : $args->lname; // Default last name to `-` because MC requires this.
-			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
 			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_aw_list)
@@ -101,9 +98,6 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
 
-			$args->fname       = !$args->fname ? ucwords(strstr($args->email, '@', TRUE)) : $args->fname;
-			$args->lname       = !$args->lname ? '-' : $args->lname; // Default last name to `-` because MC requires this.
-			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
 			$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status();

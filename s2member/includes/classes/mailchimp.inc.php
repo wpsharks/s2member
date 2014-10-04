@@ -55,9 +55,6 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/nc-mcapi.inc.php';
 			$mcapi = new NC_MCAPI($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], TRUE);
 
-			$args->fname       = !$args->fname ? ucwords(strstr($args->email, '@', TRUE)) : $args->fname;
-			$args->lname       = !$args->lname ? '-' : $args->lname; // Default last name to `-` because MC requires this.
-			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
 			$mc_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids'];
 
 			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_mc_list)
@@ -131,9 +128,6 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/nc-mcapi.inc.php';
 			$mcapi = new NC_MCAPI($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], TRUE);
 
-			$args->fname       = !$args->fname ? ucwords(strstr($args->email, '@', TRUE)) : $args->fname;
-			$args->lname       = !$args->lname ? '-' : $args->lname; // Default last name to `-` because MC requires this.
-			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
 			$mc_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids'];
 
 			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_mc_list)
