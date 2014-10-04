@@ -56,7 +56,7 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
 			$gr_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_getresponse_list_ids'];
 
-			foreach(preg_split('/['."\r\n\t".';,]+/', $gr_level_list_ids) as $_gr_list)
+			foreach(preg_split('/['."\r\n\t".';,]+/', $gr_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_gr_list)
 			{
 				$_gr = array(
 					'args'       => $args,
@@ -142,7 +142,7 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
 			$gr_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_getresponse_list_ids'];
 
-			foreach(preg_split('/['."\r\n\t".';,]+/', $gr_level_list_ids) as $_gr_list)
+			foreach(preg_split('/['."\r\n\t".';,]+/', $gr_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_gr_list)
 			{
 				$_gr = array(
 					'args'       => $args,

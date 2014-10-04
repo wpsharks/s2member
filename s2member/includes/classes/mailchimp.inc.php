@@ -60,7 +60,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
 			$mc_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids'];
 
-			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids) as $_mc_list)
+			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_mc_list)
 			{
 				$_mc = array(
 					'args'           => $args,
@@ -136,7 +136,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
 			$mc_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids'];
 
-			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids) as $_mc_list)
+			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_mc_list)
 			{
 				$_mc = array(
 					'args'           => $args,
