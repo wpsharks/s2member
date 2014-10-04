@@ -68,7 +68,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 					'list'           => trim($_mc_list),
 					'list_id'        => trim($_mc_list),
 					'api_method'     => 'listSubscribe',
-					'api_properties' => $mcapi,
+					'api_properties' => $mcapi
 				);
 				if(!$_mc['list']) continue; // List missing.
 
@@ -144,7 +144,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 					'list'           => trim($_mc_list),
 					'list_id'        => trim($_mc_list),
 					'api_method'     => 'listUnsubscribe',
-					'api_properties' => $mcapi,
+					'api_properties' => $mcapi
 				);
 				if(!$_mc['list']) continue; // List missing.
 

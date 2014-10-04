@@ -63,11 +63,11 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 					'function'   => __FUNCTION__,
 					'list'       => trim($_gr_list),
 					'list_id'    => trim($_gr_list),
-					'api_method' => 'add_contact',
+					'api_method' => 'add_contact'
 				);
 				if(!$_gr['list']) continue; // List missing.
 
-				$_gr['api_method']  = 'add_contact';
+				$_gr['api_method']  = 'get_contacts'; // Check if exists.
 				$_gr['api_headers'] = array('Content-Type' => 'application/json');
 				$_gr['api_params']  = array($GLOBALS['WS_PLUGIN__']['s2member']['o']['getresponse_api_key'],
 				                            array('campaigns' => array($_gr['list_id']), 'email' => array('EQUALS' => $args->email)));
@@ -76,13 +76,15 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 				   && ($_gr['api_response_contact_ids'] = array_keys((array)$_gr['api_response']->result)) && ($_gr['api_response_contact_id'] = $_gr['api_response_contact_ids'][0])
 				) // They already exist on this list, we need to update the existing subscription here instead of adding a new one.
 				{
-					$_gr['api_method']  = 'set_contact_name';
+					$_gr['api_method']  = 'set_contact_name'; // Update.
+					$_gr['api_headers'] = array('Content-Type' => 'application/json');
 					$_gr['api_params']  = array($GLOBALS['WS_PLUGIN__']['s2member']['o']['getresponse_api_key'],
 					                            array('contact' => $_gr['api_response_contact_id'], 'name' => $args->name));
 					$_gr['api_request'] = json_encode(array('method' => $_gr['api_method'], 'params' => $_gr['api_params'], 'id' => uniqid('', TRUE)));
 					if(is_object($_gr['api_response'] = json_decode(c_ws_plugin__s2member_utils_urls::remote('https://api2.getresponse.com', $_gr['api_request'], array('headers' => $_gr['api_headers'])))) && empty($_gr['api_response']->error))
 					{
-						$_gr['api_method']  = 'set_contact_customs';
+						$_gr['api_method']  = 'set_contact_customs'; // Update.
+						$_gr['api_headers'] = array('Content-Type' => 'application/json');
 						$_gr['api_params']  = array($GLOBALS['WS_PLUGIN__']['s2member']['o']['getresponse_api_key'],
 						                            array('contact' => $_gr['api_response_contact_id'], 'customs' => apply_filters('ws_plugin__s2member_getresponse_customs_array', array(), get_defined_vars())));
 						$_gr['api_request'] = json_encode(array('method' => $_gr['api_method'], 'params' => $_gr['api_params'], 'id' => uniqid('', TRUE)));
@@ -90,12 +92,14 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 							$_gr['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
 					}
 				}
-				else // Create a new contact; i.e. they do not exist on this list yet.
+				else // Create a new contact; i.e. they do not exist yet.
 				{
-					$_gr['api_params'] = array($GLOBALS['WS_PLUGIN__']['s2member']['o']['getresponse_api_key'],
-					                           array('name'     => $args->name, 'email' => $args->email, 'ip' => $args->ip,
-					                                 'campaign' => $_gr['list_id'], 'action' => 'standard', 'cycle_day' => 0,
-					                                 'customs'  => apply_filters('ws_plugin__s2member_getresponse_customs_array', array(), get_defined_vars())));
+					$_gr['api_method']  = 'add_contact'; // Add new contact.
+					$_gr['api_headers'] = array('Content-Type' => 'application/json');
+					$_gr['api_params']  = array($GLOBALS['WS_PLUGIN__']['s2member']['o']['getresponse_api_key'],
+					                            array('name'     => $args->name, 'email' => $args->email, 'ip' => $args->ip,
+					                                  'campaign' => $_gr['list_id'], 'action' => 'standard', 'cycle_day' => 0,
+					                                  'customs'  => apply_filters('ws_plugin__s2member_getresponse_customs_array', array(), get_defined_vars())));
 					if(!$_gr['api_params'][1]['ip'] || $_gr['api_params'][1]['ip'] === 'unknown') unset($_gr['api_params'][1]['ip']);
 
 					$_gr['api_request'] = json_encode(array('method' => $_gr['api_method'], 'params' => $_gr['api_params'], 'id' => uniqid('', TRUE)));
@@ -126,6 +130,51 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 
 			if(!$args->opt_out) // Double check.
 				return FALSE; // Must say explicitly.
+
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['getresponse_api_key'])
+				return FALSE; // Not possible.
+
+			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_getresponse_list_ids']))
+				return FALSE; // No list configured at this level.
+
+			$args->fname       = !$args->fname ? ucwords(strstr($args->email, '@', TRUE)) : $args->fname;
+			$args->lname       = !$args->lname ? '-' : $args->lname; // Default last name to `-` because MC requires this.
+			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
+			$gr_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_getresponse_list_ids'];
+
+			foreach(preg_split('/['."\r\n\t".';,]+/', $gr_level_list_ids) as $_gr_list)
+			{
+				$_gr = array(
+					'args'       => $args,
+					'function'   => __FUNCTION__,
+					'list'       => trim($_gr_list),
+					'list_id'    => trim($_gr_list),
+					'api_method' => 'delete_contact'
+				);
+				if(!$_gr['list']) continue; // List missing.
+
+				$_gr['api_method']  = 'get_contacts'; // Check if exists.
+				$_gr['api_headers'] = array('Content-Type' => 'application/json');
+				$_gr['api_params']  = array($GLOBALS['WS_PLUGIN__']['s2member']['o']['getresponse_api_key'],
+				                            array('campaigns' => array($_gr['list_id']), 'email' => array('EQUALS' => $args->email)));
+				$_gr['api_request'] = json_encode(array('method' => $_gr['api_method'], 'params' => $_gr['api_params'], 'id' => uniqid('', TRUE)));
+				if(is_object($_gr['api_response'] = json_decode(c_ws_plugin__s2member_utils_urls::remote('https://api2.getresponse.com', $_gr['api_request'], array('headers' => $_gr['api_headers'])))) && empty($_gr['api_response']->error)
+				   && ($_gr['api_response_contact_ids'] = array_keys((array)$_gr['api_response']->result)) && ($_gr['api_response_contact_id'] = $_gr['api_response_contact_ids'][0])
+				)// They exist on this list, so we can remove theme here via `delete_contact`.
+				{
+					$_gr['api_method']  = 'delete_contact'; // Delete.
+					$_gr['api_headers'] = array('Content-Type' => 'application/json');
+					$_gr['api_params']  = array($GLOBALS['WS_PLUGIN__']['s2member']['o']['getresponse_api_key'],
+					                            array('contact' => $_gr['api_response_contact_id']));
+					$_gr['api_request'] = json_encode(array('method' => $_gr['api_method'], 'params' => $_gr['api_params'], 'id' => uniqid('', TRUE)));
+					if(is_object($_gr['api_response'] = json_decode(c_ws_plugin__s2member_utils_urls::remote('https://api2.getresponse.com', $_gr['api_request'], array('headers' => $_gr['api_headers'])))) && empty($_gr['api_response']->error) && $_gr['api_response']->result->deleted)
+						$_gr['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
+				}
+				c_ws_plugin__s2member_utils_logs::log_entry('getresponse-api', $_gr);
+			}
+			unset($_gr_list, $_gr); // Just a little housekeeping.
+
+			return !empty($success); // If one suceeds.
 		}
 
 		/**
