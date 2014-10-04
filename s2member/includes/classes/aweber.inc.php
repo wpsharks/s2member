@@ -53,9 +53,6 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
-			$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status();
-			c_ws_plugin__s2member_email_configs::email_config_release();
-
 			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_aw_list)
 			{
 				$_aw = array(
@@ -79,9 +76,6 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 				c_ws_plugin__s2member_utils_logs::log_entry('aweber-api', $_aw);
 			}
 			unset($_aw_list, $_aw); // Just a little housekeeping.
-
-			if($email_configs_were_on) // Turn em' back on?
-				c_ws_plugin__s2member_email_configs::email_config();
 
 			return !empty($success); // If one suceeds.
 		}
@@ -113,7 +107,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
 			$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status();
-			c_ws_plugin__s2member_email_configs::email_config(); // Email configs MUST be ON for removal requests.
+			if(!$email_configs_were_on) c_ws_plugin__s2member_email_configs::email_config(); // MUST be ON for removal requests.
 			// `From:` address MUST match AWeber account. See: <http://www.aweber.com/faq/questions/62/Can+I+Unsubscribe+People+Via+Email%3F>.
 
 			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_aw_list)
