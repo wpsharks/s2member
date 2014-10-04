@@ -42,6 +42,9 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 			if(!($args = self::validate_args($args)))
 				return FALSE; // Invalid args.
 
+			if(!$args->opt_in) // Double check.
+				return FALSE; // Must say explicitly.
+
 			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'])
 				return FALSE; // Not possible.
 
@@ -114,6 +117,9 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		{
 			if(!($args = self::validate_args($args)))
 				return FALSE; // Invalid args.
+
+			if(!$args->opt_out) // Double check.
+				return FALSE; // Must say explicitly.
 
 			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'])
 				return FALSE; // Not possible.
