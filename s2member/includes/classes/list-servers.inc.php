@@ -195,77 +195,97 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		}
 
 		/**
-		 * Listens to Collective EOT/MOD Events processed internally by s2Member.
+		 * Listens to Collective EOT/MOD events processed by s2Member.
 		 *
-		 * This is only applicable when ``['custom_reg_auto_opt_outs']`` contains related Event(s).
-		 *
-		 * @package s2Member\List_Servers
 		 * @since 3.5
+		 * @package s2Member\List_Servers
 		 *
-		 * @attaches-to ``add_action('ws_plugin__s2member_during_collective_mods');``
-		 * @attaches-to ``add_action('ws_plugin__s2member_during_collective_eots');``
+		 * @attaches-to `add_action('ws_plugin__s2member_during_collective_mods');`.
+		 * @attaches-to `add_action('ws_plugin__s2member_during_collective_eots');`.
 		 *
 		 * @param int|string $user_id Required. A WordPress User ID, numeric string or integer.
-		 * @param array      $vars Required. An array of defined variables passed by the calling Hook.
-		 * @param string     $event Required. A specific event that triggered this call from the Action Hook.
+		 * @param array      $vars Required. An array of defined variables passed by the calling hook.
+		 * @param string     $event Required. A specific event that triggered this call from the action hook.
 		 * @param string     $event_spec Required. A specific event specification *(a broader classification)*.
-		 * @param string     $mod_new_role Required if ``$event_spec === 'modification'`` (but can be empty). Role the User is being modified to.
-		 * @param string     $mod_new_user Optional. If ``$event_spec === 'modification'``, the new User object with current details.
-		 * @param string     $mod_old_user Optional. If ``$event_spec === 'modification'``, the old/previous User obj with old details.
+		 * @param string     $mod_new_role Required if `$event_spec === 'modification'`; but can be empty. User role.
+		 * @param string     $mod_new_user Optional. If `$event_spec === 'modification'`, the new user object with current details.
+		 * @param string     $mod_old_user Optional. If `$event_spec === 'modification'`, the old/previous user obj with old details.
 		 *
-		 * @TODO Geez Louise! Refactor, refactor!!!!!
+		 * @note This is only applicable when `['custom_reg_auto_opt_outs']` contains related Event(s).
 		 */
 		public static function auto_process_list_server_removals($user_id, $vars, $event, $event_spec, $mod_new_role = NULL, $mod_new_user = NULL, $mod_old_user = NULL)
 		{
-			global $current_site, $current_blog; // For Multisite support.
-			static $auto_processed = array( /* Process ONE time for each User. */);
+			static $auto_processed = array(); // Static cache.
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_auto_process_list_server_removals', get_defined_vars());
-			unset($__refs, $__v);
+			unset($__refs, $__v); // Allows vars to be modified by reference.
 
-			$custom_reg_auto_op_outs = c_ws_plugin__s2member_utils_strings::wrap_deep($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_auto_opt_outs'], '/^', '$/i');
+			if(c_ws_plugin__s2member_list_servers::list_servers_integrated())
+				if($user_id && is_numeric($user_id) && !isset($auto_processed[$user_id]))
+					if(is_array($vars) && is_string($event = (string)$event) && is_string($event_spec = (string)$event_spec))
+						if(($custom_reg_auto_op_outs = c_ws_plugin__s2member_utils_strings::wrap_deep($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_auto_opt_outs'], '/^', '$/i')))
+							if(c_ws_plugin__s2member_utils_arrays::in_regex_array($event, $custom_reg_auto_op_outs) || c_ws_plugin__s2member_utils_arrays::in_regex_array($event_spec, $custom_reg_auto_op_outs))
+								if(is_object($dynamic_user = $user_now = new WP_User($user_id)) && $dynamic_user->exists() && !empty($dynamic_user->ID))
+								{
+									$mod_new_role = $event_spec === 'modification' && is_string($mod_new_role) ? $mod_new_role : ''; // Might be empty.
+									$mod_new_user = $event_spec === 'modification' && !empty($mod_new_user->ID) && $mod_new_user->ID === $dynamic_user->ID ? $mod_new_user : NULL;
+									$mod_old_user = $event_spec === 'modification' && !empty($mod_old_user->ID) && $mod_old_user->ID === $dynamic_user->ID ? $mod_old_user : NULL;
+									$dynamic_user = $event_spec === 'modification' && $mod_old_user ? $mod_old_user : $user_now; // Use old user when applicable.
 
-			if(c_ws_plugin__s2member_list_servers::list_servers_integrated() && $user_id && is_numeric($user_id) && !in_array($user_id, $auto_processed) && is_array($vars) && is_string($event = (string)$event) && is_string($event_spec = (string)$event_spec) && (c_ws_plugin__s2member_utils_arrays::in_regex_array($event, $custom_reg_auto_op_outs) || c_ws_plugin__s2member_utils_arrays::in_regex_array($event_spec, $custom_reg_auto_op_outs)) && is_object($user = $_user = new WP_User ($user_id)) && !empty($user->ID))
-			{
-				$mod_new_role = ($event_spec === 'modification' && $mod_new_role && is_string($mod_new_role)) ? $mod_new_role : FALSE; // Might be empty(i.e. they now have NO Role).
-				$mod_new_user = ($event_spec === 'modification' && $mod_new_user && is_object($mod_new_user) && !empty($mod_new_user->ID) && $mod_new_user->ID === $_user->ID) ? $mod_new_user : FALSE;
-				$mod_old_user = ($event_spec === 'modification' && $mod_old_user && is_object($mod_old_user) && !empty($mod_old_user->ID) && $mod_old_user->ID === $_user->ID) ? $mod_old_user : FALSE;
+									if( // Initial conditionals.
 
-				$user = ($event_spec === 'modification' && $mod_old_user) ? $mod_old_user : $_user; // Now, should we switch over to the old/previous User object ``$mod_old_user`` here? Or, should we use the one pulled by this routine with the User's ID?
+									($event_spec !== 'modification' // Not a modification.
 
-				if(($event_spec !== 'modification' || ($event_spec === 'modification' && (string)$mod_new_role !== c_ws_plugin__s2member_user_access::user_access_role($user) && strtotime($user->user_registered) < strtotime('-10 seconds') && ($event !== 'user-role-change' || ($event === 'user-role-change' && !empty($vars['_p']['ws_plugin__s2member_custom_reg_auto_opt_out_transitions']))))) && ($auto_processed[$user->ID] = TRUE))
-				{
-					$removed = c_ws_plugin__s2member_list_servers::process_list_server_removals(c_ws_plugin__s2member_user_access::user_access_role($user), c_ws_plugin__s2member_user_access::user_access_level($user), $user->user_login, FALSE, $user->user_email, $user->first_name, $user->last_name, FALSE, TRUE, $user->ID);
+									 || ($event_spec === 'modification' // Or it is, with a role change!
+									     && $mod_new_role !== c_ws_plugin__s2member_user_access::user_access_role($dynamic_user)
+									     && strtotime($dynamic_user->user_registered) < strtotime('-10 seconds') // Hackety hack.
+									     && ($event !== 'user-role-change' // Ignore this event, UNLESS it has confirmation.
+									         || ($event === 'user-role-change' // An admin has specifically asked for this to occur?
+									             && !empty($vars['_p']['ws_plugin__s2member_custom_reg_auto_opt_out_transitions']))))
+									)
+									) // Let us proceed now; with list removals at the very least.
+									{
+										$auto_processed[$dynamic_user->ID] = -1; // Flag as auto-processed!
 
-					if($event_spec === 'modification' && $mod_new_role && ($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_auto_opt_out_transitions'] === '2' || ($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_auto_opt_out_transitions'] === '1' && $removed)))
-					{
-						$user = ($event_spec === 'modification' && $mod_new_user) ? $mod_new_user : $_user; // Now, should we switch over to a new/current User object ``$mod_new_user`` here? (which may contain newly updated details). Or, should we simply use the User object pulled by this routine with the User's ID?
+										$auto_removal_success = c_ws_plugin__s2member_list_servers::process_list_server_removals
+										(
+											c_ws_plugin__s2member_user_access::user_access_role($dynamic_user), // Old role w/ modifications.
+											c_ws_plugin__s2member_user_access::user_access_level($dynamic_user), // Old level w/ modifications.
+											$dynamic_user->user_login, '', $dynamic_user->user_email, $dynamic_user->first_name, $dynamic_user->last_name, '', TRUE, $dynamic_user->ID
+										);
+										if( // Now let's determine if they should be subscribed to the new lists.
 
-						$transitioned = c_ws_plugin__s2member_list_servers::process_list_servers($mod_new_role, c_ws_plugin__s2member_user_access::user_access_role_to_level($mod_new_role), $user->user_login, FALSE, $user->user_email, $user->first_name, $user->last_name, FALSE, TRUE, (($removed) ? FALSE : TRUE), $user->ID);
+											$event_spec === 'modification' && $mod_new_role // And they have a role now?
+											&& ($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_auto_opt_out_transitions'] === '2'
+											    || ($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_auto_opt_out_transitions'] === '1' && $auto_removal_success))
 
-						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-						do_action('ws_plugin__s2member_during_auto_process_list_server_removal_transitions', get_defined_vars());
-						unset($__refs, $__v);
-					}
+										) // Let us proceed now; we want to subscribe the user to the list they should be on now; based on role/level.
+										{
+											$dynamic_user = $event_spec === 'modification' && $mod_new_user ? $mod_new_user : $user_now; // New user; when applicable.
 
-					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-					do_action('ws_plugin__s2member_during_auto_process_list_server_removals', get_defined_vars());
-					unset($__refs, $__v);
-				}
-			}
-			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+											$auto_transition_success = c_ws_plugin__s2member_list_servers::process_list_servers
+											(
+												$mod_new_role, // Subscribe to lists associated w/ their new role/level.
+												c_ws_plugin__s2member_user_access::user_access_role_to_level($mod_new_role),
+												$dynamic_user->user_login, '', $dynamic_user->user_email, $dynamic_user->first_name, $dynamic_user->last_name,
+												'', TRUE, ($auto_removal_success ? FALSE : TRUE), $dynamic_user->ID
+											);
+											do_action('ws_plugin__s2member_during_auto_process_list_server_removal_transitions', get_defined_vars());
+										}
+										do_action('ws_plugin__s2member_during_auto_process_list_server_removals', get_defined_vars());
+									}
+								}
 			do_action('ws_plugin__s2member_after_auto_process_list_server_removals', get_defined_vars());
-			unset($__refs, $__v);
 		}
 
 		/**
-		 * Determines whether or not any List Servers have been integrated.
+		 * List servers have been integrated?
 		 *
-		 * @package s2Member\List_Servers
 		 * @since 3.5
+		 * @package s2Member\List_Servers
 		 *
-		 * @return bool True if List Servers have been integrated, else false.
+		 * @return bool True if list servers have been integrated.
 		 */
 		public static function list_servers_integrated()
 		{
