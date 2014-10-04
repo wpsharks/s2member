@@ -233,7 +233,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 									$mod_old_user = $event_spec === 'modification' && !empty($mod_old_user->ID) && $mod_old_user->ID === $dynamic_user->ID ? $mod_old_user : NULL;
 									$dynamic_user = $event_spec === 'modification' && $mod_old_user ? $mod_old_user : $user_now; // Use old user when applicable.
 
-									if( // Initial conditionals.
+									if( // Secondary conditionals.
 
 									($event_spec !== 'modification' // Not a modification.
 
