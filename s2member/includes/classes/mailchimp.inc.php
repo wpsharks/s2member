@@ -79,8 +79,6 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 
 					if(!$_mc['list_id']) continue; // List ID is missing now; after parsing interest groups.
 				}
-				else $_mc['list_id'] = $_mc['list']; // Else, it's just a List ID.
-
 				$_mc['merge_array'] = array('MERGE1' => $args->fname, 'MERGE2' => $args->lname, 'OPTIN_IP' => $args->ip, 'OPTIN_TIME' => date('Y-m-d H:i:s'));
 				$_mc['merge_array'] = !empty($_mc['interest_groups']) ? array_merge($_mc['merge_array'], $_mc['interest_groups']) : $_mc['merge_array'];
 				$_mc['merge_array'] = apply_filters('ws_plugin__s2member_mailchimp_array', $_mc['merge_array'], get_defined_vars()); // Deprecated!
@@ -97,7 +95,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 
 				c_ws_plugin__s2member_utils_logs::log_entry('mailchimp-api', $_mc);
 			}
-			unset($_mc_list, $_mc); // Housekeeping.
+			unset($_mc_list, $_mc); // Just a little housekeeping.
 
 			return !empty($success); // If one suceeds.
 		}
@@ -116,6 +114,55 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		{
 			if(!($args = self::validate_args($args)))
 				return FALSE; // Invalid args.
+
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'])
+				return FALSE; // Not possible.
+
+			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids']))
+				return FALSE; // No list configured at this level.
+
+			if(!class_exists('NC_MCAPI')) // Include the MailChimp API Class here.
+				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/nc-mcapi.inc.php';
+			$mcapi = new NC_MCAPI($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], TRUE);
+
+			$args->fname       = !$args->fname ? ucwords(strstr($args->email, '@', TRUE)) : $args->fname;
+			$args->lname       = !$args->lname ? '-' : $args->lname; // Default last name to `-` because MC requires this.
+			$args->name        = $args->fname || $args->lname ? trim($args->fname.' '.$args->lname) : ucwords(strstr($args->email, '@', TRUE));
+			$mc_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids'];
+
+			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids) as $_mc_list)
+			{
+				$_mc = array(
+					'args'           => $args,
+					'function'       => __FUNCTION__,
+					'list'           => trim($_mc_list),
+					'list_id'        => trim($_mc_list),
+					'api_method'     => 'listUnsubscribe',
+					'api_properties' => $mcapi,
+				);
+				if(!$_mc['list']) continue; // List missing.
+
+				if(strpos($_mc['list'], '::') !== FALSE) // Contains Interest Groups?
+				{
+					list($_mc['list_id'], $_mc['interest_groups_title'], $_mc['interest_groups']) = preg_split('/\:\:/', $_mc['list'], 3);
+
+					if(($_mc['interest_groups_title'] = trim($_mc['interest_groups_title'])))
+						if(($_mc['interest_groups'] = $_mc['interest_groups'] ? preg_split('/\|/', trim($_mc['interest_groups']), NULL, PREG_SPLIT_NO_EMPTY) : array()))
+							$_mc['interest_groups'] = array('GROUPINGS' => array(array('name' => $_mc['interest_groups_title'], 'groups' => implode(',', $_mc['interest_groups']))));
+
+					if(!$_mc['list_id']) continue; // List ID is missing now; after parsing interest groups.
+				}
+				if($_mc['api_response'] = $mcapi->{$_mc['api_method']}($_mc['list_id'], $args->email, // See: `http://apidocs.mailchimp.com/`.
+					($_mc['api_delete_member'] = apply_filters('ws_plugin__s2member_mailchimp_removal_delete_member', FALSE, get_defined_vars())), // Completely delete?
+					($_mc['api_send_goodbye'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_goodbye', FALSE, get_defined_vars())), // Send goodbye letter?
+					($_mc['api_send_notify'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_notify', FALSE, get_defined_vars())))
+				) $_mc['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
+
+				c_ws_plugin__s2member_utils_logs::log_entry('mailchimp-api', $_mc);
+			}
+			unset($_mc_list, $_mc); // Just a little housekeeping.
+
+			return !empty($success); // If one suceeds.
 		}
 
 		/**
@@ -131,11 +178,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		 */
 		public static function transition($old_args, $new_args)
 		{
-			if(!($old_args = self::validate_args($old_args)))
-				return FALSE; // Invalid args.
-
-			if(!($new_args = self::validate_args($new_args)))
-				return FALSE; // Invalid args.
+			return self::unsubscribe($old_args) && self::subscribe($new_args);
 		}
 	}
 }
