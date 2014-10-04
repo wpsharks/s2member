@@ -39,6 +39,19 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		 */
 		public static function subscribe($args)
 		{
+			$defaults = array(
+				'role'          => '',
+				'level'         => 0,
+				'login'         => '',
+				'pass'          => '',
+				'email'         => '',
+				'fname'         => '',
+				'lname'         => '',
+				'ip'            => '',
+				'opt_in'        => FALSE,
+				'double_opt_in' => FALSE,
+				'user_id'       => 0
+			);
 		}
 
 		/**
@@ -53,6 +66,18 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		 */
 		public static function unsubscribe($args)
 		{
+			$defaults = array(
+				'role'    => '',
+				'level'   => 0,
+				'login'   => '',
+				'pass'    => '',
+				'email'   => '',
+				'fname'   => '',
+				'lname'   => '',
+				'ip'      => '',
+				'opt_out' => FALSE,
+				'user_id' => 0
+			);
 		}
 
 		/**
@@ -61,12 +86,26 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		 * @since 141004
 		 * @package s2Member\List_Servers
 		 *
-		 * @param array $args Input arguments.
+		 * @param array $old_args Input arguments.
+		 * @param array $new_args Input arguments.
 		 *
 		 * @return bool True if successful.
 		 */
-		public static function transition($args)
+		public static function transition($old_args, $new_args)
 		{
+			$defaults = array(
+				'role'          => '',
+				'level'         => 0,
+				'login'         => '',
+				'pass'          => '',
+				'email'         => '',
+				'fname'         => '',
+				'lname'         => '',
+				'ip'            => '',
+				'opt_in'        => FALSE,
+				'double_opt_in' => FALSE,
+				'user_id'       => 0
+			);
 		}
 	}
 }
