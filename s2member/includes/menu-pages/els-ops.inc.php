@@ -211,9 +211,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-aweber-section">'."\n";
 				echo '<a href="http://www.s2member.com/aweber" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/aweber-logo.png" class="ws-menu-page-right ws-menu-page-bordered" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
 				echo '<h3>AWeber List Server Integration (optional)</h3>'."\n";
-				echo '<p>s2Member can be integrated with AWeber. AWeber is an email marketing service. Whether you\'re looking to get your first email campaign off the ground, or you\'re a seasoned veteran who wants to dig into advanced tools like detailed email web analytics, activity based segmentation, geo-targeting and broadcast split-testing, AWeber\'s got just what you need to make email marketing work for you.</p>'."\n";
-				echo '<p>You can have your Members automatically subscribed to your AWeber marketing lists <em>(e.g. newsletters / auto-responders)</em>. You\'ll need an <a href="http://www.s2member.com/aweber" target="_blank" rel="external">AWeber account</a> and your <a href="#" onclick="alert(\'To obtain your AWeber List ID(s), log into your AWeber account. Click on the Lists tab. On that page you\\\'ll find a Unique List ID associated with each of your lists. AWeber sometimes refers to this as a List Name instead of a List ID.\'); return false;">AWeber List IDs</a>. You will ALSO need to configure a <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">Custom Email Parser</a> inside your AWeber account.</p>'."\n";
-				echo '<p>Log into AWeber, and go to <em>My Lists -› Email Parser</em>. If you like, choose the PayPal Parser <em>(even if you\'re not using PayPal as your Payment Gateway)</em>. You can safely ignore the additional instructions they provide. s2Member just needs the PayPal box checked, and that\'s all. Or, even better, integrate <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">s2Member\'s Custom Email Parser</a> for AWeber, which <strong>will improve reliability</strong> and flexibility.</p>'."\n";
+				echo '<p>s2Member can be integrated with AWeber. AWeber is an email marketing service. Whether you\'re looking to get your first email campaign off the ground, or you\'re a seasoned veteran who wants to dig into advanced tools like detailed email web analytics, activity based segmentation, geo-targeting and broadcast split-testing, AWeber\'s got just what you need to make email marketing work for you. You can have your Members automatically subscribed to your AWeber marketing lists <em>(i.e. newsletters / auto-responders)</em>. You\'ll need an <a href="http://www.s2member.com/aweber" target="_blank" rel="external">AWeber account</a> and your <a href="#" onclick="alert(\'To obtain your AWeber List ID(s), log into your AWeber account. Click on the Lists tab. On that page you\\\'ll find a Unique List ID associated with each of your lists. AWeber sometimes refers to this as a List Name instead of a List ID.\'); return false;">AWeber List IDs</a>. You will ALSO need either an API Key (if you choose the API option below); or a <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">Custom Email Parser</a> for the s2Member application.</p>'."\n";
 				echo '<p><em><strong>AWeber Tip:</strong> If you want your Members to be subscribed to multiple AWeber List IDs at the same time, instead of comma-delimiting those List IDs here; we suggest a single List ID in your s2Member integration; then use <a href="https://help.aweber.com/entries/21696463-Can-I-Add-Subscribers-to-More-Than-One-List-At-Once-" target="_blank" rel="external">AWeber Automation Rules</a> for this. Automation Rules can also reduce the number of email confirmation notices that Members receive.</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_during_aweber", get_defined_vars());
 
@@ -232,10 +230,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_aweber_api_type" id="ws-plugin--s2member-aweber-api-type">'."\n";
-				echo '<option value="api"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["aweber_api_type"] === "api") ? ' selected="selected"' : '').'>API (recommended for best reliability)</option>'."\n";
+				echo '<option value="api"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["aweber_api_type"] === "api") ? ' selected="selected"' : '').'>API (recommended for a more robust integration)</option>'."\n";
 				echo '<option value="email"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["aweber_api_type"] === "email") ? ' selected="selected"' : '').'>Email (less reliable; requires an Email Parser)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo 'Starting w/ s2Member™ v141005+, you can now integrate with AWeber\'s API instead of through an Email Parser. Please choose which method you prefer. The new <code>API</code> option is recommended, but the old Email Parser will continue to work with limited functionality'."\n";
+				echo 'Starting w/ s2Member™ v141005+, you can now integrate with AWeber\'s API (recommended) instead of through an Email Parser.'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -244,7 +242,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-aweber-api-key">'."\n";
 				echo 'AWeber API Key (Required for API Integration):<br />'."\n";
-				echo 'If you chose <code>API</code> above, you MUST fill this in please.'."\n";
+				echo '<small>If you choose <code>API</code> above, you MUST fill this in please.</small>'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
