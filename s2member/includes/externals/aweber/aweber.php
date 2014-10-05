@@ -135,6 +135,8 @@ class AWeberAPIBase {
  * Creates a connection to the AWeberAPI for a given consumer application.
  * This is generally the starting point for this library.  Instances can be
  * created directly with consumerKey and consumerSecret.
+ *
+ * @property AWeberCollection ___account
  * @uses AWeberAPIBase
  * @package
  * @version $id$

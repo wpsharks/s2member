@@ -62,7 +62,8 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 					'list_id'    => trim($_gr_list),
 					'api_method' => 'add_contact'
 				);
-				if(!$_gr['list']) continue; // List missing.
+				if(!$_gr['list'] || !$_gr['list_id'])
+					continue; // List missing.
 
 				$_gr['api_method']  = 'get_contacts'; // Check if exists.
 				$_gr['api_headers'] = array('Content-Type' => 'application/json');
@@ -145,7 +146,8 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 					'list_id'    => trim($_gr_list),
 					'api_method' => 'delete_contact'
 				);
-				if(!$_gr['list']) continue; // List missing.
+				if(!$_gr['list'] || !$_gr['list_id'])
+					continue; // List missing.
 
 				$_gr['api_method']  = 'get_contacts'; // Check if exists.
 				$_gr['api_headers'] = array('Content-Type' => 'application/json');

@@ -83,7 +83,8 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 					'api_method'     => 'listSubscribe',
 					'api_properties' => $mc_api
 				);
-				if(!$_mc['list']) continue; // List missing.
+				if(!$_mc['list'] || !$_mc['list_id'])
+					continue; // List missing.
 
 				if(strpos($_mc['list'], '::') !== FALSE) // Contains Interest Groups?
 				{
@@ -154,7 +155,8 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 					'api_method'     => 'listUnsubscribe',
 					'api_properties' => $mc_api
 				);
-				if(!$_mc['list']) continue; // List missing.
+				if(!$_mc['list'] || !$_mc['list_id'])
+					continue; // List missing.
 
 				if(strpos($_mc['list'], '::') !== FALSE) // Contains Interest Groups?
 				{

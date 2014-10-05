@@ -54,7 +54,8 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
 
-			if(!($aw_api = self::aw_api())) return FALSE; // Unable to acquire API instance.
+			if(!($aw_api = self::aw_api()) || empty($aw_api->___account->id))
+				return FALSE; // Unable to acquire API instance.
 
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
@@ -67,8 +68,59 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 					'list_id'    => trim($_aw_list),
 					'api_method' => 'listSubscribe'
 				);
-				if(!$_aw['list']) continue; // List missing.
+				if(!$_aw['list'] || !$_aw['list_id'])
+					continue; // List missing.
 
+				try // Catch any AWeber exceptions that occur here.
+				{
+					if(($_aw['foundLists'] = $aw_api->___account->lists->find(array('name' => $_aw['list_id']))))
+						if(($_aw['listUrl'] = '/accounts/'.$aw_api->___account->id.'/lists/'.$_aw['foundLists'][0]->id))
+							if(($_aw['list'] = $aw_api->___account->loadFromUrl($_aw['listUrl'])))
+							{
+								$_aw['subscriber_props']                = array(
+									'name'          => $args->name,
+									'email'         => $args->email,
+									'ip_address'    => $args->ip,
+									'ad_tracking'   => 's2-'.(is_multisite() && !is_main_site()
+											? $GLOBALS['current_blog']->domain.$GLOBALS['current_blog']->path
+											: $_SERVER['HTTP_HOST']),
+									'custom_fields' => apply_filters('ws_plugin__s2member_aweber_custom_fields_array', array(), get_defined_vars()),
+									'status'        => !$args->double_opt_in ? 'subscribed' : '', // Try to bypass confirmation?
+								);
+								$_aw['subscriber_props']['name']        = substr($_aw['subscriber_props']['name'], 0, 60);
+								$_aw['subscriber_props']['email']       = substr($_aw['subscriber_props']['email'], 0, 50);
+								$_aw['subscriber_props']['ip_address']  = substr($_aw['subscriber_props']['ip_address'], 0, 60);
+								$_aw['subscriber_props']['ad_tracking'] = substr($_aw['subscriber_props']['ad_tracking'], 0, 20);
+
+								foreach($_aw['subscriber_props'] as $_key => $_value)
+									if(!$_value && $_value !== FALSE) // Empty?
+										unset($_aw['subscriber_props'][$_key]);
+								unset($_key, $_value); // Housekeeping.
+
+								$_aw['findSubscriber'] = array('email' => $args->email, 'status' => 'subscribed');
+								if(($_aw['foundSubscribers'] = $_aw['list']->subscribers->find($_aw['findSubscriber'])))
+								{
+									/** @var AWeberEntry $_existing_subscriber */
+									$_existing_subscriber = $_aw['foundSubscribers'][0];
+
+									foreach($_aw['subscriber_props'] as $_key => $_value)
+										if(in_array($_key, array('name', 'ad_tracking', 'custom_fields'), TRUE))
+											$_existing_subscriber->{$_key} = $_value;
+									unset($_key, $_value); // Housekeeping.
+
+									if($_existing_subscriber->save() && ($_aw['subscriber'] = $_existing_subscriber))
+										$_aw['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
+
+									unset($_existing_subscriber); // Housekeeping.
+								}
+								else if(($_aw['subscriber'] = $_aw['list']->subscribers->create($_aw['subscriber'])) && !empty($_aw['subscriber']->id))
+									$_aw['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
+							}
+				}
+				catch(Exception $exception)
+				{
+					$_aw['exception'] = $exception;
+				}
 				c_ws_plugin__s2member_utils_logs::log_entry('aweber-api', $_aw);
 			}
 			unset($_aw_list, $_aw); // Just a little housekeeping.
@@ -103,7 +155,8 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
 
-			if(!($aw_api = self::aw_api())) return FALSE; // Unable to acquire API instance.
+			if(!($aw_api = self::aw_api()) || empty($aw_api->___account->id))
+				return FALSE; // Unable to acquire API instance.
 
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
@@ -116,8 +169,33 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 					'list_id'    => trim($_aw_list),
 					'api_method' => 'listUnsubscribe'
 				);
-				if(!$_aw['list']) continue; // List missing.
+				if(!$_aw['list'] || !$_aw['list_id'])
+					continue; // List missing.
 
+				try // Catch any AWeber exceptions that occur here.
+				{
+					if(($_aw['foundLists'] = $aw_api->___account->lists->find(array('name' => $_aw['list_id']))))
+						if(($_aw['listUrl'] = '/accounts/'.$aw_api->___account->id.'/lists/'.$_aw['foundLists'][0]->id))
+							if(($_aw['list'] = $aw_api->___account->loadFromUrl($_aw['listUrl'])))
+							{
+								$_aw['findSubscriber'] = array('email' => $args->email, 'status' => 'subscribed');
+								if(($_aw['foundSubscribers'] = $_aw['list']->subscribers->find($_aw['findSubscriber'])))
+								{
+									/** @var AWeberEntry $_existing_subscriber */
+									$_existing_subscriber         = $_aw['foundSubscribers'][0];
+									$_existing_subscriber->status = 'unsubscribed'; // Unsubscribe.
+
+									if($_existing_subscriber->save() && ($_aw['subscriber'] = $_existing_subscriber))
+										$_aw['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
+
+									unset($_existing_subscriber); // Housekeeping.
+								}
+							}
+				}
+				catch(Exception $exception)
+				{
+					$_aw['exception'] = $exception;
+				}
 				c_ws_plugin__s2member_utils_logs::log_entry('aweber-api', $_aw);
 			}
 			unset($_aw_list, $_aw); // Just a little housekeeping.
@@ -165,12 +243,12 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 
 			list($consumerKey, $consumerSecret, $accessKey, $accessSecret) = $key_parts;
 
-			try // Catch any exceptions that occur here.
+			try // Catch any AWeber exceptions that occur here.
 			{
 				$aw_api             = new AWeberAPI($consumerKey, $consumerSecret);
 				$aw_api->___account = $aw_api->getAccount($accessKey, $accessSecret);
 
-				return $aw_api; // AWeberAPI class instance.
+				return $aw_api; // AWeberAPI instance.
 			}
 			catch(Exception $exception)
 			{
