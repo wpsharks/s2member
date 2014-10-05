@@ -28,6 +28,24 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 	class c_ws_plugin__s2member_mailchimp extends c_ws_plugin__s2member_list_server_base
 	{
 		/**
+		 * API instance.
+		 *
+		 * @since 141004
+		 * @package s2Member\List_Servers
+		 *
+		 * @return NC_MCAPI|null MailChimp API instance.
+		 */
+		public static function mc_api()
+		{
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'])
+				return NULL; // Not possible.
+
+			if(!class_exists('NC_MCAPI')) // Include the MailChimp API class here.
+				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/nc-mcapi.inc.php';
+			return new NC_MCAPI($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], TRUE);
+		}
+
+		/**
 		 * Subscribe.
 		 *
 		 * @since 141004
@@ -51,9 +69,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids']))
 				return FALSE; // No list configured at this level.
 
-			if(!class_exists('NC_MCAPI')) // Include the MailChimp API Class here.
-				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/nc-mcapi.inc.php';
-			$mcapi = new NC_MCAPI($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], TRUE);
+			if(!($mc_api = self::mc_api())) return FALSE; // Unable to acquire API instance.
 
 			$mc_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids'];
 
@@ -65,7 +81,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 					'list'           => trim($_mc_list),
 					'list_id'        => trim($_mc_list),
 					'api_method'     => 'listSubscribe',
-					'api_properties' => $mcapi
+					'api_properties' => $mc_api
 				);
 				if(!$_mc['list']) continue; // List missing.
 
@@ -84,7 +100,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 				$_mc['merge_array'] = apply_filters('ws_plugin__s2member_mailchimp_array', $_mc['merge_array'], get_defined_vars()); // Deprecated!
 				// Filter: `ws_plugin__s2member_mailchimp_array` deprecated in v110523. Please use Filter: `ws_plugin__s2member_mailchimp_merge_array`.
 
-				if($_mc['api_response'] = $mcapi->{$_mc['api_method']}($_mc['list_id'], $args->email, // See: `http://apidocs.mailchimp.com/` for full details.
+				if($_mc['api_response'] = $mc_api->{$_mc['api_method']}($_mc['list_id'], $args->email, // See: `http://apidocs.mailchimp.com/` for full details.
 					($_mc['api_merge_array'] = apply_filters('ws_plugin__s2member_mailchimp_merge_array', $_mc['merge_array'], get_defined_vars())), // Configured merge array above.
 					($_mc['api_email_type'] = apply_filters('ws_plugin__s2member_mailchimp_email_type', 'html', get_defined_vars())), // Type of email to receive (i.e. html,text,mobile).
 					($_mc['api_double_optin'] = apply_filters('ws_plugin__s2member_mailchimp_double_optin', $args->double_opt_in, get_defined_vars())), // Abuse of this may cause account suspension.
@@ -124,9 +140,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids']))
 				return FALSE; // No list configured at this level.
 
-			if(!class_exists('NC_MCAPI')) // Include the MailChimp API Class here.
-				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/nc-mcapi.inc.php';
-			$mcapi = new NC_MCAPI($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], TRUE);
+			if(!($mc_api = self::mc_api())) return FALSE; // Unable to acquire API instance.
 
 			$mc_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids'];
 
@@ -138,7 +152,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 					'list'           => trim($_mc_list),
 					'list_id'        => trim($_mc_list),
 					'api_method'     => 'listUnsubscribe',
-					'api_properties' => $mcapi
+					'api_properties' => $mc_api
 				);
 				if(!$_mc['list']) continue; // List missing.
 
@@ -152,7 +166,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 
 					if(!$_mc['list_id']) continue; // List ID is missing now; after parsing interest groups.
 				}
-				if($_mc['api_response'] = $mcapi->{$_mc['api_method']}($_mc['list_id'], $args->email, // See: `http://apidocs.mailchimp.com/`.
+				if($_mc['api_response'] = $mc_api->{$_mc['api_method']}($_mc['list_id'], $args->email, // See: `http://apidocs.mailchimp.com/`.
 					($_mc['api_delete_member'] = apply_filters('ws_plugin__s2member_mailchimp_removal_delete_member', FALSE, get_defined_vars())), // Completely delete?
 					($_mc['api_send_goodbye'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_goodbye', FALSE, get_defined_vars())), // Send goodbye letter?
 					($_mc['api_send_notify'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_notify', FALSE, get_defined_vars())))

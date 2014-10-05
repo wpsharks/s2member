@@ -54,6 +54,8 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
 
+			if(!($aw_api = self::aw_api())) return FALSE; // Unable to acquire API instance.
+
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
 			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_aw_list)
@@ -101,6 +103,8 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
 
+			if(!($aw_api = self::aw_api())) return FALSE; // Unable to acquire API instance.
+
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
 			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_aw_list)
@@ -138,6 +142,40 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 				return c_ws_plugin__s2member_aweber_e::transition($old_args, $new_args);
 
 			return self::unsubscribe($old_args) && self::subscribe($new_args);
+		}
+
+		/**
+		 * API instance.
+		 *
+		 * @since 141004
+		 * @package s2Member\List_Servers
+		 *
+		 * @return AWeberAPI|null AWeber API instance.
+		 */
+		public static function aw_api()
+		{
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])
+				return NULL; // Not possible.
+
+			if(!class_exists('AWeberAPI')) // Include the AWeber API class here.
+				include_once dirname(dirname(__FILE__)).'/externals/aweber/aweber_api.php';
+
+			if(count($key_parts = explode('|', $GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])) < 4)
+				return NULL; // It's an invalid API key; i.e. authorization code.
+
+			list($consumerKey, $consumerSecret, $accessKey, $accessSecret) = $key_parts;
+
+			try // Catch any exceptions that occur here.
+			{
+				$aw_api             = new AWeberAPI($consumerKey, $consumerSecret);
+				$aw_api->___account = $aw_api->getAccount($accessKey, $accessSecret);
+
+				return $aw_api; // AWeberAPI class instance.
+			}
+			catch(Exception $exception)
+			{
+				return NULL; // API initialization failure.
+			}
 		}
 	}
 }
