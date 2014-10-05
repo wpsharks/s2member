@@ -68,9 +68,8 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 					if(!$accessTokenKey || !$accessTokenSecret)
 						return NULL; // Not possible.
 
-					$GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_internal_api_key'] = $internal_api_key =
-						array('key'      => $consumerKey.'|'.$consumerSecret.'|'.$accessTokenKey.'|'.$accessTokenSecret,
-						      'checksum' => $internal_api_key_checksum);
+					$GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_internal_api_key'] = $internal_api_key
+						= $consumerKey.'|'.$consumerSecret.'|'.$accessTokenKey.'|'.$accessTokenSecret.'|'.$internal_api_key_checksum;
 
 					c_ws_plugin__s2member_menu_pages::update_all_options
 					(array('ws_plugin__s2member_aweber_internal_api_key' => $internal_api_key),
@@ -97,6 +96,21 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			{
 				return NULL; // API initialization failure.
 			}
+		}
+
+		/**
+		 * Checks a countable obj.
+		 *
+		 * @since 141004
+		 * @package s2Member\List_Servers
+		 *
+		 * @param Countable $countable Countable obj.
+		 *
+		 * @return bool True if has `count()` > `0`.
+		 */
+		public static function count($countable)
+		{
+			return $countable instanceof Countable && $countable->count();
 		}
 
 		/**
@@ -145,7 +159,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 
 				try // Catch any AWeber exceptions that occur here.
 				{
-					if(($_aw['foundLists'] = $aw_api->___account->lists->find(array('name' => $_aw['list_id']))))
+					if(self::count($_aw['foundLists'] = $aw_api->___account->lists->find(array('name' => $_aw['list_id']))))
 						if(($_aw['listUrl'] = '/accounts/'.$aw_api->___account->id.'/lists/'.$_aw['foundLists'][0]->id))
 							if(($_aw['list'] = $aw_api->___account->loadFromUrl($_aw['listUrl'])))
 							{
@@ -170,7 +184,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 								unset($_key, $_value); // Housekeeping.
 
 								$_aw['findSubscriber'] = array('email' => $args->email, 'status' => 'subscribed');
-								if(($_aw['foundSubscribers'] = $_aw['list']->subscribers->find($_aw['findSubscriber'])))
+								if(self::count($_aw['foundSubscribers'] = $_aw['list']->subscribers->find($_aw['findSubscriber'])))
 								{
 									/** @var AWeberEntry $_existing_subscriber */
 									$_existing_subscriber = $_aw['foundSubscribers'][0];
@@ -246,12 +260,12 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 
 				try // Catch any AWeber exceptions that occur here.
 				{
-					if(($_aw['foundLists'] = $aw_api->___account->lists->find(array('name' => $_aw['list_id']))))
+					if(self::count($_aw['foundLists'] = $aw_api->___account->lists->find(array('name' => $_aw['list_id']))))
 						if(($_aw['listUrl'] = '/accounts/'.$aw_api->___account->id.'/lists/'.$_aw['foundLists'][0]->id))
 							if(($_aw['list'] = $aw_api->___account->loadFromUrl($_aw['listUrl'])))
 							{
 								$_aw['findSubscriber'] = array('email' => $args->email, 'status' => 'subscribed');
-								if(($_aw['foundSubscribers'] = $_aw['list']->subscribers->find($_aw['findSubscriber'])))
+								if(self::count($_aw['foundSubscribers'] = $_aw['list']->subscribers->find($_aw['findSubscriber'])))
 								{
 									/** @var AWeberEntry $_existing_subscriber */
 									$_existing_subscriber         = $_aw['foundSubscribers'][0];
