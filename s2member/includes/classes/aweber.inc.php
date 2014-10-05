@@ -43,15 +43,53 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			if(!class_exists('AWeberAPI')) // Include the AWeber API class here.
 				include_once dirname(dirname(__FILE__)).'/externals/aweber/aweber_api.php';
 
-			if(count($key_parts = explode('|', $GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])) < 4)
+			if(count($key_parts = explode('|', $GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])) < 5)
 				return NULL; // It's an invalid API key; i.e. authorization code.
 
-			list($consumerKey, $consumerSecret, $accessKey, $accessSecret) = $key_parts;
+			list($consumerKey, $consumerSecret, $requestToken, $tokenSecret, $verifier) = $key_parts;
+			$internal_api_key_checksum = md5($consumerKey.$consumerSecret.$requestToken.$tokenSecret.$verifier);
+
+			if(count($internal_key_parts = explode('|', $GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_internal_api_key'])) >= 5)
+				list(, , , , $checksum) = $internal_key_parts; // Only need checksum for now.
+
+			if(empty($checksum) || $checksum !== $internal_api_key_checksum)
+			{
+				try // Catch any AWeber exceptions that occur here.
+				{
+					$aw_api                     = new AWeberAPI($consumerKey, $consumerSecret);
+					$aw_api->user->requestToken = $requestToken;
+					$aw_api->user->tokenSecret  = $tokenSecret;
+					$aw_api->user->verifier     = $verifier;
+
+					if(!is_array($accessToken = $aw_api->getAccessToken()) || count($accessToken) < 2)
+						return NULL; // Not possible.
+
+					list($accessTokenKey, $accessTokenSecret) = $accessToken;
+					if(!$accessTokenKey || !$accessTokenSecret)
+						return NULL; // Not possible.
+
+					$GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_internal_api_key'] = $internal_api_key =
+						array('key'      => $consumerKey.'|'.$consumerSecret.'|'.$accessTokenKey.'|'.$accessTokenSecret,
+						      'checksum' => $internal_api_key_checksum);
+
+					c_ws_plugin__s2member_menu_pages::update_all_options
+					(array('ws_plugin__s2member_aweber_internal_api_key' => $internal_api_key),
+					 TRUE, FALSE, FALSE, FALSE, FALSE);
+				}
+				catch(Exception $exception)
+				{
+					return NULL; // API initialization failure.
+				}
+			}
+			if(count($internal_key_parts = explode('|', $GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_internal_api_key'])) < 5)
+				return NULL; // It's an invalid internal API key. Cannot continue.
+
+			list($consumerKey, $consumerSecret, $accessTokenKey, $accessTokenSecret, $checksum) = $internal_key_parts;
 
 			try // Catch any AWeber exceptions that occur here.
 			{
 				$aw_api             = new AWeberAPI($consumerKey, $consumerSecret);
-				$aw_api->___account = $aw_api->getAccount($accessKey, $accessSecret);
+				$aw_api->___account = $aw_api->getAccount($accessTokenKey, $accessTokenSecret);
 
 				return $aw_api; // AWeberAPI instance.
 			}
