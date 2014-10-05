@@ -211,7 +211,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-aweber-section">'."\n";
 				echo '<a href="http://www.s2member.com/aweber" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/aweber-logo.png" class="ws-menu-page-right ws-menu-page-bordered" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
 				echo '<h3>AWeber List Server Integration (optional)</h3>'."\n";
-				echo '<p>s2Member can be integrated with AWeber. AWeber is an email marketing service. Whether you\'re looking to get your first email campaign off the ground, or you\'re a seasoned veteran who wants to dig into advanced tools like detailed email web analytics, activity based segmentation, geo-targeting and broadcast split-testing, AWeber\'s got just what you need to make email marketing work for you. You can have your Members automatically subscribed to your AWeber marketing lists <em>(i.e. newsletters / auto-responders)</em>. You\'ll need an <a href="http://www.s2member.com/aweber" target="_blank" rel="external">AWeber account</a> and your <a href="#" onclick="alert(\'To obtain your AWeber List ID(s), log into your AWeber account. Click on the Lists tab. On that page you\\\'ll find a Unique List ID associated with each of your lists. AWeber sometimes refers to this as a List Name instead of a List ID.\'); return false;">AWeber List IDs</a>. You will ALSO need either an API Key (if you choose the API option below); or a <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">Custom Email Parser</a> for the s2Member application.</p>'."\n";
+				echo '<p>s2Member can be integrated with AWeber. AWeber is an email marketing service. Whether you\'re looking to get your first email campaign off the ground, or you\'re a seasoned veteran who wants to dig into advanced tools like detailed email web analytics, activity based segmentation, geo-targeting and broadcast split-testing, AWeber\'s got just what you need to make email marketing work for you. You can have your Members automatically subscribed to your AWeber marketing lists <em>(i.e. newsletters / auto-responders)</em>. You\'ll need an <a href="http://www.s2member.com/aweber" target="_blank" rel="external">AWeber account</a> and your <a href="#" onclick="alert(\'To obtain your AWeber List ID(s), log into your AWeber account. Click on the Lists tab. On that page you\\\'ll find a Unique List ID associated with each of your lists. AWeber sometimes refers to this as a List Name instead of a List ID.\'); return false;">AWeber List IDs</a>. You will ALSO need either an API Authorization Code (if you choose the API option below); or a <a href="http://www.s2member.com/kb/aweber-email-parser-for-s2member/" target="_blank" rel="external">Custom Email Parser</a> for the s2Member application.</p>'."\n";
 				echo '<p><em><strong>AWeber Tip:</strong> If you want your Members to be subscribed to multiple AWeber List IDs at the same time, instead of comma-delimiting those List IDs here; we suggest a single List ID in your s2Member integration; then use <a href="https://help.aweber.com/entries/21696463-Can-I-Add-Subscribers-to-More-Than-One-List-At-Once-" target="_blank" rel="external">AWeber Automation Rules</a> for this. Automation Rules can also reduce the number of email confirmation notices that Members receive.</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_els_ops_page_during_left_sections_during_aweber", get_defined_vars());
 
@@ -241,7 +241,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-aweber-api-key">'."\n";
-				echo 'AWeber API Key (Required for API Integration):<br />'."\n";
+				echo 'AWeber API Authorization Code (Required for API Integration):<br />'."\n";
 				echo '<small>If you choose <code>API</code> above, you MUST fill this in please.</small>'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
@@ -251,7 +251,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_aweber_api_key" id="ws-plugin--s2member-aweber-api-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["aweber_api_key"]).'" /><br />'."\n";
-				echo 'Once you have an AWeber account, you\'ll need to login; then <a href="http://www.s2member.com/r/aweber-api-key" target="_blank" rel="external">get your API Key</a>.'."\n";
+				echo 'Once you have an AWeber account, <a href="http://www.s2member.com/r/aweber-api-key" target="_blank" rel="external">click here to get the Authorization Code</a> needed by s2Member.'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
