@@ -39,11 +39,17 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 		 */
 		public static function subscribe($args)
 		{
+			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_type'] === 'email')
+				return c_ws_plugin__s2member_aweber_e::subscribe($args);
+
 			if(!($args = self::validate_args($args)))
 				return FALSE; // Invalid args.
 
 			if(!$args->opt_in) // Double check.
 				return FALSE; // Must say explicitly.
+
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])
+				return FALSE; // Not possible.
 
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
@@ -60,8 +66,6 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 					'api_method' => 'listSubscribe'
 				);
 				if(!$_aw['list']) continue; // List missing.
-
-
 
 				c_ws_plugin__s2member_utils_logs::log_entry('aweber-api', $_aw);
 			}
@@ -82,11 +86,17 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 		 */
 		public static function unsubscribe($args)
 		{
+			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_type'] === 'email')
+				return c_ws_plugin__s2member_aweber_e::unsubscribe($args);
+
 			if(!($args = self::validate_args($args)))
 				return FALSE; // Invalid args.
 
 			if(!$args->opt_out) // Double check.
 				return FALSE; // Must say explicitly.
+
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])
+				return FALSE; // Not possible.
 
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
@@ -103,8 +113,6 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 					'api_method' => 'listUnsubscribe'
 				);
 				if(!$_aw['list']) continue; // List missing.
-
-
 
 				c_ws_plugin__s2member_utils_logs::log_entry('aweber-api', $_aw);
 			}
@@ -126,6 +134,9 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 		 */
 		public static function transition($old_args, $new_args)
 		{
+			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_type'] === 'email')
+				return c_ws_plugin__s2member_aweber_e::transition($old_args, $new_args);
+
 			return self::unsubscribe($old_args) && self::subscribe($new_args);
 		}
 	}

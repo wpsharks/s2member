@@ -251,6 +251,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['mailchimp_api_key']   = '';
 		$default_options['getresponse_api_key'] = '';
+		$default_options['aweber_api_key'] = ''; // Needed for `api` type.
+		$default_options['aweber_api_type'] = 'api'; // `api` or `email`.
 
 		for($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++)
 			$default_options['level'.$n.'_mailchimp_list_ids'] = '';
@@ -507,10 +509,16 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 				else if(preg_match('/^(?:signup|modification|ccap|sp)_email_(?:subject|message)$/', $key) && (!is_string($value) || !strlen($value)))
 					$value = $default_options[$key];
 
-				else if($key === 'mailchimp_api_key' && (!is_string($value) || !strlen($value)))
+				else if($key === 'aweber_api_type' && (!is_string($value) || !preg_match('/^(?:api|email)$/', $value)))
+					$value = $default_options[$key];
+
+				else if(preg_match('/^(?:mailchimp|getresponse|aweber)_api_key$/', $key) && (!is_string($value) || !strlen($value)))
 					$value = $default_options[$key];
 
 				else if(preg_match('/^level[0-9]+_mailchimp_list_ids$/', $key) && (!is_string($value) || !strlen($value = preg_replace('/['."\r\n\t".']+/', '', $value))))
+					$value = $default_options[$key];
+
+				else if(preg_match('/^level[0-9]+_getresponse_list_ids$/', $key) && (!is_string($value) || !strlen($value = preg_replace('/\s+/', '', $value))))
 					$value = $default_options[$key];
 
 				else if(preg_match('/^level[0-9]+_aweber_list_ids$/', $key) && (!is_string($value) || !strlen($value = preg_replace('/\s+/', '', $value))))
