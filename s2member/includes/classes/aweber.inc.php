@@ -183,11 +183,14 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 										unset($_aw['subscriber_props'][$_key]);
 								unset($_key, $_value); // Housekeeping.
 
-								$_aw['findSubscriber'] = array('email' => $args->email, 'status' => 'subscribed');
-								if(self::count($_aw['foundSubscribers'] = $_aw['list']->subscribers->find($_aw['findSubscriber'])))
+								$_aw['findSubscriber'] = array('email' => $args->email);
+								if(self::count($_aw['foundSubscribers'] = $_aw['list']->subscribers->find($_aw['findSubscriber']))
+								   && $_aw['foundSubscribers'][0]->status !== 'unconfirmed' // i.e. `subscribed|unsubscribed`.
+								) // Cannot modify an `unconfirmed` subscriber.
 								{
 									/** @var AWeberEntry $_existing_subscriber */
-									$_existing_subscriber = $_aw['foundSubscribers'][0];
+									$_existing_subscriber         = $_aw['foundSubscribers'][0];
+									$_existing_subscriber->status = 'subscribed'; // Subscribe.
 
 									foreach($_aw['subscriber_props'] as $_key => $_value)
 										if(in_array($_key, array('name', 'ad_tracking', 'custom_fields'), TRUE))
