@@ -33,16 +33,16 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 		 * @since 141004
 		 * @package s2Member\List_Servers
 		 *
-		 * @return NC_MCAPI|null MailChimp API instance.
+		 * @return Mailchimp|null MailChimp API instance.
 		 */
 		public static function mc_api()
 		{
 			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'])
 				return NULL; // Not possible.
 
-			if(!class_exists('NC_MCAPI')) // Include the MailChimp API class here.
-				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/nc-mcapi.inc.php';
-			return new NC_MCAPI($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], TRUE);
+			if(!class_exists('Mailchimp')) // Include the MailChimp API class here.
+				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/Mailchimp.php';
+			return new Mailchimp($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], array('timeout' => 30));
 		}
 
 		/**
@@ -103,15 +103,22 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 				$_mc['merge_array'] = apply_filters('ws_plugin__s2member_mailchimp_array', $_mc['merge_array'], get_defined_vars()); // Deprecated!
 				// Filter: `ws_plugin__s2member_mailchimp_array` deprecated in v110523. Please use Filter: `ws_plugin__s2member_mailchimp_merge_array`.
 
-				if($_mc['api_response'] = $mc_api->{$_mc['api_method']}($_mc['list_id'], $args->email, // See: `http://apidocs.mailchimp.com/` for full details.
-					($_mc['api_merge_array'] = apply_filters('ws_plugin__s2member_mailchimp_merge_array', $_mc['merge_array'], get_defined_vars())), // Configured merge array above.
-					($_mc['api_email_type'] = apply_filters('ws_plugin__s2member_mailchimp_email_type', 'html', get_defined_vars())), // Type of email to receive (i.e. html,text,mobile).
-					($_mc['api_double_optin'] = apply_filters('ws_plugin__s2member_mailchimp_double_optin', $args->double_opt_in, get_defined_vars())), // Abuse of this may cause account suspension.
-					($_mc['api_update_existing'] = apply_filters('ws_plugin__s2member_mailchimp_update_existing', TRUE, get_defined_vars())), // Existing subscribers should be updated with this?
-					($_mc['api_replace_interests'] = apply_filters('ws_plugin__s2member_mailchimp_replace_interests', TRUE, get_defined_vars())), // Replace interest groups? (only if provided).
-					($_mc['api_send_welcome'] = apply_filters('ws_plugin__s2member_mailchimp_send_welcome', FALSE, get_defined_vars())))
-				) $_mc['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
-
+				try // Catch any Mailchimp exceptions that occur here.
+				{
+					if(($_mc['api_response'] = $mc_api->lists->subscribe($_mc['list_id'], $args->email, // See: `http://apidocs.mailchimp.com/` for full details.
+							($_mc['api_merge_array'] = apply_filters('ws_plugin__s2member_mailchimp_merge_array', $_mc['merge_array'], get_defined_vars())), // Configured merge array above.
+							($_mc['api_email_type'] = apply_filters('ws_plugin__s2member_mailchimp_email_type', 'html', get_defined_vars())), // Type of email to receive (i.e. html,text,mobile).
+							($_mc['api_double_optin'] = apply_filters('ws_plugin__s2member_mailchimp_double_optin', $args->double_opt_in, get_defined_vars())), // Abuse of this may cause account suspension.
+							($_mc['api_update_existing'] = apply_filters('ws_plugin__s2member_mailchimp_update_existing', TRUE, get_defined_vars())), // Existing subscribers should be updated with this?
+							($_mc['api_replace_interests'] = apply_filters('ws_plugin__s2member_mailchimp_replace_interests', TRUE, get_defined_vars())), // Replace interest groups? (only if provided).
+							($_mc['api_send_welcome'] = apply_filters('ws_plugin__s2member_mailchimp_send_welcome', FALSE, get_defined_vars()))))
+					   && !empty($_mc['api_response']->email)
+					) $_mc['api_success'] = $success = TRUE;
+				}
+				catch(Exception $exception)
+				{
+					$_mc['exception'] = $exception;
+				}
 				c_ws_plugin__s2member_utils_logs::log_entry('mailchimp-api', $_mc);
 			}
 			unset($_mc_list, $_mc); // Just a little housekeeping.
@@ -172,12 +179,19 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 
 					if(!$_mc['list_id']) continue; // List ID is missing now; after parsing interest groups.
 				}
-				if($_mc['api_response'] = $mc_api->{$_mc['api_method']}($_mc['list_id'], $args->email, // See: `http://apidocs.mailchimp.com/`.
-					($_mc['api_delete_member'] = apply_filters('ws_plugin__s2member_mailchimp_removal_delete_member', FALSE, get_defined_vars())), // Completely delete?
-					($_mc['api_send_goodbye'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_goodbye', FALSE, get_defined_vars())), // Send goodbye letter?
-					($_mc['api_send_notify'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_notify', FALSE, get_defined_vars())))
-				) $_mc['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
-
+				try // Catch any Mailchimp exceptions that occur here.
+				{
+					if(($_mc['api_response'] = $mc_api->lists->unsubscribe($_mc['list_id'], $args->email, // See: `http://apidocs.mailchimp.com/`.
+							($_mc['api_delete_member'] = apply_filters('ws_plugin__s2member_mailchimp_removal_delete_member', FALSE, get_defined_vars())), // Completely delete?
+							($_mc['api_send_goodbye'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_goodbye', FALSE, get_defined_vars())), // Send goodbye letter?
+							($_mc['api_send_notify'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_notify', FALSE, get_defined_vars()))))
+					   && !empty($_mc['api_response']->complete)
+					) $_mc['api_success'] = $success = TRUE;
+				}
+				catch(Exception $exception)
+				{
+					$_mc['exception'] = $exception;
+				}
 				c_ws_plugin__s2member_utils_logs::log_entry('mailchimp-api', $_mc);
 			}
 			unset($_mc_list, $_mc); // Just a little housekeeping.

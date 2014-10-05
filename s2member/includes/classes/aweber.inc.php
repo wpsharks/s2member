@@ -28,6 +28,40 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 	class c_ws_plugin__s2member_aweber extends c_ws_plugin__s2member_list_server_base
 	{
 		/**
+		 * API instance.
+		 *
+		 * @since 141004
+		 * @package s2Member\List_Servers
+		 *
+		 * @return AWeberAPI|null AWeber API instance.
+		 */
+		public static function aw_api()
+		{
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])
+				return NULL; // Not possible.
+
+			if(!class_exists('AWeberAPI')) // Include the AWeber API class here.
+				include_once dirname(dirname(__FILE__)).'/externals/aweber/aweber_api.php';
+
+			if(count($key_parts = explode('|', $GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])) < 4)
+				return NULL; // It's an invalid API key; i.e. authorization code.
+
+			list($consumerKey, $consumerSecret, $accessKey, $accessSecret) = $key_parts;
+
+			try // Catch any AWeber exceptions that occur here.
+			{
+				$aw_api             = new AWeberAPI($consumerKey, $consumerSecret);
+				$aw_api->___account = $aw_api->getAccount($accessKey, $accessSecret);
+
+				return $aw_api; // AWeberAPI instance.
+			}
+			catch(Exception $exception)
+			{
+				return NULL; // API initialization failure.
+			}
+		}
+
+		/**
 		 * Subscribe.
 		 *
 		 * @since 141004
@@ -220,40 +254,6 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 				return c_ws_plugin__s2member_aweber_e::transition($old_args, $new_args);
 
 			return self::unsubscribe($old_args) && self::subscribe($new_args);
-		}
-
-		/**
-		 * API instance.
-		 *
-		 * @since 141004
-		 * @package s2Member\List_Servers
-		 *
-		 * @return AWeberAPI|null AWeber API instance.
-		 */
-		public static function aw_api()
-		{
-			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])
-				return NULL; // Not possible.
-
-			if(!class_exists('AWeberAPI')) // Include the AWeber API class here.
-				include_once dirname(dirname(__FILE__)).'/externals/aweber/aweber_api.php';
-
-			if(count($key_parts = explode('|', $GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])) < 4)
-				return NULL; // It's an invalid API key; i.e. authorization code.
-
-			list($consumerKey, $consumerSecret, $accessKey, $accessSecret) = $key_parts;
-
-			try // Catch any AWeber exceptions that occur here.
-			{
-				$aw_api             = new AWeberAPI($consumerKey, $consumerSecret);
-				$aw_api->___account = $aw_api->getAccount($accessKey, $accessSecret);
-
-				return $aw_api; // AWeberAPI instance.
-			}
-			catch(Exception $exception)
-			{
-				return NULL; // API initialization failure.
-			}
 		}
 	}
 }

@@ -33,16 +33,16 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp_o'))
 		 * @since 141004
 		 * @package s2Member\List_Servers
 		 *
-		 * @return NC_MCAPI|null MailChimp API instance.
+		 * @return Mailchimp_o|null MailChimp API instance.
 		 */
 		public static function mc_api()
 		{
 			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'])
 				return NULL; // Not possible.
 
-			if(!class_exists('NC_MCAPI')) // Include the MailChimp API class here.
-				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/nc-mcapi.inc.php';
-			return new NC_MCAPI($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], TRUE);
+			if(!class_exists('Mailchimp_o')) // Include the MailChimp API class here.
+				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/Mailchimp-o.php';
+			return new Mailchimp_o($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], TRUE);
 		}
 
 		/**
