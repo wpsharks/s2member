@@ -73,6 +73,8 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 
 			$mc_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids'];
 
+			extract((array)$args); // Extract the arguments for back compat. w/ filters that relied upon them.
+
 			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_mc_list)
 			{
 				$_mc = array(
@@ -144,6 +146,8 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 			if(!($mc_api = self::mc_api())) return FALSE; // Unable to acquire API instance.
 
 			$mc_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_mailchimp_list_ids'];
+
+			extract((array)$args); // Extract the arguments for back compat. w/ filters that relied upon them.
 
 			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_mc_list)
 			{
