@@ -13,7 +13,7 @@
 * @package Xtnls\MailChimp
 * @since 3.0
 */
-class NC_MCAPI {
+class Mailchimp_o {
     var $version = "1.3";
     var $errorMessage;
     var $errorCode;
@@ -49,7 +49,7 @@ class NC_MCAPI {
      * @param string $apikey Your MailChimp apikey
      * @param string $secure Whether or not this should use a secure connection
      */
-    function NC_MCAPI($apikey, $secure=false) {
+    function Mailchimp_o($apikey, $secure=false) {
         $this->secure = $secure;
         $this->apiUrl = parse_url("http://api.mailchimp.com/" . $this->version . "/?output=php");
         $this->api_key = $apikey;
