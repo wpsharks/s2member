@@ -46,6 +46,7 @@ if(!class_exists('c_ws_plugin__s2member_systematics'))
 				return $is_s2_systematic; // Filters will have already been applied here.
 
 			$ci = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
+
 			if(!empty($_SERVER['QUERY_STRING']) && preg_match('/[\?&]s2member/'.$ci, $_SERVER['QUERY_STRING']) && c_ws_plugin__s2member_utils_conds::is_site_root($_SERVER['REQUEST_URI']))
 				return ($is_s2_systematic = apply_filters('ws_plugin__s2member_is_s2_systematic_use_page', TRUE, get_defined_vars()));
 
@@ -70,6 +71,8 @@ if(!class_exists('c_ws_plugin__s2member_systematics'))
 			if(isset($is_wp_systematic)) // Already cached statically? Saves time.
 				return $is_wp_systematic; // Filters will have already been applied here.
 
+			$ci = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
+
 			if(is_admin()) // In the admin area? All administrational pages are considered Systematic.
 				return ($is_wp_systematic = apply_filters('ws_plugin__s2member_is_wp_systematic_use_page', TRUE, get_defined_vars()));
 
@@ -85,7 +88,6 @@ if(!class_exists('c_ws_plugin__s2member_systematics'))
 			if((defined('DOING_CRON') && DOING_CRON) || strcasecmp(PHP_SAPI, 'CLI') === 0) // CLI or CRON job.
 				return ($is_wp_systematic = apply_filters('ws_plugin__s2member_is_wp_systematic_use_page', TRUE, get_defined_vars()));
 
-			$ci = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
 			if(preg_match('/^\/(?:wp-.+?|xmlrpc)\.php$/'.$ci, c_ws_plugin__s2member_utils_urls::parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))
 				return ($is_wp_systematic = apply_filters('ws_plugin__s2member_is_wp_systematic_use_page', TRUE, get_defined_vars()));
 
@@ -110,6 +112,8 @@ if(!class_exists('c_ws_plugin__s2member_systematics'))
 			if(isset($is_systematic)) // Already cached statically? Saves time.
 				return $is_systematic; // Filters will have already been applied here.
 
+			$ci = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
+
 			if(c_ws_plugin__s2member_systematics::is_s2_systematic_use_page()) // An s2Member Systematic Use Page?
 				return ($is_systematic = apply_filters('ws_plugin__s2member_is_systematic_use_page', TRUE, get_defined_vars()));
 
@@ -128,7 +132,6 @@ if(!class_exists('c_ws_plugin__s2member_systematics'))
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_limit_exceeded_page'] && is_page($GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_limit_exceeded_page']))
 				return ($is_systematic = apply_filters('ws_plugin__s2member_is_systematic_use_page', TRUE, get_defined_vars()));
 
-			$ci = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_override'] && ($_lro = c_ws_plugin__s2member_login_redirects::login_redirection_uri(NULL, 'root-returns-false')) && preg_match('/^'.preg_quote($_lro, '/').'$/'.$ci, $_SERVER['REQUEST_URI']))
 				return ($is_systematic = apply_filters('ws_plugin__s2member_is_systematic_use_page', TRUE, get_defined_vars()));
 
