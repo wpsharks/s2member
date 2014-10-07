@@ -47,7 +47,7 @@ jQuery(document)
 					              return true;
 				              });
 		       }
-		       if(!/\/wp-admin([\/?#]|$)/.test(location.href))
+		       if(!/\/wp-admin([\/?#]|$)/i.test(location.href))
 		       {
 			       $('input#ws-plugin--s2member-profile-password1, input#ws-plugin--s2member-profile-password2')
 				       .keyup(function()
@@ -98,7 +98,7 @@ jQuery(document)
 					               return true;
 				               });
 		       }
-		       if(/\/wp-signup\.php/.test(location.href))
+		       if(/\/wp-signup\.php/i.test(location.href))
 		       {
 			       $('div#content > div.mu_register > form#setupform')
 				       .submit(function()
@@ -129,7 +129,7 @@ jQuery(document)
 					               return true;
 				               });
 		       }
-		       if(/\/wp-login\.php/.test(location.href))
+		       if(/\/wp-login\.php/i.test(location.href))
 		       {
 			       $('div#login > form#registerform input#user_login').attr('tabindex', '10');
 			       $('div#login > form#registerform input#user_email').attr('tabindex', '20');
@@ -194,7 +194,7 @@ jQuery(document)
 					               return true;
 				               });
 		       }
-		       if(/\/wp-admin\/(?:user\/)?profile\.php/.test(location.href))
+		       if(/\/wp-admin\/(?:user\/)?profile\.php/i.test(location.href))
 		       {
 			       $('form#your-profile')
 				       .submit(function(/* Validation. */)
