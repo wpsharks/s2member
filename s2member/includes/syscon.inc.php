@@ -315,7 +315,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['amazon_cf_files_distro_streaming_dname']     = '';
 		$default_options['amazon_cf_files_distros_auto_config_status'] = '';
 
-		$default_options['ruri_restrictions_case_sensitive'] = '0';
+		$default_options['ruris_case_sensitive'] = '0'; // No by default.
 
 		for($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++)
 			$default_options['level'.$n.'_ruris'] = '';
@@ -556,7 +556,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 				else if(preg_match('/^amazon_(?:s3|cf)_files_/', $key) && (!is_string($value) || !strlen($value)))
 					$value = $default_options[$key];
 
-				else if($key === 'ruri_restrictions_case_sensitive' && (!is_string($value) || !is_numeric($value)))
+				else if($key === 'ruris_case_sensitive' && (!is_string($value) || !is_numeric($value)))
 					$value = $default_options[$key];
 
 				else if(preg_match('/^level[0-9]+_ruris$/', $key) && (!is_string($value) || !strlen($value)))
