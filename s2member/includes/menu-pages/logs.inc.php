@@ -167,7 +167,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-				echo '<form method="post" onsubmit="if(!confirm(\'Archive all existing log files?\n\nAll of your current log files will be archived (e.g. they will simply be renamed with an ARCHIVED tag &amp; date in their file name); and new log files will be created automatically the next time s2Member logs something on your installation.\n\nPlease click OK to confirm this action.\')) return false;">'."\n";
+				echo '<form method="post" onsubmit="if(!confirm(\'Archive all existing log files?\n\nAll of your current log files will be archived (i.e. they will simply be renamed with an ARCHIVED tag &amp; date in their file name); and new log files will be created automatically the next time s2Member logs something on your installation.\n\nPlease click OK to confirm this action.\')) return false;">'."\n";
 				echo '<input type="hidden" name="ws_plugin__s2member_logs_archive_start_fresh" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-logs-archive-start-fresh")).'" />'."\n";
 				echo '<input type="submit" value="Archive All Current Log Files" class="ws-menu-page-right ws-plugin--s2member-archive-logs-start-fresh-button" style="font-size:110%; font-weight:normal; clear:right; min-width:200px;" />'."\n";
 				echo '</form>'."\n";

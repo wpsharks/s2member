@@ -113,11 +113,11 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 *
 	 * @param string  $plugin_name If empty, defaults to a generic value.
 	 *    Name of the plugin that's checking dependencies;
-	 *    e.g. the plugin that called this routine.
+	 *    i.e. the plugin that called this routine.
 	 *
 	 * @param string  $plugin_dir_names If empty, defaults to a generic value.
 	 *    Name of one or more (comma-delimited) plugin directories associated with dependency scans;
-	 *    e.g. directories associated with the plugin that called this routine.
+	 *    i.e. directories associated with the plugin that called this routine.
 	 *
 	 * @param boolean $report_notices TRUE by default.
 	 *    If FALSE, do NOT report any notices.
@@ -871,7 +871,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							' Please check with your hosting provider to resolve this issue and have PHP <code>eval()</code> enabled.'.
 							' Note... the use of <code>eval()</code>, is limited to areas where it is absolutely necessary to achieve a desired functionality.'.
 							' For instance, where PHP code is supplied by a site owner (or by their developer) to achieve advanced customization through a UI panel. This can be evaluated at runtime to allow for the inclusion of PHP conditionals or dynamic values.'.
-							' In cases such as these, the PHP <code>eval()</code> function serves a valid purpose. This does NOT introduce a vulnerability, because the code being evaluated has actually been introduced by the site owner (e.g. the code can be trusted in this case).'
+							' In cases such as these, the PHP <code>eval()</code> function serves a valid purpose. This does NOT introduce a vulnerability, because the code being evaluated has actually been introduced by the site owner (i.e. the code can be trusted in this case).'
 						), htmlspecialchars($plugin_name)
 					)
 				);
@@ -2106,7 +2106,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 * @param string      $dir The directory we should begin with.
 	 *
 	 * @param boolean     $ignore_readme_files Optional. Defaults to a TRUE value.
-	 *    By default, we ignore README files (e.g. `readme.txt` and `readme.md`).
+	 *    By default, we ignore README files (i.e. `readme.txt` and `readme.md`).
 	 *
 	 *    NOTE: No matter what this is set to, we always exclude our default globs.
 	 *       See: {@link dir_file_ignore()} for further details on this.
@@ -2509,7 +2509,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							);
 
 							$_auto_fix_confirmation =
-								"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nThis is a PHP routine, that will attempt to fix the issue automatically (e.g. to fix it programmatically).\\n\\t\\nBACKUP NOTICE: Please backup all of your files, and all of your database tables, before running this routine.\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before running this routine. It is always better to have a qualified web developer help you. If you run this routine, you do so at your own risk.")."');\"";
+								"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nThis is a PHP routine, that will attempt to fix the issue automatically (i.e. to fix it programmatically).\\n\\t\\nBACKUP NOTICE: Please backup all of your files, and all of your database tables, before running this routine.\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before running this routine. It is always better to have a qualified web developer help you. If you run this routine, you do so at your own risk.")."');\"";
 
 							echo '<a href="'.esc_attr(add_query_arg(urlencode_deep($_auto_fix), (string)$_SERVER['REQUEST_URI'])).'" '.$_auto_fix_confirmation.'>'.
 							     self::i18n('AUTO-FIX<em>!</em>').
@@ -2698,7 +2698,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					);
 
 					$_auto_fix_confirmation =
-						"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nThis is a PHP routine, that will attempt to fix the issue automatically (e.g. to fix it programmatically).\\n\\t\\nBACKUP NOTICE: Please backup all of your files, and all of your database tables, before running this routine.\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before running this routine. It is always better to have a qualified web developer help you. If you run this routine, you do so at your own risk.")."');\"";
+						"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nThis is a PHP routine, that will attempt to fix the issue automatically (i.e. to fix it programmatically).\\n\\t\\nBACKUP NOTICE: Please backup all of your files, and all of your database tables, before running this routine.\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before running this routine. It is always better to have a qualified web developer help you. If you run this routine, you do so at your own risk.")."');\"";
 
 					echo '<a href="'.esc_attr(add_query_arg(urlencode_deep($_auto_fix), (string)$_SERVER['REQUEST_URI'])).'" '.$_auto_fix_confirmation.'>'.
 					     self::i18n('AUTO-FIX<em>!</em>').

@@ -707,11 +707,11 @@ in order to be removed - this <strong>will not</strong> unsubscribe them from th
     /**
      * Subscribe the provided email to a list. By default this sends a confirmation email - you will not see new members until the link contained in it is clicked!
      * @param string $id
-     * @param associative_array $email
+     * @param array $email
      *     - email string an email address - for new subscribers obviously this should be used
      *     - euid string the unique id for an email address (not list related) - the email "id" returned from listMemberInfo, Webhooks, Campaigns, etc.
      *     - leid string the list email id (previously called web_id) for a list-member-info type call. this doesn't change when the email address changes
-     * @param associative_array $merge_vars
+     * @param array $merge_vars
      *     - new-email string set this to change the email address. This is only respected on calls using update_existing or when passed to lists/update.
      *     - groupings array of Interest Grouping structs. Each should contain:
      *         - id int Grouping "id" from lists/interest-groupings (either this or name must be present) - this id takes precedence and can't change (unlike the name)
@@ -733,7 +733,7 @@ in order to be removed - this <strong>will not</strong> unsubscribe them from th
      * @param bool $update_existing
      * @param bool $replace_interests
      * @param bool $send_welcome
-     * @return associative_array the ids for this subscriber
+     * @return array the ids for this subscriber
      *     - email string the email address added
      *     - euid string the email unique id
      *     - leid string the list member's truly unique id
@@ -746,14 +746,14 @@ in order to be removed - this <strong>will not</strong> unsubscribe them from th
     /**
      * Unsubscribe the given email address from the list
      * @param string $id
-     * @param associative_array $email
+     * @param array $email
      *     - email string an email address
      *     - euid string the unique id for an email address (not list related) - the email "id" returned from listMemberInfo, Webhooks, Campaigns, etc.
      *     - leid string the list email id (previously called web_id) for a list-member-info type call. this doesn't change when the email address changes
      * @param boolean $delete_member
      * @param boolean $send_goodbye
      * @param boolean $send_notify
-     * @return associative_array with a single entry:
+     * @return array with a single entry:
      *     - complete bool whether the call worked. reallistically this will always be true as errors will be thrown otherwise.
      */
     public function unsubscribe($id, $email, $delete_member=false, $send_goodbye=true, $send_notify=true) {
