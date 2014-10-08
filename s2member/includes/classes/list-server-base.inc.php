@@ -68,9 +68,11 @@ if(!class_exists('c_ws_plugin__s2member_list_server_base'))
 					case 'role':
 					case 'level':
 						$_value = (string)$_value;
+						break;
 
 					case 'ccaps': // Input can be a string or an array.
 						$_value = is_array($_value) ? implode(',', $_value) : (string)$_value;
+						break;
 
 					case 'login':
 					case 'pass':
@@ -79,16 +81,20 @@ if(!class_exists('c_ws_plugin__s2member_list_server_base'))
 					case 'lname':
 					case 'ip':
 						$_value = (string)$_value;
+						break;
 
 					case 'opt_in':
 					case 'double_opt_in':
 						$_value = (boolean)$_value;
+						break;
 
 					case 'user': // A `WP_User` object instance.
 						$_value = $_value instanceof WP_User ? $_value : NULL;
+						break;
 
 					case 'user_id': // User ID.
 						$_value = (integer)$_value;
+						break;
 				}
 			unset($_key, $_value); // Housekeeping.
 
