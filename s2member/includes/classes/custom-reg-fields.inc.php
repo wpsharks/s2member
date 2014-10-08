@@ -800,8 +800,8 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 					foreach($fields as $field => $config)
 						{
-							add_filter('get_user_option_' . $field, array('c_ws_plugin__s2member_custom_reg_fields', 'do_filter_get_user_option'), 10, 3);
-							add_filter('get_user_option_s2_' . $field, array('c_ws_plugin__s2member_custom_reg_fields', 'do_filter_get_user_option'), 10, 3); // Also add filter for `s2_$field` variant
+							add_filter('get_user_option_' . $field, array('c_ws_plugin__s2member_custom_reg_fields', 'do_filter_get_user_option'), 20, 3);
+							add_filter('get_user_option_s2_' . $field, array('c_ws_plugin__s2member_custom_reg_fields', 'do_filter_get_user_option'), 20, 3); // Also add filter for `s2_$field` variant
 						}
 				}
 
@@ -816,18 +816,26 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 			 */
 			public static function do_filter_get_user_option($result, $name, $user)
 				{
-					if($result) return $result; // If WordPress already applied a value to this, we shouldn't override it.
+					if($result !== false) return $result; // If WordPress already applied a value to this, we shouldn't override it.
 
-					$fields = get_s2member_custom_fields($user->ID);
+					$user_fields = ($user->ID) ? get_user_option("s2member_custom_fields", $user->ID) : false;
+					if(!$user->ID || $user_fields === false || !$custom_fields = json_decode($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true))
+						return $result;
+
+					foreach($custom_fields as $field)
+						{
+							if ($user->ID)
+								$s2member_custom_fields[$field["id"]]["user_value"] = (isset($user_fields[$field["id"]])) ? $user_fields[$field["id"]] : false;
+							$s2member_custom_fields[$field["id"]]["config"] = $field;
+						}
+
+					$fields = (isset($s2member_custom_fields)) ? (array)$s2member_custom_fields : array();
 
 					if(isset($fields[$name]))
 						$result = $fields[$name]['user_value'];
 
 					elseif(strpos($name, 's2_') === 0 && ($real_name = preg_replace('/^s2_/', '', $name)) && isset($fields[$real_name]))
 						$result = $fields[$real_name]['user_value'];
-
-					$result = apply_filters('c_ws_plugin__s2member_custom_reg_field_value_get_user_option', $result, get_defined_vars());
-					$result = apply_filters('c_ws_plugin__s2member_custom_reg_field_value_get_user_option_'.$name, $result, get_defined_vars());
 
 					return $result;
 				}
