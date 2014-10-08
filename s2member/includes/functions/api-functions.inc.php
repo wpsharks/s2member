@@ -2489,7 +2489,7 @@ if(!function_exists("get_s2member_custom_fields"))
 	{
 		function get_s2member_custom_fields($user_id = FALSE)
 			{
-				$fields = ($user_id) ? get_user_option("s2member_custom_fields", $user_id) : false;
+				$fields = ($user_id) ? get_user_option("s2member_custom_fields", $user_id) : array();
 
 				foreach(json_decode($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
 					{
