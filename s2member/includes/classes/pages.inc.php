@@ -41,6 +41,7 @@ if(!class_exists('c_ws_plugin__s2member_pages'))
 
 			do_action('ws_plugin__s2member_before_check_page_level_access', get_defined_vars());
 
+			$ci       = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
 			$excluded = apply_filters('ws_plugin__s2member_check_page_level_access_excluded', FALSE, get_defined_vars());
 
 			if(!$excluded && is_page() && is_object($post) && !empty($post->ID) && ($page_id = (int)$post->ID) && $GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_options_page'])
@@ -52,7 +53,7 @@ if(!class_exists('c_ws_plugin__s2member_pages'))
 					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page'] && $page_id === (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page'] && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level0')) && $page_id !== (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_options_page'])
 						c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('page', $page_id, 'level', 0, $_SERVER['REQUEST_URI'], 'sys').exit ();
 
-					else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_override'] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri($user, 'root-returns-false')) && preg_match('/^'.preg_quote($login_redirection_uri, '/').'$/', $_SERVER['REQUEST_URI']) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level0')) && $page_id !== (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_options_page'])
+					else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_override'] && ($login_redirection_uri = c_ws_plugin__s2member_login_redirects::login_redirection_uri($user, 'root-returns-false')) && preg_match('/^'.preg_quote($login_redirection_uri, '/').'$/'.$ci, $_SERVER['REQUEST_URI']) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level0')) && $page_id !== (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_options_page'])
 						c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('page', $page_id, 'level', 0, $_SERVER['REQUEST_URI'], 'sys').exit ();
 
 					else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_limit_exceeded_page'] && $page_id === (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_limit_exceeded_page'] && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level0')) && $page_id !== (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_options_page'])
@@ -87,7 +88,7 @@ if(!class_exists('c_ws_plugin__s2member_pages'))
 							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ruris']) // URIs configured at this Level?
 
 								foreach(preg_split('/['."\r\n\t".']+/', c_ws_plugin__s2member_ruris::fill_ruri_level_access_rc_vars($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ruris'], $user)) as $str)
-									if($str && preg_match('/'.preg_quote($str, '/').'/', $_SERVER['REQUEST_URI']) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
+									if($str && preg_match('/'.preg_quote($str, '/').'/'.$ci, $_SERVER['REQUEST_URI']) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') && (!$user || !$user->has_cap('access_s2member_level'.$n)))
 										c_ws_plugin__s2member_mo_page::wp_redirect_w_mop_vars('page', $page_id, 'level', $n, $_SERVER['REQUEST_URI'], 'ruri').exit ();
 						}
 						if(is_array($ccaps_req = get_post_meta($page_id, 's2member_ccaps_req', TRUE)) && !empty($ccaps_req) && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted'))
