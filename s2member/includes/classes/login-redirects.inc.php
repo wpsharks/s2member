@@ -46,6 +46,8 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 			do_action('ws_plugin__s2member_before_login_redirect', get_defined_vars());
 			unset($__refs, $__v); // Housekeeping.
 
+			$ci = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
+
 			if(is_string($username) && $username && is_object($user) && !empty($user->ID) && ($user_id = $user->ID))
 			{
 				update_user_option($user_id, 's2member_last_login_time', time());
@@ -61,8 +63,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 
 				if(($ok = TRUE) && !is_super_admin($user_id) && $username !== 'demo' // Exclude super admins, the `demo` user, and anyone who can edit posts.
 				   && !apply_filters('ws_plugin__s2member_disable_login_ip_restrictions', (($user->has_cap('edit_posts')) ? TRUE : FALSE), get_defined_vars())
-				)
-					$ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok($_SERVER['REMOTE_ADDR'], strtolower($username));
+				) $ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok($_SERVER['REMOTE_ADDR'], strtolower($username));
 
 				if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_always_http']) // Alter value of `redirect_to`?
 					if(!empty($_REQUEST['redirect_to']) && is_string($_REQUEST['redirect_to']) && strpos($_REQUEST['redirect_to'], 'wp-admin') === FALSE)
@@ -71,7 +72,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 						if(stripos($_REQUEST['redirect_to'], 'http://') !== 0) // Force an absolute URL in this case.
 						{
 							$home_path               = trim((string)@parse_url(home_url('/'), PHP_URL_PATH), '/');
-							$http_home_base          = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/', '', home_url('/', 'http')), '/');
+							$http_home_base          = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/'.$ci, '', home_url('/', 'http')), '/');
 							$_REQUEST['redirect_to'] = $http_home_base.'/'.ltrim($_REQUEST['redirect_to'], '/');
 						}
 					}
@@ -79,7 +80,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 				{
 					$obey_redirect_to = apply_filters('ws_plugin__s2member_obey_login_redirect_to', TRUE, get_defined_vars());
 
-					if($obey_redirect_to && (empty($_REQUEST['redirect_to']) || !is_string($_REQUEST['redirect_to']) || $_REQUEST['redirect_to'] === admin_url() || preg_match('/^\/?wp-admin\/?$/', $_REQUEST['redirect_to'])))
+					if($obey_redirect_to && (empty($_REQUEST['redirect_to']) || !is_string($_REQUEST['redirect_to']) || $_REQUEST['redirect_to'] === admin_url() || preg_match('/^\/?wp-admin\/?$/'.$ci, $_REQUEST['redirect_to'])))
 						$obey_redirect_to = FALSE; // Do not obey default redirect_to locations; like those inside the default admin area.
 
 					else if($obey_redirect_to && !empty($_REQUEST['redirect_to_automatic']) && is_string($redirect))
@@ -109,7 +110,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 							if(stripos($redirect, 'http://') !== 0) // Force absolute.
 							{
 								$home_path      = trim((string)@parse_url(home_url('/'), PHP_URL_PATH), '/');
-								$http_home_base = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/', '', home_url('/', 'http')), '/');
+								$http_home_base = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/'.$ci, '', home_url('/', 'http')), '/');
 								$redirect       = $http_home_base.'/'.ltrim($redirect, '/');
 							}
 						}
@@ -117,9 +118,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 					}
 				}
 			}
-			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_after_login_redirect', get_defined_vars());
-			unset($__refs, $__v); // Housekeeping.
 		}
 
 		/**
@@ -165,7 +164,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 			if(($url = c_ws_plugin__s2member_login_redirects::login_redirection_url($user, $root_returns_false)))
 				$uri = c_ws_plugin__s2member_utils_urls::parse_uri($url);
 
-			return apply_filters('ws_plugin__s2member_login_redirection_uri', ((!empty($uri)) ? $uri : FALSE), get_defined_vars());
+			return apply_filters('ws_plugin__s2member_login_redirection_uri', !empty($uri) ? $uri : FALSE, get_defined_vars());
 		}
 
 		/**
@@ -189,7 +188,8 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 			$url      = (string)$url; // Force ``$url`` to a string value.
 			$orig_url = $url; // Record the original URL that was passed in.
 
-			$user = ((is_object($user) || is_object($user = (is_user_logged_in()) ? wp_get_current_user() : NULL)) && !empty($user->ID)) ? $user : NULL;
+			$user = (is_object($user) || is_object($user = wp_get_current_user()))
+			        && !empty($user->ID) ? $user : NULL;
 
 			$user_id       = ($user) ? (string)$user->ID : '';
 			$user_login    = ($user) ? (string)strtolower($user->user_login) : '';
