@@ -234,7 +234,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 				echo '<option value="api"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["aweber_api_type"] === "api") ? ' selected="selected"' : '').'>API (recommended for a more robust integration)</option>'."\n";
 				echo '<option value="email"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["aweber_api_type"] === "email") ? ' selected="selected"' : '').'>Email (less reliable; requires an Email Parser)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo 'Starting w/ s2Member™ v141005+, you can now integrate with AWeber\'s API (recommended) instead of through an Email Parser.'."\n";
+				echo 'Starting w/ s2Member™ v141007+, you can now integrate with AWeber\'s API (recommended) instead of through an Email Parser.'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
