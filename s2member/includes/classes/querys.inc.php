@@ -266,7 +266,7 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 		 * @package s2Member\Queries
 		 * @since 3.5
 		 *
-		 * @param object $wp_query Expects ``$wp_query`` by reference.
+		 * @param WP_Query $wp_query Expects ``$wp_query`` by reference.
 		 */
 		public static function _query_level_access_sys(&$wp_query = NULL)
 		{
