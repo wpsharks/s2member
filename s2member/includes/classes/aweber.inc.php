@@ -140,7 +140,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
 
-			if(!($aw_api = self::aw_api()) || empty($aw_api->___account->id))
+			if(!($aw_api = self::aw_api()) || !@$aw_api->___account->id)
 				return FALSE; // Unable to acquire API instance.
 
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
@@ -202,7 +202,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 
 									unset($_existing_subscriber); // Housekeeping.
 								}
-								else if(($_aw['subscriber'] = $_aw['list']->subscribers->create($_aw['subscriber'])) && !empty($_aw['subscriber']->id))
+								else if(($_aw['subscriber'] = $_aw['list']->subscribers->create($_aw['subscriber_props'])) && @$_aw['subscriber']->id)
 									$_aw['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
 							}
 				}
@@ -244,7 +244,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids']))
 				return FALSE; // No list configured at this level.
 
-			if(!($aw_api = self::aw_api()) || empty($aw_api->___account->id))
+			if(!($aw_api = self::aw_api()) || !@$aw_api->___account->id)
 				return FALSE; // Unable to acquire API instance.
 
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];

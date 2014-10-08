@@ -112,7 +112,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 							($_mc['api_update_existing'] = apply_filters('ws_plugin__s2member_mailchimp_update_existing', TRUE, get_defined_vars())), // Existing subscribers should be updated with this?
 							($_mc['api_replace_interests'] = apply_filters('ws_plugin__s2member_mailchimp_replace_interests', TRUE, get_defined_vars())), // Replace interest groups? (only if provided).
 							($_mc['api_send_welcome'] = apply_filters('ws_plugin__s2member_mailchimp_send_welcome', FALSE, get_defined_vars()))))
-					   && !empty($_mc['api_response']->email)
+					   && !empty($_mc['api_response']['email'])
 					) $_mc['api_success'] = $success = TRUE;
 				}
 				catch(Exception $exception)
@@ -185,7 +185,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 							($_mc['api_delete_member'] = apply_filters('ws_plugin__s2member_mailchimp_removal_delete_member', FALSE, get_defined_vars())), // Completely delete?
 							($_mc['api_send_goodbye'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_goodbye', FALSE, get_defined_vars())), // Send goodbye letter?
 							($_mc['api_send_notify'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_notify', FALSE, get_defined_vars()))))
-					   && !empty($_mc['api_response']->complete)
+					   && !empty($_mc['api_response']['complete'])
 					) $_mc['api_success'] = $success = TRUE;
 				}
 				catch(Exception $exception)
