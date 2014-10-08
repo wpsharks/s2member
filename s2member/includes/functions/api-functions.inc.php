@@ -2491,7 +2491,9 @@ if(!function_exists("get_s2member_custom_fields"))
 			{
 				$fields = ($user_id) ? get_user_option("s2member_custom_fields", $user_id) : false;
 
-				foreach(json_decode($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true) as $field)
+				if(!$custom_fields = json_decode($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true)) return array();
+
+				foreach($custom_fields as $field)
 					{
 						if /* Should we try to fill the User's value for this Custom Field? */($user_id)
 							$s2member_custom_fields[$field["id"]]["user_value"] = (isset($fields[$field["id"]])) ? $fields[$field["id"]] : false;

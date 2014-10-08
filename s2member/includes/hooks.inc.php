@@ -108,6 +108,8 @@ add_action('wpmu_activate_user', 'c_ws_plugin__s2member_registrations::configure
 add_action('wpmu_activate_blog', 'c_ws_plugin__s2member_registrations::configure_user_on_ms_blog_activation', 10, 5);
 add_action('signup_extra_fields', 'c_ws_plugin__s2member_custom_reg_fields::ms_custom_registration_fields');
 
+add_action('plugins_loaded', array('c_ws_plugin__s2member_custom_reg_fields', 'add_filters_get_user_option'), 1);
+
 add_action('bp_after_signup_profile_fields', 'c_ws_plugin__s2member_custom_reg_fields_4bp::custom_registration_fields_4bp');
 add_action('bp_signup_validate', 'c_ws_plugin__s2member_registrations::custom_registration_field_errors_4bp');
 add_action('bp_after_profile_field_content', 'c_ws_plugin__s2member_custom_reg_fields_4bp::custom_profile_fields_4bp');
