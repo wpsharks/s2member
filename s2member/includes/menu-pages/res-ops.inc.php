@@ -87,7 +87,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_res_ops"))
 
 					echo '</tr>'."\n";
 				}
-
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 				echo '</div>'."\n";
@@ -131,7 +130,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_res_ops"))
 
 					echo '</tr>'."\n";
 				}
-
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 				echo '</div>'."\n";
@@ -175,7 +173,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_res_ops"))
 
 					echo '</tr>'."\n";
 				}
-
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 				echo '</div>'."\n";
@@ -221,7 +218,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_res_ops"))
 
 					echo '<tr>'."\n";
 				}
-
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 				echo '</div>'."\n";
