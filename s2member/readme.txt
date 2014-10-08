@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 140921
-Stable tag: 140921
+Version: 141007
+Stable tag: 141007
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -159,11 +159,20 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v140921 =
+= v141007 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v141007 =
+
+- (s2Member Pro) **ClickBank IPN v6:** This release enables a new integration option for site owners integrated with ClickBank. You may now choose to integrate with v6 of ClickBank's IPN service, since all previous versions are slowly being phased out by ClickBank. Please see: `Dashboard ⥱ s2Member ⥱ ClickBank Options ⥱ IPN Integration` for v6 config. options. See also [this GitHub issue](https://github.com/websharks/s2member/issues/256) if you'd like further details regarding this topic. See also: [this article @ ClickBank](https://support.clickbank.com/entries/22803622-instant-notification-service).
+- (s2Member/s2Member Pro) **AWeber API Integration:** This release of s2Member adds a new option for site owners using AWeber. It is now possible to integrate with the new [s2Member App](http://www.s2member.com/r/aweber-api-key) for AWeber; i.e. via the AWeber API instead of via email-based communication. For further details, please see: `Dashboard ⥱ s2Member ⥱ API / List Servers ⥱ AWeber Integration`. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/303) if you'd like additional details.
+- (s2Member/s2Member Pro) **Bug Fix:** The EOT Behavior option for `refunds,partial_refunds,reversals` was not being accepted by s2Member. Fixed in this release. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/345) if you'd like further details.
+- (s2Member/s2Member Pro) **MailChimp API Wrapper:** This release of s2Member comes with an updated API wrapper class for MailChimp integration. No change in functionality, just a smoother, slightly faster, and more bug-free interaction with the MailChimp API. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/303) if you'd like further details regarding this improvement. See also: [the official MailChimp API class](https://bitbucket.org/mailchimp/mailchimp-api-php); i.e. what s2Member has been updated to in this release.
+- (s2Member/s2Member Pro) **URI Restrictions caSe-insensitive (Security Fix)** This release of s2Member changes the way URI Restrictions work. All URI Restrictions are now caSe-insensitive (i.e. `/some-path/` is now the same as `/some-Path/`), allowing s2Member to automatically pick up different variations used in attempts to exploit the behavior of certain slugs within the WordPress core. You can also change this new default behavior, if you prefer. Please see: `Dashboard ⥱ s2Member ⥱ Restriction Options ⥱ URI Restrictions`. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/354) for the details about why this was changed in the most recent copy of s2Member.
+- (s2Member/s2Member) **AWeber Role-Based Emails:** In this release we're adding a note in the s2Member UI regarding role-based email addresses being rejected by AWeber. AWeber does not allow role-based emails like: `admin@` or `webmaster@` to be subscribed. It is suggested that you enable s2Member's config. option: "Force Personal Emails" if you intend to integrate with AWeber. Please see: `Dashboard ⥱ s2Member ⥱ General Options ⥱ Registration/Profile Fields`; where you can tell s2Member for force personal email addresses when someone registers on-site. This will prevent a potential subscriber from entering something like `admin@example.com` as their email address.
 
 = v140921 =
 
