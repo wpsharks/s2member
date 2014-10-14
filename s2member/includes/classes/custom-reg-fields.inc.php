@@ -790,5 +790,54 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 					return apply_filters('c_ws_plugin__s2member_custom_reg_field_validation_errors', $errors, get_defined_vars());
 				}
+
+			/**
+			 * Adds filters to `get_user_option` for Custom Field mapping
+			 */
+			public static function add_filters_get_user_option()
+				{
+					$fields = get_s2member_custom_fields();
+
+					foreach($fields as $field => $config)
+						{
+							add_filter('get_user_option_' . $field, array('c_ws_plugin__s2member_custom_reg_fields', 'do_filter_get_user_option'), 20, 3);
+							add_filter('get_user_option_s2_' . $field, array('c_ws_plugin__s2member_custom_reg_fields', 'do_filter_get_user_option'), 20, 3); // Also add filter for `s2_$field` variant
+						}
+				}
+
+			/**
+			 * Filter for `get_user_option` queries. For Custom Field mapping.
+			 *
+			 * @param bool|string $result The current field value, if WordPress has found one. Otherwise, FALSE.
+			 * @param string $name Field slug/name being queried
+			 * @param WP_User $user WP_User object related to the `get_user_option` query
+			 *
+			 * @return mixed
+			 */
+			public static function do_filter_get_user_option($result, $name, $user)
+				{
+					if($result !== false) return $result; // If WordPress already applied a value to this, we shouldn't override it.
+
+					$user_fields = ($user->ID) ? get_user_option("s2member_custom_fields", $user->ID) : false;
+					if(!$user->ID || $user_fields === false || !$custom_fields = json_decode($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], true))
+						return $result;
+
+					foreach($custom_fields as $field)
+						{
+							if ($user->ID)
+								$s2member_custom_fields[$field["id"]]["user_value"] = (isset($user_fields[$field["id"]])) ? $user_fields[$field["id"]] : false;
+							$s2member_custom_fields[$field["id"]]["config"] = $field;
+						}
+
+					$fields = (isset($s2member_custom_fields)) ? (array)$s2member_custom_fields : array();
+
+					if(isset($fields[$name]))
+						$result = $fields[$name]['user_value'];
+
+					elseif(strpos($name, 's2_') === 0 && ($real_name = preg_replace('/^s2_/', '', $name)) && isset($fields[$real_name]))
+						$result = $fields[$real_name]['user_value'];
+
+					return $result;
+				}
 			}
 	}
