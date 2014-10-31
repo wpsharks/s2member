@@ -215,7 +215,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 										{
 											$user_previous_file_downloads++; // Previous files always count against this User/Member.
 
-											$_user_file_download_access_log_entry = & $user_file_download_access_log[$user_file_download_access_log_entry_key];
+											$_user_file_download_access_log_entry = &$user_file_download_access_log[$user_file_download_access_log_entry_key];
 											$_user_already_downloaded_this_file   = $_user_already_downloaded_a_streaming_variation_of_this_file = FALSE;
 
 											if($user_file_download_access_log_entry['file'] === $req['file_download']) // Already downloaded this file? If yes, mark this flag as true.
@@ -475,7 +475,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 
 								$chunk_size = apply_filters('ws_plugin__s2member_file_downloads_chunk_size', 2097152, get_defined_vars());
 
-								while($_bytes_to_read) // While we have bytes to read here.
+								while($_bytes_to_read > 0) // While we have bytes to read here.
 								{
 									$_bytes_to_read -= ($_reading = ($_bytes_to_read > $chunk_size) ? $chunk_size : $_bytes_to_read);
 									echo fread($resource, $_reading); // Serve file in chunks (default chunk size is 2MB).
