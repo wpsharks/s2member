@@ -94,7 +94,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 
 					if(($_mc['interest_groups_title'] = trim($_mc['interest_groups_title'])))
 						if(($_mc['interest_groups'] = $_mc['interest_groups'] ? preg_split('/\|/', trim($_mc['interest_groups']), NULL, PREG_SPLIT_NO_EMPTY) : array()))
-							$_mc['interest_groups'] = array('GROUPINGS' => array(array('name' => $_mc['interest_groups_title'], 'groups' => implode(',', $_mc['interest_groups']))));
+							$_mc['interest_groups'] = array('GROUPINGS' => array(array('name' => $_mc['interest_groups_title'], 'groups' => $_mc['interest_groups'])));
 
 					if(!$_mc['list_id']) continue; // List ID is missing now; after parsing interest groups.
 				}
@@ -175,7 +175,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 
 					if(($_mc['interest_groups_title'] = trim($_mc['interest_groups_title'])))
 						if(($_mc['interest_groups'] = $_mc['interest_groups'] ? preg_split('/\|/', trim($_mc['interest_groups']), NULL, PREG_SPLIT_NO_EMPTY) : array()))
-							$_mc['interest_groups'] = array('GROUPINGS' => array(array('name' => $_mc['interest_groups_title'], 'groups' => implode(',', $_mc['interest_groups']))));
+							$_mc['interest_groups'] = array('GROUPINGS' => array(array('name' => $_mc['interest_groups_title'], 'groups' => $_mc['interest_groups'])));
 
 					if(!$_mc['list_id']) continue; // List ID is missing now; after parsing interest groups.
 				}
