@@ -493,6 +493,97 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_amazon_cf", get_defined_vars());
 			}
+/*			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_amazon_s3_comp", TRUE, get_defined_vars()))
+			{
+				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_amazon_s3_comp", get_defined_vars());
+
+				echo '<div class="ws-menu-page-group" title="S3-Compatible Content Delivery (e.g. DreamObjects, etc.)">'."\n";
+
+				echo '<div class="ws-menu-page-section ws-plugin--s2member-amazon-s3-comp-section">'."\n";
+				echo '<h3>S3-Compatible Content Delivery (optional)</h3>'."\n";
+				echo '<p>[Documentation goes here.]</p>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table" style="margin-top:0;">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<th style="padding-top:0;">'."\n";
+				echo '<label for="ws-plugin--s2member-amazon-s3-comp-files-bucket">'."\n";
+				echo 'API Endpoint URL:'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<td>'."\n";
+				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_amazon_s3_comp_api_endpoint" id="ws-plugin--s2member-amazon-s3-comp-api-endpoint" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_comp_api_endpoint"]).'" /><br />'."\n";
+				echo 'Please type the S3-Compatible API Endpoint URL'."\n";
+				echo '</td>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<th style="padding-top:0;">'."\n";
+				echo '<label for="ws-plugin--s2member-amazon-s3-comp-files-bucket">'."\n";
+				echo 'S3-Compatible Bucket Name (where protected files are):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<td>'."\n";
+				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_amazon_s3_comp_files_bucket" id="ws-plugin--s2member-amazon-s3-comp-files-bucket" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_comp_files_bucket"]).'" /><br />'."\n";
+				echo 'Your S3-Compatible Bucket will be used, instead of the <code>/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'/</code> directory.<br />'."\n";
+				echo 'Please type the name of your Bucket. Ex: <code>mys3compbucket</code>'."\n";
+				echo '</td>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-amazon-s3-comp-files-access-key">'."\n";
+				echo 'Access Key (Access Key ID):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<td>'."\n";
+				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_comp_files_access_key" id="ws-plugin--s2member-amazon-s3-comp-files-access-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_comp_files_access_key"]).'" /><br />'."\n";
+				echo 'Please type the Access Key.'."\n";
+				echo '</td>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-amazon-s3-comp-files-secret-key">'."\n";
+				echo 'Secret Key (Secret Access Key):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<td>'."\n";
+				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_amazon_s3_comp_files_secret_key" id="ws-plugin--s2member-amazon-s3-comp-files-secret-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_comp_files_secret_key"]).'" /><br />'."\n";
+				echo 'Please type the Secret Key.'."\n";
+				echo '</td>'."\n";
+
+				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+				echo '</div>'."\n";
+
+				echo '</div>'."\n";
+
+				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_amazon_s3_comp", get_defined_vars());
+			}*/
 			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_rtmp_streaming", TRUE, get_defined_vars()))
 			{
 				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_rtmp_streaming", get_defined_vars());
