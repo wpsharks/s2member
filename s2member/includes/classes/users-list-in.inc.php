@@ -461,6 +461,9 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 												if(isset($_p["ws_plugin__s2member_profile_s2member_subscr_id"]))
 													update_user_option($user_id, "s2member_subscr_id", $_p["ws_plugin__s2member_profile_s2member_subscr_id"]);
 
+												if(isset($_p["ws_plugin__s2member_profile_s2member_subscr_cid"]))
+													update_user_option($user_id, "s2member_subscr_cid", $_p["ws_plugin__s2member_profile_s2member_subscr_cid"]);
+
 												if(isset($_p["ws_plugin__s2member_profile_s2member_custom"]))
 													update_user_option($user_id, "s2member_custom", $_p["ws_plugin__s2member_profile_s2member_custom"]);
 
