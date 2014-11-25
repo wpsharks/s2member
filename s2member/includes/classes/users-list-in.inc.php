@@ -291,7 +291,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 
 																			echo '<tr>'."\n";
 																			echo '<th><label for="ws-plugin--s2member-profile-'.esc_attr($field_id_class).'">'.((preg_match("/^(checkbox|pre_checkbox)$/", $field["type"])) ? ucwords(preg_replace("/_/", " ", $field_var)) : $field["label"]).':</label></th>'."\n";
-																			echo '<td>'.c_ws_plugin__s2member_custom_reg_fields::custom_field_gen(__FUNCTION__, $field, "ws_plugin__s2member_profile_", "ws-plugin--s2member-profile-", "", ((preg_match("/^(text|textarea|select|selects)$/", $field["type"])) ? "width:99%;" : ""), "", "", $fields, $fields[$field_var], "administrative").'</td>'."\n";
+																			echo '<td>'.c_ws_plugin__s2member_custom_reg_fields::custom_field_gen(__FUNCTION__, $field, "ws_plugin__s2member_profile_", "ws-plugin--s2member-profile-", "", ((preg_match("/^(text|textarea|select|selects)$/", $field["type"])) ? "width:99%;" : ""), "", "", $fields, @$fields[$field_var], "administrative").'</td>'."\n";
 																			echo '</tr>'."\n";
 																		}
 																	unset($__refs, $__v);
