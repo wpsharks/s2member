@@ -498,9 +498,9 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 																	{
 																		if((is_array($_p["ws_plugin__s2member_profile_".$field_var]) && !empty($_p["ws_plugin__s2member_profile_".$field_var])) || (is_string($_p["ws_plugin__s2member_profile_".$field_var]) && strlen($_p["ws_plugin__s2member_profile_".$field_var])))
 																			$fields[$field_var] = $_p["ws_plugin__s2member_profile_".$field_var];
-																		else unset($fields[$field_var]);
+																		else if(isset($fields)) unset($fields[$field_var]);
 																	}
-																else unset($fields[$field_var]);
+																else if(isset($fields)) unset($fields[$field_var]);
 															}
 													}
 												if(!empty($fields))
