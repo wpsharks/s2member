@@ -27,6 +27,10 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 	 */
 	class c_ws_plugin__s2member_access_cap_times
 	{
+		/**
+		 * @var string Current log time increment.
+		 */
+		protected static $log_time = NULL;
 
 		/**
 		 * @var array Previous array of user CAPS.
@@ -130,16 +134,18 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 
 			$ac_times = get_user_option('s2member_access_cap_times', $user_id);
 			if(!is_array($ac_times)) $ac_times = array();
-			$time = (float)time();
+
+			if(!isset(self::$log_time))
+				self::$log_time = (float)time();
 
 			foreach($caps['prev'] as $_cap => $_was_enabled)
 				if($_was_enabled && empty($caps['now'][$_cap]))
-					$ac_times[number_format(($time += .0001), 4, '.', '')] = '-'.$_cap;
+					$ac_times[number_format((self::$log_time += .0001), 4, '.', '')] = '-'.$_cap;
 			unset($_cap, $_was_enabled);
 
 			foreach($caps['now'] as $_cap => $_now_enabled)
 				if($_now_enabled && empty($caps['prev'][$_cap]))
-					$ac_times[number_format(($time += .0001), 4, '.', '')] = $_cap;
+					$ac_times[number_format((self::$log_time += .0001), 4, '.', '')] = $_cap;
 			unset($_cap, $_now_enabled);
 
 			update_user_option($user_id, 's2member_access_cap_times', $ac_times);
