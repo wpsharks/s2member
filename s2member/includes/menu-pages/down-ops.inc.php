@@ -84,7 +84,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 					echo '<th style="padding-top:0;">'."\n";
 					echo '<label for="ws-plugin--s2member-level'.$n.'-file-downloads-allowed">'."\n";
-					echo ($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'File Downloads ( Highest Level #'.$n.' ):'."\n" : 'File Downloads (Level #'.$n.' Or Higher):'."\n";
+					echo ($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'File Downloads (Highest Level #'.$n.'):'."\n" : 'File Downloads (Level #'.$n.' Or Higher):'."\n";
 					echo '</label>'."\n";
 					echo '</th>'."\n";
 
