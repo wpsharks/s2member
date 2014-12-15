@@ -79,7 +79,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 									if (file_exists ($wp_login_file) && ($wp_login = file_get_contents ($wp_login_file)) && is_writable ($wp_login_file))
 										{
 											if ((($wp_login_written = file_put_contents ($wp_login_file, preg_replace ($wp_login_section, $wp_login_replace, $wp_login, 1, $wp_login_patched))) && $wp_login_patched) || ($wp_login_patched_already = $wp_login_patched = strpos ($wp_login, $wp_login_replace)))
-												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file ' . (($wp_login_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
+												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file ' . (!empty($wp_login_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
 											else if (!$wp_login_written) // Otherwise, we need to report that /wp-login.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file could NOT be patched. Patch NOT written.', true) : null;
 											else if (!$wp_login_patched) // Otherwise, we need to report that /wp-login.php could NOT be updated. Wrong WordPress version?
@@ -95,7 +95,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 									if (file_exists ($load_file) && ($load = file_get_contents ($load_file)) && is_writable ($load_file))
 										{
 											if ((($load_written = file_put_contents ($load_file, preg_replace ($load_section, $load_replace, $load, 1, $load_patched))) && $load_patched) || ($load_patched_already = $load_patched = strpos ($load, $load_replace)))
-												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file ' . (($load_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
+												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file ' . (!empty($load_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
 											else if (!$load_written) // Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file could NOT be patched. Patch NOT written.', true) : null;
 											else if (!$load_patched) // Otherwise, we need to report that /wp-includes/load.php could NOT be updated. Wrong WordPress version?
@@ -105,13 +105,13 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 										($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/load.php</code> file could NOT be patched. File NOT writable.', true) : null;
 
 									$user_new_file = ABSPATH . "wp-admin/user-new.php";
-									$user_new_section = "/([\r\n\t\s ]+)(wpmu_signup_user( *?)\(( *?)\\\$new_user_login,( *?)\\\$_REQUEST\[( *?)'email'( *?)\],( *?)array( *?)\(( *?)'add_to_blog'( *?)\=\>( *?)\\\$wpdb->blogid,( *?)'new_role'( *?)\=\>( *?)\\\$_REQUEST\[( *?)'role'( *?)\]( *?)\)( *?)\);)/";
+									$user_new_section = "/([\r\n\t\s ]+)(wpmu_signup_user( *?)\(( *?)\\\$new_user_login,( *?)(?:\\\$new_user_email|\\\$_REQUEST\[( *?)'email'( *?)\]),( *?)array( *?)\(( *?)'add_to_blog'( *?)\=\>( *?)\\\$wpdb->blogid,( *?)'new_role'( *?)\=\>( *?)\\\$_REQUEST\[( *?)'role'( *?)\]( *?)\)( *?)\);)/";
 									$user_new_replace = "\n\t\t\t// Modified for full plugin compatiblity.\n\t\t\t//wpmu_signup_user( \$new_user_login, \$_REQUEST[ 'email' ], array( 'add_to_blog' => \$wpdb->blogid, 'new_role' => \$_REQUEST[ 'role' ] ) );\n\t\t\twpmu_signup_user( \$new_user_login, \$_REQUEST[ 'email' ], apply_filters( 'add_signup_meta', array( 'add_to_blog' => \$wpdb->blogid, 'new_role' => \$_REQUEST[ 'role' ] ) ) );";
 
 									if (file_exists ($user_new_file) && ($user_new = file_get_contents ($user_new_file)) && is_writable ($user_new_file))
 										{
 											if ((($user_new_written = file_put_contents ($user_new_file, preg_replace ($user_new_section, $user_new_replace, $user_new, 1, $user_new_patched))) && $user_new_patched) || ($user_new_patched_already = $user_new_patched = strpos ($user_new, $user_new_replace)))
-												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file ' . (($user_new_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
+												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file ' . (!empty($user_new_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
 											else if (!$user_new_written) // Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-admin/user-new.php</code> file could NOT be patched. Patch NOT written.', true) : null;
 											else if (!$user_new_patched) // Otherwise, we need to report that /wp-admin/user-new.php could NOT be updated. Wrong WordPress version?
@@ -127,7 +127,7 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 									if (file_exists ($ms_functions_file) && ($ms_functions = file_get_contents ($ms_functions_file)) && is_writable ($ms_functions_file))
 										{
 											if ((($ms_functions_written = file_put_contents ($ms_functions_file, preg_replace ($ms_functions_section, $ms_functions_replace, $ms_functions, 1, $ms_functions_patched))) && $ms_functions_patched) || ($ms_functions_patched_already = $ms_functions_patched = strpos ($ms_functions, $ms_functions_replace)))
-												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file ' . (($ms_functions_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
+												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file ' . (!empty($ms_functions_patched_already) ? 'is patched' : 'has been patched successfully') . '.') : null;
 											else if (!$ms_functions_written) // Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Possibly a permissions error.
 												($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-includes/ms-functions.php</code> file could NOT be patched. Patch NOT written.', true) : null;
 											else if (!$ms_functions_patched) // Otherwise, we need to report that /wp-includes/ms-functions.php could NOT be updated. Wrong WordPress version?
