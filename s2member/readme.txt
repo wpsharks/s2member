@@ -20,6 +20,9 @@ ClickBank® Compatible: yes w/s2Member® Pro
 Tested up to: 4.0
 Requires at least: 3.3
 
+Requires PHP: 5.2+
+Tested up to PHP: 5.6
+
 Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License v2 or later.
 Contributors: WebSharks, JasWSInc, anguz, raamdev
