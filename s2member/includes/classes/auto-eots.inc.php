@@ -95,7 +95,7 @@ if (!class_exists ("c_ws_plugin__s2member_auto_eots"))
 				* 	Can also be Filtered with `ws_plugin__s2member_auto_eot_system_per_process`.
 				* @return null
 				*/
-				public static function auto_eot_system ($per_process = 3)
+				public static function auto_eot_system ($per_process = 6)
 					{
 						global /* Need global DB obj. */ $wpdb;
 						global /* Multisite. */ $current_site, $current_blog;
