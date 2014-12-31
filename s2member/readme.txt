@@ -54,15 +54,11 @@ s2Member® — a powerful (free) membership plugin for WordPress®. Protect memb
 
 == Description ==
 
+**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://www.s2member.com/contact/).
+
+---
+
 The s2Member® Framework (free) integrates with PayPal® Website Payments Standard (also free), and supports "Buy Now" and "Subscriptions".
-
-= Reasons to upgrade to "s2Member® Pro" =
-
-- Stripe™ integration via Pro Forms ~ [video intro](http://www.s2member.com/videos/L0aJz4-9mNanxemFZ_3G2-SIn-xAoiwD/).
-- PayPal Pro™ integration via Pro Forms (one-step checkout).
-- Authorize.Net™ integration via Pro Forms (one-step checkout).
-- Plus ClickBank™ and Google Wallet™ button integrations too :-)
-- Unlimited Membership Levels, Coupon Codes, Pro API, and more!
 
 You can learn more about this powerful membership management system for WordPress at [s2Member.com](http://www.s2member.com/pro/) ~ Or watch the quick video below.
 
@@ -78,9 +74,21 @@ s2Member allows you to protect Pages, Posts, Tags, Categories, URIs, URI word fr
 
 With s2Member, you can also protect downloadable files, using restrictions to control how many downloads can occur within a certain amount of time; all based on Membership Level or even Custom Capabilities. sMember® can even integrate with Amazon® S3 and CloudFront (optional) for serving protected audio/video streams over an RTMP protocol.
 
+= Reasons to upgrade to "s2Member® Pro" =
+
+- Stripe™ integration via Pro Forms ~ [video intro](http://www.s2member.com/videos/L0aJz4-9mNanxemFZ_3G2-SIn-xAoiwD/).
+- PayPal Pro™ integration via Pro Forms (one-step checkout).
+- Authorize.Net™ integration via Pro Forms (one-step checkout).
+- Plus ClickBank™ and Google Wallet™ button integrations too :-)
+- Unlimited Membership Levels, Coupon Codes, Pro API, and more!
+
 You can learn more about s2Member® at [s2Member.com](http://www.s2member.com/).
 
 == Installation ==
+
+**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://www.s2member.com/contact/).
+
+---
 
 = s2Member® is Very Easy to Install =
 
@@ -107,6 +115,10 @@ Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networki
 7. s2Member Screenshot #7
 
 == Frequently Asked Questions ==
+
+**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://www.s2member.com/contact/).
+
+---
 
 = Please Check the Following s2Member® Resources =
 
