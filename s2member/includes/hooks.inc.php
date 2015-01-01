@@ -57,6 +57,7 @@ add_action('admin_init', 'c_ws_plugin__s2member_menu_pages::logs_zip_downloader'
 
 add_filter('bbp_has_replies_query', 'c_ws_plugin__s2member_querys::_bbp_flag_has_replies');
 add_action('pre_get_posts', 'c_ws_plugin__s2member_security::security_gate_query', 100);
+add_filter('wp_list_pages_excludes', 'c_ws_plugin__s2member_querys::_query_level_access_list_pages', 100);
 
 add_action('wp', 'c_ws_plugin__s2member_ssl::check_force_ssl', 1);
 add_action('wp', 'c_ws_plugin__s2member_security::security_gate', 1);
@@ -202,7 +203,6 @@ add_action('plugins_loaded', 'c_ws_plugin__s2member_mo_page::back_compat_mop_var
 
 remove_filter('the_content', 'wptexturize'); // Bug fix; see: <https://github.com/websharks/s2member/issues/349>
 // See also, this WP core bug report for further details: <https://core.trac.wordpress.org/ticket/29608>
-
 /*
 Register the activation | de-activation routines.
 */
