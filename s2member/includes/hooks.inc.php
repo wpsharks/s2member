@@ -199,6 +199,10 @@ add_action('bbp_activation', 'c_ws_plugin__s2member_roles_caps::config_roles', 1
 add_action('http_api_debug', 'c_ws_plugin__s2member_utils_logs::http_api_debug', 1000, 5);
 
 add_action('plugins_loaded', 'c_ws_plugin__s2member_mo_page::back_compat_mop_vars', -(PHP_INT_MAX - 10));
+
+remove_filter('the_content', 'wptexturize'); // Bug fix; see: <https://github.com/websharks/s2member/issues/349>
+// See also, this WP core bug report for further details: <https://core.trac.wordpress.org/ticket/29608>
+
 /*
 Register the activation | de-activation routines.
 */
