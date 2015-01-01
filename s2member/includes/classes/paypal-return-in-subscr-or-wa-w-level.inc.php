@@ -84,7 +84,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level'))
 						$paypal['regular']         = $paypal['mc_amount3']; // This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal.
 						$paypal['regular_term']    = $paypal['period3']; // This is just set to keep a standard; this way both initial_term & regular_term are available.
 						$paypal['recurring']       = ($paypal['recurring']) ? $paypal['mc_amount3'] : '0'; // If non-recurring, this should be zero, otherwise Regular.
-						$paypal['currency']        = $paypal['mc_currency']; // Normalize input currency.
+						$paypal['currency']        = strtoupper($paypal['mc_currency']); // Normalize input currency.
 						$paypal['currency_symbol'] = c_ws_plugin__s2member_utils_cur::symbol($paypal['currency']);
 
 						$ipn_signup_vars = $paypal; // Copy of PayPal vars; used as IPN signup vars.
@@ -107,7 +107,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level'))
 						$paypal['regular']         = $paypal['mc_amount3']; // This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal.
 						$paypal['regular_term']    = $paypal['period3']; // This is just set to keep a standard; this way both initial_term & regular_term are available.
 						$paypal['recurring']       = ($paypal['recurring']) ? $paypal['mc_amount3'] : '0'; // If non-recurring, this should be zero, otherwise Regular.
-						$paypal['currency']        = $paypal['mc_currency']; // Normalize input currency.
+						$paypal['currency']        = strtoupper($paypal['mc_currency']); // Normalize input currency.
 						$paypal['currency_symbol'] = c_ws_plugin__s2member_utils_cur::symbol($paypal['currency']);
 
 						$ipn_signup_vars = $paypal; // Copy of PayPal vars; used as IPN signup vars.

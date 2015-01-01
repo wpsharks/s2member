@@ -66,7 +66,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level')
 
 					if(preg_match('/^web_accept$/i', $paypal['txn_type']) /* Conversions for Lifetime & Fixed-Term sales. */)
 					{
-						$paypal['period3']    = ($paypal['eotper']) ? $paypal['eotper'] : '1 L'; // 1 Lifetime.
+						$paypal['period3']    = !empty($paypal['eotper']) ? $paypal['eotper'] : '1 L'; // 1 Lifetime.
 						$paypal['mc_amount3'] = $paypal['mc_gross']; // The 'Buy Now' amount is the full gross.
 					}
 					$paypal['initial_term']    = (preg_match('/^[1-9]/', $paypal['period1'])) ? $paypal['period1'] : '0 D'; // Defaults to '0 D' (zero days).
@@ -74,7 +74,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_modify_w_level')
 					$paypal['regular']         = $paypal['mc_amount3']; // This is the Regular Payment Amount that is charged to the Customer. Always required by PayPal.
 					$paypal['regular_term']    = $paypal['period3']; // This is just set to keep a standard; this way both initial_term & regular_term are available.
 					$paypal['recurring']       = ($paypal['recurring']) ? $paypal['mc_amount3'] : '0'; // If non-recurring, this should be zero, otherwise Regular.
-					$paypal['currency']        = $paypal['mc_currency']; // Normalize input currency.
+					$paypal['currency']        = strtoupper($paypal['mc_currency']); // Normalize input currency.
 					$paypal['currency_symbol'] = c_ws_plugin__s2member_utils_cur::symbol($paypal['currency']);
 
 					$ipn_signup_vars = $paypal; // Copy of PayPal vars; used as IPN signup vars.
