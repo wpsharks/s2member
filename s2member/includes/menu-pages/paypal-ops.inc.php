@@ -745,6 +745,15 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>'."\n";
 				echo '</ul>'."\n";
 
+				if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
+				{
+					echo '<strong>Coupon Replacement Codes (applicable only w/ s2Member Pro Forms):</strong>'."\n";
+					echo '<ul class="ws-menu-page-li-margins">'."\n";
+					echo '<li><code>%%full_coupon_code%%</code> = A full Coupon Code — if one is accepted by your configuration of s2Member. This may indicate an Affiliate Coupon Code, which will include your Affiliate Suffix Chars too (i.e. the full Coupon Code).</li>'."\n";
+					echo '<li><code>%%coupon_code%%</code> = A Coupon Code — if one is accepted by your configuration of s2Member. This will NOT include any Affiliate Suffix Chars. This indicates the actual Coupon Code accepted by your configuration of s2Member (excluding any Affiliate ID).</li>'."\n";
+					echo '<li><code>%%coupon_affiliate_id%%</code> = This is the end of an Affiliate Coupon Code <em>(i.e. the referring affiliate\'s ID)</em>. This is only applicable if an Affiliate Coupon Code is accepted by your configuration of s2Member.</li>'."\n";
+					echo '</ul>'."\n";
+				}
 				echo '<strong>Custom Registration/Profile Fields are also supported in this email:</strong>'."\n";
 				echo '<ul class="ws-menu-page-li-margins">'."\n";
 				echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>'."\n";
