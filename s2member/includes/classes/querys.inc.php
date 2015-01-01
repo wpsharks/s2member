@@ -123,9 +123,6 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 							if(in_array('wp_get_nav_menu_items', ($callers = (isset($callers) ? $callers : c_ws_plugin__s2member_utilities::callers()))))
 								add_filter('wp_get_nav_menu_items', 'c_ws_plugin__s2member_querys::_query_level_access_navs', 100);
 
-						if($suppressing_filters !== 'n/a' && (in_array('all', $o) || in_array('pages', $o)))
-							add_filter('wp_list_pages_excludes', 'c_ws_plugin__s2member_querys::_query_level_access_list_pages', 100);
-
 						if((is_user_logged_in() && is_object($user = wp_get_current_user()) && !empty($user->ID) && ($user_id = $user->ID)) || !($user = FALSE))
 						{
 							$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE);
@@ -400,6 +397,17 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 		 */
 		public static function _query_level_access_list_pages($excludes = array())
 		{
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['filter_wp_query']
+			   || (!in_array('all', $GLOBALS['WS_PLUGIN__']['s2member']['o']['filter_wp_query'])
+			       && !in_array('pages', $GLOBALS['WS_PLUGIN__']['s2member']['o']['filter_wp_query']))
+			) return $excludes; // Not applicable.
+
+			$systematics   = array(); // Initialize.
+			$systematics[] = $GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_limit_exceeded_page'];
+			if(!is_user_logged_in()) $systematics[] = $GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page'];
+			$systematics = c_ws_plugin__s2member_utils_arrays::force_integers($systematics); // Force integer values here.
+			$excludes    = array_merge($excludes, $systematics);
+
 			for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Here we need to exclude any Page not available to the current user.
 			{
 				if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_pages'] === 'all' && !current_user_can('access_s2member_level'.$n))
