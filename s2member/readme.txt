@@ -54,7 +54,7 @@ s2Member® — a powerful (free) membership plugin for WordPress®. Protect memb
 
 == Description ==
 
-**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://www.s2member.com/contact/).
+**NOTICE:** The support forum at WordPress is for community interaction only. If you are an s2Member Pro customer in need of support, please use [our support center](http://www.s2member.com/contact/).
 
 ---
 
