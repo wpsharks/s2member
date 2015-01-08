@@ -577,14 +577,14 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		{
 			if(($key = trim((string)$key)) && (strpos($key, '-----BEGIN RSA PRIVATE KEY-----') === FALSE || strpos($key, '-----END RSA PRIVATE KEY-----') === FALSE))
 			{
-				foreach(($lines = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/[\r\n]+/", $key))) as $line => $value)
+				foreach(($lines = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split('/['."\r\n".']+/', $key))) as $line => $value)
 					if(strpos($value, '-') === 0) // Begins with a boundary identifying character ( a hyphen `-` )?
 					{
 						$boundaries = (empty($boundaries)) ? 1 : $boundaries + 1; // Counter.
 						unset($lines[$line]); // Remove this boundary line. We'll fix these below.
 					}
 				if(empty($boundaries) || $boundaries <= 2) // Do NOT modify keys with more than 2 boundaries.
-					$key = "-----BEGIN RSA PRIVATE KEY-----\n".implode("\n", $lines)."\n-----END RSA PRIVATE KEY-----";
+					$key = '-----BEGIN RSA PRIVATE KEY-----'."\n".implode("\n", $lines)."\n".'-----END RSA PRIVATE KEY-----';
 			}
 			return $key; // Always a trimmed string here.
 		}
@@ -616,7 +616,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		 * @param string $string Input string/data, to be signed by this routine.
 		 * @param string $key The secret key that will be used in this signature.
 		 *
-		 * @return string An HMAC-SHA1 signature string.
+		 * @return string An HMAC-SHA256 signature string.
 		 */
 		public static function hmac_sha256_sign($string = '', $key = '')
 		{
