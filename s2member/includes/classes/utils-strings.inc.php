@@ -613,14 +613,15 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		 * @package s2Member\Utilities
 		 * @since 111017
 		 *
-		 * @param string $string Input string/data, to be signed by this routine.
-		 * @param string $key The secret key that will be used in this signature.
+		 * @param string  $string Input string/data, to be signed by this routine.
+		 * @param string  $key The secret key that will be used in this signature.
+		 * @param boolean $binary Return binary format?
 		 *
 		 * @return string An HMAC-SHA256 signature string.
 		 */
-		public static function hmac_sha256_sign($string = '', $key = '')
+		public static function hmac_sha256_sign($string = '', $key = '', $binary = FALSE)
 		{
-			return hash_hmac('sha256', $string, $key);
+			return hash_hmac('sha256', $string, $key, $binary);
 		}
 
 		/**

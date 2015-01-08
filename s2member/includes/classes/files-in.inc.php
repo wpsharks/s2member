@@ -670,12 +670,12 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 				if(preg_match('/^amazon_s3_files_/', $option) && ($option = preg_replace('/^amazon_s3_files_/', '', $option)))
 					$s3c[$option] = $option_value;
 
-			$s3_date_key                = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign(date('Ymd'), 'AWS4'.$s3c['secret_key']);
-			$s3_date_region_key         = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($s3c['bucket_region'], $s3_date_key);
-			$s3_date_region_service_key = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign('s3', $s3_date_region_key);
-			$s3_signing_key             = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign('aws4_request', $s3_date_region_service_key);
+			$s3_date_key                = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign(date('Ymd'), 'AWS4'.$s3c['secret_key'], TRUE);
+			$s3_date_region_key         = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($s3c['bucket_region'], $s3_date_key, TRUE);
+			$s3_date_region_service_key = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign('s3', $s3_date_region_key, TRUE);
+			$s3_signing_key             = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign('aws4_request', $s3_date_region_service_key, TRUE);
 
-			return c_ws_plugin__s2member_utils_strings::hmac_sha1_sign((string)$string, $s3_signing_key);
+			return c_ws_plugin__s2member_utils_strings::hmac_sha256_sign((string)$string, $s3_signing_key);
 		}
 
 		/**
@@ -684,21 +684,26 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 		 * @package s2Member\Files
 		 * @since 150108
 		 *
-		 * @param string $domain The API endpoint domain; e.g. `[bucket].s3.amazonaws.com`.
-		 * @param string $location The API endpoint URI; e.g. `/?acl`.
-		 * @param string $method The request method; e.g. `GET`, `PUT`, `POST`, etc.
-		 * @param array  $headers An associative array of all headers.
-		 * @param string $body Any input data sent with the request.
+		 * @param string $s3_date The date header; e.g. `YYYYMMDD'T'HHMMSS'Z'`.
+		 * @param string $s3_domain The API endpoint domain; e.g. `[bucket].s3.amazonaws.com`.
+		 * @param string $s3_location The API endpoint URI; e.g. `/?acl`.
+		 * @param string $s3_method The request method; e.g. `GET`, `PUT`, `POST`, etc.
+		 * @param array  $s3_headers An associative array of all headers.
+		 * @param string $s3_body Any input data sent with the request.
 		 *
 		 * @return string An AWS4-HMAC-SHA256 signature/authorization header for Amazon S3.
 		 */
-		public static function amazon_s34_authorization($domain = 's3.amazonaws.com', $location = '/', $method = 'GET', $headers = array(), $body = '')
+		public static function amazon_s34_authorization($s3_date = '',
+		                                                $s3_domain = 's3.amazonaws.com',
+		                                                $s3_location = '/', $s3_method = 'GET',
+		                                                $s3_headers = array(), $s3_body = '')
 		{
-			$domain   = trim(strtolower((string)$domain));
-			$location = trim((string)$location);
-			$method   = trim(strtoupper((string)$method));
-			$headers  = (array)$headers;
-			$body     = trim((string)$body);
+			$s3_date     = trim((string)$s3_date);
+			$s3_domain   = trim(strtolower((string)$s3_domain));
+			$s3_location = trim((string)$s3_location);
+			$s3_method   = trim(strtoupper((string)$s3_method));
+			$s3_headers  = (array)$s3_headers;
+			$s3_body     = trim((string)$s3_body);
 
 			$s3c = array(); // Initialize config. keys.
 			foreach($GLOBALS['WS_PLUGIN__']['s2member']['o'] as $option => $option_value)
@@ -706,7 +711,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 					$s3c[$option] = $option_value;
 
 			$s3_iso8601_date   = date('Ymd\THis\Z');
-			$s3_location_parts = parse_url($location);
+			$s3_location_parts = parse_url($s3_location);
 			$s3_canonical_path = !empty($s3_location_parts['path']) ? '/'.ltrim($s3_location_parts['path'], '/') : '/';
 			$s3_scope          = date('Ymd').'/'.$s3c['bucket_region'].'/s3/aws4_request';
 
@@ -715,39 +720,35 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 			ksort($query_args, SORT_STRING);
 
 			foreach($query_args as $_key => $_value)
-				$s3_canonical_query .= c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(rawurlencode($_key)).
+				$s3_canonical_query .= '&'.c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(rawurlencode($_key)).
 				                       '='.c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(rawurlencode($_value));
+			$s3_canonical_query = ltrim($s3_canonical_query, '&');
 			unset($_key, $_value); // Housekeeping.
 
 			$s3_canonical_headers     = '';
 			$s3_canonical_header_keys = array();
-			ksort($headers, SORT_STRING);
+			ksort($s3_headers, SORT_STRING);
 
-			foreach($headers as $_key => $_value)
+			foreach($s3_headers as $_key => $_value)
 				if(is_string($_key) && ($_key = strtolower($_key)))
 					if(in_array($_key, array('host', 'content-type'), TRUE) || stripos($_key, 'X-Amz-') === 0)
 					{
 						$s3_canonical_headers .= strtolower($_key).':'.trim($_value)."\n";
 						$s3_canonical_header_keys[] = strtolower($_key);
 					}
-			$s3_canonical_headers = trim($s3_canonical_headers);
 			unset($_key, $_value); // Housekeeping.
 
-			$s3_hashed_payload = self::amazon_s34_sign($body);
-
-			$s3_canonicial_request        = $method."\n".
-			                                $s3_canonical_path."\n".
-			                                $s3_canonical_query."\n".
-			                                $s3_canonical_headers."\n".
-			                                implode(';', $s3_canonical_header_keys)."\n".
-			                                $s3_hashed_payload;
-			$s3_canonicial_request_sha256 = self::amazon_s34_sign($s3_canonicial_request);
-
-			$s3_string_to_sign = 'AWS4-HMAC-SHA256'."\n".
-			                     $s3_iso8601_date."\n".
-			                     $s3_scope."\n".
-			                     $s3_canonicial_request_sha256;
-			$s3_signature      = self::amazon_s34_sign($s3_string_to_sign);
+			$s3_canonicial_request = $s3_method."\n".
+			                         $s3_canonical_path."\n".
+			                         $s3_canonical_query."\n".
+			                         $s3_canonical_headers."\n".
+			                         implode(';', $s3_canonical_header_keys)."\n".
+			                         hash('sha256', $s3_body);
+			$s3_string_to_sign     = 'AWS4-HMAC-SHA256'."\n".
+			                         $s3_date."\n".
+			                         $s3_scope."\n".
+			                         hash('sha256', $s3_canonicial_request);
+			$s3_signature          = self::amazon_s34_sign($s3_string_to_sign);
 
 			$s3_authorization_header_signature = 'AWS4-HMAC-SHA256 Credential='.$s3c['access_key'].'/'.$s3_scope.','.
 			                                     'SignedHeaders='.implode(';', $s3_canonical_header_keys).','.
@@ -811,11 +812,12 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 
 			if(!empty($s3c) && $s3c['bucket'] && $s3c['access_key'] && $s3c['secret_key']) // Must have Amazon S3 Bucket/Keys.
 			{
+				$s3_iso8601_date             = date('Ymd\THis\Z');
 				$s3_date                     = gmdate('D, d M Y H:i:s').' GMT';
 				$s3_location                 = strtolower($s3c['bucket']) !== $s3c['bucket'] ? '/'.$s3c['bucket'].'/?acl' : '/?acl';
 				$s3_domain                   = strtolower($s3c['bucket']) !== $s3c['bucket'] ? 's3.amazonaws.com' : $s3c['bucket'].'.s3.amazonaws.com';
-				$s3_headers                  = array('Host' => $s3_domain, 'Date' => $s3_date, 'x-amz-content-sha256' => self::amazon_s34_sign(''));
-				$s3_headers['Authorization'] = self::amazon_s34_authorization($s3_domain, $s3_location, 'GET', $s3_headers, '');
+				$s3_headers                  = array('Host' => $s3_domain, 'Date' => $s3_date, 'x-amz-date' => $s3_iso8601_date, 'x-amz-content-sha256' => hash('sha256', ''));
+				$s3_headers['Authorization'] = self::amazon_s34_authorization($s3_iso8601_date, $s3_domain, $s3_location, 'GET', $s3_headers, '');
 				$s3_args                     = array('method' => 'GET', 'redirection' => 5, 'headers' => $s3_headers);
 
 				if(($s3_response = c_ws_plugin__s2member_utils_urls::remote('https://'.$s3_domain.$s3_location, FALSE, array_merge($s3_args, array('timeout' => 20)), 'array')) && $s3_response['code'] === 200)
@@ -824,8 +826,8 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 					{
 						$s3_owner                    = array('access_id' => trim($s3_owner_id_tag[1]), 'display_name' => trim($s3_owner_display_name_tag[1]));
 						$s3_acls_xml                 = '<AccessControlPolicy><Owner><ID>'.esc_html($s3_owner['access_id']).'</ID><DisplayName>'.esc_html($s3_owner['display_name']).'</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>'.esc_html($s3_owner['access_id']).'</ID><DisplayName>'.esc_html($s3_owner['display_name']).'</DisplayName></Grantee><Permission>FULL_CONTROL</Permission></Grant>'.(($cfc['distros_s3_access_id']) ? '<Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>'.esc_html($cfc['distros_s3_access_id']).'</ID><DisplayName>s2Member/CloudFront</DisplayName></Grantee><Permission>READ</Permission></Grant>' : '').'</AccessControlList></AccessControlPolicy>';
-						$s3_headers                  = array('Host' => $s3_domain, 'Date' => $s3_date, 'Content-Type' => 'application/xml', 'x-amz-content-sha256' => self::amazon_s34_sign($s3_acls_xml));
-						$s3_headers['Authorization'] = self::amazon_s34_authorization($s3_domain, $s3_location, 'PUT', $s3_headers, $s3_acls_xml);
+						$s3_headers                  = array('Host' => $s3_domain, 'Date' => $s3_date, 'x-amz-date' => $s3_iso8601_date, 'Content-Type' => 'application/xml', 'x-amz-content-sha256' => hash('sha256', $s3_acls_xml));
+						$s3_headers['Authorization'] = self::amazon_s34_authorization($s3_iso8601_date, $s3_domain, $s3_location, 'PUT', $s3_headers, $s3_acls_xml);
 						$s3_args                     = array('method' => 'PUT', 'redirection' => 5, 'body' => $s3_acls_xml, 'headers' => $s3_headers);
 
 						if(($s3_response = c_ws_plugin__s2member_utils_urls::remote('https://'.$s3_domain.$s3_location, FALSE, array_merge($s3_args, array('timeout' => 20)), 'array')) && $s3_response['code'] === 200)
@@ -834,16 +836,16 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 							$s3_policy_sid               = md5(uniqid('s2Member/CloudFront:', TRUE));
 							$s3_location                 = strtolower($s3c['bucket']) !== $s3c['bucket'] ? '/'.$s3c['bucket'].'/?policy' : '/?policy';
 							$s3_policy_json              = '{"Version":"2008-10-17","Id":"'.c_ws_plugin__s2member_utils_strings::esc_dq($s3_policy_id).'","Statement":[{"Sid":"'.c_ws_plugin__s2member_utils_strings::esc_dq($s3_policy_sid).'","Effect":"Allow","Principal":{"CanonicalUser":"'.c_ws_plugin__s2member_utils_strings::esc_dq($cfc['distros_s3_access_id']).'"},"Action":"s3:GetObject","Resource":"arn:aws:s3:::'.c_ws_plugin__s2member_utils_strings::esc_dq($s3c['bucket']).'/*"}]}';
-							$s3_headers                  = array('Host' => $s3_domain, 'Date' => $s3_date, 'Content-Type' => 'application/json', 'x-amz-content-sha256' => self::amazon_s34_sign($s3_policy_json));
-							$s3_headers['Authorization'] = self::amazon_s34_authorization($s3_domain, $s3_location, 'PUT', $s3_headers, $s3_policy_json);
+							$s3_headers                  = array('Host' => $s3_domain, 'Date' => $s3_date, 'x-amz-date' => $s3_iso8601_date, 'Content-Type' => 'application/json', 'x-amz-content-sha256' => hash('sha256', $s3_policy_json));
+							$s3_headers['Authorization'] = self::amazon_s34_authorization($s3_iso8601_date, $s3_domain, $s3_location, 'PUT', $s3_headers, $s3_policy_json);
 							$s3_args                     = array('method' => 'PUT', 'redirection' => 5, 'body' => $s3_policy_json, 'headers' => $s3_headers);
 
 							if(!$cfc['distros_s3_access_id'] || (($s3_response = c_ws_plugin__s2member_utils_urls::remote('https://'.$s3_domain.$s3_location, FALSE, array_merge($s3_args, array('timeout' => 20)), 'array')) && ($s3_response['code'] === 200 || $s3_response['code'] === 204)))
 							{
 								$s3_location                 = strtolower($s3c['bucket']) !== $s3c['bucket'] ? '/'.$s3c['bucket'].'/crossdomain.xml' : '/crossdomain.xml';
 								$s3_policy_xml               = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents(dirname(dirname(__FILE__)).'/templates/cfg-files/s2-cross-xml.php')));
-								$s3_headers                  = array('Host' => $s3_domain, 'Date' => $s3_date, 'Content-Type' => 'text/xml', 'X-Amz-Acl' => 'public-read', 'x-amz-content-sha256' => self::amazon_s34_sign($s3_policy_xml));
-								$s3_headers['Authorization'] = self::amazon_s34_authorization($s3_domain, $s3_location, 'PUT', $s3_headers, $s3_policy_xml);
+								$s3_headers                  = array('Host' => $s3_domain, 'Date' => $s3_date, 'x-amz-date' => $s3_iso8601_date, 'Content-Type' => 'text/xml', 'X-Amz-Acl' => 'public-read', 'x-amz-content-sha256' => hash('sha256', $s3_policy_xml));
+								$s3_headers['Authorization'] = self::amazon_s34_authorization($s3_iso8601_date, $s3_domain, $s3_location, 'PUT', $s3_headers, $s3_policy_xml);
 								$s3_args                     = array('method' => 'PUT', 'redirection' => 5, 'body' => $s3_policy_xml, 'headers' => $s3_headers);
 
 								if(($s3_response = c_ws_plugin__s2member_utils_urls::remote('https://'.$s3_domain.$s3_location, FALSE, array_merge($s3_args, array('timeout' => 20)), 'array')) && $s3_response['code'] === 200)
