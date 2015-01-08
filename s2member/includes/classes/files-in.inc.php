@@ -663,12 +663,39 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 		 *
 		 * @return string An AWS4-HMAC-SHA256 signature for Amazon S3.
 		 */
-		public static function amazon_s34_sign($string = '')
+		public static function amazon_s34_sign($domain, $location, $method, $headers, $body = '')
 		{
-			$s3_iso8601_date   = date('Ymd\THis\Z');
-			$s3_scope          = date('Ymd').'/'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_s3_files_bucket_region'].'/s3/aws4_request';
-			$s3c['secret_key'] = $GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_s3_files_secret_key'];
+			$domain   = trim(strtolower((string)$domain));
+			$location = trim((string)$location);
+			$method   = trim(strtoupper((string)$method));
+			$headers  = (array)$headers;
+			$body     = trim((string)$body);
 
+			foreach($GLOBALS['WS_PLUGIN__']['s2member']['o'] as $option => $option_value)
+				if(preg_match('/^amazon_s3_files_/', $option) && ($option = preg_replace('/^amazon_s3_files_/', '', $option)))
+					$s3c[$option] = $option_value;
+
+			$s3_iso8601_date   = date('Ymd\THis\Z');
+			$s3_location_parts = parse_url($location);
+			$s3_canonical_path = !empty($s3_location_parts['path']) ? $s3_location_parts['path'] : '/';
+			$s3_hashed_payload = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($body);
+			$s3_scope          = date('Ymd').'/'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_s3_files_bucket_region'].'/s3/aws4_request';
+
+			$s3_canonical_query = '';
+			wp_parse_str($s3_location_parts['query'], $query_args);
+			ksort($query_args, SORT_STRING);
+			foreach($query_args as $_key => $_value)
+				$s3_canonical_query .= c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($_key)).'='.c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($_value));
+			unset($_key, $_value); // Housekeeping.
+
+			$s3_canonicial_request = c_ws_plugin__s2member_files_in::amazon_s3_sign(
+				$method."\n".
+				$s3_canonical_path."\n".
+				$s3_canonical_query."\n".
+				'host:'.$domain."\n".
+				'host'."\n".
+				$s3_hashed_payload
+			);
 			return c_ws_plugin__s2member_utils_strings::hmac_sha256_sign((string)$string, $s3c['secret_key']);
 		}
 
