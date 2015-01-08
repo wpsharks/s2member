@@ -654,17 +654,19 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 		}
 
 		/**
-		 * Creates an Amazon S3 HMAC-SHA256 signature.
+		 * Creates an Amazon S3 AWS4-HMAC-SHA256 signature.
 		 *
 		 * @package s2Member\Files
 		 * @since 110524RC
 		 *
 		 * @param string $string Input string/data, to be signed by this routine.
 		 *
-		 * @return string An HMAC-SHA256 signature for Amazon S3.
+		 * @return string An AWS4-HMAC-SHA256 signature for Amazon S3.
 		 */
 		public static function amazon_s34_sign($string = '')
 		{
+			$s3_iso8601_date   = date('Ymd\THis\Z');
+			$s3_scope          = date('Ymd').'/'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_s3_files_bucket_region'].'/s3/aws4_request';
 			$s3c['secret_key'] = $GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_s3_files_secret_key'];
 
 			return c_ws_plugin__s2member_utils_strings::hmac_sha256_sign((string)$string, $s3c['secret_key']);
@@ -726,10 +728,10 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 			if(!empty($s3c) && $s3c['bucket'] && $s3c['access_key'] && $s3c['secret_key']) // Must have Amazon S3 Bucket/Keys.
 			{
 				$s3_date      = gmdate('D, d M Y H:i:s').' GMT';
-				$s3_location  = ((strtolower($s3c['bucket']) !== $s3c['bucket'])) ? '/'.$s3c['bucket'].'/?acl' : '/?acl';
-				$s3_domain    = ((strtolower($s3c['bucket']) !== $s3c['bucket'])) ? 's3.amazonaws.com' : $s3c['bucket'].'.s3.amazonaws.com';
-				$s3_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_s3_sign('GET'."\n\n\n".$s3_date."\n".'/'.$s3c['bucket'].'/?acl'));
-				$s3_args      = array('method' => 'GET', 'redirection' => 5, 'headers' => array('Host' => $s3_domain, 'Date' => $s3_date, 'Authorization' => 'AWS '.$s3c['access_key'].':'.$s3_signature));
+				$s3_location  = strtolower($s3c['bucket']) !== $s3c['bucket'] ? '/'.$s3c['bucket'].'/?acl' : '/?acl';
+				$s3_domain    = strtolower($s3c['bucket']) !== $s3c['bucket'] ? 's3.amazonaws.com' : $s3c['bucket'].'.s3.amazonaws.com';
+				$s3_signature = base64_encode(c_ws_plugin__s2member_files_in::amazon_s3_sign('GET'."\n/\nacl=\nhost:".$s3_domain."\nhost\n".self::amazon_s34_sign('')));
+				$s3_args      = array('method' => 'GET', 'redirection' => 5, 'headers' => array('Host' => $s3_domain, 'Date' => $s3_date, 'Authorization' => 'AWS4-HMAC-SHA256 '.$s3c['access_key'].':'.$s3_signature));
 
 				if(($s3_response = c_ws_plugin__s2member_utils_urls::remote('https://'.$s3_domain.$s3_location, FALSE, array_merge($s3_args, array('timeout' => 20)), 'array')) && $s3_response['code'] === 200)
 				{
