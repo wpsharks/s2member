@@ -705,7 +705,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 
 			foreach($headers as $_key => $_value)
 				if(is_string($_key) && ($_key = strtolower($_key)))
-					if(in_array($_key, array('host', 'content-type'), TRUE))
+					if(in_array($_key, array('host', 'content-type'), TRUE) || stripos($_key, 'X-Amz-') === 0)
 					{
 						$s3_canonical_headers .= strtolower($_key).':'.trim($_value)."\n";
 						$s3_canonical_header_keys[] = strtolower($_key);
