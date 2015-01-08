@@ -665,7 +665,11 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 		 */
 		public static function amazon_s34_sign($string = '')
 		{
-			$s3c['secret_key']          = $GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_s3_files_secret_key'];
+			$s3c = array(); // Initialize config. keys.
+			foreach($GLOBALS['WS_PLUGIN__']['s2member']['o'] as $option => $option_value)
+				if(preg_match('/^amazon_s3_files_/', $option) && ($option = preg_replace('/^amazon_s3_files_/', '', $option)))
+					$s3c[$option] = $option_value;
+
 			$s3_date_key                = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign(date('Ymd'), 'AWS4'.$s3c['secret_key']);
 			$s3_date_region_key         = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($s3c['bucket_region'], $s3_date_key);
 			$s3_date_region_service_key = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign('s3', $s3_date_region_key);
