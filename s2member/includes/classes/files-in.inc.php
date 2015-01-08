@@ -659,11 +659,15 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 		 * @package s2Member\Files
 		 * @since 110524RC
 		 *
-		 * @param string $string Input string/data, to be signed by this routine.
+		 * @param string $domain The API endpoint domain; e.g. `[bucket].s3.amazonaws.com`.
+		 * @param string $location The API endpoint URI; e.g. `/?acl`.
+		 * @param string $method The request method; e.g. `GET`, `PUT`, `POST`, etc.
+		 * @param array  $headers An associative array of all headers.
+		 * @param string $body Any input data sent with the request.
 		 *
 		 * @return string An AWS4-HMAC-SHA256 signature for Amazon S3.
 		 */
-		public static function amazon_s34_sign($domain, $location, $method, $headers, $body = '')
+		public static function amazon_s34_sign($domain = 's3.amazonaws.com', $location = '/', $method = 'GET', $headers = array(), $body = '')
 		{
 			$domain   = trim(strtolower((string)$domain));
 			$location = trim((string)$location);
@@ -671,32 +675,65 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 			$headers  = (array)$headers;
 			$body     = trim((string)$body);
 
+			$s3c = array(); // Initialize config. keys.
 			foreach($GLOBALS['WS_PLUGIN__']['s2member']['o'] as $option => $option_value)
 				if(preg_match('/^amazon_s3_files_/', $option) && ($option = preg_replace('/^amazon_s3_files_/', '', $option)))
 					$s3c[$option] = $option_value;
 
 			$s3_iso8601_date   = date('Ymd\THis\Z');
 			$s3_location_parts = parse_url($location);
-			$s3_canonical_path = !empty($s3_location_parts['path']) ? $s3_location_parts['path'] : '/';
-			$s3_hashed_payload = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($body);
-			$s3_scope          = date('Ymd').'/'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_s3_files_bucket_region'].'/s3/aws4_request';
+			$s3_canonical_path = !empty($s3_location_parts['path']) ? '/'.ltrim($s3_location_parts['path'], '/') : '/';
+			$s3_scope          = date('Ymd').'/'.$s3c['bucket_region'].'/s3/aws4_request';
 
-			$s3_canonical_query = '';
-			wp_parse_str($s3_location_parts['query'], $query_args);
+			$s3_date_key                = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign(date('Ymd'), 'AWS4'.$s3c['secret_key']);
+			$s3_date_region_key         = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($s3c['bucket_region'], $s3_date_key);
+			$s3_date_region_service_key = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign('s3', $s3_date_region_key);
+			$s3_signing_key             = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign('aws4_request', $s3_date_region_service_key);
+
+			$s3_canonical_query = ''; // Initialize.
+			wp_parse_str((string)@$s3_location_parts['query'], $query_args);
 			ksort($query_args, SORT_STRING);
+
 			foreach($query_args as $_key => $_value)
-				$s3_canonical_query .= c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($_key)).'='.c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(urlencode($_value));
+				$s3_canonical_query .= c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(rawurlencode($_key)).
+				                       '='.c_ws_plugin__s2member_utils_strings::urldecode_ur_chars_deep(rawurlencode($_value));
 			unset($_key, $_value); // Housekeeping.
 
-			$s3_canonicial_request = c_ws_plugin__s2member_files_in::amazon_s3_sign(
-				$method."\n".
-				$s3_canonical_path."\n".
-				$s3_canonical_query."\n".
-				'host:'.$domain."\n".
-				'host'."\n".
-				$s3_hashed_payload
-			);
-			return c_ws_plugin__s2member_utils_strings::hmac_sha256_sign((string)$string, $s3c['secret_key']);
+			$s3_canonical_headers     = '';
+			$s3_canonical_header_keys = array();
+			ksort($headers, SORT_STRING);
+
+			foreach($headers as $_key => $_value)
+				if(is_string($_key) && ($_key = strtolower($_key)))
+					if(in_array($_key, array('host', 'content-type'), TRUE))
+					{
+						$s3_canonical_headers .= strtolower($_key).':'.trim($_value)."\n";
+						$s3_canonical_header_keys[] = strtolower($_key);
+					}
+			$s3_canonical_headers = trim($s3_canonical_headers);
+			unset($_key, $_value); // Housekeeping.
+
+			$s3_hashed_payload = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($body, $s3_signing_key);
+
+			$s3_canonicial_request        = $method."\n".
+			                                $s3_canonical_path."\n".
+			                                $s3_canonical_query."\n".
+			                                $s3_canonical_headers."\n".
+			                                implode(';', $s3_canonical_header_keys)."\n".
+			                                $s3_hashed_payload;
+			$s3_canonicial_request_sha256 = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($s3_canonicial_request, $s3_signing_key);
+
+			$s3_string_to_sign = 'AWS4-HMAC-SHA256'."\n".
+			                     $s3_iso8601_date."\n".
+			                     $s3_scope."\n".
+			                     $s3_canonicial_request_sha256;
+			$s3_signature      = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($s3_string_to_sign, $s3_signing_key);
+
+			$s3_authorization_header_signature = 'AWS4-HMAC-SHA256 Credential='.$s3c['access_key'].'/'.$s3_scope.','.
+			                                     'SignedHeaders='.implode(';', $s3_canonical_header_keys).','.
+			                                     'Signature='.$s3_signature;
+
+			return $s3_authorization_header_signature;
 		}
 
 		/**
