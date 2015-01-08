@@ -654,20 +654,20 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 		}
 
 		/**
-		 * Creates an Amazon S3 HMAC-SHA1 signature.
+		 * Creates an Amazon S3 HMAC-SHA256 signature.
 		 *
 		 * @package s2Member\Files
 		 * @since 110524RC
 		 *
 		 * @param string $string Input string/data, to be signed by this routine.
 		 *
-		 * @return string An HMAC-SHA1 signature for Amazon S3.
+		 * @return string An HMAC-SHA256 signature for Amazon S3.
 		 */
 		public static function amazon_s34_sign($string = '')
 		{
 			$s3c['secret_key'] = $GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_s3_files_secret_key'];
 
-			return c_ws_plugin__s2member_utils_strings::hmac_sha1_sign((string)$string, $s3c['secret_key']);
+			return c_ws_plugin__s2member_utils_strings::hmac_sha256_sign((string)$string, $s3c['secret_key']);
 		}
 
 		/**
