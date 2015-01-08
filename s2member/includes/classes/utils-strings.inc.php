@@ -180,7 +180,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		 */
 		public static function strip_2_kb_chars($string = '')
 		{
-			return preg_replace('/[^0-9A-Z\r\n\t\s`\=\[\]\\\;\',\.\/~\!@#\$%\^&\*\(\)_\+\|\}\{\:"\?\>\<\-]/i', '', remove_accents((string)$string));
+			return preg_replace('/[^0-9A-Z'."\r\n\t".'\s`\=\[\]\\\;\',\.\/~\!@#\$%\^&\*\(\)_\+\|\}\{\:"\?\>\<\-]/i', '', remove_accents((string)$string));
 		}
 
 		/**
