@@ -657,7 +657,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 		 * Creates an Amazon S3 AWS4-HMAC-SHA256 signature.
 		 *
 		 * @package s2Member\Files
-		 * @since 110524RC
+		 * @since 150108
 		 *
 		 * @param string $domain The API endpoint domain; e.g. `[bucket].s3.amazonaws.com`.
 		 * @param string $location The API endpoint URI; e.g. `/?acl`.
