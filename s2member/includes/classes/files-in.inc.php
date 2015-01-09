@@ -670,7 +670,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 				if(preg_match('/^amazon_s3_files_/', $option) && ($option = preg_replace('/^amazon_s3_files_/', '', $option)))
 					$s3c[$option] = $option_value;
 
-			$s3_date_key                = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign(date('Ymd'), 'AWS4'.$s3c['secret_key'], TRUE);
+			$s3_date_key                = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign(gmdate('Ymd'), 'AWS4'.$s3c['secret_key'], TRUE);
 			$s3_date_region_key         = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign($s3c['bucket_region'], $s3_date_key, TRUE);
 			$s3_date_region_service_key = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign('s3', $s3_date_region_key, TRUE);
 			$s3_signing_key             = c_ws_plugin__s2member_utils_strings::hmac_sha256_sign('aws4_request', $s3_date_region_service_key, TRUE);
@@ -710,10 +710,10 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 				if(preg_match('/^amazon_s3_files_/', $option) && ($option = preg_replace('/^amazon_s3_files_/', '', $option)))
 					$s3c[$option] = $option_value;
 
-			$s3_iso8601_date   = date('Ymd\THis\Z');
+			$s3_iso8601_date   = gmdate('Ymd\THis\Z');
 			$s3_location_parts = parse_url($s3_location);
 			$s3_canonical_path = !empty($s3_location_parts['path']) ? '/'.ltrim($s3_location_parts['path'], '/') : '/';
-			$s3_scope          = date('Ymd').'/'.$s3c['bucket_region'].'/s3/aws4_request';
+			$s3_scope          = gmdate('Ymd').'/'.$s3c['bucket_region'].'/s3/aws4_request';
 
 			$s3_canonical_query = ''; // Initialize.
 			wp_parse_str((string)@$s3_location_parts['query'], $query_args);
@@ -812,7 +812,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 
 			if(!empty($s3c) && $s3c['bucket'] && $s3c['access_key'] && $s3c['secret_key']) // Must have Amazon S3 Bucket/Keys.
 			{
-				$s3_iso8601_date             = date('Ymd\THis\Z');
+				$s3_iso8601_date             = gmdate('Ymd\THis\Z');
 				$s3_date                     = gmdate('D, d M Y H:i:s').' GMT';
 				$s3_location                 = strtolower($s3c['bucket']) !== $s3c['bucket'] ? '/'.$s3c['bucket'].'/?acl' : '/?acl';
 				$s3_domain                   = strtolower($s3c['bucket']) !== $s3c['bucket'] ? 's3.amazonaws.com' : $s3c['bucket'].'.s3.amazonaws.com';
