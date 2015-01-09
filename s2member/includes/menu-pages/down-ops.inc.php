@@ -281,16 +281,16 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_amazon_s3_files_bucket_region" id="ws-plugin--s2member-amazon-s3-files-bucket-region">'."\n";
-				echo '<option value="us-east-1"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-east-1') ? ' selected="selected"' : '').'>us-east-1</option>'."\n";
-				echo '<option value="us-west-1"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-west-1') ? ' selected="selected"' : '').'>us-west-1</option>'."\n";
-				echo '<option value="us-west-2"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-west-2') ? ' selected="selected"' : '').'>us-west-2</option>'."\n";
-				echo '<option value="eu-west-1"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-west-1') ? ' selected="selected"' : '').'>eu-west-1</option>'."\n";
-				echo '<option value="eu-central-1"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-central-1') ? ' selected="selected"' : '').'>eu-central-1</option>'."\n";
-				echo '<option value="ap-southeast-1"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-southeast-1') ? ' selected="selected"' : '').'>ap-southeast-1</option>'."\n";
-				echo '<option value="ap-southeast-2"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-southeast-2') ? ' selected="selected"' : '').'>ap-southeast-2</option>'."\n";
-				echo '<option value="ap-northeast-1"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-northeast-1') ? ' selected="selected"' : '').'>ap-northeast-1</option>'."\n";
-				echo '<option value="sa-east-1"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'sa-east-1') ? ' selected="selected"' : '').'>sa-east-1</option>'."\n";
-				echo '<option value="us-gov-west-1"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-gov-west-1') ? ' selected="selected"' : '').'>us-gov-west-1</option>'."\n";
+				echo '<option value="us-east-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-east-1') ? ' selected="selected"' : '').'>us-east-1</option>'."\n";
+				echo '<option value="us-west-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-west-1') ? ' selected="selected"' : '').'>us-west-1</option>'."\n";
+				echo '<option value="us-west-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-west-2') ? ' selected="selected"' : '').'>us-west-2</option>'."\n";
+				echo '<option value="eu-west-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-west-1') ? ' selected="selected"' : '').'>eu-west-1</option>'."\n";
+				echo '<option value="eu-central-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-central-1') ? ' selected="selected"' : '').'>eu-central-1</option>'."\n";
+				echo '<option value="ap-southeast-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-southeast-1') ? ' selected="selected"' : '').'>ap-southeast-1</option>'."\n";
+				echo '<option value="ap-southeast-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-southeast-2') ? ' selected="selected"' : '').'>ap-southeast-2</option>'."\n";
+				echo '<option value="ap-northeast-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-northeast-1') ? ' selected="selected"' : '').'>ap-northeast-1</option>'."\n";
+				echo '<option value="sa-east-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'sa-east-1') ? ' selected="selected"' : '').'>sa-east-1</option>'."\n";
+				echo '<option value="us-gov-west-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-gov-west-1') ? ' selected="selected"' : '').'>us-gov-west-1</option>'."\n";
 				echo '</select><br />'."\n";
 				echo 'See: <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region" target="_blank">http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region</a>'."\n";
 				echo '</td>'."\n";
