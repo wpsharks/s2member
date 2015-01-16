@@ -14,7 +14,7 @@
  * @package s2Member\Admin_Lockouts
  * @since 3.5
  */
-if(realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME']))
+if(!defined('WPINC')) // MUST have WordPress.
 	exit ('Do not access this file directly.');
 
 if(!class_exists('c_ws_plugin__s2member_admin_lockouts'))

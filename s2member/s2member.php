@@ -64,7 +64,7 @@ Description: s2Member, a powerful (free) membership plugin for WordPress. Protec
 Tags: s2, s2member, s2 member, membership, users, user, members, member, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, paypal pro, pay pal, authorize, authorize.net, google wallet, clickbank, click bank, buddypress, buddy press, bbpress, bb press, shopping cart, cart, checkout, ecommerce
 
 -- end section for WordPress parsing. ------------------------------------------------------------------------------- */
-if(realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME']))
+if(!defined('WPINC')) // MUST have WordPress.
 	exit('Do not access this file directly.');
 /**
  * The installed version of s2Member.

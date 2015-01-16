@@ -14,7 +14,7 @@
  * @package s2Member\PayPal
  * @since 110720
  */
-if(realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME']))
+if(!defined('WPINC')) // MUST have WordPress.
 	exit('Do not access this file directly.');
 
 if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level'))

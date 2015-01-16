@@ -1,6 +1,6 @@
 <?php
-if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
-	exit("Do not access this file directly.");
+if(!defined('WPINC')) // MUST have WordPress.
+	exit('Do not access this file directly.');
 ?>
 
 <IfModule authz_core_module>
@@ -9,6 +9,3 @@ if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
 <IfModule !authz_core_module>
 	deny from all
 </IfModule>
-
-# Disallow directory indexing here.
-	Options -Indexes

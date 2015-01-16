@@ -1,6 +1,6 @@
 <?php
-if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
-	exit("Do not access this file directly.");
+if(!defined('WPINC')) // MUST have WordPress.
+	exit('Do not access this file directly.');
 ?>
 
 <?php echo '<?xml version="1.0"?>'."\n"; ?>

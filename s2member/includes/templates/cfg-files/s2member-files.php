@@ -1,9 +1,9 @@
 <?php
-if (realpath (__FILE__) === realpath ($_SERVER["SCRIPT_FILENAME"]))
-	exit("Do not access this file directly.");
+if(!defined('WPINC')) // MUST have WordPress.
+	exit('Do not access this file directly.');
 
 global /* A Multisite ``$base`` configuration? */ $base;
-$ws_plugin__s2member_temp_s_base = (!empty($base)) ? $base : c_ws_plugin__s2member_utils_urls::parse_url (network_home_url ("/"), PHP_URL_PATH);
+$ws_plugin__s2member_temp_s_base = (!empty($base)) ? $base : c_ws_plugin__s2member_utils_urls::parse_url (network_home_url ('/'), PHP_URL_PATH);
 // This works on Multisite installs too. The function ``network_home_url ()`` defaults to ``home_url ()`` on standard WordPress installs.
 // Do NOT use ``site`` URL. Must use the `home` URL here, because that's what WordPress uses in its own `mod_rewrite` implementation.
 ?>
@@ -27,7 +27,7 @@ $ws_plugin__s2member_temp_s_base = (!empty($base)) ? $base : c_ws_plugin__s2memb
 
 # Handle virtual directories, common on multisite networks.
 	RewriteCond %{ENV:s2member_file_download_wp_vdir_check} !^complete$
-	RewriteCond %{THE_REQUEST} ^(?:GET|HEAD)(?:[\ ]+)(?:<?php echo preg_quote ($ws_plugin__s2member_temp_s_base, " "); ?>)([_0-9a-zA-Z\-]+/)(?:wp-content/)
+	RewriteCond %{THE_REQUEST} ^(?:GET|HEAD)(?:[\ ]+)(?:<?php echo preg_quote ($ws_plugin__s2member_temp_s_base, ' '); ?>)([_0-9a-zA-Z\-]+/)(?:wp-content/)
 	RewriteRule ^(.*)$ - [E=s2member_file_download_wp_vdir:,E=s2member_file_download_wp_vdir:%1,E=s2member_file_download_wp_vdir_check:complete]
 
 # Handle streaming download requests via the rewrite engine.
@@ -110,8 +110,5 @@ $ws_plugin__s2member_temp_s_base = (!empty($base)) ? $base : c_ws_plugin__s2memb
 		deny from all
 	</IfModule>
 </IfModule>
-
-# Disallow directory indexing here.
-	Options -Indexes
 
 <?php unset($ws_plugin__s2member_temp_s_base); ?>

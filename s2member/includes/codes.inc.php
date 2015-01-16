@@ -14,7 +14,7 @@
  * @package s2Member
  * @since 3.0
  */
-if(realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME']))
+if(!defined('WPINC')) // MUST have WordPress.
 	exit ('Do not access this file directly.');
 /*
 Add WordPress Editor Shortcodes.

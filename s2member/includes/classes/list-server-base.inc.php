@@ -14,7 +14,7 @@
  * @since 141004
  * @package s2Member\List_Servers
  */
-if(realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME']))
+if(!defined('WPINC')) // MUST have WordPress.
 	exit('Do not access this file directly.');
 
 if(!class_exists('c_ws_plugin__s2member_list_server_base'))

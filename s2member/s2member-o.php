@@ -14,6 +14,8 @@
  * @package s2Member
  * @since 110912
  */
+define ('_WS_PLUGIN__S2MEMBER_ONLY', TRUE);
+
 include_once dirname(__FILE__).'/includes/classes/utils-s2o.inc.php';
 
 if(($ws_plugin__s2member_o['wp_dir'] = c_ws_plugin__s2member_utils_s2o::wp_dir(dirname(__FILE__), dirname($_SERVER['SCRIPT_FILENAME']))))
@@ -29,6 +31,7 @@ if(($ws_plugin__s2member_o['wp_dir'] = c_ws_plugin__s2member_utils_s2o::wp_dir(d
 		 * @var bool
 		 */
 		define ('SHORTINIT', TRUE);
+
 		/**
 		 * Flag indicating only s2Member is being loaded.
 		 *
@@ -38,11 +41,12 @@ if(($ws_plugin__s2member_o['wp_dir'] = c_ws_plugin__s2member_utils_s2o::wp_dir(d
 		 * @var bool
 		 */
 		define ('WS_PLUGIN__S2MEMBER_ONLY', TRUE);
+
 		/*
 		Load WordPress.
 		*/
 		require($ws_plugin__s2member_o['wp_dir'].'/wp-load.php');
-		eval ('?>'.$ws_plugin__s2member_o['wp_settings_as']); // Settings after ``SHORTINIT``.
+		eval ('?>'.$ws_plugin__s2member_o['wp_settings_as']);
 	}
 	else // Else fallback on full WordPress.
 		require($ws_plugin__s2member_o['wp_dir'].'/wp-load.php');

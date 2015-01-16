@@ -14,7 +14,7 @@
  * @package s2Member\No_Cache
  * @since 3.5
  */
-if(realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME']))
+if(!defined('WPINC')) // MUST have WordPress.
 	exit ('Do not access this file directly.');
 
 if(!class_exists('c_ws_plugin__s2member_no_cache'))
@@ -95,8 +95,8 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 			if(!$once && (empty($_GET['qcAC']) || !filter_var($_GET['qcAC'], FILTER_VALIDATE_BOOLEAN))
 			   && (
 					$no_cache === TRUE // Forces no-cache constants; if `TRUE` explicitly.
-					|| ($no_cache === 'restricted' && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
-					|| (is_user_logged_in() && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
+					|| ($no_cache === 'restricted' && (!defined('ZENCACHE_WHEN_LOGGED_IN') || !ZENCACHE_WHEN_LOGGED_IN) && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
+					|| (is_user_logged_in() && (!defined('ZENCACHE_WHEN_LOGGED_IN') || !ZENCACHE_WHEN_LOGGED_IN) && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
 					|| c_ws_plugin__s2member_systematics::is_s2_systematic_use_page()
 				)
 			)
@@ -110,7 +110,7 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 				 * @var bool
 				 */
 				if(!defined('DONOTCACHEDB'))
-					define ('DONOTCACHEDB', TRUE);
+					define('DONOTCACHEDB', TRUE);
 
 				/**
 				 * No-cache Page for plugins.
@@ -121,7 +121,7 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 				 * @var bool
 				 */
 				if(!defined('DONOTCACHEPAGE'))
-					define ('DONOTCACHEPAGE', TRUE);
+					define('DONOTCACHEPAGE', TRUE);
 
 				/**
 				 * No-cache Objects for plugins.
@@ -132,7 +132,18 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 				 * @var bool
 				 */
 				if(!defined('DONOTCACHEOBJECT'))
-					define ('DONOTCACHEOBJECT', TRUE);
+					define('DONOTCACHEOBJECT', TRUE);
+
+				/**
+				 * No-cache anything for ZenCache plugin.
+				 *
+				 * @package s2Member\No_Cache
+				 * @since 3.5
+				 *
+				 * @var bool
+				 */
+				if(!defined('ZENCACHE_ALLOWED'))
+					define('ZENCACHE_ALLOWED', FALSE);
 
 				/**
 				 * No-cache anything for Quick Cache plugin.
@@ -143,7 +154,7 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 				 * @var bool
 				 */
 				if(!defined('QUICK_CACHE_ALLOWED'))
-					define ('QUICK_CACHE_ALLOWED', FALSE);
+					define('QUICK_CACHE_ALLOWED', FALSE);
 
 				$once = TRUE; // Set these one time only.
 
@@ -185,7 +196,11 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 
 			$using_selective_behavior = apply_filters('ws_plugin__s2member_no_cache_headers_selective', FALSE, get_defined_vars());
 
-			if(!$once && !headers_sent() && (empty($_GET['qcABC']) || !filter_var($_GET['qcABC'], FILTER_VALIDATE_BOOLEAN)) && ($no_cache || !$using_selective_behavior || c_ws_plugin__s2member_no_cache::$headers))
+			if(!$once && !headers_sent() // Only once, and only if possible.
+			   && (empty($_GET['zcABC']) || !filter_var($_GET['zcABC'], FILTER_VALIDATE_BOOLEAN))
+			   && (empty($_GET['qcABC']) || !filter_var($_GET['qcABC'], FILTER_VALIDATE_BOOLEAN))
+			   && ($no_cache || !$using_selective_behavior || c_ws_plugin__s2member_no_cache::$headers)
+			)
 				if(!apply_filters('ws_plugin__s2member_disable_no_cache_headers', FALSE, get_defined_vars()))
 				{
 					foreach(headers_list() as $header) // No-cache headers already sent? We need to check here.
