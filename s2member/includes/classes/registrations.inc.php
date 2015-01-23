@@ -1190,6 +1190,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 												Logging now supports Multisite Networking as well. */
 
 											$reg_vars = get_defined_vars(); // All defined vars.
+											$reg_vars['_COOKIE'] = $_COOKIE; // Record cookies also.
 											// No need to include these in the logs. Unset before log entry.
 											unset($reg_vars['wpdb'], $reg_vars['current_site'], $reg_vars['current_blog']);
 											c_ws_plugin__s2member_utils_logs::log_entry('reg-handler', $reg_vars);
