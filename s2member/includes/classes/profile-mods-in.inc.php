@@ -73,7 +73,7 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 					if(!empty($_p['ws_plugin__s2member_profile_last_name']))
 						$userdata['last_name'] = $_p['ws_plugin__s2member_profile_last_name'];
 
-					wp_update_user($userdata); // OK. Now send this array for an update.
+					wp_update_user(wp_slash($userdata)); // OK. Now send this array for an update.
 
 					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_fields'])
 						if($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level('auto-detection', 'profile'))

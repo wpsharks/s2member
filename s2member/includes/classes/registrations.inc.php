@@ -300,7 +300,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 						if(!empty($user_already_exists) && c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog($user_login, $user_email, $meta['add_to_blog']))
 						{
 							add_user_to_blog($meta['add_to_blog'], $user_id, $meta['new_role']); // Add this User to the specified Blog.
-							wp_update_user(array('ID' => $user_id, 'user_pass' => $password)); // Update Password so it's the same as in the following msg.
+							wp_update_user(wp_slash(array('ID' => $user_id, 'user_pass' => $password))); // Update Password so it's the same as in the following msg.
 							wpmu_welcome_user_notification($user_id, $password, $meta); // Send welcome letter via email just like ``wpmu_activate_signup()`` does.
 
 							do_action('wpmu_activate_user', $user_id, $password, $meta); // Process Hook that would have been fired inside ``wpmu_activate_signup()``.
@@ -503,7 +503,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 				{
 					$role = get_option('default_role'); // Use default Role.
 					add_existing_user_to_blog(array('user_id' => $user_id, 'role' => $role)); // Add User.
-					wp_update_user(array('ID' => $user_id, 'user_pass' => $user_pass)); // Update to ``$user_pass``.
+					wp_update_user(wp_slash(array('ID' => $user_id, 'user_pass' => $user_pass))); // Update to ``$user_pass``.
 
 					do_action('ws_plugin__s2member_during_ms_create_existing_user', get_defined_vars());
 					do_action('user_register', $user_id); // So s2Member knows a User is registering.
@@ -669,13 +669,13 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											if(!$user->display_name || $user->display_name === $user->user_login)
 											{
 												if($custom_reg_display_name === 'full' && $name)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $name));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $name)));
 												else if($custom_reg_display_name === 'first' && $fname)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $fname));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $fname)));
 												else if($custom_reg_display_name === 'last' && $lname)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $lname));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $lname)));
 												else if($custom_reg_display_name === 'login' && $login)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $login));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $login)));
 											}
 											if(is_multisite()) // Should we handle Main Site permissions and Originating Blog ID#?
 											{
@@ -844,13 +844,13 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											if(!$user->display_name || $user->display_name === $user->user_login)
 											{
 												if($custom_reg_display_name === 'full' && $name)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $name));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $name)));
 												else if($custom_reg_display_name === 'first' && $fname)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $fname));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $fname)));
 												else if($custom_reg_display_name === 'last' && $lname)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $lname));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $lname)));
 												else if($custom_reg_display_name === 'login' && $login)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $login));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $login)));
 											}
 											if(is_multisite( /* Should we handle Main Site permissions and Originating Blog ID#? */))
 											{
@@ -985,13 +985,13 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											if(!$user->display_name || $user->display_name === $user->user_login)
 											{
 												if($custom_reg_display_name === 'full' && $name)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $name));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $name)));
 												else if($custom_reg_display_name === 'first' && $fname)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $fname));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $fname)));
 												else if($custom_reg_display_name === 'last' && $lname)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $lname));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $lname)));
 												else if($custom_reg_display_name === 'login' && $login)
-													wp_update_user(array('ID' => $user_id, 'display_name' => $login));
+													wp_update_user(wp_slash(array('ID' => $user_id, 'display_name' => $login)));
 											}
 											if(is_multisite()) // Should we handle Main Site permissions and Originating Blog ID#?
 											{
