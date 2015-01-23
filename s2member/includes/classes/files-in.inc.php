@@ -538,7 +538,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 
 				$extension = strtolower(substr($config['file_download'], strrpos($config['file_download'], '.') + 1));
 				$streaming = (isset($config['file_stream'])) ? filter_var($config['file_stream'], FILTER_VALIDATE_BOOLEAN) : ((in_array($extension, preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['file_download_stream_extensions']))) ? TRUE : FALSE);
-				$ssl       = (isset($config['file_ssl'])) ? filter_var($config['file_ssl'], FILTER_VALIDATE_BOOLEAN) : ((is_ssl()) ? TRUE : FALSE);
+				$ssl       = (isset($config['file_ssl'])) ? filter_var($config['file_ssl'], FILTER_VALIDATE_BOOLEAN) : (is_ssl() ? TRUE : FALSE);
 
 				if($get_streamer_array && $streaming && ($cfx = '/cfx/st') && ($cfx_pos = strpos($url_, $cfx)) !== FALSE && ($streamer = substr($url_, 0, $cfx_pos + strlen($cfx))) && ($url = c_ws_plugin__s2member_files_in::check_file_download_access(array_merge($config, array('file_stream' => FALSE, 'check_user' => FALSE, 'count_against_user' => FALSE)))))
 					$return = array('streamer' => $streamer, 'prefix' => $extension.':', 'file' => preg_replace('/^'.preg_quote($streamer, '/').'\//', '', $url_), 'url' => preg_replace('/^.+?\:/', (($ssl) ? 'https:' : 'http:'), $url));
@@ -573,7 +573,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 			do_action('ws_plugin__s2member_before_check_file_remote_authorization', get_defined_vars());
 			unset($__refs, $__v); // Housekeeping.
 
-			$_g = c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep(((!empty($_GET)) ? $_GET : array())));
+			$_g = c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep(!empty($_GET) ? $_GET : array()));
 
 			if(!is_object($user) && isset($_g['s2member_file_remote']) && filter_var($_g['s2member_file_remote'], FILTER_VALIDATE_BOOLEAN))
 			{

@@ -300,7 +300,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['file_download_content_encodong_none'] = '0';
 
 		$default_options['amazon_s3_files_bucket']        = '';
-		$default_options['amazon_s3_files_bucket_region'] = 'us-east-1';
+		$default_options['amazon_s3_files_bucket_region'] = '';
 		$default_options['amazon_s3_files_access_key']    = '';
 		$default_options['amazon_s3_files_secret_key']    = '';
 
