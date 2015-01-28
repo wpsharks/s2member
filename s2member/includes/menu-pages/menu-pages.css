@@ -15,7 +15,7 @@
 * @package WebSharks\Menu Pages
 * @since x.xx
 */
-@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
 /*
 Alter WordPress wrap on s2Member menu pages.
 */
@@ -500,7 +500,7 @@ div.ws-menu-page div.ws-menu-page-groups-hide:active
 div.ws-menu-page div.ws-menu-page-toolbox
 {
 	float     : right;
-	max-width : 300px;
+	max-width : 320px;
 
 	z-index   : 1;
 	position  : relative;
@@ -820,6 +820,75 @@ table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > 
 	color         : #FFFFFF;
 	background    : #73834B;
 	box-shadow    : 0 0 1px 0 rgba(0, 0, 0, 0.5) inset, 0 0 1px 1px rgba(223, 245, 165, 0.5);
+}
+/*
+Coupons table.
+*/
+table.ws-menu-page-table table.coupons-table
+{
+	margin       : 0;
+	padding      : 0;
+	width        : 100%;
+	box-sizing   : border-box;
+	table-layout : auto;
+}
+table.ws-menu-page-table table.coupons-table thead::after
+{
+	content : ' ';
+	display : block;
+	margin  : 0 0 15px 0;
+}
+table.ws-menu-page-table table.coupons-table thead th:not(:last-child)
+{
+	background    : rgba(255, 255, 255, 0.25);
+	border-radius : .25em;
+}
+table.ws-menu-page-table table.coupons-table th,
+table.ws-menu-page-table table.coupons-table td
+{
+	margin         : 0;
+	padding        : .1em;
+	text-align     : center;
+	vertical-align : middle;
+	width          : 10.5%;
+}
+table.ws-menu-page-table table.coupons-table th
+{
+	padding : .2em;
+}
+table.ws-menu-page-table table.coupons-table th i.fa
+{
+	display : block;
+}
+table.ws-menu-page-table table.coupons-table td:last-child
+{
+	width       : 5%;
+	font-size   : 110%;
+	white-space : nowrap;
+}
+table.ws-menu-page-table table.coupons-table td:last-child a
+{
+	width   : 33.3%;
+	display : inline-block;
+}
+table.ws-menu-page-table table.coupons-table td:last-child a.-delete:hover
+{
+	color : #AC0000;
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > table.coupons-table input[type='text']
+{
+	box-sizing : border-box;
+	width      : 100% !important;
+}
+table.ws-menu-page-table div.coupon-add
+{
+	margin : .5em 0 1em 5px;
+}
+table.ws-menu-page-table div.coupon-add > a
+{
+	font-size       : 120%;
+	font-weight     : bold;
+	text-decoration : none;
 }
 /*
 Specifically for info pages with readme files.

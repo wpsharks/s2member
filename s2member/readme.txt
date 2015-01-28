@@ -30,6 +30,7 @@ Contributors: WebSharks, JasWSInc, anguz, raamdev
 Author: s2Member® / WebSharks, Inc.
 Author URI: http://www.s2member.com/
 Donate link: http://www.s2member.com/donate/
+Beta link: http://www.s2member.com/beta-testers/
 
 Text Domain: s2member
 Domain Path: /includes/translations
