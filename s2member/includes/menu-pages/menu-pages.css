@@ -850,11 +850,16 @@ table.ws-menu-page-table table.coupons-table td
 	padding        : .1em;
 	text-align     : center;
 	vertical-align : middle;
-	width          : 10.5%;
+	width          : 10%;
 }
 table.ws-menu-page-table table.coupons-table th
 {
 	padding : .2em;
+}
+table.ws-menu-page-table table.coupons-table th:first-child,
+table.ws-menu-page-table table.coupons-table td:first-child
+{
+	width : 20%;
 }
 table.ws-menu-page-table table.coupons-table th i.fa
 {
@@ -868,7 +873,7 @@ table.ws-menu-page-table table.coupons-table td:last-child
 }
 table.ws-menu-page-table table.coupons-table td:last-child a
 {
-	width   : 33.3%;
+	width   : 40%;
 	display : inline-block;
 }
 table.ws-menu-page-table table.coupons-table td:last-child a.-delete:hover
