@@ -81,6 +81,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 					$paypal['currency']        = strtoupper($paypal['mc_currency']); // Normalize input currency.
 					$paypal['currency_symbol'] = c_ws_plugin__s2member_utils_cur::symbol($paypal['currency']);
 
+					if(!empty($coupon['coupon_code']) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
+						{
+							$coupon_class = new c_ws_plugin__s2member_pro_coupons();
+							$coupon_class->update_uses($coupon['coupon_code']);
+						}
 					$ipn_signup_vars = $paypal; // Create array of IPN signup vars w/o s2member_log.
 					unset($ipn_signup_vars['s2member_log']);
 					/*

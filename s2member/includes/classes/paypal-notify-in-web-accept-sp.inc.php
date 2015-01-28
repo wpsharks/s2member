@@ -64,6 +64,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 					$paypal['currency']        = strtoupper($paypal['mc_currency']); // Normalize input currency.
 					$paypal['currency_symbol'] = c_ws_plugin__s2member_utils_cur::symbol($paypal['currency']);
 
+					if(!empty($coupon['coupon_code']) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
+						{
+							$coupon_class = new c_ws_plugin__s2member_pro_coupons();
+							$coupon_class->update_uses($coupon['coupon_code']);
+						}
 					if(($sp_access_url = c_ws_plugin__s2member_sp_access::sp_access_link_gen($paypal['sp_ids'], $paypal['hours'])) && is_array($cv = preg_split('/\|/', $paypal['custom'])))
 					{
 						$processing = $during = TRUE; // Yes, we ARE processing this.
