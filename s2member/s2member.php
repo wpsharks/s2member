@@ -132,15 +132,15 @@ if(version_compare(PHP_VERSION, WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION, '>=') && ve
 	/*
 	Load a possible Pro module, if/when available.
 	*/
-	if(apply_filters('ws_plugin__s2member_load_pro', TRUE) && file_exists(dirname(__FILE__).'-pro/pro-module.php'))
+	if(apply_filters('ws_plugin__s2member_load_pro', TRUE))
 	{
-		include_once dirname(__FILE__).'-pro/pro-module.php';
-		if(is_dir(WP_PLUGIN_DIR.'/codestyling-localization') && !is_dir(dirname(__FILE__).'/s2member-pro') && function_exists('symlink'))
-		{
-			// Removing this for now. It causes problems during upgrades.
-			//@symlink(dirname(__FILE__).'-pro', dirname(__FILE__).'/s2member-pro'); // For CS localization compatibility.
-			//@chmod(dirname(__FILE__).'/s2member-pro', 0755);
-		}
+		if(is_file($_s2member_pro = dirname(__FILE__).'-pro/pro-module.php'))
+			include_once $_s2member_pro;
+
+		else if(is_file($_s2member_pro = WP_PLUGIN_DIR.'/'.basename(dirname(__FILE__)).'-pro/pro-module.php'))
+			include_once $_s2member_pro;
+
+		unset($_s2member_pro); // Housekeeping.
 	}
 	/*
 	Configure options and their defaults.

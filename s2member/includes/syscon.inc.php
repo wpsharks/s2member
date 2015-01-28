@@ -85,7 +85,7 @@ $GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha'] = array('public_key' => '6
 /*
 Configure the right menu options panel for s2Member.
 */
-$GLOBALS['WS_PLUGIN__']['s2member']['c']['menu_pages'] = array('updates' => TRUE, 'upsell-pro' => TRUE, 'installation' => FALSE, 'tools' => FALSE, 'kb' => TRUE, 'videos' => TRUE, 'support' => TRUE, 'donations' => TRUE);
+$GLOBALS['WS_PLUGIN__']['s2member']['c']['menu_pages'] = array('updates' => TRUE, 'upsell-pro' => TRUE, 'installation' => FALSE, 'tools' => FALSE, 'kb' => TRUE, 'videos' => TRUE, 'support' => TRUE, 'donations' => TRUE, 'beta' => TRUE);
 /*
 Check if s2Member has been configured *should be set after the first config via options panel*.
 */
@@ -300,7 +300,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['file_download_content_encodong_none'] = '0';
 
 		$default_options['amazon_s3_files_bucket']        = '';
-		$default_options['amazon_s3_files_bucket_region'] = 'us-east-1';
+		$default_options['amazon_s3_files_bucket_region'] = '';
 		$default_options['amazon_s3_files_access_key']    = '';
 		$default_options['amazon_s3_files_secret_key']    = '';
 

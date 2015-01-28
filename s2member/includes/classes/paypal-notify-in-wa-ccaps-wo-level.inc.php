@@ -65,6 +65,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 					$paypal['currency']        = strtoupper($paypal['mc_currency']); // Normalize input currency.
 					$paypal['currency_symbol'] = c_ws_plugin__s2member_utils_cur::symbol($paypal['currency']);
 
+					if(!empty($coupon['coupon_code']) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
+						{
+							$coupon_class = new c_ws_plugin__s2member_pro_coupons();
+							$coupon_class->update_uses($coupon['coupon_code']);
+						}
 					if(preg_match('/(referenc|associat|updat|upgrad)/i', $paypal['option_name1']) && $paypal['option_selection1']) // Must have this information for Capability additions.
 					{
 						if(($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['txn_id'], $paypal['option_selection1'])) && is_object($user = new WP_User ($user_id)) && $user->ID)
