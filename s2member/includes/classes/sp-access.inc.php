@@ -92,7 +92,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				* @param bool $read_only Optional. Defaults to false. If ``$read_only = true``,
 				* 	no session cookies are set, no IP Restrictions are checked, and script execution is not exited on Link failure.
 				* 	In other words, with ``$read_only = true``, this function will simply return true or false.
-				* @return null|bool Always returns `true` if access is indeed allowed in one way or another.
+				* @return null|bool|string Returns `true` (or the SP access string), if access is indeed allowed in one way or another.
 				* 	If access is denied with ``$read_only = true`` simply return false. If access is denied with ``$read_only = false``, return false; but if a Specific Post/Page Access Link is currently being used, we exit with a warning about Access Link expiration here.
 				*/
 				public static function sp_access ($sp_id = FALSE, $read_only = FALSE)
@@ -118,7 +118,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 																	c_ws_plugin__s2member_sp_access::sp_access_session ($_g["s2member_sp_access"]);
 
 																if ($read_only || c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok ($_SERVER["REMOTE_ADDR"], $sp_access_value))
-																	return apply_filters("ws_plugin__s2member_sp_access", true, get_defined_vars (), "auth-via-link-session");
+																	return apply_filters("ws_plugin__s2member_sp_access", $sp_access_value, get_defined_vars (), "auth-via-link-session");
 															}
 													}
 											}
