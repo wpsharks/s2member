@@ -161,6 +161,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 								$pr_times['level'.$paypal['level']] = (!$pr_times['level'.$paypal['level']]) ? time() : $pr_times['level'.$paypal['level']];
 								update_user_option($user_id, 's2member_paid_registration_times', $pr_times);
 
+								if(!empty($coupon['full_coupon_code']) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
+								{
+									$user_coupons = is_array($user_coupons = get_user_option('s2member_coupon_codes', $user_id)) ? $user_coupons : array();
+									$user_coupons = array_merge($user_coupons, (array)$coupon['full_coupon_code']);
+									update_user_option($user_id, 's2member_coupon_codes', $user_coupons);
+								}
 								c_ws_plugin__s2member_user_notes::clear_user_note_lines($user_id, '/^Demoted by s2Member\:/');
 								c_ws_plugin__s2member_user_notes::clear_user_note_lines($user_id, '/^Paid Subscr\. ID @ time of demotion\:/');
 

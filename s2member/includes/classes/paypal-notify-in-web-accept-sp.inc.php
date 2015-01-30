@@ -81,6 +81,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 								$sp_references = c_ws_plugin__s2member_utils_arrays::array_unique(array_merge($sp_references, $_sp_reference));
 								update_user_option($user_id, 's2member_sp_references', $sp_references);
 
+								if(!empty($coupon['full_coupon_code']) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
+								{
+									$user_coupons = is_array($user_coupons = get_user_option('s2member_coupon_codes', $user_id)) ? $user_coupons : array();
+									$user_coupons = array_merge($user_coupons, (array)$coupon['full_coupon_code']);
+									update_user_option($user_id, 's2member_coupon_codes', $user_coupons);
+								}
 								$paypal['s2member_log'][] = 'Specific Post/Page ~ Sale associated with User ID: '.$user_id.'.';
 							}
 						$sbj = preg_replace('/%%sp_access_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($sp_access_url), $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'sp_email_subject']);
