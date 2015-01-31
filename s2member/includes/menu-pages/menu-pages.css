@@ -147,10 +147,11 @@ div.ws-menu-page pre.code > code
 	display       : block;
 	box-shadow    : 0 0 5px 1px #000000 inset, 0 0 1px 1px rgba(223, 245, 165, 0.5);
 }
-div.ws-menu-page code.highlight-php
+div.ws-menu-page code.highlight-php,
+div.ws-menu-page code.highlight-shortcodes
 {
 	font-size     : 90%;
-	color         : #EEEEEE;
+	color         : #000000;
 	background    : #FFFFFF;
 	overflow      : auto;
 	max-width     : 100%;
@@ -229,6 +230,14 @@ div.ws-menu-page .ws-menu-page-bright-hilite
 {
 	font-size     : 102%;
 	background    : #EBF084;
+
+	border-radius : 3px;
+	padding       : 0 0.2em;
+}
+div.ws-menu-page .ws-menu-page-warning-hilite
+{
+	color         : #FFFFFF;
+	background    : #AC3204;
 
 	border-radius : 3px;
 	padding       : 0 0.2em;
