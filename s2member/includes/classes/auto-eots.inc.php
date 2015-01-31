@@ -156,7 +156,6 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 											if(preg_match('/^access_s2member_ccap_/', $cap))
 												$user->remove_cap($ccap = $cap);
 
-									// delete_user_option ($user_id, 's2member_custom');
 									delete_user_option($user_id, 's2member_subscr_gateway');
 									delete_user_option($user_id, 's2member_subscr_id');
 									delete_user_option($user_id, 's2member_subscr_baid');
