@@ -40,7 +40,7 @@ Requires at least: 3.3
 
 Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License
-Contributors: WebSharks
+Contributors: WebSharks, JasWSInc, anguz, raamdev, bruce-caldwell
 
 Author: s2Member / WebSharks, Inc.
 Author URI: http://www.s2member.com/

@@ -25,7 +25,7 @@ Tested up to PHP: 5.6
 
 Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License v2 or later.
-Contributors: WebSharks, JasWSInc, anguz, raamdev
+Contributors: WebSharks, JasWSInc, anguz, raamdev, bruce-caldwell
 
 Author: s2Member® / WebSharks, Inc.
 Author URI: http://www.s2member.com/
