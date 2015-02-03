@@ -107,7 +107,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 								if(!empty($coupon['full_coupon_code']) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
 								{
 									$user_coupons = is_array($user_coupons = get_user_option('s2member_coupon_codes', $user_id)) ? $user_coupons : array();
-									$user_coupons = array_merge($user_coupons, (array)$coupon['full_coupon_code']);
+									$user_coupons = array_unique(array_merge($user_coupons, (array)$coupon['full_coupon_code']));
 									update_user_option($user_id, 's2member_coupon_codes', $user_coupons);
 								}
 								$paypal['s2member_log'][] = 's2Member Custom Capabilities updated w/ advanced update routines.';
