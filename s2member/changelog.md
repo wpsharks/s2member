@@ -1,4 +1,4 @@
-= v150129 =
+= v150203 =
 
 - (s2Member Pro) **Gift/Redemption Codes:** This release adds a powerful new shortcode: `[s2Member-Gift-Codes /]`. This makes it easy to generate and sell access to gift codes (i.e. gift certificates) and/or to a list of redemption codes. For instance,  where a single team leader might like to purchase multiple accounts they can distribute to others on a team, or in a group. Video demo here: https://www.youtube.com/watch?v=T3N_vygowbM&feature=youtu.be ~ See also: [this GitHub issue](https://github.com/websharks/s2member/issues/386) for additional technical details.
 - (s2Member Pro) **User-Specific Coupon Codes:** This release of s2Member makes it possible to configure Pro Form Coupon Codes that are connected (i.e. only valid) when entered by specific Users/Members who are logged into the site. See: `Dashboard ⥱ s2Member ⥱ Pro Coupon Codes`. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/403) for additional technical details.

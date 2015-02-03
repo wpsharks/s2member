@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  150129\n"
+"Project-Id-Version:  150203\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2015-01-29 19:59:33+00:00\n"
+"POT-Creation-Date: 2015-02-03 22:16:54+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1017,12 +1017,12 @@ msgid_plural "You may create up to <strong>%s</strong> sites."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/classes/users-list-in.inc.php:345
+#: includes/classes/users-list-in.inc.php:349
 msgctxt "s2member-front"
 msgid "Additional Profile Fields"
 msgstr ""
 
-#: includes/classes/users-list-in.inc.php:345
+#: includes/classes/users-list-in.inc.php:349
 msgctxt "s2member-front"
 msgid "(for this site)"
 msgstr ""
