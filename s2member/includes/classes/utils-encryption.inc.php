@@ -141,7 +141,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_encryption'))
 			$e      = isset($base64[0]) ? c_ws_plugin__s2member_utils_strings::base64_url_safe_decode($base64) : '';
 
 			if(function_exists('mcrypt_decrypt') && in_array('rijndael-256', mcrypt_list_algorithms()) && in_array('cbc', mcrypt_list_modes()))
-				if(isset($e[0]) && preg_match('/^~r2\:([a-zA-Z0-9]+)(?:\:([a-zA-Z0-9]+))?\|(.*?)$/s', $e, $iv_md5_e))
+				if(isset($e[0]) && preg_match('/^~r2\:([a-zA-Z0-9]+)(?:\:([a-zA-Z0-9]+))?\|(.*)$/s', $e, $iv_md5_e))
 				{
 					$key = c_ws_plugin__s2member_utils_encryption::key($key);
 					$key = substr($key, 0, mcrypt_get_key_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC));
@@ -209,7 +209,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_encryption'))
 			$base64 = is_string($base64) ? $base64 : '';
 			$e      = isset($base64[0]) ? c_ws_plugin__s2member_utils_strings::base64_url_safe_decode($base64) : '';
 
-			if(isset($e[0]) && preg_match('/^~xe(?:\:([a-zA-Z0-9]+))?\|(.*?)$/s', $e, $md5_e))
+			if(isset($e[0]) && preg_match('/^~xe(?:\:([a-zA-Z0-9]+))?\|(.*)$/s', $e, $md5_e))
 			{
 				$key = c_ws_plugin__s2member_utils_encryption::key($key);
 
