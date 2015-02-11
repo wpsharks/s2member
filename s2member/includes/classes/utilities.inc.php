@@ -156,7 +156,7 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 				$badge = preg_replace('/%%no_cache%%/i', (($no_cache) ? '&amp;no_cache='.urlencode(mt_rand(0, PHP_INT_MAX)) : ''), $badge);
 				$badge = preg_replace('/%%display_on_failure%%/i', (($display_on_failure) ? '&amp;display_on_failure=1' : ''), $badge);
 			}
-			return (!empty($badge)) ? $badge : ''; // Return Security Badge.
+			return !empty($badge) ? $badge : ''; // Return Security Badge.
 		}
 
 		/**
@@ -202,12 +202,12 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 		 *
 		 * @return array Array of backtrace callers (lowercase).
 		 */
-		public static function callers($debug_backtrace = array())
+		public static function callers($debug_backtrace = NULL)
 		{
 			$callers = array(); // Initialize array.
-			foreach(($debug_backtrace = (is_array($debug_backtrace)) ? $debug_backtrace : debug_backtrace()) as $caller)
-				if(isset ($caller['class'], $caller['function']) || (!isset ($caller['class']) && isset ($caller['function'])))
-					$callers[] = (isset ($caller['class'])) ? $caller['class'].'::'.$caller['function'] : $caller['function'];
+			foreach(($debug_backtrace = is_array($debug_backtrace) ? $debug_backtrace : debug_backtrace()) as $caller)
+				if(isset($caller['class'], $caller['function']) || (!isset($caller['class']) && isset($caller['function'])))
+					$callers[] = isset($caller['class']) ? $caller['class'].'::'.$caller['function'] : $caller['function'];
 
 			return array_map('strtolower', array_unique($callers));
 		}
