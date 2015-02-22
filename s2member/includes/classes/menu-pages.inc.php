@@ -205,12 +205,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_logs_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
 					add_submenu_page($menu, 's2Member Logs', 'Log Files (Debug)', 'create_users', 'ws-plugin--s2member-logs', 'c_ws_plugin__s2member_menu_pages::logs_page');
 
-				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_6', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
-
-				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_info_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, 's2Member Information', 's2Member Info', 'create_users', 'ws-plugin--s2member-info', 'c_ws_plugin__s2member_menu_pages::info_page');
-
 				do_action('ws_plugin__s2member_during_add_admin_options_additional_pages', get_defined_vars());
 			}
 			do_action('ws_plugin__s2member_after_add_admin_options', get_defined_vars());
@@ -238,9 +232,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				add_menu_page('s2Member', 's2Member', 'create_users', $menu, 'c_ws_plugin__s2member_menu_pages::mms_ops_page', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/images/brand-favicon.png');
 
 				add_submenu_page($menu, 's2Member Multisite (Configuration)', 'Multisite (Config)', 'create_users', 'ws-plugin--s2member-mms-ops', 'c_ws_plugin__s2member_menu_pages::mms_ops_page');
-
-				if(apply_filters('ws_plugin__s2member_during_add_network_admin_options_add_info_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, 's2Member Information', 's2Member Info', 'create_users', 'ws-plugin--s2member-info', 'c_ws_plugin__s2member_menu_pages::info_page');
 
 				do_action('ws_plugin__s2member_during_add_network_admin_options_additional_pages', get_defined_vars());
 			}
@@ -626,7 +617,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			c_ws_plugin__s2member_menu_pages::update_all_options();
 
 			if(!empty($_REQUEST['ws_plugin__s2member_cf_options_reset'])
-			   && wp_verify_nonce($_REQUEST['ws_plugin__s2member_cf_options_reset'], 'ws-plugin--s2member-cf-options-reset'))
+			   && wp_verify_nonce($_REQUEST['ws_plugin__s2member_cf_options_reset'], 'ws-plugin--s2member-cf-options-reset')
+			)
 			{
 				c_ws_plugin__s2member_files_in::reset_aws_cf_config_values(); // A full CloudFront reset.
 				c_ws_plugin__s2member_admin_notices::display_admin_notice('Amazon CloudFront configuration reset successfully.');
@@ -676,7 +668,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 			do_action('ws_plugin__s2member_after_down_ops_page', get_defined_vars());
 		}
-
 
 		/**
 		 * Builds and handles the API Tracking options page.
@@ -822,21 +813,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			include_once dirname(dirname(__FILE__)).'/menu-pages/logs.inc.php';
 
 			do_action('ws_plugin__s2member_after_logs_page', get_defined_vars());
-		}
-
-		/**
-		 * Builds and handles the s2Member Info page.
-		 *
-		 * @package s2Member\Menu_Pages
-		 * @since 3.5
-		 */
-		public static function info_page()
-		{
-			do_action('ws_plugin__s2member_before_info_page', get_defined_vars());
-
-			include_once dirname(dirname(__FILE__)).'/menu-pages/info.inc.php';
-
-			do_action('ws_plugin__s2member_after_info_page', get_defined_vars());
 		}
 	}
 }

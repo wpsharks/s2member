@@ -298,15 +298,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_mms_ops"))
 									}
 								do_action("ws_plugin__s2member_during_mms_ops_page_after_left_sections", get_defined_vars());
 
-								echo '<div class="ws-menu-page-hr"></div>'."\n";
-
 								echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";
 
 								echo '</form>'."\n";
 							}
 						else // Otherwise, we can display a simple notation; leading into Multisite Networking.
 							{
-								echo '<p style="margin-top:0;"><span class="ws-menu-page-hilite">Your WordPress installation does not have Multisite Networking enabled.<br />Which is perfectly OK :-) Multisite Networking is 100% completely optional.</span></p>'."\n";
+								echo '<p style="margin-top:0;">Your WordPress installation does not have Multisite Networking enabled.<br />Which is perfectly OK :-) Multisite Networking is 100% completely optional.</p>'."\n";
 								echo '<img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/large-icon.png" title="s2Member (a Membership management system for WordPress)" alt="" style="float:right; margin:25px 0 0 25px; border:0;" />'."\n";
 
 								if(file_exists($ws_plugin__s2member_temp = dirname(dirname(dirname(__FILE__)))."/readme-ms.txt"))

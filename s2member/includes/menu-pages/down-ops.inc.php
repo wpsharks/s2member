@@ -884,8 +884,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 			}
 			do_action("ws_plugin__s2member_during_down_ops_page_after_left_sections", get_defined_vars());
 
-			echo '<div class="ws-menu-page-hr"></div>'."\n";
-
 			echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";
 
 			echo '</form>'."\n";

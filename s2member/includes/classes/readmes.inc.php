@@ -198,9 +198,9 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 				* @param string $key A key *(within the specs section)*.
 				* @param string $specific_path Optional. Path to a specific readme file to parse. Defaults to that of the software itself.
 				* 	When/if a readme-dev.txt file is available, that will be used instead of the default readme.txt.
-				* @return str|bool The value of the key, else false if not found.
+				* @return string|bool The value of the key, else false if not found.
 				*/
-				public static function parse_readme_value ($key = FALSE, $specific_path = FALSE)
+				public static function parse_readme_value ($key = '', $specific_path = '')
 					{
 						static $readme = array(); // For repeated lookups.
 
@@ -210,7 +210,6 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 								$dev_path = dirname (dirname (dirname (__FILE__))) . "/readme-dev.txt";
 								$path = (file_exists ($dev_path)) ? $dev_path : $path;
 							}
-
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_parse_readme_value", get_defined_vars ());
 						unset($__refs, $__v);
@@ -228,9 +227,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 
 								return apply_filters("ws_plugin__s2member_parse_readme_value", ((isset ($m[5]) && strlen ($m[5] = trim ($m[5]))) ? $m[5] : false), get_defined_vars ());
 							}
-						else // Nope.
 							return false;
 					}
 			}
 	}
-?>

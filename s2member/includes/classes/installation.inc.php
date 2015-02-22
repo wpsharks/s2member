@@ -114,7 +114,7 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 				$notice .= 'You now have version '.esc_html(WS_PLUGIN__S2MEMBER_VERSION).'. Your existing configuration remains.';
 
 				if(!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) // No Changelog on a Multisite Blog Farm.
-					$notice .= '<br />Have fun, <a href="'.esc_attr(admin_url('/admin.php?page=ws-plugin--s2member-info#rm-changelog')).'">read the Changelog</a>, and make some money! :-)';
+					$notice .= '<br />Have fun, <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value('Changelog URI')).'" target="_blank">read the Changelog</a>, and make some money! :-)';
 
 				c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array('blog|network:plugins.php', 'blog|network:ws-plugin--s2member-start', 'blog|network:ws-plugin--s2member-mms-ops', 'blog|network:ws-plugin--s2member-gen-ops', 'blog|network:ws-plugin--s2member-res-ops'));
 			}

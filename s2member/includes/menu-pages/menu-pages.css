@@ -21,7 +21,24 @@ Alter WordPress wrap on s2Member menu pages.
 */
 body[class*='s2member'] #wpwrap
 {
-
+	position   : relative;
+	background : #BEBEBE url('<?php echo $i; ?>/trans-bg.png');
+}
+body[class*='s2member'] #wpwrap::before
+{
+	content    : '';
+	top        : 0;
+	left       : 0;
+	width      : 100%;
+	height     : 250px;
+	position   : absolute;
+	background : -moz-linear-gradient(top, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.57) 5%, rgba(255, 255, 255, 0) 100%); /* FF3.6+ */
+	background : -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0.6)), color-stop(5%, rgba(255, 255, 255, 0.57)), color-stop(100%, rgba(255, 255, 255, 0))); /* Chrome,Safari4+ */
+	background : -webkit-linear-gradient(top, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.57) 5%, rgba(255, 255, 255, 0) 100%); /* Chrome10+,Safari5.1+ */
+	background : -o-linear-gradient(top, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.57) 5%, rgba(255, 255, 255, 0) 100%); /* Opera 11.10+ */
+	background : -ms-linear-gradient(top, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.57) 5%, rgba(255, 255, 255, 0) 100%); /* IE10+ */
+	background : linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.57) 5%, rgba(255, 255, 255, 0) 100%); /* W3C */
+	filter     : progid:DXImageTransform.Microsoft.gradient(startColorstr='#99ffffff', endColorstr='#00ffffff', GradientType=0); /* IE6-9 */
 }
 /*
 Align these with menu page.
@@ -76,15 +93,18 @@ div.ws-menu-page > h2
 {
 	font-size     : 200%;
 	font-weight   : bold;
+	color         : #05141E;
 
 	height        : 90px;
 	box-sizing    : border-box;
 	position      : relative;
 	z-index       : 0;
 
-	margin-bottom : 15px;
-	padding       : 25px 0 0 120px;
+	margin-bottom : 20px;
+	padding       : 30px 0 0 120px;
 	background    : url('<?php echo $i; ?>/s2___.png') no-repeat left bottom;
+
+	text-shadow   : 0 -1px 5px rgba(255, 255, 255, 0.25), 0 1px 5px rgba(255, 255, 255, 0.25), 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 div.ws-menu-page > h2:before
 {
@@ -113,7 +133,7 @@ div.ws-menu-page > h2:after
 	z-index    : 0;
 	position   : absolute;
 
-	background : url('<?php echo $i; ?>/s2___end.png') no-repeat right bottom
+	background : url('<?php echo $i; ?>/s2___end.png') no-repeat right bottom;
 }
 div.ws-menu-page code
 {
@@ -500,11 +520,12 @@ div.ws-menu-page div.ws-menu-page-groups-hide:active
 }
 div.ws-menu-page div.ws-menu-page-toolbox
 {
-	float     : right;
-	max-width : 320px;
+	float        : right;
+	max-width    : 320px;
 
-	z-index   : 1;
-	position  : relative;
+	z-index      : 1;
+	position     : relative;
+	margin-right : 25px;
 }
 div.ws-menu-page div.ws-menu-page-toolbox > .links
 {
@@ -659,8 +680,8 @@ table.ws-menu-page-table img.ws-menu-page-brand-updates
 }
 table.ws-menu-page-table p.submit
 {
-	margin  : 0;
 	padding : 0;
+	margin  : 20px 0 0 0;
 }
 table.ws-menu-page-table a[rel~="external"]
 {
