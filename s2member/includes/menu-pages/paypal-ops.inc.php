@@ -42,7 +42,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			echo '<tr class="ws-menu-page-table-tr">'."\n";
 			echo '<td class="ws-menu-page-table-l">'."\n";
 
-			echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">'."\n";
+			echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form" autocomplete="off">'."\n";
 			echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
 			echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />'."\n";
 

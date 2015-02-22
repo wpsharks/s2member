@@ -73,7 +73,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 										echo '</th>' . "\n";
 
 										echo '<td>' . "\n";
-										echo '<form onsubmit="return false;">' . "\n";
+										echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 										echo '<p id="ws-plugin--s2member-level' . $n . '-trial-line">I\'ll offer the first <input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-trial-period" value="0" size="6" /> <select id="ws-plugin--s2member-level' . $n . '-trial-term">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-membership-trial-terms.php"))) . '</select> @ $<input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-trial-amount" value="0.00" size="4" /></p>' . "\n";
 										echo '<p><span id="ws-plugin--s2member-level' . $n . '-trial-then">Then, </span>I want to charge: $<input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-amount" value="0.01" size="4" /> / <select id="ws-plugin--s2member-level' . $n . '-term">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-membership-regular-terms.php"))) . '</select></p>' . "\n";
 										echo '<p>Checkout Page Style <a href="#" onclick="alert(\'Optional. This can be configured inside your PayPal account. PayPal allows you to create Custom Page Styles, and assign a unique name to them. You can add your own header image and color selection to the checkout form. Once you\\\'ve created a Custom Page Style at PayPal, you can enter that Page Style here.\\n\\nIn addition. The Shortcode below, provided by s2Member; supports an image attribute: image=\\\'\\\'default\\\'\\\'. This can be changed to a full URL, pointing to a custom image of your own; instead of the default PayPal Button image.\'); return false;" tabindex="-1">[?]</a>: <input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-page-style" value="paypal" size="18" /> <select id="ws-plugin--s2member-level' . $n . '-currency">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-currencies.php"))) . '</select> <input type="button" value="Generate Button Code" onclick="ws_plugin__s2member_paypalButtonGenerate(\'level' . $n . '\');" /></p>' . "\n";
@@ -86,7 +86,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 										echo '<tr>' . "\n";
 
 										echo '<td colspan="2">' . "\n";
-										echo '<form onsubmit="return false;">' . "\n";
+										echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 
 										if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_levelN_buttons_before_shortcode = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_level" . $n . "_buttons_before_shortcode"))
 											do_action($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_levelN_buttons_before_shortcode, get_defined_vars ());
@@ -162,7 +162,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '</th>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 
 								echo '<p>Modification: <select id="ws-plugin--s2member-modification-level">' . "\n";
 
@@ -190,7 +190,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<tr>' . "\n";
 
 								echo '<td colspan="2">' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_modification_buttons_before_shortcode", get_defined_vars ());
 								echo '<strong>WordPress Shortcode:</strong> (recommended for both the WordPress Visual &amp; HTML Editors)<br />' . "\n";
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-checkout-button-shortcode.php")));
@@ -262,7 +262,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '</th>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 								echo '<p>I want to charge: $<input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-amount" value="0.01" size="4" /> / <select id="ws-plugin--s2member-ccap-term">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-membership-ccap-terms.php"))) . '</select></p>' . "\n";
 								echo '<p>Checkout Page Style <a href="#" onclick="alert(\'Optional. This can be configured inside your PayPal account. PayPal allows you to create Custom Page Styles, and assign a unique name to them. You can add your own header image and color selection to the checkout form. Once you\\\'ve created a Custom Page Style at PayPal, you can enter that Page Style here.\\n\\nIn addition. The Shortcode below, provided by s2Member; supports an image attribute: image=\\\'\\\'default\\\'\\\'. This can be changed to a full URL, pointing to a custom image of your own; instead of the default PayPal Button image.\'); return false;" tabindex="-1">[?]</a>: <input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-page-style" value="paypal" size="18" /> <select id="ws-plugin--s2member-ccap-currency">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-currencies.php"))) . '</select> <input type="button" value="Generate Button Code" onclick="ws_plugin__s2member_paypalCcapButtonGenerate();" /></p>' . "\n";
 								echo '<p>Description: <input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-desc" value="Description and pricing details here." size="73" /></p>' . "\n";
@@ -274,7 +274,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<tr>' . "\n";
 
 								echo '<td colspan="2">' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_ccap_buttons_before_shortcode", get_defined_vars ());
 								echo '<strong>WordPress Shortcode:</strong> (recommended for both the WordPress Visual &amp; HTML Editors)<br />' . "\n";
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-ccaps-checkout-button-shortcode.php")));
@@ -347,7 +347,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '</th>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 								echo '<p>No configuration necessary.</p>' . "\n";
 								echo '</form>' . "\n";
 								echo '</td>' . "\n";
@@ -356,7 +356,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<tr>' . "\n";
 
 								echo '<td colspan="2">' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_cancellation_buttons_before_shortcode", get_defined_vars ());
 								echo '<strong>WordPress Shortcode:</strong> (recommended for both the WordPress Visual &amp; HTML Editors)<br />' . "\n";
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-cancellation-button-shortcode.php")));
@@ -405,7 +405,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<tr>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 								echo '<p>Paid Membership Level#: <select id="ws-plugin--s2member-reg-link-level" style="min-width:200px;">' . "\n";
 								for ($n = 1; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
 									echo '<option value="' . $n . '">s2Member Level #' . $n . '</option>' . "\n";
@@ -455,7 +455,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '</th>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 
 								echo '<p><select id="ws-plugin--s2member-sp-leading-id">' . "\n";
 								echo '<option value="">&mdash; Select a Leading Post/Page that you\'ve protected &mdash;</option>' . "\n";
@@ -485,7 +485,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<tr>' . "\n";
 
 								echo '<td colspan="2">' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_during_sp_buttons_before_shortcode", get_defined_vars ());
 								echo '<strong>WordPress Shortcode:</strong> (recommended for both the WordPress Visual &amp; HTML Editors)<br />' . "\n";
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-sp-checkout-button-shortcode.php")));
@@ -539,7 +539,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<tr>' . "\n";
 
 								echo '<td>' . "\n";
-								echo '<form onsubmit="return false;">' . "\n";
+								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 
 								echo '<p><select id="ws-plugin--s2member-sp-link-leading-id">' . "\n";
 								echo '<option value="">&mdash; Select a Leading Post/Page that you\'ve protected &mdash;</option>' . "\n";

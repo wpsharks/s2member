@@ -68,7 +68,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
 				echo '<h3 style="margin-bottom:0;">Search s2Member KB Articles, Forums, Codex and more<em>!</em></h3>'."\n";
-				echo '<form method="get" action="http://www.s2member.com/quick-s.php" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';">'."\n";
+				echo '<form method="get" action="http://www.s2member.com/quick-s.php" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';" autocomplete="off">'."\n";
 				echo '<p><input type="text" name="q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /> <input type="submit" value="Search" style="font-size:120%; font-weight:normal;" /></p>'."\n";
 				echo '</form>'."\n";
 
@@ -100,7 +100,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 				do_action("ws_plugin__s2member_during_logs_page_during_left_sections_during_log_settings", get_defined_vars());
 
-				echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form">'."\n";
+				echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form" autocomplete="off">'."\n";
 				echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
 
 				echo '<table class="form-table">'."\n";
@@ -167,17 +167,17 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-				echo '<form method="post" onsubmit="if(!confirm(\'Archive all existing log files?\n\nAll of your current log files will be archived (i.e., they will simply be renamed with an ARCHIVED tag &amp; date in their file name); and new log files will be created automatically the next time s2Member logs something on your installation.\n\nPlease click OK to confirm this action.\')) return false;">'."\n";
+				echo '<form method="post" onsubmit="if(!confirm(\'Archive all existing log files?\n\nAll of your current log files will be archived (i.e., they will simply be renamed with an ARCHIVED tag &amp; date in their file name); and new log files will be created automatically the next time s2Member logs something on your installation.\n\nPlease click OK to confirm this action.\')) return false;" autocomplete="off">'."\n";
 				echo '<input type="hidden" name="ws_plugin__s2member_logs_archive_start_fresh" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-logs-archive-start-fresh")).'" />'."\n";
 				echo '<input type="submit" value="Archive All Current Log Files" class="ws-menu-page-right ws-plugin--s2member-archive-logs-start-fresh-button" style="font-size:110%; font-weight:normal; clear:right; min-width:300px;" />'."\n";
 				echo '</form>'."\n";
 
-				echo '<form method="post" onsubmit="if(!confirm(\'Delete all existing log files?\n\nThis will permanently delete ALL of your existing log files (including any archived log files).\n\nPlease click OK to confirm this action.\')) return false;">'."\n";
+				echo '<form method="post" onsubmit="if(!confirm(\'Delete all existing log files?\n\nThis will permanently delete ALL of your existing log files (including any archived log files).\n\nPlease click OK to confirm this action.\')) return false;" autocomplete="off">'."\n";
 				echo '<input type="hidden" name="ws_plugin__s2member_logs_delete_start_fresh" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-logs-delete-start-fresh")).'" />'."\n";
 				echo '<input type="submit" value="Permanently Delete All Log Files" class="ws-menu-page-right ws-plugin--s2member-delete-logs-start-fresh-button" style="font-size:110%; font-weight:normal; clear:right; min-width:300px;" />'."\n";
 				echo '</form>'."\n";
 
-				echo '<form method="post">'."\n";
+				echo '<form method="post" autocomplete="off">'."\n";
 				echo '<input type="hidden" name="ws_plugin__s2member_logs_download_zip" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-logs-download-zip")).'" />'."\n";
 				echo '<input type="submit" value="Download All Log Files (Zip File)" class="ws-menu-page-right ws-plugin--s2member-logs-download-zip-button" style="font-size:110%; font-weight:normal; clear:right; min-width:300px;" />'."\n";
 				echo '</form>'."\n";
@@ -254,7 +254,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 				                    '<option value="" disabled="disabled"></option>'.
 				                    $log_file_options;
 
-				echo '<form method="post" name="ws_plugin__s2member_log_viewer" id="ws-plugin--s2member-log-viewer">'."\n";
+				echo '<form method="post" name="ws_plugin__s2member_log_viewer" id="ws-plugin--s2member-log-viewer" autocomplete="off">'."\n";
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
