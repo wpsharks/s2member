@@ -711,7 +711,7 @@ msgstr ""
 #: s2member/includes/classes/paypal-return-in-no-tx-data.inc.php:66
 #: s2member/includes/classes/paypal-return-in-proxy-ty-email.inc.php:64
 msgctxt "s2member-front"
-msgid "<strong>** Sandbox Mode **</strong> You may NOT receive this Email in Sandbox Mode. Sandbox addresses are usually bogus (for testing)."
+msgid "<strong>* Sandbox Mode *:</strong> You may NOT receive this Email in Sandbox Mode. Sandbox addresses are usually bogus (for testing)."
 msgstr ""
 
 #: s2member/includes/classes/paypal-return-in-no-tx-data.inc.php:67

@@ -127,7 +127,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 				echo '</table>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
-				echo '<p><em><strong>*Tip*</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
+				echo '<p><em><strong>Tip:</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
@@ -228,7 +228,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 				echo '</table>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
-				echo '<p><em><strong>*Tip*</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
+				echo '<p><em><strong>Tip:</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
@@ -321,7 +321,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 				echo '</table>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
-				echo '<p><em><strong>*Tip*</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
+				echo '<p><em><strong>Tip:</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
@@ -399,7 +399,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 				echo '</table>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
-				echo '<p><em><strong>*Tip*</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
+				echo '<p><em><strong>Tip:</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
@@ -452,10 +452,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 				echo '<p>Your <code>profile</code> ID will be assigned by iDevAffiliate. Be sure to replace <code>profile=123</code> with your own profile ID.</p>'."\n";
-				echo '<p><em><strong>*Tip*</strong> iDevAffiliate also provides an alternative method, using a 3rd-party call. The alternative 3rd-party call, could be used with <code>s2Member ⥱ API Notifications.</code> A 3rd-party call, is essentially an HTTP connection that runs silently behind-the-scenes, as opposed to being loaded in a browser. It\'s a bit more powerful (and reliable), but also more advanced.</em></p>'."\n";
+				echo '<p><em><strong>Tip:</strong> iDevAffiliate also provides an alternative method, using a 3rd-party call. The alternative 3rd-party call, could be used with <code>s2Member ⥱ API Notifications.</code> A 3rd-party call, is essentially an HTTP connection that runs silently behind-the-scenes, as opposed to being loaded in a browser. It\'s a bit more powerful (and reliable), but also more advanced.</em></p>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
-				echo '<p><em><strong>*Tip*</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes with iDevAffiliate. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
+				echo '<p><em><strong>Tip:</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes with iDevAffiliate. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
@@ -501,10 +501,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 				echo '<p>Your <code>merchantID</code> will be assigned by ShareASale. Be sure to replace <code>merchantID=123</code> with the one they assign you.</p>'."\n";
-				echo '<p><em><strong>*Tip*</strong> ShareASale also provides an alternative method, using a 3rd-party call. The alternative 3rd-party call, could be used with <code>s2Member ⥱ API Notifications.</code> A 3rd-party call, is essentially an HTTP connection that runs silently behind-the-scenes, as opposed to being loaded in a browser. It\'s a bit more powerful (and reliable), but also more advanced.</em></p>'."\n";
+				echo '<p><em><strong>Tip:</strong> ShareASale also provides an alternative method, using a 3rd-party call. The alternative 3rd-party call, could be used with <code>s2Member ⥱ API Notifications.</code> A 3rd-party call, is essentially an HTTP connection that runs silently behind-the-scenes, as opposed to being loaded in a browser. It\'s a bit more powerful (and reliable), but also more advanced.</em></p>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
-				echo '<p><em><strong>*Tip*</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes with ShareASale. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
+				echo '<p><em><strong>Tip:</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes with ShareASale. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
@@ -525,7 +525,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 				do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_during_other_methods", get_defined_vars());
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
-				echo '<p><em><strong>*Tip*</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes with iDevAffiliate. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
+				echo '<p><em><strong>Tip:</strong> With <a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value("Pro Add-on / Prices")).'" target="_blank" rel="external">s2Member Pro-Forms</a>, it\'s possible to integrate Affiliate Coupon Codes with iDevAffiliate. Each of your affiliates can add their affiliate ID onto the end of any valid Coupon Code that you\'ve configured with s2Member Pro. Please check your Dashboard here: <code>s2Member ⥱ Pro Coupon Codes ⥱ Affiliate Coupon Codes</code>. This is a VERY powerful feature.</em></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
