@@ -303,12 +303,12 @@ msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:144
 msgctxt "s2member-front"
-msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member ⥱ General Options ⥱ Membership Options Page</code>."
+msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <strong>s2Member ⥱ General Options ⥱ Membership Options Page</strong>."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:155
 msgctxt "s2member-front"
-msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member ⥱ Download Options ⥱ Basic Download Restrictions</code>."
+msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <strong>s2Member ⥱ Download Options ⥱ Basic Download Restrictions</strong>."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:496

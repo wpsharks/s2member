@@ -92,7 +92,7 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 				if(!$v || !version_compare($v, '110912', '>=') && $GLOBALS['WS_PLUGIN__']['s2member']['o']['filter_wp_query'] === array('all'))
 					// s2Member v110912 changed the way the 'all' option for Alternative Views was handled.
 				{
-					$notice = '<strong>IMPORTANT:</strong> This version of s2Member changes the way your <code>Alternative View Protections</code> work. Please review your options under: <code>s2Member ⥱ Restriction Options ⥱ Alternative View Protections</code>.';
+					$notice = '<strong>IMPORTANT:</strong> This version of s2Member changes the way your <code>Alternative View Protections</code> work. Please review your options under: <strong>s2Member ⥱ Restriction Options ⥱ Alternative View Protections</strong>.';
 					c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array('blog|network:plugins.php', 'blog|network:ws-plugin--s2member-start', 'blog|network:ws-plugin--s2member-mms-ops', 'blog|network:ws-plugin--s2member-gen-ops', 'blog|network:ws-plugin--s2member-res-ops'));
 				}
 				if($v && version_compare($v, '130316', '<=')) // This version disables logging by default.
@@ -136,7 +136,7 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 				$notice = '<strong>Multisite Network</strong> updated automatically by <strong>s2Member</strong> v'.esc_html(WS_PLUGIN__S2MEMBER_VERSION).'.<br />';
 				$notice .= 'You\'ll want to configure s2Member\'s Multisite options now.<br />';
 				$notice .= 'In the Dashboard for your Main Site, see:<br />';
-				$notice .= '<code>s2Member ⥱ Multisite (Config)</code>.';
+				$notice .= '<strong>s2Member ⥱ Multisite (Config)</strong>.';
 
 				c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array('blog|network:plugins.php', 'blog|network:ws-plugin--s2member-start', 'blog|network:ws-plugin--s2member-mms-ops', 'blog|network:ws-plugin--s2member-gen-ops', 'blog|network:ws-plugin--s2member-res-ops'));
 

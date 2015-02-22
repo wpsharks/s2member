@@ -123,7 +123,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								else // Extensive log reporting here. This is an area where many site owners find trouble. Depending on server configuration; remote HTTPS connections may fail.
 									{
 										if /* Enqueue an admin notice if the site owner is missing the PDT Identity Key. */ (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_identity_token"])
-											c_ws_plugin__s2member_admin_notices::enqueue_admin_notice("<strong>s2Member:</strong> You have no PayPal PDT Identity Token configured. PayPal Auto-Return handling failed. Please update your PayPal PDT Identity Key. See: <code>s2Member ⥱ PayPal Options ⥱ PayPal PDT/Auto-Return Integration</code>. Thank you!", "*:*", true);
+											c_ws_plugin__s2member_admin_notices::enqueue_admin_notice("<strong>s2Member:</strong> You have no PayPal PDT Identity Token configured. PayPal Auto-Return handling failed. Please update your PayPal PDT Identity Key. See: <strong>s2Member ⥱ PayPal Options ⥱ PayPal PDT/Auto-Return Integration</strong>. Thank you!", "*:*", true);
 
 										$paypal["s2member_log"][] = "Unable to verify \$_POST vars. This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility.";
 										$paypal["s2member_log"][] = "Please make sure that you configure a PayPal PDT Identity Token for your installation of s2Member. See: `s2Member ⥱ PayPal Options ⥱ PayPal PDT/Auto-Return Integration`.";

@@ -5,7 +5,7 @@
  * @note Replicate into `[...-]check-my-server.php`;
  * or any other file loading this as class: ``websharks_core_v3_deps_x__check_my_server``.
  *
- * This class MUST remain PHP v5.2 compatible. No namespace, and do NOT extend the framework.
+ * This class MUST remain PHP v5.2 compatible. No namespace, and do not extend the framework.
  * This class MUST be capable of running with or without WordPress. Possibly in a stand-alone file as class: ``websharks_core_v3_deps_x__check_my_server``.
  * We should run a ``check()`` automatically, when loaded in a stand-alone file as class: ``websharks_core_v3_deps_x__check_my_server``.
  *
@@ -1777,7 +1777,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'message'  => sprintf(
 							self::i18n(
 								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with <code>UTF-8</code> encoding.'.
-								' This can be changed in the Dashboard, under: <code>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</code>.'.
+								' This can be changed in the Dashboard, under: <strong>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</strong>.'.
 								' See also: <a href="http://codex.wordpress.org/Glossary#Unicode" target="_blank" rel="xlink">this article</a> about UTF-8.'.
 								' Your current encoding configuration is NOT yet defined.'
 							), htmlspecialchars($plugin_name)
@@ -1792,7 +1792,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'message'  => sprintf(
 							self::i18n(
 								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with <code>UTF-8</code> encoding.'.
-								' This can be changed in the Dashboard, under: <code>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</code>.'.
+								' This can be changed in the Dashboard, under: <strong>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</strong>.'.
 								' See also: <a href="http://codex.wordpress.org/Glossary#Unicode" target="_blank" rel="xlink">this article</a> about UTF-8.'.
 								' Your current encoding configuration is set to: <code>%2$s</code>'
 							), htmlspecialchars($plugin_name), htmlspecialchars($blog_charset_encoding)
@@ -1805,7 +1805,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'title'   => self::i18n('WordPress Character Encoding'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress installation is operating with <code>%1$s</code> encoding, under: <code>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</code>.'
+								'Your WordPress installation is operating with <code>%1$s</code> encoding, under: <strong>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</strong>.'
 							), htmlspecialchars($blog_charset_encoding)
 						)
 					);
@@ -1828,7 +1828,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							'message' => sprintf(
 								self::i18n(
 									'Although NOT required, %1$s recommends that your WordPress installation be configured with a matching HOST name.'.
-									' This can be changed in the Dashboard, under: <code>WordPress ⥱ Settings ⥱ General ⥱ WordPress/Site URLs</code>.'.
+									' This can be changed in the Dashboard, under: <strong>WordPress ⥱ Settings ⥱ General ⥱ WordPress/Site URLs</strong>.'.
 									' Your current configuration does NOT match: <code>%2$s</code>'
 								), htmlspecialchars($plugin_name), htmlspecialchars($current_host_name)
 							)

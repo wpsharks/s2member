@@ -141,7 +141,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 									status_header(503);
 									header('Content-Type: text/html; charset=UTF-8');
 									while(@ob_end_clean()) ; // Clean any existing output buffers.
-									exit(_x('<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member ⥱ General Options ⥱ Membership Options Page</code>.', 's2member-front', 's2member'));
+									exit(_x('<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <strong>s2Member ⥱ General Options ⥱ Membership Options Page</strong>.', 's2member-front', 's2member'));
 								}
 								return FALSE; // Else return false.
 							}
@@ -152,7 +152,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 									status_header(503);
 									header('Content-Type: text/html; charset=UTF-8');
 									while(@ob_end_clean()) ; // Clean any existing output buffers.
-									exit(_x('<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member ⥱ Download Options ⥱ Basic Download Restrictions</code>.', 's2member-front', 's2member'));
+									exit(_x('<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <strong>s2Member ⥱ Download Options ⥱ Basic Download Restrictions</strong>.', 's2member-front', 's2member'));
 								}
 								return FALSE; // Else return false.
 							}
