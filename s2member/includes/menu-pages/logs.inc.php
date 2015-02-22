@@ -93,7 +93,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 				echo '</div>'."\n";
 
 				echo '<div class="warning" style="margin-bottom:0;">'."\n";
-				echo '<p style="margin:0;"><span>Regarding s2Member Security Badges. If debug logging is enabled, your site will NOT qualify for an s2Member Security Badge until you disable logging (and you must ALSO download, and then delete any existing log files). For further details, please see KB Article: <a href="http://www.s2member.com/kb/security-badges/" target="_blank" rel="external">s2Member Security Badges</a>.</span></p>'."\n";
+				echo '<p style="margin:0;"><span>Regarding s2Member Security Badges. If debug logging is enabled, your site will not qualify for an s2Member Security Badge until you disable logging (and you must also download, and then delete any existing log files). For further details, please see KB Article: <a href="http://www.s2member.com/kb/security-badges/" target="_blank" rel="external">s2Member Security Badges</a>.</span></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
