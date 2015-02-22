@@ -5,7 +5,7 @@
 [s2If current_user_is(s2member_level2) OR current_user_is_for_blog(24,s2member_level2)]
 
 	They are either a Level #2 Member on this Blog,
-	OR ... they're at Level# 2 on Blog ID# 24 (i.e. Multisite Networking)
+	OR ... they're at Level# 2 on Blog ID# 24 (i.e., Multisite Networking)
 
 		* Note the use of `OR` here. True if either condition is met.
 
@@ -19,7 +19,7 @@
 	You have [s2Get constant="S2MEMBER_CURRENT_USER_ACCESS_LABEL" /].
 
 		^ This uses the s2Get Shortcode to retrieve the value of s2Member API Constants.
-			These are also documented under: `s2Member -› API Scripting`.
+			These are also documented under: `s2Member ⥱ API Scripting`.
 
 		So, this might come out to something like:
 			`Hi there John.

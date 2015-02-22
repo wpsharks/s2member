@@ -21,30 +21,23 @@ Alter WordPress wrap on s2Member menu pages.
 */
 body[class*='s2member'] #wpwrap
 {
-	background : #C7C7C7;
+
 }
 /*
 Align these with menu page.
 */
 div.updated, div.error
 {
-	font-size : 120%;
-	margin    : 25px 25px 25px 5px;
+	margin : 25px 25px 25px 5px;
 }
 /*
 These CSS selectors address common layout styles.
 */
 div.ws-menu-page
 {
-	font-size     : 14px;
-	padding       : 25px;
-	min-width     : 800px;
-	margin        : 25px 25px 25px 5px;
-
-	border-radius : 5px;
-	border        : 1px solid #333333;
-	box-shadow    : 0 0 8px 0 rgba(0, 0, 0, 0.2) !important;
-	background    : #FFFFFF url('<?php echo $i; ?>/trans-bg.png') repeat left top;
+	font-size : 14px;
+	min-width : 800px;
+	margin    : 25px 25px 25px 5px;
 }
 div.ws-menu-page p,
 div.ws-menu-page code
@@ -53,7 +46,7 @@ div.ws-menu-page code
 }
 div.ws-menu-page a
 {
-	color : #003E75;
+	color : #336695;
 }
 div.ws-menu-page a:hover,
 div.ws-menu-page a:active
@@ -89,7 +82,7 @@ div.ws-menu-page > h2
 	position      : relative;
 	z-index       : 0;
 
-	margin-bottom : 25px;
+	margin-bottom : 15px;
 	padding       : 25px 0 0 120px;
 	background    : url('<?php echo $i; ?>/s2___.png') no-repeat left bottom;
 }
@@ -321,25 +314,25 @@ div.ws-menu-page input:not([type='image']):not([type='button']):not([type='submi
 }
 div.ws-menu-page input::-webkit-input-placeholder
 {
-	padding-top : 3px;
+	padding-top : .1em;
 	font-style  : italic;
 	color       : rgba(255, 255, 255, 0.2);
 }
 div.ws-menu-page input::-moz-placeholder
 {
-	padding-top : 3px;
+	padding-top : .1em;
 	font-style  : italic;
 	color       : rgba(255, 255, 255, 0.2);
 }
 div.ws-menu-page input:-moz-placeholder
 {
-	padding-top : 3px;
+	padding-top : .1em;
 	font-style  : italic;
 	color       : rgba(255, 255, 255, 0.2);
 }
 div.ws-menu-page input:-ms-input-placeholder
 {
-	padding-top : 3px;
+	padding-top : .1em;
 	font-style  : italic;
 	color       : rgba(255, 255, 255, 0.2);
 }
@@ -417,7 +410,6 @@ div.ws-menu-page .warning,
 div.ws-menu-page .error
 {
 	border-radius : 5px;
-	font-size     : 120%;
 	padding       : 10px;
 	margin        : 0 0 25px 0;
 }
@@ -473,8 +465,8 @@ div.ws-menu-page div.ws-menu-page-groups-hide
 	line-height         : 1em;
 	font-size           : 150%;
 	font-weight         : bold;
-	color               : #FFFFFF;
-	background          : #0E4152;
+	color               : #627689;
+	background          : #05141E;
 
 	border-radius       : 4px;
 	border              : 1px solid rgba(0, 0, 0, 0.5);
@@ -498,7 +490,7 @@ div.ws-menu-page div.ws-menu-page-groups-show
 div.ws-menu-page div.ws-menu-page-groups-show:hover,
 div.ws-menu-page div.ws-menu-page-groups-hide:hover
 {
-	background : #0D1F2F;
+	color : #FFFFFF;
 }
 div.ws-menu-page div.ws-menu-page-groups-show:active,
 div.ws-menu-page div.ws-menu-page-groups-hide:active
@@ -589,8 +581,8 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .toggler
 	top                 : 0;
 	right               : 0;
 
-	background          : #0E4152 url('<?php echo $i; ?>/trans-bg.png') repeat left top;
-	box-shadow          : 0 0 0 1px #FFFFFF;
+	color               : #627689;
+	background          : #06242F;
 	border-radius       : 3px;
 
 	cursor              : pointer;
@@ -600,7 +592,8 @@ table.ws-menu-page-table td.ws-menu-page-table-r > .toggler
 }
 table.ws-menu-page-table td.ws-menu-page-table-r > .toggler:hover
 {
-	background-color : #0D1F2F;
+	color            : #FFFFFF;
+	background-color : #05141E;
 }
 table.ws-menu-page-table td.ws-menu-page-table-r > .wrapper
 {
@@ -684,13 +677,13 @@ table.ws-menu-page-table div.ws-menu-page-r-group-header
 	font-size           : 150%;
 	font-weight         : bold;
 	line-height         : 1em;
-	color               : #EEEEEE;
-	background          : #173B47;
+	color               : #DDDDDD;
+	background          : #05141E;
 
 	border-radius       : 5px;
 	box-shadow          : 0 2px 2px 0 rgba(0, 0, 0, 0.25);
 
-	margin-bottom       : 25px;
+	margin-bottom       : 15px;
 
 	cursor              : pointer;
 	-webkit-user-select : none;
@@ -702,17 +695,18 @@ table.ws-menu-page-table div.ws-menu-page-r-group-header:hover,
 table.ws-menu-page-table div.ws-menu-page-group-header.open,
 table.ws-menu-page-table div.ws-menu-page-r-group-header.open
 {
-	color      : #FFFFFF;
-	background : #0D1F2F;
+	color : #FFFFFF;
 }
 table.ws-menu-page-table div.ws-menu-page-group-header.open,
 table.ws-menu-page-table div.ws-menu-page-r-group-header.open
 {
 	margin-bottom : 0;
 }
-table.ws-menu-page-table div.ws-menu-page-group-header:after,
-table.ws-menu-page-table div.ws-menu-page-r-group-header:after
+table.ws-menu-page-table div.ws-menu-page-group-header::after,
+table.ws-menu-page-table div.ws-menu-page-r-group-header::after
 {
+	color       : #627689;
+
 	font-size   : 80%;
 	content     : '\f078';
 	font-weight : normal;
@@ -722,8 +716,15 @@ table.ws-menu-page-table div.ws-menu-page-r-group-header:after
 	margin      : 0 0 0 10px;
 	display     : inline-block;
 }
-table.ws-menu-page-table div.ws-menu-page-group-header.open:after,
-table.ws-menu-page-table div.ws-menu-page-r-group-header.open:after
+table.ws-menu-page-table div.ws-menu-page-group-header:hover::after,
+table.ws-menu-page-table div.ws-menu-page-group-header.open::after,
+table.ws-menu-page-table div.ws-menu-page-r-group-header:hover::after,
+table.ws-menu-page-table div.ws-menu-page-r-group-header.open::after
+{
+	color : #FFFFFF;
+}
+table.ws-menu-page-table div.ws-menu-page-group-header.open::after,
+table.ws-menu-page-table div.ws-menu-page-r-group-header.open::after
 {
 	content : '\f077';
 }
@@ -738,7 +739,7 @@ table.ws-menu-page-table div.ws-menu-page-r-group
 	position                   : relative;
 	display                    : none;
 
-	padding                    : 25px;
+	padding                    : 15px;
 	color                      : #333333;
 	background                 : #D0DDAD;
 
@@ -751,7 +752,7 @@ table.ws-menu-page-table div.ws-menu-page-group.open,
 table.ws-menu-page-table div.ws-menu-page-r-group.open
 {
 	display       : block;
-	margin-bottom : 25px;
+	margin-bottom : 15px;
 }
 table.ws-menu-page-table div.ws-menu-page-group div.ws-menu-page-hr,
 table.ws-menu-page-table div.ws-menu-page-r-group div.ws-menu-page-hr
@@ -829,6 +830,10 @@ table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > 
 	color         : #FFFFFF;
 	background    : #73834B;
 	box-shadow    : 0 0 1px 0 rgba(0, 0, 0, 0.5) inset, 0 0 1px 1px rgba(223, 245, 165, 0.5);
+}
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td > div.ws-menu-page-scrollbox a
+{
+	color : #FFFFFF;
 }
 /*
 Coupons table.

@@ -107,7 +107,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 				{
 					if(($_mc['api_response'] = $mc_api->lists->subscribe($_mc['list_id'], array('email' => $args->email), // See: `http://apidocs.mailchimp.com/` for full details.
 							($_mc['api_merge_array'] = apply_filters('ws_plugin__s2member_mailchimp_merge_array', $_mc['merge_array'], get_defined_vars())), // Configured merge array above.
-							($_mc['api_email_type'] = apply_filters('ws_plugin__s2member_mailchimp_email_type', 'html', get_defined_vars())), // Type of email to receive (i.e. html,text,mobile).
+							($_mc['api_email_type'] = apply_filters('ws_plugin__s2member_mailchimp_email_type', 'html', get_defined_vars())), // Type of email to receive (i.e., html,text,mobile).
 							($_mc['api_double_optin'] = apply_filters('ws_plugin__s2member_mailchimp_double_optin', $args->double_opt_in, get_defined_vars())), // Abuse of this may cause account suspension.
 							($_mc['api_update_existing'] = apply_filters('ws_plugin__s2member_mailchimp_update_existing', TRUE, get_defined_vars())), // Existing subscribers should be updated with this?
 							($_mc['api_replace_interests'] = apply_filters('ws_plugin__s2member_mailchimp_replace_interests', TRUE, get_defined_vars())), // Replace interest groups? (only if provided).

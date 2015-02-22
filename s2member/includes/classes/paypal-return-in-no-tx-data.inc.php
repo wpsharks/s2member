@@ -45,7 +45,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_no_tx_data"))
 						unset($__refs, $__v);
 
 						$paypal["s2member_log"][] = "No Return-Data. Customer MUST wait for Email Confirmation.";
-						$paypal["s2member_log"][] = "Note. This can sometimes happen when/if you are offering an Initial/Trial Period. There are times when a Payment Gateway will NOT supply s2Member with any data immediately after checkout. When/if this happens, s2Member must process the transaction via IPN only (i.e. behind-the-scene), and the Customer must wait for Email Confirmation in these cases.";
+						$paypal["s2member_log"][] = "Note. This can sometimes happen when/if you are offering an Initial/Trial Period. There are times when a Payment Gateway will NOT supply s2Member with any data immediately after checkout. When/if this happens, s2Member must process the transaction via IPN only (i.e., behind-the-scene), and the Customer must wait for Email Confirmation in these cases.";
 						$paypal["s2member_log"][] = /* Recording _POST + _GET vars for analysis and debugging. */ var_export ($_REQUEST, true);
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;

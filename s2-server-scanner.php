@@ -113,11 +113,11 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 *
 	 * @param string  $plugin_name If empty, defaults to a generic value.
 	 *    Name of the plugin that's checking dependencies;
-	 *    i.e. the plugin that called this routine.
+	 *    i.e., the plugin that called this routine.
 	 *
 	 * @param string  $plugin_dir_names If empty, defaults to a generic value.
 	 *    Name of one or more (comma-delimited) plugin directories associated with dependency scans;
-	 *    i.e. directories associated with the plugin that called this routine.
+	 *    i.e., directories associated with the plugin that called this routine.
 	 *
 	 * @param boolean $report_notices TRUE by default.
 	 *    If FALSE, do NOT report any notices.
@@ -147,7 +147,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 *
 	 * @note The return value of this function depends heavily on the parameters used to call upon it.
 	 *    If it's called with ``$check_last_ok = TRUE`` (the default), there's a good chance it will simply return TRUE.
-	 *    That is, if we check a last OK time, and it's valid — a re-scan will NOT be processed; and there are no `issues` to report.
+	 *    That is, if we check a last OK time, and it's valid—a re-scan will NOT be processed; and there are no `issues` to report.
 	 *
 	 * @note This routine also deals with administrative notices in WordPress.
 	 * @note This routine also deals with auto-fix routines in WordPress.
@@ -871,7 +871,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							' Please check with your hosting provider to resolve this issue and have PHP <code>eval()</code> enabled.'.
 							' Note... the use of <code>eval()</code>, is limited to areas where it is absolutely necessary to achieve a desired functionality.'.
 							' For instance, where PHP code is supplied by a site owner (or by their developer) to achieve advanced customization through a UI panel. This can be evaluated at runtime to allow for the inclusion of PHP conditionals or dynamic values.'.
-							' In cases such as these, the PHP <code>eval()</code> function serves a valid purpose. This does NOT introduce a vulnerability, because the code being evaluated has actually been introduced by the site owner (i.e. the code can be trusted in this case).'
+							' In cases such as these, the PHP <code>eval()</code> function serves a valid purpose. This does NOT introduce a vulnerability, because the code being evaluated has actually been introduced by the site owner (i.e., the code can be trusted in this case).'
 						), htmlspecialchars($plugin_name)
 					)
 				);
@@ -1034,7 +1034,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					'message' => sprintf(
 						self::i18n(
 							'One or more HTTP connection tests failed against localhost.<br />'.
-							'Cannot connect to self over HTTP — possible DNS resolution issue.<br />'.
+							'Cannot connect to self over HTTP—possible DNS resolution issue.<br />'.
 							'Can\'t connect to: <code>%1$s</code><br /><br />'.
 
 							'In order to run %2$s, your installation of PHP needs one of the following...<br />'.
@@ -1575,7 +1575,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'title'    => self::i18n('WordPress Memory Limit'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that you raise your WordPress memory limit (please set: <code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>64M</code> (i.e. 64 megabytes).'.
+								'Although NOT required, %1$s recommends that you raise your WordPress memory limit (please set: <code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>64M</code> (i.e., 64 megabytes).'.
 								' Please see: <a href="http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP" target="_blank" rel="xlink">this how-to article</a>.'.
 								' Or consult with your web hosting company about this message. Your current memory limit is NOT yet defined.'
 							), htmlspecialchars($plugin_name)
@@ -1589,7 +1589,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'title'    => self::i18n('WordPress Memory Limit'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that you raise your WordPress memory limit (please set: <code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>64M</code> (i.e. 64 megabytes).'.
+								'Although NOT required, %1$s recommends that you raise your WordPress memory limit (please set: <code>WP_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>64M</code> (i.e., 64 megabytes).'.
 								' Please see: <a href="http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP" target="_blank" rel="xlink">this how-to article</a>.'.
 								' Or consult with your web hosting company about this message. Your current memory limit allows only: <code>%2$s</code>'
 							), htmlspecialchars($plugin_name), htmlspecialchars(WP_MEMORY_LIMIT)
@@ -1617,7 +1617,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'title'    => self::i18n('WordPress MAX Memory Limit'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that you raise your WordPress MAX memory limit (please set: <code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>256M</code> (i.e. 256 megabytes).'.
+								'Although NOT required, %1$s recommends that you raise your WordPress MAX memory limit (please set: <code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>256M</code> (i.e., 256 megabytes).'.
 								' Please see: <a href="http://wordpress.org/support/topic/how-to-set-wp_max_memory_limit" target="_blank" rel="xlink">this how-to article</a>.'.
 								' Or consult with your web hosting company about this message. Your current MAX memory limit is NOT yet defined.'
 							), htmlspecialchars($plugin_name)
@@ -1631,7 +1631,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'title'    => self::i18n('WordPress MAX Memory Limit'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT required, %1$s recommends that you raise your WordPress MAX memory limit (please set: <code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>256M</code> (i.e. 256 megabytes).'.
+								'Although NOT required, %1$s recommends that you raise your WordPress MAX memory limit (please set: <code>WP_MAX_MEMORY_LIMIT</code> in <code>/wp-config.php</code>), to at least <code>256M</code> (i.e., 256 megabytes).'.
 								' Please see: <a href="http://wordpress.org/support/topic/how-to-set-wp_max_memory_limit" target="_blank" rel="xlink">this how-to article</a>.'.
 								' Or consult with your web hosting company about this message. Your current MAX memory limit allows only: <code>%2$s</code>'
 							), htmlspecialchars($plugin_name), htmlspecialchars(WP_MAX_MEMORY_LIMIT)
@@ -1659,7 +1659,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'title'    => self::i18n('WordPress External HTTP Requests'),
 						'message'  => sprintf(
 							self::i18n(
-								'Although NOT absolutely required, %1$s HIGHLY recommends that you allow all external HTTP requests (please set: <code>WP_HTTP_BLOCK_EXTERNAL</code> in <code>/wp-config.php</code>), to: <code>FALSE</code>.'.
+								'Although NOT absolutely required, %1$s highly recommends that you allow all external HTTP requests (please set: <code>WP_HTTP_BLOCK_EXTERNAL</code> in <code>/wp-config.php</code>), to: <code>FALSE</code>.'.
 								' Please see: <a href="http://kovshenin.com/2012/how-to-disable-http-calls-in-wordpress/" target="_blank" rel="xlink">this how-to article</a>.'.
 								' Or, consult with your web hosting company about this message. Your are currently blocking all external HTTP requests.'.
 								' <strong>IMPORTANT:</strong> unless you have ALSO configured <code>WP_ACCESSIBLE_HOSTS</code>, your current'.
@@ -1777,7 +1777,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'message'  => sprintf(
 							self::i18n(
 								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with <code>UTF-8</code> encoding.'.
-								' This can be changed in the Dashboard, under: <code>WordPress -› Settings -› Reading -› Encoding</code>.'.
+								' This can be changed in the Dashboard, under: <code>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</code>.'.
 								' See also: <a href="http://codex.wordpress.org/Glossary#Unicode" target="_blank" rel="xlink">this article</a> about UTF-8.'.
 								' Your current encoding configuration is NOT yet defined.'
 							), htmlspecialchars($plugin_name)
@@ -1792,7 +1792,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'message'  => sprintf(
 							self::i18n(
 								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with <code>UTF-8</code> encoding.'.
-								' This can be changed in the Dashboard, under: <code>WordPress -› Settings -› Reading -› Encoding</code>.'.
+								' This can be changed in the Dashboard, under: <code>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</code>.'.
 								' See also: <a href="http://codex.wordpress.org/Glossary#Unicode" target="_blank" rel="xlink">this article</a> about UTF-8.'.
 								' Your current encoding configuration is set to: <code>%2$s</code>'
 							), htmlspecialchars($plugin_name), htmlspecialchars($blog_charset_encoding)
@@ -1805,7 +1805,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'title'   => self::i18n('WordPress Character Encoding'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress installation is operating with <code>%1$s</code> encoding, under: <code>WordPress -› Settings -› Reading -› Encoding</code>.'
+								'Your WordPress installation is operating with <code>%1$s</code> encoding, under: <code>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</code>.'
 							), htmlspecialchars($blog_charset_encoding)
 						)
 					);
@@ -1828,7 +1828,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							'message' => sprintf(
 								self::i18n(
 									'Although NOT required, %1$s recommends that your WordPress installation be configured with a matching HOST name.'.
-									' This can be changed in the Dashboard, under: <code>WordPress -› Settings -› General -› WordPress/Site URLs</code>.'.
+									' This can be changed in the Dashboard, under: <code>WordPress ⥱ Settings ⥱ General ⥱ WordPress/Site URLs</code>.'.
 									' Your current configuration does NOT match: <code>%2$s</code>'
 								), htmlspecialchars($plugin_name), htmlspecialchars($current_host_name)
 							)
@@ -2106,7 +2106,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 * @param string      $dir The directory we should begin with.
 	 *
 	 * @param boolean     $ignore_readme_files Optional. Defaults to a TRUE value.
-	 *    By default, we ignore README files (i.e. `readme.txt` and `readme.md`).
+	 *    By default, we ignore README files (i.e., `readme.txt` and `readme.md`).
 	 *
 	 *    NOTE: No matter what this is set to, we always exclude our default globs.
 	 *       See: {@link dir_file_ignore()} for further details on this.
@@ -2193,7 +2193,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 * @param string $fixable_issue The issue that needs to be fixed automatically.
 	 *    This is identified by the issue itself, through its `auto_fix` value.
 	 *
-	 * @return boolean|string TRUE if the issue was resolved (i.e. fixed automatically).
+	 * @return boolean|string TRUE if the issue was resolved (i.e., fixed automatically).
 	 *    Else, this returns a string message, indicating the reason for failure.
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
@@ -2267,7 +2267,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 	 *    That is, a ``$new_value`` string `1`, is actually defined as an integer.
 	 *    String values should be wrapped explicitly with single quotes.
 	 *
-	 * @return boolean|string TRUE if the constant was changed (i.e. fixed automatically).
+	 * @return boolean|string TRUE if the constant was changed (i.e., fixed automatically).
 	 *    Else, this returns a string message, indicating the reason for failure.
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
@@ -2509,7 +2509,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							);
 
 							$_auto_fix_confirmation =
-								"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nThis is a PHP routine, that will attempt to fix the issue automatically (i.e. to fix it programmatically).\\n\\t\\nBACKUP NOTICE: Please backup all of your files, and all of your database tables, before running this routine.\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before running this routine. It is always better to have a qualified web developer help you. If you run this routine, you do so at your own risk.")."');\"";
+								"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nThis is a PHP routine, that will attempt to fix the issue automatically (i.e., to fix it programmatically).\\n\\t\\nBACKUP NOTICE: Please backup all of your files, and all of your database tables, before running this routine.\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before running this routine. It is always better to have a qualified web developer help you. If you run this routine, you do so at your own risk.")."');\"";
 
 							echo '<a href="'.esc_attr(add_query_arg(urlencode_deep($_auto_fix), (string)$_SERVER['REQUEST_URI'])).'" '.$_auto_fix_confirmation.'>'.
 							     self::i18n('AUTO-FIX<em>!</em>').
@@ -2528,7 +2528,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							);
 
 							$_dismissal_confirmation =
-								"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nYou want to dismiss (i.e. ignore) this message?\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before ignoring this message. It is better to fix the underlying cause. If you ignore this message, you do so at your own risk.")."');\"";
+								"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nYou want to dismiss (i.e., ignore) this message?\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before ignoring this message. It is better to fix the underlying cause. If you ignore this message, you do so at your own risk.")."');\"";
 
 							echo '<a href="'.esc_attr(add_query_arg(urlencode_deep($_dismiss), (string)$_SERVER['REQUEST_URI'])).'" '.$_dismissal_confirmation.'>'.
 							     self::i18n('dismiss?').
@@ -2550,7 +2550,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					unset($_key, $_issue); // Just a little housekeeping here.
 				}
 
-				// Also display any passes (i.e. something positive?).
+				// Also display any passes (i.e., something positive?).
 
 				if($this->check['has_passes'])
 				{
@@ -2698,7 +2698,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					);
 
 					$_auto_fix_confirmation =
-						"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nThis is a PHP routine, that will attempt to fix the issue automatically (i.e. to fix it programmatically).\\n\\t\\nBACKUP NOTICE: Please backup all of your files, and all of your database tables, before running this routine.\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before running this routine. It is always better to have a qualified web developer help you. If you run this routine, you do so at your own risk.")."');\"";
+						"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nThis is a PHP routine, that will attempt to fix the issue automatically (i.e., to fix it programmatically).\\n\\t\\nBACKUP NOTICE: Please backup all of your files, and all of your database tables, before running this routine.\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before running this routine. It is always better to have a qualified web developer help you. If you run this routine, you do so at your own risk.")."');\"";
 
 					echo '<a href="'.esc_attr(add_query_arg(urlencode_deep($_auto_fix), (string)$_SERVER['REQUEST_URI'])).'" '.$_auto_fix_confirmation.'>'.
 					     self::i18n('AUTO-FIX<em>!</em>').
@@ -2717,7 +2717,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					);
 
 					$_dismissal_confirmation =
-						"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nYou want to dismiss (i.e. ignore) this message?\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before ignoring this message. It is better to fix the underlying cause, and then re-activate the plugin. If you ignore this message, you do so at your own risk.")."');\"";
+						"onclick=\"return confirm('".self::i18n("ARE YOU SURE ABOUT THIS?\\nYou want to dismiss (i.e., ignore) this message?\\n\\t\\nNOTE: Please consult with a qualified web developer (or your hosting company), before ignoring this message. It is better to fix the underlying cause, and then re-activate the plugin. If you ignore this message, you do so at your own risk.")."');\"";
 
 					echo '<a href="'.esc_attr(add_query_arg(urlencode_deep($_dismiss), (string)$_SERVER['REQUEST_URI'])).'" '.$_dismissal_confirmation.'>'.
 					     self::i18n('dismiss?').
@@ -2738,7 +2738,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 			}
 			unset($_key, $_issue); // Just a little housekeeping here.
 
-			// Also display any passes (i.e. something positive?).
+			// Also display any passes (i.e., something positive?).
 
 			if($this->check['has_passes']) // Has passes?
 			{

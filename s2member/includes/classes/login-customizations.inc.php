@@ -76,7 +76,7 @@ if(!class_exists('c_ws_plugin__s2member_login_customizations'))
 		}
 
 		/**
-		 * Styles login/registration *( i.e. `/wp-login.php` )*.
+		 * Styles login/registration *( i.e., `/wp-login.php` )*.
 		 *
 		 * @package s2Member\Login_Customizations
 		 * @since 3.5

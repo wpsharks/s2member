@@ -83,7 +83,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		 *
 		 * @param bool $opt_in Defaults to `FALSE`; must be set to `TRUE`.
 		 * @param bool $double_opt_in Defaults to `TRUE`. Use at your own risk.
-		 * @param bool $clean_user_cache Defaults to `TRUE`; i.e. we start from a fresh copy of the current user.
+		 * @param bool $clean_user_cache Defaults to `TRUE`; i.e., we start from a fresh copy of the current user.
 		 *
 		 * @return bool True if at least one list server is processed successfully.
 		 */
@@ -166,7 +166,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		 * @package s2Member\List_Servers
 		 *
 		 * @param bool $opt_out Defaults to `FALSE`; must be set to `TRUE`.
-		 * @param bool $clean_user_cache Defaults to `TRUE`; i.e. we start from a fresh copy of the current user.
+		 * @param bool $clean_user_cache Defaults to `TRUE`; i.e., we start from a fresh copy of the current user.
 		 *
 		 * @return bool True if at least one list server removal is processed successfully.
 		 */

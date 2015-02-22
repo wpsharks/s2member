@@ -46,7 +46,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_forms"))
 											{
 												foreach ((array)c_ws_plugin__s2member_utils_forms::form_whips_2_array($form) as $name => $value)
 													{
-														if (strlen ($name) && strlen ($value)) // Check $name -› $value lengths.
+														if (strlen ($name) && strlen ($value)) // Check $name ⥱ $value lengths.
 
 															if (strlen ($value = (preg_match ("/^http(s)?\:\/\//i", $value)) ? rawurlencode ($value) : urlencode ($value)))
 																{

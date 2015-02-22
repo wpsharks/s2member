@@ -44,7 +44,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_proxy_ty_email"))
 						do_action("ws_plugin__s2member_during_paypal_return_before_explicit_ty_email", get_defined_vars ());
 						unset($__refs, $__v);
 
-						$paypal["s2member_log"][] = "Customer MUST wait for Email Confirmation — `proxy_use`: ( `ty-email` ).";
+						$paypal["s2member_log"][] = "Customer MUST wait for Email Confirmation—`proxy_use`: ( `ty-email` ).";
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_during_paypal_return_during_explicit_ty_email", get_defined_vars ());

@@ -209,10 +209,10 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 			$url = preg_replace('/%%current_user_logins%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_logins)), $url);
 
 			if($url !== $orig_url && (!($parse = c_ws_plugin__s2member_utils_urls::parse_url($url, -1, FALSE)) || (!empty($parse['path']) && strpos($parse['path'], '//') !== FALSE)))
-				$url = home_url('/'); // Defaults to Home Page. We don't return invalid URLs produced by empty Replacement Codes ( i.e. with `//` ).
+				$url = home_url('/'); // Defaults to Home Page. We don't return invalid URLs produced by empty Replacement Codes ( i.e., with `//` ).
 
 			if($root_returns_false && c_ws_plugin__s2member_utils_conds::is_site_root($url)) // Used by s2Member's security gate.
-				$url = FALSE; // In case we need to return false on root URLs (i.e. don't protect the Home Page inadvertently).
+				$url = FALSE; // In case we need to return false on root URLs (i.e., don't protect the Home Page inadvertently).
 
 			return apply_filters('ws_plugin__s2member_fill_login_redirect_rc_vars', $url, get_defined_vars());
 		}

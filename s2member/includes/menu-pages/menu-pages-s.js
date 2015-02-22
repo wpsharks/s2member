@@ -180,7 +180,7 @@ jQuery(document).ready(function($)
 
 								tools = '<div id="ws-plugin--s2member-custom-reg-field-configuration-tools"></div>', table = '<table id="ws-plugin--s2member-custom-reg-field-configuration-table"></table>';
 
-								$configuration.html /* Add tools div & table div to configuration div (i.e. div#ws-plugin--s2member-custom-reg-field-configuration). */(tools+table);
+								$configuration.html /* Add tools div & table div to configuration div (i.e., div#ws-plugin--s2member-custom-reg-field-configuration). */(tools+table);
 
 								$tools = $('div#ws-plugin--s2member-custom-reg-field-configuration-tools'), $table = $('table#ws-plugin--s2member-custom-reg-field-configuration-table');
 
@@ -488,7 +488,7 @@ jQuery(document).ready(function($)
 												form += '<td colspan="2">';
 												form += '<input type="text" property="id" maxlength="25" autocomplete="off" id="ws-plugin--s2member-custom-reg-field-configuration-tools-form-id" value="'+esc_attr(field.id)+'" /><br />';
 												form += '<small>Examples: <code>country_code</code>, <code>street_address</code></small><br />';
-												form += '<small>e.g. <code>[s2Get user_field="country_code" /]</code></small>';
+												form += '<small>e.g., <code>[s2Get user_field="country_code" /]</code></small>';
 												form += '</td>';
 												form += '</tr>';
 
@@ -1157,7 +1157,7 @@ jQuery(document).ready(function($)
 
 						if /* Must have a Leading Post/Page ID to work with. Otherwise, Link generation will fail. */(!leading)
 							{
-								alert('— Oops, a slight problem: —\n\nPlease select a Leading Post/Page.\n\n*Tip* If there are no Posts/Pages in the menu, it\'s because you\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member -› Restriction Options -› Specific Post/Page Access.');
+								alert('— Oops, a slight problem: —\n\nPlease select a Leading Post/Page.\n\n*Tip* If there are no Posts/Pages in the menu, it\'s because you\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member ⥱ Restriction Options ⥱ Specific Post/Page Access.');
 								return false;
 							}
 						else if(!regAmount || isNaN(regAmount) || regAmount < 0.01)
@@ -1247,7 +1247,7 @@ jQuery(document).ready(function($)
 
 						if /* Must have a Leading Post/Page ID to work with. Otherwise, Link generation will fail. */(!leading)
 							{
-								alert('— Oops, a slight problem: —\n\nPlease select a Leading Post/Page.\n\n*Tip* If there are no Posts/Pages in the menu, it\'s because you\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member -› Restriction Options -› Specific Post/Page Access.');
+								alert('— Oops, a slight problem: —\n\nPlease select a Leading Post/Page.\n\n*Tip* If there are no Posts/Pages in the menu, it\'s because you\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member ⥱ Restriction Options ⥱ Specific Post/Page Access.');
 								return false;
 							}
 						for(var i = 0, ids = leading; i < additionals.length; i++)

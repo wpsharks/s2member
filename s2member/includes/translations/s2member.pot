@@ -1,4 +1,4 @@
-# Copyright (C) 2015 
+# Copyright (C) 2015
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
@@ -303,12 +303,12 @@ msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:144
 msgctxt "s2member-front"
-msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member -› General Options -› Membership Options Page</code>."
+msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member ⥱ General Options ⥱ Membership Options Page</code>."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:155
 msgctxt "s2member-front"
-msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member -› Download Options -› Basic Download Restrictions</code>."
+msgid "<strong>503: Basic File Downloads are NOT enabled yet.</strong> Please contact Support for assistance. If you are the site owner, please configure: <code>s2Member ⥱ Download Options ⥱ Basic Download Restrictions</code>."
 msgstr ""
 
 #: s2member/includes/classes/files-in.inc.php:496
@@ -733,7 +733,7 @@ msgstr ""
 
 #: s2member/includes/classes/paypal-return-in-proxy-x-preview.inc.php:64
 msgctxt "s2member-front"
-msgid "<strong>Thank you! (this is a preview, no action necessary).</strong><br /><br />* Note: each of your Customers are returned back to your site immediately after they complete checkout. This Return Page displays a message and instructions for the Customer. s2Member may change the message and instructions dynamically, based on what the Customer is actually doing <em>(i.e. based on the type of transaction that is taking place)</em>.<br /><br /><em>* With <a href=\"%s\" target=\"_blank\">s2Member Pro</a> installed, it is possible to customize this Return Page in various ways.</em>"
+msgid "<strong>Thank you! (this is a preview, no action necessary).</strong><br /><br />* Note: each of your Customers are returned back to your site immediately after they complete checkout. This Return Page displays a message and instructions for the Customer. s2Member may change the message and instructions dynamically, based on what the Customer is actually doing <em>(i.e., based on the type of transaction that is taking place)</em>.<br /><br /><em>* With <a href=\"%s\" target=\"_blank\">s2Member Pro</a> installed, it is possible to customize this Return Page in various ways.</em>"
 msgstr ""
 
 #: s2member/includes/classes/paypal-return-in-proxy-x-preview.inc.php:65
@@ -1278,7 +1278,7 @@ msgctxt "s2member-front"
 msgid "Lifetimes"
 msgstr ""
 
-#. translators: Each cycle ( i.e. `each day/week/month` or `every 2
+#. translators: Each cycle ( i.e., `each day/week/month` or `every 2
 #. days/weeks/months`, etc. ). Cycles are translated elsewhere.
 #: s2member/includes/classes/utils-time.inc.php:295
 #: s2member/includes/classes/utils-time.inc.php:338
@@ -1293,7 +1293,7 @@ msgctxt "s2member-front"
 msgid "lifetime"
 msgstr ""
 
-#. translators: Membership cycle ( i.e. `1 day/week/month` or `2
+#. translators: Membership cycle ( i.e., `1 day/week/month` or `2
 #. days/weeks/months`, etc. ). Most of this is translated elsewhere.
 #: s2member/includes/classes/utils-time.inc.php:302
 msgctxt "s2member-front"
@@ -1302,7 +1302,7 @@ msgid_plural "%1$s %3$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#. translators: Cycle ( i.e. `for 1 day/week/month` or `for 2
+#. translators: Cycle ( i.e., `for 1 day/week/month` or `for 2
 #. days/weeks/months`, etc. ). Most of this is translated elsewhere.
 #: s2member/includes/classes/utils-time.inc.php:345
 msgctxt "s2member-front"
@@ -2700,7 +2700,7 @@ msgctxt "s2member-front"
 msgid ""
 "ERROR: Unable to verify POST vars. Please contact Support for assistance.\n"
 "\n"
-"This is most likely related to an invalid AliPay configuration. If you are the site owner, please check: s2Member -› AliPay Options."
+"This is most likely related to an invalid AliPay configuration. If you are the site owner, please check: s2Member ⥱ AliPay Options."
 msgstr ""
 
 #: s2member-pro/s2member-pro/includes/classes/gateways/authnet/authnet-cancellation-in.inc.php:114
@@ -3900,7 +3900,7 @@ msgstr ""
 
 #: s2member-pro/s2member-pro/includes/classes/gateways/clickbank/clickbank-return-in.inc.php:222
 msgctxt "s2member-front"
-msgid "ERROR: Unable to verify POST vars. Please contact Support for assistance.\\n\\nThis is most likely related to an invalid ClickBank configuration. If you are the site owner, please check: s2Member -› ClickBank Options."
+msgid "ERROR: Unable to verify POST vars. Please contact Support for assistance.\\n\\nThis is most likely related to an invalid ClickBank configuration. If you are the site owner, please check: s2Member ⥱ ClickBank Options."
 msgstr ""
 
 #: s2member-pro/s2member-pro/includes/classes/gateways/clickbank/clickbank-utilities.inc.php:237
@@ -4044,7 +4044,7 @@ msgstr ""
 
 #: s2member-pro/s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:511
 msgctxt "s2member-admin"
-msgid "Invalid Payflow form configuration. Invalid \"rt, rp, rr\" attributes. Payflow supports a specific set of recurring intervals. Pro Forms can be configured to charge: weekly, bi-weekly, monthly, quarterly, semi-yearly or yearly. Any other combination results in this error. This is a Payflow limitation."
+msgid "Invalid Payflow form configuration. Invalid \"rt, rp, rr\" attributes. Payflow supports a specific set of recurring intervals. Pro-Forms can be configured to charge: weekly, bi-weekly, monthly, quarterly, semi-yearly or yearly. Any other combination results in this error. This is a Payflow limitation."
 msgstr ""
 
 #: s2member-pro/s2member-pro/includes/classes/gateways/paypal/paypal-responses.inc.php:514
@@ -4091,7 +4091,7 @@ msgstr ""
 #: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-responses.inc.php:348
 #: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-responses.inc.php:476
 msgctxt "s2member-admin"
-msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount (when greater than 0.00), must be >= 0.50; i.e. the minimum amount that Stripe will charge is 0.50"
+msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount (when greater than 0.00), must be >= 0.50; i.e., the minimum amount that Stripe will charge is 0.50"
 msgstr ""
 
 #: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-responses.inc.php:351

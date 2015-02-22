@@ -154,7 +154,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 				{
 					$file_download_extension               = strtolower(ltrim((string)strrchr(basename($config['file_download']), '.'), '.'));
 					$file_download_resolution_wo_extension = substr($config['file_download'], 0, -(strlen($file_download_extension) + 1) /* For the dot. */);
-					$file_download_wo_resolution_extension = preg_replace('/\-r[0-9]+([^.]*)$/i', '', $file_download_resolution_wo_extension); // e.g. `r720p-HD` is removed here.
+					$file_download_wo_resolution_extension = preg_replace('/\-r[0-9]+([^.]*)$/i', '', $file_download_resolution_wo_extension); // e.g., `r720p-HD` is removed here.
 
 					$file_download_resolutions = array(); // Initialize the array of resolutions.
 					foreach(preg_split('/[,;\s]+/', $attr['player_resolutions'], NULL, PREG_SPLIT_NO_EMPTY) as $_player_resolution)
@@ -245,7 +245,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 											if($_is_first_file_download_url) $player_sources .= ",'default': 'true'";
 											$player_sources .= '}'; // Close this source.
 										}
-										$_file_download_url['smil']['height'] = (integer)$_file_download_url_label; // e.g. `720p-HD` becomes `720`.
+										$_file_download_url['smil']['height'] = (integer)$_file_download_url_label; // e.g., `720p-HD` becomes `720`.
 										if(!$_file_download_url['smil']['height']) $_file_download_url['smil']['height'] = 720; // Use a default height if invalid.
 										$_file_download_url['smil']['width'] = ceil(($_file_download_url['smil']['height'] / $player_resolution_aspect_ratio_h) * $player_resolution_aspect_ratio_w);
 
@@ -258,7 +258,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 										                                                 ' height="'.esc_attr($_file_download_url['smil']['height']).'"'.
 										                                                 ' system-bitrate="'.esc_attr($_file_download_url['smil']['system-bitrate']).'" />';
 									}
-									else // Build them inline; i.e. don't create a SMIL file in this case; not necessary.
+									else // Build them inline; i.e., don't create a SMIL file in this case; not necessary.
 									{
 										$player_sources .= ',{'; // Open this source; JSON object properties.
 										$player_sources .= "'file': '".c_ws_plugin__s2member_utils_strings::esc_js_sq($_file_download_url['streamer'].'/'.$_file_download_url['prefix'].$_file_download_url['file'])."'";

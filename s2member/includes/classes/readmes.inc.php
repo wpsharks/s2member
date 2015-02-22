@@ -176,7 +176,7 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 				* @package s2Member\Readmes
 				* @since 3.5
 				*
-				* @param string $str A string *(i.e. the specs section)*.
+				* @param string $str A string *(i.e., the specs section)*.
 				* @return string Parsed specs. With HTML markup for list item display.
 				*/
 				public static function _parse_readme_specs ($str = FALSE)
