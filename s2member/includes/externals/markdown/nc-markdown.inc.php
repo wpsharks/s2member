@@ -863,7 +863,7 @@ class NC_Markdown_Parser {
 		# an aspect of Markdown's syntax that's hard to parse perfectly
 		# without resorting to mind-reading. Perhaps the solution is to
 		# change the syntax rules such that sub-lists must start with a
-		# starting cardinal number; e.g. "1." or "a.".
+		# starting cardinal number; e.g., "1." or "a.".
 
 		$this->list_level++;
 
@@ -1284,7 +1284,7 @@ class NC_Markdown_Parser {
 
 	function encodeEmailAddress($addr) {
 	#
-	#	Input: an email address, e.g. "foo@example.com"
+	#	Input: an email address, e.g., "foo@example.com"
 	#
 	#	Output: the email address as a mailto link, with each character
 	#		of the address encoded as either a decimal or hex entity, in

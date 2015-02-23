@@ -53,10 +53,11 @@ Plugin Name: s2Member Framework
 Forum URI: http://www.s2member.com/forums/
 Plugin URI: http://www.s2member.com/framework/
 Privacy URI: http://www.s2member.com/privacy/
+Changelog URI: http://www.s2member.com/changelog/
 Video Tutorials: http://www.s2member.com/videos/
-Pro Module / Home Page: http://www.s2member.com/
-Pro Module / Prices: http://www.s2member.com/prices/
-Pro Module / Auto-Update URL: http://www.s2member.com/
+Pro Add-on / Home Page: http://www.s2member.com/
+Pro Add-on / Prices: http://www.s2member.com/prices/
+Pro Add-on / Auto-Update URL: http://www.s2member.com/
 PayPal Pro Integration: http://www.s2member.com/videos/ED70D90C6749DA3D/
 Professional Installation URI: http://www.s2member.com/professional-installation/
 

@@ -1187,7 +1187,7 @@ class Mailchimp_o {
      * @example xml-rpc_listMergeVarAdd.php
      *
      * @param string $id the list id to connect to. Get by calling lists()
-     * @param string $tag The merge tag to add, e.g. FNAME
+     * @param string $tag The merge tag to add, e.g., FNAME
      * @param string $name The long description of the tag being added, used for user displays
      * @param array $options optional Various options for this merge var. <em>note:</em> for historical purposes this can also take a "boolean"
                     string field_type optional one of: text, number, radio, dropdown, date, address, phone, url, imageurl - defaults to text

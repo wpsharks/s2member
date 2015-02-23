@@ -102,7 +102,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 				if(($tag = trim($tag)) && is_numeric($tag)) // Force integers.
 					$tag_ids[] = ($tag_id = (int)$tag); // Force integer values here.
 
-				else if($tag && is_string($tag)) // A string (i.e. a tag name or a tag slug)?
+				else if($tag && is_string($tag)) // A string (i.e., a tag name or a tag slug)?
 				{
 					if(is_object($term = get_term_by('name', $tag, 'post_tag')))
 						$tag_ids[] = (int)$term->term_id;
@@ -382,7 +382,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 		 *   The ``$exclude_conflicts`` argument should be used whenever we introduce a list of option values to a site owner. Helping them avoid mishaps.
 		 *   Please note, the ``$exclude_conflicts`` argument implements a resource-intensive processing routine.
 		 *
-		 * @return array Unique array of all Singulars *(i.e. Posts/Pages )* protected with Specific Post/Page Access.
+		 * @return array Unique array of all Singulars *(i.e., Posts/Pages )* protected with Specific Post/Page Access.
 		 *   Includes Custom Post Types also, as specified by site owner's Specific Post/Page Restrictions.
 		 */
 		public static function get_all_singulars_with_sp($exclude_conflicts = FALSE)

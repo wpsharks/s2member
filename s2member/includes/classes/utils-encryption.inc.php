@@ -72,16 +72,16 @@ if(!class_exists('c_ws_plugin__s2member_utils_encryption'))
 		public static function uunnci_key_20_max()
 		{
 			$microtime_19_max = number_format(microtime(TRUE), 9, '.', '');
-			// e.g. `9999999999`.`999999999` (max decimals: `9`, max overall precision: `19`).
-			// Assuming timestamp is never > 10 digits; i.e. before `Sat, 20 Nov 2286 17:46:39 GMT`.
+			// e.g., `9999999999`.`999999999` (max decimals: `9`, max overall precision: `19`).
+			// Assuming timestamp is never > 10 digits; i.e., before `Sat, 20 Nov 2286 17:46:39 GMT`.
 
 			list($seconds_10_max, $microseconds_9_max) = explode('.', $microtime_19_max, 2);
-			// e.g. `array(`9999999999`, `999999999`)`. Max total digits combined: `19`.
+			// e.g., `array(`9999999999`, `999999999`)`. Max total digits combined: `19`.
 
-			$seconds_base36      = base_convert($seconds_10_max, '10', '36'); // e.g. max `9999999999`, to base 36.
-			$microseconds_base36 = base_convert($microseconds_9_max, '10', '36'); // e.g. max `999999999`, to base 36.
-			$mt_rand_base36      = base_convert(mt_rand(1, 999999999), '10', '36'); // e.g. max `999999999`, to base 36.
-			$key                 = 'k'.$mt_rand_base36.$seconds_base36.$microseconds_base36; // e.g. `kgjdgxr4ldqpdrgjdgxr`.
+			$seconds_base36      = base_convert($seconds_10_max, '10', '36'); // e.g., max `9999999999`, to base 36.
+			$microseconds_base36 = base_convert($microseconds_9_max, '10', '36'); // e.g., max `999999999`, to base 36.
+			$mt_rand_base36      = base_convert(mt_rand(1, 999999999), '10', '36'); // e.g., max `999999999`, to base 36.
+			$key                 = 'k'.$mt_rand_base36.$seconds_base36.$microseconds_base36; // e.g., `kgjdgxr4ldqpdrgjdgxr`.
 
 			return $key; // Max possible value: `kgjdgxr4ldqpdrgjdgxr` (20 chars).
 		}

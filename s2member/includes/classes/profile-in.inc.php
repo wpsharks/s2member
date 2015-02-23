@@ -51,7 +51,7 @@ if(!class_exists('c_ws_plugin__s2member_profile_in'))
 
 					echo '<body style="'.esc_attr(apply_filters('ws_plugin__s2member_profile_body_styles', "background:#FFFFFF; color:#333333; font-family:'Verdana', sans-serif; font-size:13px;", get_defined_vars())).'">'."\n";
 
-					echo '<form method="post" name="ws_plugin__s2member_profile" id="ws-plugin--s2member-profile" action="'.esc_attr(home_url('/')).'">'."\n";
+					echo '<form method="post" name="ws_plugin__s2member_profile" id="ws-plugin--s2member-profile" action="'.esc_attr(home_url('/')).'" autocomplete="off">'."\n";
 
 					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 					do_action('ws_plugin__s2member_during_profile_before_table', get_defined_vars());

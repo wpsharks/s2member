@@ -140,7 +140,7 @@ if(!class_exists('c_ws_plugin__s2member_login_checks'))
 		 * @package s2Member\Login_Checks
 		 * @since 131025
 		 *
-		 * @param string $username Expects a username (e.g. a `user_login` value).
+		 * @param string $username Expects a username (e.g., a `user_login` value).
 		 *
 		 * @return integer Current number of simultaneous logins.
 		 */
@@ -156,7 +156,7 @@ if(!class_exists('c_ws_plugin__s2member_login_checks'))
 			$transient_entries = $prefix.md5('s2member_simultaneous_login_entries_for_'.strtolower((string)$username));
 
 			$timeout     = $GLOBALS['WS_PLUGIN__']['s2member']['o']['max_simultaneous_logins_timeout'];
-			$timeout_ago = strtotime('-'.$timeout); // e.g. 30 minutes ago.
+			$timeout_ago = strtotime('-'.$timeout); // e.g., 30 minutes ago.
 
 			$entries = (is_array($entries = get_transient($transient_entries))) ? $entries : array();
 			foreach($entries as $_entry => $_time /* Auto-expire entries, based on time. */)
@@ -173,7 +173,7 @@ if(!class_exists('c_ws_plugin__s2member_login_checks'))
 		 *
 		 * @attaches-to ``add_action('wp_login');``
 		 *
-		 * @param string       $username Expects a username (e.g. a `user_login` value).
+		 * @param string       $username Expects a username (e.g., a `user_login` value).
 		 * @param WP_User|null $user When fired against `wp_login` this receives a WP_User object also.
 		 * @param string       $action Default action is to increment the counter. This can be set to `decrement` or NULL to do nothing.
 		 */
@@ -189,7 +189,7 @@ if(!class_exists('c_ws_plugin__s2member_login_checks'))
 			$transient_entries = $prefix.md5('s2member_simultaneous_login_entries_for_'.strtolower((string)$username));
 
 			$timeout     = $GLOBALS['WS_PLUGIN__']['s2member']['o']['max_simultaneous_logins_timeout'];
-			$timeout_ago = strtotime('-'.$timeout); // e.g. 30 minutes ago.
+			$timeout_ago = strtotime('-'.$timeout); // e.g., 30 minutes ago.
 
 			$entries = (is_array($entries = get_transient($transient_entries))) ? $entries : array();
 			foreach($entries as $_entry => $_time /* Auto-expire entries, based on time. */)

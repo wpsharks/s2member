@@ -69,7 +69,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Posts of this type)</option>'."\n")
 													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Pages)</option>'."\n";
 
-												echo '</select><br /><small>* see: <code>Restriction Options -› Pages</code></small>'."\n";
+												echo '</select><br /><small>* see: <strong>Restriction Options ⥱ Pages</strong></small>'."\n";
 
 												if(!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site())
 													// ^ Will change once Custom Capabilities are compatible with a Blog Farm.
@@ -77,7 +77,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 														echo '<p style="margin-top:15px; margin-left:2px;"><strong>Require Custom Capabilities?</strong></p>'."\n";
 														echo '<label class="screen-reader-text" for="ws-plugin--s2member-security-meta-box-ccaps">Custom Capabilities?</label>'."\n";
 														echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_security_meta_box_ccaps" id="ws-plugin--s2member-security-meta-box-ccaps" value="'.format_to_edit(trim(implode(",", (array)get_post_meta($page_id, "s2member_ccaps_req", true)))).'" onkeyup="if(this.value.match(/[^a-z_0-9,]/)) this.value = jQuery.trim (jQuery.trim (this.value).replace (/[ \-]/g, \'_\').replace (/[^a-z_0-9,]/gi, \'\').toLowerCase ());" style="width:99%;" />'."\n";
-														echo '<br /><small>* see: <code>API Scripting -› Custom Capabilities</code></small>'."\n";
+														echo '<br /><small>* see: <strong>API Scripting ⥱ Custom Capabilities</strong></small>'."\n";
 													}
 											}
 
@@ -115,7 +115,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Posts of this type)</option>'."\n")
 													: '<option value="" disabled="disabled">Level #'.$n.' (already protects "all" Posts)</option>'."\n";
 
-												echo '</select><br /><small>* see: <code>Restriction Options -› Posts</code></small>'."\n";
+												echo '</select><br /><small>* see: <strong>Restriction Options ⥱ Posts</strong></small>'."\n";
 
 												if(!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site())
 													// ^ Will change once Custom Capabilities are compatible with a Blog Farm.
@@ -123,7 +123,7 @@ if(!class_exists("c_ws_plugin__s2member_meta_box_security"))
 														echo '<p style="margin-top:15px; margin-left:2px;"><strong>Require Custom Capabilities?</strong></p>'."\n";
 														echo '<label class="screen-reader-text" for="ws-plugin--s2member-security-meta-box-ccaps">Custom Capabilities?</label>'."\n";
 														echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_security_meta_box_ccaps" id="ws-plugin--s2member-security-meta-box-ccaps" value="'.format_to_edit(trim(implode(",", (array)get_post_meta($post_id, "s2member_ccaps_req", true)))).'" onkeyup="if(this.value.match(/[^a-z_0-9,]/)) this.value = jQuery.trim (jQuery.trim (this.value).replace (/[ \-]/g, \'_\').replace (/[^a-z_0-9,]/gi, \'\').toLowerCase ());" style="width:99%;" />'."\n";
-														echo '<br /><small>* see: <code>API Scripting -› Custom Capabilities</code></small>'."\n";
+														echo '<br /><small>* see: <strong>API Scripting ⥱ Custom Capabilities</strong></small>'."\n";
 													}
 											}
 

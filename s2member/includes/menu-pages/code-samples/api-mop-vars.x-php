@@ -22,7 +22,7 @@ Here is a breakdown that explains each of the values:
 		- Restriction Type `ruri` indicates that Request URI Access Restrictions triggered the redirection.
 		- Restriction Type `ccap` indicates Custom Capability Restrictions triggered the redirection.
 		- Restriction Type `sp` indicates Specific Post/Page Access Restrictions triggered the redirection.
-		- Restriction Type `sys` indicates Systematic (i.e. something s2Member protects automatically).
+		- Restriction Type `sys` indicates Systematic (i.e., something s2Member protects automatically).
 
 	* `[requirement type]` = A string. One of: `level|ccap|sp`
 		- Requirement Type `level` indicates that a Membership Level is required for access.

@@ -586,7 +586,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 										if(!is_admin() && (!c_ws_plugin__s2member_utils_conds::pro_is_installed() || !c_ws_plugin__s2member_pro_remote_ops::is_remote_op('create_user')) && ($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok()) && extract($reg_cookies))
 										{ /* This routine could be processed through `/wp-login.php?action=register`, `/wp-activate.php`, or `/activate` via BuddyPress`.
 																	This may also be processed through a standard BuddyPress installation, or another plugin calling `user_register`.
-																	If processed through `/wp-activate.php`, it could've originated inside the admin — via `/user-new.php`. */
+																	If processed through `/wp-activate.php`, it could've originated inside the admin—via `/user-new.php`. */
 											/**
 											 * @var $subscr_gateway string Reference for IDEs.
 											 * @var $subscr_id string Reference for IDEs.
@@ -939,11 +939,11 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 
 											$opt_in = (!empty($_pmr['ws_plugin__s2member_custom_reg_field_opt_in'])) ? TRUE : FALSE;
 
-											if(!($fname = $user->first_name)) // `Users -› Add New`.
+											if(!($fname = $user->first_name)) // `Users ⥱ Add New`.
 												if(!empty($_pmr['ws_plugin__s2member_custom_reg_field_first_name']))
 													$fname = (string)$_pmr['ws_plugin__s2member_custom_reg_field_first_name'];
 
-											if(!($lname = $user->last_name)) // `Users -› Add New`.
+											if(!($lname = $user->last_name)) // `Users ⥱ Add New`.
 												if(!empty($_pmr['ws_plugin__s2member_custom_reg_field_last_name']))
 													$lname = (string)$_pmr['ws_plugin__s2member_custom_reg_field_last_name'];
 
@@ -958,7 +958,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 												if(!empty($GLOBALS['ws_plugin__s2member_generate_password_return']))
 													$pass = (string)$GLOBALS['ws_plugin__s2member_generate_password_return'];
 
-											if(!$pass) // Also try the `Users -› Add New` form.
+											if(!$pass) // Also try the `Users ⥱ Add New` form.
 												if(!empty($_pmr['pass1'])) // Field in `/user-new.php`.
 													$pass = (string)$_pmr['pass1'];
 

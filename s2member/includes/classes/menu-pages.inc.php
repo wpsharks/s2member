@@ -96,25 +96,25 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 				if(empty($_GET['page']) || $_GET['page'] !== 'ws-plugin--s2member-mms-ops') // Do NOT display page-conflict-warnings on the Main Multisite Configuration panel.
 				{
-					if(!$options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>NOTE:</strong> s2Member security restrictions will NOT be enforced until you\'ve configured a Membership Options Page. See: <code>s2Member -› General Options -› Membership Options Page</code>.'))
+					if(!$options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>NOTE:</strong> s2Member security restrictions will NOT be enforced until you\'ve configured a Membership Options Page. See: <strong>s2Member ⥱ General Options ⥱ Membership Options Page</strong>.'))
 						($enqueue_notices === TRUE || in_array('page-conflict-warnings', (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, '*:*', TRUE) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
 
-					if($options['login_welcome_page'] && $options['login_welcome_page'] === $options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is the same as your Membership Options Page. Please correct this. See: <code>s2Member -› General Options -› Login Welcome Page</code>.'))
+					if($options['login_welcome_page'] && $options['login_welcome_page'] === $options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is the same as your Membership Options Page. Please correct this. See: <strong>s2Member ⥱ General Options ⥱ Login Welcome Page</strong>.'))
 						($enqueue_notices === TRUE || in_array('page-conflict-warnings', (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, '*:*', TRUE) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
 
-					if($options['membership_options_page'] && (string)get_option('page_on_front') === $options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Home Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Membership Options Page</code>.'))
+					if($options['membership_options_page'] && (string)get_option('page_on_front') === $options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Home Page (i.e., static page) for WordPress. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <strong>WordPress ⥱ Reading Options</strong>. Or change: <strong>s2Member ⥱ General Options ⥱ Membership Options Page</strong>.'))
 						($enqueue_notices === TRUE || in_array('page-conflict-warnings', (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, '*:*', TRUE) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
 
-					if($options['login_welcome_page'] && (string)get_option('page_on_front') === $options['login_welcome_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Home Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Login Welcome Page</code>.'))
+					if($options['login_welcome_page'] && (string)get_option('page_on_front') === $options['login_welcome_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Home Page (i.e., static page) for WordPress. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <strong>WordPress ⥱ Reading Options</strong>. Or change: <strong>s2Member ⥱ General Options ⥱ Login Welcome Page</strong>.'))
 						($enqueue_notices === TRUE || in_array('page-conflict-warnings', (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, '*:*', TRUE) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
 
-					if($options['membership_options_page'] && (string)get_option('page_for_posts') === $options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Posts Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <code>WordPress -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Membership Options Page</code>.'))
+					if($options['membership_options_page'] && (string)get_option('page_for_posts') === $options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Membership Options Page is currently configured as your Posts Page (i.e., static page) for WordPress. This causes internal conflicts with s2Member. Your Membership Options Page MUST stand alone. Please correct this. See: <strong>WordPress ⥱ Reading Options</strong>. Or change: <strong>s2Member ⥱ General Options ⥱ Membership Options Page</strong>.'))
 						($enqueue_notices === TRUE || in_array('page-conflict-warnings', (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, '*:*', TRUE) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
 
-					if($options['login_welcome_page'] && (string)get_option('page_for_posts') === $options['login_welcome_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Posts Page (i.e. static page) for WordPress. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <code>WordPress -› Reading Options</code>. Or change: <code>s2Member -› General Options -› Login Welcome Page</code>.'))
+					if($options['login_welcome_page'] && (string)get_option('page_for_posts') === $options['login_welcome_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Login Welcome Page is currently configured as your Posts Page (i.e., static page) for WordPress. This causes internal conflicts with s2Member. Your Login Welcome Page MUST stand alone. Please correct this. See: <strong>WordPress ⥱ Reading Options</strong>. Or change: <strong>s2Member ⥱ General Options ⥱ Login Welcome Page</strong>.'))
 						($enqueue_notices === TRUE || in_array('page-conflict-warnings', (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, '*:*', TRUE) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
 
-					if($options['file_download_limit_exceeded_page'] && $options['file_download_limit_exceeded_page'] === $options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Download Limit Exceeded Page is the same as your Membership Options Page. Please correct this. See: <code>s2Member -› Download Options</code>.'))
+					if($options['file_download_limit_exceeded_page'] && $options['file_download_limit_exceeded_page'] === $options['membership_options_page'] && ($display_notices === TRUE || in_array('page-conflict-warnings', (array)$display_notices)) && ($notice = '<strong>s2Member:</strong> Your Download Limit Exceeded Page is the same as your Membership Options Page. Please correct this. See: <strong>s2Member ⥱ Download Options</strong>.'))
 						($enqueue_notices === TRUE || in_array('page-conflict-warnings', (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, '*:*', TRUE) : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
 				}
 				$updated_all_options = TRUE; // Flag indicating this routine was processed successfully; and that all s2Member options have been updated successfully.
@@ -205,12 +205,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_logs_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
 					add_submenu_page($menu, 's2Member Logs', 'Log Files (Debug)', 'create_users', 'ws-plugin--s2member-logs', 'c_ws_plugin__s2member_menu_pages::logs_page');
 
-				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_6', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
-
-				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_info_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, 's2Member Information', 's2Member Info', 'create_users', 'ws-plugin--s2member-info', 'c_ws_plugin__s2member_menu_pages::info_page');
-
 				do_action('ws_plugin__s2member_during_add_admin_options_additional_pages', get_defined_vars());
 			}
 			do_action('ws_plugin__s2member_after_add_admin_options', get_defined_vars());
@@ -238,9 +232,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				add_menu_page('s2Member', 's2Member', 'create_users', $menu, 'c_ws_plugin__s2member_menu_pages::mms_ops_page', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/images/brand-favicon.png');
 
 				add_submenu_page($menu, 's2Member Multisite (Configuration)', 'Multisite (Config)', 'create_users', 'ws-plugin--s2member-mms-ops', 'c_ws_plugin__s2member_menu_pages::mms_ops_page');
-
-				if(apply_filters('ws_plugin__s2member_during_add_network_admin_options_add_info_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, 's2Member Information', 's2Member Info', 'create_users', 'ws-plugin--s2member-info', 'c_ws_plugin__s2member_menu_pages::info_page');
 
 				do_action('ws_plugin__s2member_during_add_network_admin_options_additional_pages', get_defined_vars());
 			}
@@ -626,7 +617,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			c_ws_plugin__s2member_menu_pages::update_all_options();
 
 			if(!empty($_REQUEST['ws_plugin__s2member_cf_options_reset'])
-			   && wp_verify_nonce($_REQUEST['ws_plugin__s2member_cf_options_reset'], 'ws-plugin--s2member-cf-options-reset'))
+			   && wp_verify_nonce($_REQUEST['ws_plugin__s2member_cf_options_reset'], 'ws-plugin--s2member-cf-options-reset')
+			)
 			{
 				c_ws_plugin__s2member_files_in::reset_aws_cf_config_values(); // A full CloudFront reset.
 				c_ws_plugin__s2member_admin_notices::display_admin_notice('Amazon CloudFront configuration reset successfully.');
@@ -662,7 +654,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 			if(!empty($_POST['ws_plugin__s2member_amazon_cf_files_auto_configure_distros']) && ($nonce = $_POST['ws_plugin__s2member_amazon_cf_files_auto_configure_distros']) && wp_verify_nonce($nonce, 'ws-plugin--s2member-amazon-cf-files-auto-configure-distros'))
 				if(($amazon_cf_auto_configure_distros = c_ws_plugin__s2member_files_in::amazon_cf_auto_configure_distros()) && $amazon_cf_auto_configure_distros['success'])
-					c_ws_plugin__s2member_admin_notices::display_admin_notice('Amazon CloudFront Distributions auto-configured successfully. Please allow 30 minutes for initial propagation. <strong>Tip:</strong> If you try to stream over the RTMP protocol using something like the <code>[s2Stream /]</code> shortcode, and you keep getting an "ID Not Found" error while using JW Player; please note that it can <em>sometimes</em> take a full 24 hours for RTMP (i.e. streaming distributions) to begin working properly. This is because there are a few initialization routines that must complete on the AWS side when you first integrate with CloudFront. Please be patient.'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_downloads_cname']) ? '<br /><em>Downloads Distribution CNAME: <code>'.esc_html($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_downloads_cname']).' &mdash;&raquo; '.esc_html($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_downloads_dname']).'</code></em>' : '').(($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_streaming_cname']) ? '<br /><em>Streaming Distribution CNAME: <code>'.esc_html($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_streaming_cname']).' &mdash;&raquo; '.esc_html($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_streaming_dname']).'</code></em>' : ''));
+					c_ws_plugin__s2member_admin_notices::display_admin_notice('Amazon CloudFront Distributions auto-configured successfully. Please allow 30 minutes for initial propagation. <strong>Tip:</strong> If you try to stream over the RTMP protocol using something like the <code>[s2Stream /]</code> shortcode, and you keep getting an "ID Not Found" error while using JW Player; please note that it can <em>sometimes</em> take a full 24 hours for RTMP (i.e., streaming distributions) to begin working properly. This is because there are a few initialization routines that must complete on the AWS side when you first integrate with CloudFront. Please be patient.'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_downloads_cname']) ? '<br /><em>Downloads Distribution CNAME: <code>'.esc_html($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_downloads_cname']).' &mdash;&raquo; '.esc_html($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_downloads_dname']).'</code></em>' : '').(($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_streaming_cname']) ? '<br /><em>Streaming Distribution CNAME: <code>'.esc_html($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_streaming_cname']).' &mdash;&raquo; '.esc_html($GLOBALS['WS_PLUGIN__']['s2member']['o']['amazon_cf_files_distro_streaming_dname']).'</code></em>' : ''));
 				else // Else there was an error. We need to report this back to the site owner so they can understand what's going on.
 					(c_ws_plugin__s2member_menu_pages::$pre_display_errors['cf_files_auto_configure_distros'] = TRUE).c_ws_plugin__s2member_admin_notices::display_admin_notice('Unable to auto-configure Amazon CloudFront Distributions.<br />Error code: <code>'.esc_html($amazon_cf_auto_configure_distros['code']).'</code>. Error Message: <code>'.esc_html($amazon_cf_auto_configure_distros['message']).'</code>', TRUE);
 
@@ -676,7 +668,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 			do_action('ws_plugin__s2member_after_down_ops_page', get_defined_vars());
 		}
-
 
 		/**
 		 * Builds and handles the API Tracking options page.
@@ -740,7 +731,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			do_action('ws_plugin__s2member_before_paypal_buttons_page', get_defined_vars());
 
 			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_merchant_id'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_username'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_password'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_signature'])
-				c_ws_plugin__s2member_admin_notices::display_admin_notice('Please configure <code>s2Member -› PayPal Options</code> first. Once all of your PayPal Options are configured; including your Email Address, Merchant ID, API Username, Password, and Signature; return to this page &amp; generate your PayPal Button(s).', TRUE);
+				c_ws_plugin__s2member_admin_notices::display_admin_notice('Please configure <strong>s2Member ⥱ PayPal Options</strong> first. Once all of your PayPal Options are configured; including your Email Address, Merchant ID, API Username, Password, and Signature; return to this page &amp; generate your PayPal Button(s).', TRUE);
 
 			include_once dirname(dirname(__FILE__)).'/menu-pages/paypal-buttons.inc.php';
 
@@ -822,21 +813,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			include_once dirname(dirname(__FILE__)).'/menu-pages/logs.inc.php';
 
 			do_action('ws_plugin__s2member_after_logs_page', get_defined_vars());
-		}
-
-		/**
-		 * Builds and handles the s2Member Info page.
-		 *
-		 * @package s2Member\Menu_Pages
-		 * @since 3.5
-		 */
-		public static function info_page()
-		{
-			do_action('ws_plugin__s2member_before_info_page', get_defined_vars());
-
-			include_once dirname(dirname(__FILE__)).'/menu-pages/info.inc.php';
-
-			do_action('ws_plugin__s2member_after_info_page', get_defined_vars());
 		}
 	}
 }

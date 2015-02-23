@@ -173,9 +173,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 
 								$paypal['s2member_log'][] = 's2Member Level/Capabilities updated w/ advanced update routines.';
 
-								$sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_subject']; // The same for standard and w/ Pro Forms.
-								$msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_message']; // The same for standard and w/ Pro Forms.
-								$rec = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_recipients']; // The same for standard and w/ Pro Forms.
+								$sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_subject']; // The same for standard and w/ Pro-Forms.
+								$msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_message']; // The same for standard and w/ Pro-Forms.
+								$rec = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_recipients']; // The same for standard and w/ Pro-Forms.
 
 								if(($rec = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $rec)) && ($rec = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_id']), $rec)))
 									if(($rec = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_baid']), $rec)) && ($rec = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_cid']), $rec)))

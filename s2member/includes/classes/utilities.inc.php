@@ -100,7 +100,7 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 			$checksum .= (c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? '-'.WS_PLUGIN__S2MEMBER_PRO_VERSION : ''; // Pro version string?
 			$checksum .= '-'.abs(crc32($GLOBALS['WS_PLUGIN__']['s2member']['c']['checksum'].$GLOBALS['WS_PLUGIN__']['s2member']['o']['options_checksum'].$GLOBALS['WS_PLUGIN__']['s2member']['o']['options_version']));
 
-			return $checksum; // (i.e. version-pro version-checksum)
+			return $checksum; // (i.e., version-pro version-checksum)
 		}
 
 		/**

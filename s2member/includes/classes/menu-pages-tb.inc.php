@@ -47,7 +47,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages_tb'))
 			}
 			if($GLOBALS['WS_PLUGIN__']['s2member']['c']['menu_pages']['upsell-pro'])
 			{
-				echo '<a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value('Pro Module / Prices')).'" target="_blank" style="font-size:120%; font-weight:bold;"><i class="fa fa-money"></i> s2Member® Pro (Upgrade)</a>'."\n";
+				echo '<a href="'.esc_attr(c_ws_plugin__s2member_readmes::parse_readme_value('Pro Add-on / Prices')).'" target="_blank" style="font-size:120%; font-weight:bold;"><i class="fa fa-money"></i> s2Member® Pro (Upgrade)</a>'."\n";
 			}
 			if($GLOBALS['WS_PLUGIN__']['s2member']['c']['menu_pages']['installation'])
 			{

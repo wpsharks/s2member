@@ -1,4 +1,4 @@
-Notice that NESTED Conditionals require a preceding underscore (i.e. _s2If, __s2If, ___s2If).
+Notice that NESTED Conditionals require a preceding underscore (i.e., _s2If, __s2If, ___s2If).
 	You can go up to ten levels deep ( __________s2If ).
 
 [s2If current_user_is(s2member_level4)]

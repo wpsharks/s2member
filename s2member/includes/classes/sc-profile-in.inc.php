@@ -63,7 +63,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_profile_in'))
 
 				ob_start(); // Start buffering. Allows Hooks to echo output like: `/?s2member_profile=1`.
 
-				echo '<form method="post" name="ws_plugin__s2member_profile" id="ws-plugin--s2member-profile">'."\n";
+				echo '<form method="post" name="ws_plugin__s2member_profile" id="ws-plugin--s2member-profile" autocomplete="off">'."\n";
 
 				if(!empty($GLOBALS['ws_plugin__s2member_profile_saved'])) // Respond to successful updates.
 				{
