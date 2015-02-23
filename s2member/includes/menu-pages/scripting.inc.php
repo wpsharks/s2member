@@ -487,39 +487,6 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_api_advanced_dripping", get_defined_vars ());
 							}
 
-						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_profile_modifications", (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()), get_defined_vars ()))
-							{
-								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_profile_modifications", get_defined_vars ());
-
-								echo '<div class="ws-menu-page-group" title="Member Profile Modifications">' . "\n";
-
-								echo '<div class="ws-menu-page-section ws-plugin--s2member-profile-modifications-section">' . "\n";
-								echo '<h3>Giving Members The Ability To Modify Their Profile</h3>' . "\n";
-								echo '<p>s2Member can be configured to redirect Members away from the <a href="' . esc_attr (admin_url ("/profile.php")) . '" target="_blank" rel="external">default Profile Editing Panel</a> that is built into WordPress. When/if a Member attempts to access the default Profile Editing Panel, they\'ll instead, be redirected to the Login Welcome Page that you\'ve configured through s2Member. <strong>Why would I redirect?</strong> Unless you\'ve made some drastic modifications to your WordPress installation, the default Profile Editing Panel that ships with WordPress, is NOT really suited for public access, even by a Member. See: <strong>s2Member ⥱ General Options ⥱ Profile Modifications</strong>.</p>' . "\n";
-								echo '<p>So instead of using this default Profile Editing Panel; s2Member creates an added layer of functionality, on top of WordPress. It does this by providing you (as the site owner), with a special Shortcode: <code>[s2Member-Profile /]</code> that you can place into your Login Welcome Page, or any Post/Page for that matter (even into a Text Widget). This Shortcode produces an Inline Profile Editing Form that supports all aspects of s2Member, including Password changes; and any Custom Registration/Profile Fields that you\'ve configured with s2Member.</p>' . "\n";
-								echo '<p>Alternatively, s2Member also gives you the ability to send your Members to a <a href="' . esc_attr (home_url ("/?s2member_profile=1")) . '" target="_blank" rel="external">special Stand-Alone version</a>. This Stand-Alone version has been designed (with a bare-bones format), intentionally. This makes it possible for you to <a href="#" onclick="if(!window.open(\'' . home_url ("/?s2member_profile=1") . '\', \'_popup\', \'width=600,height=400,left=100,screenX=100,top=100,screenY=100,location=0,menubar=0,toolbar=0,status=0,scrollbars=1,resizable=1\')) alert(\'Please disable popup blockers and try again!\'); return false;" rel="external">open it up in a popup window</a>, or embed it into your Login Welcome Page using an IFRAME. Code samples are provided below.</p>' . "\n";
-								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_profile_modifications", get_defined_vars ());
-
-								echo '<div class="ws-menu-page-hr"></div>' . "\n";
-
-								echo '<p><strong>Shortcode:</strong> for an Inline Profile Modification Form:<br />' . "\n";
-								echo '<p><input type="text" autocomplete="off" value="' . format_to_edit ('[s2Member-Profile /]') . '" onclick="this.select ();" /></p>' . "\n";
-
-								echo '<p style="margin-top:20px;"><strong>Stand-Alone / Code Sample</strong> (standard link tag):</p>' . "\n";
-								echo '<p><input type="text" autocomplete="off" value="' . format_to_edit (preg_replace ("/\<\?php echo S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL; \?\>/", c_ws_plugin__s2member_utils_strings::esc_refs (home_url ("/?s2member_profile=1")), file_get_contents (dirname (__FILE__) . "/code-samples/current-user-profile-modification-page-url-1-ops.x-php"))) . '" class="monospace" onclick="this.select ();" /></p>' . "\n";
-
-								echo '<p style="margin-top:20px;"><strong>Stand-Alone / Code Sample</strong> (open the link in a popup window):</p>' . "\n";
-								echo '<p><input type="text" autocomplete="off" value="' . format_to_edit (preg_replace ("/\<\?php echo S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL; \?\>/", c_ws_plugin__s2member_utils_strings::esc_refs (home_url ("/?s2member_profile=1")), file_get_contents (dirname (__FILE__) . "/code-samples/current-user-profile-modification-page-url-2-ops.x-php"))) . '" class="monospace" onclick="this.select ();" /></p>' . "\n";
-
-								echo '<p style="margin-top:20px;"><strong>Stand-Alone / Code Sample</strong> (embed the Form with an IFRAME tag):</p>' . "\n";
-								echo '<p><input type="text" autocomplete="off" value="' . format_to_edit (preg_replace ("/\<\?php echo S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL; \?\>/", c_ws_plugin__s2member_utils_strings::esc_refs (home_url ("/?s2member_profile=1")), file_get_contents (dirname (__FILE__) . "/code-samples/current-user-profile-modification-page-url-3-ops.x-php"))) . '" class="monospace" onclick="this.select ();" /></p>' . "\n";
-								echo '</div>' . "\n";
-
-								echo '</div>' . "\n";
-
-								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_after_profile_modifications", get_defined_vars ());
-							}
-
 						if (apply_filters("ws_plugin__s2member_during_scripting_page_during_left_sections_display_api_constants", true, get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_before_api_constants", get_defined_vars ());
