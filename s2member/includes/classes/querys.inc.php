@@ -89,7 +89,7 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 		public static function query_level_access(&$wp_query = NULL, $force = FALSE)
 		{
 			global $wpdb; // Global DB object reference.
-			static $initial_query = TRUE; // Tracks the initial query.
+
 			c_ws_plugin__s2member_querys::$current_wp_query = &$wp_query;
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
@@ -108,8 +108,9 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 				if((!is_admin() || c_ws_plugin__s2member_querys::_is_admin_ajax_search($wp_query)) && !$wp_query->get('___s2_is_bbp_has_replies') /* See: <http://bit.ly/1obLpv4> */)
 				{
 					$suppressing_filters = $wp_query->get('suppress_filters'); // Filter suppression on?
-					if(!$suppressing_filters && $force // Forcing this routine bypasses all of these other conditionals. Works with API function ``attach_s2member_query_filters()``.
-					   || (!$suppressing_filters && in_array('all', $o) && !($initial_query && $wp_query->is_singular())) // Don't create 404 errors. Allow Security Gate to handle these.
+
+					if((!$suppressing_filters && $force) // Forcing this routine bypasses all of these other conditionals. Works with API function ``attach_s2member_query_filters()``.
+					   || (!$suppressing_filters && in_array('all', $o) && !($wp_query->is_main_query() && $wp_query->is_singular())) // Don't create 404 errors. Allow Security Gate to handle these.
 					   || (!$suppressing_filters && (in_array('all', $o) || in_array('searches', $o)) && $wp_query->is_search()) // Or, is this a search results query, possibly via AJAX: `admin-ajax.php`?
 					   || (!$suppressing_filters && (in_array('all', $o) || in_array('feeds', $o)) && $wp_query->is_feed() && !$wp_query->is_comment_feed()) // Or, is this a feed; and it's NOT for comments?
 					   || (!$suppressing_filters && (in_array('all', $o) || in_array('comment-feeds', $o)) && $wp_query->is_feed() && $wp_query->is_comment_feed()) // Or, is this a feed; and it IS indeed for comments?
@@ -250,8 +251,6 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_after_query_level_access', get_defined_vars());
 			unset($__refs, $__v); // Housekeeping.
-
-			$initial_query = FALSE; // No longer.
 		}
 
 		/**
