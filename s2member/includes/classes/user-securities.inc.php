@@ -38,12 +38,24 @@ if(!class_exists('c_ws_plugin__s2member_user_securities'))
 		 * @since 3.5
 		 *
 		 * @attaches-to ``add_action('init');``
-		 *
-		 * @return null
 		 */
 		public static function initialize() // Initializes the Filter for `user_has_cap`.
 		{
 			add_filter('user_has_cap', 'c_ws_plugin__s2member_user_securities::user_capabilities', 10, 3);
+		}
+
+		/**
+		 * Deals w/ bbPress-specific issues on a Multisite Network.
+		 *
+		 * @package s2Member\User_Securities
+		 * @since 150224
+		 *
+		 * @attaches-to ``add_action('after_setup_theme');``
+		 */
+		public static function set_current_user()
+		{
+			if(is_multisite() && is_user_logged_in() && !current_user_can('read'))
+				remove_action('bbp_setup_current_user', 'bbp_set_current_user_default_role');
 		}
 
 		/**
