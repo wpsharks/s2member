@@ -60,7 +60,7 @@ s2Member®—a powerful (free) membership plugin for WordPress®. Protect member
 
 ---
 
-The s2Member® Framework (free) integrates with PayPal® Website Payments Standard (also free).
+The s2Member® Framework (free) integrates with PayPal Website Payments Standard (also free). Sell "Buy Now" or Membership access to your site. Restrict access to Roles, Capabilities, Posts, Pages, or anything else in WordPress.
 
 Protect your WordPress Posts, Pages, Tags, Categories, URIs, BuddyPress/bbPress, and even portions of content within Posts, Pages, themes, plugins. Easily configurable & highly extensible. You can even protect downloadable files and streaming audio/video. Store files locally, or use s2Member's integration with Amazon® S3/CloudFront.
 
