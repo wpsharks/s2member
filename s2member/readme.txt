@@ -60,31 +60,24 @@ s2Member®—a powerful (free) membership plugin for WordPress®. Protect member
 
 ---
 
-The s2Member® Framework (free) integrates with PayPal® Website Payments Standard (also free), and supports "Buy Now" and "Subscriptions".
+The s2Member® Framework (free) integrates with PayPal® Website Payments Standard (also free).
 
-You can learn more about this powerful membership management system for WordPress at [s2Member.com](http://www.s2member.com/pro/) ~ Or watch the quick video below.
+Protect your WordPress Posts, Pages, Tags, Categories, URIs, BuddyPress/bbPress, and even portions of content within Posts, Pages, themes, plugins. Easily configurable & highly extensible. You can even protect downloadable files and streaming audio/video. Store files locally, or use s2Member's integration with Amazon® S3/CloudFront.
 
-[youtube http://www.youtube.com/watch?v=2C3Lan7vxw0 /]
+s2Member is powered almost entirely by WordPress shortcodes, making complex integrations quick & easy. Sell recurring (or non-recurring) subscriptions with lots of flexibility. Or sell "Buy Now" access in various ways. You can also sell specific Posts/Pages, sell access to file downloads, or sell Custom Capabilities that provide highly configurable access to specific portions of your content.
 
-If you're serious about membership management in WordPress, you want s2Member! s2Member supports custom Pages for registration (including Custom Registration/Profile Fields), account access, and a whole lot more. s2Member is compatible with Multisite Networking too, and even with BuddyPress and bbPress.
-
-With the s2Member® Pro add-on (an optional paid upgrade), you can add support for unlimited Membership Levels, Stripe™ (w/ Pro-Forms to facilitate on-site credit card processing), PayPal® Website Payments Pro (also with Pro-Forms), Authorize.Net® (also with Pro-Forms), Google® Checkout, ClickBank®, advanced User Import/Export tools, the ability to use Coupon Codes, and many other enhancements. Videos available at: [s2Member.com / Videos](http://www.s2member.com/videos/).
-
-s2Member supports Free Subscribers (at Level #0), and up to four primary Membership Levels [1-4] (unlimited with s2Member® Pro). You can label your Membership Levels anything you like. The defaults are Free, Bronze, Silver, Gold, and Platinum. s2Member also supports an unlimited number of Custom Capability Packages. Custom Capabilities are an easy way to extend s2Member in creative ways. Custom Capabilities allow you to create an unlimited number of Membership Packages, all with different Capabilities and prices.
-
-s2Member allows you to protect Pages, Posts, Tags, Categories, URIs, URI word fragments, URI Replacement Codes for BuddyPress, Specific Post/Page "Buy Now" Access, and even portions of content within Posts/Pages/themes/plugins. All settings are configurable through the s2Member Options panel. This makes s2Member VERY easy to integrate into any site powered by WordPress®.
-
-With s2Member, you can also protect downloadable files, using restrictions to control how many downloads can occur within a certain amount of time; all based on Membership Level or even Custom Capabilities. sMember® can even integrate with Amazon® S3 and CloudFront (optional) for serving protected audio/video streams over an RTMP protocol.
+You can learn more at [s2Member.com](http://www.s2member.com/).
 
 = Reasons to upgrade to "s2Member® Pro" =
 
-- Stripe™ integration via Pro-Forms ~ [video intro](http://www.s2member.com/videos/L0aJz4-9mNanxemFZ_3G2-SIn-xAoiwD/).
+- Stripe™ (+Bitcoin) integration via Pro-Forms (one-step checkout).
 - PayPal Pro™ integration via Pro-Forms (one-step checkout).
 - Authorize.Net™ integration via Pro-Forms (one-step checkout).
-- Plus ClickBank™ and Google Wallet™ button integrations too :-)
-- Unlimited Membership Levels, Coupon Codes, Pro API, and more!
+- Plus ClickBank™, Unlimited Membership Levels, Coupon Codes, Gift/Redemption Codes, Pro API, and more!
 
-You can learn more about s2Member® at [s2Member.com](http://www.s2member.com/).
+With 1000's of customers, an intelligent open-community, comprehensive documentation, video tutorials, APIs, the s2Member Codex, KB articles, and over 50,000 forum posts; s2Member just can't be beat!
+
+Secure WordPress content and offer users/members a secure checkout solution that integrates seamlessly with WordPress Roles/Capabilities. It's like a cash machine. s2Member puts money back in your pocket with every customer you acquire. You can learn more at [s2Member.com](http://www.s2member.com/).
 
 == Installation ==
 
