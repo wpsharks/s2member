@@ -45,7 +45,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_no_tx_data"))
 						unset($__refs, $__v);
 
 						$paypal["s2member_log"][] = "No Return-Data. Customer MUST wait for Email Confirmation.";
-						$paypal["s2member_log"][] = "Note. This can sometimes happen when/if you are offering an Initial/Trial Period. There are times when a Payment Gateway will NOT supply s2Member with any data immediately after checkout. When/if this happens, s2Member must process the transaction via IPN only (i.e. behind-the-scene), and the Customer must wait for Email Confirmation in these cases.";
+						$paypal["s2member_log"][] = "Note. This can sometimes happen when/if you are offering an Initial/Trial Period. There are times when a Payment Gateway will NOT supply s2Member with any data immediately after checkout. When/if this happens, s2Member must process the transaction via IPN only (i.e., behind-the-scene), and the Customer must wait for Email Confirmation in these cases.";
 						$paypal["s2member_log"][] = /* Recording _POST + _GET vars for analysis and debugging. */ var_export ($_REQUEST, true);
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -63,7 +63,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in_no_tx_data"))
 							$paypal["s2member_log"][] = "Redirecting Customer to the Home Page (after asking Customer to check their email).";
 
 							echo c_ws_plugin__s2member_return_templates::return_template ($paypal["subscr_gateway"],
-								_x ('<strong>Thank you! (you MUST check your email before proceeding).</strong><br /><br />* Note: It can take <em>(up to 15 minutes)</em> for Email Confirmation with important details. If you don\'t receive email confirmation in the next 15 minutes, please contact Support.', "s2member-front", "s2member") . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"] || (c_ws_plugin__s2member_utils_conds::pro_is_installed () && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["pro_" . $paypal["subscr_gateway"] . "_sandbox"]))) ? '<br /><br />' . _x ('<strong>** Sandbox Mode **</strong> You may NOT receive this Email in Sandbox Mode. Sandbox addresses are usually bogus (for testing).', "s2member-front", "s2member") : ''),
+								_x ('<strong>Thank you! (you MUST check your email before proceeding).</strong><br /><br />* Note: It can take <em>(up to 15 minutes)</em> for Email Confirmation with important details. If you don\'t receive email confirmation in the next 15 minutes, please contact Support.', "s2member-front", "s2member") . (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"] || (c_ws_plugin__s2member_utils_conds::pro_is_installed () && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["pro_" . $paypal["subscr_gateway"] . "_sandbox"]))) ? '<br /><br />' . _x ('<strong>* Sandbox Mode *:</strong> You may NOT receive this Email in Sandbox Mode. Sandbox addresses are usually bogus (for testing).', "s2member-front", "s2member") : ''),
 							   _x ("Back To Home Page", "s2member-front", "s2member"), home_url ("/"));
 						}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;

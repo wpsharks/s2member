@@ -176,7 +176,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
 
 									if($subscr_gateway && $subscr_id) // Also note the Paid Subscr. Gateway/ID so there is a reference left behind here.
-										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$subscr_gateway.' -› '.$subscr_id);
+										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$subscr_gateway.' ⥱ '.$subscr_id);
 
 									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'] && is_array($cv = preg_split('/\|/', $custom)))
 									{

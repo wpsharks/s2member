@@ -83,7 +83,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 			$content_if      = $content_else = NULL; // Initialize.
 			$shortcode_depth = strspn($shortcode, '_'); // Based on a zero index.
-			$else_tag        = '['.str_repeat('_', $shortcode_depth).'else]'; // e.g. [else], [_else], [__else]
+			$else_tag        = '['.str_repeat('_', $shortcode_depth).'else]'; // e.g., [else], [_else], [__else]
 
 			if(strpos($content, $else_tag) !== FALSE && $pro_is_installed)
 				list($content_if, $content_else) = explode($else_tag, $content, 2);

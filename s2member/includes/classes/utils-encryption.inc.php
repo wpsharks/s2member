@@ -72,16 +72,16 @@ if(!class_exists('c_ws_plugin__s2member_utils_encryption'))
 		public static function uunnci_key_20_max()
 		{
 			$microtime_19_max = number_format(microtime(TRUE), 9, '.', '');
-			// e.g. `9999999999`.`999999999` (max decimals: `9`, max overall precision: `19`).
-			// Assuming timestamp is never > 10 digits; i.e. before `Sat, 20 Nov 2286 17:46:39 GMT`.
+			// e.g., `9999999999`.`999999999` (max decimals: `9`, max overall precision: `19`).
+			// Assuming timestamp is never > 10 digits; i.e., before `Sat, 20 Nov 2286 17:46:39 GMT`.
 
 			list($seconds_10_max, $microseconds_9_max) = explode('.', $microtime_19_max, 2);
-			// e.g. `array(`9999999999`, `999999999`)`. Max total digits combined: `19`.
+			// e.g., `array(`9999999999`, `999999999`)`. Max total digits combined: `19`.
 
-			$seconds_base36      = base_convert($seconds_10_max, '10', '36'); // e.g. max `9999999999`, to base 36.
-			$microseconds_base36 = base_convert($microseconds_9_max, '10', '36'); // e.g. max `999999999`, to base 36.
-			$mt_rand_base36      = base_convert(mt_rand(1, 999999999), '10', '36'); // e.g. max `999999999`, to base 36.
-			$key                 = 'k'.$mt_rand_base36.$seconds_base36.$microseconds_base36; // e.g. `kgjdgxr4ldqpdrgjdgxr`.
+			$seconds_base36      = base_convert($seconds_10_max, '10', '36'); // e.g., max `9999999999`, to base 36.
+			$microseconds_base36 = base_convert($microseconds_9_max, '10', '36'); // e.g., max `999999999`, to base 36.
+			$mt_rand_base36      = base_convert(mt_rand(1, 999999999), '10', '36'); // e.g., max `999999999`, to base 36.
+			$key                 = 'k'.$mt_rand_base36.$seconds_base36.$microseconds_base36; // e.g., `kgjdgxr4ldqpdrgjdgxr`.
 
 			return $key; // Max possible value: `kgjdgxr4ldqpdrgjdgxr` (20 chars).
 		}
@@ -141,7 +141,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_encryption'))
 			$e      = isset($base64[0]) ? c_ws_plugin__s2member_utils_strings::base64_url_safe_decode($base64) : '';
 
 			if(function_exists('mcrypt_decrypt') && in_array('rijndael-256', mcrypt_list_algorithms()) && in_array('cbc', mcrypt_list_modes()))
-				if(isset($e[0]) && preg_match('/^~r2\:([a-zA-Z0-9]+)(?:\:([a-zA-Z0-9]+))?\|(.*?)$/s', $e, $iv_md5_e))
+				if(isset($e[0]) && preg_match('/^~r2\:([a-zA-Z0-9]+)(?:\:([a-zA-Z0-9]+))?\|(.*)$/s', $e, $iv_md5_e))
 				{
 					$key = c_ws_plugin__s2member_utils_encryption::key($key);
 					$key = substr($key, 0, mcrypt_get_key_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC));
@@ -209,7 +209,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_encryption'))
 			$base64 = is_string($base64) ? $base64 : '';
 			$e      = isset($base64[0]) ? c_ws_plugin__s2member_utils_strings::base64_url_safe_decode($base64) : '';
 
-			if(isset($e[0]) && preg_match('/^~xe(?:\:([a-zA-Z0-9]+))?\|(.*?)$/s', $e, $md5_e))
+			if(isset($e[0]) && preg_match('/^~xe(?:\:([a-zA-Z0-9]+))?\|(.*)$/s', $e, $md5_e))
 			{
 				$key = c_ws_plugin__s2member_utils_encryption::key($key);
 

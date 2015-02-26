@@ -304,7 +304,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 		 *
 		 * @param string     $field_id Required. A unique Custom Registration/Profile Field ID, that you configured with s2Member.
 		 *   Or, this could be set to any property that exists on the WP_User object for a particular User;
-		 *   ( i.e. `id`, `ID`, `user_login`, `user_email`, `first_name`, `last_name`, `display_name`, `ip`, `IP`,
+		 *   ( i.e., `id`, `ID`, `user_login`, `user_email`, `first_name`, `last_name`, `display_name`, `ip`, `IP`,
 		 *   `s2member_registration_ip`, `s2member_custom`, `s2member_subscr_id`, `s2member_subscr_or_wp_id`,
 		 *   `s2member_subscr_gateway`, `s2member_custom_fields`, `s2member_file_download_access_[log|arc]`,
 		 *   `s2member_auto_eot_time`, `s2member_last_payment_time`, `s2member_paid_registration_times`,

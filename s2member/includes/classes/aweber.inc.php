@@ -44,7 +44,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 				include_once dirname(dirname(__FILE__)).'/externals/aweber/aweber_api.php';
 
 			if(count($key_parts = explode('|', $GLOBALS['WS_PLUGIN__']['s2member']['o']['aweber_api_key'])) < 5)
-				return NULL; // It's an invalid API key; i.e. authorization code.
+				return NULL; // It's an invalid API key; i.e., authorization code.
 
 			list($consumerKey, $consumerSecret, $requestToken, $tokenSecret, $verifier) = $key_parts;
 			$internal_api_key_checksum = md5($consumerKey.$consumerSecret.$requestToken.$tokenSecret.$verifier);
@@ -185,7 +185,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 
 								$_aw['findSubscriber'] = array('email' => $args->email);
 								if(self::count($_aw['foundSubscribers'] = $_aw['list']->subscribers->find($_aw['findSubscriber']))
-								   && $_aw['foundSubscribers'][0]->status !== 'unconfirmed' // i.e. `subscribed|unsubscribed`.
+								   && $_aw['foundSubscribers'][0]->status !== 'unconfirmed' // i.e., `subscribed|unsubscribed`.
 								) // Cannot modify an `unconfirmed` subscriber.
 								{
 									/** @var AWeberEntry $_existing_subscriber */

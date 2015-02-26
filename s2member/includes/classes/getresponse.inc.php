@@ -92,7 +92,7 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 							$_gr['api_success'] = $success = TRUE; // Flag this as `TRUE`; assists with return value below.
 					}
 				}
-				else // Create a new contact; i.e. they do not exist yet.
+				else // Create a new contact; i.e., they do not exist yet.
 				{
 					$_gr['api_method']  = 'add_contact'; // Add new contact.
 					$_gr['api_headers'] = array('Content-Type' => 'application/json');

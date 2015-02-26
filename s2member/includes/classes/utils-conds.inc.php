@@ -106,7 +106,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_conds'))
 
 		/**
 		 * Determines whether or not this is a Multisite Farm;
-		 * *( i.e. if ``MULTISITE_FARM == true`` inside `/wp-config.php` )*.
+		 * *( i.e., if ``MULTISITE_FARM == true`` inside `/wp-config.php` )*.
 		 *
 		 * With s2Member, this option may also indicate a Multisite Blog Farm.
 		 * ``$GLOBALS['WS_PLUGIN__']['s2member']['o']['mms_registration_file'] === 'wp-signup'``.

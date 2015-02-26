@@ -103,20 +103,20 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 		 * Calculate Auto-EOT Time, based on `user_id`, `period1`, `period3`, `last_payment_time`, or an optional `eotper`.
 		 *
 		 * Used by s2Member's built-in Auto-EOT System, and also by its IPN routines.
-		 * `last_payment_time` can be forced w/ ``$lpt`` *(i.e. for delayed eots)*.
+		 * `last_payment_time` can be forced w/ ``$lpt`` *(i.e., for delayed eots)*.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 3.5
 		 *
 		 * @param int|string $user_id Optional. A WordPress User ID.
 		 *
-		 * @param string     $period1 Optional. First Intial "Period Term" *( i.e. `0 D` )*.
+		 * @param string     $period1 Optional. First Intial "Period Term" *( i.e., `0 D` )*.
 		 *   Only used when ``$user_id`` is passed in.
 		 *
-		 * @param string     $period3 Optional. Regular "Period Term" *( i.e. `1 M` )*.
+		 * @param string     $period3 Optional. Regular "Period Term" *( i.e., `1 M` )*.
 		 *   Only used when ``$user_id`` is passed in.
 		 *
-		 * @param string     $eotper Optional. A Fixed "Period Term" *( i.e. `1 M` )*.
+		 * @param string     $eotper Optional. A Fixed "Period Term" *( i.e., `1 M` )*.
 		 *   This replaces ``$period1`` / ``$period3``.
 		 *   Not used when ``$user_id`` is passed in.
 		 *   Only when ``$user_id`` is not passed in.
@@ -228,7 +228,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 		 * @param string $term_or_period_term A Term, or a "Period Term" combination.
 		 * @param string $directive Optional. One of `recurring|singular|plural`. Defaults to `recurring`.
 		 *
-		 * @return string|bool A Term Cycle *( i.e. `Daily`, `Weekly`, `Monthly`, `Yearly`, `Lifetime`, etc. )*, else false on failure.
+		 * @return string|bool A Term Cycle *( i.e., `Daily`, `Weekly`, `Monthly`, `Yearly`, `Lifetime`, etc. )*, else false on failure.
 		 *
 		 * @todo Add support here for fixed recurring payments configured through `rrt=""`.
 		 */
@@ -274,7 +274,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 		 * @param string          $period_term A "Period Term" combination.
 		 * @param bool|int|string $recurring Defaults to false. If true, the ``$period_term`` is recurring. Can also be the string `0|1|BN`.
 		 *
-		 * @return string Verbose *(lowercase)* Period Term description *( i.e. `weekly`, `every 3 weeks`, `lifetime`, `3 months`, `1 month`, etc. )*.
+		 * @return string Verbose *(lowercase)* Period Term description *( i.e., `weekly`, `every 3 weeks`, `lifetime`, `3 months`, `1 month`, etc. )*.
 		 *
 		 * @todo Add support here for fixed recurring payments configured through `rrt=""`.
 		 */
@@ -291,14 +291,14 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 				$period_term = strtolower($cycle_recurring); // Results in an "ly" ending.
 
 			else if($recurring) // Otherwise, it's recurring; but NOT an "ly" ending.
-				/* translators: Each cycle ( i.e. `each day/week/month` or `every 2 days/weeks/months`, etc. ). Cycles are translated elsewhere. */
+				/* translators: Each cycle ( i.e., `each day/week/month` or `every 2 days/weeks/months`, etc. ). Cycles are translated elsewhere. */
 				$period_term = strtolower(sprintf(_nx('each %2$s', 'every %1$s %3$s', $period, 's2member-front', 's2member'), $period, $cycle_singular, $cycle_plural));
 
 			else if(strtoupper($term) === 'L') // One-payment for lifetime access.
 				$period_term = strtolower(_x('lifetime', 's2member-front', 's2member')); // Life.
 
 			else // Otherwise, this is NOT recurring. Results in X days/weeks/months/years/lifetime.
-				/* translators: Membership cycle ( i.e. `1 day/week/month` or `2 days/weeks/months`, etc. ). Most of this is translated elsewhere. */
+				/* translators: Membership cycle ( i.e., `1 day/week/month` or `2 days/weeks/months`, etc. ). Most of this is translated elsewhere. */
 				$period_term = strtolower(sprintf(_nx('%1$s %2$s', '%1$s %3$s', $period, 's2member-front', 's2member'), $period, $cycle_singular, $cycle_plural));
 
 			return $period_term; // Return converted value.
@@ -317,7 +317,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 		 * @param string          $period_term A "Period Term" combo, with space separation.
 		 * @param bool|int|string $recurring Defaults to false. If true, the ``$period_term`` is recurring. Can also be the string `0|1|BN`.
 		 *
-		 * @return string Verbose *(lowercase)* Amount Period Term description *( i.e. `1.00`, `1.00 / monthly`, `1.00 every 3 months`, `1.00 for 1 month`, `1.00 for 3 months`, etc. )*.
+		 * @return string Verbose *(lowercase)* Amount Period Term description *( i.e., `1.00`, `1.00 / monthly`, `1.00 every 3 months`, `1.00 for 1 month`, `1.00 for 3 months`, etc. )*.
 		 *
 		 * @todo Add support here for fixed recurring payments configured through `rrt=""`.
 		 */
@@ -334,14 +334,14 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 				$amount_period_term = number_format($amount, 2, '.', '').' / '.strtolower($cycle_recurring);
 
 			else if($recurring) // Otherwise, it's recurring; but NOT an "ly" ending.
-				/* translators: Each cycle ( i.e. `each day/week/month` or `every 2 days/weeks/months`, etc. ). Cycles are translated elsewhere. */
+				/* translators: Each cycle ( i.e., `each day/week/month` or `every 2 days/weeks/months`, etc. ). Cycles are translated elsewhere. */
 				$amount_period_term = number_format($amount, 2, '.', '').' '.strtolower(sprintf(_nx('each %2$s', 'every %1$s %3$s', $period, 's2member-front', 's2member'), $period, $cycle_singular, $cycle_plural));
 
 			else if(strtoupper($term) === 'L') // One-payment for lifetime access.
 				$amount_period_term = number_format($amount, 2, '.', ''); // Price.
 
 			else // Otherwise, this is NOT recurring. Results in 0.00 for X days/weeks/months/years/lifetime.
-				/* translators: Cycle ( i.e. `for 1 day/week/month` or `for 2 days/weeks/months`, etc. ). Most of this is translated elsewhere. */
+				/* translators: Cycle ( i.e., `for 1 day/week/month` or `for 2 days/weeks/months`, etc. ). Most of this is translated elsewhere. */
 				$amount_period_term = number_format($amount, 2, '.', '').' '.strtolower(sprintf(_nx('for %1$s %2$s', 'for %1$s %3$s', $period, 's2member-front', 's2member'), $period, $cycle_singular, $cycle_plural));
 
 			return $amount_period_term; // Return converted value.

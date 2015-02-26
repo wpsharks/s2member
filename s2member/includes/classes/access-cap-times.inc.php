@@ -121,7 +121,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 			foreach($caps as &$_caps_prev_now)
 			{
 				foreach(array_intersect(array_keys($_caps_prev_now), array_keys($role_objects)) as $_role)
-					if($_caps_prev_now[$_role]) // If the cap (i.e. the role) is enabled; merge its caps.
+					if($_caps_prev_now[$_role]) // If the cap (i.e., the role) is enabled; merge its caps.
 						$_caps_prev_now = array_merge($_caps_prev_now, $role_objects[$_role]->capabilities);
 
 				$_s2_caps_prev_now = array();
@@ -199,11 +199,11 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		 * @param array   $access_caps Optional. If not passed, this returns all times for all caps.
 		 *    If passed, please pass an array of specific access capabilities to get the times for.
 		 *    If removal times are desired, you should add a `-` prefix.
-		 *    e.g. `array('ccap_music','level2','-ccap_video')`
+		 *    e.g., `array('ccap_music','level2','-ccap_video')`
 		 *
 		 * @return array An array of all access capability times.
 		 *    Keys are UTC timestamps (w/ microtime precision), values are the capabilities (including `-` prefixed removals).
-		 *    e.g. `array('1234567890.0001' => 'ccap_music', '1234567890.0002' => 'level2', '1234567890.0003' => '-ccap_video')`
+		 *    e.g., `array('1234567890.0001' => 'ccap_music', '1234567890.0002' => 'level2', '1234567890.0003' => '-ccap_video')`
 		 */
 		public static function get_access_cap_times($user_id, $access_caps = array())
 		{

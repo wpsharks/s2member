@@ -400,7 +400,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @since 3.5
 				*
 				* @param string $term Expects one of `D|W|M|Y`.
-				* @return bool|str A full singular description of the term *( i.e. `Day|Week|Month|Year` )*, else false.
+				* @return bool|str A full singular description of the term *( i.e., `Day|Week|Month|Year` )*, else false.
 				*/
 				public static function paypal_pro_term($term = FALSE)
 					{
@@ -422,7 +422,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				*
 				* @param string $term Expects one of `D|W|M|Y`.
 				* @param string $period Expects a numeric value.
-				* @return bool|str A full singular description of the term *( i.e. `DAY|WEEK|BIWK|MONT|QTER|SMYR|YEAR` )*, else false.
+				* @return bool|str A full singular description of the term *( i.e., `DAY|WEEK|BIWK|MONT|QTER|SMYR|YEAR` )*, else false.
 				*
 				* @note Payflow unfortunately does NOT support daily and/or bi-monthly billing.
 				*/
@@ -454,7 +454,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				* @since 3.5
 				*
 				* @param string $term Expects one of `Day|Week|Month|Year`.
-				* @return bool|str A term code *( i.e. `D|W|M|Y` )*, else false.
+				* @return bool|str A term code *( i.e., `D|W|M|Y` )*, else false.
 				*/
 				public static function paypal_std_term($term = FALSE)
 					{

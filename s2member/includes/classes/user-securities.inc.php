@@ -38,12 +38,24 @@ if(!class_exists('c_ws_plugin__s2member_user_securities'))
 		 * @since 3.5
 		 *
 		 * @attaches-to ``add_action('init');``
-		 *
-		 * @return null
 		 */
 		public static function initialize() // Initializes the Filter for `user_has_cap`.
 		{
 			add_filter('user_has_cap', 'c_ws_plugin__s2member_user_securities::user_capabilities', 10, 3);
+		}
+
+		/**
+		 * Deals w/ bbPress-specific issues on a Multisite Network.
+		 *
+		 * @package s2Member\User_Securities
+		 * @since 150224
+		 *
+		 * @attaches-to ``add_action('after_setup_theme');``
+		 */
+		public static function set_current_user()
+		{
+			if(is_multisite() && is_user_logged_in() && !current_user_can('read'))
+				remove_action('bbp_setup_current_user', 'bbp_set_current_user_default_role');
 		}
 
 		/**
@@ -55,7 +67,7 @@ if(!class_exists('c_ws_plugin__s2member_user_securities'))
 		 * @attaches-to ``add_filter('user_has_cap');``
 		 *
 		 * @param array $capabilities Expects an array of Capabilities passed in by the Filter.
-		 *   This array contains all of the Capabilities that the User has *( i.e. ``$user->allcaps`` )*.
+		 *   This array contains all of the Capabilities that the User has *( i.e., ``$user->allcaps`` )*.
 		 * @param array $caps_map An array of Capabilities mapped out by the ``map_meta_cap`` function.
 		 * @param array $args Array of arguments originally passed through the ``has_cap()`` function.
 		 *   However, WordPress modifies this array of arguments in the following way.
@@ -116,7 +128,7 @@ if(!class_exists('c_ws_plugin__s2member_user_securities'))
 		 *
 		 * Demo accounts *( where the Username MUST be 'demo' )*, will NOT be allowed to change their Password.
 		 * Any other restrictions you need to impose must be done through custom programming, using s2Member's Conditionals.
-		 *   See `s2Member -› API Scripting`.
+		 *   See `s2Member ⥱ API Scripting`.
 		 *
 		 * @package s2Member\User_Securities
 		 * @since 3.5

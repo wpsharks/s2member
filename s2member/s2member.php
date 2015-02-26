@@ -19,8 +19,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 150203
-Stable tag: 150203
+Version: 150225
+Stable tag: 150225
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -53,10 +53,11 @@ Plugin Name: s2Member Framework
 Forum URI: http://www.s2member.com/forums/
 Plugin URI: http://www.s2member.com/framework/
 Privacy URI: http://www.s2member.com/privacy/
+Changelog URI: http://www.s2member.com/changelog/
 Video Tutorials: http://www.s2member.com/videos/
-Pro Module / Home Page: http://www.s2member.com/
-Pro Module / Prices: http://www.s2member.com/prices/
-Pro Module / Auto-Update URL: http://www.s2member.com/
+Pro Add-on / Home Page: http://www.s2member.com/
+Pro Add-on / Prices: http://www.s2member.com/prices/
+Pro Add-on / Auto-Update URL: http://www.s2member.com/
 PayPal Pro Integration: http://www.s2member.com/videos/ED70D90C6749DA3D/
 Professional Installation URI: http://www.s2member.com/professional-installation/
 
@@ -75,7 +76,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  * @var string
  */
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
-	define('WS_PLUGIN__S2MEMBER_VERSION', '150203' /* !#distro-version#! */);
+	define('WS_PLUGIN__S2MEMBER_VERSION', '150225' /* !#distro-version#! */);
 /**
  * Minimum PHP version required to run s2Member.
  *
@@ -105,7 +106,7 @@ if(!defined('WS_PLUGIN__S2MEMBER_MIN_WP_VERSION'))
  * @var string
  */
 if(!defined('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION'))
-	define('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION', '150203' /* !#distro-version#! */);
+	define('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION', '150225' /* !#distro-version#! */);
 /*
 Several compatibility checks.
 If all pass, load the s2Member plugin.

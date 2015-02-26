@@ -74,7 +74,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 						$paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback` )').'.';
 					else $paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment` ) - or - `recurring_payment_profile_cancel` w/ `initial_payment_status` ( `failed` )').'.';
 
-					if(empty($_REQUEST['s2member_paypal_proxy'])) // Only on true PayPal IPNs; e.g. we can bypass this on proxied IPNs.
+					if(empty($_REQUEST['s2member_paypal_proxy'])) // Only on true PayPal IPNs; e.g., we can bypass this on proxied IPNs.
 					{
 						$paypal['s2member_log'][] = 'Sleeping for 10 seconds. Waiting for a possible ( `subscr_signup|subscr_modify|recurring_payment_profile_created` ).';
 						sleep(10); // Sleep here for a moment. PayPal sometimes sends a subscr_eot before the subscr_signup, subscr_modify.
@@ -145,7 +145,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										delete_user_option($user_id, 's2member_file_download_access_log');
 
 										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
-										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$paypal['subscr_gateway'].' -› '.$paypal['subscr_id']);
+										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$paypal['subscr_gateway'].' ⥱ '.$paypal['subscr_id']);
 
 										$paypal['s2member_log'][] = 'Member Level/Capabilities demoted to: '.ucwords(preg_replace('/_/', ' ', $demotion_role)).'.';
 
@@ -287,7 +287,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 								$auto_eot_time = c_ws_plugin__s2member_utils_time::auto_eot_time($user_id, $paypal['period1'], $paypal['period3'], '', time());
 								/* We assume the last payment was today, because this is how newer PayPal accounts function with respect to EOT handling.
-								Newer PayPal accounts ( i.e. Subscription IDs starting with `I-`, will have their EOT triggered upon the last payment. */
+								Newer PayPal accounts ( i.e., Subscription IDs starting with `I-`, will have their EOT triggered upon the last payment. */
 								update_user_option($user_id, 's2member_auto_eot_time', $auto_eot_time); // s2Member will follow-up on this later.
 
 								$paypal['s2member_log'][] = 'Auto-EOT Time for this account (delayed), set to: '.date('D M j, Y g:i a T', $auto_eot_time);
