@@ -76,8 +76,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 					if(empty($_REQUEST['s2member_paypal_proxy'])) // Only on true PayPal IPNs; e.g., we can bypass this on proxied IPNs.
 					{
-						$paypal['s2member_log'][] = 'Sleeping for 10 seconds. Waiting for a possible ( `subscr_signup|subscr_modify|recurring_payment_profile_created` ).';
-						sleep(10); // Sleep here for a moment. PayPal sometimes sends a subscr_eot before the subscr_signup, subscr_modify.
+						$paypal['s2member_log'][] = 'Sleeping for 15 seconds. Waiting for a possible ( `subscr_signup|subscr_modify|recurring_payment_profile_created` ).';
+						sleep(15); // Sleep here for a moment. PayPal sometimes sends a subscr_eot before the subscr_signup, subscr_modify.
 						$paypal['s2member_log'][] = 'Awake. It\'s '.date('D M j, Y g:i:s a T').'. s2Member `txn_type` identified as '.$identified_as.'.';
 					}
 					$paypal['ip'] = (preg_match('/ip address/i', $paypal['option_name2']) && $paypal['option_selection2']) ? $paypal['option_selection2'] : '';
