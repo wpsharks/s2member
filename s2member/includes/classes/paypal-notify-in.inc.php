@@ -78,7 +78,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 
 					if(!empty($paypal['txn_type']) && $paypal['txn_type'] === 'merch_pmt')
 						// This is mostly irrelevant, but it helps to keep the logs cleaner.
-						sleep(5); // Wait for Pro-Form procesing to complete.
+						sleep(15); // Wait for Pro-Form procesing to complete.
 
 					if(empty($paypal['custom']) && !empty($paypal['recurring_payment_id'])) // Recurring Profile ID.
 						$paypal['custom'] = c_ws_plugin__s2member_utils_users::get_user_custom_with($paypal['recurring_payment_id']);
