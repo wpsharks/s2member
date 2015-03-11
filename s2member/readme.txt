@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 150225
-Stable tag: 150225
+Version: 150311
+Stable tag: 150311
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -169,11 +169,20 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v150225 =
+= v150311 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v150311 =
+
+- (s2Member/s2Member) **Bug Fix:** The list of users in the WordPress Dashboard was going blank in a particular scenario where a search was attempted in concert with a sortable s2Member column. Fixed in this release. Props to @bridgeport for finding this. See also [this GitHub issue](https://github.com/websharks/s2member/issues/496#issuecomment-76821470) if you'd like technical details.
+- (s2Member Pro) **`[s2Member-List /]` Bug Fix:** This release resolves an issue with pagination in the `[s2Member-List /]` shortcode after recent changes in the `WP_User_Query` class. See [this GitHub issue](https://github.com/websharks/s2member/issues/493) if you'd like additional details.
+- (s2Member Pro) **Remote Operations API (Bug Fix):** If a remote API call was made to find a user by `user_login`, and that username was all numeric, the `WP_User` class treated it like a user ID instead of as an actual username. Resolved in this release by calling `new WP_User(0, [user login])` as the second argument to the constructor. Thereby forcing `WP_User` to consider it a username. See also [this GitHub issue](https://github.com/websharks/s2member/issues/498) if you'd like technical details.
+- (s2Member Pro) **Stripe Bug Fix:** Stripe Pro-Forms for Specific Post/Page Access should not disable the email address field for logged-in users. Resolved in this release. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/500) if you'd like technical details.
+- (s2Member Pro) **Stripe Pro-Forms:** This release corrects a bug first introduced in the last release that prevented custom templates for Stripe Pro-Forms from working as intended. Please see [this GitHub issue](https://github.com/websharks/s2member/issues/510) if you'd like additional details.
+- (s2Member Pro) **Bug Fix for Gift/Redemption Codes:** This release of s2Member corrects a bug that impacted the generation of Gift/Redemption Codes whenever they were sold with Specific Post/Page Access. See also [this GitHub issue](https://github.com/websharks/s2member/issues/512) if you'd like additional details.
 
 = v150225 =
 
