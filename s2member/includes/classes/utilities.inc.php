@@ -151,10 +151,42 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 		{
 			if($v && file_exists(($template = dirname(dirname(__FILE__)).'/templates/badges/s-badge.php')))
 			{
+				switch((integer)$v) // Width/height based on variation.
+				{
+					case 1: // Variation number 1.
+
+						$width_height_attrs  = 'width="200" height="55"';
+						$width_height_styles = 'width:200px; height:55px;';
+
+						break; // Break switch loop.
+
+					case 2: // Variation number 2.
+
+						$width_height_attrs  = 'width="180" height="58"';
+						$width_height_styles = 'width:180px; height:58px;';
+
+						break; // Break switch loop.
+
+					case 3: // Variation number 3.
+
+						$width_height_attrs  = 'width="80" height="15"';
+						$width_height_styles = 'width:80px; height:15px;';
+
+						break; // Break switch loop.
+
+					default: // Default case handler.
+
+						$width_height_attrs = $width_height_styles = '';
+
+						break; // Break switch loop.
+				}
 				$badge = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($template)));
-				$badge = preg_replace('/%%site_url%%/i', urlencode(home_url()), preg_replace('/%%v%%/i', (string)$v, $badge));
-				$badge = preg_replace('/%%no_cache%%/i', (($no_cache) ? '&amp;no_cache='.urlencode(mt_rand(0, PHP_INT_MAX)) : ''), $badge);
-				$badge = preg_replace('/%%display_on_failure%%/i', (($display_on_failure) ? '&amp;display_on_failure=1' : ''), $badge);
+
+				$badge = preg_replace('/%%v%%/i', (string)(integer)$v, $badge);
+				$badge = preg_replace('/%%site_url%%/i', urlencode(home_url()), $badge);
+				$badge = preg_replace('/%%no_cache%%/i', $no_cache ? '&amp;no_cache='.urlencode(mt_rand()) : '', $badge);
+				$badge = preg_replace('/%%display_on_failure%%/i', $display_on_failure ? '&amp;display_on_failure=1' : '', $badge);
+				$badge = preg_replace(array('/%%width_height_attrs%%/i', '/%%width_height_styles%%/i'), array($width_height_attrs, $width_height_styles), $badge);
 			}
 			return !empty($badge) ? $badge : ''; // Return Security Badge.
 		}
