@@ -830,10 +830,9 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 					if(isset($user_fields[$option_name]))
 						return $user_fields[$option_name];
 
-					if(stripos($option_name, 's2_') === 0)
-						if(($real_name = preg_replace('/^s2_/i', '', $option_name)))
-							if(isset($user_fields[$real_name]))
-								return $user_fields[$real_name];
+					if(stripos($option_name, 's2_') === 0 && ($real_option_name = preg_replace('/^s2_/i', '', $option_name)))
+						if(isset($user_fields[$real_option_name]))
+							return $user_fields[$real_option_name];
 
 					return $what_wp_says;
 				}
