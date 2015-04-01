@@ -53,7 +53,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_integrations"))
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-bbpress-section">'."\n";
 				echo '<h3>bbPress Plugin Integration (easy peasy)</h3>'."\n";
 				echo '<input type="button" value="Update Roles/Capabilities" class="ws-menu-page-right ws-plugin--s2member-update-roles-button" style="min-width:175px;" />'."\n";
-				echo '<p>The plugin version of <a href="http://www.s2member.com/bbpress-plugin" target="_blank" rel="external">bbPress 2.0+</a> integrates seamlessly with WordPress. If bbPress was already installed when you activated s2Member, your s2Member Roles/Capabilities are already configured to work in harmony with bbPress. If you didn\'t, you can simply click the "Update Roles/Capabilities" button here. That\'s all it takes. Once your Roles/Capbilities are updated, s2Member and bbPress are fully integrated with each other.</p>'."\n";
+				echo '<p>The plugin version of <a href="http://s2member.com/r/bbpress/" target="_blank" rel="external">bbPress 2.0+</a> integrates seamlessly with WordPress. If bbPress was already installed when you activated s2Member, your s2Member Roles/Capabilities are already configured to work in harmony with bbPress. If you didn\'t, you can simply click the "Update Roles/Capabilities" button here. That\'s all it takes. Once your Roles/Capbilities are updated, s2Member and bbPress are fully integrated with each other.</p>'."\n";
 				echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/roles-caps/#s2-roles-caps" target="_blank" rel="external">s2Member Roles/Capabilities (Including <strong>bbPress</strong> Support)</a>.</p>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";

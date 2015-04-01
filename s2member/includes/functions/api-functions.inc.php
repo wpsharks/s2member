@@ -102,7 +102,7 @@ if(!function_exists("is_user_not_logged_in"))
 *
 * WordPress Subscribers are at Membership Level 0. If you're allowing Open Registration, Subscribers will be at Level 0 *(a Free Subscriber)*.
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
-* All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
+* All of their other {@link http://s2member.com/r/wordpress-rolescaps/ Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
 * @since 110524RC
@@ -187,7 +187,7 @@ if(!function_exists("user_is"))
 *
 * WordPress Subscribers are at Membership Level 0. If you're allowing Open Registration, Subscribers will be at Level 0 *(a Free Subscriber)*.
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
-* All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
+* All of their other {@link http://s2member.com/r/wordpress-rolescaps/ Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
 * @since 110524RC
@@ -265,7 +265,7 @@ if(!function_exists("user_is_not"))
 *
 * WordPress Subscribers are at Membership Level 0. If you're allowing Open Registration, Subscribers will be at Level 0 *(a Free Subscriber)*.
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
-* All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
+* All of their other {@link http://s2member.com/r/wordpress-rolescaps/ Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
 * @since 3.5
@@ -349,7 +349,7 @@ if(!function_exists("current_user_is"))
 *
 * WordPress Subscribers are at Membership Level 0. If you're allowing Open Registration, Subscribers will be at Level 0 *(a Free Subscriber)*.
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
-* All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
+* All of their other {@link http://s2member.com/r/wordpress-rolescaps/ Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
 * @since 3.5
@@ -431,7 +431,7 @@ if(!function_exists("current_user_is_not"))
 *
 * WordPress Subscribers are at Membership Level 0. If you're allowing Open Registration, Subscribers will be at Level 0 *(a Free Subscriber)*.
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
-* All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
+* All of their other {@link http://s2member.com/r/wordpress-rolescaps/ Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
 * @since 3.5
@@ -510,7 +510,7 @@ if(!function_exists("current_user_is_for_blog"))
 *
 * WordPress Subscribers are at Membership Level 0. If you're allowing Open Registration, Subscribers will be at Level 0 *(a Free Subscriber)*.
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
-* All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
+* All of their other {@link http://s2member.com/r/wordpress-rolescaps/ Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
 * @since 3.5
@@ -579,7 +579,7 @@ if(!function_exists("current_user_is_not_for_blog"))
 *
 * WordPress Subscribers are at Membership Level 0. If you're allowing Open Registration, Subscribers will be at Level 0 *(a Free Subscriber)*.
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
-* All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
+* All of their other {@link http://s2member.com/r/wordpress-rolescaps/ Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
 * @since 3.5
@@ -648,7 +648,7 @@ if(!function_exists("user_cannot"))
 *
 * WordPress Subscribers are at Membership Level 0. If you're allowing Open Registration, Subscribers will be at Level 0 *(a Free Subscriber)*.
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
-* All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
+* All of their other {@link http://s2member.com/r/wordpress-rolescaps/ Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
 * @since 3.5
@@ -717,7 +717,7 @@ if(!function_exists("current_user_cannot"))
 *
 * WordPress Subscribers are at Membership Level 0. If you're allowing Open Registration, Subscribers will be at Level 0 *(a Free Subscriber)*.
 * WordPress Administrators, Editors, Authors, and Contributors have Level 4 access, with respect to s2Member.
-* All of their other {@link http://codex.wordpress.org/Roles_and_Capabilities Roles/Capabilities} are left untouched.
+* All of their other {@link http://s2member.com/r/wordpress-rolescaps/ Roles/Capabilities} are left untouched.
 *
 * @package s2Member\API_Functions
 * @since 3.5

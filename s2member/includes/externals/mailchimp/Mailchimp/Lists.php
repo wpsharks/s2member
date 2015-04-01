@@ -395,7 +395,7 @@ data or specific members of a list? If so, checkout the <a href="/export/1.0/lis
      *     - choices array optional kind of - an array of strings to use as the choices for radio and dropdown type fields
      *     - dateformat string optional only valid for birthday and date fields. For birthday type, must be "MM/DD" (default) or "DD/MM". For date type, must be "MM/DD/YYYY" (default) or "DD/MM/YYYY". Any other values will be converted to the default.
      *     - phoneformat string optional "US" is the default - any other value will cause them to be unformatted (international)
-     *     - defaultcountry string optional the <a href="http://www.iso.org/iso/english_country_names_and_code_elements" target="_blank">ISO 3166 2 digit character code</a> for the default country. Defaults to "US". Anything unrecognized will be converted to the default.
+     *     - defaultcountry string optional the <a href="http://s2member.com/r/iso-3166/" target="_blank">ISO 3166 2 digit character code</a> for the default country. Defaults to "US". Anything unrecognized will be converted to the default.
      * @return associative_array the full data for the new merge var, just like merge-vars returns
      *     - name string Name/description of the merge field
      *     - req bool Denotes whether the field is required (true) or not (false)
