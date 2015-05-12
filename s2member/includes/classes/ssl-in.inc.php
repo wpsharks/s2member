@@ -146,7 +146,7 @@ if(!class_exists('c_ws_plugin__s2member_ssl_in'))
 						$ssl_entire_tags     = array_unique(array_map('strtolower', apply_filters('_ws_plugin__s2member_force_ssl_buffer_entire_tags', array('script', 'style', 'iframe', 'object', 'embed', 'video'), get_defined_vars())));
 						$non_ssl_entire_tags = array_unique(array_map('strtolower', apply_filters('_ws_plugin__s2member_force_non_ssl_buffer_entire_tags', array(), get_defined_vars())));
 
-						$ssl_attr_only_tags     = array_unique(array_diff(array_map('strtolower', apply_filters('_ws_plugin__s2member_force_ssl_buffer_attr_only_tags', array('link', 'img', 'input'), get_defined_vars())), $ssl_entire_tags));
+						$ssl_attr_only_tags     = array_unique(array_diff(array_map('strtolower', apply_filters('_ws_plugin__s2member_force_ssl_buffer_attr_only_tags', array('link', 'img', 'form', 'input'), get_defined_vars())), $ssl_entire_tags));
 						$non_ssl_attr_only_tags = array_unique(array_diff(array_map('strtolower', apply_filters('_ws_plugin__s2member_force_non_ssl_buffer_attr_only_tags', array('a'), get_defined_vars())), $non_ssl_entire_tags));
 
 						$buffer = ($ssl_entire_tags) ? preg_replace_callback('/\<('.implode('|', c_ws_plugin__s2member_utils_strings::preg_quote_deep($ssl_entire_tags, '/')).')(?![a-z_0-9\-])[^\>]*?\>.*?\<\/\\1\>/is', '_ws_plugin__s2member_force_ssl_buffer_callback', $buffer) : $buffer;
