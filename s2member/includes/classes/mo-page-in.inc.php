@@ -110,6 +110,16 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 							$mop_url = add_query_arg(urlencode_deep($vars), $mop_url);
 							$mop_url = c_ws_plugin__s2member_utils_urls::add_s2member_sig($mop_url);
 						}
+					if(!empty($_GET) && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page_ga_vars_enable"])
+						{
+							$ga_vars = array(); // Initialize.
+
+							foreach(stripslashes_deep($_GET) as $_key => $_value)
+									if(strpos($_key, 'utc_') === 0) $ga_vars[$_key] = $_value;
+							unset($_key, $_value); // Housekeeping.
+
+							$mop_url = add_query_arg(urlencode_deep($ga_vars), $mop_url);
+						}
 					wp_redirect($mop_url, $status); // NOTE: we do not exit here (on purpose).
 
 					do_action("ws_plugin__s2member_after_wp_redirect_w_mop_vars", get_defined_vars());
