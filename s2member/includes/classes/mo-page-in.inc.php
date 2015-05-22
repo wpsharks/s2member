@@ -115,7 +115,7 @@ if(!class_exists("c_ws_plugin__s2member_mo_page_in"))
 							$ga_vars = array(); // Initialize.
 
 							foreach(stripslashes_deep($_GET) as $_key => $_value)
-									if(strpos($_key, 'utc_') === 0) $ga_vars[$_key] = $_value;
+									if(strpos($_key, 'utm_') === 0) $ga_vars[$_key] = $_value;
 							unset($_key, $_value); // Housekeeping.
 
 							$mop_url = add_query_arg(urlencode_deep($ga_vars), $mop_url);
