@@ -82,16 +82,13 @@ if (!class_exists ("c_ws_plugin__s2member_login_redirects_r"))
 
 						if (!apply_filters("ws_plugin__s2member_allow_other_login_redirect_filters", false, get_defined_vars ()))
 							{
-								remove_all_filters /* Removes all `login_redirect` Filters. */("login_redirect");
+								remove_all_filters("login_redirect");
 								add_filter ("login_redirect", "c_ws_plugin__s2member_login_redirects_r::_empty_login_redirect_filter");
 								add_filter ("login_redirect", "c_ws_plugin__s2member_login_redirects_r::_http_login_redirect_filter");
 
 								do_action("ws_plugin__s2member_during_remove_login_redirect_filters", get_defined_vars ());
 							}
 						do_action("ws_plugin__s2member_after_remove_login_redirect_filters", get_defined_vars ());
-
-						return /* Return for uniformity. */;
 					}
 			}
 	}
-?>
