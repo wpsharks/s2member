@@ -197,7 +197,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 								$args["s2member"] = WS_PLUGIN__S2MEMBER_VERSION; // Indicates this is an s2Member connection.
 
 								$args["httpversion"] = (!isset($args["httpversion"])) ? "1.1" : $args["httpversion"];
-								$args["user-agent"]  = !isset($args["user-agent"]) ? "s2Member v".WS_PLUGIN__S2MEMBER_VERSION : $args["user-agent"];
+								$args["user-agent"]  = !isset($args["user-agent"]) ? "s2Member v".WS_PLUGIN__S2MEMBER_VERSION."; ".home_url() : $args["user-agent"];
 
 								if(!isset($args["sslverify"]) && c_ws_plugin__s2member_utils_conds::is_localhost())
 									$args["sslverify"] = FALSE; // Force this off on localhost installs.
