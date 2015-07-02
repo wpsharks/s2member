@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 150311
-Stable tag: 150311
+Version: 150702
+Stable tag: 150702
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -17,7 +17,7 @@ Authorize.Net® Compatible: yes w/s2Member® Pro
 Google® Checkout Compatible: yes w/s2Member® Pro
 ClickBank® Compatible: yes w/s2Member® Pro
 
-Tested up to: 4.2-alpha
+Tested up to: 4.3-alpha
 Requires at least: 3.3
 
 Requires PHP: 5.2+
@@ -169,11 +169,24 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v150311 =
+= v150702 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v150702 =
+
+- (s2Member/s2Member Pro) **PayPal IPN Compat.** This release addresses a problem with IPN connection failures that result in a 500 Internal Server Error on the PayPal side; occurring whenever s2Member attempts to verify IPN data. Please see: [this GitHub issue](https://github.com/websharks/s2member/issues/610) if you'd like additional details.
+- (s2Member Pro) **Stripe Bug Fix:** This release corrects a bug in Stripe Pro-Form Checkout Options, where a Free Registration option could cause other paid Checkout Options to result in a checkout error under the right conditions. See [this GitHub issue](https://github.com/websharks/s2member/issues/569) for further details.
+- (s2Member/s2Member) **Google Analytics Compat.** This release automatically preserves `utc_` variables that are used by Google Analytics whenever a Membership Options Page redirection occurs. i.e., if a visitor comes to the site with `utc_` variables and is redirected to the Membership Options Page, because the content they were trying to access is protected; the `utc_` variables are preserved during this redirection, and delivered as part of the Membership Options Page redirect.
+- (s2Member Pro) **Authorize.Net Endpoint Filters:** This release adds two new WordPress Filters (i.e., Hooks) that can be used by developers in certain rare cases. Hook names are `ws_plugin__s2member_pro_authnet_aim_endpoint_url` and `ws_plugin__s2member_pro_authnet_arb_endpoint_url `. See [this GitHub issue](https://github.com/websharks/s2member/issues/575#issuecomment-104077606) if you'd like additional details and a quick example of use.
+- (s2Member Pro) **Authorize.Net AIM Compat.:** This release addresses a compatibility issue that came to light recently, which was actually attributed to a bug in s2Member Pro that has been sliding through unnoticed until now. The format for an expiration date sent to the Authorize.Net AIM API should be `MM-YYYY`. The format for ARB API calls is `YYYY-MM`. s2Member Pro was sending `YYYY-MM` to both APIs. Fixed in this release. Props to @raamdev for investigating this. See also [this GitHub issue](https://github.com/websharks/s2member/issues/576) if you'd like additional details.
+- (s2Member Pro) **`[s2Member-List /]` Bug:** This release corrects an issue in the `[s2Member-List /]` shortcode that was preventing the `display_name` DB column from being searchable. This release also adds the `display_name` to the list of default `search_columns=""` that are considered by the `[s2Member-List /]` shortcode. Props to @patdumond for researching this. See [this GitHub issue](https://github.com/websharks/s2member/issues/578) for further details.
+- (s2Member/s2Member Pro) **Bug Fix:** This release corrects an issue where s2Member would fail to subscribe customers to configured mailing list IDs whenever an existing customer is upgrading and you have the Double Opt-In Checkbox turned off entirely. Fixed. See [this GitHub issue](https://github.com/websharks/s2member/issues/581) if you would like additional details.
+- (s2Member Pro) **Stripe Bug Fix:** This release corrects a bug in s2Member's Stripe Pro-Forms, related to having multiple Checkout Options. The bug resulted in a missing error message whenever one of the Checkout Options was submitted incorrectly, and also resulted in the default Checkout Option being magically selected instead of the one that a customer was working with. Props to @patdumond and @bryanthankins. See: [this GitHub issue](https://github.com/websharks/s2member/issues/586) if you'd like additional details.
+- (s2Member/s2Member Pro) **Bug Fix:** This release fixes an issue where the s2Drip shortcode was requiring PHP 5.3+; this fix allows the shortcode to work properly with PHP 5.2+.
+- (s2Member Pro) **Compat.** A call to `WP_Widget` was updated to support WordPress v4.3+. See [this GitHub issue](https://github.com/websharks/s2member/issues/607) if you'd like additional details.
 
 = v150311 =
 
