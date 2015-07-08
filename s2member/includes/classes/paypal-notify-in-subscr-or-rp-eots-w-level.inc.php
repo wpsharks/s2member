@@ -94,6 +94,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 						if((!$is_refund_or_reversal && !$is_delayed_eot && !get_user_option('s2member_auto_eot_time', $user_id))
 						   || ($is_refund_or_reversal && $is_partial_refund && $GLOBALS['WS_PLUGIN__']['s2member']['o']['triggers_immediate_eot'] === 'refunds,partial_refunds,reversals')
+						   || ($is_refund_or_reversal && !$is_partial_refund && $GLOBALS['WS_PLUGIN__']['s2member']['o']['triggers_immediate_eot'] === 'refunds,partial_refunds,reversals')
 						   || ($is_refund_or_reversal && !$is_partial_refund && $GLOBALS['WS_PLUGIN__']['s2member']['o']['triggers_immediate_eot'] === 'refunds,reversals')
 						   || ($is_refund && !$is_partial_refund && $GLOBALS['WS_PLUGIN__']['s2member']['o']['triggers_immediate_eot'] === 'refunds')
 						   || ($is_reversal && $GLOBALS['WS_PLUGIN__']['s2member']['o']['triggers_immediate_eot'] === 'reversals')
