@@ -457,7 +457,7 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			 * The current User's Registration Time.
 			 *
 			 * The Registration Time, is the time at which the Username was created for the account, that's it.
-			 * There's nothing special about this. This simply returns a {@link http://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
+			 * There's nothing special about this. This simply returns a {@link https://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
 			 *
 			 * This will be equal to `0` if NOT logged-in.
 			 *

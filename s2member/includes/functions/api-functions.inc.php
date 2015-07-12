@@ -2131,7 +2131,7 @@ if(!function_exists("s2member_total_unique_downloads_of"))
  * Obtains the Last Login Time for the current User, and/or for a particular User.
  *
  * The Last Login Time, is the time at which the Username last logged into the site.
- * There's nothing special about this. This simply returns a {@link http://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
+ * There's nothing special about this. This simply returns a {@link https://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
  *
  * ———— Code Sample Using Function Parameters ————
  * ```
@@ -2152,7 +2152,7 @@ if(!function_exists("s2member_total_unique_downloads_of"))
  * @since 130210
  *
  * @param int $user_id Optional. Defaults to the current User's ID.
- * @return int A {@link http://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
+ * @return int A {@link https://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
  * 	The Last Login Time, is the time at which the Username last logged into the site.
  *    If the User has never logged into the site (or s2Member has never recorded them logging in), this will return `0`.
  *
@@ -2169,7 +2169,7 @@ if(!function_exists("s2member_last_login_time"))
 * Obtains the Registration Time for the current User, and/or for a particular User.
 *
 * The Registration Time, is the time at which the Username was created for the account, that's it.
-* There's nothing special about this. This simply returns a {@link http://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
+* There's nothing special about this. This simply returns a {@link https://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
 *
 * ———— Code Sample Using Function Parameters ————
 * ```
@@ -2190,7 +2190,7 @@ if(!function_exists("s2member_last_login_time"))
 * @since 3.5
 *
 * @param int $user_id Optional. Defaults to the current User's ID.
-* @return int A {@link http://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
+* @return int A {@link https://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
 * 	The Registration Time, is the time at which the Username was created for the account, that's it.
 *
 * @see s2Member\API_Functions\get_user_field()
@@ -2234,7 +2234,7 @@ if(!function_exists("s2member_registration_time"))
 *
 * @param string $level Optional. Defaults to the first/initial Paid Registration Time, regardless of Level#.
 * @param int $user_id Optional. Defaults to the current User's ID.
-* @return int A {@link http://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
+* @return int A {@link https://en.wikipedia.org/wiki/Unix_time Unix Timestamp}.
 *
 * @see s2Member\API_Functions\get_user_field()
 */

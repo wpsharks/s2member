@@ -78,7 +78,7 @@ class Mailchimp_Campaigns {
      *         - schedule_hour string optional an hour between 0 and 24 - default to 4 (4am <em>local time</em>) - applies to all schedule types
      *         - schedule_weekday string optional for "weekly" only, a number specifying the day of the week to send: 0 (Sunday) - 6 (Saturday) - defaults to 1 (Monday)
      *         - schedule_monthday string optional for "monthly" only, a number specifying the day of the month to send (1 - 28) or "last" for the last day of a given month. Defaults to the 1st day of the month
-     *         - days associative_array optional used for "daily" schedules only, an array of the <a href="http://en.wikipedia.org/wiki/ISO-8601#Week_dates" target="_blank">ISO-8601 weekday numbers</a> to send on
+     *         - days associative_array optional used for "daily" schedules only, an array of the <a href="https://en.wikipedia.org/wiki/ISO-8601#Week_dates" target="_blank">ISO-8601 weekday numbers</a> to send on
      *             - 1 bool optional Monday, defaults to true
      *             - 2 bool optional Tuesday, defaults to true
      *             - 3 bool optional Wednesday, defaults to true
@@ -108,7 +108,7 @@ class Mailchimp_Campaigns {
      *         - campaign_url string optional sort of, required for "campaignClicko"
      *         - schedule_hour int The hour of the day - 24 hour format in GMT - the autoresponder should be triggered, ignored for "hourly"
      *         - use_import_time boolean whether or not imported subscribers (ie, <em>any</em> non-double optin subscribers) will receive
-     *         - days associative_array optional used for "daily" schedules only, an array of the <a href="http://en.wikipedia.org/wiki/ISO-8601#Week_dates" target="_blank">ISO-8601 weekday numbers</a> to send on<
+     *         - days associative_array optional used for "daily" schedules only, an array of the <a href="https://en.wikipedia.org/wiki/ISO-8601#Week_dates" target="_blank">ISO-8601 weekday numbers</a> to send on<
      *             - 1 bool optional Monday, defaults to true
      *             - 2 bool optional Tuesday, defaults to true
      *             - 3 bool optional Wednesday, defaults to true
@@ -374,5 +374,3 @@ Caveats:<br/><ul class='bullets'>
     }
 
 }
-
-

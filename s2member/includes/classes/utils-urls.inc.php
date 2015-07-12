@@ -77,7 +77,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @param int|string $status A numeric redirection status code.
 				* @return int|str A numeric status redirection code, possibly modified to a value of `302`.
 				*
-				* @see http://en.wikipedia.org/wiki/Web_browser_engine
+				* @see https://en.wikipedia.org/wiki/Web_browser_engine
 				*/
 				public static function redirect_browsers_using_302_status($status = FALSE)
 					{

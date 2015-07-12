@@ -2,7 +2,7 @@
 /**
 * Deprecated functions from previous versions of s2Member.
 *
-* See: {@link http://en.wikipedia.org/wiki/Deprecation}
+* See: {@link https://en.wikipedia.org/wiki/Deprecation}
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
