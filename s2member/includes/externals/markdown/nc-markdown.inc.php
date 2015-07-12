@@ -1471,4 +1471,3 @@ class NC_Markdown_Parser {
 	}
 
 }
-?>

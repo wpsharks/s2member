@@ -10,4 +10,4 @@
     Some content for Free Subscribers.
 <?php } else if(S2MEMBER_CURRENT_USER_ACCESS_LEVEL === -1){ ?>
     Some public content.
-<?php } ?> 
+<?php } ?>

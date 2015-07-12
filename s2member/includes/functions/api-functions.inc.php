@@ -2732,4 +2732,3 @@ if(!function_exists("s2member_login_ips_for"))
 				return (is_array($ips)) ? $ips : array();
 			}
 	}
-?>

@@ -2451,4 +2451,3 @@ class Mailchimp_o {
     }
 
 }
-?>

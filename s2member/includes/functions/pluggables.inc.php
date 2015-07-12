@@ -41,4 +41,3 @@ if (!function_exists ("wp_new_user_notification"))
 			}
 		$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["pluggables"]["wp_new_user_notification"] = true;
 	}
-?>

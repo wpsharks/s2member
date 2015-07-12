@@ -290,5 +290,3 @@ class AWeberAPI extends AWeberAPIBase {
         return $this->adapter->getAccessToken();
     }
 }
-
-?>
