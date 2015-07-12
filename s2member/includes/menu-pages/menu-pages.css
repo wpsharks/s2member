@@ -526,6 +526,10 @@ div.ws-menu-page div.ws-menu-page-toolbox
 	z-index      : 1;
 	position     : relative;
 	margin-right : 25px;
+	<?php if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()): ?>
+		font-size    : 90%;
+	  margin       : -10px 25px 0 0;
+	<?php endif; ?>
 }
 div.ws-menu-page div.ws-menu-page-toolbox > .links
 {
