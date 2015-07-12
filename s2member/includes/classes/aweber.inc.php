@@ -178,6 +178,9 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 								$_aw['subscriber_props']['ip_address']  = substr($_aw['subscriber_props']['ip_address'], 0, 60);
 								$_aw['subscriber_props']['ad_tracking'] = substr($_aw['subscriber_props']['ad_tracking'], 0, 20);
 
+								if(!filter_var($_aw['subscriber_props']['ip_address'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))
+									$_aw['subscriber_props']['ip_address'] = ''; // IPv4 addresses only.
+
 								foreach($_aw['subscriber_props'] as $_key => $_value)
 									if(!$_value && $_value !== FALSE) // Empty?
 										unset($_aw['subscriber_props'][$_key]);
