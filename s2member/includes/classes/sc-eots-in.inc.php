@@ -39,7 +39,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 		 * @param string $content Content inside the Shortcode.
 		 * @param string $shortcode The actual Shortcode name itself.
 		 *
-		 * @return mixed Value of the requested data, or null on failure.
+		 * @return string Value of the requested data.
 		 */
 		public static function sc_eot_details($attr = array(), $content = '', $shortcode = '')
 		{
