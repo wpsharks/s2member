@@ -104,7 +104,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 				}
 			else if($attr['user_eot_time'] && (is_user_logged_in() || $attr['user_id']))
 				{
-					$get = get_user_option('s2member_auto_eot_time', (int)$attr['user_id']);
+					$get = (string)get_user_option('s2member_auto_eot_time', (int)$attr['user_id']);
 
 					if(is_numeric($get) && strlen($get) === 10) // A timestamp?
 					{
@@ -114,7 +114,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 						else if($attr['user_eot_time'] === 'default')
 							$get = date(get_option('date_format'), (integer)$get);
 
-						else $get = date($attr['date_format'], (integer)$get);
+						else $get = date($attr['user_eot_time'], (integer)$get);
 					}
 				}
 			if(isset($get) && (is_array($get) || is_object($get)))

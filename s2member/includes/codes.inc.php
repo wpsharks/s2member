@@ -21,6 +21,7 @@ Add WordPress Editor Shortcodes.
 */
 add_shortcode('s2Key', 'c_ws_plugin__s2member_sc_keys::sc_get_key');
 add_shortcode('s2Get', 'c_ws_plugin__s2member_sc_gets::sc_get_details');
+add_shortcode('s2Eot', 'c_ws_plugin__s2member_sc_eots::sc_eot_details');
 add_shortcode('s2File', 'c_ws_plugin__s2member_sc_files::sc_get_file');
 add_shortcode('s2Stream', 'c_ws_plugin__s2member_sc_files::sc_get_stream');
 
