@@ -74,25 +74,48 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 				{
 					$get = c_ws_plugin__s2member_utils_users::get_user_field($attr['user_field'], (int)$attr['user_id']);
 
-					if($attr['user_field'] === 's2member_auto_eot_time' && $attr['date_format'] && is_numeric($get) && strlen($get) === 10)
-						$get = date($attr['date_format'], (integer)$get);
+					if($attr['user_field'] === 's2member_auto_eot_time' && $attr['date_format'])
+					 	if(is_numeric($get) && strlen($get) === 10) // Timestamp?
+							{
+								if($attr['date_format'] === 'timestamp')
+									$get = (string)$get; // No change.
+
+								else if($attr['date_format'] === 'default')
+									$get = date(get_option('date_format'), (integer)$get);
+
+								else $get = date($attr['date_format'], (integer)$get);
+							}
 				}
 			else if($attr['user_option'] && (is_user_logged_in() || $attr['user_id']))
 				{
 					$get = get_user_option($attr['user_option'], (int)$attr['user_id']);
 
-					if($attr['user_option'] === 's2member_auto_eot_time' && $attr['date_format'] && is_numeric($get) && strlen($get) === 10)
-						$get = date($attr['date_format'], (integer)$get);
+					if($attr['user_option'] === 's2member_auto_eot_time' && $attr['date_format'])
+						if(is_numeric($get) && strlen($get) === 10) // Timestamp?
+							{
+								if($attr['date_format'] === 'timestamp')
+									$get = (string)$get; // No change.
+
+								else if($attr['date_format'] === 'default')
+									$get = date(get_option('date_format'), (integer)$get);
+
+								else $get = date($attr['date_format'], (integer)$get);
+							}
 				}
 			else if($attr['user_eot_time'] && (is_user_logged_in() || $attr['user_id']))
 				{
 					$get = get_user_option('s2member_auto_eot_time', (int)$attr['user_id']);
 
-					if($attr['date_format'] && is_numeric($get) && strlen($get) === 10)
-						$get = date($attr['date_format'], (integer)$get);
+					if(is_numeric($get) && strlen($get) === 10) // A timestamp?
+					{
+						if($attr['user_eot_time'] === 'timestamp')
+							$get = (string)$get; // No change.
 
-					else if(is_numeric($get) && strlen($get) === 10)
-						$get = date($attr['user_eot_time'], (integer)$get);
+						else if($attr['user_eot_time'] === 'default')
+							$get = date(get_option('date_format'), (integer)$get);
+
+						else $get = date($attr['date_format'], (integer)$get);
+					}
 				}
 			if(isset($get) && (is_array($get) || is_object($get)))
 			{
