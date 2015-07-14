@@ -316,35 +316,35 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 		 */
 		public static function get_user_field($field_id = '', $user_id = 0)
 		{
-			global $wpdb;
-			/** @var wpdb $wpdb */
+			global $wpdb; /** @var wpdb $wpdb Reference for IDEs. */
 
-			$current_user = wp_get_current_user(); // Current User's object (used when/if `$user_id` is empty).
+			$current_user = wp_get_current_user(); // Current user.
 
-			if(is_object($user = ($user_id) ? new WP_User ($user_id) : $current_user) && !empty($user->ID) && ($user_id = $user->ID))
+			if(is_object($user = $user_id ? new WP_User($user_id) : $current_user)
+				&& !empty($user->ID) && ($user_id = $user->ID))
 			{
-				if(isset ($user->$field_id))
-					return $user->$field_id;
+				if(isset($user->{$field_id}))
+					return $user->{$field_id};
 
-				else if(isset ($user->data->$field_id))
-					return $user->data->$field_id;
+				else if(isset($user->data->{$field_id}))
+					return $user->data->{$field_id};
 
-				else if(isset ($user->{$wpdb->prefix.$field_id}))
+				else if(isset($user->{$wpdb->prefix.$field_id}))
 					return $user->{$wpdb->prefix.$field_id};
 
-				else if(isset ($user->data->{$wpdb->prefix.$field_id}))
+				else if(isset($user->data->{$wpdb->prefix.$field_id}))
 					return $user->data->{$wpdb->prefix.$field_id};
 
 				else if(strcasecmp($field_id, 'full_name') === 0)
 					return trim($user->first_name.' '.$user->last_name);
 
-				else if(preg_match('/^(email|user_email)$/i', $field_id))
+				else if(preg_match('/^(?:email|user_email)$/i', $field_id))
 					return $user->user_email;
 
-				else if(preg_match('/^(login|user_login)$/i', $field_id))
+				else if(preg_match('/^(?:login|user_login)$/i', $field_id))
 					return $user->user_login;
 
-				else if(preg_match('/^(s2member_)?registration_time$/i', $field_id))
+				else if(preg_match('/^(?:s2member_)?registration_time$/i', $field_id))
 					return $user->user_registered;
 
 				else if(strcasecmp($field_id, 's2member_access_role') === 0)
@@ -360,7 +360,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					return c_ws_plugin__s2member_user_access::user_access_ccaps($user);
 
 				else if(strcasecmp($field_id, 'ip') === 0 && is_object($current_user) && !empty($current_user->ID) && $current_user->ID === ($user_id = $user->ID))
-					return $_SERVER['REMOTE_ADDR'];
+					return $_SERVER['REMOTE_ADDR']; // Current IP address.
 
 				else if(strcasecmp($field_id, 's2member_registration_ip') === 0 || strcasecmp($field_id, 'reg_ip') === 0 || strcasecmp($field_id, 'ip') === 0)
 					return get_user_option('s2member_registration_ip', $user_id);
@@ -369,8 +369,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					return ($subscr_id = get_user_option('s2member_subscr_id', $user_id)) ? $subscr_id : $user_id;
 
 				else if(is_array($fields = get_user_option('s2member_custom_fields', $user_id)))
-					if(isset ($fields[preg_replace('/[^a-z0-9]/i', '_', strtolower($field_id))]))
-						return $fields[preg_replace('/[^a-z0-9]/i', '_', strtolower($field_id))];
+					{
+						$field_var = preg_replace('/[^a-z0-9]/i', '_', strtolower($field_id));
+						if(isset($fields[$field_var])) return $fields[$field_var];
+					}
 			}
 			return FALSE; // Otherwise, return false.
 		}
