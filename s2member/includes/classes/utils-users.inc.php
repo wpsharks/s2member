@@ -422,6 +422,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			if(!($subscr_id = get_user_option('s2member_subscr_id', $user->ID)))
 				return $empty_response; // Not possible.
 
+			if(!is_array($ipn_signup_vars = self::get_user_ipn_signup_vars($user->ID)))
+				$ipn_signup_vars = array(); // Force an array value.
+
 			if($check_gateway) switch($subscr_gateway)
 			{
 				case 'paypal':
@@ -440,7 +443,19 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						|| !class_exists('c_ws_plugin__s2member_pro_authnet_utilities')
 					) return $empty_response; // Not possible.
 
-					// TODO
+					$authnet_status = array(
+						'x_method'          => 'status',
+						'x_subscription_id' => $subscr_id,
+					);
+					$authnet_status = c_ws_plugin__s2member_pro_authnet_utilities::authnet_arb_response($authnet_status);
+
+					if(!empty($authnet['__error'])) // API response error?
+						return $empty_response; // Not possible.
+
+					//if(preg_match('/^(active|suspended)$/i', $authnet['subscription_status']))
+					//	return $empty_response; // Not possible.
+
+
 
 					break; // Break switch.
 
