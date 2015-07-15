@@ -396,15 +396,16 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 		 */
 		public static function get_user_eot($user_id = 0, $check_gateway = TRUE)
 		{
-			if(!$user_id) $user_id = get_current_user_id();
-
-			if(!$user_id || !($user = new WP_User($user_id)) || !$user->ID)
-				return array('type' => '', 'time' => 0, 'tense' => '');
+			if(!($user_id = (integer)$user_id)) // Empty user ID in this call?
+				$user_id = get_current_user_id(); // Assume current user.
 
 			$now            = time(); // Current timestamp.
 			$grace_time     = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
 			$grace_time     = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $grace_time);
 			$empty_response = array('type' => '', 'time' => 0, 'tense' => '');
+
+			if(!$user_id || !($user = new WP_User($user_id)) || !$user->ID)
+				return $empty_response; // No matching user in the DB.
 
 			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled'])
 				return $empty_response; // Not applicable. EOTs are off here.
