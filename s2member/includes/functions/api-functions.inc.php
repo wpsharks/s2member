@@ -2732,3 +2732,37 @@ if(!function_exists("s2member_login_ips_for"))
 				return (is_array($ips)) ? $ips : array();
 			}
 	}
+
+/**
+* Auto EOT time, else estimated EOT time.
+*
+* ———— PHP Code Samples ————
+* ```
+* <!php print_r($eot = s2member_eot_time()); !>
+* ```
+* ———— Shortcode Equivalent ————
+* ```
+* [s2Eot /]
+* ```
+*
+* @package s2Member\API_Functions
+* @since 150713
+*
+* @param string|int $user_id Defaults to the current user ID.
+* @param bool $check_gateway Defaults to a true value. If this is false, it is only possible to return a fixed EOT time.
+* 	In other words, if this is false and there is no EOT time, empty values will be returned. Be careful with this, because not checking
+* 	the payment gateway can result in an inaccurate return value. Only set to false if you want to limit the check to a fixed hard-coded EOT time.
+*
+* @return array An associative array of EOT details; with the following elements.
+*
+* - `type` One of `fixed` (a fixed EOT time), `next` (next payment time; i.e., ongoing recurring subscription), or an empty string if there is no EOT for the user.
+* - `time` The timestamp (UTC time) that represents the EOT (End Of Term); else `0` if there is no EOT time.
+* - `tense` One of `past`, `future`, or an empty string if there is no EOT time. If time is now (or earlier) this will be `past`. If time is in the future, this will be `future`.
+*/
+if(!function_exists('s2member_eot'))
+	{
+		function s2member_eot($user_id = 0, $check_gateway = true)
+			{
+				return c_ws_plugin__s2member_utils_users::get_user_eot($user_id, $check_gateway);
+			}
+	}

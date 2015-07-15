@@ -376,5 +376,143 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			}
 			return FALSE; // Otherwise, return false.
 		}
+
+		/**
+		 * Auto EOT time, else estimated EOT time.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 150713
+		 *
+		 * @param int|string $user_id Optional. Defaults to the current User's ID.
+		 * @param bool $check_gateway Defaults to a true value. If this is false, it is only possible to return a fixed EOT time.
+		 * 	In other words, if this is false and there is no EOT time, empty values will be returned. Be careful with this, because not checking
+		 * 	the payment gateway can result in an inaccurate return value. Only set to false if you want to limit the check to a fixed hard-coded EOT time.
+		 *
+		 * @return array An associative array of EOT details; with the following elements.
+		 *
+		 * - `type` One of `fixed` (a fixed EOT time), `next` (next payment time; i.e., an ongoing recurring subscription); or an empty string if there is no EOT for the user.
+		 * - `time` The timestamp (UTC time) that represents the EOT (End Of Term); else `0` if there is no EOT time.
+		 * - `tense` If time is now (or earlier) this will be `past`. If time is in the future, this will be `future`. If there is no time, this is an empty string.
+		 */
+		public static function get_user_eot($user_id = 0, $check_gateway = TRUE)
+		{
+			if(!$user_id) $user_id = get_current_user_id();
+
+			if(!$user_id || !($user = new WP_User($user_id)) || !$user->ID)
+				return array('type' => '', 'time' => 0, 'tense' => '');
+
+			$now            = time(); // Current timestamp.
+			$grace_time     = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
+			$grace_time     = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $grace_time);
+			$empty_response = array('type' => '', 'time' => 0, 'tense' => '');
+
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled'])
+				return $empty_response; // Not applicable. EOTs are off here.
+
+			if(($time = (integer)get_user_option('s2member_auto_eot_time', $user->ID)))
+				return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+
+			if(!user_can($user->ID, 'access_s2member_level1') && !c_ws_plugin__s2member_user_access::user_access_ccaps($user))
+				return $empty_response; // They have no access, and thus there is no EOT in this case.
+
+			if(!($subscr_gateway = get_user_option('s2member_subscr_gateway', $user->ID)))
+				return $empty_response; // Not possible.
+
+			if(!($subscr_id = get_user_option('s2member_subscr_id', $user->ID)))
+				return $empty_response; // Not possible.
+
+			if($check_gateway) switch($subscr_gateway)
+			{
+				case 'paypal':
+
+					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
+						|| !class_exists('c_ws_plugin__s2member_pro_paypal_utilities')
+					) return $empty_response; // Not possible.
+
+					// TODO
+
+					break; // Break switch.
+
+				case 'authnet':
+
+					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
+						|| !class_exists('c_ws_plugin__s2member_pro_authnet_utilities')
+					) return $empty_response; // Not possible.
+
+					// TODO
+
+					break; // Break switch.
+
+				case 'stripe': // Stripe payment gateway.
+
+					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
+						|| !class_exists('c_ws_plugin__s2member_pro_stripe_utilities')
+					) return $empty_response; // Not possible.
+
+					if(!($subscr_cid = get_user_option('s2member_subscr_cid', $user->ID)))
+						return $empty_response; // Not possible.
+
+					if(!is_object($stripe_subscription = c_ws_plugin__s2member_pro_stripe_utilities::get_customer_subscription($subscr_cid, $subscr_id)))
+						return $empty_response; // Not possible.
+
+					if(($time = (integer)$stripe_subscription->ended_at) > 0 && ($time += $grace_time))
+						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+
+					if(in_array($stripe_subscription->status, array('canceled', 'unpaid'), TRUE))
+					{
+						$time = (integer)$stripe_subscription->current_period_end + $grace_time;
+						return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+					}
+					if($stripe_subscription->plan->metadata->recurring_times > 0)
+					{
+						$time = (integer)$stripe_subscription->start;
+						$time += $stripe_subscription->plan->trial_period_days * DAY_IN_SECONDS;
+
+						switch($stripe_subscription->plan->interval)
+						{
+							case 'day': // Every X days in this case.
+								$time += (DAY_IN_SECONDS * $stripe_subscription->plan->interval_count)
+									* $stripe_subscription->plan->metadata->recurring_times;
+								break; // Break switch now.
+
+							case 'week': // Every X weeks in this case.
+								$time += (WEEK_IN_SECONDS * $stripe_subscription->plan->interval_count)
+									* $stripe_subscription->plan->metadata->recurring_times;
+								break; // Break switch now.
+
+							case 'month': // Every X months in this case.
+								$time += ((WEEK_IN_SECONDS * 4) * $stripe_subscription->plan->interval_count)
+									* $stripe_subscription->plan->metadata->recurring_times;
+								break; // Break switch now.
+
+							case 'year': // Every X years in this case.
+								$time += (YEAR_IN_SECONDS * $stripe_subscription->plan->interval_count)
+									* $stripe_subscription->plan->metadata->recurring_times;
+								break; // Break switch now.
+						}
+						$time += $grace_time; // Now add the grace time.
+						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+					}
+					// Else we simply use the end of the current period as the EOT time.
+					$time = (integer)$stripe_subscription->current_period_end + $grace_time;
+					return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+
+					break; // Break switch.
+
+				case 'clickbank':
+
+					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
+						|| !class_exists('c_ws_plugin__s2member_pro_clickbank_utilities')
+					) return $empty_response; // Not possible.
+
+					// TODO
+
+					break; // Break switch.
+
+				default: // Default case handler.
+					return $empty_response; // Not possible.
+			}
+			return $empty_response; // Not possible.
+		}
 	}
 }

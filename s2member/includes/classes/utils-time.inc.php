@@ -133,7 +133,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 		public static function auto_eot_time($user_id = 0, $period1 = '', $period3 = '', $eotper = '', $lpt = 0, $ext = 0)
 		{
 			$eot_grace_time = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
-			$eot_grace_time = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $eot_grace_time, get_defined_vars());
+			$eot_grace_time = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $eot_grace_time);
 
 			if($user_id && ($user = new WP_User ($user_id)) && $user->ID) // Valid user_id?
 			{
