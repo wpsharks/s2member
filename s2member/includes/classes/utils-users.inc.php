@@ -427,35 +427,33 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 
 			if($check_gateway) switch($subscr_gateway)
 			{
-				case 'paypal':
+				case 'paypal': // PayPal (Std/Pro/Payflow Edition).
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_paypal_utilities')
 					) return $empty_response; // Not possible.
 
+					if(!$ipn_signup_vars) // Must have for this gateway.
+						return $empty_response; // Not possible.
+
+					$time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3']);
+					return array('type' => $time <= $now ? 'fixed' : 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+
 					// TODO
 
 					break; // Break switch.
 
-				case 'authnet':
+				case 'authnet': // Authorize.Net (limited functionality).
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_authnet_utilities')
 					) return $empty_response; // Not possible.
 
-					$authnet_status = array(
-						'x_method'          => 'status',
-						'x_subscription_id' => $subscr_id,
-					);
-					$authnet_status = c_ws_plugin__s2member_pro_authnet_utilities::authnet_arb_response($authnet_status);
-
-					if(!empty($authnet['__error'])) // API response error?
+					if(!$ipn_signup_vars) // Must have for this gateway.
 						return $empty_response; // Not possible.
 
-					//if(preg_match('/^(active|suspended)$/i', $authnet['subscription_status']))
-					//	return $empty_response; // Not possible.
-
-
+					$time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3']);
+					return array('type' => $time <= $now ? 'fixed' : 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 
 					break; // Break switch.
 
@@ -477,7 +475,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					if(in_array($stripe_subscription->status, array('canceled', 'unpaid'), TRUE))
 					{
 						$time = (integer)$stripe_subscription->current_period_end + $grace_time;
-						return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+						return array('type' => $time <= $now ? 'fixed' : 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 					}
 					if($stripe_subscription->plan->metadata->recurring_times > 0)
 					{
@@ -511,11 +509,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					}
 					// Else we simply use the end of the current period as the EOT time.
 					$time = (integer)$stripe_subscription->current_period_end + $grace_time;
-					return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+					return array('type' => $time <= $now ? 'fixed' : 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 
 					break; // Break switch.
 
-				case 'clickbank':
+				case 'clickbank': // ClickBank.
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_clickbank_utilities')
