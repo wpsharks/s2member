@@ -414,8 +414,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			if(($time = (integer)get_user_option('s2member_auto_eot_time', $user->ID)))
 				return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 
-			if(!user_can($user->ID, 'access_s2member_level1') && !c_ws_plugin__s2member_user_access::user_access_ccaps($user))
-				return $empty_response; // They have no access, and thus there is no EOT in this case.
+			if((!user_can($user->ID, 'access_s2member_level1') || c_ws_plugin__s2member_user_access::user_access_role($user) === $demotion_role)
+				&& !c_ws_plugin__s2member_user_access::user_access_ccaps($user)
+				) return $empty_response; // They have no access.
 
 			if(!($subscr_gateway = get_user_option('s2member_subscr_gateway', $user->ID)))
 				return $empty_response; // Not possible.
