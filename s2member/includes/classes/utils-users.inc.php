@@ -402,6 +402,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			$now            = time(); // Current timestamp.
 			$grace_time     = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
 			$grace_time     = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $grace_time);
+			$demotion_role  = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber');
 			$empty_response = array('type' => '', 'time' => 0, 'tense' => '');
 
 			if(!$user_id || !($user = new WP_User($user_id)) || !$user->ID)
@@ -427,19 +428,36 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 
 			if($check_gateway) switch($subscr_gateway)
 			{
-				case 'paypal': // PayPal (Std/Pro/Payflow Edition).
+				case 'paypal': // PayPal (limited functionality).
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_paypal_utilities')
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_username']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_password']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_signature']
 					) return $empty_response; // Not possible.
 
 					if(!$ipn_signup_vars) // Must have for this gateway.
 						return $empty_response; // Not possible.
 
-					$time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3']);
-					return array('type' => $time <= $now ? 'fixed' : 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+					if(($time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3'])) <= $now)
+						return $empty_response; // Not appropriate; this can lead to confusion.
 
-					// TODO
+					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_username'])
+					{
+						if(!($api_response = c_ws_plugin__s2member_pro_paypal_utilities::payflow_get_profile($subscr_id)) || !empty($api_response['__error']))
+							return $empty_response; // No recurring profile.
+					}
+					else // Use PayPal Pro API (old flavor).
+					{
+						$api_args = array(
+							'METHOD'    => 'GetRecurringPaymentsProfileDetails',
+							'PROFILEID' => $subscr_id,
+						);
+						if(!($api_response = c_ws_plugin__s2member_paypal_utilities::paypal_api_response($api_args)) || !empty($api_response['__error']))
+							return $empty_response; // No recurring profile.
+					}
+					return array('type' => 'next', 'time' => $time, 'tense' => 'future');
 
 					break; // Break switch.
 
@@ -447,13 +465,24 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_authnet_utilities')
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_authnet_api_login_id']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_authnet_api_trans_key']
 					) return $empty_response; // Not possible.
 
 					if(!$ipn_signup_vars) // Must have for this gateway.
 						return $empty_response; // Not possible.
 
-					$time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3']);
-					return array('type' => $time <= $now ? 'fixed' : 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+					if(($time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3'])) <= $now)
+						return $empty_response; // Not appropriate; this can lead to confusion.
+
+					$api_args = array(
+						'x_method'          => 'status',
+						'x_subscription_id' => $subscr_id,
+					);
+					if(!($api_response = c_ws_plugin__s2member_pro_authnet_utilities::authnet_arb_response($api_args)) || !empty($api_response['__error']))
+						return $empty_response; // No recurring profile.
+
+					return array('type' => 'next', 'time' => $time, 'tense' => 'future');
 
 					break; // Break switch.
 
@@ -461,12 +490,14 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_stripe_utilities')
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_stripe_api_publishable_key']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_stripe_api_secret_key']
 					) return $empty_response; // Not possible.
 
 					if(!($subscr_cid = get_user_option('s2member_subscr_cid', $user->ID)))
 						return $empty_response; // Not possible.
 
-					if(!is_object($stripe_subscription = c_ws_plugin__s2member_pro_stripe_utilities::get_customer_subscription($subscr_cid, $subscr_id)))
+					if(!is_object($stripe_subscription = c_ws_plugin__s2member_pro_stripe_utilities::get_customer_subscription($subscr_cid, $subscr_id)) || empty($stripe_subscription->id))
 						return $empty_response; // Not possible.
 
 					if(($time = (integer)$stripe_subscription->ended_at) > 0 && ($time += $grace_time))
@@ -513,13 +544,25 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 
 					break; // Break switch.
 
-				case 'clickbank': // ClickBank.
+				case 'clickbank': // ClickBank (limited functionality).
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_clickbank_utilities')
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_username']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_clerk_key']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_developer_key']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_secret_key']
 					) return $empty_response; // Not possible.
 
+					if(!$ipn_signup_vars) // Must have for this gateway.
+						return $empty_response; // Not possible.
+
+					if(($time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3'])) <= $now)
+						return $empty_response; // Not appropriate; this can lead to confusion.
+
 					// TODO
+
+					return array('type' => 'next', 'time' => $time, 'tense' => 'future');
 
 					break; // Break switch.
 
