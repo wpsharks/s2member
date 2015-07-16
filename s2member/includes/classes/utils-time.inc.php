@@ -211,7 +211,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 				if((int)$ext > strtotime('now')) // Existing EOT Time must be in the future.
 					$auto_eot_time = $auto_eot_time + ((int)$ext - strtotime('now'));
 
-			return ($auto_eot_time <= 0) ? strtotime('now') : $auto_eot_time;
+			return $auto_eot_time <= 0 ? strtotime('now') : $auto_eot_time;
 		}
 
 		/**

@@ -47,13 +47,20 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 			do_action('ws_plugin__s2member_before_sc_eot_details', get_defined_vars());
 			unset($__refs, $__v); // Allow variables to be modified by reference.
 
+			c_ws_plugin__s2member_no_cache::no_cache_constants(true);
+
+			$mode = ''; // Initialize shortcode mode and validate.
+			if(!empty($attr['mode']) && in_array(strtolower($attr['mode']), array('fixed', 'next'), TRUE))
+				$mode = strtolower($attr['mode']); // A specific mode; i.e., `fixed`, `next`.
+
 			$attr = shortcode_atts( // Attributes.
 				array(
-					'user_id'              => '',
+					'user_id'              => '', // Current user.
 					'date_format'          => get_option('date_format'),
-					'future_format'        => _x('%%date%%', 's2member-front', 's2member'),
-					'past_format'          => _x('%%date%%', 's2member-front', 's2member'),
-					'empty_format'         => _x('N/A', 's2member-front', 's2member'),
+					'future_format'        => $mode ? '%%date%%' : '<strong class="s2member-sc-eot-label -future">'._x('Access Expires:', 's2member-front', 's2member').'</strong> <span class="s2member-sc-eot-date -future">%%date%%</span>',
+					'past_format'          => $mode ? '%%date%%' : '<strong class="s2member-sc-eot-label -past">'._x('Access Expired:', 's2member-front', 's2member').'</strong> <span class="s2member-sc-eot-date -past">%%date%%</span>',
+					'next_format'          => $mode ? '%%date%%' : '<strong class="s2member-sc-eot-label -ongoing">'._x('Next Payment:', 's2member-front', 's2member').'</strong> <span class="s2member-sc-eot-date -ongoing">%%date%%</span>',
+					'empty_format'         => $mode ? _x('N/A', 's2member-front', 's2member') : '', // Empty w/o a mode.
 				),
 				c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr)
 			);
@@ -61,26 +68,61 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 			do_action('ws_plugin__s2member_before_sc_eot_details_after_shortcode_atts', get_defined_vars());
 			unset($__refs, $__v); // Allow variables to be modified by reference.
 
-			if(($time = (integer)get_user_option('s2member_auto_eot_time', (int)$attr['user_id'])))
+			if(!($user_id = (int)$attr['user_id']))
+				$user_id = get_current_user_id(); // Current user.
+			$subscr_id = get_user_option('s2member_subscr_id', $user_id);
+
+			// Collect and cache the EOT for this user.
+
+			$prefix = 's2m_eot_'; // Transient prefix for this shortcode.
+			$transient = $prefix.md5('s2member_sc_eot_'.$mode.serialize($attr).$user_id.$subscr_id);
+
+			if(!is_array($eot = get_transient($transient)))
 			{
-				if($time <= time())
-					$details = $attr['past_format'];
-				else $details = $attr['future_format'];
-
-				if($attr['date_format'] === 'timestamp')
-					$date = (string)$time; // Timestamp.
-
-				else if($attr['date_format'] === 'default')
-					$date = date(get_option('date_format'), $time);
-
-				else if($attr['date_format']) // Anything?
-					$date = date($attr['date_format'], $time);
-
-				else $date = date(get_option('date_format'), $time);
-
-				$details = str_ireplace('%%date%%', esc_html($date), $details);
+				$eot = c_ws_plugin__s2member_utils_users::get_user_eot($user_id);
+				set_transient($transient, $eot, DAY_IN_SECONDS / 2);
 			}
-			else $details = $attr['empty_format']; // Default format for empty EOT time.
+			// Initialize EOT details/output format.
+
+			if($eot['type'] === 'fixed' && $eot['time'] && $eot['tense'] === 'past')
+				$details = $attr['past_format'];
+
+			else if($eot['type'] === 'fixed' && $eot['time'] && $eot['tense'] === 'future')
+				$details = $attr['future_format'];
+
+			else if($eot['type'] === 'next' && $eot['time'] && $eot['tense'] === 'future')
+				$details = $attr['next_format'];
+
+			else $details = $attr['empty_format'];
+
+			// Initialize EOT details/output date format.
+
+			if($eot['time'] && $attr['date_format'] === 'timestamp')
+				$date = (string)$eot['time']; // Timestamp.
+
+			else if($eot['time'] && $attr['date_format'] === 'default')
+				$date = date(get_option('date_format'), $eot['time']);
+
+			else if($eot['time'] && $attr['date_format'])
+				$date = date($attr['date_format'], $eot['time']);
+
+			else if($eot['time']) // Default date format.
+				$date = date(get_option('date_format'), $eot['time']);
+
+			$details = str_ireplace('%%date%%', esc_html($date), $details);
+
+			// Check special considerations and the current mode.
+
+			if($eot['type'] === 'fixed' && !$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled'])
+				$details = $attr['empty_format']; // EOTs are disabled on this site.
+
+			else if($eot['type'] === 'fixed' && $mode === 'next')
+				$details = $attr['empty_format'];
+
+			else if($eot['type'] === 'next' && $mode === 'fixed')
+				$details = $attr['empty_format'];
+
+			// Return the details/output from this shortcode.
 
 			return apply_filters('ws_plugin__s2member_sc_eot_details', $details, get_defined_vars());
 		}

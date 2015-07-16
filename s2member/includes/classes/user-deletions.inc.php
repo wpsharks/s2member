@@ -106,10 +106,10 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 				unset($__refs, $__v);
 
 				delete_user_option($user_id, 's2member_custom');
+				delete_user_option($user_id, 's2member_subscr_gateway');
 				delete_user_option($user_id, 's2member_subscr_id');
 				delete_user_option($user_id, 's2member_subscr_baid');
 				delete_user_option($user_id, 's2member_subscr_cid');
-				delete_user_option($user_id, 's2member_subscr_gateway');
 
 				delete_user_option($user_id, 's2member_custom_fields');
 				delete_user_option($user_id, 's2member_registration_ip');
@@ -128,6 +128,7 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 				delete_user_option($user_id, 's2member_file_download_access_arc');
 				delete_user_option($user_id, 's2member_file_download_access_log');
 
+				delete_user_option($user_id, 's2member_last_auto_eot_time');
 				delete_user_option($user_id, 's2member_login_counter');
 				delete_user_option($user_id, 's2member_notes');
 

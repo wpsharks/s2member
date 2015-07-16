@@ -408,28 +408,33 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			if(!$user_id || !($user = new WP_User($user_id)) || !$user->ID)
 				return $empty_response; // No matching user in the DB.
 
-			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled'])
-				return $empty_response; // Not applicable. EOTs are off here.
+			$ipn_signup_vars     = self::get_user_ipn_signup_vars($user->ID);
+			$subscr_gateway      = (string)get_user_option('s2member_subscr_gateway', $user->ID);
+			$subscr_id           = (string)get_user_option('s2member_subscr_id', $user->ID);
+			$subscr_cid          = (string)get_user_option('s2member_subscr_cid', $user->ID);
+			$last_auto_eot_time  = (integer)get_user_option('s2member_last_auto_eot_time', $user->ID);
+			$auto_eot_time       = (integer)get_user_option('s2member_auto_eot_time', $user->ID);
 
-			if(($time = (integer)get_user_option('s2member_auto_eot_time', $user->ID)))
-				return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+			if($auto_eot_time) // They have a hard-coded EOT time at present?
+				return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
 
-			if((!user_can($user->ID, 'access_s2member_level1') || c_ws_plugin__s2member_user_access::user_access_role($user) === $demotion_role)
-				&& !c_ws_plugin__s2member_user_access::user_access_ccaps($user)
-				) return $empty_response; // They have no access.
+			if(!$subscr_gateway && !$subscr_id && !$subscr_cid && $last_auto_eot_time // EOTd?
+				&& (!user_can($user->ID, 'access_s2member_level1') || c_ws_plugin__s2member_user_access::user_access_role($user) === $demotion_role)
+				&& !c_ws_plugin__s2member_user_access::user_access_ccaps($user) // And no CCAPs either?
+			) return array('type' => 'fixed', 'time' => $last_auto_eot_time, 'tense' => $last_auto_eot_time <= $now ? 'past' : 'future');
 
-			if(!($subscr_gateway = get_user_option('s2member_subscr_gateway', $user->ID)))
-				return $empty_response; // Not possible.
+			if(!$subscr_gateway || !$subscr_id || !is_array($ipn_signup_vars) || !$ipn_signup_vars)
+				return $empty_response; // No recurring profile.
 
-			if(!($subscr_id = get_user_option('s2member_subscr_id', $user->ID)))
-				return $empty_response; // Not possible.
+			if(empty($ipn_signup_vars['txn_type']) || $ipn_signup_vars['txn_type'] !== 'subscr_signup')
+				return $empty_response; // No recurring profile.
 
-			if(!is_array($ipn_signup_vars = self::get_user_ipn_signup_vars($user->ID)))
-				$ipn_signup_vars = array(); // Force an array value.
+			$auto_eot_time // Update this now; i.e., build a new EOT time based on IPN signup vars.
+				= c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3']);
 
-			if($check_gateway) switch($subscr_gateway)
+			if($check_gateway) switch($subscr_gateway) // A bit different for each payment gateway.
 			{
-				case 'paypal': // PayPal (limited functionality).
+				case 'paypal': // PayPal (PayPal Pro only).
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_paypal_utilities')
@@ -438,16 +443,20 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_signature']
 					) return $empty_response; // Not possible.
 
-					if(!$ipn_signup_vars) // Must have for this gateway.
-						return $empty_response; // Not possible.
-
-					if(($time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3'])) <= $now)
-						return $empty_response; // Not appropriate; this can lead to confusion.
-
 					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_username'])
 					{
 						if(!($api_response = c_ws_plugin__s2member_pro_paypal_utilities::payflow_get_profile($subscr_id)) || !empty($api_response['__error']))
 							return $empty_response; // No recurring profile.
+
+						if(!preg_match('/^(?:Active|ActiveProfile)$/i', $api_response['STATUS']))
+							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
+
+						if($api_response['TERM'] > 0 && $api_response['PAYMENTSLEFT'] <= 0)
+							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
+
+						if($api_response['TERM'] <= 0 || $api_response['PAYMENTSLEFT'] > 0)
+							if($api_response['NEXTPAYMENT'] && ($time = strtotime($api_response['NEXTPAYMENT'])) > $now)
+								return array('type' => 'next', 'time' => $time, 'tense' => 'future');
 					}
 					else // Use PayPal Pro API (old flavor).
 					{
@@ -457,24 +466,28 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						);
 						if(!($api_response = c_ws_plugin__s2member_paypal_utilities::paypal_api_response($api_args)) || !empty($api_response['__error']))
 							return $empty_response; // No recurring profile.
+
+						if(!preg_match('/^(?:Active|ActiveProfile)$/i', $api_response['STATUS']))
+							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
+
+						if($api_response['TOTALBILLINGCYCLES'] > 0 && $api_response['NUMCYCLESREMAINING'] <= 0)
+							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
+
+						if($api_response['TOTALBILLINGCYCLES'] <= 0 || $api_response['NUMCYCLESREMAINING'] > 0)
+							if($api_response['NEXTBILLINGDATE'] && ($time = strtotime($api_response['NEXTBILLINGDATE'])) > $now)
+								return array('type' => 'next', 'time' => $time, 'tense' => 'future');
 					}
-					return array('type' => 'next', 'time' => $time, 'tense' => 'future');
+					return $empty_response; // Not possible.
 
 					break; // Break switch.
 
-				case 'authnet': // Authorize.Net (limited functionality).
+				case 'authnet': // Authorize.Net (EOT only; w/ limited functionality).
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_authnet_utilities')
 						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_authnet_api_login_id']
 						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_authnet_api_trans_key']
 					) return $empty_response; // Not possible.
-
-					if(!$ipn_signup_vars) // Must have for this gateway.
-						return $empty_response; // Not possible.
-
-					if(($time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3'])) <= $now)
-						return $empty_response; // Not appropriate; this can lead to confusion.
 
 					$api_args = array(
 						'x_method'          => 'status',
@@ -483,11 +496,16 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					if(!($api_response = c_ws_plugin__s2member_pro_authnet_utilities::authnet_arb_response($api_args)) || !empty($api_response['__error']))
 						return $empty_response; // No recurring profile.
 
-					return array('type' => 'next', 'time' => $time, 'tense' => 'future');
+					if(!preg_match('/^(?:active)$/i', $api_response['subscription_status']))
+						return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
+
+					// NOTE: Next payment time not possible with Authorize.Net at this time.
+
+					return $empty_response; // Not possible.
 
 					break; // Break switch.
 
-				case 'stripe': // Stripe payment gateway.
+				case 'stripe': // Stripe payment gateway (best).
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_stripe_utilities')
@@ -495,19 +513,23 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_stripe_api_secret_key']
 					) return $empty_response; // Not possible.
 
-					if(!($subscr_cid = get_user_option('s2member_subscr_cid', $user->ID)))
-						return $empty_response; // Not possible.
+					if(!$subscr_cid) return $empty_response; // Not possible.
 
 					if(!is_object($stripe_subscription = c_ws_plugin__s2member_pro_stripe_utilities::get_customer_subscription($subscr_cid, $subscr_id)) || empty($stripe_subscription->id))
-						return $empty_response; // Not possible.
+						return $empty_response; // No recurring profile.
 
 					if(($time = (integer)$stripe_subscription->ended_at) > 0 && ($time += $grace_time))
 						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 
-					if(in_array($stripe_subscription->status, array('canceled', 'unpaid'), TRUE))
+					if(!$stripe_subscription->plan->metadata->recurring) // Not recurring?
 					{
 						$time = (integer)$stripe_subscription->current_period_end + $grace_time;
-						return array('type' => $time <= $now ? 'fixed' : 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+					}
+					if(in_array($stripe_subscription->status, array('canceled', 'unpaid'), TRUE) || $stripe_subscription->cancel_at_period_end)
+					{
+						$time = (integer)$stripe_subscription->current_period_end + $grace_time;
+						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 					}
 					if($stripe_subscription->plan->metadata->recurring_times > 0)
 					{
@@ -539,8 +561,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						$time += $grace_time; // Now add the grace time.
 						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 					}
-					// Else we simply use the end of the current period as the EOT time.
-					$time = (integer)$stripe_subscription->current_period_end + $grace_time;
+					// Else we simply use the end of the current period as a default value.
+					$time = (integer)$stripe_subscription->current_period_end + 1 + $grace_time;
 					return array('type' => $time <= $now ? 'fixed' : 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 
 					break; // Break switch.
@@ -555,15 +577,19 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_secret_key']
 					) return $empty_response; // Not possible.
 
-					if(!$ipn_signup_vars) // Must have for this gateway.
-						return $empty_response; // Not possible.
+					if(!($api_response = c_ws_plugin__s2member_pro_clickbank_utilities::clickbank_api_order($subscr_id)))
+						return $empty_response; // No recurring profile.
 
-					if(($time = c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3'])) <= $now)
-						return $empty_response; // Not appropriate; this can lead to confusion.
+					if(!preg_match('/^(?:TEST_)?SALE$/i', $api_response['txnType']) || !$api_response['recurring'])
+						return $empty_response; // No recurring profile.
 
-					// TODO
+					if(strcasecmp($api_response['status'], 'active') !== 0 || $api_response['futurePayments'] <= 0)
+						return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
 
-					return array('type' => 'next', 'time' => $time, 'tense' => 'future');
+					if($api_response['nextPaymentDate'] && ($time = strtotime($api_response['nextPaymentDate'])) > $now)
+						return array('type' => 'next', 'time' => $time, 'tense' => 'future');
+
+					return $empty_response; // Not possible.
 
 					break; // Break switch.
 

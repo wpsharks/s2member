@@ -60,6 +60,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 			do_action('ws_plugin__s2member_before_sc_if_conditionals', get_defined_vars());
 			unset($__refs, $__v); // Allows variables to be modified by reference.
 
+			c_ws_plugin__s2member_no_cache::no_cache_constants(true);
+
 			$blog_farm_safe = apply_filters('ws_plugin__s2member_sc_if_conditionals_blog_farm_safe',
 			                                array('is_user_logged_in', 'is_user_not_logged_in',
 			                                      'user_is', 'user_is_not', 'user_can', 'user_cannot',
