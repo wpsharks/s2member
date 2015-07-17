@@ -2752,6 +2752,8 @@ if(!function_exists("s2member_login_ips_for"))
 * @param bool $check_gateway Defaults to a true value. If this is false, it is only possible to return a fixed EOT time.
 * 	In other words, if this is false and there is no EOT time, empty values will be returned. Be careful with this, because not checking
 * 	the payment gateway can result in an inaccurate return value. Only set to false if you want to limit the check to a fixed hard-coded EOT time.
+* @param string $favor Defaults to a value of `fixed`; i.e., if a fixed EOT time is available, that is returned in favor of a next payment time.
+* 	You can set this to `next` if you'd like to favor a next payment time (when applicable) instead of returning a fixed EOT time.
 *
 * @return array An associative array of EOT details; with the following elements.
 *
@@ -2761,8 +2763,8 @@ if(!function_exists("s2member_login_ips_for"))
 */
 if(!function_exists('s2member_eot'))
 	{
-		function s2member_eot($user_id = 0, $check_gateway = true)
+		function s2member_eot($user_id = 0, $check_gateway = true, $favor = 'fixed')
 			{
-				return c_ws_plugin__s2member_utils_users::get_user_eot($user_id, $check_gateway);
+				return c_ws_plugin__s2member_utils_users::get_user_eot($user_id, $check_gateway, $favor);
 			}
 	}
