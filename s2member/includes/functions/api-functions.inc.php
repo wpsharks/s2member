@@ -2738,7 +2738,7 @@ if(!function_exists("s2member_login_ips_for"))
 *
 * ———— PHP Code Samples ————
 * ```
-* <!php print_r($eot = s2member_eot_time()); !>
+* <!php print_r($eot = s2member_eot()); !>
 * ```
 * ———— Shortcode Equivalent ————
 * ```
