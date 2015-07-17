@@ -387,6 +387,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 		 * @param bool $check_gateway Defaults to a true value. If this is false, it is only possible to return a fixed EOT time.
 		 * 	In other words, if this is false and there is no EOT time, empty values will be returned. Be careful with this, because not checking
 		 * 	the payment gateway can result in an inaccurate return value. Only set to false if you want to limit the check to a fixed hard-coded EOT time.
+		 * @param string $favor Defaults to a value of `fixed`; i.e., if a fixed EOT time is available, that is returned in favor of a next payment time.
+		 * 	You can set this to `next` if you'd like to favor a next payment time (when applicable) instead of returning a fixed EOT time.
 		 *
 		 * @return array An associative array of EOT details; with the following elements.
 		 *
@@ -394,7 +396,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 		 * - `time` The timestamp (UTC time) that represents the EOT (End Of Term); else `0` if there is no EOT time.
 		 * - `tense` If time is now (or earlier) this will be `past`. If time is in the future, this will be `future`. If there is no time, this is an empty string.
 		 */
-		public static function get_user_eot($user_id = 0, $check_gateway = TRUE)
+		public static function get_user_eot($user_id = 0, $check_gateway = TRUE, $favor = 'fixed')
 		{
 			if(!($user_id = (integer)$user_id)) // Empty user ID in this call?
 				$user_id = get_current_user_id(); // Assume current user.
