@@ -64,13 +64,15 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 
 			$attr = shortcode_atts( // Attributes.
 				array(
+					'debug'                => 'no', // Off.
 					'user_id'              => '0', // Current.
-					'date_format'          => 'F jS, Y, g:i a T',
+					'date_format'          => 'M jS, Y, g:i a T',
 					'round_to'             => '', // Optional rounding.
 					'offset'               => '0', // Optional time offset.
+					'timezone'             => '', // Default timezone; i.e., GMT/UTC.
 					'future_format'        => $mode ? '%%date%%' : '<strong class="s2member-sc-eot-label -future">'._x('Access Expires:', 's2member-front', 's2member').'</strong> <span class="s2member-sc-eot-date -future">%%date%%</span>',
 					'past_format'          => $mode ? '%%date%%' : '<strong class="s2member-sc-eot-label -past">'._x('Access Expired:', 's2member-front', 's2member').'</strong> <span class="s2member-sc-eot-date -past">%%date%%</span>',
-					'next_format'          => $mode ? '%%date%%' : '<strong class="s2member-sc-eot-label -ongoing">'._x('Next Payment:', 's2member-front', 's2member').'</strong> <span class="s2member-sc-eot-date -ongoing">%%date%%</span>',
+					'next_format'          => $mode ? '%%date%%' : '<strong class="s2member-sc-eot-label -next">'._x('Next Payment:', 's2member-front', 's2member').'</strong> <span class="s2member-sc-eot-date -next">%%date%%</span>',
 					'empty_format'         => $mode ? (in_array($subscr_gateway, array('stripe', 'paypal', 'clickbank'), TRUE) ? _x('N/A', 's2member-front', 's2member') : _x('—', 's2member-front', 's2member')) : '',
 				),
 				c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr)
@@ -111,17 +113,24 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 
 			// Initialize EOT details/output date format.
 
-			if($eot['time'] && $attr['date_format'] === 'timestamp')
-				$date = (string)$eot['time']; // Timestamp.
+			$time = null; // Initialize the time calculation.
+			if($eot['time']) // // Do we have a time to work with?
+				{
+					$time = new DateTime(date('Y-m-d H:i:s', $eot['time']));
+					if($attr['timezone'] && strtoupper($attr['timezone']) !== 'UTC')
+						$time->setTimezone(new DateTimeZone($attr['timezone']));
+				}
+			if($time && $attr['date_format'] === 'timestamp')
+				$date = (string)$time->getTimestamp();
 
-			else if($eot['time'] && $attr['date_format'] === 'default')
-				$date = date(get_option('date_format'), $eot['time']);
+			else if($time && $attr['date_format'] === 'default')
+				$date = $time->format(get_option('date_format'));
 
-			else if($eot['time'] && $attr['date_format'])
-				$date = date($attr['date_format'], $eot['time']);
+			else if($time && $attr['date_format'])
+				$date = $time->format($attr['date_format']);
 
-			else if($eot['time']) // Default date format.
-				$date = date(get_option('date_format'), $eot['time']);
+			else if($time) // Default date/time format.
+				$date = $time->format('M jS, Y, g:i a T');
 
 			else $date = ''; // Default date; i.e., nothing.
 
@@ -130,13 +139,22 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 			// Check special considerations and the current mode.
 
 			if($eot['type'] === 'fixed' && !$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled'])
-				$details = $attr['empty_format']; // EOTs are disabled on this site.
-
+				{
+					$details = $attr['empty_format']; // EOTs are disabled on this site.
+					$eot['debug'] = 's2Member\'s Auto-EOT System is disabled on this site.';
+				}
 			else if($eot['type'] === 'fixed' && $mode === 'next')
-				$details = $attr['empty_format'];
-
+				{
+					$details = $attr['empty_format']; // Empty this.
+					$eot['debug'] = 'No fixed EOT time was found for this user.';
+				}
 			else if($eot['type'] === 'next' && $mode === 'fixed')
-				$details = $attr['empty_format'];
+				{
+					$details = $attr['empty_format']; // Empty this.
+					$eot['debug'] = 'No more payments needed from this user.';
+				}
+			if(filter_var($attr['debug'], FILTER_VALIDATE_BOOLEAN))
+				$details .= '<pre>'.esc_html($eot['debug'] ? $eot['debug'] : 'Unknown error.').'</pre>';
 
 			// Return the details/output from this shortcode.
 

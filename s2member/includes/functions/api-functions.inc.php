@@ -2734,7 +2734,7 @@ if(!function_exists("s2member_login_ips_for"))
 	}
 
 /**
-* Auto EOT time, else estimated EOT time.
+* Auto EOT time, else NPR (next payment time).
 *
 * ———— PHP Code Samples ————
 * ```
@@ -2760,6 +2760,7 @@ if(!function_exists("s2member_login_ips_for"))
 * - `type` One of `fixed` (a fixed EOT time), `next` (next payment time; i.e., ongoing recurring subscription), or an empty string if there is no EOT for the user.
 * - `time` The timestamp (UTC time) that represents the EOT (End Of Term); else `0` if there is no EOT time.
 * - `tense` One of `past`, `future`, or an empty string if there is no EOT time. If time is now (or earlier) this will be `past`. If time is in the future, this will be `future`.
+* - `debug` A string of details that explain to a developer what was returned. For debugging only.
 */
 if(!function_exists('s2member_eot'))
 	{
