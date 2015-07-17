@@ -134,16 +134,26 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 		{
 			$eot_grace_time = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
 			$eot_grace_time = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $eot_grace_time);
+			$p1_time = $p3_time = $eot_time = $auto_eot_time = 0; // Intialize.
 
-			if($user_id && ($user = new WP_User ($user_id)) && $user->ID) // Valid user_id?
+			if($user_id && ($user = new WP_User ($user_id)) && $user->ID)
 			{
-				$registration_time = strtotime($user->user_registered);
-				$last_payment_time = get_user_option('s2member_last_payment_time', $user_id);
-				$last_payment_time = ((int)$lpt) ? (int)$lpt : (int)$last_payment_time;
+				$registration_time         = strtotime($user->user_registered);
+				$last_payment_time         = get_user_option('s2member_last_payment_time', $user_id);
+				$last_payment_time         = (int)$lpt ? (int)$lpt : (int)$last_payment_time;
+				$last_paid_access_cap_time = 0; // Initialize the last access cap time.
+				if(($access_cap_times = c_ws_plugin__s2member_access_cap_times::get_access_cap_times($user_id)))
+					foreach(array_reverse($access_cap_times, TRUE) as $_time => $_cap)
+						if(strpos($_cap, '-') !== 0 && $_cap !== 'level0')
+						{
+							$last_paid_access_cap_time = (integer)$_time;
+							break; // Got what we need; stop here.
+						}
+				unset($_time, $_cap); // Housekeeping.
 
-				if(!($p1_time = 0) && ($period1 = trim(strtoupper($period1))))
+				if(($period1 = trim(strtoupper($period1))))
 				{
-					list ($num, $span) = preg_split('/ /', $period1, 2);
+					list($num, $span) = preg_split('/ /', $period1, 2);
 
 					$days = 0; // Days start at 0.
 
@@ -157,9 +167,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 					$p1_days = (int)$num * (int)$days;
 					$p1_time = $p1_days * 86400;
 				}
-				if(!($p3_time = 0) && ($period3 = trim(strtoupper($period3))))
+				if(($period3 = trim(strtoupper($period3))))
 				{
-					list ($num, $span) = preg_split('/ /', $period3, 2);
+					list($num, $span) = preg_split('/ /', $period3, 2);
 
 					$days = 0; // Days start at 0.
 
@@ -173,22 +183,19 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 					$p3_days = (int)$num * (int)$days;
 					$p3_time = $p3_days * 86400;
 				}
-				if(!$last_payment_time) // If there's been no payment yet.
-					// After p1, if there was a p1. Otherwise, reg. time + 1 day grace.
-					$auto_eot_time = $registration_time + $p1_time + $eot_grace_time;
+				if(!$last_payment_time) // No last payment time; i.e., has paid nothing yet?
+					$auto_eot_time = ($last_paid_access_cap_time ? $last_paid_access_cap_time : $registration_time) + $p1_time + $eot_grace_time;
 
-				// Else if p1, and last payment within p1, last + p1 + 1 day grace.
-				else if($p1_time && $last_payment_time <= $registration_time + $p1_time)
+				else if($p1_time && $last_payment_time <= ($last_paid_access_cap_time ? $last_paid_access_cap_time : $registration_time) + $p1_time)
 					$auto_eot_time = $last_payment_time + $p1_time + $eot_grace_time;
 
-				else // Otherwise, after last payment + p3 + 1 day grace.
-					$auto_eot_time = $last_payment_time + $p3_time + $eot_grace_time;
+				else $auto_eot_time = $last_payment_time + $p3_time + $eot_grace_time;
 			}
 			else if($eotper) // Otherwise, if we have a specific EOT period; calculate from today.
 			{
-				if(!($eot_time = 0) && ($eotper = trim(strtoupper($eotper))))
+				if(($eotper = trim(strtoupper($eotper))))
 				{
-					list ($num, $span) = preg_split('/ /', $eotper, 2);
+					list($num, $span) = preg_split('/ /', $eotper, 2);
 
 					$days = 0; // Days start at 0.
 
@@ -199,14 +206,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 						$days = ($span === 'M') ? 30 : $days;
 						$days = ($span === 'Y') ? 365 : $days;
 					}
-
 					$eot_days = (int)$num * (int)$days;
 					$eot_time = $eot_days * 86400;
 				}
 				$auto_eot_time = strtotime('now') + $eot_time + $eot_grace_time;
 			}
-			settype($auto_eot_time, 'integer'); // Force to integer type here.
-
 			if($ext && $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_time_ext_behavior'] === 'extend')
 				if((int)$ext > strtotime('now')) // Existing EOT Time must be in the future.
 					$auto_eot_time = $auto_eot_time + ((int)$ext - strtotime('now'));

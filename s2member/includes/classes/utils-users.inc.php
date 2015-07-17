@@ -453,6 +453,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						if(!($api_response = c_ws_plugin__s2member_pro_paypal_utilities::payflow_get_profile($subscr_id)) || !empty($api_response['__error']))
 							return $empty_response; // No recurring profile.
 
+						if(preg_match('/^(?:Pending|PendingProfile)$/i', $api_response['STATUS']))
+							return $empty_response; // Recurring profile is pending.
+
 						if(!preg_match('/^(?:Active|ActiveProfile)$/i', $api_response['STATUS']))
 							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
 
@@ -460,8 +463,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
 
 						if($api_response['TERM'] <= 0 || $api_response['PAYMENTSLEFT'] > 0)
-							if($api_response['NEXTPAYMENT'] && ($time = strtotime($api_response['NEXTPAYMENT'])) > $now)
-								return array('type' => 'next', 'time' => $time, 'tense' => 'future');
+							if($api_response['NEXTPAYMENT'] && strlen($api_response['NEXTPAYMENT']) === 8) // MMDDYYYY format is not `strtotime()` compatible.
+								if(($time = strtotime(substr($api_response['NEXTPAYMENT'], -4).'-'.substr($api_response['NEXTPAYMENT'], 0, 2).'-'.substr($api_response['NEXTPAYMENT'], 2, 2))) > $now)
+									return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 					}
 					else // Use PayPal Pro API (old flavor).
 					{
@@ -472,6 +476,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						if(!($api_response = c_ws_plugin__s2member_paypal_utilities::paypal_api_response($api_args)) || !empty($api_response['__error']))
 							return $empty_response; // No recurring profile.
 
+						if(preg_match('/^(?:Pending|PendingProfile)$/i', $api_response['STATUS']))
+							return $empty_response; // Recurring profile is pending.
+
 						if(!preg_match('/^(?:Active|ActiveProfile)$/i', $api_response['STATUS']))
 							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
 
@@ -480,7 +487,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 
 						if($api_response['TOTALBILLINGCYCLES'] <= 0 || $api_response['NUMCYCLESREMAINING'] > 0)
 							if($api_response['NEXTBILLINGDATE'] && ($time = strtotime($api_response['NEXTBILLINGDATE'])) > $now)
-								return array('type' => 'next', 'time' => $time, 'tense' => 'future');
+								return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 					}
 					return $empty_response; // Not possible.
 
@@ -504,7 +511,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					if(!preg_match('/^(?:active)$/i', $api_response['subscription_status']))
 						return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
 
-					// NOTE: Next payment time not possible with Authorize.Net at this time.
+					// Fixed recurring intervals not possible with Authorize.Net at this time.
+					// Next payment time not possible with Authorize.Net at this time.
 
 					return $empty_response; // Not possible.
 
@@ -520,23 +528,68 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 
 					if(!$subscr_cid) return $empty_response; // Not possible.
 
-					if(!is_object($stripe_subscription = c_ws_plugin__s2member_pro_stripe_utilities::get_customer_subscription($subscr_cid, $subscr_id)) || empty($stripe_subscription->id))
-						return $empty_response; // No recurring profile.
+					if(!is_object($stripe_subscription = c_ws_plugin__s2member_pro_stripe_utilities::get_customer_subscription($subscr_cid, $subscr_id))
+						|| empty($stripe_subscription->id)) // And we have a subscription ID?
+							return $empty_response; // No recurring profile.
 
-					if(($time = (integer)$stripe_subscription->ended_at) > 0 && ($time += $grace_time))
-						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
-
-					if(!$stripe_subscription->plan->metadata->recurring) // Not recurring?
+					if((integer)$stripe_subscription->ended_at > 0) // Done?
 					{
-						$time = (integer)$stripe_subscription->current_period_end + $grace_time;
+						$time = $stripe_subscription->ended_at + $grace_time;
 						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 					}
 					if(in_array($stripe_subscription->status, array('canceled', 'unpaid'), TRUE) || $stripe_subscription->cancel_at_period_end)
 					{
-						$time = (integer)$stripe_subscription->current_period_end + $grace_time;
+						$time = $stripe_subscription->current_period_end + $grace_time;
 						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 					}
-					if($stripe_subscription->plan->metadata->recurring_times > 0)
+					if(isset($stripe_subscription->plan->metadata->recurring, $stripe_subscription->plan->metadata->recurring_times)
+						&& !$stripe_subscription->plan->metadata->recurring) // Non-recurring subscription?
+					{
+						$time = (integer)$stripe_subscription->start;
+						$time += $stripe_subscription->plan->trial_period_days * DAY_IN_SECONDS;
+
+						switch($stripe_subscription->plan->interval)
+						{
+							case 'day': // Every X days in this case.
+								$time += (DAY_IN_SECONDS * $stripe_subscription->plan->interval_count) * 1;
+								break; // Break switch now.
+
+							case 'week': // Every X weeks in this case.
+								$time += (WEEK_IN_SECONDS * $stripe_subscription->plan->interval_count) * 1;
+								break; // Break switch now.
+
+							case 'month': // Every X months in this case.
+								$time += ((WEEK_IN_SECONDS * 4) * $stripe_subscription->plan->interval_count) * 1;
+								break; // Break switch now.
+
+							case 'year': // Every X years in this case.
+								$time += (YEAR_IN_SECONDS * $stripe_subscription->plan->interval_count) * 1;
+								break; // Break switch now.
+						}
+						if($favor === 'next' && $stripe_subscription->current_period_end + 1 < $time)
+						{
+							if($stripe_subscription->current_period_end + 1 > $now)
+							{
+								$time = $stripe_subscription->current_period_end + 1;
+								return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+							}
+							return $empty_response; // Next payment in the past.
+						}
+						$time += $grace_time; // Now add grace to the final EOT time.
+						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+					}
+					if(isset($stripe_subscription->plan->metadata->recurring, $stripe_subscription->plan->metadata->recurring_times)
+						&& $stripe_subscription->plan->metadata->recurring && $stripe_subscription->plan->metadata->recurring_times <= 0)
+					{
+						if($stripe_subscription->current_period_end + 1 > $now)
+						{
+							$time = $stripe_subscription->current_period_end + 1;
+							return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+						}
+						return $empty_response; // Next payment in the past.
+					}
+					if(isset($stripe_subscription->plan->metadata->recurring, $stripe_subscription->plan->metadata->recurring_times)
+						&& $stripe_subscription->plan->metadata->recurring && $stripe_subscription->plan->metadata->recurring_times > 0)
 					{
 						$time = (integer)$stripe_subscription->start;
 						$time += $stripe_subscription->plan->trial_period_days * DAY_IN_SECONDS;
@@ -563,12 +616,24 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 									* $stripe_subscription->plan->metadata->recurring_times;
 								break; // Break switch now.
 						}
-						$time += $grace_time; // Now add the grace time.
+						if($favor === 'next' && $stripe_subscription->current_period_end + 1 < $time)
+						{
+							if($stripe_subscription->current_period_end + 1 > $now)
+							{
+								$time = $stripe_subscription->current_period_end + 1;
+								return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+							}
+							return $empty_response; // Next payment in the past.
+						}
+						$time += $grace_time; // Now add grace to the final EOT time.
 						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 					}
-					// Else we simply use the end of the current period as a default value.
-					$time = (integer)$stripe_subscription->current_period_end + 1 + $grace_time;
-					return array('type' => $time <= $now ? 'fixed' : 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+					if($stripe_subscription->current_period_end + 1 > $now)
+					{
+						$time = $stripe_subscription->current_period_end + 1;
+						return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
+					}
+					return $empty_response; // Not possible.
 
 					break; // Break switch.
 
@@ -582,7 +647,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_secret_key']
 					) return $empty_response; // Not possible.
 
-					if(!($api_response = c_ws_plugin__s2member_pro_clickbank_utilities::clickbank_api_order($subscr_id)))
+					if(empty($ipn_signup_vars['txn_id'])) // ClickBank receipt number.
+						return $empty_response; // No recurring profile.
+
+					if(!($api_response = c_ws_plugin__s2member_pro_clickbank_utilities::clickbank_api_order($ipn_signup_vars['txn_id'])))
 						return $empty_response; // No recurring profile.
 
 					if(!preg_match('/^(?:TEST_)?SALE$/i', $api_response['txnType']) || !$api_response['recurring'])
@@ -592,7 +660,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future');
 
 					if($api_response['nextPaymentDate'] && ($time = strtotime($api_response['nextPaymentDate'])) > $now)
-						return array('type' => 'next', 'time' => $time, 'tense' => 'future');
+						return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future');
 
 					return $empty_response; // Not possible.
 

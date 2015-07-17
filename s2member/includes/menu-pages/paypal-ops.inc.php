@@ -58,7 +58,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<a href="http://www.s2member.com/paypal" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/paypal-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
 				echo '<h3>PayPal Account Details (required, if using PayPal)</h3>'."\n";
 				echo '<p>s2Member integrates with <a href="http://www.s2member.com/paypal" target="_blank" rel="external">PayPal Payments Standard</a>—for businesses. You do not need a PayPal Pro account. You just need to upgrade your Personal PayPal account to a Business status, which is free. A PayPal account can be <a href="http://s2member.com/r/paypal-business-upgrade/" target="_blank" rel="external">upgraded</a> from a Personal account to a Business account by clicking the "Profile" link under your "My Account" tab, selecting "Personal Business Information", and then clicking the "Upgrade Your Account" button. <strong>See also:</strong> This KB article: <a href="http://s2member.com/kb-article/supported-paypal-account-types/" target="_blank" rel="external">PayPal Compatibility (Account Types)</a>.</p>'."\n";
-				echo '<p><em><strong>PayPal API Credentials:</strong> Once you have a PayPal Business account, you\'ll need access to your <a href="http://s2member.com/r/paypal-profile-api-access/" target="_blank" rel="external">PayPal API Credentials</a>. Log into your PayPal account, and navigate to <strong>Profile ⥱ API Access (or ⥱ Request API Credentials)</strong>. From the available options, please choose "Request API Signature".</em></p>'."\n";
+				echo '<p><em><strong>PayPal API Credentials:</strong> Once you have a PayPal Business account, you\'ll need access to your <a href="http://s2member.com/r/paypal-profile-api-access/" target="_blank" rel="external">PayPal API Credentials</a>. Log into your PayPal account, and navigate to <strong>Profile → API Access (or → Request API Credentials)</strong>. From the available options, please choose "Request API Signature".</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_account_details", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
@@ -76,7 +76,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_merchant_id" id="ws-plugin--s2member-paypal-merchant-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile ⥱ Secure Merchant ID</strong>'."\n";
+				echo 'At PayPal, see: <strong>Profile → Secure Merchant ID</strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -93,7 +93,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_business" id="ws-plugin--s2member-paypal-business" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile ⥱ Email Accounts</strong>'."\n";
+				echo 'At PayPal, see: <strong>Profile → Email Accounts</strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -117,7 +117,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_api_username" id="ws-plugin--s2member-paypal-api-username" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile ⥱ API Access (or ⥱ Request API Credentials)</strong>'."\n";
+				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials)</strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -134,7 +134,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_api_password" id="ws-plugin--s2member-paypal-api-password" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile ⥱ API Access (or ⥱ Request API Credentials)</strong>'."\n";
+				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials)</strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -151,7 +151,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_api_signature" id="ws-plugin--s2member-paypal-api-signature" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile ⥱ API Access (or  ⥱ "Request API Credentials")</strong>'."\n";
+				echo 'At PayPal, see: <strong>Profile → API Access (or  → "Request API Credentials")</strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -194,7 +194,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="radio" name="ws_plugin__s2member_paypal_btn_encryption" id="ws-plugin--s2member-paypal-btn-encryption-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-btn-encryption-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_btn_encryption" id="ws-plugin--s2member-paypal-btn-encryption-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-btn-encryption-1">Yes, enable PayPal Button encryption.</label><br />'."\n";
-				echo '<em>If enabled, all of your PayPal Button Shortcodes will produce <em>encrypted</em> PayPal Buttons. This improves security against fraudulent transactions. For extra security, you should update your PayPal account too, under: <strong>My Profile ⥱ Website Payment Preferences</strong>. You\'ll want to block all non-encrypted payments. <strong>Note:</strong> this will NOT work until you\'ve supplied s2Member with your PayPal Email Address, and also with your API Username/Password/Signature.</em>'."\n";
+				echo '<em>If enabled, all of your PayPal Button Shortcodes will produce <em>encrypted</em> PayPal Buttons. This improves security against fraudulent transactions. For extra security, you should update your PayPal account too, under: <strong>My Profile → Website Payment Preferences</strong>. You\'ll want to block all non-encrypted payments. <strong>Note:</strong> this will NOT work until you\'ve supplied s2Member with your PayPal Email Address, and also with your API Username/Password/Signature.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -254,7 +254,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<a href="http://www.s2member.com/paypal" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/images/paypal-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
 				echo '<h3>Payflow Account Details (required, if using Payflow)</h3>'."\n";
 				echo '<p>Newer PayPal Pro accounts (i.e., PayPal Pro w/ Payflow Edition), come with the Payflow API for Recurring Billing service. If you have a newer PayPal Pro account, and you wish to integrate PayPal\'s Recurring Billing service with s2Member Pro-Forms, you will need to fill in the details here. Providing Payflow API Credentials below, will automatically put s2Member\'s Recurring Billing integration through Pro-Forms into Payflow mode. Just fill in the details below, and you\'re ready to generate Pro-Forms that charge customers on a recurring basis. s2Member will use the Payflow Edition API instead of the older PayPal Pro DPRP service; which is being slowly phased out in favor of Payflow Edition APIs.</p>'."\n";
-				echo '<p><em><strong>Payflow API Credentials:</strong> Once you have a PayPal Pro account, you\'ll need access to your <a href="http://s2member.com/r/paypal-profile-api-access/" target="_blank" rel="external">Payflow API Credentials</a>. Log into your PayPal account, and navigate to <strong>Profile ⥱ API Access (or ⥱ Request API Credentials)</strong>. From the available options, please choose "Payflow / API Access". You will need the following credentials: Username, Password, Partner, and Vendor.</em></p>'."\n";
+				echo '<p><em><strong>Payflow API Credentials:</strong> Once you have a PayPal Pro account, you\'ll need access to your <a href="http://s2member.com/r/paypal-profile-api-access/" target="_blank" rel="external">Payflow API Credentials</a>. Log into your PayPal account, and navigate to <strong>Profile → API Access (or → Request API Credentials)</strong>. From the available options, please choose "Payflow / API Access". You will need the following credentials: Username, Password, Partner, and Vendor.</em></p>'."\n";
 				echo '<p><em><strong>Important Note:</strong> Supplying Payflow API Credentials here does not mean you can bypass other areas of s2Member\'s configuration; i.e., please supply s2Member with all of your PayPal account details. Your PayPal Pro (Payflow Edition) account is configured here, but up above you will need to configure other Account Details also.</em></p>'."\n";
 				echo '<p><strong>See also:</strong> This KB article: <a href="http://s2member.com/kb-article/supported-paypal-account-types/" target="_blank" rel="external">PayPal Account Types</a>.</p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_payflow_account_details", get_defined_vars());
@@ -274,7 +274,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_payflow_api_username" id="ws-plugin--s2member-paypal-payflow-api-username" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_username"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile ⥱ API Access (or ⥱ Request API Credentials) ⥱ Payflow API Access</strong>'."\n";
+				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials) → Payflow API Access</strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -291,7 +291,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_payflow_api_password" id="ws-plugin--s2member-paypal-payflow-api-password" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_password"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile ⥱ API Access (or ⥱ Request API Credentials) ⥱ Payflow API Access</strong>'."\n";
+				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials) → Payflow API Access</strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -308,7 +308,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" name="ws_plugin__s2member_paypal_payflow_api_partner" id="ws-plugin--s2member-paypal-payflow-api-partner" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_partner"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile ⥱ API Access (or ⥱ Request API Credentials) ⥱ Payflow API Access</strong>'."\n";
+				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials) → Payflow API Access</strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -325,7 +325,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" name="ws_plugin__s2member_paypal_payflow_api_vendor" id="ws-plugin--s2member-paypal-payflow-api-vendor" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_vendor"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile ⥱ API Access (or ⥱ Request API Credentials) ⥱ Payflow API Access</strong>'."\n";
+				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials) → Payflow API Access</strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -347,7 +347,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-ipn-section">'."\n";
 				echo '<h3>PayPal IPN / Instant Payment Notifications (required, please enable)</h3>'."\n";
-				echo '<p>Log into your PayPal account and navigate to this section:<br /><strong>Account Profile ⥱ Instant Payment Notification Preferences</strong></p>'."\n";
+				echo '<p>Log into your PayPal account and navigate to this section:<br /><strong>Account Profile → Instant Payment Notification Preferences</strong></p>'."\n";
 				echo '<p>Edit your IPN settings &amp; turn IPN Notifications: <strong><code>On</code></strong></p>'."\n";
 				echo '<p>You\'ll need your IPN URL, which is:<br /><code>'.esc_html(home_url("/?s2member_paypal_notify=1")).'</code></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn", get_defined_vars());
@@ -356,7 +356,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<div id="ws-plugin--s2member-paypal-ipn-details" style="margin-top:10px; display:none;">'."\n";
 				echo '<p><em><strong>Quick Tip:</strong> In addition to the <a href="http://s2member.com/r/paypal-ipn-setup/" target="_blank" rel="external">default IPN settings inside your PayPal account</a>, the IPN URL is also set on a per-transaction basis by the special PayPal Button Code that s2Member provides you with. In other words, if you have multiple sites operating on one PayPal account, that\'s OK. s2Member dynamically sets the IPN URL for each transaction. The result is that the IPN URL configured from within your PayPal account, becomes the default, which is then overwritten on a per-transaction basis. In fact, PayPal recently updated their system to support IPN URL preservation. One PayPal account can handle multiple sites, all using different IPN URLs.</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn_after_quick_tip", get_defined_vars());
-				echo '<p><em><strong>IPN Communications:</strong> You\'ll be happy to know that s2Member handles cancellations, expirations, failed payments, terminations (e.g., refunds &amp; chargebacks) for you automatically. If you log into your PayPal account and cancel a Member\'s Subscription, or, if the Member logs into their PayPal account and cancels their own Subscription, s2Member will be notified of these important changes and react accordingly through the PayPal IPN service that runs silently behind-the-scene. The PayPal IPN service will notify s2Member whenever a Member\'s payments have been failing, and/or whenever a Member\'s Subscription has expired for any reason. Even refunds &amp; chargeback reversals are supported through the IPN service. If you issue a refund to an unhappy Customer through PayPal, s2Member will be notified, and the account for that Customer will either be demoted to a Free Subscriber, or deleted automatically (based on your configuration). The communication from PayPal ⥱ s2Member is seamless.</em></p>'."\n";
+				echo '<p><em><strong>IPN Communications:</strong> You\'ll be happy to know that s2Member handles cancellations, expirations, failed payments, terminations (e.g., refunds &amp; chargebacks) for you automatically. If you log into your PayPal account and cancel a Member\'s Subscription, or, if the Member logs into their PayPal account and cancels their own Subscription, s2Member will be notified of these important changes and react accordingly through the PayPal IPN service that runs silently behind-the-scene. The PayPal IPN service will notify s2Member whenever a Member\'s payments have been failing, and/or whenever a Member\'s Subscription has expired for any reason. Even refunds &amp; chargeback reversals are supported through the IPN service. If you issue a refund to an unhappy Customer through PayPal, s2Member will be notified, and the account for that Customer will either be demoted to a Free Subscriber, or deleted automatically (based on your configuration). The communication from PayPal → s2Member is seamless.</em></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
@@ -383,7 +383,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-pdt-section">'."\n";
 				echo '<h3>PayPal PDT Identity Token (required, please enable)</h3>'."\n";
-				echo '<p>Log into your PayPal account and navigate to this section:<br /><strong>Account Profile ⥱ Website Payment Preferences</strong></p>'."\n";
+				echo '<p>Log into your PayPal account and navigate to this section:<br /><strong>Account Profile → Website Payment Preferences</strong></p>'."\n";
 				echo '<p>Turn the Auto-Return feature: <strong><code>On</code></strong></p>'."\n";
 				echo '<p>You\'ll need your <a href="'.esc_attr(home_url("/?s2member_paypal_return=1&s2member_paypal_proxy=paypal&s2member_paypal_proxy_use=x-preview")).'" target="_blank" rel="external">Auto-Return URL</a>, which is:<br /><code>'.esc_html(home_url("/?s2member_paypal_return=1")).'</code></p>'."\n";
 				echo '<p>You must also enable PDT (Payment Data Transfer): <strong><code>On</code></strong><br /><em>You\'ll be issued an Identity Token that you can enter below.</em></p>'."\n";
@@ -404,7 +404,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_identity_token" id="ws-plugin--s2member-paypal-identity-token" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_identity_token"]).'" /><br />'."\n";
-				echo 'Your PDT Identity Token will appear under <strong>Profile ⥱ Website Payment Preferences</strong> in your PayPal account.'."\n";
+				echo 'Your PDT Identity Token will appear under <strong>Profile → Website Payment Preferences</strong> in your PayPal account.'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -643,7 +643,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>'."\n";
 				echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>'."\n";
 				echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>'."\n";
-				echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member ⥱ General Options ⥱ Registration/Profile Fields</em>.</li>'."\n";
+				echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member → General Options → Registration/Profile Fields</em>.</li>'."\n";
 				echo '</ul>'."\n";
 
 				echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>'."\n";
@@ -679,7 +679,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-ccap-confirmation-email-section">'."\n";
 				echo '<h3>Capability Confirmation Email (required, but the default works fine)</h3>'."\n";
-				echo '<p>This email is sent to existing Users after they complete a Buy Now purchase for one or more Custom Capabilities (if and when you make this possible); see: <strong>Dashboard ⥱ s2Member ⥱ PayPal Buttons/Forms ⥱ Capability (Buy Now)</strong>. The <strong>primary</strong> purpose of this email is to provide the Customer with a confirmation that their account was updated. You may also customize this further by providing details that are specifically geared to your site.</p>'."\n";
+				echo '<p>This email is sent to existing Users after they complete a Buy Now purchase for one or more Custom Capabilities (if and when you make this possible); see: <strong>Dashboard → s2Member → PayPal Buttons/Forms → Capability (Buy Now)</strong>. The <strong>primary</strong> purpose of this email is to provide the Customer with a confirmation that their account was updated. You may also customize this further by providing details that are specifically geared to your site.</p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_ccap_confirmation_email", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
@@ -768,7 +768,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>'."\n";
 				echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>'."\n";
 				echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>'."\n";
-				echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member ⥱ General Options ⥱ Registration/Profile Fields</em>.</li>'."\n";
+				echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member → General Options → Registration/Profile Fields</em>.</li>'."\n";
 				echo '</ul>'."\n";
 
 				echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>'."\n";
@@ -804,7 +804,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-sp-confirmation-email-section">'."\n";
 				echo '<h3>Specific Post/Page Confirmation Email (required, but the default works fine)</h3>'."\n";
-				echo '<p>This email is sent to new Customers after they return from a successful purchase at PayPal, for Specific Post/Page Access. (see: <strong>s2Member ⥱ Restriction Options ⥱ Specific Post/Page Access</strong>). This is NOT used for Membership sales, only for Specific Post/Page Access. The <strong>primary</strong> purpose of this email is to provide the Customer with instructions, along with a link to access the Specific Post/Page they\'ve purchased access to. If you\'ve created a Specific Post/Page Package (with multiple Posts/Pages bundled together into one transaction), this ONE link (<code>%%sp_access_url%%</code>) will automatically authenticate them for access to ALL of the Posts/Pages included in their transaction. You may customize this email further by providing details that are specifically geared to your site.</p>'."\n";
+				echo '<p>This email is sent to new Customers after they return from a successful purchase at PayPal, for Specific Post/Page Access. (see: <strong>s2Member → Restriction Options → Specific Post/Page Access</strong>). This is NOT used for Membership sales, only for Specific Post/Page Access. The <strong>primary</strong> purpose of this email is to provide the Customer with instructions, along with a link to access the Specific Post/Page they\'ve purchased access to. If you\'ve created a Specific Post/Page Package (with multiple Posts/Pages bundled together into one transaction), this ONE link (<code>%%sp_access_url%%</code>) will automatically authenticate them for access to ALL of the Posts/Pages included in their transaction. You may customize this email further by providing details that are specifically geared to your site.</p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_sp_confirmation_email", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
@@ -909,7 +909,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-eot-behavior-section">'."\n";
 				echo '<h3>PayPal EOT Behavior (required, please choose)</h3>'."\n";
 				echo '<p>EOT = End Of Term. By default, s2Member will demote a paid Member to a Free Subscriber whenever their Subscription term has ended (i.e., expired), been cancelled, refunded, charged back to you, etc. s2Member demotes them to a Free Subscriber, so they will no longer have Member Level Access to your site. However, in some cases, you may prefer to have Customer accounts deleted completely, instead of just being demoted. This is where you choose which method works best for your site. If you don\'t want s2Member to take ANY action at all, you can disable s2Member\'s EOT System temporarily, or even completely. There are also a few other configurable options here, so please read carefully. These options are all very important.</p>'."\n";
-				echo '<p><strong>PayPal IPNs:</strong> The PayPal IPN service will notify s2Member whenever a Member\'s payments have been failing, and/or whenever a Member\'s Subscription has expired for any reason. Even refunds &amp; chargeback reversals are supported through the IPN service. For example, if you issue a refund to an unhappy Customer through PayPal, s2Member will eventually be notified, and the account for that Customer will either be demoted to a Free Subscriber, or deleted automatically (based on your configuration). The communication from PayPal ⥱ s2Member is seamless.</p>'."\n";
+				echo '<p><strong>PayPal IPNs:</strong> The PayPal IPN service will notify s2Member whenever a Member\'s payments have been failing, and/or whenever a Member\'s Subscription has expired for any reason. Even refunds &amp; chargeback reversals are supported through the IPN service. For example, if you issue a refund to an unhappy Customer through PayPal, s2Member will eventually be notified, and the account for that Customer will either be demoted to a Free Subscriber, or deleted automatically (based on your configuration). The communication from PayPal → s2Member is seamless.</p>'."\n";
 				echo '<p><em><strong>Some Hairy Details:</strong> There might be times whenever you notice that a Member\'s Subscription has been cancelled through PayPal... but, s2Member continues allowing the User  access to your site as a paid Member. Please don\'t be confused by this... in 99.9% of these cases, the reason for this is legitimate. s2Member will only remove the User\'s Membership privileges when an EOT (End Of Term) is processed, a refund occurs, a chargeback occurs, or when a cancellation occurs - which would later result in a delayed Auto-EOT by s2Member.</em></p>'."\n";
 				echo '<p><em>s2Member will not process an EOT until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system (based on your configuration). s2Member also calculates one extra day (24 hours) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_eot_behavior", get_defined_vars());
@@ -1037,7 +1037,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<option value="refunds,reversals"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,reversals") ? ' selected="selected"' : '').'>Full Refunds, Reversals (these ALWAYS trigger an Immediate EOT action)</option>'."\n";
 				echo '<option value="refunds,partial_refunds,reversals"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,partial_refunds,reversals") ? ' selected="selected"' : '').'>Full Refunds, Partial Refunds, Reversals (these ALWAYS trigger an Immediate EOT action)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo '<em><strong>Note:</strong> s2Member is not equipped to detect partial refunds against multi-payment Subscriptions reliably. Therefore, all refunds processed against Subscriptions (of any kind) are considered <strong>Partial</strong> Refunds. Full refunds (in the eyes of s2Member) occur only against Buy Now transactions where it is easy for s2Member to see that the refund amount is &gt;= the original Buy Now purchase price (i.e., a Full Refund). <strong>Also Note:</strong> This setting (no matter what you choose) will NOT impact s2Member\'s internal API Notifications for Refund/Reversal events. <a href="#" onclick="alert(\'A Full or Partial Refund; and/or a Reversal Notification will ALWAYS be processed internally by s2Member, even if no action is taken by s2Member in accordance with your configuration here.\\n\\nIn this way, you\\\'ll have the full ability to listen for these events on your own (via API Notifications); if you prefer (optional). For more information, check your Dashboard under: `s2Member ⥱ API Notifications ⥱ Refunds/Reversals`.\'); return false;">Click here for details</a>.</em>'."\n";
+				echo '<em><strong>Note:</strong> s2Member is not equipped to detect partial refunds against multi-payment Subscriptions reliably. Therefore, all refunds processed against Subscriptions (of any kind) are considered <strong>Partial</strong> Refunds. Full refunds (in the eyes of s2Member) occur only against Buy Now transactions where it is easy for s2Member to see that the refund amount is &gt;= the original Buy Now purchase price (i.e., a Full Refund). <strong>Also Note:</strong> This setting (no matter what you choose) will NOT impact s2Member\'s internal API Notifications for Refund/Reversal events. <a href="#" onclick="alert(\'A Full or Partial Refund; and/or a Reversal Notification will ALWAYS be processed internally by s2Member, even if no action is taken by s2Member in accordance with your configuration here.\\n\\nIn this way, you\\\'ll have the full ability to listen for these events on your own (via API Notifications); if you prefer (optional). For more information, check your Dashboard under: `s2Member → API Notifications → Refunds/Reversals`.\'); return false;">Click here for details</a>.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";

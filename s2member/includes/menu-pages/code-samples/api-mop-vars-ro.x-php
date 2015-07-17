@@ -24,7 +24,7 @@ Here is a breakdown on each of these Variables:
 	* `s2member_seeking` = [post|page|catg|ptag]-[ID number] (Post ID, Page ID, Category ID, Tag ID)
 		Or: `s2member_seeking` = ruri-[base64 encoded URI] (only applies w/ Membership URI Restrictions)
 		Or: `s2member_seeking` = file-[protected file name] (only applies w/ Download Restrictions)
-		Or: `s2member_seeking` = bbpress (only applies when the s2Member ⥱ bbPress Bridge is installed)
+		Or: `s2member_seeking` = bbpress (only applies when the s2Member → bbPress Bridge is installed)
 	* `s2member_level_req` = a Membership Level # required for access (only applies to Membership Level Access)
 	* `s2member_ccap_req` = a Custom Capability required for access (only applies to Custom Capability Restrictions)
 	* `s2member_sp_req` = a Specific Post/Page ID required (only applies to Specific Post/Page Access Restrictions)
