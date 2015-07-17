@@ -1777,7 +1777,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'message'  => sprintf(
 							self::i18n(
 								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with <code>UTF-8</code> encoding.'.
-								' This can be changed in the Dashboard, under: <strong>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</strong>.'.
+								' This can be changed in the Dashboard, under: <strong>WordPress → Settings → Reading → Encoding</strong>.'.
 								' See also: <a href="http://codex.wordpress.org/Glossary#Unicode" target="_blank" rel="xlink">this article</a> about UTF-8.'.
 								' Your current encoding configuration is NOT yet defined.'
 							), htmlspecialchars($plugin_name)
@@ -1792,7 +1792,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'message'  => sprintf(
 							self::i18n(
 								'Although NOT required, %1$s recommends that your WordPress installation be configured to operate with <code>UTF-8</code> encoding.'.
-								' This can be changed in the Dashboard, under: <strong>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</strong>.'.
+								' This can be changed in the Dashboard, under: <strong>WordPress → Settings → Reading → Encoding</strong>.'.
 								' See also: <a href="http://codex.wordpress.org/Glossary#Unicode" target="_blank" rel="xlink">this article</a> about UTF-8.'.
 								' Your current encoding configuration is set to: <code>%2$s</code>'
 							), htmlspecialchars($plugin_name), htmlspecialchars($blog_charset_encoding)
@@ -1805,7 +1805,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						'title'   => self::i18n('WordPress Character Encoding'),
 						'message' => sprintf(
 							self::i18n(
-								'Your WordPress installation is operating with <code>%1$s</code> encoding, under: <strong>WordPress ⥱ Settings ⥱ Reading ⥱ Encoding</strong>.'
+								'Your WordPress installation is operating with <code>%1$s</code> encoding, under: <strong>WordPress → Settings → Reading → Encoding</strong>.'
 							), htmlspecialchars($blog_charset_encoding)
 						)
 					);
@@ -1828,7 +1828,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 							'message' => sprintf(
 								self::i18n(
 									'Although NOT required, %1$s recommends that your WordPress installation be configured with a matching HOST name.'.
-									' This can be changed in the Dashboard, under: <strong>WordPress ⥱ Settings ⥱ General ⥱ WordPress/Site URLs</strong>.'.
+									' This can be changed in the Dashboard, under: <strong>WordPress → Settings → General → WordPress/Site URLs</strong>.'.
 									' Your current configuration does NOT match: <code>%2$s</code>'
 								), htmlspecialchars($plugin_name), htmlspecialchars($current_host_name)
 							)

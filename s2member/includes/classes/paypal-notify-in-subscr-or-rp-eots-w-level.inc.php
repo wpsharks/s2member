@@ -57,7 +57,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 			{
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify_before_subscr_eot', get_defined_vars());
-				unset($__refs, $__v);
+				unset($__refs, $__v); // Housekeeping.
 
 				if(!get_transient($transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
 				{
@@ -118,7 +118,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_before_demote', get_defined_vars());
 										do_action('ws_plugin__s2member_during_collective_mods', $user_id, get_defined_vars(), $eot_del_type, 'modification', $demotion_role);
 										do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'modification');
-										unset($__refs, $__v);
+										unset($__refs, $__v); // Housekeeping.
 
 										if($existing_role !== $demotion_role) // Only if NOT the existing Role.
 											$user->set_role($demotion_role); // Give User the demotion Role.
@@ -128,25 +128,28 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 												if(preg_match('/^access_s2member_ccap_/', $cap))
 													$user->remove_cap($ccap = $cap);
 
-										// delete_user_option($user_id, 's2member_custom');
+										delete_user_option($user_id, 's2member_subscr_gateway');
 										delete_user_option($user_id, 's2member_subscr_id');
 										delete_user_option($user_id, 's2member_subscr_baid');
 										delete_user_option($user_id, 's2member_subscr_cid');
-										delete_user_option($user_id, 's2member_subscr_gateway');
 
 										delete_user_option($user_id, 's2member_ipn_signup_vars');
-										if(!apply_filters('ws_plugin__s2member_preserve_paid_registration_times', TRUE, get_defined_vars()))
+										if(!apply_filters('ws_plugin__s2member_preserve_paid_registration_times', TRUE))
 											delete_user_option($user_id, 's2member_paid_registration_times');
 
 										delete_user_option($user_id, 's2member_last_status_scan');
 										delete_user_option($user_id, 's2member_first_payment_txn_id');
 										delete_user_option($user_id, 's2member_last_payment_time');
+										delete_user_option($user_id, 's2member_last_auto_eot_time');
 										delete_user_option($user_id, 's2member_auto_eot_time');
 
 										delete_user_option($user_id, 's2member_file_download_access_log');
+										delete_user_option($user_id, 's2member_authnet_payment_failures');
+
+										update_user_option($user_id, 's2member_last_auto_eot_time', time());
 
 										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
-										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$paypal['subscr_gateway'].' ⥱ '.$paypal['subscr_id']);
+										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$paypal['subscr_gateway'].' → '.$paypal['subscr_id']);
 
 										$paypal['s2member_log'][] = 'Member Level/Capabilities demoted to: '.ucwords(preg_replace('/_/', ' ', $demotion_role)).'.';
 
@@ -228,7 +231,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										}
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_demote', get_defined_vars());
-										unset($__refs, $__v);
+										unset($__refs, $__v); // Housekeeping.
 									}
 									else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_eot_behavior'] === 'delete')
 									{
@@ -240,7 +243,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_before_delete', get_defined_vars());
 										do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'removal-deletion');
-										unset($__refs, $__v);
+										unset($__refs, $__v); // Housekeeping.
 
 										if(is_multisite()) // Multisite does NOT actually delete; ONLY removes.
 										{
@@ -258,11 +261,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delete', get_defined_vars());
-										unset($__refs, $__v);
+										unset($__refs, $__v); // Housekeeping.
 									}
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot', get_defined_vars());
-									unset($__refs, $__v);
+									unset($__refs, $__v); // Housekeeping.
 								}
 								else // Otherwise, treat this as if it were a cancellation. EOTs are currently disabled.
 								{
@@ -275,7 +278,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_disabled', get_defined_vars());
-									unset($__refs, $__v);
+									unset($__refs, $__v); // Housekeeping.
 								}
 							}
 							else $paypal['s2member_log'][] = 'Unable to (demote|delete) Member. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.';
@@ -295,7 +298,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 								foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 								do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delayed', get_defined_vars());
-								unset($__refs, $__v);
+								unset($__refs, $__v); // Housekeeping.
 							}
 							else $paypal['s2member_log'][] = 'Ignoring Delayed EOT. The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access.';
 						}
@@ -426,7 +429,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 						}
 						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 						do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_refund_reversal', get_defined_vars());
-						unset($__refs, $__v);
+						unset($__refs, $__v); // Housekeeping.
 					}
 				}
 				else // Else, this is a duplicate IPN. Must stop here.
@@ -437,7 +440,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 				}
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify_after_subscr_eot', get_defined_vars());
-				unset($__refs, $__v);
+				unset($__refs, $__v); // Housekeeping.
 
 				return apply_filters('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level', $paypal, get_defined_vars());
 			}

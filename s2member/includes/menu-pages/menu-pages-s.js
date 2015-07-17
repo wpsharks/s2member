@@ -1157,7 +1157,7 @@ jQuery(document).ready(function($)
 
 						if /* Must have a Leading Post/Page ID to work with. Otherwise, Link generation will fail. */(!leading)
 							{
-								alert('— Oops, a slight problem: —\n\nPlease select a Leading Post/Page.\n\n*Tip* If there are no Posts/Pages in the menu, it\'s because you\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member ⥱ Restriction Options ⥱ Specific Post/Page Access.');
+								alert('— Oops, a slight problem: —\n\nPlease select a Leading Post/Page.\n\n*Tip* If there are no Posts/Pages in the menu, it\'s because you\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.');
 								return false;
 							}
 						else if(!regAmount || isNaN(regAmount) || regAmount < 0.01)
@@ -1247,7 +1247,7 @@ jQuery(document).ready(function($)
 
 						if /* Must have a Leading Post/Page ID to work with. Otherwise, Link generation will fail. */(!leading)
 							{
-								alert('— Oops, a slight problem: —\n\nPlease select a Leading Post/Page.\n\n*Tip* If there are no Posts/Pages in the menu, it\'s because you\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member ⥱ Restriction Options ⥱ Specific Post/Page Access.');
+								alert('— Oops, a slight problem: —\n\nPlease select a Leading Post/Page.\n\n*Tip* If there are no Posts/Pages in the menu, it\'s because you\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.');
 								return false;
 							}
 						for(var i = 0, ids = leading; i < additionals.length; i++)

@@ -9,5 +9,5 @@ every [s2Get constant="S2MEMBER_LEVEL2_FILE_DOWNLOADS_ALLOWED_DAYS" /] days.
 
 **NOTE** The use of `[s2If php=""]` and `[else]` requires s2Member Pro.
 **NOTE** Arbitrary PHP code (via [s2If php=""]) will only work if you enable this functionality.
-	Please visit `Dashboard ⥱ s2Member ⥱ Restriction Options ⥱ Simple Shortcode Conditionals`
+	Please visit `Dashboard → s2Member → Restriction Options → Simple Shortcode Conditionals`
 		to set your preferences and enable `[s2If php=""]` when s2Member Pro is installed.

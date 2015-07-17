@@ -376,5 +376,318 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			}
 			return FALSE; // Otherwise, return false.
 		}
+
+		/**
+		 * Auto EOT time, else NPR (next payment time).
+		 *
+		 * @package s2Member\Utilities
+		 * @since 150713
+		 *
+		 * @param int|string $user_id Optional. Defaults to the current User's ID.
+		 * @param bool $check_gateway Defaults to a true value. If this is false, it is only possible to return a fixed EOT time.
+		 * 	In other words, if this is false and there is no EOT time, empty values will be returned. Be careful with this, because not checking
+		 * 	the payment gateway can result in an inaccurate return value. Only set to false if you want to limit the check to a fixed hard-coded EOT time.
+		 * @param string $favor Defaults to a value of `fixed`; i.e., if a fixed EOT time is available, that is returned in favor of a next payment time.
+		 * 	You can set this to `next` if you'd like to favor a next payment time (when applicable) instead of returning a fixed EOT time.
+		 *
+		 * @return array An associative array of EOT details; with the following elements.
+		 *
+		 * - `type` One of `fixed` (a fixed EOT time), `next` (next payment time; i.e., an ongoing recurring subscription); or an empty string if there is no EOT for the user.
+		 * - `time` The timestamp (UTC time) that represents the EOT (End Of Term); else `0` if there is no EOT time.
+		 * - `tense` If time is now (or earlier) this will be `past`. If time is in the future, this will be `future`. If there is no time, this is an empty string.
+		 * - `debug` A string of details that explain to a developer what was returned. For debugging only.
+		 */
+		public static function get_user_eot($user_id = 0, $check_gateway = TRUE, $favor = 'fixed')
+		{
+			if(!($user_id = (integer)$user_id)) // Empty user ID in this call?
+				$user_id = get_current_user_id(); // Assume current user.
+
+			if(!$favor || !in_array($favor, array('fixed', 'next'), TRUE))
+				$favor = 'fixed'; // Default behavior.
+
+			$now            = time(); // Current timestamp.
+			$grace_time     = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
+			$grace_time     = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $grace_time);
+			$demotion_role  = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber');
+			$empty_response = array('type' => '', 'time' => 0, 'tense' => '', 'debug' => '');
+
+			if(!$user_id || !($user = new WP_User($user_id)) || !$user->ID)
+				return array_merge($empty_response, array('debug' => 'Invalid user ID.'));
+
+			$ipn_signup_vars     = self::get_user_ipn_signup_vars($user->ID);
+			$subscr_gateway      = (string)get_user_option('s2member_subscr_gateway', $user->ID);
+			$subscr_id           = (string)get_user_option('s2member_subscr_id', $user->ID);
+			$subscr_cid          = (string)get_user_option('s2member_subscr_cid', $user->ID);
+			$last_auto_eot_time  = (integer)get_user_option('s2member_last_auto_eot_time', $user->ID);
+			$auto_eot_time       = (integer)get_user_option('s2member_auto_eot_time', $user->ID);
+
+			if($auto_eot_time) // They have a hard-coded EOT time at present?
+				return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+					'debug' => 'This is a fixed EOT time recorded by s2Member. It can be altered in the WordPress Dashboard for this user.');
+
+			if(!$subscr_gateway && !$subscr_id && !$subscr_cid && $last_auto_eot_time // EOTd?
+				&& (!user_can($user->ID, 'access_s2member_level1') || c_ws_plugin__s2member_user_access::user_access_role($user) === $demotion_role)
+				&& !c_ws_plugin__s2member_user_access::user_access_ccaps($user) // And no CCAPs either?
+			) return array('type' => 'fixed', 'time' => $last_auto_eot_time, 'tense' => $last_auto_eot_time <= $now ? 'past' : 'future',
+				'debug' => 'This is an archived/fixed EOT time recorded by s2Member; i.e., the date this customer\'s access expired.');
+
+			if(!$subscr_gateway || !$subscr_id || !is_array($ipn_signup_vars) || !$ipn_signup_vars)
+				return array_merge($empty_response, array('debug' => 'This user has no subscription; i.e., missing `subscr_id`, `subscr_gateway` or `ipn_signup_vars`.'));
+
+			if(empty($ipn_signup_vars['txn_type']) || $ipn_signup_vars['txn_type'] !== 'subscr_signup')
+				return array_merge($empty_response, array('debug' => 'This user has no subscription; i.e., `txn_type` != `subscr_signup`.'));
+
+			$auto_eot_time // Update this now; i.e., build a new EOT time based on IPN signup vars.
+				= c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3']);
+
+			if($check_gateway) switch($subscr_gateway) // A bit different for each payment gateway.
+			{
+				case 'paypal': // PayPal (PayPal Pro only).
+
+					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
+						|| !class_exists('c_ws_plugin__s2member_pro_paypal_utilities')
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_username']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_password']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_signature']
+					) return array_merge($empty_response, array('debug' => 'PayPal Pro API credentials missing in your s2Member configuration.'));
+
+					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_username'])
+					{
+						if(!($api_response = c_ws_plugin__s2member_pro_paypal_utilities::payflow_get_profile($subscr_id)) || !empty($api_response['__error']))
+							return array_merge($empty_response, array('debug' => 'No fixed EOT, and the PayPal Pro API says there is no subscription for this user.'));
+
+						if(preg_match('/^(?:Pending|PendingProfile)$/i', $api_response['STATUS']))
+							return array_merge($empty_response, array('debug' => 'No fixed EOT, and the PayPal Pro API says the subscription for this user is currently pending changes. Unable to determine at this moment. Please try again in 15 minutes.'));
+
+						if(!preg_match('/^(?:Active|ActiveProfile)$/i', $api_response['STATUS']))
+							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+								'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription is no longer active, and thus, access should be terminated at this time.');
+
+						if($api_response['TERM'] > 0 && $api_response['PAYMENTSLEFT'] <= 0)
+							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+								'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription has reached its last payment, and thus, access should be terminated at this time.');
+
+						if($api_response['TERM'] <= 0 || $api_response['PAYMENTSLEFT'] > 0)
+							if($api_response['NEXTPAYMENT'] && strlen($api_response['NEXTPAYMENT']) === 8) // MMDDYYYY format is not `strtotime()` compatible.
+								if(($time = strtotime(substr($api_response['NEXTPAYMENT'], -4).'-'.substr($api_response['NEXTPAYMENT'], 0, 2).'-'.substr($api_response['NEXTPAYMENT'], 2, 2))) > $now)
+									return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+										'debug' => 'The PayPal Pro API says this is the next payment time.');
+					}
+					else // Use PayPal Pro API (old flavor).
+					{
+						$api_args = array(
+							'METHOD'    => 'GetRecurringPaymentsProfileDetails',
+							'PROFILEID' => $subscr_id,
+						);
+						if(!($api_response = c_ws_plugin__s2member_paypal_utilities::paypal_api_response($api_args)) || !empty($api_response['__error']))
+							return array_merge($empty_response, array('debug' => 'No fixed EOT, and the PayPal Pro API says there is no subscription for this user.'));
+
+						if(preg_match('/^(?:Pending|PendingProfile)$/i', $api_response['STATUS']))
+							return array_merge($empty_response, array('debug' => 'No fixed EOT, and the PayPal Pro API says the subscription for this user is currently pending changes. Unable to determine at this moment. Please try again in 15 minutes.'));
+
+						if(!preg_match('/^(?:Active|ActiveProfile)$/i', $api_response['STATUS']))
+							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+								'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription is no longer active, and thus, access should be terminated at this time.');
+
+						if($api_response['TOTALBILLINGCYCLES'] > 0 && $api_response['NUMCYCLESREMAINING'] <= 0)
+							return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+								'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription has reached its last payment, and thus, access should be terminated at this time.');
+
+						if($api_response['TOTALBILLINGCYCLES'] <= 0 || $api_response['NUMCYCLESREMAINING'] > 0)
+							if($api_response['NEXTBILLINGDATE'] && ($time = strtotime($api_response['NEXTBILLINGDATE'])) > $now)
+								return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+									'debug' => 'The PayPal Pro API says this is the next payment time.');
+					}
+					return array_merge($empty_response, array('debug' => 'No fixed EOT, and there are no more payments needed from this user.'));
+
+					break; // Break switch.
+
+				case 'authnet': // Authorize.Net (EOT only; w/ limited functionality).
+
+					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
+						|| !class_exists('c_ws_plugin__s2member_pro_authnet_utilities')
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_authnet_api_login_id']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_authnet_api_trans_key']
+					) return array_merge($empty_response, array('debug' => 'Authorize.Net API credentials missing in your s2Member configuration.'));
+
+					$api_args = array(
+						'x_method'          => 'status',
+						'x_subscription_id' => $subscr_id,
+					);
+					if(!($api_response = c_ws_plugin__s2member_pro_authnet_utilities::authnet_arb_response($api_args)) || !empty($api_response['__error']))
+						return array_merge($empty_response, array('debug' => 'No fixed EOT, and the Authorize.Net API says there is no subscription for this user.'));
+
+					if(!preg_match('/^(?:active)$/i', $api_response['subscription_status']))
+						return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+							'debug' => 'This is the estimated EOT time. The Authorize.Net API says this subscription is no longer active, and thus, access should be terminated at this time.');
+
+					// Next payment time not possible with Authorize.Net at this time.
+					// Fixed recurring intervals not possible to query with Authorize.Net at this time.
+					return array_merge($empty_response, array('debug' => 'Partially-supported payment gateway; unable to determine.'));
+
+					break; // Break switch.
+
+				case 'stripe': // Stripe payment gateway (best).
+
+					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
+						|| !class_exists('c_ws_plugin__s2member_pro_stripe_utilities')
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_stripe_api_publishable_key']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_stripe_api_secret_key']
+					) return array_merge($empty_response, array('debug' => 'Stripe API credentials missing in your s2Member configuration.'));
+
+					if(!$subscr_cid) return array_merge($empty_response, array('debug' => 'No fixed EOT, and no `subscr_cid` on file. Unable to determine.'));
+
+					if(!is_object($stripe_subscription = c_ws_plugin__s2member_pro_stripe_utilities::get_customer_subscription($subscr_cid, $subscr_id)) || empty($stripe_subscription->id))
+						return array_merge($empty_response, array('debug' => 'No fixed EOT, and the Stripe API says there is no subscription for this user.'));
+
+					if((integer)$stripe_subscription->ended_at > 0) // Done?
+					{
+						$time = $stripe_subscription->ended_at + $grace_time;
+						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+							'debug' => 'The Stripe API says this subscription reached an expiration on this date + grace time.');
+					}
+					if(in_array($stripe_subscription->status, array('canceled', 'unpaid'), TRUE) || $stripe_subscription->cancel_at_period_end)
+					{
+						$time = $stripe_subscription->current_period_end + $grace_time;
+						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+							'debug' => 'The Stripe API says this subscription was cancelled, and thus, should EOT on this date + grace time.');
+					}
+					if(isset($stripe_subscription->plan->metadata->recurring, $stripe_subscription->plan->metadata->recurring_times)
+						&& !$stripe_subscription->plan->metadata->recurring) // Non-recurring subscription?
+					{
+						$time = (integer)$stripe_subscription->start;
+						$time += $stripe_subscription->plan->trial_period_days * DAY_IN_SECONDS;
+
+						switch($stripe_subscription->plan->interval)
+						{
+							case 'day': // Every X days in this case.
+								$time += (DAY_IN_SECONDS * $stripe_subscription->plan->interval_count) * 1;
+								break; // Break switch now.
+
+							case 'week': // Every X weeks in this case.
+								$time += (WEEK_IN_SECONDS * $stripe_subscription->plan->interval_count) * 1;
+								break; // Break switch now.
+
+							case 'month': // Every X months in this case.
+								$time += ((WEEK_IN_SECONDS * 4) * $stripe_subscription->plan->interval_count) * 1;
+								break; // Break switch now.
+
+							case 'year': // Every X years in this case.
+								$time += (YEAR_IN_SECONDS * $stripe_subscription->plan->interval_count) * 1;
+								break; // Break switch now.
+						}
+						if($favor === 'next' && $stripe_subscription->current_period_end + 1 < $time)
+						{
+							if($stripe_subscription->current_period_end + 1 > $now)
+							{
+								$time = $stripe_subscription->current_period_end + 1;
+								return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+									'debug' => 'The Stripe API says this is the next payment time.');
+							}
+							return array_merge($empty_response, array('debug' => 'Stripe says no more payments needed from this user.'));
+						}
+						$time += $grace_time; // Now add grace to the final EOT time.
+						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+							'debug' => 'The Stripe API says this subscription will be completely over on this date + grace time.');
+					}
+					if(isset($stripe_subscription->plan->metadata->recurring, $stripe_subscription->plan->metadata->recurring_times)
+						&& $stripe_subscription->plan->metadata->recurring && $stripe_subscription->plan->metadata->recurring_times <= 0)
+					{
+						if($stripe_subscription->current_period_end + 1 > $now)
+						{
+							$time = $stripe_subscription->current_period_end + 1;
+							return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+								'debug' => 'The Stripe API says this is the next payment time.');
+						}
+						return array_merge($empty_response, array('debug' => 'Stripe says no more payments needed from this user.'));
+					}
+					if(isset($stripe_subscription->plan->metadata->recurring, $stripe_subscription->plan->metadata->recurring_times)
+						&& $stripe_subscription->plan->metadata->recurring && $stripe_subscription->plan->metadata->recurring_times > 0)
+					{
+						$time = (integer)$stripe_subscription->start;
+						$time += $stripe_subscription->plan->trial_period_days * DAY_IN_SECONDS;
+
+						switch($stripe_subscription->plan->interval)
+						{
+							case 'day': // Every X days in this case.
+								$time += (DAY_IN_SECONDS * $stripe_subscription->plan->interval_count)
+									* $stripe_subscription->plan->metadata->recurring_times;
+								break; // Break switch now.
+
+							case 'week': // Every X weeks in this case.
+								$time += (WEEK_IN_SECONDS * $stripe_subscription->plan->interval_count)
+									* $stripe_subscription->plan->metadata->recurring_times;
+								break; // Break switch now.
+
+							case 'month': // Every X months in this case.
+								$time += ((WEEK_IN_SECONDS * 4) * $stripe_subscription->plan->interval_count)
+									* $stripe_subscription->plan->metadata->recurring_times;
+								break; // Break switch now.
+
+							case 'year': // Every X years in this case.
+								$time += (YEAR_IN_SECONDS * $stripe_subscription->plan->interval_count)
+									* $stripe_subscription->plan->metadata->recurring_times;
+								break; // Break switch now.
+						}
+						if($favor === 'next' && $stripe_subscription->current_period_end + 1 < $time)
+						{
+							if($stripe_subscription->current_period_end + 1 > $now)
+							{
+								$time = $stripe_subscription->current_period_end + 1;
+								return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+									'debug' => 'The Stripe API says this is the next payment time.');
+							}
+							return array_merge($empty_response, array('debug' => 'Stripe says no more payments needed from this user.'));
+						}
+						$time += $grace_time; // Now add grace to the final EOT time.
+						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+							'debug' => 'The Stripe API says this subscription will be completely over on this date + grace time.');
+					}
+					if($stripe_subscription->current_period_end + 1 > $now)
+					{
+						$time = $stripe_subscription->current_period_end + 1;
+						return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+							'debug' => 'The Stripe API says this is the next payment time.');
+					}
+					return array_merge($empty_response, array('debug' => 'No fixed EOT, and Stripe says there are no more payments needed from this user.'));
+
+					break; // Break switch.
+
+				case 'clickbank': // ClickBank (limited functionality).
+
+					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
+						|| !class_exists('c_ws_plugin__s2member_pro_clickbank_utilities')
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_username']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_clerk_key']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_developer_key']
+						|| !$GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_clickbank_secret_key']
+					) return array_merge($empty_response, array('debug' => 'ClickBank API credentials missing in your s2Member configuration.'));
+
+					if(empty($ipn_signup_vars['txn_id'])) // ClickBank receipt number.
+						return array_merge($empty_response, array('debug' => 'No fixed EOT, and no `txn_id` on file. Unable to determine.'));
+
+					if(!($api_response = c_ws_plugin__s2member_pro_clickbank_utilities::clickbank_api_order($ipn_signup_vars['txn_id'])))
+						return array_merge($empty_response, array('debug' => 'No fixed EOT, and the ClickBank API says there is no subscription for this user.'));
+
+					if(!preg_match('/^(?:TEST_)?SALE$/i', $api_response['txnType']) || !$api_response['recurring'])
+						return array_merge($empty_response, array('debug' => 'No fixed EOT, and the ClickBank API says there is no recurring subscription for this user.'));
+
+					if(strcasecmp($api_response['status'], 'active') !== 0 || $api_response['futurePayments'] <= 0)
+						return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+							'debug' => 'This is the estimated EOT time. The ClickBank API says this subscription no longer active, or it has reached its last payment, and thus, access should be terminated at this time.');
+
+					if($api_response['nextPaymentDate'] && ($time = strtotime($api_response['nextPaymentDate'])) > $now)
+						return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+							'debug' => 'The ClickBank API says this is the next payment time.');
+
+					return array_merge($empty_response, array('debug' => 'No fixed EOT, and there are no more payments needed from this user.'));
+
+					break; // Break switch.
+
+				default: // Default case handler.
+					return array_merge($empty_response, array('debug' => 'Partially-supported payment gateway; unable to determine.'));
+			}
+			return array_merge($empty_response, array('debug' => 'Payment gateway check disabled; unable to determine.'));
+		}
 	}
 }

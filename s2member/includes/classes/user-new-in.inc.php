@@ -154,7 +154,7 @@ if (!class_exists ("c_ws_plugin__s2member_user_new_in"))
 										unset($__refs, $__v);
 
 										$unfs .= '<tr>' . "\n";
-										$unfs .= '<th><label for="ws-plugin--s2member-user-new-s2member-ccaps">Custom Capabilities:</label> <a href="#" onclick="alert(\'Optional. This is VERY advanced.\\nSee: s2Member ⥱ API Scripting ⥱ Custom Capabilities.' . ((is_multisite ()) ? '\\n\\nCustom Capabilities are assigned on a per-Blog basis. So having a set of Custom Capabilities for one Blog, and having NO Custom Capabilities on another Blog - is very common. This is how permissions are designed to work.' : '') . '\'); return false;" tabindex="-1">[?]</a></th>' . "\n";
+										$unfs .= '<th><label for="ws-plugin--s2member-user-new-s2member-ccaps">Custom Capabilities:</label> <a href="#" onclick="alert(\'Optional. This is VERY advanced.\\nSee: s2Member → API Scripting → Custom Capabilities.' . ((is_multisite ()) ? '\\n\\nCustom Capabilities are assigned on a per-Blog basis. So having a set of Custom Capabilities for one Blog, and having NO Custom Capabilities on another Blog - is very common. This is how permissions are designed to work.' : '') . '\'); return false;" tabindex="-1">[?]</a></th>' . "\n";
 										$unfs .= '<td><input type="text" autocomplete="off" name="ws_plugin__s2member_user_new_s2member_ccaps" id="ws-plugin--s2member-user-new-s2member-ccaps" value="' . format_to_edit ($_p["ws_plugin__s2member_user_new_s2member_ccaps"]) . '" class="regular-text" onkeyup="if(this.value.match(/[^a-z_0-9,]/)) this.value = jQuery.trim (jQuery.trim (this.value).replace (/[ \-]/g, \'_\').replace (/[^a-z_0-9,]/gi, \'\').toLowerCase ());" /></td>' . "\n";
 										$unfs .= '</tr>' . "\n";
 

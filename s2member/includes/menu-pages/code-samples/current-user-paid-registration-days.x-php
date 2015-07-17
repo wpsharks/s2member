@@ -33,7 +33,7 @@ In this example, the longer they've been a "paying" Member, the more they get.
 
 **NOTE** The use of `[s2If php=""]` requires s2Member Pro.
 **NOTE** Arbitrary PHP code (via [s2If php=""]) will only work if you enable this functionality.
-	Please visit `Dashboard ⥱ s2Member ⥱ Restriction Options ⥱ Simple Shortcode Conditionals`
+	Please visit `Dashboard → s2Member → Restriction Options → Simple Shortcode Conditionals`
 		to set your preferences and enable `[s2If php=""]` when s2Member Pro is installed.
 
 ---- Another s2member Shortcode Equivalent ----

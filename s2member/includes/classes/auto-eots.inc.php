@@ -111,7 +111,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_auto_eot_system', get_defined_vars());
-			unset($__refs, $__v);
+			unset($__refs, $__v); // Housekeeping.
 
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled']  /* Enabled? */)
 			{
@@ -123,7 +123,9 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 					{
 						if(($user_id = $eot->ID) && is_object($user = new WP_User ($user_id)) && $user->ID)
 						{
-							delete_user_option($user_id, 's2member_auto_eot_time'); // Always delete.
+							$auto_eot_time = get_user_option('s2member_auto_eot_time', $user_id);
+							delete_user_option($user_id, 's2member_last_auto_eot_time');
+							delete_user_option($user_id, 's2member_auto_eot_time');
 
 							if(!$user->has_cap('administrator') /* Do NOT process Administrator accounts. */)
 							{
@@ -131,13 +133,14 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 								{
 									$eot_del_type = 'auto-eot-cancellation-expiration-demotion'; // Set EOT/Del type.
 
-									$custom         = get_user_option('s2member_custom', $user_id);
-									$subscr_gateway = get_user_option('s2member_subscr_gateway', $user_id);
-									$subscr_id      = get_user_option('s2member_subscr_id', $user_id);
-									$subscr_baid    = get_user_option('s2member_subscr_baid', $user_id);
-									$subscr_cid     = get_user_option('s2member_subscr_cid', $user_id);
-									$fields         = get_user_option('s2member_custom_fields', $user_id);
-									$user_reg_ip    = get_user_option('s2member_registration_ip', $user_id);
+									$custom          = get_user_option('s2member_custom', $user_id);
+									$subscr_gateway  = get_user_option('s2member_subscr_gateway', $user_id);
+									$subscr_id       = get_user_option('s2member_subscr_id', $user_id);
+									$subscr_baid     = get_user_option('s2member_subscr_baid', $user_id);
+									$subscr_cid      = get_user_option('s2member_subscr_cid', $user_id);
+									$fields          = get_user_option('s2member_custom_fields', $user_id);
+									$user_reg_ip     = get_user_option('s2member_registration_ip', $user_id);
+									$ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id);
 
 									$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber');
 									$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
@@ -146,7 +149,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									do_action('ws_plugin__s2member_during_auto_eot_system_during_before_demote', get_defined_vars());
 									do_action('ws_plugin__s2member_during_collective_mods', $user_id, get_defined_vars(), $eot_del_type, 'modification', $demotion_role);
 									do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'modification');
-									unset($__refs, $__v);
+									unset($__refs, $__v); // Housekeeping.
 
 									if($existing_role !== $demotion_role /* Only if NOT the existing Role. */)
 										$user->set_role($demotion_role /* Give User the demotion Role. */);
@@ -162,21 +165,23 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									delete_user_option($user_id, 's2member_subscr_cid');
 
 									delete_user_option($user_id, 's2member_ipn_signup_vars');
-									if(!apply_filters('ws_plugin__s2member_preserve_paid_registration_times', TRUE, get_defined_vars()))
+									if(!apply_filters('ws_plugin__s2member_preserve_paid_registration_times', TRUE))
 										delete_user_option($user_id, 's2member_paid_registration_times');
 
 									delete_user_option($user_id, 's2member_last_status_scan');
 									delete_user_option($user_id, 's2member_first_payment_txn_id');
 									delete_user_option($user_id, 's2member_last_payment_time');
+									delete_user_option($user_id, 's2member_last_auto_eot_time');
 									delete_user_option($user_id, 's2member_auto_eot_time');
 
 									delete_user_option($user_id, 's2member_file_download_access_log');
 									delete_user_option($user_id, 's2member_authnet_payment_failures');
 
-									c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
+									update_user_option($user_id, 's2member_last_auto_eot_time', $auto_eot_time);
 
+									c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
 									if($subscr_gateway && $subscr_id) // Also note the Paid Subscr. Gateway/ID so there is a reference left behind here.
-										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$subscr_gateway.' ⥱ '.$subscr_id);
+										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$subscr_gateway.' → '.$subscr_id);
 
 									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'] && is_array($cv = preg_split('/\|/', $custom)))
 									{
@@ -257,7 +262,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									}
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_auto_eot_system_during_demote', get_defined_vars());
-									unset($__refs, $__v);
+									unset($__refs, $__v); // Housekeeping.
 								}
 								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_eot_behavior'] === 'delete')
 								{
@@ -266,7 +271,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_auto_eot_system_during_before_delete', get_defined_vars());
 									do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'removal-deletion');
-									unset($__refs, $__v);
+									unset($__refs, $__v); // Housekeeping.
 
 									if(is_multisite()/* Multisite does NOT actually delete; ONLY removes. */)
 									{
@@ -280,11 +285,11 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_auto_eot_system_during_delete', get_defined_vars());
-									unset($__refs, $__v);
+									unset($__refs, $__v); // Housekeeping.
 								}
 								foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 								do_action('ws_plugin__s2member_during_auto_eot_system', get_defined_vars());
-								unset($__refs, $__v);
+								unset($__refs, $__v); // Housekeeping.
 							}
 						}
 					}
@@ -294,7 +299,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_after_auto_eot_system', get_defined_vars());
-			unset($__refs, $__v);
+			unset($__refs, $__v); // Housekeeping.
 		}
 	}
 }
