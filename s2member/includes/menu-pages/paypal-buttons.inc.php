@@ -51,7 +51,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 										if (($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_levelN_buttons = "ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_level" . $n . "_buttons"))
 											do_action($ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_levelN_buttons, get_defined_vars ());
 
-										echo '<div class="ws-menu-page-group" title="PayPal Buttons For Level #' . $n . ' Access">' . "\n";
+										echo '<div class="ws-menu-page-group" title="Buttons For Level #' . $n . ' Access">' . "\n";
 
 										echo '<div class="ws-menu-page-section ws-plugin--s2member-level' . $n . '-buttons-section">' . "\n";
 										echo '<h3>Button Code Generator For Level #' . $n . ' Access</h3>' . "\n";
@@ -137,7 +137,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_modification_buttons", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="PayPal Subscr Modification Buttons">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Subscr. Modification Buttons">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-modification-buttons-section">' . "\n";
 								echo '<h3>Button Code Generator For Subscription Modifications</h3>' . "\n";
@@ -238,7 +238,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_ccap_buttons", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="PayPal Capability (Buy Now) Buttons">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Capability (Buy Now) Buttons">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-ccap-buttons-section">' . "\n";
 								echo '<h3>Button Code Generator For Independent Custom Capabilities</h3>' . "\n";
@@ -316,7 +316,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_cancellation_buttons", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="PayPal Subscr Cancellation Buttons">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Subscr. Cancellation Buttons">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-cancellation-buttons-section">' . "\n";
 								echo '<h3>One Button Does It All For Cancellations (copy/paste)</h3>' . "\n";
@@ -393,7 +393,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_reg_links", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="PayPal Member Registration Access Links">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Member Registration Access Links">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-reg-links-section">' . "\n";
 								echo '<h3>Registration Access Link Generator (for Customer Service)</h3>' . "\n";
@@ -432,7 +432,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_sp_buttons", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="PayPal Specific Post/Page (Buy Now) Buttons">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Specific Post/Page (Buy Now) Buttons">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-sp-buttons-section">' . "\n";
 								echo '<h3>Button Code Generator For Specific Post/Page Buttons</h3>' . "\n";
@@ -527,7 +527,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 							{
 								do_action("ws_plugin__s2member_during_paypal_buttons_page_during_left_sections_before_sp_links", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="PayPal Specific Post/Page Access Links">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Specific Post/Page Access Links">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-sp-links-section">' . "\n";
 								echo '<h3>Specific Post/Page Access Link Generator (for Customer Service)</h3>' . "\n";
