@@ -401,6 +401,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			if(!($user_id = (integer)$user_id)) // Empty user ID in this call?
 				$user_id = get_current_user_id(); // Assume current user.
 
+			if(!$favor || !in_array($favor, array('fixed', 'next'), TRUE))
+				$favor = 'fixed'; // Default behavior.
+
 			$now            = time(); // Current timestamp.
 			$grace_time     = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
 			$grace_time     = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $grace_time);

@@ -79,7 +79,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 
 			if(!is_array($eot = get_transient($transient)))
 			{
-				$eot = c_ws_plugin__s2member_utils_users::get_user_eot($user_id);
+				$eot = c_ws_plugin__s2member_utils_users::get_user_eot($user_id, $mode);
 				set_transient($transient, $eot, DAY_IN_SECONDS / 2);
 			}
 			// Initialize EOT details/output format.
