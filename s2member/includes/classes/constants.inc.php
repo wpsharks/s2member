@@ -544,7 +544,7 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			 * @see http://codex.wordpress.org/Function_Reference/get_user_option get_user_option()
 			 */
 			if(!defined('S2MEMBER_CURRENT_USER_PAID_REGISTRATION_TIME'))
-				define ('S2MEMBER_CURRENT_USER_PAID_REGISTRATION_TIME', ($c[] = (($user && (int)$paid_registration_times['level']) ? (int)$paid_registration_times['level'] : 0)));
+				define ('S2MEMBER_CURRENT_USER_PAID_REGISTRATION_TIME', ($c[] = (($user && (int)@$paid_registration_times['level']) ? (int)$paid_registration_times['level'] : 0)));
 
 			/**
 			 * The number of days the current User has been a paid Member.
@@ -596,7 +596,7 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			 * @see http://codex.wordpress.org/Function_Reference/get_user_option get_user_option()
 			 */
 			if(!defined('S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS'))
-				define ('S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS', ($c[] = (($user && (int)$paid_registration_times['level']) ? (int)floor((strtotime('now') - (int)$paid_registration_times['level']) / 86400) : 0)));
+				define ('S2MEMBER_CURRENT_USER_PAID_REGISTRATION_DAYS', ($c[] = (($user && (int)@$paid_registration_times['level']) ? (int)floor((strtotime('now') - (int)$paid_registration_times['level']) / 86400) : 0)));
 
 			/**
 			 * The number of days the current User has had an account, period.
