@@ -45,13 +45,19 @@ if(!class_exists('c_ws_plugin__s2member_utils_cur'))
 		{
 			if(is_numeric($a) && strlen($from) === 3 && strlen($to) === 3)
 			{
-				$q        = strtoupper($from.'-'.$to); // Also need this to test the return value.
-				$endpoint = 'http://www.freecurrencyconverterapi.com/api/convert?q='.urlencode($q).'&compact=y';
+				$regex    = '/\<span\s+class\s*\=\s*(?:["\'])?bld(?:["\'])?\s*\>(?P<conversion>[0-9.]+)\s+'.preg_quote($to, '/').'\s*\<\/span\>/i';
+				$endpoint = 'http://www.google.com/finance/converter?a='.urlencode($a).'&from='.urlencode($from).'&to='.urlencode($to);
 
-				if(($json = c_ws_plugin__s2member_utils_urls::remote($endpoint))
-				   && is_object($json = json_decode($json)) && isset($json->{$q}->val)
-				   && is_float($conversion = (float)$a * (float)$json->{$q}->val)
-				) return number_format($conversion, 2, '.', '');
+				$prefix    = 's2m_cur'; // Transient prefix.
+				$transient = $prefix.md5('s2member_cur_convert_'.$endpoint);
+
+				if(!($response = get_transient($transient)))
+				{
+					$response  = c_ws_plugin__s2member_utils_urls::remote($endpoint);
+					set_transient($transient, $response, DAY_IN_SECONDS / 2);
+				}
+				if($response && preg_match($regex, $response, $m))
+					return number_format((float)$m['conversion'], 2, '.', '');
 			}
 			return ''; // Default return value.
 		}
