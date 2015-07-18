@@ -15,9 +15,9 @@
 * @since 3.5
 */
 if(!defined('WPINC')) // MUST have WordPress.
-	exit ("Do not access this file directly.");
+	exit ('Do not access this file directly.');
 
-if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
+if (!class_exists ('c_ws_plugin__s2member_utils_captchas'))
 	{
 		/**
 		* Captcha utilities.
@@ -28,6 +28,19 @@ if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
 		class c_ws_plugin__s2member_utils_captchas
 			{
 				/**
+				* Which reCAPTCHA™ version.
+				*
+				* @package s2Member\Utilities
+				* @since 150717
+				*
+				* @return string The version number.
+				*/
+				public static function recaptcha_version()
+					{
+						return apply_filters('ws_plugin__s2member_recaptcha_version', '1', get_defined_vars());
+					}
+
+				/**
 				* Public/private keys to use for reCAPTCHA™.
 				*
 				* @package s2Member\Utilities
@@ -35,13 +48,14 @@ if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
 				*
 				* @return array An array with with two elements: `public` and `private`.
 				*/
-				public static function recaptcha_keys ()
+				public static function recaptcha_keys()
 					{
-						$public = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["recaptcha"]["public_key"];
-						$private = /* Private key. */ $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["recaptcha"]["private_key"];
+						$public  = $GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['public_key'];
+						$private = $GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['private_key'];
 
-						return apply_filters("ws_plugin__s2member_recaptcha_keys", array("public" => $public, "private" => $private), get_defined_vars ());
+						return apply_filters('ws_plugin__s2member_recaptcha_keys', array('public' => $public, 'private' => $private), get_defined_vars ());
 					}
+
 				/**
 				* Verifies a reCAPTCHA™ code via Google.
 				*
@@ -52,13 +66,27 @@ if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
 				* @param string $response The value of `recaptcha_response_field` during form submission.
 				* @return bool True if ``$response`` is valid, else false.
 				*/
-				public static function recaptcha_code_validates ($challenge = FALSE, $response = FALSE)
+				public static function recaptcha_code_validates($challenge = '', $response = '')
 					{
-						$keys = c_ws_plugin__s2member_utils_captchas::recaptcha_keys ();
-						$post_vars = array("privatekey" => $keys["private"], "remoteip" => $_SERVER["REMOTE_ADDR"], "challenge" => $challenge, "response" => $response);
+						$keys = c_ws_plugin__s2member_utils_captchas::recaptcha_keys();
 
-						return preg_match ("/^true/i", trim (c_ws_plugin__s2member_utils_urls::remote ("http://www.google.com/recaptcha/api/verify", $post_vars)));
+						if(self::recaptcha_version() === '2') // New API verifier.
+							{
+								$api_post_vars = array('secret' => $keys['private'], 'response' => $response, 'remoteip' => $_SERVER['REMOTE_ADDR']);
+								$api_response  = c_ws_plugin__s2member_utils_urls::remote('https://www.google.com/recaptcha/api/siteverify', $api_post_vars);
+								$api_response  = json_decode($api_response);
+
+								return is_object($api_response) && !empty($api_response->success);
+							}
+						else // Old API call; note that this is NOT over SSL for some reason.
+							{
+								$api_post_vars = array('privatekey' => $keys['private'], 'challenge' => $challenge, 'response' => $response, 'remoteip' => $_SERVER['REMOTE_ADDR']);
+								$api_response  = c_ws_plugin__s2member_utils_urls::remote ('http://www.google.com/recaptcha/api/verify', $api_post_vars);
+
+								return preg_match('/^true/i', trim($api_response));
+							}
 					}
+
 				/**
 				* Builds a reCAPTCHA™ JavaScript `script` tag for display.
 				*
@@ -70,17 +98,23 @@ if (!class_exists ("c_ws_plugin__s2member_utils_captchas"))
 				* @param string $error Optional. An error message to display.
 				* @return string HTML markup for JavaScript tag.
 				*/
-				public static function recaptcha_script_tag ($theme = FALSE, $tabindex = FALSE, $error = FALSE)
+				public static function recaptcha_script_tag($theme = '', $tabindex = '', $error = '')
 					{
-						$theme = ($theme) ? $theme : "clean";
-						$tabindex = (strlen ($tabindex)) ? (int)$tabindex : -1;
-						$keys = c_ws_plugin__s2member_utils_captchas::recaptcha_keys ();
+						$theme             = $theme ? $theme : 'clean';
+						$tabindex          = strlen($tabindex) ? (int)$tabindex : -1;
+						$keys              = c_ws_plugin__s2member_utils_captchas::recaptcha_keys();
 
-						$options = '<script type="text/javascript">' . "if(typeof RecaptchaOptions !== 'object'){ var RecaptchaOptions = {theme: '" . c_ws_plugin__s2member_utils_strings::esc_js_sq ($theme) . "', lang: '" . c_ws_plugin__s2member_utils_strings::esc_js_sq ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["recaptcha"]["lang"]) . "', tabindex: " . $tabindex . " }; }" . '</script>' . "\n";
-						$no_tabindex_icons = '<script type="text/javascript">' . "if(typeof jQuery === 'function'){ jQuery('td a[id^=\"recaptcha\"]').removeAttr('tabindex'); }" . '</script>';
-						$adjustments = (!apply_filters("c_ws_plugin__s2member_utils_tabindex_recaptcha_icons", false, get_defined_vars ())) ? $no_tabindex_icons : "";
+						if(self::recaptcha_version() === '2') // New API verifier.
+						{
+							$theme = !$theme || in_array($theme, array('red', 'white', 'clean', 'blackglass'), TRUE) ? 'light' : $theme;
+							return '<div class="g-recaptcha" data-sitekey="'.esc_attr($keys['public']).'" data-theme="'.esc_attr($theme).'" data-tabindex="'.esc_attr($tabindex).'"></div>'.
+									'<script src="https://www.google.com/recaptcha/api.js"></script>';
+						}
+						$options           = '<script type="text/javascript">'."if(typeof RecaptchaOptions !== 'object'){ var RecaptchaOptions = {theme: '".c_ws_plugin__s2member_utils_strings::esc_js_sq($theme)."', lang: '".c_ws_plugin__s2member_utils_strings::esc_js_sq($GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['lang'])."', tabindex: ".$tabindex." }; }".'</script>'."\n";
+						$no_tabindex_icons = '<script type="text/javascript">'."if(typeof jQuery === 'function'){ jQuery('td a[id^=\"recaptcha\"]').removeAttr('tabindex'); }".'</script>';
+						$adjustments       = !apply_filters('c_ws_plugin__s2member_utils_tabindex_recaptcha_icons', false, get_defined_vars ()) ? $no_tabindex_icons : '';
 
-						return $options . '<script type="text/javascript" src="' . esc_attr ('https://www.google.com/recaptcha/api/challenge?k=' . urlencode ($keys["public"])) . '' . (($error) ? '&amp;error=' . urlencode ($error) : '') . '"></script>' . $adjustments;
+						return $options.'<script type="text/javascript" src="'.esc_attr('https://www.google.com/recaptcha/api/challenge?k='.urlencode($keys['public'])).($error ? '&amp;error='.urlencode($error) : '').'"></script>'.$adjustments;
 					}
 			}
 	}

@@ -81,7 +81,7 @@ $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir_htaccess'] = dirname(__FILE__
 /*
 Configure the global reCaptcha (www.websharks-inc.net / or any domain). These public/private keys work on any installation.
 */
-$GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha'] = array('public_key' => '6LeCANsSAAAAAIIrlB3FrXe42mr0OSSZpT0pkpFK', 'private_key' => '6LeCANsSAAAAAGBXMIKAirv6G4PmaGa-ORxdD-oZ', 'lang' => _x('en', 's2member-front recaptcha-lang-code', 's2member'));
+$GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']  = array('public_key' => '6LeCANsSAAAAAIIrlB3FrXe42mr0OSSZpT0pkpFK', 'private_key' => '6LeCANsSAAAAAGBXMIKAirv6G4PmaGa-ORxdD-oZ', 'lang' => _x('en', 's2member-front recaptcha-lang-code', 's2member'));
 /*
 Configure the right menu options panel for s2Member.
 */
