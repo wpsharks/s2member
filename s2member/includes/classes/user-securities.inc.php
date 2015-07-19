@@ -157,5 +157,111 @@ if(!class_exists('c_ws_plugin__s2member_user_securities'))
 
 			return apply_filters('ws_plugin__s2member_hide_password_fields', $show, get_defined_vars());
 		}
+
+		/**
+		 * Acquires password minimum length.
+		 *
+		 * @package s2Member\User_Securities
+		 * @since 150717
+		 *
+		 * @param string $password The password to score.
+		 *
+		 * @return integer Password minimum length.
+		 */
+		public static function min_password_length()
+		{
+			$min = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_password_min_length'];
+			return max(6, (integer)apply_filters('ws_plugin__s2member_min_password_length', $min > 0 ? $min : 0));
+		}
+
+		/**
+		 * Acquires minimum password strength code.
+		 *
+		 * @package s2Member\User_Securities
+		 * @since 150717
+		 *
+		 * @return string Minimum password strength code.
+		 */
+		public static function min_password_strength_code()
+		{
+			$code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_password_min_strength'];
+			return apply_filters('ws_plugin__s2member_min_password_strength_code', trim($code));
+		}
+
+		/**
+		 * Acquires minimum password strength label.
+		 *
+		 * @package s2Member\User_Securities
+		 * @since 150717
+		 *
+		 * @return string Minimum password strength label.
+		 */
+		public static function min_password_strength_label()
+		{
+			switch(self::min_password_strength_code())
+			{
+				case 'weak': return _x('`weak`, `good`, or `strong`', 's2member-front', 's2member');
+				case 'good': return _x('`good` or `strong` (i.e., use numbers, letters, and mixed caSe)', 's2member-front', 's2member');
+				case 'strong': return _x('`strong` (i.e., use numbers, letters, mixed caSe, and punctuation)', 's2member-front', 's2member');
+			}
+			return ''; // Default behavior.
+		}
+
+		/**
+		 * Acquires minimum password strength score.
+		 *
+		 * @package s2Member\User_Securities
+		 * @since 150717
+		 *
+		 * @return integer Minimum password strength score.
+		 */
+		public static function min_password_strength_score()
+		{
+			$score = 0; // Default behavior.
+
+			switch(self::min_password_strength_code())
+				{
+					case 'n/a': $score = 0; break;
+					case 'weak': $score = 10; break;
+					case 'good': $score = 30; break;
+					case 'strong': $score = 50; break;
+				}
+			return apply_filters('ws_plugin__s2member_min_password_strength_score', $score > 0 ? $score : 0);
+		}
+
+		/**
+		 * Acquires password strength score.
+		 *
+		 * @package s2Member\User_Securities
+		 * @since 150717
+		 *
+		 * @param string $password The password to score.
+		 *
+		 * @return integer Password strength score.
+		 */
+		public static function password_strength_score($password)
+		{
+			$score = 0; // Initialize score.
+
+			if(strlen($password) < 1)
+				return $score;
+
+		 	else if(strlen($password) < self::min_password_length())
+				return $score;
+
+			if(preg_match('/[0-9]/', $password))
+				$score += 10;
+
+			if(preg_match('/[a-z]/', $password))
+				$score += 10;
+
+			if(preg_match('/[A-Z]/', $password))
+				$score += 10;
+
+			if(preg_match('/[^0-9a-zA-Z]/', $password))
+				$score += $score === 30 ? 20 : 10;
+
+			return apply_filters('ws_plugin__s2member_password_strength_score', $score > 0 ? $score : 0);
+		}
 	}
 }

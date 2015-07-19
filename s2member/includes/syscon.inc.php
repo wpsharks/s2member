@@ -145,10 +145,12 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['run_uninstall_routines'] = '0';
 
-		$default_options['custom_reg_fields']       = '';
-		$default_options['custom_reg_names']        = '1';
-		$default_options['custom_reg_display_name'] = 'full';
-		$default_options['custom_reg_password']     = '0';
+		$default_options['custom_reg_fields']                = '';
+		$default_options['custom_reg_names']                 = '1';
+		$default_options['custom_reg_display_name']          = 'full';
+		$default_options['custom_reg_password']              = '0';
+		$default_options['custom_reg_password_min_length']   = '8'; // Minimum characters.
+		$default_options['custom_reg_password_min_strength'] = 'good'; // `weak`, `good` or `strong`.
 
 		$default_options['custom_reg_opt_in']       = '1';
 		$default_options['custom_reg_opt_in_label'] = _x('Yes, I want to receive updates via email.', 's2member-front', 's2member');
@@ -292,9 +294,11 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['apply_label_translations'] = '0';
 
-		for($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++) $default_options['level'.$n.'_file_downloads_allowed'] = '';
+		for($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++)
+			$default_options['level'.$n.'_file_downloads_allowed'] = '';
 
-		for($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++) $default_options['level'.$n.'_file_downloads_allowed_days'] = '';
+		for($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++)
+			$default_options['level'.$n.'_file_downloads_allowed_days'] = '';
 
 		$default_options['file_download_limit_exceeded_page']   = '';
 		$default_options['file_download_inline_extensions']     = '';
@@ -412,7 +416,10 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 				else if($key === 'custom_reg_fields' && (!is_string($value) || !strlen($value)))
 					$value = $default_options[$key];
 
-				else if(preg_match('/^custom_reg_(?:names|password|opt_in|auto_opt_out_transitions)$/', $key) && (!is_string($value) || !is_numeric($value)))
+				else if(preg_match('/^custom_reg_(?:names|password|password_min_length|opt_in|auto_opt_out_transitions)$/', $key) && (!is_string($value) || !is_numeric($value)))
+					$value = $default_options[$key];
+
+				else if($key === 'custom_reg_password_min_strength' && (!is_string($value) || !strlen($value)))
 					$value = $default_options[$key];
 
 				else if($key === 'custom_reg_display_name' && (!is_string($value) || !preg_match('/^(?:full|first|last|login|0)$/', $value)))

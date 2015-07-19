@@ -56,7 +56,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-uninstall-section">'."\n";
 				echo '<h3>Plugin Deletion Safeguards (highly recommended)</h3>'."\n";
-				echo '<p>By default, s2Member will retain all of it\'s Roles, Capabilities, and your Configuration Options when/if you delete s2Member from the Plugins Menu in WordPress. However, if you would like for s2Member to erase itself completely, please choose: <code>No (upon deletion, erase all data/options)</code>. See also: <a href="http://s2member.com/kb-article/how-do-i-manually-uninstall-s2member/" target="_blank" rel="external">s2Member Uninstall Instructions</a></p>';
+				echo '<p>By default, s2Member will retain all of it\'s Roles, Capabilities, and your Configuration Options when/if you delete s2Member from the Plugins Menu in WordPress. However, if you would like for s2Member to erase itself completely, please choose: <code>No (upon deletion, erase all data/options)</code>. See also: <a href="http://s2member.com/kb-article/how-do-i-uninstall-s2member/" target="_blank" rel="external">s2Member Uninstall Instructions</a></p>';
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_uninstall", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
@@ -1147,16 +1147,32 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '</th>'."\n";
 
 				echo '</tr>'."\n";
-				echo '<tr>'."\n";
+				echo '<tr style="padding-bottom:0;">'."\n";
 
-				echo '<td>'."\n";
-				echo '<select name="ws_plugin__s2member_custom_reg_password" id="ws-plugin--s2member-custom-reg-password"'.((is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && is_main_site() && !c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? ' disabled="disabled"' : '').'>'."\n";
-				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"]) ? ' selected="selected"' : '').'>No (send auto-generated passwords via email; after registration)</option>'."\n";
-				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"]) ? ' selected="selected"' : '').'>Yes (allow members to create their own password during registration)</option>'."\n";
-				echo '</select><br />'."\n";
-				echo 'Auto-generated Passwords are recommended for best security; i.e., this also serves as a form of email confirmation.'."\n";
+				echo '<td style="padding-bottom:0;">'."\n";
+				echo '<em><strong>Note:</strong> Custom passwords are easier for users. However, auto-generated passwords are recommended for best security; i.e., auto-generated passwords also serve as a form of email confirmation.</em>'."\n";
 				echo (is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && is_main_site()) ? '<br /><em>* For security purposes, Custom Passwords are not possible on the Main Site of a Blog Farm. <a href="#" onclick="alert(\'For security purposes, Custom Passwords are not possible on the Main Site of a Blog Farm. A User must wait for the activation/confirmation email; where a randomly generated Password will be assigned. Please note, this limitation only affects your Main Site, via `/wp-signup.php`. In other words, your Customers (i.e., other Blog Owners) will still have the ability to allow Custom Passwords with s2Member. YOU are affected by this limitation, NOT them.\\n\\n* NOTE: s2Member (Pro) removes this limitation.\\nIf you install the s2Member Pro Add-on, you WILL be able to allow Custom Passwords through s2Member Pro-Forms; even on a Multisite Blog Farm.\'); return false;" tabindex="-1">[?]</a></em>'."\n" : '';
 				echo (c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '<br /><em>* Does not affect BuddyPress registration form (always <code>yes</code> with BuddyPress registration).</em>'."\n" : '';
+				echo '<br /><select name="ws_plugin__s2member_custom_reg_password" id="ws-plugin--s2member-custom-reg-password"'.((is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && is_main_site() && !c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? ' disabled="disabled"' : '').'>'."\n";
+				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"]) ? ' selected="selected"' : '').'>No (send auto-generated passwords via email; after registration)</option>'."\n";
+				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"]) ? ' selected="selected"' : '').'>Yes (allow members to create their own password during registration)</option>'."\n";
+				echo '</select>'."\n";
+				echo '</td>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr style="padding-top:0;">'."\n";
+
+				echo '<td style="padding-top:2px;">'."\n";
+				echo '<div id="ws-plugin--s2member-custom-reg-password-settings">'."\n";
+				echo '<small><em><strong>Note:</strong> Minimum characters and password strength also impact profile updates, so it\'s a good idea to configure these even if you\'re using auto-generated passwords during registration.</em></small><br />'."\n";
+				echo '<small>Minimum characters:</small> <input type="text" autocomplete="off" name="ws_plugin__s2member_custom_reg_password_min_length" id="ws-plugin--s2member-custom-reg-password-min-length" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_length"]).'" maxlength="2" size="2" style="width:auto;" />'."\n";
+				echo '<small>Minimum strength:</small> <select name="ws_plugin__s2member_custom_reg_password_min_strength" id="ws-plugin--s2member-custom-reg-password-min-strength" style="width:auto;">'."\n";
+				echo '<option value="n/a"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_strength"] === 'n/a') ? ' selected="selected"' : '').'>N/A (do not enforce a password strength requirement)</option>'."\n";
+				echo '<option value="weak"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_strength"] === 'weak') ? ' selected="selected"' : '').'>Weak (only needs to meet minimum length requirement)</option>'."\n";
+				echo '<option value="good"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_strength"] === 'good') ? ' selected="selected"' : '').'>Good (must have numbers, letters, and mixed caSe)</option>'."\n";
+				echo '<option value="strong"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_strength"] === 'strong') ? ' selected="selected"' : '').'>Strong (must have numbers, letters, mixed caSe, and punctuation)</option>'."\n";
+				echo '</select>'."\n";
+				echo '</div>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";

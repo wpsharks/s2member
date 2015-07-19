@@ -806,6 +806,10 @@ table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > 
 	width       : auto;
 	padding     : 0 0.5em 0 0;
 }
+table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr:not(:first-child) > th
+{
+	padding-top: 0.5em;
+}
 table.ws-menu-page-table div.ws-menu-page-group table.form-table > tbody > tr > td
 {
 	width   : auto;
