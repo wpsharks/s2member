@@ -1449,26 +1449,18 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_default_url_shortener" id="ws-plugin--s2member-default-url-shortener">'."\n";
-				echo '<option value="tiny_url"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_url_shortener"] === "tiny_url") ? ' selected="selected"' : '').'>tinyurl.com (free tinyURL API service)</option>'."\n";
-				echo '<option value="goo_gl"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_url_shortener"] === "goo_gl") ? ' selected="selected"' : '').'>goo.gl (free Google URL Shortening API service)</option>'."\n";
+				echo '<option value="tiny_url"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_url_shortener"] === "tiny_url") ? ' selected="selected"' : '').'>tinyurl.com (free; no API key)</option>'."\n";
+				echo '<option value="bitly"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_url_shortener"] === "bitly") ? ' selected="selected"' : '').'>Bitly (free; API key required)</option>'."\n";
+				echo '<option value="goo_gl"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_url_shortener"] === "goo_gl") ? ' selected="selected"' : '').'>goo.gl (almost-free; API key required)</option>'."\n";
 				echo '</select>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
 				echo '<tr>'."\n";
 
-				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-default-custom-str-url-shortener">'."\n";
-				echo 'Custom URL Shortening Service API (Optional/Advanced):'."\n";
-				echo '</label>'."\n";
-				echo '</th>'."\n";
-
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
-
 				echo '<td>'."\n";
-				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_default_custom_str_url_shortener" id="ws-plugin--s2member-default-custom-str-url-shortener" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_custom_str_url_shortener"]).'" /><br />'."\n";
-				echo 'Your own custom URL <code>(i.e., GET request)</code>, with <code>%%s2_long_url%%</code> Replacement Code. [<a href="#" onclick="alert(\'Advanced site owners can use a custom URL shortening service they prefer.\\n\\nIn order for this to work, your URL shortening service must support simple GET requests through its API (sometimes referred to as a REST or NVP API).\\n\\nIn addition, your URL shortening service must return a plain-text URL in the response. See example below.\\n\\nBitly example GET request with format=txt:\\n\\nhttp://api.bitly.com/v3/shorten?login=demo&apiKey=2d71bf07&format=txt&longUrl=%%s2_long_url%%\\n\\ns2Member expects a shortened URL in the response from Bitly.\\n\\nIf you configure s2Member to use your own custom URL shortening service, s2Member will try your configuration first, and if anything fails, it will fall back on its own pre-integrated backups.\\n\\nWhen configuring your URL for the GET request, s2Member makes two Replacement Codes available:\\n\\n%%s2_long_url%% = The full URL that needs to be shortened (raw URL-encoded).\\n\\n%%s2_long_url_md5%% = An MD5 hash of the full URL (might be useful in some APIs).\'); return false;" tabindex="-1">details</a>]<br />'."\n";
+				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_default_url_shortener_key" id="ws-plugin--s2member-default-url-shortener-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_url_shortener_key"]).'" /><br />'."\n";
+				echo '<em>If you choose Bitly, enter your <a href="http://s2member.com/r/bitly-oauth-access-token/" target="_blank" rel="external">Bitly oAuth Access Token</a>. If you choose Google, <a href="http://s2member.com/r/google-console-create-project/" target="_blank" rel="external">create a new Google Project</a>, enable the URL Shortening API in your Project, generate a Public API Key and enter it here.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";

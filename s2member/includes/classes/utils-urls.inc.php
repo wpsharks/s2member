@@ -15,9 +15,9 @@
 * @since 3.5
 */
 if(!defined('WPINC')) // MUST have WordPress.
-	exit("Do not access this file directly.");
+	exit('Do not access this file directly.');
 
-if(!class_exists("c_ws_plugin__s2member_utils_urls"))
+if(!class_exists('c_ws_plugin__s2member_utils_urls'))
 	{
 		/**
 		* URL utilities.
@@ -37,8 +37,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function wp_signup_url()
 					{
-						return apply_filters("wp_signup_location", site_url("/wp-signup.php"));
+						return apply_filters('wp_signup_location', site_url('/wp-signup.php'));
 					}
+
 				/**
 				* Builds a WordPress registration URL to `/wp-login.php?action=register`.
 				*
@@ -49,8 +50,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function wp_register_url()
 					{
-						return apply_filters("wp_register_location", add_query_arg("action", urlencode("register"), wp_login_url()), get_defined_vars());
+						return apply_filters('wp_register_location', add_query_arg('action', urlencode('register'), wp_login_url()), get_defined_vars());
 					}
+
 				/**
 				* Builds a BuddyPress registration URL to `/register`.
 				*
@@ -61,18 +63,19 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function bp_register_url()
 					{
-						if( /* If BuddyPress is installed. */c_ws_plugin__s2member_utils_conds::bp_is_installed())
-							return home_url(((function_exists("bp_get_signup_slug")) ? bp_get_signup_slug()."/" : BP_REGISTER_SLUG."/"));
+						if(c_ws_plugin__s2member_utils_conds::bp_is_installed())
+							return home_url(function_exists('bp_get_signup_slug') ? bp_get_signup_slug().'/' : BP_REGISTER_SLUG.'/');
 
-						return /* Default return false. */ false;
+						return false;
 					}
+
 				/**
 				* Filters content redirection status *(uses 302s for browsers)*.
 				*
 				* @package s2Member\Utilities
 				* @since 3.5
 				*
-				* @attaches-to ``add_filter("ws_plugin__s2member_content_redirect_status");``
+				* @attaches-to ``add_filter('ws_plugin__s2member_content_redirect_status');``
 				*
 				* @param int|string $status A numeric redirection status code.
 				* @return int|str A numeric status redirection code, possibly modified to a value of `302`.
@@ -81,14 +84,15 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function redirect_browsers_using_302_status($status = FALSE)
 					{
-						$engines = "msie|trident|gecko|webkit|presto|konqueror|playstation";
+						$engines = 'msie|trident|gecko|webkit|presto|konqueror|playstation';
 
-						if( /* Default `301` status? */(int)$status === 301 && /* Have User-Agent? */ !empty($_SERVER["HTTP_USER_AGENT"]))
-							if(($is_browser = preg_match("/(".$engines.")[\/ ]([0-9\.]+)/i", $_SERVER["HTTP_USER_AGENT"])))
-								return /* Use 302 status. */ ($status = 302);
+						if((int)$status === 301 && !empty($_SERVER['HTTP_USER_AGENT']))
+							if(($is_browser = preg_match('/('.$engines.')[\/ ]([0-9\.]+)/i', $_SERVER['HTTP_USER_AGENT'])))
+								$status = 302; // Use 302 for browser engines.
 
-						return /* Else use existing status. */ $status;
+						return $status;
 					}
+
 				/**
 				* Encodes all types of amperands to `amp;`, for use in XHTML code.
 				*
@@ -102,8 +106,9 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function e_amps($url_uri_query = FALSE)
 					{
-						return str_replace("&", "&amp;", c_ws_plugin__s2member_utils_urls::n_amps((string)$url_uri_query));
+						return str_replace('&', '&amp;', c_ws_plugin__s2member_utils_urls::n_amps((string)$url_uri_query));
 					}
+
 				/**
 				* Normalizes amperands to `&` when working with URLs, URIs, and/or query strings.
 				*
@@ -115,10 +120,11 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function n_amps($url_uri_query = FALSE)
 					{
-						$amps = implode("|", array_keys /* Keys are regex patterns. */(c_ws_plugin__s2member_utils_strings::$ampersand_entities));
+						$amps = implode('|', array_keys(c_ws_plugin__s2member_utils_strings::$ampersand_entities));
 
-						return /* Normalizes amperands to `&`. */ preg_replace("/(?:".$amps.")/", "&", (string)$url_uri_query);
+						return preg_replace('/(?:'.$amps.')/', '&', (string)$url_uri_query);
 					}
+
 				/**
 				* Parses out a full valid URI, from either a full URL, or a partial URI.
 				*
@@ -134,13 +140,13 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 					{
 						if(is_string($url_uri) && is_array($parse = c_ws_plugin__s2member_utils_urls::parse_url($url_uri)))
 							{
-								$parse["path"] = (!empty($parse["path"])) ? ((strpos($parse["path"], "/") === 0) ? $parse["path"] : "/".$parse["path"]) : "/";
+								$parse['path'] = !empty($parse['path']) ? (strpos($parse['path'], '/') === 0 ? $parse['path'] : '/'.$parse['path']) : '/';
 
-								return (!empty($parse["query"])) ? $parse["path"]."?".$parse["query"] : $parse["path"];
+								return !empty($parse['query']) ? $parse['path'].'?'.$parse['query'] : $parse['path'];
 							}
-						else // Force a string return value here.
-							return /* Empty string. */ "";
+						return ''; // Default return value.
 					}
+
 				/**
 				* Parses a URL/URI with same args as PHP's ``parse_url()`` function.
 				*
@@ -159,20 +165,21 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 					{
 						$component = $component === FALSE || $component === -1 ? -1 : $component;
 
-						if(is_string($url_uri) && strpos($url_uri, "?") !== FALSE)
+						if(is_string($url_uri) && strpos($url_uri, '?') !== FALSE)
 							{
-								list($_, $query) = preg_split /* Split @ query string marker. */("/\?/", $url_uri, 2);
-								$query = /* See: <https://bugs.php.net/bug.php?id=38143>. */ str_replace("://", urlencode("://"), $query);
-								$url_uri = /* Put it all back together again, after the above modifications. */ $_."?".$query;
+								list($_, $query) = preg_split /* Split @ query string marker. */('/\?/', $url_uri, 2);
+								$query = /* See: <https://bugs.php.net/bug.php?id=38143>. */ str_replace('://', urlencode('://'), $query);
+								$url_uri = /* Put it all back together again, after the above modifications. */ $_.'?'.$query;
 								unset($_, $query); // A little housekeeping here. Unset these vars.
 							}
 						$parse = @parse_url($url_uri, $component); // Let PHP work its magic via ``parse_url()``.
 
-						if($clean_path && is_array($parse) && !empty($parse["path"]) && is_string($parse["path"]))
-							$parse["path"] = preg_replace("/\/+/", "/", $parse["path"]);
+						if($clean_path && is_array($parse) && !empty($parse['path']) && is_string($parse['path']))
+							$parse['path'] = preg_replace('/\/+/', '/', $parse['path']);
 
 						return $component !== -1 ? (string)$parse : $parse;
 					}
+
 				/**
 				* Responsible for all remote communications processed by s2Member.
 				*
@@ -182,50 +189,50 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @since 3.5
 				*
 				* @param string $url Full URL with possible query string parameters.
-				* @param string|array $post_vars Optional. Either a string of POST vars, or an array.
+				* @param string|array $post_body Optional. Either a string of POST data, or an array.
 				* @param array $args Optional. An array of additional arguments used by ``wp_remote_request()``.
 				* @param bool $return_array Optional. If true, instead of a string, we return an array with elements:
 				* 	`code` *(http response code)*, `message` *(http response message)*, `headers` *(an array of lowercase headers)*, `body` *(the response body string)*, `response` *(full response array)*.
 				* @return str|array|bool Requested response str|array from remote location *(see ``$return_array`` parameter )*; else (bool)`false` on failure.
 				*/
-				public static function remote($url = FALSE, $post_vars = FALSE, $args = FALSE, $return_array = FALSE)
+				public static function remote($url = FALSE, $post_body = FALSE, $args = FALSE, $return_array = FALSE)
 					{
 						if(!$url || !is_string($url))
 							return false;
 
 						$args = !is_array($args) ? array() : $args;
 
-						$args["s2member"]    = WS_PLUGIN__S2MEMBER_VERSION; // s2Member connection.
-						$args["httpversion"] = !isset($args["httpversion"]) ? "1.1" : $args["httpversion"];
-						$args["user-agent"]  = !isset($args["user-agent"]) ? "s2Member v".WS_PLUGIN__S2MEMBER_VERSION."; ".home_url() : $args["user-agent"];
+						$args['s2member']    = WS_PLUGIN__S2MEMBER_VERSION; // s2Member connection.
+						$args['httpversion'] = !isset($args['httpversion']) ? '1.1' : $args['httpversion'];
+						$args['user-agent']  = !isset($args['user-agent']) ? 's2Member v'.WS_PLUGIN__S2MEMBER_VERSION.'; '.home_url() : $args['user-agent'];
 
-						if(!isset($args["sslverify"]) && c_ws_plugin__s2member_utils_conds::is_localhost())
-							$args["sslverify"] = FALSE; // Force this off on localhost installs.
+						if(!isset($args['sslverify']) && c_ws_plugin__s2member_utils_conds::is_localhost())
+							$args['sslverify'] = FALSE; // Force this off on localhost installs.
 
-						else if(!isset($args["sslverify"]) && strcasecmp(self::parse_url($url, PHP_URL_HOST), $_SERVER["HTTP_HOST"]) === 0)
-							$args["sslverify"] = FALSE; // Don't require verification when posting to self.
+						else if(!isset($args['sslverify']) && strcasecmp(self::parse_url($url, PHP_URL_HOST), $_SERVER['HTTP_HOST']) === 0)
+							$args['sslverify'] = FALSE; // Don't require verification when posting to self.
 
-						if((is_array($post_vars) || is_string($post_vars)) && !empty($post_vars))
-							$args = array_merge($args, array("method" => "POST", "body" => $post_vars));
+						if($post_body && (is_array($post_body) || is_string($post_body)))
+							$args = array_merge($args, array('method' => 'POST', 'body' => $post_body));
 
-						if(!empty($args["method"]) && strcasecmp((string)$args["method"], "DELETE") === 0 && version_compare(get_bloginfo("version"), "3.4", "<"))
-							add_filter("use_curl_transport", "__return_false", /* ID via priority. */ 111209554);
+						if(!empty($args['method']) && strcasecmp((string)$args['method'], 'DELETE') === 0 && version_compare(get_bloginfo('version'), '3.4', '<'))
+							add_filter('use_curl_transport', '__return_false', /* ID via priority. */ 111209554);
 
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-						do_action("ws_plugin__s2member_before_wp_remote_request", get_defined_vars());
+						do_action('ws_plugin__s2member_before_wp_remote_request', get_defined_vars());
 						unset($__refs, $__v); // Housekeeping.
 
 						$response = wp_remote_request($url, $args);
 
-						remove_filter("use_curl_transport", "__return_false", 111209554);
+						remove_filter('use_curl_transport', '__return_false', 111209554);
 
 						if($return_array && !is_wp_error($response) && is_array($response))
 							{
-								$a = array("code" => (int)wp_remote_retrieve_response_code($response));
-								$a = array_merge($a, array("message" => wp_remote_retrieve_response_message($response)));
-								$a = array_merge($a, array("headers" => wp_remote_retrieve_headers($response)));
-								$a = array_merge($a, array("body" => wp_remote_retrieve_body($response)));
-								$a = array_merge($a, array("response" => $response));
+								$a = array('code' => (int)wp_remote_retrieve_response_code($response));
+								$a = array_merge($a, array('message' => wp_remote_retrieve_response_message($response)));
+								$a = array_merge($a, array('headers' => wp_remote_retrieve_headers($response)));
+								$a = array_merge($a, array('body' => wp_remote_retrieve_body($response)));
+								$a = array_merge($a, array('response' => $response));
 
 								return $a; // Return array w/ ``$response`` too.
 							}
@@ -234,6 +241,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 
 						return false; // Remote request failed, return false.
 					}
+
 				/**
 				* Shortens a long URL, based on s2Member configuration.
 				*
@@ -245,37 +253,61 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				* @param bool $try_backups Defaults to true. If a failure occurs with the first API, we'll try others until we have success.
 				* @return str|bool The shortened URL on success, else false on failure.
 				*/
-				public static function shorten($url = FALSE, $api_sp = FALSE, $try_backups = TRUE)
+				public static function shorten($url = '', $api_sp = '', $try_backups = TRUE)
 					{
-						$url = /* Force strings, else false. */ ($url && is_string($url)) ? $url : false;
-						$api_sp = ($api_sp && is_string($api_sp)) ? strtolower($api_sp) : false;
+						$url                              = $url && is_string($url) ? $url : FALSE;
+						$apis                             = array('tiny_url', 'bitly', 'goo_gl'); // Supported APIs.
+						$api_sp                           = $api_sp && is_string($api_sp) ? strtolower($api_sp) : FALSE;
+						$default_url_shortener            = $GLOBALS['WS_PLUGIN__']['s2member']['o']['default_url_shortener'];
+						$default_url_shortener_key        = $GLOBALS['WS_PLUGIN__']['s2member']['o']['default_url_shortener_key'];
+						$default_custom_str_url_shortener = $GLOBALS['WS_PLUGIN__']['s2member']['o']['default_custom_str_url_shortener'];
+						$api                              = $api_sp ? $api_sp : $default_url_shortener;
 
-						$default_url_shortener = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_url_shortener"];
-						$default_custom_str_url_shortener = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_custom_str_url_shortener"];
-
-						$apis = /* The shortening APIs currently pre-integrated in this release of s2Member. */ array("tiny_url", "goo_gl");
-
-						if($url && ($api = /* If specific, use it. Otherwise, use the default shortening API. */ ($api_sp) ? $api_sp : $default_url_shortener))
+						if($url && $api) // If specific, use it. Otherwise, try customs, else use the default shortening API.
 							{
-								if(!$api_sp && ($custom_url = trim(apply_filters("ws_plugin__s2member_url_shorten", false, get_defined_vars()))) && stripos($custom_url, "http") === 0)
-									return /* Using whatever other shortener API you prefer, over the ones available by default with s2Member. */ ($shorter_url = $custom_url);
+								if(!$api_sp // If not a specific API, give filters a chance to shorten it here.
+										&& ($custom_url = trim(apply_filters('ws_plugin__s2member_url_shorten', FALSE, get_defined_vars())))
+										&& stripos($custom_url, 'http') === 0)
+									return ($shorter_url = $custom_url);
 
-								else if(!$api_sp && stripos($default_custom_str_url_shortener, "http") === 0 && ($custom_url = trim(c_ws_plugin__s2member_utils_urls::remote(str_ireplace(array("%%s2_long_url%%", "%%s2_long_url_md5%%"), array(rawurlencode($url), urlencode(md5($url))), $default_custom_str_url_shortener)))) && stripos($custom_url, "http") === 0)
-									return /* Using whatever other shortener API that a site owner prefers, over the ones available by default with s2Member. */ ($shorter_url = $custom_url);
+								else if(!$api_sp // If not specific, try custom settings.
+										&& stripos($default_custom_str_url_shortener, 'http') === 0
+										&& ($custom_url = trim(self::remote(str_ireplace(array('%%s2_long_url%%', '%%s2_long_url_md5%%'), array(rawurlencode($url), urlencode(md5($url))), $default_custom_str_url_shortener))))
+										&& stripos($custom_url, 'http') === 0)
+									return ($shorter_url = $custom_url);
 
-								else if($api === "tiny_url" && ($tiny_url = trim(c_ws_plugin__s2member_utils_urls::remote("http://tinyurl.com/api-create.php?url=".rawurlencode($url)))) && stripos($tiny_url, "http") === 0)
-									return /* The default tinyURL API: <http://tinyurl.com/api-create.php?url=http://www.example.com/>. */ ($shorter_url = $tiny_url);
+								else if($api === 'tiny_url' // Using the TinyURL API in this case?
+										&& ($tiny_url = trim(self::remote('http://tinyurl.com/api-create.php?url='.rawurlencode($url))))
+										&& stripos($tiny_url, 'http') === 0)
+									return ($shorter_url = $tiny_url);
 
-								else if($api === "goo_gl" && ($goo_gl = json_decode(trim(c_ws_plugin__s2member_utils_urls::remote("https://www.googleapis.com/urlshortener/v1/url".((($goo_gl_key = apply_filters("ws_plugin__s2member_url_shorten_api_goo_gl_key", false))) ? "?key=".urlencode($goo_gl_key) : ""), json_encode(array("longUrl" => $url)), array("headers" => array("Content-Type" => "application/json")))), true)) && !empty($goo_gl["id"]) && is_string($goo_gl_url = $goo_gl["id"]) && stripos($goo_gl_url, "http") === 0)
-									return /* Google API: <http://code.google.com/apis/urlshortener/v1/getting_started.html>. */ ($shorter_url = $goo_gl_url);
+								else if($api === 'bitly' // Using the Bitly API in this case?
+										&& ($bitly_endpoint          = 'https://api-ssl.bitly.com/v3/shorten')
+										&& ($bitly_endpoint_key      = $default_url_shortener_key) // Must be configured by site owner.
+										&& ($bitly_endpoint          = add_query_arg('access_token', urlencode($bitly_endpoint_key), $bitly_endpoint))
+										&& ($bitly_endpoint          = add_query_arg('longUrl', urlencode($url), $bitly_endpoint))
+										&& ($bitly_response          = json_decode(trim(self::remote($bitly_endpoint))))
+										&& !empty($bitly_response->data->url) && stripos($bitly_url = $bitly_response->data->url, 'http') === 0)
+									return ($shorter_url = $bitly_url);
 
-								else if /* Try backups? This way we can still shorten the URL with a backup. */($try_backups && count($apis) > 1)
+								else if($api === 'goo_gl' // Using the Google API in this case?
+										&& ($goo_gl_endpoint          = 'https://www.googleapis.com/urlshortener/v1/url')
+										&& ($goo_gl_endpoint_headers  = array('headers' => array('Content-Type' => 'application/json')))
+										&& ($goo_gl_endpoint_key      = $default_url_shortener_key) // Must be configured by site owner.
+										&& ($goo_gl_endpoint          = add_query_arg('key', urlencode($goo_gl_endpoint_key), $goo_gl_endpoint))
+										&& ($goo_gl_response          = json_decode(trim(self::remote($goo_gl_endpoint, json_encode(array('longUrl' => $url)), $goo_gl_endpoint_headers))))
+										&& !empty($goo_gl_response->id) && stripos($goo_gl_url = $goo_gl_response->id, 'http') === 0)
+									return ($shorter_url = $goo_gl_url);
 
-									foreach /* Try other backup APIs now. */(array_diff($apis, array($api)) as $backup)
-										if(($backup = c_ws_plugin__s2member_utils_urls::shorten($url, $backup, false)))
-											return /* Success, we can return now. */ ($shorter_url = $backup);
+								else if($try_backups && count($apis) > 1) // Try backups?
+									{
+										foreach(array_diff($apis, array($api)) as $_backup_api)
+											if(($_backup_api_url = self::shorten($url, $_backup_api, FALSE)))
+												return ($shorter_url = $_backup_api_url);
+										unset($_backup_api, $_backup_api_url); // Housekeeping.
+									}
 							}
-						return /* Default return value. */ false;
+						return FALSE; // Default return value.
 					}
 				/**
 				* Removes all s2Member-generated signatures from a full URL, a partial URI, or just a query string.
@@ -289,12 +321,13 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function remove_s2member_sigs($url_uri_query = FALSE, $sig_var = FALSE)
 					{
-						$url_uri_query = c_ws_plugin__s2member_utils_strings::trim((string)$url_uri_query, false, "?&=");
-						$sig_var = ($sig_var && is_string($sig_var)) ? $sig_var : /* Use default. */ "_s2member_sig";
-						$sigs = /* Remove all signatures. */ array_unique(array($sig_var, "_s2member_sig"));
+						$url_uri_query = c_ws_plugin__s2member_utils_strings::trim((string)$url_uri_query, false, '?&=');
+						$sig_var       = ($sig_var && is_string($sig_var)) ? $sig_var : '_s2member_sig';
+						$sigs          = array_unique(array($sig_var, '_s2member_sig'));
 
-						return trim(remove_query_arg($sigs, $url_uri_query), "?&=");
+						return trim(remove_query_arg($sigs, $url_uri_query), '?&=');
 					}
+
 				/**
 				* Adds an s2Member-generated signature onto a full URL, a partial URI, or just a query string.
 				*
@@ -307,27 +340,27 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function add_s2member_sig($url_uri_query = FALSE, $sig_var = FALSE)
 					{
-						$url_uri_query = $query = c_ws_plugin__s2member_utils_strings::trim((string)$url_uri_query, false, "?&=");
-						$sig_var = ($sig_var && is_string($sig_var)) ? $sig_var : /* Use default. */ "_s2member_sig";
+						$url_uri_query = $query = c_ws_plugin__s2member_utils_strings::trim((string)$url_uri_query, false, '?&=');
+						$sig_var       = $sig_var && is_string($sig_var) ? $sig_var : '_s2member_sig';
 
 						$url_uri_query = $query = c_ws_plugin__s2member_utils_urls::remove_s2member_sigs($url_uri_query, $sig_var);
-						if( /* Is this a full URL, or a partial URI? */preg_match("/^(?:[a-z]+\:\/\/|\/)/i", ($url_uri_query)))
-							$query = trim(c_ws_plugin__s2member_utils_urls::parse_url($url_uri_query, PHP_URL_QUERY), "?&=");
+						if(preg_match('/^(?:[a-z]+\:\/\/|\/)/i', $url_uri_query)) // Is this a full URL or a partial URI?
+							$query = trim(c_ws_plugin__s2member_utils_urls::parse_url($url_uri_query, PHP_URL_QUERY), '?&=');
 
-						$key = /* Obtain the proper encryption/decryption key. */ c_ws_plugin__s2member_utils_encryption::key();
+						$key = c_ws_plugin__s2member_utils_encryption::key(); // Obtain key.
 
-						if($url_uri_query && is_string /* We DO allow empty query strings. So we can sign a URL without one. */($query))
+						if($url_uri_query && is_string($query)) // We DO allow empty query strings. So we can sign a URL without one.
 							{
-								wp_parse_str /* Parse the query string into an array of ``$vars``. Then sort & serialize them into a string. */($query, $vars);
+								wp_parse_str($query, $vars); // Parse the query string into an array of ``$vars``.
 								$vars = c_ws_plugin__s2member_utils_arrays::remove_0b_strings(c_ws_plugin__s2member_utils_strings::trim_deep($vars));
 								$vars = serialize(c_ws_plugin__s2member_utils_arrays::ksort_deep($vars));
 
-								$sig = /* The s2Member-generated signature. */ ($time = time())."-".md5($key.$time.$vars);
-
+								$sig = ($time = time()).'-'.md5($key.$time.$vars);
 								$url_uri_query = add_query_arg($sig_var, urlencode($sig), $url_uri_query);
 							}
-						return /* Possibly with a ``$sig_var`` variable. */ $url_uri_query;
+						return $url_uri_query; // Possibly with a ``$sig_var`` variable.
 					}
+
 				/**
 				* Verifies an s2Member-generated signature; in a full URL, a partial URI, or in just a query string.
 				*
@@ -342,34 +375,35 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function s2member_sig_ok($url_uri_query = FALSE, $check_time = FALSE, $exp_secs = FALSE, $sig_var = FALSE)
 					{
-						$url_uri_query = $query = c_ws_plugin__s2member_utils_strings::trim((string)$url_uri_query, false, "?&=");
-						if( /* Is this a full URL, or a partial URI? */preg_match("/^(?:[a-z]+\:\/\/|\/)/i", ($url_uri_query)))
-							$query = trim(c_ws_plugin__s2member_utils_urls::parse_url($url_uri_query, PHP_URL_QUERY), "?&=");
+						$url_uri_query = $query = c_ws_plugin__s2member_utils_strings::trim((string)$url_uri_query, false, '?&=');
+						if(preg_match('/^(?:[a-z]+\:\/\/|\/)/i', $url_uri_query)) // Is this a full URL or a partial URI?
+							$query = trim(c_ws_plugin__s2member_utils_urls::parse_url($url_uri_query, PHP_URL_QUERY), '?&=');
 
-						$check_time = /* Are we checking time? Force a boolean value here. */ ($check_time) ? true : false;
-						$exp_secs = (is_numeric($exp_secs)) ? (int)$exp_secs : /* Else 10 seconds by default here. */ 10;
-						$sig_var = ($sig_var && is_string($sig_var)) ? $sig_var : /* Use default. */ "_s2member_sig";
+						$check_time = (bool)$check_time; // Check time?
+						$exp_secs   = is_numeric($exp_secs) ? (int)$exp_secs : 10;
+						$sig_var    = $sig_var && is_string($sig_var) ? $sig_var : '_s2member_sig';
 
-						$key = /* Obtain the proper encryption/decryption key. */ c_ws_plugin__s2member_utils_encryption::key();
+						$key = c_ws_plugin__s2member_utils_encryption::key(); // Obtain key.
 
-						if(preg_match_all /* Does ``$query`` have an s2Member-generated signature? */("/".preg_quote($sig_var, "/")."\=([0-9]+)-([^&$]+)/", $query, $sigs))
+						if(preg_match_all('/'.preg_quote($sig_var, '/').'\=([0-9]+)-([^&$]+)/', $query, $sigs))
 							{
-								$query = /* Remove existing s2Member-generated signatures. */ c_ws_plugin__s2member_utils_urls::remove_s2member_sigs($query, $sig_var);
+								$query = c_ws_plugin__s2member_utils_urls::remove_s2member_sigs($query, $sig_var);
 
-								wp_parse_str /* Parse the query string into an array of ``$vars``. Then sort & serialize them into a string. */($query, $vars);
+								wp_parse_str($query, $vars); // Parse the query string into an array of ``$vars``.
 								$vars = c_ws_plugin__s2member_utils_arrays::remove_0b_strings(c_ws_plugin__s2member_utils_strings::trim_deep($vars));
 								$vars = serialize(c_ws_plugin__s2member_utils_arrays::ksort_deep($vars));
 
-								($time = $sigs[1][($i = count($sigs[1]) - 1)]).($sig = $sigs[2][$i]).($valid_sig = md5($key.$time.$vars));
+								$i         = count($sigs[1]) - 1; // Last one.
+								$time      = $sigs[1][$i]; // Timestamp.
+								$sig       = $sigs[2][$i]; // Signature.
+								$valid_sig = md5($key.$time.$vars);
 
-								if /* Checking time? This must NOT be older than ``$exp_secs`` seconds ago. */($check_time)
-									return ($sig === $valid_sig && $time >= strtotime("-".$exp_secs." seconds"));
+								if($check_time) // This must NOT be older than ``$exp_secs`` seconds ago.
+									return $sig === $valid_sig && $time >= strtotime('-'.$exp_secs.' seconds');
 
-								else // Ignoring time? Just need to compare signatures in this case.
-								return /* Do they match up? */ ($sig === $valid_sig);
+								return $sig === $valid_sig;
 							}
-						else // Return false. No ``$query``, or no ``$sigs``.
-							return /* False, it's NOT ok. */ false;
+						return false; // False, it's NOT ok.
 					}
 			}
 	}

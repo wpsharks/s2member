@@ -163,7 +163,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['force_admin_lockouts'] = '0';
 		$default_options['filter_wp_query']      = array('all');
 
-		$default_options['default_url_shortener']            = 'tiny_url';
+		$default_options['default_url_shortener'] = 'tiny_url';
+		$default_options['default_url_shortener_key'] = '';
 		$default_options['default_custom_str_url_shortener'] = '';
 
 		$default_options['mms_auto_patch']          = '1';
