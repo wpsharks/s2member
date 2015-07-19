@@ -75,17 +75,20 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 			do_action('ws_plugin__s2member_before_display_admin_notice', get_defined_vars());
 			unset($__refs, $__v); // Allow variables to be modified by reference.
 
-			if($notice && is_string($notice) && $error) // Slightly different/special format for errors.
+			if($dismiss) $dismissal_link = '<div style="float:right; margin:0 0 0 1em; font-weight:bold;">'.
+				'[ <a href="'.esc_attr(add_query_arg('ws-plugin--s2member-dismiss-admin-notice', urlencode(md5($notice)), $_SERVER['REQUEST_URI'])).'">dismiss</a> ]'.
+				'</div>';
+			if($notice && is_string($notice) && $error)
 			{
-				$notice .= $dismiss ? ' [ <a href="'.esc_attr(add_query_arg('ws-plugin--s2member-dismiss-admin-notice', urlencode(md5($notice)),
-				                                                            $_SERVER['REQUEST_URI'])).'">dismiss message</a> ]' : '';
-				echo '<div class="error fade"><p>'.$notice.'</p></div>'; // Special error notice; w/ fade class.
+				if($dismiss && !empty($dismissal_link))
+					$notice = $dismissal_link.$notice;
+				echo '<div class="error fade"><p>'.$notice.'</p></div>';
 			}
 			else if($notice && is_string($notice))
 			{
-				$notice .= $dismiss ? ' [ <a href="'.esc_attr(add_query_arg('ws-plugin--s2member-dismiss-admin-notice', urlencode(md5($notice)),
-				                                                            $_SERVER['REQUEST_URI'])).'">dismiss message</a> ]' : '';
-				echo '<div class="updated fade"><p>'.$notice.'</p></div>'; // Regular notice; w/ fade class.
+				if($dismiss && !empty($dismissal_link))
+					$notice = $dismissal_link.$notice;
+				echo '<div class="updated fade"><p>'.$notice.'</p></div>';
 			}
 			do_action('ws_plugin__s2member_after_display_admin_notice', get_defined_vars());
 		}
