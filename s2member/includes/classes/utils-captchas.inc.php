@@ -50,10 +50,39 @@ if (!class_exists ('c_ws_plugin__s2member_utils_captchas'))
 				*/
 				public static function recaptcha_keys()
 					{
+						// NOTE: Version 2 keys are only possible w/ s2Member Pro filters.
+
 						$public  = $GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['public_key'];
 						$private = $GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['private_key'];
 
 						return apply_filters('ws_plugin__s2member_recaptcha_keys', array('public' => $public, 'private' => $private), get_defined_vars ());
+					}
+
+				/**
+				* reCAPTCHA™ post vars.
+				*
+				* @package s2Member\Utilities
+				* @since 150717
+				*
+				* @param array $post_vars Existing post vars array.
+				*
+				* @return array Post vars array, with reCAPTCHA™ challenge/response.
+				*/
+				public static function recaptcha_post_vars($post_vars = array())
+					{
+						$post_vars = (array)$post_vars; // Force array.
+
+						if(self::recaptcha_version() === '2')
+						{
+							$post_vars['g-recaptcha-response']      = isset($_POST['g-recaptcha-response']) ? trim(stripslashes((string)$_POST['g-recaptcha-response'])) : '';
+							$post_vars['recaptcha_challenge_field'] = $post_vars['recaptcha_response_field'] = $post_vars['g-recaptcha-response']; // Compatibility.
+
+							return apply_filters('ws_plugin__s2member_recaptcha_post_vars', $post_vars, get_defined_vars());
+						}
+						$post_vars['recaptcha_challenge_field']     = isset($_POST['recaptcha_challenge_field']) ? trim(stripslashes((string)$_POST['recaptcha_challenge_field'])) : '';
+						$post_vars['recaptcha_response_field']      = isset($_POST['recaptcha_response_field']) ? trim(stripslashes((string)$_POST['recaptcha_response_field'])) : '';
+
+						return apply_filters('ws_plugin__s2member_recaptcha_post_vars', $post_vars, get_defined_vars());
 					}
 
 				/**
@@ -107,7 +136,7 @@ if (!class_exists ('c_ws_plugin__s2member_utils_captchas'))
 						if(self::recaptcha_version() === '2') // New API verifier.
 						{
 							$theme = !$theme || in_array($theme, array('red', 'white', 'clean', 'blackglass'), TRUE) ? 'light' : $theme;
-							return '<div class="g-recaptcha" data-sitekey="'.esc_attr($keys['public']).'" data-theme="'.esc_attr($theme).'" data-tabindex="'.esc_attr($tabindex).'"></div>'.
+							return '<div class="g-recaptcha" data-sitekey="'.esc_attr($keys['public']).'" data-size="normal" data-theme="'.esc_attr($theme).'" data-tabindex="'.esc_attr($tabindex).'"></div>'.
 									'<script src="https://www.google.com/recaptcha/api.js"></script>';
 						}
 						$options           = '<script type="text/javascript">'."if(typeof RecaptchaOptions !== 'object'){ var RecaptchaOptions = {theme: '".c_ws_plugin__s2member_utils_strings::esc_js_sq($theme)."', lang: '".c_ws_plugin__s2member_utils_strings::esc_js_sq($GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['lang'])."', tabindex: ".$tabindex." }; }".'</script>'."\n";
