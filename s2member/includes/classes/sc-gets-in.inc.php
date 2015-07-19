@@ -59,6 +59,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 					// Options.
 					'user_id'        => '',
 					'date_format'    => '',
+					'size'           => '',
 				),
 				c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr)
 			);
@@ -73,7 +74,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 			}
 			else if($attr['user_field'] && (is_user_logged_in() || $attr['user_id']))
 				{
-					$get = c_ws_plugin__s2member_utils_users::get_user_field($attr['user_field'], (int)$attr['user_id']);
+					$user_field_args = array('size' => $attr['size']);
+					$get = c_ws_plugin__s2member_utils_users::get_user_field($attr['user_field'], (int)$attr['user_id'], $user_field_args);
 
 					if(preg_match('/time$/i', $attr['user_field']) && $attr['date_format'])
 					 	if(is_numeric($get) && strlen($get) === 10) // Timestamp?

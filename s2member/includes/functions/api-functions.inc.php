@@ -2440,9 +2440,9 @@ if(!function_exists("s2member_access_cap_times") && !function_exists("s2member_c
 */
 if(!function_exists("get_user_field"))
 	{
-		function get_user_field($field_id = FALSE, $user_id = FALSE)
+		function get_user_field($field_id = FALSE, $user_id = FALSE, $args = array())
 			{
-				return c_ws_plugin__s2member_utils_users::get_user_field($field_id, $user_id);
+				return c_ws_plugin__s2member_utils_users::get_user_field($field_id, $user_id, $args);
 			}
 	}
 /**

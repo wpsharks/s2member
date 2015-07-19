@@ -311,10 +311,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 		 *   `s2member_access_role`, `s2member_access_level`, `s2member_access_label`,
 		 *   `s2member_access_ccaps`, etc, etc. ).
 		 * @param int|string $user_id Optional. Defaults to the current User's ID.
+		 * @param array $args Any additional behavioral args. Since v150717.
 		 *
 		 * @return mixed The value of the requested field, or false if the field does not exist.
 		 */
-		public static function get_user_field($field_id = '', $user_id = 0)
+		public static function get_user_field($field_id = '', $user_id = 0, $args = array())
 		{
 			global $wpdb; /** @var wpdb $wpdb Reference for IDEs. */
 
@@ -323,6 +324,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			if(is_object($user = $user_id ? new WP_User($user_id) : $current_user)
 				&& !empty($user->ID) && ($user_id = $user->ID))
 			{
+				$args = (array)$args; // Force array.
+
 				if(isset($user->{$field_id}))
 					return $user->{$field_id};
 
@@ -368,7 +371,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 				else if(strcasecmp($field_id, 's2member_subscr_or_wp_id') === 0)
 					return ($subscr_id = get_user_option('s2member_subscr_id', $user_id)) ? $subscr_id : $user_id;
 
-				else if(strcasecmp($field_id, 'avatar') === 0) return get_avatar($user_id, 512);
+				else if(strcasecmp($field_id, 'avatar') === 0) // Avatar with a specific size?
+					return get_avatar($user_id, !empty($args['size']) ? $args['size'] : 96);
 
 				else if(is_array($fields = get_user_option('s2member_custom_fields', $user_id)))
 					{
