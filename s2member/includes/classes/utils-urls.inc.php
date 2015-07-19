@@ -157,21 +157,21 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function parse_url($url_uri = FALSE, $component = FALSE, $clean_path = TRUE)
 					{
-						$component = ($component === false || $component === -1) ? -1 : $component;
+						$component = $component === FALSE || $component === -1 ? -1 : $component;
 
-						if(is_string($url_uri) && /* And, there is a query string? */ strpos($url_uri, "?") !== false)
+						if(is_string($url_uri) && strpos($url_uri, "?") !== FALSE)
 							{
 								list($_, $query) = preg_split /* Split @ query string marker. */("/\?/", $url_uri, 2);
 								$query = /* See: <https://bugs.php.net/bug.php?id=38143>. */ str_replace("://", urlencode("://"), $query);
 								$url_uri = /* Put it all back together again, after the above modifications. */ $_."?".$query;
-								unset /* A little housekeeping here. Unset these vars. */($_, $query);
+								unset($_, $query); // A little housekeeping here. Unset these vars.
 							}
-						$parse = @parse_url /* Let PHP work its magic via ``parse_url()``. */($url_uri, $component);
+						$parse = @parse_url($url_uri, $component); // Let PHP work its magic via ``parse_url()``.
 
-						if($clean_path && isset($parse["path"]) && is_string($parse["path"]) && !empty($parse["path"]))
-							$parse["path"] = /* Clean up the path now. */ preg_replace("/\/+/", "/", $parse["path"]);
+						if($clean_path && is_array($parse) && !empty($parse["path"]) && is_string($parse["path"]))
+							$parse["path"] = preg_replace("/\/+/", "/", $parse["path"]);
 
-						return ($component !== -1) ? /* Force a string return value? */ (string)$parse : $parse;
+						return $component !== -1 ? (string)$parse : $parse;
 					}
 				/**
 				* Responsible for all remote communications processed by s2Member.
@@ -202,7 +202,7 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 						if(!isset($args["sslverify"]) && c_ws_plugin__s2member_utils_conds::is_localhost())
 							$args["sslverify"] = FALSE; // Force this off on localhost installs.
 
-						else if(!isset($args["sslverify"]) && strcasecmp(@parse_url($url, PHP_URL_HOST), $_SERVER["HTTP_HOST"]) === 0)
+						else if(!isset($args["sslverify"]) && strcasecmp(self::parse_url($url, PHP_URL_HOST), $_SERVER["HTTP_HOST"]) === 0)
 							$args["sslverify"] = FALSE; // Don't require verification when posting to self.
 
 						if((is_array($post_vars) || is_string($post_vars)) && !empty($post_vars))
