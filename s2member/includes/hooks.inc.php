@@ -211,3 +211,4 @@ Register the activation | de-activation routines.
 register_activation_hook($GLOBALS['WS_PLUGIN__']['s2member']['c']['plugin_basename'], 'c_ws_plugin__s2member_installation::activate');
 register_deactivation_hook($GLOBALS['WS_PLUGIN__']['s2member']['c']['plugin_basename'], 'c_ws_plugin__s2member_installation::deactivate');
 register_uninstall_hook($GLOBALS['WS_PLUGIN__']['s2member']['c']['plugin_basename'], 'c_ws_plugin__s2member_installation::uninstall');
+add_filter('auto_update_plugin', 'c_ws_plugin__s2member_installation::auto_update_filter', PHP_INT_MAX-10, 2); // Disallow s2Member update.
