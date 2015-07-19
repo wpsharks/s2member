@@ -190,50 +190,49 @@ if(!class_exists("c_ws_plugin__s2member_utils_urls"))
 				*/
 				public static function remote($url = FALSE, $post_vars = FALSE, $args = FALSE, $return_array = FALSE)
 					{
-						if($url && /* We MUST have a valid full URL (string) before we do anything in this routine. */ is_string($url))
-							{
-								$args = /* Force array, and disable SSL verification. */ (!is_array($args)) ? array(): $args;
-
-								$args["s2member"] = WS_PLUGIN__S2MEMBER_VERSION; // Indicates this is an s2Member connection.
-
-								$args["httpversion"] = (!isset($args["httpversion"])) ? "1.1" : $args["httpversion"];
-								$args["user-agent"]  = !isset($args["user-agent"]) ? "s2Member v".WS_PLUGIN__S2MEMBER_VERSION."; ".home_url() : $args["user-agent"];
-
-								if(!isset($args["sslverify"]) && c_ws_plugin__s2member_utils_conds::is_localhost())
-									$args["sslverify"] = FALSE; // Force this off on localhost installs.
-
-								if((is_array($post_vars) || is_string($post_vars)) && !empty($post_vars))
-									$args = array_merge($args, array("method" => "POST", "body" => $post_vars));
-
-								if(!empty($args["method"]) && strcasecmp((string)$args["method"], "DELETE") === 0 && version_compare(get_bloginfo("version"), "3.4", "<"))
-									add_filter("use_curl_transport", "__return_false", /* ID via priority. */ 111209554);
-
-								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
-								do_action("ws_plugin__s2member_before_wp_remote_request", get_defined_vars());
-								unset($__refs, $__v);
-
-								$response = /* Process remote request via ``wp_remote_request()``. */ wp_remote_request($url, $args);
-
-								remove_filter /* Remove this Filter now. */("use_curl_transport", "__return_false", 111209554);
-
-								if($return_array && !is_wp_error($response) && is_array($response))
-									{
-										$a = array("code" => (int)wp_remote_retrieve_response_code($response));
-										$a = array_merge($a, array("message" => wp_remote_retrieve_response_message($response)));
-										$a = array_merge($a, array("headers" => wp_remote_retrieve_headers($response)));
-										$a = array_merge($a, array("body" => wp_remote_retrieve_body($response)));
-										$a = array_merge($a, array("response" => $response));
-
-										return /* Return array w/ ``$response`` too. */ $a;
-									}
-								else if(!is_wp_error($response) && is_array($response) /* Return body only. */)
-									return /* Return ``$response`` body only. */ wp_remote_retrieve_body($response);
-
-								else // Else this remote request has failed completely. Return false.
-								return false; // Remote request failed, return false.
-							}
-						else // Else, return false.
+						if(!$url || !is_string($url))
 							return false;
+
+						$args = !is_array($args) ? array() : $args;
+
+						$args["s2member"]    = WS_PLUGIN__S2MEMBER_VERSION; // s2Member connection.
+						$args["httpversion"] = !isset($args["httpversion"]) ? "1.1" : $args["httpversion"];
+						$args["user-agent"]  = !isset($args["user-agent"]) ? "s2Member v".WS_PLUGIN__S2MEMBER_VERSION."; ".home_url() : $args["user-agent"];
+
+						if(!isset($args["sslverify"]) && c_ws_plugin__s2member_utils_conds::is_localhost())
+							$args["sslverify"] = FALSE; // Force this off on localhost installs.
+
+						else if(!isset($args["sslverify"]) && strcasecmp(@parse_url($url, PHP_URL_HOST), $_SERVER["HTTP_HOST"]) === 0)
+							$args["sslverify"] = FALSE; // Don't require verification when posting to self.
+
+						if((is_array($post_vars) || is_string($post_vars)) && !empty($post_vars))
+							$args = array_merge($args, array("method" => "POST", "body" => $post_vars));
+
+						if(!empty($args["method"]) && strcasecmp((string)$args["method"], "DELETE") === 0 && version_compare(get_bloginfo("version"), "3.4", "<"))
+							add_filter("use_curl_transport", "__return_false", /* ID via priority. */ 111209554);
+
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
+						do_action("ws_plugin__s2member_before_wp_remote_request", get_defined_vars());
+						unset($__refs, $__v); // Housekeeping.
+
+						$response = wp_remote_request($url, $args);
+
+						remove_filter("use_curl_transport", "__return_false", 111209554);
+
+						if($return_array && !is_wp_error($response) && is_array($response))
+							{
+								$a = array("code" => (int)wp_remote_retrieve_response_code($response));
+								$a = array_merge($a, array("message" => wp_remote_retrieve_response_message($response)));
+								$a = array_merge($a, array("headers" => wp_remote_retrieve_headers($response)));
+								$a = array_merge($a, array("body" => wp_remote_retrieve_body($response)));
+								$a = array_merge($a, array("response" => $response));
+
+								return $a; // Return array w/ ``$response`` too.
+							}
+						if(!is_wp_error($response) && is_array($response))
+							return wp_remote_retrieve_body($response);
+
+						return false; // Remote request failed, return false.
 					}
 				/**
 				* Shortens a long URL, based on s2Member configuration.
