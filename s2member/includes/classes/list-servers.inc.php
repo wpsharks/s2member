@@ -92,6 +92,10 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		 */
 		public static function process_list_servers_against_current_user($opt_in = FALSE, $double_opt_in = TRUE, $clean_user_cache = TRUE)
 		{
+			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+			do_action('ws_plugin__s2member_before_process_list_servers_against_current_user', get_defined_vars());
+			unset($__refs, $__v); // Allows vars to be modified by reference.
+
 			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in'])
 				$opt_in = true; // Accept as true; the double opt-in box is null.
 
@@ -178,6 +182,10 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 		 */
 		public static function process_list_server_removals_against_current_user($opt_out = FALSE, $clean_user_cache = TRUE)
 		{
+			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+			do_action('ws_plugin__s2member_before_process_list_server_removals_against_current_user', get_defined_vars());
+			unset($__refs, $__v); // Allows vars to be modified by reference.
+
 			if($clean_user_cache) // Start from a fresh user object here?
 			{
 				clean_user_cache(get_current_user_id());
