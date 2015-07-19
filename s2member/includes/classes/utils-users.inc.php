@@ -359,7 +359,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 				else if(strcasecmp($field_id, 's2member_access_ccaps') === 0)
 					return c_ws_plugin__s2member_user_access::user_access_ccaps($user);
 
-				else if(strcasecmp($field_id, 'ip') === 0 && is_object($current_user) && !empty($current_user->ID) && $current_user->ID === ($user_id = $user->ID))
+				else if(strcasecmp($field_id, 'ip') === 0 && !empty($current_user->ID) && $current_user->ID === $user_id)
 					return $_SERVER['REMOTE_ADDR']; // Current IP address.
 
 				else if(strcasecmp($field_id, 's2member_registration_ip') === 0 || strcasecmp($field_id, 'reg_ip') === 0 || strcasecmp($field_id, 'ip') === 0)
@@ -367,6 +367,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 
 				else if(strcasecmp($field_id, 's2member_subscr_or_wp_id') === 0)
 					return ($subscr_id = get_user_option('s2member_subscr_id', $user_id)) ? $subscr_id : $user_id;
+
+				else if(strcasecmp($field_id, 'avatar') === 0) return get_avatar($user_id, 512);
 
 				else if(is_array($fields = get_user_option('s2member_custom_fields', $user_id)))
 					{
