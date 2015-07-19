@@ -229,5 +229,22 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 			}
 			do_action('ws_plugin__s2member_after_uninstall', get_defined_vars());
 		}
+
+		/**
+		 * Disallow automatic updates of s2Member w/ Pro is installed.
+		 *
+		 * @package s2Member\Installation
+		 * @since 150717
+		 *
+		 * @attaches-to `auto_update_plugin` filter.
+		 */
+		public static function auto_update_filter($update = NULL, $item = NULL)
+		{
+			if(is_object($item) && !empty($item->slug) && $item->slug === 's2member')
+				if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
+					$update = FALSE; // Disallow.
+
+			return $update; // Filter through.
+		}
 	}
 }
