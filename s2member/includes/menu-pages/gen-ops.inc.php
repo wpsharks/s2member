@@ -56,7 +56,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-uninstall-section">'."\n";
 				echo '<h3>Plugin Deletion Safeguards (highly recommended)</h3>'."\n";
-				echo '<p>By default, s2Member will retain all of it\'s Roles, Capabilities, and your Configuration Options when/if you delete s2Member from the Plugins Menu in WordPress. However, if you would like for s2Member to erase itself completely, please choose: <code>No (upon deletion, erase all data/options)</code>.</p>';
+				echo '<p>By default, s2Member will retain all of it\'s Roles, Capabilities, and your Configuration Options when/if you delete s2Member from the Plugins Menu in WordPress. However, if you would like for s2Member to erase itself completely, please choose: <code>No (upon deletion, erase all data/options)</code>. See also: <a href="http://s2member.com/kb-article/how-do-i-manually-uninstall-s2member/" target="_blank" rel="external">s2Member Uninstall Instructions</a></p>';
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_uninstall", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
