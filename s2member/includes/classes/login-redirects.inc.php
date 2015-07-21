@@ -52,17 +52,20 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 			{
 				update_user_option($user_id, 's2member_last_login_time', time());
 
+				$logins = (int)get_user_option('s2member_login_counter', $user_id) + 1;
+				update_user_option($user_id, 's2member_login_counter', $logins);
+
 				if(!get_user_option('s2member_registration_ip', $user_id))
 					update_user_option($user_id, 's2member_registration_ip', $_SERVER['REMOTE_ADDR']);
 
-				if(($logins = (int)get_user_option('s2member_login_counter', $user_id) + 1) >= 1 || ($logins = 1))
-					update_user_option($user_id, 's2member_login_counter', $logins);
-
 				if($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_password'])
-					delete_user_setting('default_password_nag').update_user_option($user_id, 'default_password_nag', FALSE, TRUE);
-
-				if(($ok = TRUE) && !is_super_admin($user_id) && $username !== 'demo' // Exclude super admins, the `demo` user, and anyone who can edit posts.
-				   && !apply_filters('ws_plugin__s2member_disable_login_ip_restrictions', (($user->has_cap('edit_posts')) ? TRUE : FALSE), get_defined_vars())
+					{
+						delete_user_setting('default_password_nag');
+						update_user_option($user_id, 'default_password_nag', FALSE, TRUE);
+					}
+				$ok = TRUE; // Initialize IP restriction being OK here. This is for filters.
+				if($username !== 'demo' && !is_super_admin($user_id) // Exclude the `demo` user, super admins, and anyone who can edit posts.
+				   && !apply_filters('ws_plugin__s2member_disable_login_ip_restrictions', $user->has_cap('edit_posts') ? TRUE : FALSE, get_defined_vars())
 				) $ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok($_SERVER['REMOTE_ADDR'], strtolower($username));
 
 				if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_always_http']) // Alter value of `redirect_to`?
@@ -71,12 +74,13 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 						$_REQUEST['redirect_to'] = preg_replace('/^https\:\/\//i', 'http://', $_REQUEST['redirect_to']);
 						if(stripos($_REQUEST['redirect_to'], 'http://') !== 0) // Force an absolute URL in this case.
 						{
+							$redirect_uri            = $_REQUEST['redirect_to']; // e.g., `/path/with/?query=args`
 							$home_path               = trim((string)@parse_url(home_url('/'), PHP_URL_PATH), '/');
 							$http_home_base          = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/'.$ci, '', home_url('/', 'http')), '/');
-							$_REQUEST['redirect_to'] = $http_home_base.'/'.ltrim($_REQUEST['redirect_to'], '/');
+							$_REQUEST['redirect_to'] = $http_home_base.'/'.ltrim($redirect_uri, '/');
 						}
 					}
-				if(($redirect = apply_filters('ws_plugin__s2member_login_redirect', (($user->has_cap('edit_posts')) ? FALSE : TRUE), get_defined_vars())))
+				if(($redirect = apply_filters('ws_plugin__s2member_login_redirect', $user->has_cap('edit_posts') ? FALSE : TRUE, get_defined_vars())))
 				{
 					$obey_redirect_to = apply_filters('ws_plugin__s2member_obey_login_redirect_to', TRUE, get_defined_vars());
 
@@ -93,15 +97,21 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 						do_action('ws_plugin__s2member_during_login_redirect', get_defined_vars());
 						unset($__refs, $__v); // Housekeeping.
 
-						if($redirect && is_string($redirect)) $redirect = $redirect;
+						$is_lwp = FALSE; // Initialize LWP detection flag.
 
-						else if($redirection_url = c_ws_plugin__s2member_login_redirects::login_redirection_url($user))
-							$redirect = $redirection_url; // Special redirection URL (overrides LWP).
+						if($redirect && is_string($redirect))
+							$redirect = $redirect;
 
+						else if(($login_redirection_url = c_ws_plugin__s2member_login_redirects::login_redirection_url($user)))
+							{
+								$is_lwp   = TRUE; // Flag as being a hard-coded LWP URL in this case.
+								$redirect = $login_redirection_url; // Special redirection URL.
+							}
 						else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page'])
-							// Else we use the Login Welcome Page configured for s2Member.
-							$redirect = get_page_link($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page']);
-
+							{
+								$is_lwp   = TRUE; // Flag as being a hard-coded LWP URL in this case.
+								$redirect = get_page_link($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page']);
+							}
 						else $redirect = home_url('/'); // Default to the home page.
 
 						if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_always_http'])
@@ -109,12 +119,17 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 							$redirect = preg_replace('/^https\:\/\//i', 'http://', $redirect);
 							if(stripos($redirect, 'http://') !== 0) // Force absolute.
 							{
-								$home_path      = trim((string)@parse_url(home_url('/'), PHP_URL_PATH), '/');
-								$http_home_base = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/'.$ci, '', home_url('/', 'http')), '/');
-								$redirect       = $http_home_base.'/'.ltrim($redirect, '/');
+								$redirect_uri    = $redirect; // e.g., `/path/with/?query=args`
+								$home_path       = trim((string)@parse_url(home_url('/'), PHP_URL_PATH), '/');
+								$http_home_base  = trim(preg_replace('/\/'.preg_quote($home_path, '/').'\/$/'.$ci, '', home_url('/', 'http')), '/');
+								$redirect        = $http_home_base.'/'.ltrim($redirect_uri, '/');
 							}
 						}
-						wp_redirect($redirect).exit();
+						if($is_lwp) // Allow offsite redirection?
+							wp_redirect($redirect); // Perhaps an offsite location.
+						else wp_safe_redirect($redirect); // Default behavior.
+
+						exit(); // Stop here; redirecting now.
 					}
 				}
 			}
