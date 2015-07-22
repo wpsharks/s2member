@@ -1,4 +1,4 @@
-= v150719 =
+= v150722 =
 
 - (s2Member/s2Member Pro) **New Shortcode:** This release introduces a powerful new shortcode which allows you to display a user's EOT (End of Term) or NPT (next payment time) in a WordPress Post or Page. For further details and some minor limitations, please see [`[s2Eot /]` Shortcode Documentation](http://s2member.com/kb-article/s2eot-shortcode-documentation/). Props to @raamdev and @patdumond for their strategic assistance, feedback, and ideas for this shortcode.
 

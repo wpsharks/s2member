@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 150719
-Stable tag: 150719
+Version: 150722
+Stable tag: 150722
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -169,13 +169,13 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v150719 =
+= v150722 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
 
-= v150719 =
+= v150722 =
 
 - (s2Member/s2Member Pro) **New Shortcode:** This release introduces a powerful new shortcode which allows you to display a user's EOT (End of Term) or NPT (next payment time) in a WordPress Post or Page. For further details and some minor limitations, please see [`[s2Eot /]` Shortcode Documentation](http://s2member.com/kb-article/s2eot-shortcode-documentation/). Props to @raamdev and @patdumond for their strategic assistance, feedback, and ideas for this shortcode.
 
