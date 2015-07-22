@@ -153,6 +153,11 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 					$details = $attr['empty_format']; // Empty this.
 					$eot['debug'] = 'No more payments needed from this user.';
 				}
+			// Wrapper and debug info...
+
+			if($details) // Wrapper for CSS styling.
+				$details = '<span class="ws-plugin--s2member-sc-eot">'.$details.'</span>';
+
 			if(filter_var($attr['debug'], FILTER_VALIDATE_BOOLEAN))
 				$details .= '<pre>'.esc_html($eot['debug'] ? $eot['debug'] : 'Unknown error.').'</pre>';
 
