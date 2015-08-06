@@ -132,18 +132,18 @@ if(!class_exists('c_ws_plugin__s2member_ssl_in'))
 						if($scheme === 'relative') // e.g. `/root/relative/path.ext`
 							return $url; // Nothing to do in this case.
 
-						if($url && ($url_path = @parse_url($url, PHP_URL_PATH)) && $url_path !== '/')
-						 	if(($url_ext = strtolower(ltrim((string) strrchr(basename($url_path), '.'), '.'))))
-								if(in_array($url_ext, $static_file_extensions, true)) // Static resource?
-									return preg_replace('/^(?:https?\:)?\/\//i', 'https://', $url);
-
-						if(!in_array($scheme, array('http', 'https'), TRUE)) // If NOT explicitly passed through.
+						if(!in_array($scheme, array('http', 'https'), TRUE)) // If NOT explicit.
 						{
 							if(($scheme === 'login_post' || $scheme === 'rpc') && (force_ssl_login() || force_ssl_admin()))
-								$scheme = 'https';
+								$scheme = 'https'; // Use an SSL scheme in this case.
 
 							else if(($scheme === 'login' || $scheme === 'admin') && force_ssl_admin())
-								$scheme = 'https';
+								$scheme = 'https'; // Use an SSL scheme in this case.
+
+							else if($url && ($url_path = @parse_url($url, PHP_URL_PATH)) && $url_path !== '/'
+							 	&& ($url_ext = strtolower(ltrim((string) strrchr(basename($url_path), '.'), '.')))
+								&& in_array($url_ext, $static_file_extensions, true) // Static resource?
+							) $scheme = 'https'; // Use an SSL scheme in this case.
 
 							else $scheme = 'http'; // Default to non-SSL: `http`.
 						}
