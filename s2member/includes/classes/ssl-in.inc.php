@@ -78,15 +78,19 @@ if(!class_exists('c_ws_plugin__s2member_ssl_in'))
 				define('_ws_plugin__s2member_force_ssl_host_port', $ssl_host_port);
 
 				// Filter these. Do NOT create a sitewide conversion to `https`.
-				add_filter('home_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 3);
-				add_filter('network_home_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 3);
+				add_filter('home_url', '_ws_plugin__s2member_maybe_force_non_ssl_scheme', 10, 3);
+				add_filter('network_home_url', '_ws_plugin__s2member_maybe_force_non_ssl_scheme', 10, 3);
 
 				// Filter these. Do NOT create a sitewide conversion to `https`.
-				add_filter('site_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 3);
-				add_filter('network_site_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 3);
-				add_filter('plugins_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 2);
-				add_filter('content_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 2);
-				add_filter('includes_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 2);
+				add_filter('site_url', '_ws_plugin__s2member_maybe_force_non_ssl_scheme', 10, 3);
+				add_filter('network_site_url', '_ws_plugin__s2member_maybe_force_non_ssl_scheme', 10, 3);
+
+				// Filter these. Do NOT create a sitewide conversion to `https`.
+				// Note: these are necessary because these underlying functions create URLs in bits and pieces.
+				// 	Thus, in order to properly detect static file extensions we need to look at these values also.
+				add_filter('plugins_url', '_ws_plugin__s2member_maybe_force_non_ssl_scheme', 10, 2);
+				add_filter('content_url', '_ws_plugin__s2member_maybe_force_non_ssl_scheme', 10, 2);
+				add_filter('includes_url', '_ws_plugin__s2member_maybe_force_non_ssl_scheme', 10, 2);
 
 				// Now we create various callback functions associated with SSL and non-SSL buffering.
 				if(!function_exists('_ws_plugin__s2member_force_ssl_buffer_callback'))
@@ -111,9 +115,9 @@ if(!class_exists('c_ws_plugin__s2member_ssl_in'))
 						return $s; // Return string with conversions.
 					}
 				}
-				if(!function_exists('_ws_plugin__s2member_force_non_ssl_scheme'))
+				if(!function_exists('_ws_plugin__s2member_maybe_force_non_ssl_scheme'))
 				{
-					function _ws_plugin__s2member_force_non_ssl_scheme($url = FALSE, $path = FALSE, $scheme = FALSE)
+					function _ws_plugin__s2member_maybe_force_non_ssl_scheme($url = FALSE, $path = FALSE, $scheme = FALSE)
 					{
 						static $static_file_extensions; // Cache of static file extensions.
 						if(!isset($static_file_extensions)) // Cached this yet?
