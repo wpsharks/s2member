@@ -84,14 +84,9 @@ if(!class_exists('c_ws_plugin__s2member_ssl_in'))
 				// Filter these. Do NOT create a sitewide conversion to `https`.
 				add_filter('site_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 3);
 				add_filter('network_site_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 3);
-
-				// These additional URLs are NOT Filtered by default; but can be if needed. Use these Filters.
-				if(apply_filters('_ws_plugin__s2member_force_non_ssl_scheme_plugins_url', FALSE, get_defined_vars()))
-					add_filter('plugins_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 2);
-
-				// These additional URLs are NOT Filtered by default; but can be if needed. Use these Filters.
-				if(apply_filters('_ws_plugin__s2member_force_non_ssl_scheme_content_url', FALSE, get_defined_vars()))
-					add_filter('content_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 2);
+				add_filter('plugins_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 2);
+				add_filter('content_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 2);
+				add_filter('includes_url', '_ws_plugin__s2member_force_non_ssl_scheme', 10, 2);
 
 				// Now we create various callback functions associated with SSL and non-SSL buffering.
 				if(!function_exists('_ws_plugin__s2member_force_ssl_buffer_callback'))
@@ -120,7 +115,7 @@ if(!class_exists('c_ws_plugin__s2member_ssl_in'))
 				{
 					function _ws_plugin__s2member_force_non_ssl_scheme($url = FALSE, $path = FALSE, $scheme = FALSE)
 					{
-						static $static_file_extensions; // Static cache.
+						static $static_file_extensions; // Cache of static file extensions.
 						if(!isset($static_file_extensions)) // Cached this yet?
 						{
 							$wp_media_library_extensions = array_keys(wp_get_mime_types());
