@@ -120,8 +120,19 @@ if(!class_exists('c_ws_plugin__s2member_ssl_in'))
 				{
 					function _ws_plugin__s2member_force_non_ssl_scheme($url = FALSE, $path = FALSE, $scheme = FALSE)
 					{
-						if($scheme === 'relative')
-							return $url; // Nothing to do in this case.
+						static $static_file_extensions; // Static cache.
+						if(!isset($static_file_extensions)) // Cached this yet?
+						{
+							$wp_media_library_extensions = array_keys(wp_get_mime_types());
+        					$wp_media_library_extensions = explode('|', strtolower(implode('|', $wp_media_library_extensions)));
+        					$static_file_extensions      = array_unique(array_merge($wp_media_library_extensions, array('eot', 'ttf', 'otf', 'woff')));
+						}
+						if($scheme === 'relative') return $url; // Nothing to do.
+
+						if($url && ($url_path = @parse_url($url, PHP_URL_PATH)) && $url_path !== '/')
+						 	if(($url_ext = strtolower(ltrim((string) strrchr(basename($url_path), '.'), '.'))))
+								if(in_array($url_ext, $static_file_extensions, true)) // Static resource?
+									return $url; // Allow `https://` in static resources.
 
 						if(!in_array($scheme, array('http', 'https'), TRUE)) // If NOT explicitly passed through.
 						{
