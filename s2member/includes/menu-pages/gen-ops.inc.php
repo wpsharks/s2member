@@ -357,7 +357,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_new_user_email", get_defined_vars());
 
 				echo '<div id="ws-plugin--s2member-new-user-email-details" style="display:none;">'."\n";
-				echo (c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '<p><em><strong>BuddyPress:</strong> please note that BuddyPress does NOT send this email to Users that register through the BuddyPress registration system. This is because BuddyPress sends each User an activation link; eliminating the need for this email all together. However, you CAN still customize s2Member\'s separate email to paying Members. See: <strong>s2Member → PayPal Options → Signup Confirmation Email</strong>.</em></p>'."\n" : '';
+				echo c_ws_plugin__s2member_utils_conds::bp_is_installed() ? '<p><em><strong>BuddyPress:</strong> please note that BuddyPress does NOT send this email to Users that register through the BuddyPress registration system. This is because BuddyPress sends each User an activation link; eliminating the need for this email altogether. However, you CAN still customize s2Member\'s separate email to paying Members. See: <strong>s2Member → PayPal Options → Signup Confirmation Email</strong>.</em></p>'."\n" : '';
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
