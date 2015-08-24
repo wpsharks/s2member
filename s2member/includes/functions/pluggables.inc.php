@@ -40,7 +40,11 @@ if (!function_exists ('wp_new_user_notification'))
 							$_43_args = array(); // Initialize WP v4.3 args.
 
 							$_43_args[0] = isset($args[0]) ? $args[0] : 0;
-							$_43_args[1] = ''; // No passwords via email in WP v4.3+.
+							// This is always a user ID. Still the same.
+
+							$_43_args[1] = isset($args[2]) ? $args[2] : '';
+							// Our implementation supports a third argument; `$user_pass`.
+							// Default; no passwords via email in WP v4.3+.
 
 							if (isset($args[1]) && $args[1] === 'both')
 								$_43_args[2] = array('user', 'admin');
