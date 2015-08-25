@@ -43,12 +43,16 @@ if (!function_exists ('wp_new_user_notification'))
 							// This is always a user ID. Still the same.
 
 							$_43_args[1] = isset($args[2]) ? $args[2] : '';
-							// Our implementation supports a third argument; `$user_pass`.
-							// Default; no passwords via email in WP v4.3+.
+							// Our `wp_new_user_notification()` implementation supports a 3rd arg: `$user_pass`.
+							// Default; no passwords via email in WordPress v4.3+.
 
-							if (isset($args[1]) && $args[1] === 'both')
+							if (!empty($args[1]) && $args[1] === 'both')
 								$_43_args[2] = array('user', 'admin');
-							else $_43_args[2] = array('admin');
+
+							else if (!empty($args[1]) && is_string($args[1])) // Something else?
+								$_43_args[2] = array($args[1]); // e.g., `user` or `admin`.
+
+							else $_43_args[2] = array('admin'); // Default behavior.
 
 							$args = $_43_args; // Use restructured arguments.
 						}
