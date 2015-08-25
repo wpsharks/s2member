@@ -243,6 +243,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 									&&  ( // One of these conditions must be true.
 											($user_pass && stripos($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_message'], '%%user_pass%%') !== false)
 										 || ($is_gte_wp43 && stripos($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_message'], '%%wp_set_pass_url%%') !== false)
+										 || ($is_gte_wp43 && stripos(($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_message'] = sprintf(_x("Your Username/Password for:\n%s\n\nUsername: %%%%user_login%%%%\nTo set your password, visit: %%%%wp_set_pass_url%%%%\n\n%%%%wp_login_url%%%%", 's2member-front', 's2member'), get_bloginfo('name'))), '%%wp_set_pass_url%%') !== false)
 										)
 									) {
 										if($is_gte_wp43 && stripos($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_message'], '%%wp_set_pass_url%%') !== false)
