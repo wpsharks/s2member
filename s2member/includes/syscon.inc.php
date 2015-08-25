@@ -212,7 +212,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['new_user_emails_enabled'] = '0';
 
 		$default_options['new_user_email_subject'] = sprintf(_x('[%s] Username/Password', 's2member-front', 's2member'), get_bloginfo('name'));
-		$default_options['new_user_email_message'] = sprintf(_x("Your Username/Password for:\n%s\n\nUsername: %%%%user_login%%%%\nPassword: %%%%user_pass%%%%\n%%%%wp_login_url%%%%", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['new_user_email_message'] = sprintf(_x("Your Username/Password for:\n%s\n\nUsername: %%%%user_login%%%%\nTo set your password, visit: %%%%wp_set_pass_url%%%%\n\n%%%%wp_login_url%%%%", 's2member-front', 's2member'), get_bloginfo('name'));
 
 		$default_options['new_user_admin_email_recipients'] = get_bloginfo('admin_email');
 		$default_options['new_user_admin_email_subject']    = sprintf(_x('[%s] New User Registration', 's2member-front', 's2member'), get_bloginfo('name'));

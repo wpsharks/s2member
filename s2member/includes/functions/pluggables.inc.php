@@ -15,9 +15,9 @@
 * @since 110707
 */
 if(!defined('WPINC')) // MUST have WordPress.
-	exit("Do not access this file directly.");
+	exit('Do not access this file directly.');
 
-if (!function_exists ("wp_new_user_notification"))
+if (!function_exists ('wp_new_user_notification'))
 	{
 		/**
 		* New User notifications.
@@ -29,15 +29,36 @@ if (!function_exists ("wp_new_user_notification"))
 		*
 		* @return class Return-value of class method.
 		*/
-		if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_emails_enabled"])
+		if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_emails_enabled'])
 			{
-				function /* Accepts any number of arguments. */ wp_new_user_notification ()
+				function wp_new_user_notification()
 					{
-						$args = /* Pulls the arguments passed in to this function. */ func_get_args ();
+						$args = func_get_args(); // Function arguments.
 
-						return call_user_func_array("c_ws_plugin__s2member_email_configs::new_user_notification", $args);
+						if (version_compare(get_bloginfo('version'), '4.3', '>='))
+						{
+							$_43_args = array(); // Initialize WP v4.3 args.
+
+							$_43_args[0] = isset($args[0]) ? $args[0] : 0;
+							// This is always a user ID. Still the same.
+
+							$_43_args[1] = isset($args[2]) ? $args[2] : '';
+							// Our `wp_new_user_notification()` implementation supports a 3rd arg: `$user_pass`.
+							// Default; no passwords via email in WordPress v4.3+.
+
+							if (!empty($args[1]) && $args[1] === 'both')
+								$_43_args[2] = array('user', 'admin');
+
+							else if (!empty($args[1]) && is_string($args[1])) // Something else?
+								$_43_args[2] = array($args[1]); // e.g., `user` or `admin`.
+
+							else $_43_args[2] = array('admin'); // Default behavior.
+
+							$args = $_43_args; // Use restructured arguments.
+						}
+						return call_user_func_array('c_ws_plugin__s2member_email_configs::new_user_notification', $args);
 					}
-				add_filter /* Combine. */ ("wpmu_welcome_user_notification", "wp_new_user_notification", 10, 2);
+				add_filter('wpmu_welcome_user_notification', 'c_ws_plugin__s2member_email_configs::new_user_notification', 10, 2);
 			}
-		$GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["pluggables"]["wp_new_user_notification"] = true;
+		$GLOBALS['WS_PLUGIN__']['s2member']['c']['pluggables']['wp_new_user_notification'] = true;
 	}

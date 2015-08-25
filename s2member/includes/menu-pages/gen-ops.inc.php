@@ -353,11 +353,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
 				echo '<h3 style="margin:0;">New User Email Message (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-new-user-email-details\').toggle(); return false;" class="ws-dotted-link">click to customize</a>)</h3>'."\n";
-				echo '<p style="margin:0;">This email is sent to all new Users/Members. It should always contain their Username/Password. In addition to this email, s2Member will also send new paying Customers a Signup Confirmation Email, which you can customize from your Dashboard, under: <strong>s2Member → PayPal Options</strong>. You may wish to customize these emails further, by providing details that are specifically geared to your site.</p>'."\n";
+				echo '<p style="margin:0;">This email is sent to new Users/Members who did <em>not</em> set a Custom Password during registration.</p>'."\n";
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_new_user_email", get_defined_vars());
 
 				echo '<div id="ws-plugin--s2member-new-user-email-details" style="display:none;">'."\n";
-				echo (c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '<p><em><strong>BuddyPress:</strong> please note that BuddyPress does NOT send this email to Users that register through the BuddyPress registration system. This is because BuddyPress sends each User an activation link; eliminating the need for this email all together. However, you CAN still customize s2Member\'s separate email to paying Members. See: <strong>s2Member → PayPal Options → Signup Confirmation Email</strong>.</em></p>'."\n" : '';
+				echo c_ws_plugin__s2member_utils_conds::bp_is_installed() ? '<p><em><strong>BuddyPress:</strong> please note that BuddyPress does NOT send this email to Users that register through the BuddyPress registration system. This is because BuddyPress sends each User an activation link; eliminating the need for this email altogether. However, you CAN still customize s2Member\'s separate email to paying Members. See: <strong>s2Member → PayPal Options → Signup Confirmation Email</strong>.</em></p>'."\n" : '';
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
@@ -389,10 +389,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<tr>'."\n";
 
 				echo '<td>'."\n";
+				echo '<p><em>(The purpose of this email is to send the user a password-setup link; i.e., <code>%%wp_set_pass_url%%</code>)</em></small><p>'."\n";
 				echo '<textarea name="ws_plugin__s2member_new_user_email_message" id="ws-plugin--s2member-new-user-email-message" rows="10">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_email_message"]).'</textarea><br />'."\n";
 				echo 'Message Body used in the email sent to new Users/Members.<br /><br />'."\n";
 				echo '<strong>You can also use these special Replacement Codes if you need them:</strong>'."\n";
 				echo '<ul>'."\n";
+				echo '<li style="margin-bottom:1em;"><code>%%wp_set_pass_url%%</code> = The full URL where Users can set their password for the first time. Note that <code>%%wp_set_pass_url%%</code> should be used instead of the older/deprecated <code style="text-decoration:line-through;">%%user_pass%%</code> Replacement Code. Starting w/ WordPress v4.3+, a user can visit this link (i.e., <code>%%wp_set_pass_url%%</code>) to set a password of their own, and this is accomplished without sending a plain-text password via email; which improves security. It is suggested that you prefix this as follows: <em>To set your password, visit: <code>%%wp_set_pass_url%%</code></em></li>'."\n";
 				echo '<li><code>%%role%%</code> = The Role ID <code>(subscriber, s2member_level[0-9]+, administrator, editor, author, contributor)</code>.</li>'."\n";
 				echo '<li><code>%%label%%</code> = The Role ID Label <code>(Subscriber, s2Member Level 1, s2Member Level 2; or your own custom Labels—if configured)</code>.</li>'."\n";
 				echo '<li><code>%%level%%</code> = The Level number <code>(0, 1, 2, 3, 4)</code>. (<em>deprecated, no longer recommended; use <code>%%role%%</code></em>)</li>'."\n";
@@ -402,10 +404,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<li><code>%%user_full_name%%</code> = The Full Name (First &amp; Last) of the Member who registered their Username.</li>'."\n";
 				echo '<li><code>%%user_email%%</code> = The Email Address of the Member who registered their Username.</li>'."\n";
 				echo '<li><code>%%user_login%%</code> = The Username the Member selected during registration.</li>'."\n";
-				echo '<li><code>%%user_pass%%</code> = The Password selected or generated during registration.</li>'."\n";
 				echo '<li><code>%%user_ip%%</code> = The User\'s IP Address, detected via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>'."\n";
 				echo '<li><code>%%user_id%%</code> = A unique WordPress User ID generated during registration.</li>'."\n";
 				echo '<li><code>%%wp_login_url%%</code> = The full URL where Users can get logged into your site.</li>'."\n";
+				echo '<li style="margin-top:1em;"><code style="text-decoration:line-through;">%%user_pass%%</code> = <em>Deprecated, please stop using this. Starting w/ WordPress v4.3, this email is only sent to users who did NOT set a Custom Password during registration; i.e., the New User Notification email is only sent to the user whenever they need it to set their password. In that scenario, you should be sending the user the <code>%%wp_set_pass_url%%</code> instead of sending a plain-text password via email; which is a security no-no.</em></li>'."\n";
 				echo '</ul>'."\n";
 
 				echo '<strong>Custom Registration/Profile Fields are also supported in this email:</strong>'."\n";
@@ -505,10 +507,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<li><code>%%user_full_name%%</code> = The Full Name (First &amp; Last) of the Member who registered their Username.</li>'."\n";
 				echo '<li><code>%%user_email%%</code> = The Email Address of the Member who registered their Username.</li>'."\n";
 				echo '<li><code>%%user_login%%</code> = The Username the Member selected during registration.</li>'."\n";
-				echo '<li><code>%%user_pass%%</code> = The Password selected or generated during registration.</li>'."\n";
 				echo '<li><code>%%user_ip%%</code> = The User\'s IP Address, detected via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>'."\n";
 				echo '<li><code>%%user_id%%</code> = A unique WordPress User ID generated during registration.</li>'."\n";
 				echo '<li><code>%%wp_login_url%%</code> = The full URL where Users can get logged into your site.</li>'."\n";
+				echo '<li style="margin-top:1em;"><code style="text-decoration:line-through;">%%user_pass%%</code> = <em>Deprecated. Starting w/ WordPress v4.3, this is no longer applicable (or advised).</em></li>'."\n";
 				echo '</ul>'."\n";
 
 				echo '<strong>Custom Registration/Profile Fields are also supported in this email:</strong>'."\n";
@@ -1093,11 +1095,18 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-custom-reg-names">'."\n";
-				echo 'Collect First/Last Names during Registration?'."\n";
+				echo 'Collect First/Last Names During Registration?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -1115,11 +1124,18 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-custom-reg-display-name">'."\n";
-				echo 'Set "Display Name" during Registration?'."\n";
+				echo 'Set "Display Name" During Registration?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -1138,49 +1154,77 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-custom-reg-password">'."\n";
-				echo 'Allow Custom Passwords during Registration?'."\n";
+				echo 'Allow Custom Passwords During Registration?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
 				echo '</tr>'."\n";
-				echo '<tr style="padding-bottom:0;">'."\n";
+				echo '<tr>'."\n";
 
-				echo '<td style="padding-bottom:0;">'."\n";
-				echo '<em><strong>Note:</strong> Custom passwords are easier for users. However, auto-generated passwords are recommended for best security; i.e., auto-generated passwords also serve as a form of email confirmation.</em>'."\n";
-				echo (is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && is_main_site()) ? '<br /><em>* For security purposes, Custom Passwords are not possible on the Main Site of a Blog Farm. <a href="#" onclick="alert(\'For security purposes, Custom Passwords are not possible on the Main Site of a Blog Farm. A User must wait for the activation/confirmation email; where a randomly generated Password will be assigned. Please note, this limitation only affects your Main Site, via `/wp-signup.php`. In other words, your Customers (i.e., other Blog Owners) will still have the ability to allow Custom Passwords with s2Member. YOU are affected by this limitation, NOT them.\\n\\n* NOTE: s2Member (Pro) removes this limitation.\\nIf you install the s2Member Pro Add-on, you WILL be able to allow Custom Passwords through s2Member Pro-Forms; even on a Multisite Blog Farm.\'); return false;" tabindex="-1">[?]</a></em>'."\n" : '';
-				echo (c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '<br /><em>* Does not affect BuddyPress registration form (always <code>yes</code> with BuddyPress registration).</em>'."\n" : '';
-				echo '<br /><select name="ws_plugin__s2member_custom_reg_password" id="ws-plugin--s2member-custom-reg-password"'.((is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && is_main_site() && !c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? ' disabled="disabled"' : '').'>'."\n";
-				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"]) ? ' selected="selected"' : '').'>No (send auto-generated passwords via email; after registration)</option>'."\n";
+				echo '<td>'."\n";
+				echo '<p style="margin-bottom:4px;"><em><strong>Note:</strong> Custom Passwords are easier for users. However, this has an impact on site security. Enabling Custom Passwords disables the New User Notification email that contains a password-setup link for each user. In other words, enabling Custom Passwords effectively disables any sort of email verification procedure, because the user is allowed to set their password during registration, instead of doing that via email confirmation—which is the default WordPress behavior.</em></p>'."\n";
+				echo (is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && is_main_site()) ? '<p style="margin-bottom:4px;"><em>* For security purposes, Custom Passwords are not possible on the Main Site of a Blog Farm. <a href="#" onclick="alert(\'For security purposes, Custom Passwords are not possible on the Main Site of a Blog Farm. A User must wait for the activation/confirmation email; where a randomly generated Password will be assigned. Please note, this limitation only affects your Main Site, via `/wp-signup.php`. In other words, your Customers (i.e., other Blog Owners) will still have the ability to allow Custom Passwords with s2Member. YOU are affected by this limitation, NOT them.\\n\\n* NOTE: s2Member (Pro) removes this limitation.\\nIf you install the s2Member Pro Add-on, you WILL be able to allow Custom Passwords through s2Member Pro-Forms; even on a Multisite Blog Farm.\'); return false;" tabindex="-1">[?]</a></em></p>'."\n" : '';
+				echo (c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '<p style="margin-bottom:4px;"><em>* Does not affect BuddyPress registration form (always <code>yes</code> with BuddyPress registration).</em></p>'."\n" : '';
+				echo '<select name="ws_plugin__s2member_custom_reg_password" id="ws-plugin--s2member-custom-reg-password"'.((is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && is_main_site() && !c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? ' disabled="disabled"' : '').'>'."\n";
+				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"]) ? ' selected="selected"' : '').'>No (send each user a password-setup link after registration; recommended for best security)</option>'."\n";
 				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"]) ? ' selected="selected"' : '').'>Yes (allow members to create their own password during registration)</option>'."\n";
 				echo '</select>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
-				echo '<tr style="padding-top:0;">'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
 
-				echo '<td style="padding-top:2px;">'."\n";
-				echo '<div id="ws-plugin--s2member-custom-reg-password-settings">'."\n";
-				echo '<small><em><strong>Note:</strong> Minimum characters and password strength also impact profile updates, so it\'s a good idea to configure these even if you\'re using auto-generated passwords during registration.</em></small><br />'."\n";
-				echo '<small>Minimum characters:</small> <input type="text" autocomplete="off" name="ws_plugin__s2member_custom_reg_password_min_length" id="ws-plugin--s2member-custom-reg-password-min-length" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_length"]).'" maxlength="2" size="2" style="width:auto;" />'."\n";
-				echo '<small>Minimum strength:</small> <select name="ws_plugin__s2member_custom_reg_password_min_strength" id="ws-plugin--s2member-custom-reg-password-min-strength" style="width:auto;">'."\n";
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-custom-reg-password-min-length">'."\n";
+				echo 'Minimum Length/Strength for Custom Passwords:'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<td>'."\n";
+				echo 'Minimum length: <input type="text" autocomplete="off" name="ws_plugin__s2member_custom_reg_password_min_length" id="ws-plugin--s2member-custom-reg-password-min-length" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_length"]).'" maxlength="2" size="2" style="width:auto;" /> characters.'."\n";
+				echo '&nbsp;&nbsp;&nbsp; Minimum strength: <select name="ws_plugin__s2member_custom_reg_password_min_strength" id="ws-plugin--s2member-custom-reg-password-min-strength" style="width:auto;">'."\n";
 				echo '<option value="n/a"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_strength"] === 'n/a') ? ' selected="selected"' : '').'>N/A (do not enforce a password strength requirement)</option>'."\n";
 				echo '<option value="weak"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_strength"] === 'weak') ? ' selected="selected"' : '').'>Weak (only needs to meet minimum length requirement)</option>'."\n";
 				echo '<option value="good"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_strength"] === 'good') ? ' selected="selected"' : '').'>Good (must have numbers, letters, and mixed caSe)</option>'."\n";
 				echo '<option value="strong"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password_min_strength"] === 'strong') ? ' selected="selected"' : '').'>Strong (must have numbers, letters, mixed caSe, and punctuation)</option>'."\n";
 				echo '</select>'."\n";
-				echo '</div>'."\n";
+				echo '<p><em><strong>Tip:</strong> Minimum length and password strength also impact profile updates, so it\'s a good idea to configure these even if you\'re not using Custom Passwords during registration.</em></p>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-custom-reg-force-personal-emails">'."\n";
-				echo 'Force Personal Emails during Registration?'."\n";
+				echo 'Force Personal Emails During Registration?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -1196,6 +1240,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
 
 				echo '<th>'."\n";
@@ -1219,6 +1270,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '</tr>'."\n";
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
+
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";

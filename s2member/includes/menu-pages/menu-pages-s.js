@@ -65,9 +65,6 @@ jQuery(document).ready(function($)
 							});
 						return false;
 					});
-				$('#ws-plugin--s2member-custom-reg-password').on('change', function(){
-					$('#ws-plugin--s2member-custom-reg-password-settings').css('opacity', $(this).val() === '1' ? '1' : '0.9');
-				}).trigger('change');
 			}
 		if(location.href.match(/page\=ws-plugin--s2member-logs/))
 			{

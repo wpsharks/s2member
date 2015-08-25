@@ -46,7 +46,9 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 		{
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_generate_password', get_defined_vars());
-			unset($__refs, $__v);
+			unset($__refs, $__v); // Housekeeping.
+
+			$GLOBALS['ws_plugin__s2member_generate_password_input'] = $password; // Before filtering.
 
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_password'] || (c_ws_plugin__s2member_utils_conds::pro_is_installed() && c_ws_plugin__s2member_pro_remote_ops::is_remote_op('create_user')))
 			{
@@ -456,11 +458,20 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 							{
 								$user_pass = wp_generate_password(); // A new Password for this User/Member will be generated now.
 								c_ws_plugin__s2member_registrations::ms_create_existing_user($user_login, $user_email, $user_pass, $user_id);
-								update_user_option($user_id, 'default_password_nag', TRUE, TRUE); // Setup Password-change nag screen.
-								wp_new_user_notification($user_id, $user_pass); // Welcome email, just like ``register_new_user()``.
 
-								$redirect_to = (!empty($_REQUEST['redirect_to'])) ? trim(stripslashes($_REQUEST['redirect_to'])) : FALSE;
-								$redirect_to = ($redirect_to) ? $redirect_to : add_query_arg('checkemail', urlencode('registered'), wp_login_url());
+								$GLOBALS['ws_plugin__s2member_generate_password_input'] = $GLOBALS['ws_plugin__s2member_generate_password_return'] = null;
+								$has_custom_password = isset($GLOBALS['ws_plugin__s2member_generate_password_input'], $GLOBALS['ws_plugin__s2member_generate_password_return'])
+									&& $GLOBALS['ws_plugin__s2member_generate_password_input'] !== $GLOBALS['ws_plugin__s2member_generate_password_return'];
+
+								update_user_option($user_id, 'default_password_nag', $has_custom_password ? false : true, true);
+
+								if (version_compare(get_bloginfo('version'), '4.3', '>='))
+									wp_new_user_notification($user_id, $has_custom_password ? 'admin' : 'both', $user_pass);
+								else wp_new_user_notification($user_id, $user_pass);
+
+								$redirect_to = !empty($_REQUEST['redirect_to']) ? trim(stripslashes($_REQUEST['redirect_to'])) : FALSE;
+								$redirect_to = $redirect_to ? $redirect_to // Note: the `checkemail` message is translated if using custom passwords.
+									: add_query_arg('checkemail', urlencode('registered'), wp_login_url());
 
 								do_action('ws_plugin__s2member_during_ms_register_existing_user', get_defined_vars());
 
