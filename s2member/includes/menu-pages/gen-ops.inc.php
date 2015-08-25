@@ -1106,7 +1106,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-custom-reg-names">'."\n";
-				echo 'Collect First/Last Names during Registration?'."\n";
+				echo 'Collect First/Last Names During Registration?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -1135,7 +1135,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-custom-reg-display-name">'."\n";
-				echo 'Set "Display Name" during Registration?'."\n";
+				echo 'Set "Display Name" During Registration?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -1224,7 +1224,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-custom-reg-force-personal-emails">'."\n";
-				echo 'Force Personal Emails during Registration?'."\n";
+				echo 'Force Personal Emails During Registration?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
