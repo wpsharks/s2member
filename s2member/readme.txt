@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 150722
-Stable tag: 150722
+Version: 150825
+Stable tag: 150825
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -17,7 +17,7 @@ Authorize.Net® Compatible: yes w/s2Member® Pro
 Google® Checkout Compatible: yes w/s2Member® Pro
 ClickBank® Compatible: yes w/s2Member® Pro
 
-Tested up to: 4.3-alpha
+Tested up to: 4.4-alpha
 Requires at least: 4.2
 
 Requires PHP: 5.2+
@@ -169,11 +169,34 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v150722 =
+= v150825 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v150825 =
+
+- (s2Member/s2Member Pro) **WordPress v4.3 Compat./Bug Fix** This release of s2Member alters the way New User Notification Emails are sent, and in how they should be formatted in WordPress v4.3+.
+
+  The New User Notification Email is now sent (to a user) only if they did _not_ set a Custom Password during their registration; i.e., only if they need this email to set their password for the first time. In short, s2Member now follows the same approach used by WordPress v4.3+.
+
+  See:  **Dashboard → s2Member  → General Options → Email Configuration → New User Notification**
+
+  So the purpose of this particular email has changed just a bit; i.e., the New User Notification Email. Instead of it being sent to every new user, it is only sent to users who need it for the purpose of obtaining a password which grants them access to their account for the first time.
+
+  **Upgrading to WordPress v4.3 and the latest release of s2Member?**
+
+  Please review this section of your Dashboard carefully:
+  **s2Member  → General Options → Email Configuration → New User Notification**
+
+  - If you are using s2Member to customize the New User Notification email, you should try to update this message so that it includes the new `%%wp_set_pass_url%%` Replacement Code.
+
+  See also: [this comment at GitHub about the recent changes, with screenshots](https://github.com/websharks/s2member/issues/689#issuecomment-134563230).
+
+- (s2Member Pro) **`[s2Member-List /]` Bug Fix:** This release corrects a bug in the `[s2Member-List /]` shortcode that was causing `levels="0"` not to work, and in fact any use of a `0` in the `levels=""` attribute was broken. See [this GitHub issue](https://github.com/websharks/s2member/issues/663) if you'd like additional details. Props to @patdumond for reproducing, reporting and testing this issue.
+
+- (s2Member/s2Member Pro) **Emoji Bug Fix:** This release corrects a bug in s2Member's SSL filters that can be applied with the Post/Page Custom Field `s2member_force_ssl` being set to `yes`. A symptom of this bug was to see an SSL warning in the latest release of WordPress related to the new Emoji library. See [this GitHub issue](https://github.com/websharks/s2member/issues/674) if you'd like additional details.
 
 = v150722 =
 
