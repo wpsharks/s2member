@@ -1165,7 +1165,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-custom-reg-password">'."\n";
-				echo 'Allow Custom Passwords during Registration?'."\n";
+				echo 'Allow Custom Passwords During Registration?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
