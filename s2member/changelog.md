@@ -1,4 +1,4 @@
-= v150825 =
+= v150827 =
 
 - (s2Member/s2Member Pro) **WordPress v4.3 Compat./Bug Fix** This release of s2Member alters the way New User Notification Emails are sent, and in how they should be formatted in WordPress v4.3+.
 

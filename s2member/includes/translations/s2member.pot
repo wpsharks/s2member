@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  150825\n"
+"Project-Id-Version:  150827\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2015-08-25 13:22:32+00:00\n"
+"POT-Creation-Date: 2015-08-27 11:48:33+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -290,7 +290,7 @@ msgctxt "s2member-front"
 msgid "as a Member"
 msgstr ""
 
-#: s2member/includes/classes/email-configs.inc.php:246
+#: s2member/includes/classes/email-configs.inc.php:251
 #: s2member/includes/syscon.inc.php:215
 msgctxt "s2member-front"
 msgid ""
@@ -983,7 +983,7 @@ msgctxt "s2member-front"
 msgid "<strong>Your Link Expired:</strong><br />Please contact Support if you need assistance."
 msgstr ""
 
-#: s2member/includes/classes/registrations.inc.php:590
+#: s2member/includes/classes/registrations.inc.php:615
 msgctxt "s2member-front"
 msgid "s2Member security violation. You attempted to POST administrative variables that will NOT be trusted in a NON-administrative zone!"
 msgstr ""
@@ -4473,7 +4473,7 @@ msgid ""
 "Charges today: %%%%currency_symbol%%%%%%%%initial%%%%\n"
 "Recurring charges: %%%%currency_symbol%%%%%%%%recurring/regular_cycle%%%%\n"
 "\n"
-"Your Username/Password will arrive shortly, in a separate email. If you have any trouble, please feel free to contact us.\n"
+"If you have any trouble, please feel free to contact us.\n"
 "\n"
 "Best Regards,\n"
 "%s"
@@ -4491,7 +4491,7 @@ msgid ""
 "\n"
 "Your order can be retrieved here:\n"
 "%%%%sp_access_url%%%%\n"
-"( link expires in %%%%sp_access_exp%%%% )\n"
+"(link expires in %%%%sp_access_exp%%%%)\n"
 "\n"
 "If you have any trouble, please feel free to contact us.\n"
 "\n"
