@@ -200,7 +200,8 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 
 						if ($user_id && ($user = new WP_User ($user_id)) && !empty($user->ID) && ($user_id = $user->ID) && $notify)
 							{
-								$user_pass = $user_pass ? $user_pass : wp_generate_password();
+								remove_filter('random_password', 'c_ws_plugin__s2member_registrations::generate_password');
+								$user_pass = $user_pass ? $user_pass : wp_generate_password(); // ↑ Make sure it's w/o filter.
 								wp_set_password($user_pass, $user_id);
 
 								$return = c_ws_plugin__s2member_email_configs::new_user_notification($user_id, $user_pass, $notify, $user_email);
@@ -240,6 +241,10 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 								c_ws_plugin__s2member_email_configs::email_config_release ();
 
 								if (in_array('user', $notify, true)
+
+									// Exclude custom password generated via `wp-login.php` or BP.
+									&& empty($GLOBALS['ws_plugin__s2member_custom_wp_login_bp_password'])
+
 									&&  ( // One of these conditions must be true.
 											($user_pass && stripos($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_message'], '%%user_pass%%') !== false)
 										 || ($is_gte_wp43 && stripos($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_message'], '%%wp_set_pass_url%%') !== false)
@@ -248,7 +253,8 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 									) {
 										if($is_gte_wp43 && stripos($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_message'], '%%wp_set_pass_url%%') !== false)
 											{
-												$user_activation_key = wp_generate_password(20, false);
+												remove_filter('random_password', 'c_ws_plugin__s2member_registrations::generate_password');
+												$user_activation_key = wp_generate_password(20, false); // ↑ Make sure it's w/o filter.
 												do_action('retrieve_password_key', $user->user_login, $user_activation_key);
 
 												if(!class_exists('PasswordHash'))
