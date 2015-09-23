@@ -35,7 +35,29 @@ if (!function_exists ('wp_new_user_notification'))
 					{
 						$args = func_get_args(); // Function arguments.
 
-						if (version_compare(get_bloginfo('version'), '4.3', '>='))
+						if (version_compare(get_bloginfo('version'), '4.3.1', '>='))
+						{
+							$_43_args = array(); // Initialize WP v4.3.1 args.
+
+							$_43_args[0] = isset($args[0]) ? $args[0] : 0;
+							// This is always a user ID. Still the same.
+
+							$_43_args[1] = isset($args[3]) ? $args[3] : '';
+							// Our `wp_new_user_notification()` implementation supports a 4th arg: `$user_pass`.
+							// Default; no passwords via email in WordPress v4.3+.
+
+							if (!empty($args[2]) && $args[2] === 'both')
+								$_43_args[2] = array('user', 'admin');
+
+							else if (!empty($args[2]) && is_string($args[2])) // Something else?
+								$_43_args[2] = array($args[2]); // e.g., `user`, `admin`.
+
+							else $_43_args[2] = array('admin'); // Default behavior.
+
+							$args = $_43_args; // Use restructured arguments.
+						}
+						// Sucky WP v4.3 workaround. I was forced into doing this!!
+						else if (version_compare(get_bloginfo('version'), '4.3', '>='))
 						{
 							$_43_args = array(); // Initialize WP v4.3 args.
 
@@ -50,7 +72,7 @@ if (!function_exists ('wp_new_user_notification'))
 								$_43_args[2] = array('user', 'admin');
 
 							else if (!empty($args[1]) && is_string($args[1])) // Something else?
-								$_43_args[2] = array($args[1]); // e.g., `user` or `admin`.
+								$_43_args[2] = array($args[1]); // e.g., `user`, `admin`.
 
 							else $_43_args[2] = array('admin'); // Default behavior.
 
