@@ -188,11 +188,9 @@ if(!class_exists('c_ws_plugin__s2member_login_customizations'))
 		}
 
 		/**
-		 * Filters the Lost Password URL when the call is made from the /wp-login.php system
-		 * and changes the default behavior of wp_lostpassword_url() so that it uses site_url()
-		 * instead of network_site_url(), but only if the current $_SERVER['REQUEST_URI'] differs
-		 * from the Parent Site URL, as returned by network_site_url(). In a non-multisite
-		 * environment, the default WordPress behavior (as of v3.9.1) is used.
+		 * Filters the Lost Password URL and changes the default behavior of wp_lostpassword_url()
+		 * so that it uses site_url() instead of network_site_url(), but only if is_multisite()
+		 * In a non-multisite environment, the default WordPress behavior (as of v4.3.1) is used.
 		 *
 		 * @package s2Member\Login_Customizations
 		 * @since 140603
@@ -206,13 +204,7 @@ if(!class_exists('c_ws_plugin__s2member_login_customizations'))
 		 */
 		public static function lost_password_url($lostpassword_url, $redirect)
 		{
-			$scheme = (is_ssl()) ? 'https' : 'http';
-			$url    = $scheme.'://'.$_SERVER['HTTP_HOST'].strtok($_SERVER['REQUEST_URI'], '?');
-
-			if(basename(strtok($_SERVER['REQUEST_URI'], '?')) === 'wp-login.php'
-			   && strpos($url, (string)network_site_url('wp-login.php')) === FALSE
-			   && apply_filters('ws_plugin__s2member_tweak_lost_password_url', TRUE, get_defined_vars())
-			)
+			if(apply_filters('ws_plugin__s2member_tweak_lost_password_url', is_multisite(), get_defined_vars()))
 			{
 				$args = array('action' => 'lostpassword');
 				if(!empty($redirect)) $args['redirect_to'] = $redirect;
