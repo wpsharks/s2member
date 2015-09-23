@@ -491,7 +491,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 								update_user_option($user_id, 'default_password_nag', $has_custom_password ? false : true, true);
 
 								if (version_compare(get_bloginfo('version'), '4.3', '>='))
-									wp_new_user_notification($user_id, $has_custom_password ? 'admin' : 'both', $user_pass);
+									wp_new_user_notification($user_id, null, $has_custom_password ? 'admin' : 'both', $user_pass);
 								else wp_new_user_notification($user_id, $user_pass);
 
 								$redirect_to = !empty($_REQUEST['redirect_to']) ? trim(stripslashes($_REQUEST['redirect_to'])) : FALSE;

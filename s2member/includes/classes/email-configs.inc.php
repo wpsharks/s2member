@@ -233,6 +233,9 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 						$notify     = (array)$notify;
 						$user_email = (string)$user_email;
 
+						if(!$user_pass && !empty($GLOBALS['ws_plugin__s2member_plain_text_pass']))
+							$user_pass = (string)$GLOBALS['ws_plugin__s2member_plain_text_pass'];
+
 						if ($user_id && ($user = new WP_User($user_id)) && !empty($user->ID) && ($user_id = $user->ID) && $notify)
 							{
 								$is_gte_wp43 = version_compare(get_bloginfo('version'), '4.3', '>=');
