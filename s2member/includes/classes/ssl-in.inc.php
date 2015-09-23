@@ -112,6 +112,9 @@ if(!class_exists('c_ws_plugin__s2member_ssl_in'))
 					{
 						$s = $m[0]; // Initialize the `$s` variable.
 
+						if(stripos($s, 's2member_file_download') !== false || stripos($s, 's2member-files') !== false)
+							return $s; // See: <https://github.com/websharks/s2member/issues/702>
+
 						$s = preg_replace('/(?:https?\:)?\/\/'.preg_quote(_ws_plugin__s2member_force_ssl_host_port, '/').'/i', 'http://'._ws_plugin__s2member_force_ssl_host, $s);
 						$s = preg_replace('/(?:https?\:)?\/\/'.preg_quote(_ws_plugin__s2member_force_ssl_host, '/').'/i', 'http://'._ws_plugin__s2member_force_ssl_host, $s);
 
