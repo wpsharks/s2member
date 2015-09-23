@@ -1,3 +1,19 @@
+= v150923 =
+
+- (s2Member/s2Member Pro) **WP v4.3 Compat.** This release corrects a minor backward compatibility issue with versions of WordPress before v4.3, and for installations of s2Member that still use the `%%user_pass%%` Replacement Code in their New User Email notification. See [this GitHub issue](https://github.com/websharks/s2member/issues/710) if you'd like additional details.
+
+- (s2Member/s2Member Pro) **WP v4.3.1 Compat.** This release corrects a compatibility issue whenever you run s2Member together with WordPress v4.3.1+. Note that WordPress v4.3 made changes to the `wp_new_user_notification()` function in WordPress core. Then, a later release of WP v4.3.1 changed it again; breaking compatibility in both instances. This release brings s2Member up-to-date with WordPress v4.3.1 and preserves backward compatibility with WordPress v4.3, as well for versions prior. Props @bridgeport. See [this GitHub issue](https://github.com/websharks/s2member/issues/732) if you'd like additional details.
+
+- (s2Member/s2Member Pro) **Bug Fix**: Fixed a bug where the s2Member CSS and JS was not loaded on the Dashboard when WordPress was installed in a subfolder that was different from the Home URL. Props @magbicaleman. See [Issue #696](https://github.com/websharks/s2member/pull/696).
+
+- (s2Member Pro) **Bug Fix:** This release corrects a security issue related to the Pro Upgrade Wizard for s2Member Pro being displayed without checking `current_user_can('update_plugins')`. Resolved. Props @raamdev for identifying this and working to implement the fix. See [this GitHub issue](https://github.com/websharks/s2member/issues/697) if you'd like additional details.
+
+- (s2Member Pro) **Bug Fix:** This release corrects a bug impacting the `wp_lostpassword_url()` function whenever s2Member is configured to run in a Multisite Network. The link is now adjusted automatically so that a lost password is always recovered from the current site, not the Main Site in the network. Props to @raamdev See also: [this GitHub issue](https://github.com/websharks/s2member/issues/711) for further details.
+
+- (s2Member Pro) **Bug Fix:** Stripe Pro-Forms presented after a long block of text on a page, were not returning to the proper hash location after a Coupon Code was applied. Fixed in this release. Props @raamdev See also: [this GitHub issue](https://github.com/websharks/s2member/issues/730) if you'd like additional details.
+
+- (s2Member/s2Member Pro) **SSL Edge Case:** This release corrects an SSL + Protected File Download problem that may have occurred in rare circumstances. Reproducing this required that you have a user with an ISP that changed their IP address whenever they accessed a site over `https` instead of `http`, and that an s2Member Protected File Download link is presented on an HTTPS page. And, that you were using s2Member's own force-SSL filters. A symptom of this issue was to receive mysterious reports of a user getting a 503 error when trying to access a protected file. Resolved in this release. See [this GitHub issue](https://github.com/websharks/s2member/issues/702) if you'd like additional details.
+
 = v150827 =
 
 - (s2Member/s2Member Pro) **WordPress v4.3 Compat./Bug Fix** This release of s2Member alters the way New User Notification Emails are sent, and in how they should be formatted in WordPress v4.3+.
