@@ -1,4 +1,4 @@
-= v150923 =
+= v150925 =
 
 - (s2Member/s2Member Pro) **WP v4.3 Compat.** This release corrects a minor backward compatibility issue with versions of WordPress before v4.3, and for installations of s2Member that still use the `%%user_pass%%` Replacement Code in their New User Email notification. See [this GitHub issue](https://github.com/websharks/s2member/issues/710) if you'd like additional details.
 

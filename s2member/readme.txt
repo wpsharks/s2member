@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 150923
-Stable tag: 150923
+Version: 150925
+Stable tag: 150925
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -169,13 +169,13 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v150923 =
+= v150925 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
 
-= v150923 =
+= v150925 =
 
 - (s2Member/s2Member Pro) **WP v4.3 Compat.** This release corrects a minor backward compatibility issue with versions of WordPress before v4.3, and for installations of s2Member that still use the `%%user_pass%%` Replacement Code in their New User Email notification. See [this GitHub issue](https://github.com/websharks/s2member/issues/710) if you'd like additional details.
 
