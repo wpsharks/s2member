@@ -41,7 +41,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_pages_rs"))
 
 						ob_start(); // output buffer these so we can display a toggler conditionally.
 
-						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["menu_pages"]["updates"])
+						if (!is_ssl() && $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["menu_pages"]["updates"])
 							{
 								echo '<div class="ws-menu-page-updates">' . "\n";
 								include_once dirname (dirname (__FILE__)) . "/menu-pages/updates.inc.php";
