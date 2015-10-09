@@ -1411,7 +1411,35 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 					);
 				}
 
-				/***************************************************************************************/
+        /***************************************************************************************/
+
+        if(!empty($_SERVER['SERVER_NAME']) && is_string($_SERVER['SERVER_NAME']) && !empty($_SERVER['HTTP_HOST']) && is_string($_SERVER['HTTP_HOST']) && strcasecmp($_SERVER['SERVER_NAME'], $_SERVER['HTTP_HOST']) !== 0)
+        {
+          $warnings[] = array(
+              'title'   => self::i18n('<code>$_SERVER[\'SERVER_NAME\']</code> != <code>$_SERVER[\'HTTP_HOST\']</code>'),
+              'message' => sprintf(
+                  self::i18n(
+                      'Your server reports <code>$_SERVER[\'SERVER_NAME\']</code> = <code>%2$s</code> and <code>$_SERVER[\'HTTP_HOST\']</code> = <code>%3$s</code>'.
+                      ' Although NOT required, %1$s recommends that your installation of PHP be configured with a <code>$_SERVER[\'SERVER_NAME\']</code> environment variable that matches <code>$_SERVER[\'HTTP_HOST\']</code>.'.
+                      ' Note: If you are running this scan from a test server and this intentionally does not match up, please feel free to ignore this warning. However, be advised that an incorrect <code>$_SERVER[\'HTTP_HOST\']</code> environment variable can result in post-processing failures in the s2Member software.'.
+                      ' Please contact your hosting provider about this message. See also: <a href="http://php.net/manual/en/reserved.variables.server.php" target="_blank" rel="xlink">this PHP article</a>.'
+                  ), htmlspecialchars($plugin_name), htmlspecialchars($_SERVER['SERVER_NAME']), htmlspecialchars($_SERVER['HTTP_HOST'])
+              )
+          );
+        }
+        else // Pass on this check.
+        {
+          $passes[] = array(
+              'title'   => self::i18n('<code>$_SERVER[\'SERVER_NAME\']</code> = <code>$_SERVER[\'HTTP_HOST\']</code>'),
+              'message' => sprintf(
+                  self::i18n(
+                      'Your server reports <code>$_SERVER[\'SERVER_NAME\']</code> = <code>%1$s</code> and <code>$_SERVER[\'HTTP_HOST\']</code> = <code>%2$s</code> (a match). Good here!'
+                  ), htmlspecialchars($_SERVER['SERVER_NAME']), htmlspecialchars($_SERVER['HTTP_HOST'])
+              )
+          );
+        }
+
+        /***************************************************************************************/
 
 				if($is_wp_loaded && $plugin_dir_names)
 				{
