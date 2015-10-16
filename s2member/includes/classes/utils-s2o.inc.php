@@ -40,7 +40,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_s2o'))
 			if(!empty($_SERVER['WP_DIR']))
 				return (string)$_SERVER['WP_DIR'];
 
-			foreach(array($starting_dir, $alt_starting_dir) as $_directory)
+			foreach(array($starting_dir, $alt_starting_dir, $_SERVER['DOCUMENT_ROOT']) as $_directory)
 				if($_directory && is_string($_directory) && is_dir($_directory))
 					for($_i = 0, $_dir = $_directory; $_i <= 20; $_i++, $_dir = dirname($_dir))
 						if(file_exists($_dir.'/wp-settings.php'))
@@ -48,6 +48,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_s2o'))
 
 			header('HTTP/1.0 500 Error');
 			header('Content-Type: text/plain; charset=UTF-8');
+
 			while(@ob_end_clean()) ; // Clean any existing output buffers.
 			exit ('ERROR: s2Member unable to locate WordPress directory.');
 		}
