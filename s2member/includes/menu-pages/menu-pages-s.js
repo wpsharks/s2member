@@ -161,6 +161,16 @@ jQuery(document).ready(function($)
 
                }).trigger /* Fire on ready too. */('change');
 
+				$('select#ws-plugin--s2member-custom-reg-password').change(function()
+					{
+						var $this = $(this), $newUserNotification = $('div#ws-plugin--s2member-new-user-email-details');
+
+						if($this.val() === '1') // Disable this section.
+							$newUserNotification.css('opacity', '0.5');
+						else $newUserNotification.css('opacity', '');
+
+					}).trigger /* Fire on ready too. */('change');
+
 				if($('input#ws-plugin--s2member-custom-reg-fields').length && $('div#ws-plugin--s2member-custom-reg-field-configuration').length)
 					{
 						( /* Wrap these routines inside a function to keep variables within relative scope. */function()

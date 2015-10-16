@@ -354,6 +354,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<h3 style="margin:0;">New User Email Message (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-new-user-email-details\').toggle(); return false;" class="ws-dotted-link">click to customize</a>)</h3>'."\n";
 				echo '<p style="margin:0;">This email is sent to new Users/Members who did <em>not</em> set a Custom Password during registration.</p>'."\n";
+				if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"])
+					echo '<p class="info" style="font-size:80%; margin:.5em 0 0 0;"><strong>↑ NOTE:</strong> You currently have Custom Passwords enabled in your s2Member Registration/Profile Field options. Therefore, this email is not going to be sent; i.e., it is only sent to users who need it for the purpose of obtaining their password.</p>'."\n";
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_new_user_email", get_defined_vars());
 
 				echo '<div id="ws-plugin--s2member-new-user-email-details" style="display:none;">'."\n";
