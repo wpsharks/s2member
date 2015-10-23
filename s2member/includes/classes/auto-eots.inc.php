@@ -127,11 +127,15 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 							delete_user_option($user_id, 's2member_last_auto_eot_time');
 							delete_user_option($user_id, 's2member_auto_eot_time');
 
+							$log_entry = array('user' => (array)$user); // Intialize.
+							$log_entry['auto_eot_time'] = $auto_eot_time; // Record EOT time.
+
 							if(!$user->has_cap('administrator') /* Do NOT process Administrator accounts. */)
 							{
 								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_eot_behavior'] === 'demote')
 								{
 									$eot_del_type = 'auto-eot-cancellation-expiration-demotion'; // Set EOT/Del type.
+									$log_entry['eot_del_type'] = $eot_del_type; // Deleting user in this case.
 
 									$custom          = get_user_option('s2member_custom', $user_id);
 									$subscr_gateway  = get_user_option('s2member_subscr_gateway', $user_id);
@@ -267,6 +271,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_eot_behavior'] === 'delete')
 								{
 									$eot_del_type = $GLOBALS['ws_plugin__s2member_eot_del_type'] = 'auto-eot-cancellation-expiration-deletion';
+									$log_entry['eot_del_type'] = $eot_del_type; // Deleting user in this case.
 
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_auto_eot_system_during_before_delete', get_defined_vars());
@@ -290,6 +295,8 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 								foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 								do_action('ws_plugin__s2member_during_auto_eot_system', get_defined_vars());
 								unset($__refs, $__v); // Housekeeping.
+
+								c_ws_plugin__s2member_utils_logs::log_entry('auto-eot-system', $log_entry);
 							}
 						}
 					}

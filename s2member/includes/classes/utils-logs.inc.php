@@ -245,6 +245,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 
 		  '/s2\-http\-api\-debug/' => array('short' => 'All outgoing HTTP connections related to s2Member.', 'long' => 'This log file records all outgoing WP_Http connections that are specifically related to s2Member. This log file can be extremely helpful. It includes technical details about remote HTTP connections that are not available in other log files.'),
 		  '/wp\-http\-api\-debug/' => array('short' => 'All outgoing WordPress HTTP connections.', 'long' => 'This log file records all outgoing HTTP connections processed by the WP_Http class. This includes everything processed by WordPress; even things unrelated to s2Member. This log file can be extremely helpful. It includes technical details about remote HTTP connections that are not available in other log files.'),
+
+		  '/auto\-eot\-system/'    => array('short' => 'EOTs processed via CRON job.', 'long' => 'This log file records all EOTs processed by the WP_Cron job that powers the s2Member Auto-EOT System. Once a customer has an EOT Time, the CRON job comes in and actually handles a demotion or deletion (based on your configuration). That is what this log file shows; i.e., the actual demotion or deletion taking place.'),
 		);
 	}
 }
