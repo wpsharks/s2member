@@ -98,6 +98,7 @@ add_filter('random_password', 'c_ws_plugin__s2member_registrations::generate_pas
 add_action('user_register', 'c_ws_plugin__s2member_registrations::configure_user_registration');
 add_action('register_form', 'c_ws_plugin__s2member_custom_reg_fields::custom_registration_fields');
 add_filter('registration_errors', 'c_ws_plugin__s2member_registrations::custom_registration_field_errors', 10, 3);
+add_filter('send_password_change_email', '__return_false'); // Turn this off in favor of s2Member.
 
 add_filter('add_signup_meta', 'c_ws_plugin__s2member_registrations::ms_process_signup_meta');
 add_filter('bp_signup_usermeta', 'c_ws_plugin__s2member_registrations::ms_process_signup_meta');
