@@ -547,6 +547,39 @@ div.ws-menu-page div.ws-menu-page-toolbox > .links a
 	margin          : 0 10px 0 10px;
 	text-decoration : none;
 }
+div.ws-menu-page div.ws-menu-page-number-button-tabs
+{
+	font-size: 110%;
+	display: inline-block;
+	margin: 0 10px 0 10px;
+}
+div.ws-menu-page div.ws-menu-page-number-button-tabs > a
+{
+	margin: 0 5px;
+	padding: 4px 8px;
+	display: inline-block;
+	text-decoration: none !important;
+
+	color: #D0DDAD;
+	background: #97a376;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+div.ws-menu-page div.ws-menu-page-number-button-tabs > a:first-child
+{
+	margin-left: 0;
+}
+div.ws-menu-page div.ws-menu-page-number-button-tabs > a:last-child
+{
+	margin-right: 0;
+}
+div.ws-menu-page div.ws-menu-page-number-button-tabs > a:hover,
+div.ws-menu-page div.ws-menu-page-number-button-tabs > a.-current
+{
+	color: #000000;
+	background: #ffffff;
+	border: 1px solid #73797a;
+}
 /*
 Specifically for the main layout table.
 These CSS selectors address common layout styles.
