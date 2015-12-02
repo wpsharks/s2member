@@ -185,33 +185,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				if(!empty($_REQUEST['s2member_paypal_proxy_verification']))
 					$paypal['s2member_paypal_proxy_verification'] = esc_html(trim(stripslashes((string)$_REQUEST['s2member_paypal_proxy_verification'])));
 				/*
-				If debugging/logging is enabled; we need to append ``$paypal`` to the log file.
-					Logging now supports Multisite Networking as well.
+				Log this IPN post-processing event now.
 				*/
-				$logt = c_ws_plugin__s2member_utilities::time_details();
-				$logv = c_ws_plugin__s2member_utilities::ver_details();
-				$logm = c_ws_plugin__s2member_utilities::mem_details();
-				$log4 = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']."\n".'User-Agent: '.@$_SERVER['HTTP_USER_AGENT'];
-				$log4 = (is_multisite() && !is_main_site()) ? ($_log4 = $current_blog->domain.$current_blog->path)."\n".$log4 : $log4;
-				$log2 = (is_multisite() && !is_main_site()) ? 'gateway-core-ipn-4-'.trim(preg_replace('/[^a-z0-9]/i', '-', (!empty($_log4) ? $_log4 : '')), '-').'.log' : 'gateway-core-ipn.log';
-
-				if($GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs'])
-					if(is_dir($logs_dir = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir']))
-						if(is_writable($logs_dir) && c_ws_plugin__s2member_utils_logs::archive_oversize_log_files())
-							file_put_contents($logs_dir.'/'.$log2,
-							                  'LOG ENTRY: '.$logt."\n".$logv."\n".$logm."\n".$log4."\n".
-							                  c_ws_plugin__s2member_utils_logs::conceal_private_info(var_export($paypal, TRUE))."\n\n",
-							                  FILE_APPEND);
-
+				c_ws_plugin__s2member_utils_logs::log_entry('gateway-core-ipn', $paypal);
+				/*
+				Hook during core IPN post-processing might be useful for developers.
+				*/
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify', get_defined_vars());
 				unset($__refs, $__v);
-
-				status_header(200); // Send a 200 OK status header.
-				header('Content-Type: text/plain; charset=UTF-8'); // Content-Type text/plain with UTF-8.
-				while(@ob_end_clean()) ; // Clean any existing output buffers.
-
-				exit (((!empty($paypal['s2member_paypal_proxy_return_url'])) ? $paypal['s2member_paypal_proxy_return_url'] : ''));
+				/*
+				Output response headers; and perhaps a proxy return URL upon request.
+				*/
+				status_header(200);
+				header('Content-Type: text/plain; charset=UTF-8');
+				while(@ob_end_clean()); exit (!empty($paypal['s2member_paypal_proxy_return_url']) ? $paypal['s2member_paypal_proxy_return_url'] : '');
 			}
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_after_paypal_notify', get_defined_vars());
