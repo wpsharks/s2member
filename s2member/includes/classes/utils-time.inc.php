@@ -45,8 +45,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 		 */
 		public static function approx_time_difference($from = 0, $to = 0, $round_via = 'round')
 		{
-			$from  = (!$from) ? strtotime('now') : (int)$from;
-			$to    = (!$to) ? strtotime('now') : (int)$to;
+			$from  = !$from ? time() : (int)$from;
+			$to    = !$to ? time() : (int)$to;
 			$since = ''; // Initialize.
 
 			if(($difference = abs($to - $from)) < 3600)
