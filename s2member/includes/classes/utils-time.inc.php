@@ -32,69 +32,100 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 		 *
 		 * Returns the difference in a human readable format.
 		 * Supports: minutes, hours, days, weeks, months, and years. This is an improvement on WordPress ``human_time_diff()``.
-		 * This returns an "approximate" time difference. Rounded to the nearest minute, hour, day, week, month, year.
+		 * This returns an "approximate" time difference. Rounded to nearest minute, hour, day, week, month, year.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 3.5
 		 *
 		 * @param int $from Beginning timestamp to start from.
 		 * @param int $to Ending timestamp to stop at.
+		 * @param string $round_via Rounding type.
 		 *
 		 * @return string Human readable difference between ``$from`` and ``$to``.
 		 */
-		public static function approx_time_difference($from = 0, $to = 0)
+		public static function approx_time_difference($from = 0, $to = 0, $round_via = 'round')
 		{
-			$from  = (!$from) ? strtotime('now') : (int)$from;
-			$to    = (!$to) ? strtotime('now') : (int)$to;
+			$from  = !$from ? time() : (int)$from;
+			$to    = !$to ? time() : (int)$to;
 			$since = ''; // Initialize.
 
 			if(($difference = abs($to - $from)) < 3600)
 			{
-				$m = (int)round($difference / 60);
-
+				if($round_via === 'floor') {
+					$m = (int)floor($difference / 60);
+				} elseif ($round_via === 'ceil') {
+					$m = (int)ceil($difference / 60);
+				} else {
+					$m = (int)round($difference / 60);
+				}
 				$since = ($m < 1) ? _x('less than a minute', 's2member-front', 's2member') : $since;
-				$since = ($m === 1) ? _x('1 minute', 's2member-front', 's2member') : $since;
-				$since = ($m > 1) ? sprintf(_nx('%s minute', '%s minutes', $m, 's2member-front', 's2member'), $m) : $since;
+				$since = ($m === 1) ? _x('about 1 minute', 's2member-front', 's2member') : $since;
+				$since = ($m > 1) ? sprintf(_nx('about %s minute', 'about %s minutes', $m, 's2member-front', 's2member'), $m) : $since;
 				$since = ($m >= 60) ? _x('about 1 hour', 's2member-front', 's2member') : $since;
 			}
 			else if($difference >= 3600 && $difference < 86400)
 			{
-				$h = (int)round($difference / 3600);
-
-				$since = ($h === 1) ? _x('1 hour', 's2member-front', 's2member') : $since;
-				$since = ($h > 1) ? sprintf(_nx('%s hour', '%s hours', $h, 's2member-front', 's2member'), $h) : $since;
+				if($round_via === 'floor') {
+					$h = (int)floor($difference / 3600);
+				} elseif ($round_via === 'ceil') {
+					$h = (int)ceil($difference / 3600);
+				} else {
+					$h = (int)round($difference / 3600);
+				}
+				$since = ($h === 1) ? _x('about 1 hour', 's2member-front', 's2member') : $since;
+				$since = ($h > 1) ? sprintf(_nx('about %s hour', 'about %s hours', $h, 's2member-front', 's2member'), $h) : $since;
 				$since = ($h >= 24) ? _x('about 1 day', 's2member-front', 's2member') : $since;
 			}
 			else if($difference >= 86400 && $difference < 604800)
 			{
-				$d = (int)round($difference / 86400);
-
-				$since = ($d === 1) ? _x('1 day', 's2member-front', 's2member') : $since;
-				$since = ($d > 1) ? sprintf(_nx('%s day', '%s days', $d, 's2member-front', 's2member'), $d) : $since;
+				if($round_via === 'floor') {
+					$d = (int)floor($difference / 86400);
+				} elseif ($round_via === 'ceil') {
+					$d = (int)ceil($difference / 86400);
+				} else {
+					$d = (int)round($difference / 86400);
+				}
+				$since = ($d === 1) ? _x('about 1 day', 's2member-front', 's2member') : $since;
+				$since = ($d > 1) ? sprintf(_nx('about %s day', 'about %s days', $d, 's2member-front', 's2member'), $d) : $since;
 				$since = ($d >= 7) ? _x('about 1 week', 's2member-front', 's2member') : $since;
 			}
 			else if($difference >= 604800 && $difference < 2592000)
 			{
-				$w = (int)round($difference / 604800);
-
-				$since = ($w === 1) ? _x('1 week', 's2member-front', 's2member') : $since;
-				$since = ($w > 1) ? sprintf(_nx('%s week', '%s weeks', $w, 's2member-front', 's2member'), $w) : $since;
+				if($round_via === 'floor') {
+					$w = (int)floor($difference / 604800);
+				} elseif ($round_via === 'ceil') {
+					$w = (int)ceil($difference / 604800);
+				} else {
+					$w = (int)round($difference / 604800);
+				}
+				$since = ($w === 1) ? _x('about 1 week', 's2member-front', 's2member') : $since;
+				$since = ($w > 1) ? sprintf(_nx('about %s week', 'about %s weeks', $w, 's2member-front', 's2member'), $w) : $since;
 				$since = ($w >= 4) ? _x('about 1 month', 's2member-front', 's2member') : $since;
 			}
 			else if($difference >= 2592000 && $difference < 31556926)
 			{
-				$m = (int)round($difference / 2592000);
-
-				$since = ($m === 1) ? _x('1 month', 's2member-front', 's2member') : $since;
-				$since = ($m > 1) ? sprintf(_nx('%s month', '%s months', $m, 's2member-front', 's2member'), $m) : $since;
+				if($round_via === 'floor') {
+					$m = (int)floor($difference / 2592000);
+				} elseif ($round_via === 'ceil') {
+					$m = (int)ceil($difference / 2592000);
+				} else {
+					$m = (int)round($difference / 2592000);
+				}
+				$since = ($m === 1) ? _x('about 1 month', 's2member-front', 's2member') : $since;
+				$since = ($m > 1) ? sprintf(_nx('about %s month', 'about %s months', $m, 's2member-front', 's2member'), $m) : $since;
 				$since = ($m >= 12) ? _x('about 1 year', 's2member-front', 's2member') : $since;
 			}
 			else if($difference >= 31556926) // Years.
 			{
-				$y = (int)round($difference / 31556926);
-
-				$since = ($y === 1) ? _x('1 year', 's2member-front', 's2member') : $since;
-				$since = ($y > 1) ? sprintf(_nx('%s year', '%s years', $y, 's2member-front', 's2member'), $y) : $since;
+				if($round_via === 'floor') {
+					$y = (int)floor($difference / 31556926);
+				} elseif ($round_via === 'ceil') {
+					$y = (int)ceil($difference / 31556926);
+				} else {
+					$y = (int)round($difference / 31556926);
+				}
+				$since = ($y === 1) ? _x('about 1 year', 's2member-front', 's2member') : $since;
+				$since = ($y > 1) ? sprintf(_nx('about %s year', 'about %s years', $y, 's2member-front', 's2member'), $y) : $since;
 			}
 			return $since;
 		}

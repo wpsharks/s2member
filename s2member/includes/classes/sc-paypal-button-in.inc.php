@@ -50,7 +50,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 						$attr = /* Force array. Trim quote entities. */ c_ws_plugin__s2member_utils_strings::trim_qts_deep ((array)$attr);
 
-						$attr = shortcode_atts (apply_filters("ws_plugin__s2member_sc_paypal_button_default_attrs", array("ids" => "0", "exp" => "72", "level" => "1", "ccaps" => "", "desc" => "", "ps" => "paypal", "lc" => "", "lang" => "", "cc" => "USD", "dg" => "0", "ns" => "1", "custom" => $_SERVER["HTTP_HOST"], "ta" => "0", "tp" => "0", "tt" => "D", "ra" => "0.01", "rp" => "1", "rt" => "M", "rr" => "1", "rrt" => "", "rra" => "1", "modify" => "0", "cancel" => "0", "sp" => "0", "image" => "default", "output" => "button"), get_defined_vars ()), $attr);
+						$attr = shortcode_atts (apply_filters("ws_plugin__s2member_sc_paypal_button_default_attrs", array("ids" => "0", "exp" => "72", "level" => "1", "ccaps" => "", "desc" => "", "ps" => "paypal", "lc" => "", "lang" => "", "cc" => "USD", "dg" => "0", "ns" => "0", "custom" => $_SERVER["HTTP_HOST"], "ta" => "0", "tp" => "0", "tt" => "D", "ra" => "0.01", "rp" => "1", "rt" => "M", "rr" => "1", "rrt" => "", "rra" => "1", "modify" => "0", "cancel" => "0", "sp" => "0", "image" => "default", "output" => "button"), get_defined_vars ()), $attr);
 
 						$attr["modify"] = ($attr["modify"] === "1" && (!is_user_logged_in () || !get_user_option ("s2member_subscr_id")) && $attr["tp"]) ? "0" : $attr["modify"];
 

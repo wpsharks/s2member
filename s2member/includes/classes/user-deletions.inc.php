@@ -121,6 +121,7 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 				delete_user_option($user_id, 's2member_sp_references');
 
 				delete_user_option($user_id, 's2member_last_status_scan');
+				delete_user_option($user_id, 's2member_last_reminder_scan');
 				delete_user_option($user_id, 's2member_first_payment_txn_id');
 				delete_user_option($user_id, 's2member_last_payment_time');
 				delete_user_option($user_id, 's2member_auto_eot_time');
