@@ -43,23 +43,25 @@ License: GNU General Public License
 Contributors: WebSharks, JasWSInc, anguz, raamdev, bruce-caldwell
 
 Author: s2Member / WebSharks, Inc.
-Author URI: http://www.s2member.com/
-Donate link: http://www.s2member.com/donate/
+Author URI: http://s2member.com/
+Donate link: http://s2member.com/donate/
 
 Text Domain: s2member
 Domain Path: /includes/translations
 
 Plugin Name: s2Member Framework
-Forum URI: http://www.s2member.com/forums/
-Plugin URI: http://www.s2member.com/framework/
-Privacy URI: http://www.s2member.com/privacy/
-Changelog URI: http://www.s2member.com/changelog/
-Video Tutorials: http://www.s2member.com/videos/
-Pro Add-on / Home Page: http://www.s2member.com/
-Pro Add-on / Prices: http://www.s2member.com/prices/
-Pro Add-on / Auto-Update URL: http://www.s2member.com/
-PayPal Pro Integration: http://www.s2member.com/videos/ED70D90C6749DA3D/
-Professional Installation URI: http://www.s2member.com/professional-installation/
+Forum URI: http://s2member.com/forums/
+Plugin URI: http://s2member.com/
+Privacy URI: http://s2member.com/privacy-policy/
+Changelog URI: http://s2member.com/changelog/
+Video Tutorials: http://s2member.com/videos/
+Knowledge Base: http://s2member.com/kb/
+Newsletter: http://s2member.com/r/subscribe/
+Pro Add-on / Home Page: http://s2member.com/
+Pro Add-on / Prices: http://s2member.com/prices/
+Pro Add-on / Auto-Update URL: https://www.s2member.com/
+PayPal Pro Integration: http://s2member.com/r/pp-account-types/
+Professional Installation URI: http://s2member.com/r/professional-installation/
 
 Description: s2Member, a powerful (free) membership plugin for WordPress. Protect/secure members only content with roles/capabilities.
 Tags: s2, s2member, s2 member, membership, users, user, members, member, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, paypal pro, pay pal, authorize, authorize.net, google wallet, clickbank, click bank, buddypress, buddy press, bbpress, bb press, shopping cart, cart, checkout, ecommerce
