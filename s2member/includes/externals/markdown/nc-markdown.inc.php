@@ -5,7 +5,7 @@
 * Copyright {@link http://www.michelf.com/projects/php-markdown/ Michel Fortin}.
 * Original Markdown. Copyright {@link http://daringfireball.net/projects/markdown/ John Gruber}.
 *
-* Modified by {@link http://www.websharks-inc.com/ WebSharks, Inc.}.
+* Modified by {@link http://websharks-inc.com/ WebSharks, Inc.}.
 * Excludes WordPress and all other interfaces.
 * Uses a custom class name and interface.
 *

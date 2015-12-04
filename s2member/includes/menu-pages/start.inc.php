@@ -1,9 +1,9 @@
 <?php
 /**
-* Menu page for the s2Member plugin (Quick Start Guide page).
+* Getting Started.
 *
 * Copyright: © 2009-2011
-* {@link http://www.websharks-inc.com/ WebSharks, Inc.}
+* {@link http://websharks-inc.com/ WebSharks, Inc.}
 * (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.
@@ -20,7 +20,7 @@ if(!defined('WPINC')) // MUST have WordPress.
 if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 	{
 		/**
-		* Menu page for the s2Member plugin (Quick Start Guide page).
+		* Getting Started.
 		*
 		* @package s2Member\Menu_Pages
 		* @since 110531
@@ -35,7 +35,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 						c_ws_plugin__s2member_menu_pages_tb::display ();
 						echo '</div>'."\n";
 
-						echo '<h2>Quick-Start Guide</h2>' . "\n";
+						echo '<h2>Getting Started w/ s2Member®</h2>' . "\n";
 
 						echo '<table class="ws-menu-page-table">' . "\n";
 						echo '<tbody class="ws-menu-page-table-tbody">' . "\n";
@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_video_tutorials", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Video Tutorials" style="padding-top:5px;">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Video Tutorials" style="padding-top:5px;" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-registration-process-section">' . "\n";
 								echo '<p><iframe src="//www.youtube.com/embed/videoseries?list=PL8gPolqFnYqtBVz0nVeN2sJgRVednq0jw" width="100%" height="550" frameborder="0" allowfullscreen></iframe></p>' . "\n";
@@ -69,7 +69,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_registration_process", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="The Registration Process">' . "\n";
+								echo '<div class="ws-menu-page-group" title="The Registration Process" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-registration-process-section">' . "\n";
 								echo '<h3>The Subscription Signup/Registration Process</h3>' . "\n";
@@ -90,7 +90,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_log_reg_form", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your Login/Registration Form">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your Login/Registration Form" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-login-reg-form-section">' . "\n";
 								echo '<h3>Your Login/Registration Form (already built-in)</h3>' . "\n";
@@ -111,14 +111,14 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_login_welcome_page", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your Login Welcome Page">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your Login Welcome Page" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-login-welcome-page-section">' . "\n";
 								echo '<h3>Your Login Welcome Page (you create this in WordPress)</h3>' . "\n";
 								echo '<p>You create this special Page in WordPress. This is a "Page" not a Post. This is the first page Members will see after logging into your site.</p>' . "\n";
 								echo '<p>You should go ahead and create an empty Page now, before you start configuring everything. Title it: <code>My Login Welcome Page</code>, and click Publish.</p>' . "\n";
 								echo '<p>Once you have all of your <strong>s2Member → General Options</strong> configured, and once you have a basic understanding of how s2Member works, go back and customize the title and content for this Page. You\'ll want to be creative with your Login Welcome Page. However, you should configure your <strong>s2Member → General Options</strong> first, and test things out. That way you\'ll understand why this Page is important.</p>' . "\n";
-								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/customizing-your-lwp/" target="_blank" rel="external">Customizing Your Login Welcome Page</a>.</p>'."\n" : '';
+								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p><strong>See also:</strong> This KB article: <a href="http://s2member.com/r/customizing-login-welcome-page/" target="_blank" rel="external">Customizing Your Login Welcome Page</a>.</p>'."\n" : '';
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_during_login_welcome_page", get_defined_vars ());
 								echo '</div>' . "\n";
 
@@ -131,7 +131,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_membership_options_page", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your Membership Options Page">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your Membership Options Page" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-membership-options-page-section">' . "\n";
 								echo '<h3>Your Membership Options Page (you create this in WordPress)</h3>' . "\n";
@@ -150,7 +150,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_general_options", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your s2Member → General Options">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your s2Member → General Options" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-general-options-section">' . "\n";
 								echo '<h3>Your s2Member → General Options (Basic Configuration)</h3>' . "\n";
@@ -168,14 +168,14 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_restriction_options", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your s2Member → Restriction Options">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your s2Member → Restriction Options" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-restriction-options-section">' . "\n";
 								echo '<h3>Your s2Member → Restriction Options (Basic Configuration)</h3>' . "\n";
 								echo '<p>Once you have a Login Welcome Page, and a Membership Options Page. Go to: <strong>s2Member → Restriction Options</strong>.</p>' . "\n";
 								echo '<p>From your s2Member Restriction Options Panel you may restrict access to certain Posts, Pages, Tags, Categories, and/or URIs based on a Member\'s Level. The s2Member Options Panel makes it easy for you. All you do is type in the basics of what you want to restrict access to, and those sections of your site will be off limits to non-Members.</p>' . "\n";
 								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p>That being said, there are times when you might need to have greater control over which portions of your site can be viewed by non-Members, or Members at different Levels. This is where API Scripting with Conditionals comes in. <em>For more information, please check your Dashboard here: <strong>s2Member → API Scripting</strong></em>.</p>' . "\n" : '';
-								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/simple-shortcode-conditionals/" target="_blank" rel="external">Simple Shortcode Conditionals</a>.</p>'."\n" : '';
+								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p><strong>See also:</strong> This KB article: <a href="http://s2member.com/r/simple-shortcode-conditionals/" target="_blank" rel="external">Simple Shortcode Conditionals</a>.</p>'."\n" : '';
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_during_restriction_options", get_defined_vars ());
 								echo '</div>' . "\n";
 
@@ -188,7 +188,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_automation_process", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Cancellations / Expirations / Terminations">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Cancellations / Expirations / Terminations" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-automation-process-section">' . "\n";
 								echo '<h3>Subscription Cancellations / Expirations / Terminations</h3>' . "\n";
@@ -208,7 +208,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_upgrading_downgrading", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Upgrading/Downgrading Accounts">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Upgrading/Downgrading Accounts" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-upgrading-downgrading-section">' . "\n";
 								echo '<h3>Upgrading and/or Downgrading User Accounts</h3>' . "\n";
@@ -237,7 +237,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_reg_before_checkout", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Registration Before Checkout?">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Registration Before Checkout?" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-reg-before-checkout-section">' . "\n";
 								echo '<h3>Registration Before Checkout? (reversing the process)</h3>' . "\n";
@@ -245,7 +245,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 								echo '<p>That being said, we believe the <em>ideal</em> approach is a <em>combined Checkout/Registration process</em>; in just one simple step <em>(available with <a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Add-on / Prices")) . '" target="_blank" rel="external">s2Member Pro</a> using Stripe™ (most popular), PayPal Pro integration, or through Authorize.Net integration)</em>. However, even with PayPal Standard Buttons, there is a way to accomplish Registration Before Checkout, thereby reversing the process—if you prefer it that way.</p>'."\n";
 								echo '<p>With PayPal Standard Buttons, Registration before Checkout is accomplished by turning Open Registration <code>(on)</code>, and then making a PayPal Button available to Free Subscribers at Level #0. In other words, you can let Visitors register for free at Level #0 <em>(where they have access to very little perhaps)</em>, and then charge them for access to higher Member Levels [1-4]. For further details, please check your WordPress Dashboard here: <strong>s2Member → General Options → Open Registration</strong>.</p>' . "\n";
 								echo '<p><em>s2Member\'s Simple Conditionals can help you further integrate this process, by allowing you to integrate a special PayPal Button on your Login Welcome Page; one that will be seen only by Free Subscribers at Level #0. Please check your WordPress Dashboard under: <strong>s2Member → API Scripting → Simple Conditionals</strong>. We also suggest reading over the documentation on PayPal Modification Buttons. See: <strong>s2Member → PayPal Buttons → Subscription Modifications</strong>.</em></p>' . "\n";
-								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/simple-shortcode-conditionals/" target="_blank" rel="external">Simple Shortcode Conditionals</a>.</p>'."\n" : '';
+								echo (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ()) ? '<p><strong>See also:</strong> This KB article: <a href="http://s2member.com/r/simple-shortcode-conditionals/" target="_blank" rel="external">Simple Shortcode Conditionals</a>.</p>'."\n" : '';
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_during_reg_before_checkout", get_defined_vars ());
 								echo '</div>' . "\n";
 
@@ -258,11 +258,11 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_themes", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Choosing The Perfect WordPress Theme">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Choosing The Perfect WordPress Theme" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-themes">' . "\n";
 								echo '<h3>Choosing The Perfect WordPress Theme</h3>' . "\n";
-								echo '<p>We recommend <a href="http://www.s2member.com/r/themeforest/" target="_blank" rel="external">ThemeForest</a>. This is a great place to find the perfect theme for your installation of WordPress—at very affordable prices.</p>' . "\n";
+								echo '<p>We recommend <a href="http://s2member.com/r/themeforest/" target="_blank" rel="external">ThemeForest</a>. This is a great place to find the perfect theme for your installation of WordPress—at very affordable prices.</p>' . "\n";
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_during_themes", get_defined_vars ());
 								echo '</div>' . "\n";
 								echo '</div>' . "\n";
@@ -274,12 +274,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_pro", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Upgrading to s2Member Pro<em>!</em>">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Upgrading to s2Member Pro<em>!</em>" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-pro">' . "\n";
 								echo '<h3>s2Member Pro—A Recommended Upgrade</h3>' . "\n";
-								echo '<p>Among many other features/enhancements, <a href="http://www.s2member.com/pro/" target="_blank" rel="external">s2Member Pro</a> comes pre-integrated with additional payment gateways that work with s2Member Pro-Forms (a powerful s2Member Pro feature). For instance, Stripe (most popular; also supports Bitcoin), PayPal Payments Pro, and Authorize.Net. Each of these payment gateways allow you to accept most major credit cards on-site; i.e., customers never leave your site! s2Member Pro-Forms also support PayPal Express Checkout (if you integrate with PayPal Pro); for customers who actually prefer to pay with PayPal.</p>' . "\n";
-								echo '<p><strong>Learn more here:</strong> <a href="http://www.s2member.com/pro/" target="_blank" rel="external">s2Member Pro Features</a></p>'."\n";
+								echo '<p>Among many other features/enhancements, <a href="http://s2member.com/" target="_blank" rel="external">s2Member Pro</a> comes pre-integrated with additional payment gateways that work with s2Member Pro-Forms (a powerful s2Member Pro feature). For instance, Stripe (most popular; also supports Bitcoin), PayPal Payments Pro, and Authorize.Net. Each of these payment gateways allow you to accept most major credit cards on-site; i.e., customers never leave your site! s2Member Pro-Forms also support PayPal Express Checkout (if you integrate with PayPal Pro); for customers who actually prefer to pay with PayPal.</p>' . "\n";
+								echo '<p><strong>Learn more here:</strong> <a href="http://s2member.com/features/" target="_blank" rel="external">s2Member Pro Features</a></p>'."\n";
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_during_pro", get_defined_vars ());
 								echo '</div>' . "\n";
 
@@ -292,17 +292,17 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_help", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-help">' . "\n";
 								echo '<h3>Getting Help w/ s2Member (Troubleshooting)</h3>' . "\n";
-								echo '<p>s2Member is pretty easy to setup and install initially. Most of the official documentation is right here in your Dashboard (i.e., there is a lot of inline documentation built into the software). That being said, it can take some time to master everything there is to know about s2Member\'s advanced features. If you need assistance with s2Member, please search the <a href="http://www.s2member.com/kb/" target="_blank" rel="external">s2Member Knowledge Base</a>, <a href="http://www.s2member.com/videos/" target="_blank" rel="external">Video Tutorials</a>, <a href="http://www.s2member.com/forums/" target="_blank" rel="external">Forums</a> and <a href="http://www.s2member.com/codex/" target="_blank" rel="external">Codex</a>. If you are planning to do something creative with s2Member, you might want to <a href="http://jobs.wordpress.net" target="_blank" rel="external">hire a freelance developer</a> to assist you.</p>' . "\n";
-								echo '<p><strong>See also:</strong> <a href="http://www.s2member.com/kb/common-troubleshooting-tips/" target="_blank" rel="external">s2Member Troubleshooting Guide</a> (please read this first if you\'re having trouble).</p>'."\n";
+								echo '<p>s2Member is pretty easy to setup and install initially. Most of the official documentation is right here in your Dashboard (i.e., there is a lot of inline documentation built into the software). That being said, it can take some time to master everything there is to know about s2Member\'s advanced features. If you need assistance with s2Member, please search the <a href="http://s2member.com/kb/" target="_blank" rel="external">s2Member Knowledge Base</a>, <a href="http://s2member.com/videos/" target="_blank" rel="external">Video Tutorials</a>, <a href="http://s2member.com/forums/" target="_blank" rel="external">Forums</a> and <a href="http://s2member.com/r/codex/" target="_blank" rel="external">Codex</a>. If you are planning to do something creative with s2Member, you might want to <a href="http://jobs.wordpress.net" target="_blank" rel="external">hire a freelance developer</a> to assist you.</p>' . "\n";
+								echo '<p><strong>See also:</strong> <a href="http://s2member.com/r/common-troubleshooting-tips/" target="_blank" rel="external">s2Member Troubleshooting Guide</a> (please read this first if you\'re having trouble).</p>'."\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 								echo '<h3 style="margin-bottom:0;">Testing Server Compatibility</h3>'."\n";
-								echo '<p>Please download the <a href="http://www.s2member.com/r/server-check-tool/">s2Member Server Scanner</a>. Unzip, upload via FTP; then open in a browser for a full report.</p>'."\n";
+								echo '<p>Please download the <a href="http://s2member.com/r/server-scanner-info/">s2Member Server Scanner</a>. Unzip, upload via FTP; then open in a browser for a full report.</p>'."\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -311,9 +311,9 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<h3 style="margin-bottom:0;">Search s2Member KB Articles, Forums, Codex and more<em>!</em></h3>'."\n";
-								echo '<form method="get" action="http://www.s2member.com/quick-s.php" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';" autocomplete="off">'."\n";
-								echo '<p><input type="text" name="q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /> <input type="submit" value="Search" style="font-size:120%; font-weight:normal;" /></p>'."\n";
+								echo '<h3 style="margin-bottom:0;">Search s2Member KB Articles<em>!</em></h3>'."\n";
+								echo '<form method="get" action="http://s2member.com/kb/" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';" autocomplete="off">'."\n";
+								echo '<p><input type="text" name="kb_q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /> <input type="submit" value="Search" style="font-size:120%; font-weight:normal;" /></p>'."\n";
 								echo '</form>'."\n";
 
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_during_help", get_defined_vars ());
