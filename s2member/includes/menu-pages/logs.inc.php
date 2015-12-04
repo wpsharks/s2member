@@ -67,9 +67,9 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-				echo '<h3 style="margin-bottom:0;">Search s2Member KB Articles, Forums, Codex and more<em>!</em></h3>'."\n";
-				echo '<form method="get" action="http://www.s2member.com/quick-s.php" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';" autocomplete="off">'."\n";
-				echo '<p><input type="text" name="q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /> <input type="submit" value="Search" style="font-size:120%; font-weight:normal;" /></p>'."\n";
+				echo '<h3 style="margin-bottom:0;">Search s2Member KB Articles<em>!</em></h3>'."\n";
+				echo '<form method="get" action="http://s2member.com/kb/" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';" autocomplete="off">'."\n";
+				echo '<p><input type="text" name="kb_q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /> <input type="submit" value="Search" style="font-size:120%; font-weight:normal;" /></p>'."\n";
 				echo '</form>'."\n";
 
 				do_action("ws_plugin__s2member_during_logs_page_during_left_sections_during_help", get_defined_vars());
