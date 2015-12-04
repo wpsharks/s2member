@@ -152,7 +152,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 						'create_users', $menu, 'c_ws_plugin__s2member_menu_pages::start_page', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/images/brand-favicon.png');
 
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_start_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member Quick-Start Guide', 'Quick-Start Guide', 'create_users', 'ws-plugin--s2member-start', 'c_ws_plugin__s2member_menu_pages::start_page');
+					add_submenu_page($menu, 'Getting Started w/ s2Member', 'Getting Started', 'create_users', 'ws-plugin--s2member-start', 'c_ws_plugin__s2member_menu_pages::start_page');
 
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_1', TRUE, get_defined_vars()))
 					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
@@ -496,7 +496,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		}
 
 		/**
-		 * Builds and handles the Quick Start page.
+		 * Builds and handles the Getting Started page.
 		 *
 		 * @package s2Member\Menu_Pages
 		 * @since 3.5

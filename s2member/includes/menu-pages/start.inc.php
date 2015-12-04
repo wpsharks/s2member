@@ -1,6 +1,6 @@
 <?php
 /**
-* Menu page for the s2Member plugin (Quick Start Guide page).
+* Getting Started.
 *
 * Copyright: © 2009-2011
 * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
@@ -20,7 +20,7 @@ if(!defined('WPINC')) // MUST have WordPress.
 if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 	{
 		/**
-		* Menu page for the s2Member plugin (Quick Start Guide page).
+		* Getting Started.
 		*
 		* @package s2Member\Menu_Pages
 		* @since 110531
@@ -35,7 +35,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 						c_ws_plugin__s2member_menu_pages_tb::display ();
 						echo '</div>'."\n";
 
-						echo '<h2>Quick-Start Guide</h2>' . "\n";
+						echo '<h2>Getting Started w/ s2Member®</h2>' . "\n";
 
 						echo '<table class="ws-menu-page-table">' . "\n";
 						echo '<tbody class="ws-menu-page-table-tbody">' . "\n";

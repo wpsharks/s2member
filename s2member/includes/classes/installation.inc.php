@@ -118,14 +118,14 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 
 				c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array('blog|network:plugins.php', 'blog|network:ws-plugin--s2member-start', 'blog|network:ws-plugin--s2member-mms-ops', 'blog|network:ws-plugin--s2member-gen-ops', 'blog|network:ws-plugin--s2member-res-ops'));
 			}
-			else // Otherwise (initial activation); we'll help the Site Owner out by giving them a link to the Quick Start Guide.
+			else // Otherwise (initial activation); we'll help the Site Owner out by giving them a link to the Getting Started section.
 			{
 				$notice = '<strong>Note:</strong> s2Member adds some new data columns to your list of Users/Members. If your list gets overcrowded, please use the <strong>Screen Options</strong> tab <em>(upper right-hand corner)</em>. With WordPress Screen Options, you can add/remove specific data columns; thereby making the most important data easier to read. For example, if you create Custom Registration/Profile Fields with s2Member, those Custom Fields will result in new data columns; which can cause your list of Users/Members to become nearly unreadable. So just use the Screen Options tab to clean things up.';
 
 				c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, 'blog:users.php', FALSE, FALSE, TRUE);
 
 				$notice = '<strong>s2Member</strong> v'.esc_html(WS_PLUGIN__S2MEMBER_VERSION).' has been <strong>activated</strong>. Nice work!<br />';
-				$notice .= 'Have fun, <a href="'.esc_attr(admin_url('/admin.php?page=ws-plugin--s2member-start')).'">read the Quick Start Guide</a>, and make some money! :-)';
+				$notice .= 'Have fun, <a href="'.esc_attr(admin_url('/admin.php?page=ws-plugin--s2member-start')).'">read the Getting Started section</a>, and make some money! :-)'; // @TODO:soon
 
 				c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array('blog|network:plugins.php', 'blog|network:ws-plugin--s2member-start', 'blog|network:ws-plugin--s2member-mms-ops', 'blog|network:ws-plugin--s2member-gen-ops', 'blog|network:ws-plugin--s2member-res-ops'));
 			}
