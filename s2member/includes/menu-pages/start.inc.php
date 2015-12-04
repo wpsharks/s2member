@@ -48,7 +48,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_video_tutorials", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Video Tutorials" style="padding-top:5px;">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Video Tutorials" style="padding-top:5px;" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-registration-process-section">' . "\n";
 								echo '<p><iframe src="//www.youtube.com/embed/videoseries?list=PL8gPolqFnYqtBVz0nVeN2sJgRVednq0jw" width="100%" height="550" frameborder="0" allowfullscreen></iframe></p>' . "\n";
@@ -69,7 +69,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_registration_process", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="The Registration Process">' . "\n";
+								echo '<div class="ws-menu-page-group" title="The Registration Process" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-registration-process-section">' . "\n";
 								echo '<h3>The Subscription Signup/Registration Process</h3>' . "\n";
@@ -90,7 +90,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_log_reg_form", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your Login/Registration Form">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your Login/Registration Form" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-login-reg-form-section">' . "\n";
 								echo '<h3>Your Login/Registration Form (already built-in)</h3>' . "\n";
@@ -111,7 +111,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_login_welcome_page", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your Login Welcome Page">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your Login Welcome Page" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-login-welcome-page-section">' . "\n";
 								echo '<h3>Your Login Welcome Page (you create this in WordPress)</h3>' . "\n";
@@ -131,7 +131,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_membership_options_page", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your Membership Options Page">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your Membership Options Page" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-membership-options-page-section">' . "\n";
 								echo '<h3>Your Membership Options Page (you create this in WordPress)</h3>' . "\n";
@@ -150,7 +150,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_general_options", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your s2Member → General Options">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your s2Member → General Options" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-general-options-section">' . "\n";
 								echo '<h3>Your s2Member → General Options (Basic Configuration)</h3>' . "\n";
@@ -168,7 +168,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_restriction_options", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Your s2Member → Restriction Options">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Your s2Member → Restriction Options" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-restriction-options-section">' . "\n";
 								echo '<h3>Your s2Member → Restriction Options (Basic Configuration)</h3>' . "\n";
@@ -188,7 +188,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_automation_process", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Cancellations / Expirations / Terminations">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Cancellations / Expirations / Terminations" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-automation-process-section">' . "\n";
 								echo '<h3>Subscription Cancellations / Expirations / Terminations</h3>' . "\n";
@@ -208,7 +208,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_upgrading_downgrading", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Upgrading/Downgrading Accounts">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Upgrading/Downgrading Accounts" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-upgrading-downgrading-section">' . "\n";
 								echo '<h3>Upgrading and/or Downgrading User Accounts</h3>' . "\n";
@@ -237,7 +237,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_reg_before_checkout", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Registration Before Checkout?">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Registration Before Checkout?" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-reg-before-checkout-section">' . "\n";
 								echo '<h3>Registration Before Checkout? (reversing the process)</h3>' . "\n";
@@ -258,7 +258,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_themes", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Choosing The Perfect WordPress Theme">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Choosing The Perfect WordPress Theme" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-themes">' . "\n";
 								echo '<h3>Choosing The Perfect WordPress Theme</h3>' . "\n";
@@ -274,7 +274,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_pro", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Upgrading to s2Member Pro<em>!</em>">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Upgrading to s2Member Pro<em>!</em>" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-pro">' . "\n";
 								echo '<h3>s2Member Pro—A Recommended Upgrade</h3>' . "\n";
@@ -292,7 +292,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 							{
 								do_action("ws_plugin__s2member_during_start_page_during_left_sections_before_help", get_defined_vars ());
 
-								echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member">' . "\n";
+								echo '<div class="ws-menu-page-group" title="Getting Help w/ s2Member" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-help">' . "\n";
 								echo '<h3>Getting Help w/ s2Member (Troubleshooting)</h3>' . "\n";
