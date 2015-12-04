@@ -5,7 +5,7 @@
 * See: {@link https://en.wikipedia.org/wiki/Deprecation}
 *
 * Copyright: © 2009-2011
-* {@link http://www.websharks-inc.com/ WebSharks, Inc.}
+* {@link http://websharks-inc.com/ WebSharks, Inc.}
 * (coded in the USA)
 *
 * Released under the terms of the GNU General Public License.

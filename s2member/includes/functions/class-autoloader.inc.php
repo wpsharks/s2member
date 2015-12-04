@@ -7,7 +7,7 @@
  * See: {@link http://www.php.net/manual/en/function.spl-autoload-register.php}
  *
  * Copyright: © 2009-2011
- * {@link http://www.websharks-inc.com/ WebSharks, Inc.}
+ * {@link http://websharks-inc.com/ WebSharks, Inc.}
  * (coded in the USA)
  *
  * Released under the terms of the GNU General Public License.

@@ -117,15 +117,15 @@ Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networki
 
 = Please Check the Following s2Member® Resources =
 
-* s2Member® FAQs: <http://www.s2member.com/faqs/>
-* Knowledge Base: <http://www.s2member.com/kb/>
-* Video Tutorials: <http://www.s2member.com/videos/>
-* Community: <http://www.s2member.com/forums/>
-* Codex: <http://www.s2member.com/codex/>
+* s2Member® FAQs: <http://s2member.com/faqs/>
+* Knowledge Base: <http://s2member.com/kb/>
+* Video Tutorials: <http://s2member.com/videos/>
+* Community: <http://s2member.com/forums/>
+* Codex: <http://s2member.com/codex/>
 
 = Translating s2Member® =
 
-Please see [this FAQ entry](http://www.s2member.com/faqs/#s2-faqs-translations)
+Please see: <http://s2member.com/r/translations/>
 
 == License ==
 
