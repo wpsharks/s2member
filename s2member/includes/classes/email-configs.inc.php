@@ -216,8 +216,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 				* @since 110707
 				*
 				* @param string|int $user_id A numeric WordPress User ID.
-				* @param string $user_pass Optional. A plain text version of the User's password.
-				* 	If omitted, only the administrative notification will be sent.
+				* @param string $user_pass Optional; plain text pass. No longer suggested, by here for back compat.
 				* @param array $notify An array of directives. Must be non-empty, with at least one of these values `user,admin`.
 				* @param string $user_email Optional. This defaults to the user's currently configured email address.
 				* @return bool True if all required parameters are supplied, else false.
