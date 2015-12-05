@@ -643,7 +643,6 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											$ip          = (!$ip) ? $_SERVER['REMOTE_ADDR'] : $ip; // Else use environment variable.
 											$subscr_baid = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_baid'];
 											$subscr_cid  = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_cid'];
-											$cv          = preg_split('/\|/', $custom);
 
 											if(!($auto_eot_time = '') && $eotper) // If a specific EOT Period is included.
 												$auto_eot_time = c_ws_plugin__s2member_utils_time::auto_eot_time('', '', '', $eotper);
@@ -820,7 +819,6 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											$subscr_baid    = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_baid'];
 											$subscr_cid     = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_cid'];
 											$subscr_gateway = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway'];
-											$cv             = preg_split('/\|/', (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_custom']);
 
 											$auto_eot_time = ($eot = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_auto_eot_time']) ? strtotime($eot) : '';
 											$notes         = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_notes'];
@@ -970,7 +968,6 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											$subscr_baid    = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_baid'];
 											$subscr_cid     = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_cid'];
 											$subscr_gateway = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway'];
-											$cv             = preg_split('/\|/', (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_custom']);
 
 											$auto_eot_time = ($eot = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_auto_eot_time']) ? strtotime($eot) : '';
 											$notes         = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_notes'];
@@ -1100,7 +1097,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 
 												foreach(preg_split('/['."\r\n\t".']+/', $urls) as $url) // Notify each of the URLs.
 
-													if(($url = preg_replace('/%%cv([0-9]+)%%/ei', 'urlencode(trim(@$cv[$1]))', $url)))
+													if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)))
 														if(($url = preg_replace('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($role)), $url)))
 															if(($url = preg_replace('/%%level%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($level)), $url)))
 																if(($url = preg_replace('/%%ccaps%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ccaps)), $url)))
@@ -1158,7 +1155,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 												$msg .= 'cv8: %%cv8%%'."\n";
 												$msg .= 'cv9: %%cv9%%';
 
-												if(($msg = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $msg)))
+												if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)))
 													if(($msg = preg_replace('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($role), $msg)))
 														if(($msg = preg_replace('/%%level%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($level), $msg)))
 															if(($msg = preg_replace('/%%ccaps%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($ccaps), $msg)))
@@ -1189,7 +1186,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 
 											if(!empty($GLOBALS['ws_plugin__s2member_registration_return_url']) && ($url = $GLOBALS['ws_plugin__s2member_registration_return_url']))
 
-												if(($url = preg_replace('/%%cv([0-9]+)%%/ei', 'urlencode(trim(@$cv[$1]))', $url)))
+												if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)))
 													if(($url = preg_replace('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($role)), $url)))
 														if(($url = preg_replace('/%%level%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($level)), $url)))
 															if(($url = preg_replace('/%%ccaps%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ccaps)), $url)))
