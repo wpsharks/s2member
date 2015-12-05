@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 150925
-Stable tag: 150925
+Version: 151205
+Stable tag: 151205
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -169,11 +169,83 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v150925 =
+= v151205 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v151205 =
+
+- (s2Member/s2Member Pro) **WP/PHP Compat:** Updated for compatibility with WordPress 4.4 and PHP v7.0. Note that s2Member and s2Member Pro also remain compatible with WordPress 4.3 and PHP 5.2. However, PHP 5.5+ is strongly recommended.
+
+- (s2Member Pro) **New Feature! EOT Renewal/Reminder Email Notifications:** This release adds a long-awaited feature which allows you to configure & send EOT Renewal/Reminder Email notifications to your customers; to let them know their account with you will expire soon.
+
+  It's possible to configure one or more notifications, each with a different set of recipients, and a different subject and message body. Notifications can be sent out X days before the EOT occurs, _the day_ of the EOT, or X days after the EOT has already occurred; e.g., to encourage renewals.
+
+  See: **Dashboard → s2Member → Stripe Options → EOT Renewal/Reminder Email(s)**
+  _Also works with PayPal Pro, Authorize.Net, and ClickBank._
+
+  Props @clavaque @KTS915 @raamdev @patdumond @kristineds @pagelab @chronicelite @csexplorer17 @radven, and all of our great supporters. See [this GitHub issue](https://github.com/websharks/s2member/issues/122#issuecomment-161531763).
+
+- (s2Member/s2Member Pro) **Cleanup:** This release improves the list of Other Gateways; moving deprecated payment gateways to the bottom of the list and improving the display of the list overall. Props @kristineds @clavaque. For further details, see [this GitHub issue](https://github.com/websharks/s2member/issues/715).
+
+- (s2Member/s2Member Pro) **Bug Fix:** This release corrects an "Insecure Content Warning" that may have appeared in certain portions of the s2Member Dashboard panels whenever you accessed your Dashboard over the `https` protocol. The issue was seen in Google Chrome and it was simply a `<form>` tag that referenced the s2Member mailing list. This is now hidden by default if you access the Dashboard over SSL, in order to avoid this warning. Props @patdumond for reporting. Props @renzms for fixing. See also [this GitHub issue](https://github.com/websharks/s2member/issues/678) if you'd like additional details.
+
+- (s2Member Pro) **Stripe Locale:** This release adjusts the Stripe overlay so that it will automatically display in the language associated with a visitor's country. This was accomplished by setting the Stripe Checkout variable `locale: 'auto'` as suggested in [this GitHub issue](https://github.com/websharks/s2member/issues/728). Props @renzms
+
+- (s2Member Pro) **Stripe Bug Fix:** This release improves the way Stripe Image Branding and Stripe Statement Descriptions are applied whenever you intentionally leave them empty. It also changes the default value of Stripe Image Branding to an empty string; which will tell Stripe to use the account-level default value that you configured in your Stripe Dashboard in favor of that which you configure with s2Member. The choice is still yours, but this release sets what others have told us are better default values. See also [this GitHub issue](https://github.com/websharks/s2member/issues/666) if you'd like additional details.
+
+- (s2Member Pro) **Stripe Enhancement:** This release makes it possible to configure the Stripe "Remember Me" functionality with s2Member; i.e., it is now possible to turn this on/off if you so desire. See also [this GitHub issue](https://github.com/websharks/s2member/issues/357) for details.
+
+- (s2Member Pro) **Stripe Enhancement:** This release makes it possible for you to tell Stripe to collect a customer's full Billing Address and/or full Shipping Address. See [this GitHub issue](https://github.com/websharks/s2member/issues/667) for additional details.
+
+- (s2Member/s2Member Pro) **UI Clarity:** This release improves the way the New User Email Notification panel behaves whenever you also have Custom Passwords enabled with s2Member. The New User Email Notification is only sent when Custom Passwords are off, so this panel should disable itself whenever that is the case. Fixed in this release. Props @raamdev See also: [this GitHub issue](https://github.com/websharks/s2member/issues/739) if you'd like additional details.
+
+- (s2Member/s2Member Pro) **Bug Fix:** This release resolves a minor issue for developers running Vagrant and VVV with symlink plugins. Props @magbicaleman ~ See [this GitHub issue](https://github.com/websharks/s2member/issues/717) for further details.
+
+- (s2Member Pro) **Conflict Resolution:** This release resolves a conflict with the WP Full Stripe plugin and any other plugins that already load an existing copy of the Stripe SDK at runtime; in concert with s2Member Pro. See [this GitHub issue](https://github.com/websharks/s2member/issues/750) if you'd like additional details.
+
+- (s2Member/s2Member Pro) **New Log File:** This release of s2Member adds a new log file that keeps track of all automatic EOTs that occur through the underlying CRON job. The new log file is named: `auto-eot-system.log` and you can learn more about this file and view it from: **Dashboard → s2Member → Log Files (Debug) → Log Viewer**. Props @raamdev ~ See [this GitHub issue](https://github.com/websharks/s2member/issues/759) if you'd like additional details.
+
+- (s2Member Pro) **`[s2Member-List /]` Bug Fix:** This release resolves a problem in the `[s2Member-List /]` shortcode whenever it is configured to search Custom Fields generated with s2Member. Props @patdumond @renzms. See [this GitHub issue](https://github.com/websharks/s2member/issues/765) if you'd like additional details.
+
+- (s2Member Pro) **Stripe Enhancement:** This release updates s2Member's Stripe integration so that any Buy Now transaction spawns a Stripe popup with the amount and full description filled within the popup itself as well. Props @raamdev. See [this GitHub issue](https://github.com/websharks/s2member/issues/749) for further details.
+
+- (s2Member/s2Member Pro) **WP v4.3 Compat.** This release addresses a minor conflict between functionality provided by s2Member and that of the WordPress core itself. Whenever you change a user's password by editing their account, you can choose to send them an email about this change (or not). Since WordPress v4.3, the WordPress core will _also_ send a more vague email to notify the user of a password change, which is not customizable. This release disables that default email notification in favor of the more helpful and customizable email message that can be sent by s2Member. Simply tick the "Reset Password & Resend New User Email Notification" checkbox whenever you are editing a user. Props @patdumond for reporting. See also [this GitHub issue](https://github.com/websharks/s2member/issues/777) if you'd like additional details.
+
+- (s2Member/s2Member Pro) **PayPal Compat.** This release resolves a conflict between s2Member and a nasty bug at PayPal.com that came to light recently. In some cases, customers reported that clicking the "Continue" button at PayPal.com simply reloaded the page and gave no response. We found that this was attributed to a bug on the PayPal side (see [792](https://github.com/websharks/s2member/issues/792)). To work around this bug, we are using a new default value for the `ns="1"` shortcode attribute in PayPal Pro-Forms and PayPal Buttons. The new default value is `ns="0"`, which seems to work around this bug for the time being. Props @patdumond @raamdev for reporting and testing this fix. See also [full report here](https://github.com/websharks/s2member/issues/792).
+
+  - `ns="0"` (**new default**) = prompt for a shipping address, but do not require one
+  - `ns="1"` (old default) = do not prompt for a shipping address whatsoever
+
+  See also: **Dashboard → s2Member → PayPal Pro-Forms → PayPal Shortcode Attributes (Explained)**
+
+- (s2Member/s2Member Pro) **Getting Started:** The old Quick Start Guide was renamed to "Getting Started" in this release. It was also cleaned up and improved a bit; i.e., brought up-to-date. In addition, there is a new welcome message for first-time users of the software that invites them to read over the Getting Started page before they begin. Props @raamdev. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/655).
+
+- (s2Member Pro) **Stripe Bug Fix:** This release corrects a problem with Stripe refund and chargeback notification handling. s2Member Pro will now receive and handle Stripe refund and/or chargeback events (through your existing Webhook) as expected.
+
+  See: **Dashboard → s2Member → Stripe Options → Automatic EOT Behavior** for options that allow you to control the way in which s2Member should respond whenever a refund is processed, or when a dispute (chargeback) occurs at Stripe.
+
+  Props @ElizWS and @tubiz w/ AffiliateWP. See also [this GitHub issue](https://github.com/websharks/s2member/issues/706).
+
+- (s2Member Pro) **`[s2Member-List /]`** Added the ability to search usermeta data too. For instance, you can now search `first_name`, `last_name`, `nickname`, `description`, `s2member_subscr_id`, `s2member_custom`, etc, etc. See [this GitHub issue](https://github.com/websharks/s2member/issues/596).
+
+  _**Note:** The `first_name`, `last_name`, and `nickname` columns are now a part of the default value for the `search_columns=""` attribute in the `[s2Member-List /]` shortcode. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/596). Props @patdumond for her ideas._
+
+- (s2Member Pro) **`[s2Member-List /]`** There are some new `orderby=""` options. You may now choose to order the list by: `first_name`, `last_name`, or `nickname`.
+
+- (s2Member Pro) **`[s2Member-List /]`** It is now possible to search through s2Member Custom Registration/Profile Fields that may contain an array of values; i.e., you can now search _any_ Custom Registration/Profile Field in s2Member. For instance, if a field is designed to accept multiple selections, or you provide a set of multiple checkbox options. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/555).
+
+- (s2Member Pro) **`[s2Member-List /]` Bug Fix:** Meta fields that contained a timestamp were being displayed by the `date_i18n()` function in WP core. However, the time offset calculation was wrong; i.e., not a match to the local time configured by your installation of WordPress. Fixed in this release.
+
+- (s2Member Pro) **`[s2Member-List /]` Bug Fix:** Minor formatting corrections for replacement codes made available for the `link_*=""` attributes in the `[s2Member-List /]` shortcode.
+
+- (s2Member Pro) **`[s2Member-List /]`:** It is now possible to search for an exact match by surrounding your search query with double quotes; e.g., `"john doe"` (in quotes, for an exact match), instead of the default behavior, which is `*john doe*` behind-the-scenes; i.e., a fuzzy match.
+
+- (s2Member Pro) **`[s2Member-List /]`:** Several behind-the-scenes performance enhancements.
+
+- (s2Member/s2Member Pro) **PHP 7 Compat.** This release of s2Member removes its use of the `/e` modifier in calls to `preg_replace()`, which was deprecated in PHP 5.5 and has been removed in PHP 7. Props @bridgeport. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/415).
 
 = v150925 =
 
