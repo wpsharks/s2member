@@ -88,11 +88,11 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 															}
 														else $paypal["s2member_log"][] = "Ignoring Cancellation. An Auto-EOT Time is already set for this Member. An s2Member API Notification will still be processed however.";
 
-														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_urls"] && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
+														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_urls"])
 															{
 																foreach (preg_split ("/[\r\n\t]+/", $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_urls"]) as $url) // Handle Cancellation Notifications.
 
-																	if (($url = preg_replace ("/%%cv([0-9]+)%%/ei", 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["subscr_id"])), $url)))
+																	if (($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["subscr_id"])), $url)))
 																		if (($url = preg_replace ("/%%subscr_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["subscr_baid"])), $url)) && ($url = preg_replace ("/%%subscr_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["subscr_cid"])), $url)))
 																			if (($url = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["item_number"])), $url)) && ($url = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($paypal["item_name"])), $url)))
 																				if (($url = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($user->first_name)), $url)) && ($url = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs (urlencode ($user->last_name)), $url)))
@@ -112,7 +112,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 																										}
 																$paypal["s2member_log"][] = "Cancellation Notification URLs have been processed.";
 															}
-														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_recipients"] && is_array($cv = preg_split ("/\|/", $paypal["custom"])))
+														if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["cancellation_notification_recipients"])
 															{
 																$msg = $sbj = "(s2Member / API Notification Email) - Cancellation";
 																$msg .= "\n\n"; // Spacing in the message body.
@@ -145,7 +145,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 																$msg .= "cv8: %%cv8%%\n";
 																$msg .= "cv9: %%cv9%%";
 
-																if (($msg = preg_replace ("/%%cv([0-9]+)%%/ei", 'trim(@$cv[$1])', $msg)) && ($msg = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["subscr_id"]), $msg)))
+																if (($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $paypal['custom'])) && ($msg = preg_replace ("/%%subscr_id%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["subscr_id"]), $msg)))
 																	if (($msg = preg_replace ("/%%subscr_baid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["subscr_baid"]), $msg)) && ($msg = preg_replace ("/%%subscr_cid%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["subscr_cid"]), $msg)))
 																		if (($msg = preg_replace ("/%%item_number%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["item_number"]), $msg)) && ($msg = preg_replace ("/%%item_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($paypal["item_name"]), $msg)))
 																			if (($msg = preg_replace ("/%%user_first_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user->first_name), $msg)) && ($msg = preg_replace ("/%%user_last_name%%/i", c_ws_plugin__s2member_utils_strings::esc_refs ($user->last_name), $msg)))

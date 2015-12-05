@@ -70,11 +70,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal'))
 					Since this routine ignores the processing check, it is *possible* that Refund/Reversal Notification URLs will be contacted more than once.
 						If you're writing scripts that depend on Refund/Reversal Notifications, please keep this in mind.
 					*/
-					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_ref_rev_notification_urls'] && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_ref_rev_notification_urls'])
 					{
 						foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_ref_rev_notification_urls']) as $url)
 
-							if(($url = preg_replace('/%%cv([0-9]+)%%/ei', 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace('/%%parent_txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['parent_txn_id'])), $url)))
+							if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%parent_txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['parent_txn_id'])), $url)))
 								if(($url = preg_replace('/%%parent_txn_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['parent_txn_baid'])), $url)) && ($url = preg_replace('/%%parent_txn_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['parent_txn_cid'])), $url)))
 									if(($url = preg_replace('/%%item_number%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['item_number'])), $url)) && ($url = preg_replace('/%%item_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['item_name'])), $url)))
 										if(($url = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency'])), $url)) && ($url = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency_symbol'])), $url)))
@@ -89,7 +89,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal'))
 
 						$paypal['s2member_log'][] = 'Specific Post/Page ~ Refund/Reversal Notification URLs have been processed.';
 					}
-					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_ref_rev_notification_recipients'] && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_ref_rev_notification_recipients'])
 					{
 						$msg = $sbj = '(s2Member / API Notification Email) - Specific Post/Page ~ Refund/Reversal';
 						$msg .= "\n\n"; // Spacing in the message body.
@@ -120,7 +120,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal'))
 						$msg .= 'cv8: %%cv8%%'."\n";
 						$msg .= 'cv9: %%cv9%%';
 
-						if(($msg = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $msg)) && ($msg = preg_replace('/%%parent_txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['parent_txn_id']), $msg)))
+						if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $paypal['custom'])) && ($msg = preg_replace('/%%parent_txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['parent_txn_id']), $msg)))
 							if(($msg = preg_replace('/%%parent_txn_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['parent_txn_baid']), $msg)) && ($msg = preg_replace('/%%parent_txn_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['parent_txn_cid']), $msg)))
 								if(($msg = preg_replace('/%%item_number%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_number']), $msg)) && ($msg = preg_replace('/%%item_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_name']), $msg)))
 									if(($msg = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $msg)) && ($msg = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $msg)))

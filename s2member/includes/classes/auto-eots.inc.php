@@ -187,11 +187,11 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									if($subscr_gateway && $subscr_id) // Also note the Paid Subscr. Gateway/ID so there is a reference left behind here.
 										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$subscr_gateway.' → '.$subscr_id);
 
-									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'] && is_array($cv = preg_split('/\|/', $custom)))
+									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'])
 									{
 										foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url) // Handle EOT Notifications.
 
-											if(($url = preg_replace('/%%cv([0-9]+)%%/ei', 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode('auto-eot-cancellation-expiration-demotion')), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
+											if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode('auto-eot-cancellation-expiration-demotion')), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
 												if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
 													if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
 														if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_email)), $url)))
@@ -208,7 +208,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 																			c_ws_plugin__s2member_utils_urls::remote($url);
 																	}
 									}
-									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients'] && is_array($cv = preg_split('/\|/', $custom)))
+									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients'])
 									{
 										$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status();
 										c_ws_plugin__s2member_email_configs::email_config_release();
@@ -243,7 +243,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 										$msg .= 'cv8: %%cv8%%'."\n";
 										$msg .= 'cv9: %%cv9%%';
 
-										if(($msg = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $msg)) && ($msg = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs('auto-eot-cancellation-expiration-demotion'), $msg)) && ($msg = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_id), $msg)))
+										if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)) && ($msg = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs('auto-eot-cancellation-expiration-demotion'), $msg)) && ($msg = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_id), $msg)))
 											if(($msg = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_baid), $msg)) && ($msg = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_cid), $msg)))
 												if(($msg = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->first_name), $msg)) && ($msg = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->last_name), $msg)))
 													if(($msg = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($user->first_name.' '.$user->last_name)), $msg)))

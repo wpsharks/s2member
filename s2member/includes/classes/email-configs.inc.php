@@ -276,7 +276,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 										else $wp_set_pass_url = wp_lostpassword_url(); // Default behavior; and older versions of WordPress.
 
 										$fields = get_user_option ('s2member_custom_fields', $user_id);
-										$cv     = preg_split ('/\|/', get_user_option ('s2member_custom', $user_id));
+										$custom = get_user_option ('s2member_custom', $user_id);
 
 										$role = c_ws_plugin__s2member_user_access::user_access_role($user);
 										$label = c_ws_plugin__s2member_user_access::user_access_label($user);
@@ -288,7 +288,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 										$user_ip = $_SERVER['REMOTE_ADDR'];
 
 										if (($sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_subject']))
-											if (($sbj = preg_replace ('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $sbj)))
+											if (($sbj = c_ws_plugin__s2member_utils_strings::fill_cvs($sbj, $custom)))
 												if (($sbj = preg_replace ('/%%wp_set_pass_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($wp_set_pass_url), $sbj)))
 													if (($sbj = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $sbj)))
 														if (($sbj = preg_replace ('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($role), $sbj)))
@@ -310,7 +310,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 																														break; // Empty; we can stop here.
 
 																											if (($msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_message']))
-																												if (($msg = preg_replace ('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $msg)))
+																												if (($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)))
 																													if (($msg = preg_replace ('/%%wp_set_pass_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($wp_set_pass_url), $msg)))
 																														if (($msg = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $msg)))
 																															if (($msg = preg_replace ('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($role), $msg)))
@@ -346,7 +346,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 								if (in_array('admin', $notify, true) && $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_admin_email_recipients'])
 									{
 										$fields = get_user_option ('s2member_custom_fields', $user_id);
-										$cv = preg_split ('/\|/', get_user_option ('s2member_custom', $user_id));
+										$custom = get_user_option ('s2member_custom', $user_id);
 
 										$role = c_ws_plugin__s2member_user_access::user_access_role($user);
 										$label = c_ws_plugin__s2member_user_access::user_access_label($user);
@@ -358,7 +358,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 										$user_ip = $_SERVER['REMOTE_ADDR'];
 
 										if (($rec = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_admin_email_recipients']))
-											if (($rec = preg_replace ('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $rec)))
+											if (($rec = c_ws_plugin__s2member_utils_strings::fill_cvs($rec, $custom)))
 												if (($rec = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $rec)))
 													if (($rec = preg_replace ('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($role), $rec)))
 														if (($rec = preg_replace ('/%%label%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($label), $rec)))
@@ -379,7 +379,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 																													break; // Empty; we can stop here.
 
 																										if (($sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_admin_email_subject']))
-																											if (($sbj = preg_replace ('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $sbj)))
+																											if (($sbj = c_ws_plugin__s2member_utils_strings::fill_cvs($sbj, $custom)))
 																												if (($sbj = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $sbj)))
 																													if (($sbj = preg_replace ('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($role), $sbj)))
 																														if (($sbj = preg_replace ('/%%label%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($label), $sbj)))
@@ -400,7 +400,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 																																													break; // Empty; we can stop here.
 
 																																										if (($msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_admin_email_message']))
-																																											if (($msg = preg_replace ('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $msg)))
+																																											if (($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)))
 																																												if (($msg = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $msg)))
 																																													if (($msg = preg_replace ('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($role), $msg)))
 																																														if (($msg = preg_replace ('/%%label%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($label), $msg)))

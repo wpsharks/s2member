@@ -69,7 +69,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 							$coupon_class = new c_ws_plugin__s2member_pro_coupons();
 							$coupon_class->update_uses($coupon['coupon_code']);
 						}
-					if(($sp_access_url = c_ws_plugin__s2member_sp_access::sp_access_link_gen($paypal['sp_ids'], $paypal['hours'])) && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+					if(($sp_access_url = c_ws_plugin__s2member_sp_access::sp_access_link_gen($paypal['sp_ids'], $paypal['hours'])))
 					{
 						$processing = $during = TRUE; // Yes, we ARE processing this.
 
@@ -98,7 +98,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 						$rec = preg_replace('/%%sp_access_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($sp_access_url), $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'sp_email_recipients']);
 						$rec = preg_replace('/%%sp_access_exp%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(c_ws_plugin__s2member_utils_time::approx_time_difference(time(), strtotime('+'.$paypal['hours'].' hours'))), $rec);
 
-						if(($rec = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $rec)) && ($rec = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $rec)))
+						if(($rec = c_ws_plugin__s2member_utils_strings::fill_cvs($rec, $paypal['custom'])) && ($rec = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $rec)))
 							if(($rec = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $rec))) // Full amount of the payment, before fee is subtracted.
 								if(($rec = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $rec)) && ($rec = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $rec)))
 									if(($rec = preg_replace('/%%txn_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $rec)) && ($rec = preg_replace('/%%txn_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $rec)))
@@ -109,7 +109,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 														if(($rec = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['ip']), $rec)))
 															if(($rec = preg_replace('/%%full_coupon_code%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($coupon['full_coupon_code']), $rec)) && ($rec = preg_replace('/%%coupon_code%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($coupon['coupon_code']), $rec)) && ($rec = preg_replace('/%%coupon_affiliate_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($coupon['affiliate_id']), $rec)))
 
-																if(($sbj = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $sbj)) && ($sbj = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $sbj)))
+																if(($sbj = c_ws_plugin__s2member_utils_strings::fill_cvs($sbj, $paypal['custom'])) && ($sbj = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $sbj)))
 																	if(($sbj = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $sbj))) // Full amount of the payment, before fee is subtracted.
 																		if(($sbj = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $sbj)) && ($sbj = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $sbj)))
 																			if(($sbj = preg_replace('/%%txn_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $sbj)) && ($sbj = preg_replace('/%%txn_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $sbj)))
@@ -120,7 +120,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 																								if(($sbj = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['ip']), $sbj)))
 																									if(($sbj = preg_replace('/%%full_coupon_code%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($coupon['full_coupon_code']), $sbj)) && ($sbj = preg_replace('/%%coupon_code%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($coupon['coupon_code']), $sbj)) && ($sbj = preg_replace('/%%coupon_affiliate_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($coupon['affiliate_id']), $sbj)))
 
-																										if(($msg = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $msg)) && ($msg = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $msg)))
+																										if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $paypal['custom'])) && ($msg = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $msg)))
 																											if(($msg = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $msg))) // Full amount of the payment, before fee is subtracted.
 																												if(($msg = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $msg)) && ($msg = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $msg)))
 																													if(($msg = preg_replace('/%%txn_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $msg)) && ($msg = preg_replace('/%%txn_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $msg)))
@@ -143,11 +143,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 
 																																					$paypal['s2member_log'][] = 'Specific Post/Page Confirmation Email sent to: '.$rec.'.';
 																																				}
-						if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_sale_notification_urls'] && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+						if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_sale_notification_urls'])
 						{
 							foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_sale_notification_urls']) as $url)
 
-								if(($url = preg_replace('/%%cv([0-9]+)%%/ei', 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace('/%%sp_access_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(rawurlencode($sp_access_url)), $url)))
+								if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%sp_access_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(rawurlencode($sp_access_url)), $url)))
 									if(($url = preg_replace('/%%sp_access_exp%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(c_ws_plugin__s2member_utils_time::approx_time_difference(time(), strtotime('+'.$paypal['hours'].' hours')))), $url)))
 										if(($url = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency'])), $url)) && ($url = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency_symbol'])), $url)))
 											if(($url = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['mc_gross'])), $url)) && ($url = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_id'])), $url)))
@@ -164,7 +164,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 
 							$paypal['s2member_log'][] = 'Specific Post/Page ~ Sale Notification URLs have been processed.';
 						}
-						if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_sale_notification_recipients'] && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+						if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_sale_notification_recipients'])
 						{
 							$msg = $sbj = '(s2Member / API Notification Email) - Specific Post/Page ~ Sale';
 							$msg .= "\n\n"; // Spacing in the message body.
@@ -201,7 +201,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 							$msg .= 'cv8: %%cv8%%'."\n";
 							$msg .= 'cv9: %%cv9%%';
 
-							if(($msg = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $msg)) && ($msg = preg_replace('/%%sp_access_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($sp_access_url), $msg)))
+							if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $paypal['custom'])) && ($msg = preg_replace('/%%sp_access_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($sp_access_url), $msg)))
 								if(($msg = preg_replace('/%%sp_access_exp%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(c_ws_plugin__s2member_utils_time::approx_time_difference(time(), strtotime('+'.$paypal['hours'].' hours'))), $msg)))
 									if(($msg = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $msg)) && ($msg = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $msg)))
 										if(($msg = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $msg)) && ($msg = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $msg)))
@@ -220,9 +220,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 
 							$paypal['s2member_log'][] = 'Specific Post/Page ~ Sale Notification Emails have been processed.';
 						}
-						if($processing && $_REQUEST['s2member_paypal_proxy'] && ($url = $_REQUEST['s2member_paypal_proxy_return_url']) && is_array($cv = preg_split('/\|/', $paypal['custom']))) // A Proxy is requesting a Return URL?
+						if($processing && $_REQUEST['s2member_paypal_proxy'] && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
 						{
-							if(($url = preg_replace('/%%cv([0-9]+)%%/ei', 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace('/%%sp_access_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(rawurlencode($sp_access_url)), $url)))
+							if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%sp_access_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(rawurlencode($sp_access_url)), $url)))
 								if(($url = preg_replace('/%%sp_access_exp%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(c_ws_plugin__s2member_utils_time::approx_time_difference(time(), strtotime('+'.$paypal['hours'].' hours')))), $url)))
 									if(($url = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency'])), $url)) && ($url = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency_symbol'])), $url)))
 										if(($url = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['mc_gross'])), $url)) && ($url = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_id'])), $url)))
@@ -240,9 +240,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 
 							$paypal['s2member_log'][] = 'Specific Post/Page Return, a Proxy Return URL is ready.';
 						}
-						if($processing && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_tracking_codes']) && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+						if($processing && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_tracking_codes']))
 						{
-							if(($code = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $code)) && ($code = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $code)) && ($code = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $code)))
+							if(($code = c_ws_plugin__s2member_utils_strings::fill_cvs($code, $paypal['custom'])) && ($code = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $code)) && ($code = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $code)))
 								if(($code = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $code)) && ($code = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $code)))
 									if(($code = preg_replace('/%%txn_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $code)) && ($code = preg_replace('/%%txn_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $code)))
 										if(($code = preg_replace('/%%item_number%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_number']), $code)) && ($code = preg_replace('/%%item_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_name']), $code)))

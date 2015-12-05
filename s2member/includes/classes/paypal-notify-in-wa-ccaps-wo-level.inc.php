@@ -116,7 +116,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 								$msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ccap_email_message']; // The same for standard and w/ Pro-Forms.
 								$rec = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ccap_email_recipients']; // The same for standard and w/ Pro-Forms.
 
-								if(($rec = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $rec)) && ($rec = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $rec)))
+								if(($rec = c_ws_plugin__s2member_utils_strings::fill_cvs($rec, $paypal['custom'])) && ($rec = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $rec)))
 									if(($rec = preg_replace('/%%(?:subscr|txn)_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $rec)) && ($rec = preg_replace('/%%(?:subscr|txn)_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $rec)))
 										if(($rec = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $rec)) && ($rec = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $rec)))
 											if(($rec = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $rec)) && ($rec = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $rec)))
@@ -134,7 +134,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 																					if(($rec = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $rec)))
 																						if(($rec = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $rec)))
 
-																							if(($sbj = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $sbj)) && ($sbj = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $sbj)))
+																							if(($sbj = c_ws_plugin__s2member_utils_strings::fill_cvs($sbj, $paypal['custom'])) && ($sbj = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $sbj)))
 																								if(($sbj = preg_replace('/%%(?:subscr|txn)_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $sbj)) && ($sbj = preg_replace('/%%(?:subscr|txn)_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $sbj)))
 																									if(($sbj = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $sbj)) && ($sbj = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $sbj)))
 																										if(($sbj = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $sbj)) && ($sbj = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $sbj)))
@@ -152,7 +152,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 																																				if(($sbj = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $sbj)))
 																																					if(($sbj = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $sbj)))
 
-																																						if(($msg = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $msg)) && ($msg = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $msg)))
+																																						if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $paypal['custom'])) && ($msg = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $msg)))
 																																							if(($msg = preg_replace('/%%(?:subscr|txn)_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $msg)) && ($msg = preg_replace('/%%(?:subscr|txn)_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $msg)))
 																																								if(($msg = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $msg)) && ($msg = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $msg)))
 																																									if(($msg = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $msg)) && ($msg = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $msg)))
@@ -189,9 +189,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 																																																						$paypal['s2member_log'][] = 'Capability Confirmation Email sent to: '.$rec.'.';
 																																																					}
 																																																				}
-								if($processing && $_REQUEST['s2member_paypal_proxy'] && ($url = $_REQUEST['s2member_paypal_proxy_return_url']) && is_array($cv = preg_split('/\|/', $paypal['custom']))) // A Proxy is requesting a Return URL?
+								if($processing && $_REQUEST['s2member_paypal_proxy'] && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
 								{
-									if(($url = preg_replace('/%%cv([0-9]+)%%/ei', 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_id'])), $url)))
+									if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_id'])), $url)))
 										if(($url = preg_replace('/%%(?:subscr|txn)_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_baid'])), $url)) && ($url = preg_replace('/%%(?:subscr|txn)_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_cid'])), $url)))
 											if(($url = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency'])), $url)) && ($url = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency_symbol'])), $url)))
 												if(($url = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['mc_gross'])), $url)) && ($url = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_id'])), $url)))
@@ -220,11 +220,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 																							}
 									$paypal['s2member_log'][] = 'Capability Return, a Proxy Return URL is ready.';
 								}
-								if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_urls'] && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+								if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_urls'])
 								{
 									foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_urls']) as $url)
 
-										if(($url = preg_replace('/%%cv([0-9]+)%%/ei', 'urlencode(trim(@$cv[$1]))', $url)) && ($url = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_id'])), $url)))
+										if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_id'])), $url)))
 											if(($url = preg_replace('/%%(?:subscr|txn)_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_baid'])), $url)) && ($url = preg_replace('/%%(?:subscr|txn)_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_cid'])), $url)))
 												if(($url = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency'])), $url)) && ($url = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency_symbol'])), $url)))
 													if(($url = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['mc_gross'])), $url)) && ($url = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_id'])), $url)))
@@ -252,7 +252,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 																								}
 									$paypal['s2member_log'][] = 'Payment Notification URLs have been processed.';
 								}
-								if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_recipients'] && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+								if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_recipients'])
 								{
 									$msg = $sbj = '(s2Member / API Notification Email) - Payment';
 									$msg .= "\n\n"; // Spacing in the message body.
@@ -297,7 +297,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 									$msg .= 'cv8: %%cv8%%'."\n";
 									$msg .= 'cv9: %%cv9%%';
 
-									if(($msg = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $msg)) && ($msg = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $msg)))
+									if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $paypal['custom'])) && ($msg = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $msg)))
 										if(($msg = preg_replace('/%%(?:subscr|txn)_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $msg)) && ($msg = preg_replace('/%%(?:subscr|txn)_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $msg)))
 											if(($msg = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $msg)) && ($msg = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $msg)))
 												if(($msg = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $msg)) && ($msg = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $msg)))
@@ -327,9 +327,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 																							}
 									$paypal['s2member_log'][] = 'Payment Notification Emails have been processed.';
 								}
-								if($processing && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ccap_tracking_codes']) && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+								if($processing && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ccap_tracking_codes']))
 								{
-									if(($code = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $code)) && ($code = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $code)))
+									if(($code = c_ws_plugin__s2member_utils_strings::fill_cvs($code, $paypal['custom'])) && ($code = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $code)))
 										if(($code = preg_replace('/%%(?:subscr|txn)_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $code)) && ($code = preg_replace('/%%(?:subscr|txn)_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $code)))
 											if(($code = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $code)) && ($code = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $code)))
 												if(($code = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $code)) && ($code = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $code)))

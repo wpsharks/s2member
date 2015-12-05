@@ -199,9 +199,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level'))
 
 								$paypal['s2member_log'][] = 'Transient Tracking Cookie set on ( `web_accept|subscr_signup|subscr_payment` ) w/ update vars.';
 
-								if($processing && $tracking_properties && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_tracking_codes']) && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+								if($processing && $tracking_properties && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_tracking_codes']))
 								{
-									if(($code = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $code)) && ($code = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_id']), $code)))
+									if(($code = c_ws_plugin__s2member_utils_strings::fill_cvs($code, $paypal['custom'])) && ($code = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_id']), $code)))
 										if(($code = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_baid']), $code)) && ($code = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_cid']), $code)))
 											if(($code = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $code)) && ($code = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $code)))
 												if(($code = preg_replace('/%%initial%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['initial']), $code)) && ($code = preg_replace('/%%regular%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['regular']), $code)) && ($code = preg_replace('/%%recurring%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['recurring']), $code)))
@@ -299,9 +299,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level'))
 
 						$paypal['s2member_log'][] = 'Transient Tracking Cookie set on ( `web_accept|subscr_signup|subscr_payment` ) w/o update vars.';
 
-						if($processing && $tracking_properties && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_tracking_codes']) && is_array($cv = preg_split('/\|/', $paypal['custom'])))
+						if($processing && $tracking_properties && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_tracking_codes']))
 						{
-							if(($code = preg_replace('/%%cv([0-9]+)%%/ei', 'trim(@$cv[$1])', $code)) && ($code = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_id']), $code)))
+							if(($code = c_ws_plugin__s2member_utils_strings::fill_cvs($code, $paypal['custom'])) && ($code = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_id']), $code)))
 								if(($code = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_baid']), $code)) && ($code = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_cid']), $code)))
 									if(($code = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $code)) && ($code = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $code)))
 										if(($code = preg_replace('/%%initial%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['initial']), $code)) && ($code = preg_replace('/%%regular%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['regular']), $code)) && ($code = preg_replace('/%%recurring%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['recurring']), $code)))
