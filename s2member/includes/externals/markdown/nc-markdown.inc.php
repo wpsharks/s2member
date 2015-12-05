@@ -64,7 +64,7 @@ class NC_Markdown_Parser {
 	var $predef_titles = array();
 
 
-	function NC_Markdown_Parser() {
+	function __construct() {
 	#
 	# Constructor function. Initialize appropriate member variables.
 	#
