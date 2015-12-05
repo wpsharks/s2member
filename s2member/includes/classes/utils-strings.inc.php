@@ -660,5 +660,17 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 
 			return like_escape($string); // Deprecated in WP v4.0.
 		}
+
+		public static function fill_cvs($string, $custom)
+		{
+			$string = (string)$string;
+			$custom = (string)$custom;
+
+			foreach (preg_split('/\|/', $custom) as $_key => $_value) {
+                $string = str_ireplace('%%cv'.$_key.'%%', $_value, $string);
+            } // unset($_key, $_value); // Housekeeping.
+
+			return $string;
+		}
 	}
 }
