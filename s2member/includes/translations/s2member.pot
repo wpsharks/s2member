@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  151205\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2015-12-05 22:13:59+00:00\n"
+"POT-Creation-Date: 2015-12-10 11:34:06+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1522,11 +1522,11 @@ msgstr ""
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:207
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:328
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:333
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:639
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:644
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:649
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:654
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:659
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:638
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:643
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:648
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:653
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:658
 msgctxt "s2member-front"
 msgid "— Oops, you missed something: —"
 msgstr ""
@@ -1541,7 +1541,7 @@ msgstr ""
 #: s2member-pro/s2member-pro/includes/separates/gateways/paypal/paypal.js:899
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe-min.js:1
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:192
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:644
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:643
 msgctxt "s2member-front"
 msgid "Passwords do not match up. Please try again."
 msgstr ""
@@ -1556,7 +1556,7 @@ msgstr ""
 #: s2member-pro/s2member-pro/includes/separates/gateways/paypal/paypal.js:906
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe-min.js:1
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:197
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:649
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:648
 msgctxt "s2member-front"
 msgid "Password MUST be at least %s characters. Please try again."
 msgstr ""
@@ -1571,7 +1571,7 @@ msgstr ""
 #: s2member-pro/s2member-pro/includes/separates/gateways/paypal/paypal.js:911
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe-min.js:1
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:202
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:654
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:653
 msgctxt "s2member-front"
 msgid "Password strength MUST be %s. Please try again."
 msgstr ""
@@ -2870,11 +2870,11 @@ msgstr ""
 #: s2member-pro/s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:431
 #: s2member-pro/s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
 #: s2member-pro/s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:784
-#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:164
-#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:245
-#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:318
-#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:402
-#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:556
+#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:196
+#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:277
+#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:350
+#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:437
+#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:594
 msgctxt "s2member-front"
 msgid "Security Verification"
 msgstr ""
@@ -2883,8 +2883,8 @@ msgstr ""
 #: s2member-pro/s2member-pro/includes/classes/gateways/authnet/authnet-form-in.inc.php:743
 #: s2member-pro/s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:246
 #: s2member-pro/s2member-pro/includes/classes/gateways/paypal/paypal-form-in.inc.php:752
-#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:218
-#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:529
+#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:250
+#: s2member-pro/s2member-pro/includes/classes/gateways/stripe/stripe-form-in.inc.php:567
 msgctxt "s2member-front"
 msgid "Additional Info"
 msgstr ""
@@ -4315,7 +4315,7 @@ msgstr ""
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:106
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:207
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:333
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:659
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:658
 msgctxt "s2member-front"
 msgid "Security Verification missing. Please try again."
 msgstr ""
@@ -4433,7 +4433,7 @@ msgid "Submit Form"
 msgstr ""
 
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe-min.js:1
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:291
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:292
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:599
 msgctxt "s2member-front"
 msgid "Add"
@@ -4441,7 +4441,7 @@ msgstr ""
 
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe-min.js:1
 #: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:312
-#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:624
+#: s2member-pro/s2member-pro/includes/separates/gateways/stripe/stripe.js:623
 msgctxt "s2member-front"
 msgid "No Billing Method; please try again."
 msgstr ""
@@ -4491,7 +4491,7 @@ msgstr ""
 #: s2member-pro/s2member-pro/includes/syscon.inc.php:107
 msgctxt "s2member-front"
 msgid ""
-"Hi %%%%first_name%%%%! :-)\n"
+"Hi %%%%first_name%%%%!\n"
 "\n"
 "Just a reminder that your account access will expire: %%%%eot_date_time_tz%%%% (%%%%eot_descriptive_time%%%% from now).\n"
 "\n"
