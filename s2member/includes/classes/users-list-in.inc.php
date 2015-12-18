@@ -492,7 +492,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 							update_user_option($user_id, "s2member_auto_eot_time", $auto_eot_time);
 
 						if(isset($_p["ws_plugin__s2member_profile_s2member_reminders_enable"]))
-							update_user_option($user_id, "s2member_reminders_enable", (string)$_p["ws_plugin__s2member_profile_s2member_reminders_enable"]);
+							update_user_option($user_id, "s2member_reminders_enable", (string)(int)$_p["ws_plugin__s2member_profile_s2member_reminders_enable"]);
 
 						if(isset($_p["ws_plugin__s2member_profile_s2member_ccaps"]))
 						{
