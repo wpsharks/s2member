@@ -154,6 +154,9 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_start_page', TRUE, get_defined_vars()))
 					add_submenu_page($menu, 'Getting Started w/ s2Member', 'Getting Started', 'create_users', 'ws-plugin--s2member-start', 'c_ws_plugin__s2member_menu_pages::start_page');
 
+				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_help_page', !is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site (), get_defined_vars()))
+					add_submenu_page($menu, 'Getting Help w/ s2Member', 'Getting Help', 'create_users', 'ws-plugin--s2member-help', 'c_ws_plugin__s2member_menu_pages::help_page');
+
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_1', TRUE, get_defined_vars()))
 					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
 
@@ -508,6 +511,21 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			include_once dirname(dirname(__FILE__)).'/menu-pages/start.inc.php';
 
 			do_action('ws_plugin__s2member_after_start_page', get_defined_vars());
+		}
+
+		/**
+		 * Builds and handles the Getting Help page.
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since 151218
+		 */
+		public static function help_page()
+		{
+			do_action('ws_plugin__s2member_before_help_page', get_defined_vars());
+
+			include_once dirname(dirname(__FILE__)).'/menu-pages/help.inc.php';
+
+			do_action('ws_plugin__s2member_after_help_page', get_defined_vars());
 		}
 
 		/**
