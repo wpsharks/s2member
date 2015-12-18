@@ -206,6 +206,19 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 						if(c_ws_plugin__s2member_utils_conds::pro_is_installed())
 						{
 							foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+							do_action("ws_plugin__s2member_during_users_list_edit_cols_before_reminders_enable", get_defined_vars());
+							unset($__refs, $__v);
+
+							echo '<tr>'."\n";
+							echo '<th><label for="ws-plugin--s2member-profile-s2member-reminders-enable-yes">Enable Reminder Emails?</label> <a href="#" onclick="alert(\'This setting applies only if you have configured reminder email notifications in s2Member; e.g., EOT Renewal/Reminder Emails or NPT Renewal/Reminder Emails.\'); return false;" tabindex="-1">[?]</a></th>'."\n";
+							echo '<td><label><input type="radio" name="ws_plugin__s2member_profile_s2member_reminders_enable" id="ws-plugin--s2member-profile-s2member-reminders-enable-yes" value="1"'.((string)get_user_option('s2member_reminders_enable', $user_id) !== '0' ? ' checked' : '').' /> Yes</label> &nbsp;&nbsp;&nbsp; <label><input type="radio" name="ws_plugin__s2member_profile_s2member_reminders_enable" id="ws-plugin--s2member-profile-s2member-reminders-enable-no" value="0"'.((string)get_user_option('s2member_reminders_enable', $user_id) === '0' ? ' checked' : '').' /> No (exclude)</label></td>'."\n";
+							echo '</tr>'."\n";
+
+							foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+							do_action("ws_plugin__s2member_during_users_list_edit_cols_after_reminders_enable", get_defined_vars());
+							unset($__refs, $__v);
+
+							foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 							do_action("ws_plugin__s2member_during_users_list_edit_cols_before_reset_pass_resend", get_defined_vars());
 							unset($__refs, $__v);
 
@@ -477,6 +490,9 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 
 						if(isset($_p["ws_plugin__s2member_profile_s2member_auto_eot_time"]) && isset($auto_eot_time))
 							update_user_option($user_id, "s2member_auto_eot_time", $auto_eot_time);
+
+						if(isset($_p["ws_plugin__s2member_profile_s2member_reminders_enable"]))
+							update_user_option($user_id, "s2member_reminders_enable", (string)(int)$_p["ws_plugin__s2member_profile_s2member_reminders_enable"]);
 
 						if(isset($_p["ws_plugin__s2member_profile_s2member_ccaps"]))
 						{
