@@ -1,3 +1,13 @@
+= v151218 =
+
+- (s2Member Pro) **Reminder Email Notification Exclusions:** It is now possible to enable/disable EOT Renewal/Reminder Email notifications on a per-user basis. You can edit a user's profile in the WP Dashboard and check "_No (exclude)_" to prevent specific users from receiving any reminder emails that you configured. Props at @patdumond @luisrock. See also [this GitHub issue](https://github.com/websharks/s2member/issues/816).
+
+- (s2Member) **PHP v7 Compat.:** This release addresses one remaining issue with the `preg_replace` `/e` modifier as reported in [this GitHub issue](https://github.com/websharks/s2member/issues/811). Props @nerdworker for reporting. Thanks!
+
+- (s2Member/s2Member Pro) **WP v4.4 Compat.:** This release corrects an issue that impacted sites attempting to run s2Member on a Multisite Network; i.e., it corrects a problem with the `load.php` patch against the latest release of WordPress. Props @crazycoolcam for reporting! See also [this GitHub issue](https://github.com/websharks/s2member/issues/812).
+
+- (s2Member/s2Member Pro) **Getting Help:** This release adds a new menu page titled, "Getting Help w/ s2Member". This new section of your Dashboard provides quick & easy access to s2Member KB articles, suggestions, and our tech support department (for pro customers). Props @patdumond @raamdev. See also [this GitHub issue](https://github.com/websharks/s2member/issues/814).
+
 = v151210 =
 
 - (s2Member/s2Member Pro) **WP/PHP Compat:** Updated for compatibility with WordPress 4.4 and PHP v7.0. Note that s2Member and s2Member Pro also remain compatible with WordPress 4.3 and PHP 5.2. However, PHP 5.5+ is strongly recommended.
