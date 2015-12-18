@@ -125,6 +125,7 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 				delete_user_option($user_id, 's2member_first_payment_txn_id');
 				delete_user_option($user_id, 's2member_last_payment_time');
 				delete_user_option($user_id, 's2member_auto_eot_time');
+				delete_user_option($user_id, 's2member_reminders_enable');
 
 				delete_user_option($user_id, 's2member_file_download_access_arc');
 				delete_user_option($user_id, 's2member_file_download_access_log');
