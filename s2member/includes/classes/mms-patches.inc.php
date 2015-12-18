@@ -88,9 +88,9 @@ if (!class_exists ("c_ws_plugin__s2member_mms_patches"))
 									else // Otherwise, we need to report that /wp-login.php could NOT be updated. Possibly a permissions error.
 										($display_notices) ? c_ws_plugin__s2member_admin_notices::display_admin_notice ('Your <code>/wp-login.php</code> file could NOT be patched. File NOT writable.', true) : null;
 
-									$load_file = ABSPATH . WPINC . "/load.php";
-									$load_section = "/([\r\n\t\s ]+)(if( *?)\(( *?)empty( *?)\(( *?)\\\$active_plugins( *?)\)( *?)\|\|( *?)defined( *?)\(( *?)['\"]WP_INSTALLING['\"]( *?)\)( *?)\))/";
-									$load_replace = "\n\n\t// Modified for full plugin compatiblity.\n\t//if ( empty( \$active_plugins ) || defined( 'WP_INSTALLING' ) )\n\tif ( empty( \$active_plugins ) || ( defined( 'WP_INSTALLING' ) && !preg_match(\"/\/wp-activate\.php/\", \$_SERVER[\"REQUEST_URI\"]) ) )";
+									$load_file = ABSPATH . WPINC . "/load.php"; // WordPress v4.4 uses `wp_installing()` instead of `defined( 'WP_INSTALLING' )`
+									$load_section = "/([\r\n\t\s ]+)(if( *?)\(( *?)empty( *?)\(( *?)\\\$active_plugins( *?)\)( *?)\|\|( *?)(wp_installing\s*\(\s*\)|defined( *?)\(( *?)['\"]WP_INSTALLING['\"]( *?)\))( *?)\))/";
+									$load_replace = "\n\n\t// Modified for full plugin compatiblity.\n\t//if ( empty( \$active_plugins ) || wp_installing() )\n\tif ( empty( \$active_plugins ) || ( wp_installing() && !preg_match(\"/\/wp-activate\.php/\", \$_SERVER[\"REQUEST_URI\"]) ) )";
 
 									if (file_exists ($load_file) && ($load = file_get_contents ($load_file)) && is_writable ($load_file))
 										{
