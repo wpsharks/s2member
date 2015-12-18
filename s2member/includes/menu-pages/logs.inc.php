@@ -44,40 +44,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 
 			do_action("ws_plugin__s2member_during_logs_page_before_left_sections", get_defined_vars());
 
-			if(apply_filters("ws_plugin__s2member_during_logs_page_during_left_sections_display_help", TRUE, get_defined_vars()))
-			{
-				do_action("ws_plugin__s2member_during_logs_page_during_left_sections_before_help", get_defined_vars());
-
-				echo '<div class="ws-menu-page-group" title="Getting Help">'."\n";
-
-				echo '<div class="ws-menu-page-section ws-plugin--s2member-help">'."\n";
-				echo '<h3>Getting Help w/ s2Member (Troubleshooting)</h3>'."\n";
-				echo '<p>s2Member is pretty easy to setup and install initially. Most of the official documentation is right here in your Dashboard (i.e., there is a lot of inline documentation built into the software). That being said, it can take some time to master everything there is to know about s2Member\'s advanced features. If you need assistance with s2Member, please search the <a href="http://s2member.com/kb/" target="_blank" rel="external">s2Member Knowledge Base</a>, <a href="http://www.s2member.com/videos/" target="_blank" rel="external">Video Tutorials</a>, <a href="http://www.s2member.com/forums/" target="_blank" rel="external">Forums</a> and <a href="http://www.s2member.com/codex/" target="_blank" rel="external">Codex</a>. If you are planning to do something creative with s2Member, you might want to <a href="http://jobs.wordpress.net" target="_blank" rel="external">hire a freelance developer</a> to assist you.</p>'."\n";
-				echo '<p><strong>See also:</strong> <a href="http://www.s2member.com/kb/common-troubleshooting-tips/" target="_blank" rel="external">s2Member Troubleshooting Guide</a> (please read this first if you\'re having trouble).</p>'."\n";
-
-				echo '<div class="ws-menu-page-hr"></div>'."\n";
-
-				echo '<h3 style="margin-bottom:0;">Testing Server Compatibility</h3>'."\n";
-				echo '<p>Please download the <a href="http://www.s2member.com/r/server-check-tool/">s2Member Server Scanner</a>. Unzip, upload via FTP; then open in a browser for a full report.</p>'."\n";
-
-				echo '<div class="ws-menu-page-hr"></div>'."\n";
-
-				echo '<h3 style="margin-bottom:0;">Troubleshooting Payment Gateway Integrations</h3>'."\n";
-				echo '<p>Please use the s2Member Log Viewer (below). Log files can be very helpful.</p>'."\n";
-
-				echo '<div class="ws-menu-page-hr"></div>'."\n";
-
-				echo '<h3 style="margin-bottom:0;">Search s2Member KB Articles<em>!</em></h3>'."\n";
-				echo '<form method="get" action="http://s2member.com/kb/" target="_blank" onsubmit="if(this.q.value === \'enter search terms...\') this.q.value = \'\';" autocomplete="off">'."\n";
-				echo '<p><input type="text" name="kb_q" value="enter search terms..." style="width:60%;" onfocus="if(this.value === \'enter search terms...\') this.value = \'\';" onblur="if(this.value === \'\') this.value = \'enter search terms...\';" /> <input type="submit" value="Search" style="font-size:120%; font-weight:normal;" /></p>'."\n";
-				echo '</form>'."\n";
-
-				do_action("ws_plugin__s2member_during_logs_page_during_left_sections_during_help", get_defined_vars());
-				echo '</div>'."\n";
-				echo '</div>'."\n";
-
-				do_action("ws_plugin__s2member_during_logs_page_during_left_sections_after_help", get_defined_vars());
-			}
 			if(apply_filters("ws_plugin__s2member_during_logs_page_during_left_sections_display_log_settings", TRUE, get_defined_vars()))
 			{
 				do_action("ws_plugin__s2member_during_logs_page_during_left_sections_before_log_settings", get_defined_vars());
