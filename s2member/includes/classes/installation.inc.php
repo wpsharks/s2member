@@ -124,7 +124,7 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 				c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, 'blog:users.php', FALSE, FALSE, TRUE);
 
 				$notice = '<strong>s2Member v'.esc_html(WS_PLUGIN__S2MEMBER_VERSION).' has been activated. Nice work!</strong><br />';
-				$notice .= 'We suggest a review of the "Getting Started" page to familiarize yourself with s2Member terminology and basic configuration.<br />&#8627;&nbsp; Would you want to review now? &nbsp;&nbsp;&nbsp; <a href="'.esc_attr(admin_url('/admin.php?page=ws-plugin--s2member-start')).'"><strong>Yes (explain)</strong></a>';
+				$notice .= 'We suggest a review of the "Getting Started" page to familiarize yourself with s2Member terminology and basic configuration.<br />&#8627;&nbsp; Would you like to review now? &nbsp;&nbsp;&nbsp; <a href="'.esc_attr(admin_url('/admin.php?page=ws-plugin--s2member-start')).'"><strong>Yes (explain)</strong></a>';
 
 				c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array('blog|network:plugins.php', 'blog|network:ws-plugin--s2member-start', 'blog|network:ws-plugin--s2member-mms-ops', 'blog|network:ws-plugin--s2member-gen-ops', 'blog|network:ws-plugin--s2member-res-ops'));
 			}
