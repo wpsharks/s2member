@@ -1,4 +1,0 @@
-	// Modified for full plugin compatiblity.
-	//if ( empty( $active_plugins ) || wp_installing() )
-	if ( empty( $active_plugins ) || ( wp_installing() && !preg_match("/\/wp-activate\.php/", $_SERVER["REQUEST_URI"]) ) )
-	return $plugins;

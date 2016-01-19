@@ -538,9 +538,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		{
 			do_action('ws_plugin__s2member_before_mms_ops_page', get_defined_vars());
 
-			if(c_ws_plugin__s2member_menu_pages::update_all_options())
-				c_ws_plugin__s2member_mms_patches::mms_patches(TRUE);
-
 			include_once dirname(dirname(__FILE__)).'/menu-pages/mms-ops.inc.php';
 
 			do_action('ws_plugin__s2member_after_mms_ops_page', get_defined_vars());

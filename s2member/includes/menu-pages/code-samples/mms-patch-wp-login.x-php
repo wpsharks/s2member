@@ -1,8 +1,0 @@
-	case 'register' :
-	if ( is_multisite() ) {
-		$sign_up_url = network_site_url( 'wp-signup.php' );
-		// Multisite uses wp-signup.php
-		// Modified for full plugin compatiblity.
-		//wp_redirect( apply_filters( 'wp_signup_location', $sign_up_url ) );
-		//exit;
-	}
