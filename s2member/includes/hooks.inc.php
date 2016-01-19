@@ -156,7 +156,6 @@ add_action('network_admin_menu', 'c_ws_plugin__s2member_menu_pages::add_network_
 add_action('admin_bar_menu', 'c_ws_plugin__s2member_admin_lockouts::filter_admin_menu_bar', 100);
 add_action('admin_print_scripts', 'c_ws_plugin__s2member_menu_pages::add_admin_scripts');
 add_action('admin_print_styles', 'c_ws_plugin__s2member_menu_pages::add_admin_styles');
-add_filter('update_feedback', 'c_ws_plugin__s2member_mms_patches::sync_mms_patches');
 
 add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_notices');
 add_action('user_admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_notices');
