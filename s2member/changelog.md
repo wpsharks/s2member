@@ -1,3 +1,20 @@
+= v160120 =
+
+- (s2Member,s2Member Pro) **Bug Fix:** Resolved a minor glitch in the **WordPress Dashboard → Settings → General** panel, where s2Member's notice regarding Open Registration was inadvertently forcing the entire page into italics. Props @renzms @kristineds @raamdev ~ See also: [this GitHub issue](https://github.com/websharks/s2member/issues/831) if you'd like additional details.
+
+- (s2Member) **Multisite Support:** This release of s2Member (the free version only) removes full support for Multisite Networks, which is now a Pro feature; i.e., only available in the Pro version.
+
+  ##### Is s2Member still compatible with WordPress Multisite Networking?
+  Multisite support is no longer included in the s2Member Framework. However, it is available with s2Member Pro. s2Member Pro is compatible with Multisite Networking. After you enable Multisite Networking, install the s2Member Pro Add-On. Then, navigate to `s2Member → Multisite (Config)` in the Dashboard of your Main Site. You can learn more about s2Member Pro at [s2Member.com](http://www.s2member.com/).
+
+  ##### I was using the free version in a Multisite Network before. What happened?
+  s2Member (when running on a Multisite Network) requires minor alterations in WordPress core that are not compatible with plugins available at WordPress.org (i.e., not allowed) at this time. For this reason, full support for Multisite Networks is now available only in the pro version.
+
+  ##### What if I already configured Multisite options on a site running the free version?
+  If you already customized s2Member's Multisite Network configuration options in a previous release, those settings will remain and still be functional over the short-term; i.e., the functionality that makes s2Member compatible with Multisite Networking is still included, even in the s2Member Framework. However, the routines that deal with core patches, and those that allow you to change Multisite options are no longer available. You will need to acquire the Pro version. Or, you can revert to [a previous release](http://s2member.com/release-archive/). s2Member Framework v151218 is suggested if you go that route.
+
+  _See also: [this GitHub issue](https://github.com/websharks/s2member/issues/850) for further details._
+
 = v151218 =
 
 - (s2Member Pro) **Reminder Email Notification Exclusions:** It is now possible to enable/disable EOT Renewal/Reminder Email notifications on a per-user basis. You can edit a user's profile in the WP Dashboard and check "_No (exclude)_" to prevent specific users from receiving any reminder emails that you configured. Props at @patdumond @luisrock. See also [this GitHub issue](https://github.com/websharks/s2member/issues/816).
