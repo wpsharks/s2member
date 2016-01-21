@@ -338,7 +338,9 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 		 * @return bool True if successfull, else false on any type of failure.
 		 */
 		public static function write_no_gzip_into_root_htaccess()
-		{
+		{	if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS) {
+      			return FALSE; # Stop here. No write access on this site.
+			}
 			if(c_ws_plugin__s2member_files::remove_no_gzip_from_root_htaccess() /* Must first be able to remove any existing entry. */)
 			{
 				$start_line              = '# BEGIN s2Member GZIP exclusions'; // Beginning line for this entry.
@@ -378,7 +380,9 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 			$start_line = '# BEGIN s2Member GZIP exclusions'; // Beginning line for this entry.
 			$end_line   = '# END s2Member GZIP exclusions'; // Identifying end line for this entry.
 			$htaccess   = ABSPATH.'.htaccess'; // Location of this `.htaccess` file we need to write in.
-
+			if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS) {
+			      return FALSE; # Stop here. No write access on this site.
+			}
 			if(file_exists($htaccess) && is_readable($htaccess) && is_writable($htaccess) && ($htaccess_contents = file_get_contents($htaccess)) !== FALSE && is_string($htaccess_contents = trim($htaccess_contents)))
 			{
 				$htaccess_contents = trim(preg_replace('/'.preg_quote($start_line, '/').'['."\r\n".']+.*?['."\r\n".']+'.preg_quote($end_line, '/').'['."\r\n".']{0,2}/is', '', $htaccess_contents));
