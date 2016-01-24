@@ -326,7 +326,7 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 			if(file_exists($htaccess) && is_readable($htaccess) && ($htaccess_contents = file_get_contents($htaccess)) !== FALSE && is_string($htaccess_contents = trim($htaccess_contents)))
 				return preg_match('/'.preg_quote($start_line, '/').'['."\r\n".']+.*?['."\r\n".']+'.preg_quote($end_line, '/').'['."\r\n".']{0,2}/is', $htaccess_contents);
 
-			return FALSE; // Default return `FALSE`.
+			return FALSE;
 		}
 
 		/**
@@ -339,7 +339,10 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 		 */
 		public static function write_no_gzip_into_root_htaccess()
 		{
-			if(c_ws_plugin__s2member_files::remove_no_gzip_from_root_htaccess() /* Must first be able to remove any existing entry. */)
+			if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS) {
+				return FALSE; # No write access on this site.
+			}
+			if(c_ws_plugin__s2member_files::remove_no_gzip_from_root_htaccess())
 			{
 				$start_line              = '# BEGIN s2Member GZIP exclusions'; // Beginning line for this entry.
 				$end_line                = '# END s2Member GZIP exclusions'; // Identifying end line for this entry.
@@ -362,7 +365,7 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 					return file_put_contents($htaccess, $no_gzip);
 				}
 			}
-			return FALSE; // Default return `FALSE`.
+			return FALSE;
 		}
 
 		/**
@@ -375,6 +378,9 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 		 */
 		public static function remove_no_gzip_from_root_htaccess()
 		{
+			if(defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS) {
+				return FALSE; # No write access on this site.
+			}
 			$start_line = '# BEGIN s2Member GZIP exclusions'; // Beginning line for this entry.
 			$end_line   = '# END s2Member GZIP exclusions'; // Identifying end line for this entry.
 			$htaccess   = ABSPATH.'.htaccess'; // Location of this `.htaccess` file we need to write in.
@@ -385,11 +391,11 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 
 				return (file_put_contents($htaccess, $htaccess_contents) !== FALSE); // Check for `FALSE`, because this could return `0` if the file is now empty.
 			}
-			else if(!file_exists($htaccess) /* Return `TRUE` here, we're OK. */)
+			else if(!file_exists($htaccess))
 			{
 				return TRUE;
 			}
-			return FALSE; // Default return `FALSE`.
+			return FALSE;
 		}
 	}
 }
