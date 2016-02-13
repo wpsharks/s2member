@@ -27,7 +27,7 @@
   },
 
   "require": {
-    "websharks/wp-core": "dev-master"
+
   },
   "require-dev": {
 
@@ -37,12 +37,9 @@
 
   "autoload": {
     "psr-4": {
-      "WebSharks\\s2Member\\Pro\\Classes\\": "src/includes/classes",
-      "WebSharks\\s2Member\\Pro\\Functions\\": "src/includes/functions",
-      "WebSharks\\s2Member\\Pro\\Interfaces\\": "src/includes/interfaces",
-      "WebSharks\\s2Member\\Pro\\Traits\\": "src/includes/traits"
+
     },
-    "files": ["src/includes/functions/_load.php"]
+    "files": []
   },
 
   "config": {
