@@ -95,8 +95,8 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 			if(!$once && (empty($_GET['qcAC']) || !filter_var($_GET['qcAC'], FILTER_VALIDATE_BOOLEAN))
 			   && (
 					$no_cache === TRUE // Forces no-cache constants; if `TRUE` explicitly.
-					|| ($no_cache === 'restricted' && (!defined('ZENCACHE_WHEN_LOGGED_IN') || !ZENCACHE_WHEN_LOGGED_IN) && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
-					|| (is_user_logged_in() && (!defined('ZENCACHE_WHEN_LOGGED_IN') || !ZENCACHE_WHEN_LOGGED_IN) && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
+					|| ($no_cache === 'restricted' && (!defined('COMET_CACHE_WHEN_LOGGED_IN') || !COMET_CACHE_WHEN_LOGGED_IN) && (!defined('ZENCACHE_WHEN_LOGGED_IN') || !ZENCACHE_WHEN_LOGGED_IN) && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
+					|| (is_user_logged_in() && (!defined('COMET_CACHE_WHEN_LOGGED_IN') || !COMET_CACHE_WHEN_LOGGED_IN) && (!defined('ZENCACHE_WHEN_LOGGED_IN') || !ZENCACHE_WHEN_LOGGED_IN) && (!defined('QUICK_CACHE_WHEN_LOGGED_IN') || !QUICK_CACHE_WHEN_LOGGED_IN))
 					|| c_ws_plugin__s2member_systematics::is_s2_systematic_use_page()
 				)
 			)
@@ -133,6 +133,17 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 				 */
 				if(!defined('DONOTCACHEOBJECT'))
 					define('DONOTCACHEOBJECT', TRUE);
+
+				/**
+				 * No-cache anything for Comet Cache plugin.
+				 *
+				 * @package s2Member\No_Cache
+				 * @since 160222
+				 *
+				 * @var bool
+				 */
+				if(!defined('COMET_CACHE_ALLOWED'))
+					define('COMET_CACHE_ALLOWED', FALSE);
 
 				/**
 				 * No-cache anything for ZenCache plugin.
@@ -197,6 +208,7 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 			$using_selective_behavior = apply_filters('ws_plugin__s2member_no_cache_headers_selective', FALSE, get_defined_vars());
 
 			if(!$once && !headers_sent() // Only once, and only if possible.
+			   && (empty($_GET['ccABC']) || !filter_var($_GET['ccABC'], FILTER_VALIDATE_BOOLEAN))
 			   && (empty($_GET['zcABC']) || !filter_var($_GET['zcABC'], FILTER_VALIDATE_BOOLEAN))
 			   && (empty($_GET['qcABC']) || !filter_var($_GET['qcABC'], FILTER_VALIDATE_BOOLEAN))
 			   && ($no_cache || !$using_selective_behavior || c_ws_plugin__s2member_no_cache::$headers)
