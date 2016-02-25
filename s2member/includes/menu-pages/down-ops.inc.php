@@ -505,6 +505,24 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
 
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-amazon-cf-files-rtmp-policy-include-ip">'."\n";
+				echo 'Exclude IPs from digitally signed links as a part of the CloudFront RTMP streams?'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<td>'."\n";
+				echo '<input type="radio" name="ws_plugin__s2member_amazon_cf_files_rtmp_policy_include_ip" id="ws-plugin--s2member-amazon-cf-files-rtmp-policy-include-ip-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_rtmp_policy_include_ip"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-amazon-cf-files-rtmp-policy-include-ip-0"><strong>No,</strong> do not exclude IPs from digitally signed links that lead to CloudFront RTMP streams.</label><br /><input type="radio" name="ws_plugin__s2member_amazon_cf_files_rtmp_policy_include_ip" id="ws-plugin--s2member-amazon-cf-files-rtmp-policy-include-ip-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_rtmp_policy_include_ip"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-sandbox-1"><strong>Yes</strong>, allow IPs to be excluded from digitally signed links that lead to CloudFront RTMP streams.</label><br />'."\n";
+				echo '<p><em>s2Member will disable IPs as a part of the digitally signed links (for RTMP streams) and will improve compatibility across various devices and/or ISPs.</em></p>'."\n";
+				echo '</td>'."\n";
+
+				echo '<table class="form-table" style="margin-top:0;">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr>'."\n";
+
 				echo '<td>'."\n";
 				echo '<h3>Completely Reset CloudFront Configuration?</h3>'."\n";
 				echo '<div style="float:right; margin:0 0 0 25px;">'."\n";
