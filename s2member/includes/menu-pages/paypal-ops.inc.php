@@ -177,7 +177,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="radio" name="ws_plugin__s2member_paypal_sandbox" id="ws-plugin--s2member-paypal-sandbox-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-sandbox-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_sandbox" id="ws-plugin--s2member-paypal-sandbox-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-sandbox-1">Yes, enable support for Sandbox testing.</label><br />'."\n";
-				echo '<em>Only enable this if you\'ve provided Sandbox credentials above.<br />This puts the API, IPN, PDT and Form/Button Generators all into Sandbox mode.<br />See: <a href="http://s2member.com/r/paypal-developers/" target="_blank" rel="external">PayPal Developers</a></em>'."\n";
+				echo '<em>Only enable this if you\'ve provided Sandbox credentials above.<br />This puts the API, IPN, PDT and Form/Button Generators all into Sandbox mode. See: <a href="http://s2member.com/r/paypal-developers/" target="_blank" rel="external">PayPal Developers</a></em><br />'."\n";
+				echo '<em><strong>Warning:</strong> The PayPal Sandbox doesn\'t always give you an accurate view of what will happen once you go live, and in fact it is sometimes buggy at best. For this reason, our strong recommendation is that instead of using Sandbox Mode to run tests, that you go live and run tests with low-dollar amounts; i.e., $0.01 transactions are possible with PayPal in live mode, and that is a better way to test your installation of s2Member.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
