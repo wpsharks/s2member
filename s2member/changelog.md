@@ -1,3 +1,21 @@
+= v160225 =
+
+- (s2Member/s2Member Pro) **Comet Cache Compat.:** This release improves compatibility with Comet Cache (formerly ZenCache), whenever you have it configured to cache logged-in users. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/888). Props @KTS915 for reporting!
+
+- (s2Member Pro) **ClickBank IPN v6 Compat.:** Version 6 of the ClickBank IPN system was recently updated in a way that causes it to return `transactionType = CANCEL-TEST-REBILL` in test mode, instead of the previous value, which was: `TEST_CANCEL-REBILL`. s2Member Pro has been updated to understand either/or. See also [this GitHub issue](https://github.com/websharks/s2member/issues/882) for further details.
+
+- (s2Member Pro) **Stripe Bug Fix:** This release corrects a bug caused by typos in the source code that were preventing refunds from being processed as expected whenever Stripe was integrated. Props @YearOfBenj for reporting this important issue. Props @patdumond for relaying vital information. See also [this GitHub issue](https://github.com/websharks/s2member/issues/874) if you'd like additional details.
+
+- (s2Member Pro) **PayPal Bug Fix:** Under some conditions, the EOT behavior in s2Member Pro (when integrated with PayPal Pro) would immediately terminate access whenever a customer's subscription naturally expires. Recent versions of the Payflow system set the status to `EXPIRED`, and this was handled as an immediate EOT instead of as a delayed EOT that is subject to date calculations to determine the correct date on which a customer should lose access; i.e., based on what they have already paid for. Fixed in this release. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/873) if you'd like additional details.
+
+- (s2Member Pro) **One-Time Offer Bug Fix:** This release corrects some inconsistencies in the One-Time Offers system that comes with s2Member Pro. Symptoms included seemingly unpredictable behavior whenever redirections were configured without a specific Membership Level. Props @jacobposey for reporting. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/855) if you'd like additional details.
+
+- (s2Member/s2Member Pro) **Bug Fix:** s2Member was not properly respecting `DISALLOW_FILE_MODS` in a specific scenario related to GZIP. Props @renzms @kristineds. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/832) for further details.
+
+- (s2Member,s2Member Pro) **Bug Fix:** Resolved a minor glitch in the **WordPress Dashboard → Settings → General** panel, where s2Member's notice regarding Open Registration was inadvertently forcing the entire page into italics. Props @renzms @kristineds @raamdev ~ See also: [this GitHub issue](https://github.com/websharks/s2member/issues/831) if you'd like additional details.
+
+- (s2Member/s2Member Pro) **PayPal Sandbox:** This release updates the inline documentation under the PayPal Account Settings section of s2Member. We now suggest that instead of enabling PayPal Sandbox Mode (sometimes buggy at best), that site owners run tests with low-dollar amounts against a live PayPal account instead; e.g., $0.01 test transactions in live mode work great also. See [this GitHub issue](https://github.com/websharks/s2member/issues/891) if you'd like additional details. Props @raamdev for mentioning this again.
+
 = v160120 =
 
 - (s2Member,s2Member Pro) **Bug Fix:** Resolved a minor glitch in the **WordPress Dashboard → Settings → General** panel, where s2Member's notice regarding Open Registration was inadvertently forcing the entire page into italics. Props @renzms @kristineds @raamdev ~ See also: [this GitHub issue](https://github.com/websharks/s2member/issues/831) if you'd like additional details.
