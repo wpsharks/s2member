@@ -1,4 +1,4 @@
-= v160225 =
+= v160303 =
 
 - (s2Member/s2Member Pro) **Comet Cache Compat.:** This release improves compatibility with Comet Cache (formerly ZenCache), whenever you have it configured to cache logged-in users. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/888). Props @KTS915 for reporting!
 
