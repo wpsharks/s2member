@@ -996,8 +996,9 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 
 			$cfc['expires'] = strtotime('+'.apply_filters('ws_plugin__s2member_amazon_cf_file_expires_time', '24 hours', get_defined_vars()));
 
-			$cf_extn                            = strtolower(substr($file, strrpos($file, '.') + 1)); // Parses the file extension out so we can scan it in some special scenarios.
+			$cf_extn                            = strtolower(substr($file, strrpos($file, '.') + 1));
 			$cf_ip_res                          = c_ws_plugin__s2member_utils_conds::is_localhost() || ($stream && !$cfc['rtmp_policy_include_ip']) ? FALSE : TRUE;
+			$cf_stream_extn_resource_exclusions = array_unique((array)apply_filters('ws_plugin__s2member_amazon_cf_file_streaming_extension_resource_exclusions', array('mp3'), get_defined_vars())); // MP3 files should NOT include an extension in their resource reference.
 			$cf_resource                        = ($stream) ? ((in_array($cf_extn, $cf_stream_extn_resource_exclusions)) ? substr($file, 0, strrpos($file, '.')) : $file) : 'http'.(($ssl) ? 's' : '').'://'.(($cfc['distro_downloads_cname']) ? $cfc['distro_downloads_cname'] : $cfc['distro_downloads_dname']).'/'.$url_e_file;
 			$cf_url                             = ($stream) ? 'rtmp'.(($ssl) ? 'e' : '').'://'.(($cfc['distro_streaming_cname']) ? $cfc['distro_streaming_cname'] : $cfc['distro_streaming_dname']).'/cfx/st/'.$file : 'http'.(($ssl) ? 's' : '').'://'.(($cfc['distro_downloads_cname']) ? $cfc['distro_downloads_cname'] : $cfc['distro_downloads_dname']).'/'.$url_e_file;
 			$cf_policy                          = '{"Statement":[{"Resource":"'.c_ws_plugin__s2member_utils_strings::esc_dq($cf_resource).'","Condition":{'.(($cf_ip_res) ? '"IpAddress":{"AWS:SourceIp":"'.c_ws_plugin__s2member_utils_strings::esc_dq($_SERVER['REMOTE_ADDR']).'/32"},' : '').'"DateLessThan":{"AWS:EpochTime":'.(int)$cfc['expires'].'}}}]}';
