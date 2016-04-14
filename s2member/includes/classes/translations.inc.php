@@ -94,7 +94,7 @@ if(!class_exists("c_ws_plugin__s2member_translations"))
 				{
 					$translated = apply_filters("ws_plugin__s2member_translation_mangler", _x("Password *", "s2member-front", "s2member"), get_defined_vars());
 				}
-				else if($original === "E-mail") // Give Filters a chance here.
+				else if($original === "Email") // Give Filters a chance here.
 				{
 					$translated = apply_filters("ws_plugin__s2member_translation_mangler", _x("Email Address *", "s2member-front", "s2member"), get_defined_vars());
 				}
