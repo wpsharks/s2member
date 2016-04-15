@@ -225,7 +225,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['paypal_api_password']   = '';
 		$default_options['paypal_api_signature']  = '';
 		$default_options['paypal_identity_token'] = '';
-		$default_options['paypal_btn_encryption'] = '0';
+		$default_options['paypal_btn_encryption'] = '1';
 
 		$default_options['paypal_payflow_api_username'] = '';
 		$default_options['paypal_payflow_api_partner']  = 'PayPal';
