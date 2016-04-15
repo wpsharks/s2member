@@ -158,6 +158,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				}
 				else // Extensive log reporting here. This is an area where many site owners find trouble. Depending on server configuration; remote HTTPS connections may fail.
 				{
+					if (!empty($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_SERVER['HTTP_USER_AGENT'])) {
+						if (preg_match('/(msie|trident|gecko|webkit|presto|konqueror|playstation)[\/ ]([0-9\.]+)/i', $_SERVER['HTTP_USER_AGENT'])) {
+							$paypal['s2member_indicator'] = 'This PayPal IPN Handler by s2Member® is active & listening.';
+						}
+					}
 					$paypal['s2member_log'][] = 'Unable to verify $_POST vars. This is most likely related to an invalid configuration of s2Member, or a problem with server compatibility.';
 					$paypal['s2member_log'][] = 'Please see this KB article: `http://www.s2member.com/kb/server-scanner/`. We suggest that you run the s2Member Server Scanner.';
 					$paypal['s2member_log'][] = var_export($_REQUEST, TRUE); // Recording _POST + _GET vars for analysis and debugging.
@@ -195,11 +200,20 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				do_action('ws_plugin__s2member_during_paypal_notify', get_defined_vars());
 				unset($__refs, $__v);
 				/*
-				Output response headers; and perhaps a proxy return URL upon request.
+				Output response headers & content body.
 				*/
-				status_header(200);
+				status_header(200); // OK status code.
 				header('Content-Type: text/plain; charset=UTF-8');
-				while(@ob_end_clean()); exit (!empty($paypal['s2member_paypal_proxy_return_url']) ? $paypal['s2member_paypal_proxy_return_url'] : '');
+
+				while(@ob_end_clean()); // Clean output buffers.
+
+				if (!empty($paypal['s2member_paypal_proxy_return_url'])) {
+					exit($paypal['s2member_paypal_proxy_return_url']);
+				} elseif (!empty($paypal['s2member_indicator'])) {
+					exit($paypal['s2member_indicator']);
+				} else {
+					exit(); // Default behavior.
+				}
 			}
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_after_paypal_notify', get_defined_vars());
