@@ -46,7 +46,12 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_e"))
 						do_action("ws_plugin__s2member_before_sc_paypal_button_encryption", get_defined_vars ());
 						unset($__refs, $__v);
 
-						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"])
+						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]
+							&& $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"]
+							&& $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"]
+							&& $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"]
+							&& $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"]
+						) // Only if it is possible to connect to the PayPal API.
 							{
 								$cache = /* Are we caching? */ apply_filters("ws_plugin__s2member_sc_paypal_button_encryption_cache", true, get_defined_vars ());
 
