@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 160303
-Stable tag: 160303
+Version: 160414
+Stable tag: 160414
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -169,11 +169,50 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v160303 =
+= v160414 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v160414 =
+
+- (s2Member/s2Member Pro) **WP v4.5 Compatibility.** This release offers full compatibility with the latest release of WordPress v4.5. Nothing major was changed for standard WordPress installations, but there were a few subtle tweaks here and there to improve v4.5 compatibility. We encourage all users to upgrade right away.
+
+  **NOTE: WP v4.5 for Multisite Networks running s2Member Pro:** This release corrects a bug first introduced in the previous release of s2Member Pro that resulted in an error message (`Uncaught Error: Class 'c_ws_plugin__s2member_mms_patches' not found`) when updating to WP v4.5. It has been corrected in this release, but in order to avoid this problem altogether please follow this procedure when upgrading WordPress.
+
+  **WP v4.5 Multisite Upgrade Procedure:**
+
+  - Upgrade s2Member and s2Member Pro ​_before_​ updating WordPress core.
+  - Then upgrade WordPress core and observe that Multisite Patches are applied properly.
+
+  _If you have already upgraded to WP v4.5 and worked past this issue by patching manually, that's fine. You can still upgrade s2Member and s2Member Pro. After the upgrade you may feel free to enable automatic patching again if that's desirable._
+
+- (s2Member/s2Member Pro) **Bug Fix:** This release corrects a bug first introduced in the previous release which was causing a PHP warning about `cf_stream_extn_resource_exclusions`. A symptom was to have mysterious problems with `[s2Stream /]` or the `[s2File /]` shortcode. Fixed in this release. Props at @raamdev @renzms for reporting. See also [this GitHub issue](https://github.com/websharks/s2member/issues/901) for details.
+
+- (s2Member/s2Member Pro) **PayPal SSL Compatibility:** This release of s2Member provides an `https://` IPN URL for PayPal IPN integrations. It also provides a helpful note (in the Dashboard) about a new requirement that PayPal has with respect to the IPN URL that you configure at PayPal.com. s2Member has been updated to help you with this new requirement.
+
+  **New PayPal.com IPN Requirement:** PayPal.com is now requiring any new IPN URL that you configure to be entered as an `https://` URL; i.e., if you log into your PayPal.com account and try to configure a _brand new_ IPN URL, that URL _must_ use `https://`. PayPal.com will refuse it otherwise.
+
+  However, the `notify_url=` parameter in standard PayPal buttons should continue to work with either `http://` or `https://`, and any existing configurations out there that still use an `http://` IPN URL should continue to work as well. So this is about planning for the future. We have been told that PayPal will eventually _require_ that all IPN URLs use an `https://` protocol; i.e., they will eventually stop supporting `http://` IPN URLs altogether (at some point in the future), they are not giving anyone a date yet. For this reason we strongly suggest that you [review the details given here](https://github.com/websharks/s2member/issues/914).
+
+  Since PayPal is moving in a direction that will eventually require all site owners to have an SSL certificate in the future, s2Member's instructions (and the IPN URL it provides you with) will now be presented in the form of an `https://` URL with additional details to help you through the process of configuring an IPN handler for PayPal.
+
+  See: **Dashboard → s2Member → PayPal Options → PayPal IPN Integration**
+
+  Props @codeforest for reporting. See [this GitHub issue](https://github.com/websharks/s2member/issues/914) for further details.
+
+- (s2Member/s2Member Pro) **Bug Fix:** Email field on Registration page not shown as required via `*` symbol like other fields in this form. Caused by a change in WordPress core. Fixed in this release. Props @spottydog63 @renzms. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/907) for details.
+
+- (s2Member/s2Member Pro) **Bug Fix:** `E_NOTICE` level errors in cache handler when running in `WP_DEBUG` mode. Props at @KTS915 for reporting. Fixed in this release. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/917).
+
+- (s2Member/s2Member Pro) **i18n Compatibility:** This release of s2Member moves the `load_plugin_textdomain()` call into the `plugins_loaded` hook instead of it being run on `init`. Props @KTS915 for reporting. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/899) for details.
+
+- (s2Member Pro) **Multisite Patches:** Fixed a bug (`Uncaught Error: Class 'c_ws_plugin__s2member_mms_patches' not found`) whenever WordPress was being updated and Multisite Patches were being applied in the pro version of s2Member. See: [this GitHub issue](https://github.com/websharks/s2member/issues/929) for details.
+
+- (s2Member/s2Member Pro) **Security Enhancement:** This release of s2Member defaults PayPal Button Encryption to a value of `on` instead of `off`; i.e., there is a new default behavior. Existing s2Member installations are unaffected by this change, but if you install s2Member on a new site you will notice that (if using PayPal Buttons), Button Encryption will be enabled by default.
+
+  _Note that in order for Button Encryption to work, you must fill-in the API credentials for s2Member under: **Dashboard → s2Member → PayPal Options → PayPal Account Details**_
 
 = v160303 =
 
