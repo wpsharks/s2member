@@ -19,9 +19,9 @@ if(!defined('WPINC')) // MUST have WordPress.
 /*
 Add the plugin Actions/Filters here.
 */
-add_action('set_current_user', 'c_ws_plugin__s2member_user_securities::set_current_user', 2);
+add_action('plugins_loaded', 'c_ws_plugin__s2member_translations::load');
 
-add_action('init', 'c_ws_plugin__s2member_translations::load', 2);
+add_action('set_current_user', 'c_ws_plugin__s2member_user_securities::set_current_user', 2);
 
 add_action('init', 'c_ws_plugin__s2member_ssl::check_force_ssl', 3);
 add_action('init', 'c_ws_plugin__s2member_user_securities::initialize', 3);
