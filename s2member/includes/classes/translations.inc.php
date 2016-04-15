@@ -33,7 +33,7 @@ if(!class_exists("c_ws_plugin__s2member_translations"))
 		 * @package s2Member\Translations
 		 * @since 110815
 		 *
-		 * @attaches-to ``add_action("init");``
+		 * @attaches-to ``add_action("plugins_loaded");``
 		 *
 		 * @return null
 		 */
@@ -72,6 +72,8 @@ if(!class_exists("c_ws_plugin__s2member_translations"))
 		{
 			global $current_site, $current_blog; // In support of Multisite Networking.
 			static $s = array(); // This static array optimizes all of these routines.
+
+			if(!did_action("init")) return $translated; // Do nothing until `init` has been fired by WP core.
 
 			if((isset ($s["is_wp_login"]) && $s["is_wp_login"]) || (!isset ($s["is_wp_login"]) && ($s["is_wp_login"] = (strpos($_SERVER["REQUEST_URI"], "/wp-login.php") !== FALSE && empty($_REQUEST["action"]) && empty($_REQUEST["checkemail"])) ? TRUE : FALSE)))
 			{
