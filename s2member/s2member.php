@@ -19,8 +19,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 160414
-Stable tag: 160414
+Version: 160423
+Stable tag: 160423
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -81,7 +81,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  * @var string
  */
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
-	define('WS_PLUGIN__S2MEMBER_VERSION', '160414' /* !#distro-version#! */);
+	define('WS_PLUGIN__S2MEMBER_VERSION', '160423' /* !#distro-version#! */);
 /**
  * Minimum PHP version required to run s2Member.
  *
@@ -111,7 +111,7 @@ if(!defined('WS_PLUGIN__S2MEMBER_MIN_WP_VERSION'))
  * @var string
  */
 if(!defined('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION'))
-	define('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION', '160414' /* !#distro-version#! */);
+	define('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION', '160423' /* !#distro-version#! */);
 /*
 Several compatibility checks.
 If all pass, load the s2Member plugin.

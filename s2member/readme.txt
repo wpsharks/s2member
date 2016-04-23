@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 160414
-Stable tag: 160414
+Version: 160423
+Stable tag: 160423
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -169,13 +169,13 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v160414 =
+= v160423 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
 
-= v160414 =
+= v160423 =
 
 - (s2Member/s2Member Pro) **WP v4.5 Compatibility.** This release offers full compatibility with the latest release of WordPress v4.5. Nothing major was changed for standard WordPress installations, but there were a few subtle tweaks here and there to improve v4.5 compatibility. We encourage all users to upgrade right away.
 
