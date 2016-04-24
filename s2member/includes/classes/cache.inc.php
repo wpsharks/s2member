@@ -53,7 +53,7 @@ if (!class_exists('c_ws_plugin__s2member_cache')) {
             $fdlep_cache = isset($GLOBALS['WS_PLUGIN__']['s2member']['c']['cache']['file_download_limit_exceeded_page'])
                 ? $GLOBALS['WS_PLUGIN__']['s2member']['c']['cache']['file_download_limit_exceeded_page'] : null;
 
-            $links = ['login_welcome_page' => '', 'membership_options_page' => '', 'file_download_limit_exceeded_page' => ''];
+            $links = array('login_welcome_page' => '', 'membership_options_page' => '', 'file_download_limit_exceeded_page' => '');
 
             if (isset($lwp_cache['page'], $lwp_cache['time'], $lwp_cache['link']) && $lwp_cache['page'] === $lwp && $lwp_cache['time'] >= strtotime('-15 minutes') && $lwp_cache['link']) {
                 $links['login_welcome_page'] = $lwp_cache['link'];
