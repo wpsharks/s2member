@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 160423
-Stable tag: 160423
+Version: 160424
+Stable tag: 160424
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -169,11 +169,15 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v160423 =
+= v160424 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v160424 =
+
+- (s2Member/s2Member Pro) **PHP Compat./Bug Fix:** This follow-up release includes a patch that will prevent fatal errors when s2Member and/or s2Member Pro are installed on a site running PHP v5.2 or PHP v5.3; i.e., this release corrects a bug that was causing fatal errors on these older versions of PHP. _Note that s2Member and s2Member Pro are once again compatible with PHP v5.2+, up to PHP v7.0._ Props @krumch. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/938) for details.
 
 = v160423 =
 

@@ -1,3 +1,7 @@
+= v160424 =
+
+- (s2Member/s2Member Pro) **PHP Compat./Bug Fix:** This follow-up release includes a patch that will prevent fatal errors when s2Member and/or s2Member Pro are installed on a site running PHP v5.2 or PHP v5.3; i.e., this release corrects a bug that was causing fatal errors on these older versions of PHP. _Note that s2Member and s2Member Pro are once again compatible with PHP v5.2+, up to PHP v7.0._ Props @krumch. See also: [this GitHub issue](https://github.com/websharks/s2member/issues/938) for details.
+
 = v160423 =
 
 - (s2Member/s2Member Pro) **WP v4.5 Compatibility.** This release offers full compatibility with the latest release of WordPress v4.5. Nothing major was changed for standard WordPress installations, but there were a few subtle tweaks here and there to improve v4.5 compatibility. We encourage all users to upgrade right away.
