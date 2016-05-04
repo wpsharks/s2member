@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 160424
-Stable tag: 160424
+Version: 160503
+Stable tag: 160503
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -169,11 +169,15 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v160424 =
+= v160503 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v160503 =
+
+- (s2Member/s2Member Pro) **Security Enhancement:** This release forces `CURLOPT_SSL_VERIFYPEER` to a value of `TRUE` in the AWeber SDK that is used when/if you integrate with AWeber. In short, this forces AWeber to have a valid/verifiable SSL certificate before any data is exchanged between s2Member and the AWeber API behind-the-scenes. Props at WordPress security team for reporting this.
 
 = v160424 =
 

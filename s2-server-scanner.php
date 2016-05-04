@@ -938,7 +938,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						$_curl_test_resource, array(
 							CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 5,
 							CURLOPT_URL            => $curl_fopen_ssl_test_url, CURLOPT_RETURNTRANSFER => TRUE,
-							CURLOPT_FAILONERROR    => TRUE, CURLOPT_FORBID_REUSE => TRUE, CURLOPT_SSL_VERIFYPEER => FALSE
+							CURLOPT_FAILONERROR    => TRUE, CURLOPT_FORBID_REUSE => TRUE, CURLOPT_SSL_VERIFYPEER => TRUE
 						)
 					);
 					if(stripos((string)curl_exec($_curl_test_resource), $curl_fopen_ssl_test_url_return_string_frag) !== FALSE)
@@ -954,7 +954,7 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 						$_curl_test_resource, array(
 							CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_TIMEOUT => 5,
 							CURLOPT_URL            => $curl_fopen_localhost_test_url, CURLOPT_RETURNTRANSFER => TRUE,
-							CURLOPT_FAILONERROR    => TRUE, CURLOPT_FORBID_REUSE => TRUE, CURLOPT_SSL_VERIFYPEER => FALSE
+							CURLOPT_FAILONERROR    => TRUE, CURLOPT_FORBID_REUSE => TRUE, CURLOPT_SSL_VERIFYPEER => TRUE
 						)
 					);
 					if(stripos((string)curl_exec($_curl_test_resource), $curl_fopen_localhost_test_url_return_string_frag) !== FALSE)
