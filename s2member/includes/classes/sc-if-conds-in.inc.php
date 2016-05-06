@@ -94,7 +94,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 			if($sc_conds_allow_arbitrary_php && isset($attr['php']))
 			{
-				$attr['php'] = str_replace(['&lt;', '&gt;'], ['<', '>'], $attr['php']);
+				$attr['php'] = str_replace(array('&lt;', '&gt;', '&amp;'), array('<', '>', '&'), $attr['php']);
 
 				if(($condition_succeeded = c_ws_plugin__s2member_sc_if_conds_in::evl($attr['php'])))
 					$condition_content = isset($content_if) ? $content_if : $content;
