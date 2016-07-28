@@ -409,7 +409,7 @@ div.ws-menu-page > :not(.fade) button[type='submit'],
 div.ws-menu-page > :not(.fade) input[type='submit']
 {
 	font-size   : 150%;
-	font-weight : bold;
+	font-weight : 600;
 	background  : #5F7523;
 }
 div.ws-menu-page > :not(.fade) button[type='submit']:hover,
@@ -544,7 +544,7 @@ div.ws-menu-page div.ws-menu-page-toolbox > .links
 div.ws-menu-page div.ws-menu-page-toolbox > .links a
 {
 	display         : inline-block;
-	margin          : 0 10px 0 10px;
+	margin          : 0 5px 0 10px;
 	text-decoration : none;
 }
 div.ws-menu-page div.ws-menu-page-number-button-tabs
@@ -739,7 +739,7 @@ table.ws-menu-page-table div.ws-menu-page-r-group-header
 
 	padding             : 10px;
 	font-size           : 150%;
-	font-weight         : bold;
+	font-weight         : 600;
 	line-height         : 1em;
 	color               : #DDDDDD;
 	background          : #05141E;
