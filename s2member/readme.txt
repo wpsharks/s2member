@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 160503
-Stable tag: 160503
+Version: 160728
+Stable tag: 160728
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -17,11 +17,11 @@ Authorize.Net® Compatible: yes w/s2Member® Pro
 Google® Checkout Compatible: yes w/s2Member® Pro
 ClickBank® Compatible: yes w/s2Member® Pro
 
-Tested up to: 4.5-alpha
+Tested up to: 4.6
 Requires at least: 4.2
 
 Requires PHP: 5.2+
-Tested up to PHP: 7.0
+Tested up to PHP: 7.0.8
 
 Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License v2 or later.
@@ -169,11 +169,19 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Upgrade Notice ==
 
-= v160503 =
+= v160728 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v160728 =
+
+- (s2Member/s2Member Pro) **WP v4.6 Compatibility.** A full round of tests was performed against this release of s2Member, s2Member Pro, and the upcoming release of WordPress v4.6. In particular, the new HTTP API needed testing, along with the new optimized loading sequence in WordPress v4.6. Our tests indicate there are no compatibility issues, and we therefore encourage all s2Member site owners to upgrade to WordPress v4.6 whenever it becomes available publicly.
+
+- (s2Member/s2Member Pro) **Bug Fix:** Allow for `<` and `>` to work in the `[s2If php="" /]` shortcode attribute as expected. Some Visual Editors convert these into `&lt;` and `&gt;`, so it's necessary to interpret them as such whenever the shortcode is parsed by s2Member.
+
+- (s2Member/s2Member Pro) **JS API:** Reducing the number of variables provided by the s2Member JavaScript API by default, and adding a new filter that allows them to all be enabled when/if desirable: `ws_plugin__s2member_js_api_constants_enable`. Props @JeffStarr for reporting.
 
 = v160503 =
 

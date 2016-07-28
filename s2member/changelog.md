@@ -1,3 +1,11 @@
+= v160728 =
+
+- (s2Member/s2Member Pro) **WP v4.6 Compatibility.** A full round of tests was performed against this release of s2Member, s2Member Pro, and the upcoming release of WordPress v4.6. In particular, the new HTTP API needed testing, along with the new optimized loading sequence in WordPress v4.6. Our tests indicate there are no compatibility issues, and we therefore encourage all s2Member site owners to upgrade to WordPress v4.6 whenever it becomes available publicly.
+
+- (s2Member/s2Member Pro) **Bug Fix:** Allow for `<` and `>` to work in the `[s2If php="" /]` shortcode attribute as expected. Some Visual Editors convert these into `&lt;` and `&gt;`, so it's necessary to interpret them as such whenever the shortcode is parsed by s2Member.
+
+- (s2Member/s2Member Pro) **JS API:** Reducing the number of variables provided by the s2Member JavaScript API by default, and adding a new filter that allows them to all be enabled when/if desirable: `ws_plugin__s2member_js_api_constants_enable`. Props @JeffStarr for reporting.
+
 = v160503 =
 
 - (s2Member/s2Member Pro) **Security Enhancement:** This release forces `CURLOPT_SSL_VERIFYPEER` to a value of `TRUE` in the AWeber SDK that is used when/if you integrate with AWeber. In short, this forces AWeber to have a valid/verifiable SSL certificate before any data is exchanged between s2Member and the AWeber API behind-the-scenes. Props at WordPress security team for reporting this.
