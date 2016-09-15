@@ -55,13 +55,13 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			$file_downloads        = c_ws_plugin__s2member_files::user_downloads($user);
 			$login_redirection_url = c_ws_plugin__s2member_login_redirects::login_redirection_url($user);
 
-			$custom                  = ($user) ? get_user_option('s2member_custom', $user->ID) : '';
-			$subscr_id               = ($user) ? get_user_option('s2member_subscr_id', $user->ID) : '';
-			$subscr_gateway          = ($user) ? get_user_option('s2member_subscr_gateway', $user->ID) : '';
-			$registration_ip         = ($user) ? get_user_option('s2member_registration_ip', $user->ID) : '';
-			$custom_fields           = ($user) ? get_user_option('s2member_custom_fields', $user->ID) : array();
-			$paid_registration_times = ($user) ? get_user_option('s2member_paid_registration_times', $user->ID) : array();
-			$login_counter           = ($user) ? (int)get_user_option('s2member_login_counter') : -1;
+			$custom                  = ($user) ? (string) get_user_option('s2member_custom', $user->ID) : '';
+			$subscr_id               = ($user) ? (string) get_user_option('s2member_subscr_id', $user->ID) : '';
+			$subscr_gateway          = ($user) ? (string) get_user_option('s2member_subscr_gateway', $user->ID) : '';
+			$registration_ip         = ($user) ? (string) get_user_option('s2member_registration_ip', $user->ID) : '';
+			$custom_fields           = ($user) ? (array) get_user_option('s2member_custom_fields', $user->ID) : array();
+			$paid_registration_times = ($user) ? (array) get_user_option('s2member_paid_registration_times', $user->ID) : array();
+			$login_counter           = ($user) ? (int) get_user_option('s2member_login_counter') : -1;
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_during_constants', get_defined_vars());
