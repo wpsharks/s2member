@@ -649,13 +649,13 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 
 			/*********************************************************************************************/
 
-			if(!extension_loaded('mysql')) // MySQL extension for PHP.
+			if(!extension_loaded('mysqli')) // MySQLi extension for PHP.
 			{
 				$errors[] = array(
-					'title'   => self::i18n('MySQL Database Extension'),
+					'title'   => self::i18n('MySQLi Database Extension'),
 					'message' => sprintf(
 						self::i18n(
-							'Missing MySQL extension. %1$s needs the <a href="http://php.net/manual/en/book.mysql.php" target="_blank" rel="xlink">MySQL</a> extension for PHP.'.
+							'Missing MySQLi extension. %1$s needs the <a href="http://php.net/manual/en/book.mysqli.php" target="_blank" rel="xlink">MySQLi</a> extension for PHP.'.
 							' This will add MySQL support to your installation of PHP, allowing MySQL database communication.'.
 							' Please consult with your web hosting company about this message.'
 						), htmlspecialchars($plugin_name)
@@ -665,11 +665,11 @@ class websharks_core_v3_deps_x__check_my_server // See also: `deps.php`.
 			else // Pass on this check.
 			{
 				$passes[] = array(
-					'title'   => self::i18n('MySQL Database Extension'),
+					'title'   => self::i18n('MySQLi Database Extension'),
 					'message' => sprintf(
 						self::i18n(
-							'The <a href="http://php.net/manual/en/book.mysql.php" target="_blank" rel="xlink">MySQL</a> extension is installed.'.
-							' Your server supports MySQL database communication.'
+							'The <a href="http://php.net/manual/en/book.mysqli.php" target="_blank" rel="xlink">MySQLi</a> extension is installed.'.
+							' Your server supports MySQLi database communication.'
 						), NULL
 					)
 				);
