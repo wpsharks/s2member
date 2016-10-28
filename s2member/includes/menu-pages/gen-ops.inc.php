@@ -1289,7 +1289,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<h3>Login Welcome Page (required, please customize this)</h3>'."\n";
 				echo '<p>Please create and/or choose an existing Page to use as the first page Members will see after logging in.</p>'."\n";
 				echo (c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '<p><em><strong>BuddyPress:</strong> s2Member integrates with BuddyPress. Your Login Welcome Page affects BuddyPress too.</em></p>'."\n" : '';
-				echo '<p><em><strong>Always Private:</strong> This Page will always require a logged-in User/Member. In fact, this Page will be protected from public access by s2Member automatically. <strong>Note:</strong> for technical reasons, your Login Welcome Page <strong>cannot</strong> be set to your Front Page (i.e., your Home Page); or your Posts Page (i.e., your main Blog page). Please create a separate (dedicated) Page in WordPress, and then designate it as your Login Welcome Page below.</em></p>'."\n";
+				echo '<p><em><strong>Always Private:</strong> This Page will always require a logged-in User/Member. In fact, this Page will be protected from public access by s2Member automatically. <strong>Note:</strong> for technical reasons, your Login Welcome Page <strong>cannot</strong> be set to your Front Page (i.e., your Home Page); or your Posts Page (i.e., your main Blog page). Please create a separate dedicated Page in WordPress, and then designate it as your Login Welcome Page below.</em></p>'."\n";
 				echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/customizing-your-lwp/" target="_blank" rel="external">Customizing Your Login Welcome Page</a>.</p>'."\n";
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_login_welcome_page", get_defined_vars());
 
@@ -1329,34 +1329,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_login_redirection_override" id="ws-plugin--s2member-login-redirection-override" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"]).'" /><br />'."\n";
-				echo 'Or, you may configure a Special Redirection URL, if you prefer. You\'ll need to type in the full URL, starting with: <code>http://</code>. <em>A few <a href="#" onclick="alert(\'Replacement Codes:\\n\\n%%current_user_login%% = The current User\\\'s Username, lowercase (deprecated, please use %%current_user_nicename%%).\\n\\n%%current_user_nicename%% = The current User\\\'s Nicename in lowercase format (i.e., a cleaner version of the username for URLs; recommended for best compatibility).\\n\\n%%current_user_id%% = The current User\\\'s ID.\\n\\n%%current_user_level%% = The current User\\\'s s2Member Level.\\n\\n%%current_user_role%% = The current User\\\'s WordPress Role.'.((!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? '\\n\\n%%current_user_ccaps%% = The current User\\\'s Custom Capabilities.' : '').'\\n\\n%%current_user_logins%% = Number of times the current User has logged in.\\n\\nFor example, if you\\\'re using BuddyPress, and you want to redirect Members to their BuddyPress Profile page after logging in, you would setup a Special Redirection URL, like this: '.home_url("/members/%%current_user_nicename%%/profile/").'\\n\\nOr ... using %%current_user_level%%, you could have a separate Login Welcome Page for each Membership Level that you plan to offer. BuddyPress not required.\'); return false;">Replacement Codes</a> are also supported here.</em>'."\n";
-				echo '</td>'."\n";
-
-				echo '</tr>'."\n";
-				echo '</tbody>'."\n";
-				echo '</table>'."\n";
-
-				echo '<div class="ws-menu-page-hr"></div>'."\n";
-
-				echo '<table class="form-table" style="margin-top:0;">'."\n";
-				echo '<tbody>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-login-redirection-always-http">'."\n";
-				echo 'Always Redirect non-Administrative Users (after login) using HTTP?'."\n";
-				echo '</label>'."\n";
-				echo '</th>'."\n";
-
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<td>'."\n";
-				echo '<select name="ws_plugin__s2member_login_redirection_always_http" id="ws-plugin--s2member-login-redirection-always-http">'."\n";
-				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"]) ? ' selected="selected"' : '').'>No, do NOT modify (use WordPress default behavior; i.e., detect URL scheme automatically)</option>'."\n";
-				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_always_http"]) ? ' selected="selected"' : '').'>Yes, always redirect non-administrative users to non-SSL version (i.e., always use http://)</option>'."\n";
-				echo '</select><br />'."\n";
-				echo 'Recommended setting: <code>Yes</code>. This is compatible w/ <a href="http://codex.wordpress.org/Administration_Over_SSL" target="_blank" rel="external"><code>FORCE_SSL_LOGIN</code></a> and/or <a href="http://codex.wordpress.org/Administration_Over_SSL" target="_blank" rel="external"><code>FORCE_SSL_ADMIN</code></a>.'."\n";
+				echo 'Or, you may configure a Special Redirection URL, if you prefer. You\'ll need to type in the full URL, starting with: <code>http://</code> or <code>https://</code>. <em>A few <a href="#" onclick="alert(\'Replacement Codes:\\n\\n%%current_user_login%% = The current User\\\'s Username, lowercase (deprecated, please use %%current_user_nicename%%).\\n\\n%%current_user_nicename%% = The current User\\\'s Nicename in lowercase format (i.e., a cleaner version of the username for URLs; recommended for best compatibility).\\n\\n%%current_user_id%% = The current User\\\'s ID.\\n\\n%%current_user_level%% = The current User\\\'s s2Member Level.\\n\\n%%current_user_role%% = The current User\\\'s WordPress Role.'.((!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? '\\n\\n%%current_user_ccaps%% = The current User\\\'s Custom Capabilities.' : '').'\\n\\n%%current_user_logins%% = Number of times the current User has logged in.\\n\\nFor example, if you\\\'re using BuddyPress, and you want to redirect Members to their BuddyPress Profile page after logging in, you would setup a Special Redirection URL, like this: '.home_url("/members/%%current_user_nicename%%/profile/").'\\n\\nOr ... using %%current_user_level%%, you could have a separate Login Welcome Page for each Membership Level that you plan to offer. BuddyPress not required.\'); return false;">Replacement Codes</a> are also supported here.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";

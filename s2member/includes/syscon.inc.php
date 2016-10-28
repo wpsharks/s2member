@@ -177,7 +177,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['login_welcome_page']                  = '';
 		$default_options['login_redirection_override']          = '';
-		$default_options['login_redirection_always_http']       = '1';
+		$default_options['login_redirection_always_http']       = '0';
 		$default_options['membership_options_page']             = '';
 		$default_options['membership_options_page_vars_enable'] = '1';
 		$default_options['membership_options_page_ga_vars_enable'] = '1';
