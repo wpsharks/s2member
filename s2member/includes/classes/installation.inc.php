@@ -110,11 +110,6 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['triggers_immediate_eot'] === 'refunds,reversals') // `refunds,reversals` => `refunds,partial_refunds,reversals`
 						c_ws_plugin__s2member_menu_pages::update_all_options(array('ws_plugin__s2member_triggers_immediate_eot' => 'refunds,partial_refunds,reversals'), TRUE, FALSE, FALSE, FALSE, FALSE);
 				}
-				if((!$v || version_compare($v, '161027', '<')) && stripos(get_option('siteurl'), 'https://') === 0 && $GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_always_http'] === '1')
-				{
-					$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_always_http'] = '0';
-					update_option('ws_plugin__s2member_options', $GLOBALS['WS_PLUGIN__']['s2member']['o']);
-				}
 				$notice = '<strong>s2Member</strong> has been <strong>reactivated</strong>, with '.(($reactivation_reason === 'levels') ? '<code>'.esc_html($GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']).'</code> Membership Levels' : 'the latest version').'.<br />';
 				$notice .= 'You now have version '.esc_html(WS_PLUGIN__S2MEMBER_VERSION).'. Your existing configuration remains.';
 

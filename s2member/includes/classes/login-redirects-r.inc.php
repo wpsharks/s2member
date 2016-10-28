@@ -58,7 +58,7 @@ if (!class_exists ('c_ws_plugin__s2member_login_redirects_r'))
 					{
 						$ci = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
 
-						if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_always_http'])
+						if(apply_filters('ws_plugin__s2member_login_redirection_always_http', stripos(get_option('siteurl'), 'https://') !== 0))
 							if($redirect_to && is_string($redirect_to) && strpos($redirect_to, 'wp-admin') === FALSE)
 								{
 									$redirect_to = preg_replace('/^https\:\/\//i', 'http://', $redirect_to);

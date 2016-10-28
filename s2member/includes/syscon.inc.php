@@ -177,7 +177,6 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['login_welcome_page']                  = '';
 		$default_options['login_redirection_override']          = '';
-		$default_options['login_redirection_always_http']       = '0';
 		$default_options['membership_options_page']             = '';
 		$default_options['membership_options_page_vars_enable'] = '1';
 		$default_options['membership_options_page_ga_vars_enable'] = '1';
@@ -466,9 +465,6 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 					$value = $default_options[$key];
 
 				else if($key === 'login_redirection_override' && (!is_string($value) || !strlen($value)))
-					$value = $default_options[$key];
-
-				else if($key === 'login_redirection_always_http' && (!is_string($value) || !is_numeric($value)))
 					$value = $default_options[$key];
 
 				else if($key === 'membership_options_page' && (!is_string($value) || !is_numeric($value)))
