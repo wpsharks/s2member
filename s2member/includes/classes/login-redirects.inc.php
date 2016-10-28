@@ -68,7 +68,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 				   && !apply_filters('ws_plugin__s2member_disable_login_ip_restrictions', $user->has_cap('edit_posts') ? TRUE : FALSE, get_defined_vars())
 				) $ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok($_SERVER['REMOTE_ADDR'], strtolower($username));
 
-				if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_always_http']) // Alter value of `redirect_to`?
+				if(apply_filters('ws_plugin__s2member_login_redirection_always_http', stripos(get_option('siteurl'), 'https://') !== 0))
 					if(!empty($_REQUEST['redirect_to']) && is_string($_REQUEST['redirect_to']) && strpos($_REQUEST['redirect_to'], 'wp-admin') === FALSE)
 					{
 						$_REQUEST['redirect_to'] = preg_replace('/^https\:\/\//i', 'http://', $_REQUEST['redirect_to']);
@@ -114,7 +114,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 							}
 						else $redirect = home_url('/'); // Default to the home page.
 
-						if($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_redirection_always_http'])
+						if(apply_filters('ws_plugin__s2member_login_redirection_always_http', stripos(get_option('siteurl'), 'https://') !== 0))
 						{
 							$redirect = preg_replace('/^https\:\/\//i', 'http://', $redirect);
 							if(stripos($redirect, 'http://') !== 0) // Force absolute.
