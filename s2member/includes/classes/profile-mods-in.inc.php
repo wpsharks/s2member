@@ -58,7 +58,7 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 						{
 							$userdata['user_email'] = $_p['ws_plugin__s2member_profile_email'];
 							if(strcasecmp($userdata['user_email'], $user->user_email) !== 0)
-								$email_change = TRUE;
+								$email_change = $user->user_email;
 						}
 					if(!empty($_p['ws_plugin__s2member_profile_password1']))
 						if($user->user_login !== 'demo') // No pass change on demo!
@@ -134,7 +134,7 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 
 					if(!empty($email_change) && $role && $level >= 0)
 					{
-						c_ws_plugin__s2member_list_servers::process_list_server_removals($role, $level, $user->user_login, ((!empty($userdata['user_pass'])) ? $userdata['user_pass'] : ''), $userdata['user_email'], $user->first_name, $user->last_name, $_SERVER['REMOTE_ADDR'], TRUE, $user_id);
+						c_ws_plugin__s2member_list_servers::process_list_server_removals($role, $level, $user->user_login, ((!empty($userdata['user_pass'])) ? $userdata['user_pass'] : ''), $email_change, $user->first_name, $user->last_name, $_SERVER['REMOTE_ADDR'], TRUE, $user_id);
 					}
 					if(!empty($_p['ws_plugin__s2member_profile_opt_in']) && $role && $level >= 0)
 					{
