@@ -1,3 +1,29 @@
+## [coming soon]
+
+- **Bug Fix:** Stripe refund notifications via the Stripe Webhook were always interpreted by s2Member as full refunds. This release corrects this bug so that s2Member will handle partial refunds via the Stripe API properly in all cases. Props @raamdev for reporting.
+
+- Enforce data types when determining PHP constants. See [this GitHub issue](https://github.com/websharks/s2member/issues/989) if you'd like further details.
+
+- **Bug Fix:** Updating profile via `[s2Member-Profile /]` when changing email addresses may leave the old email address on configured email list servers in some scenarios. Props @renzms for reporting. For further details see [issue #1007](https://github.com/websharks/s2member/issues/1007).
+
+- **SSL Compatibility & Option Deprecation:** In previous versions of s2Member there was a setting in the UI that allowed you to force non-SSL redirects to the Login Welcome Page. By popular demand, this setting has been deprecated and removed from the UI.
+
+  _**New Approach:** The new approach taken in the latest release of s2Member is to automatically detect when a non-SSL redirection should occur, and when it should not occur (i.e., when the default WordPress core behavior should remain as-is)._
+
+  _s2Member does this by looking at your configured `siteurl` option in WordPress. If it begins with `https://` (indicating that your entire site is served over SSL), non-SSL redirects will no longer be forced by s2Member, which resolves problems on many sites that serve their entire site over SSL (a growing trend over the past couple years)._
+
+  _Conversely, if your configured `siteurl` option in WordPress does NOT begin with `https://` (e.g., just plain `http://`), then a non-SSL redirect **is** forced, as necessary, in order to avoid login cookie conflicts; i.e., the old behavior is preserved by this automatic detection._
+
+  _Overall, this new approach improves compatibility with WordPress core, particularly on sites that serve all of their pages over `https://` (as recommended by Google)._
+
+  _**Backward Compatibility:** As noted previously, the old option that allowed you to configure s2Member to force non-SSL redirects to the Login Welcome Page has been officially deprecated and removed from the UI. However, the old option does still exist internally, but only for backward compatibility. A WordPress filter is exposed that allows developers to alter the old setting if necessary. You can use the filter to force a `true` or `false` value._
+
+  ```php
+  <?php
+  add_filter('ws_plugin__s2member_login_redirection_always_http', '__return_true');
+  // OR add_filter('ws_plugin__s2member_login_redirection_always_http', '__return_false');
+  ```
+
 = v160801 =
 
 - (s2Member/s2Member Pro) **WP v4.6 Compatibility.** A full round of tests was performed against this release of s2Member, s2Member Pro, and the upcoming release of WordPress v4.6. In particular, the new HTTP API needed testing, along with the new optimized loading sequence in WordPress v4.6. Our tests indicate there are no compatibility issues, and we therefore encourage all s2Member site owners to upgrade to WordPress v4.6 whenever it becomes available publicly.
