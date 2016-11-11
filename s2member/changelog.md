@@ -26,6 +26,8 @@
 
 - **Bug Fix:** Username/password email being sent to users whenever Custom Passwords are enabled in your s2Member configuration and registration occurs via the default `wp-login.php?action=register` form. Fixed in this release. See also: [issue #870](https://github.com/websharks/s2member/issues/870) if you'd like additional details.
 
+- **IP Detection:** This release improves s2Member's ability to determine the current user's IP address. s2Member now searches through `HTTP_CF_CONNECTING_IP`, `HTTP_CLIENT_IP`, `HTTP_X_FORWARDED_FOR`, `HTTP_X_FORWARDED`, `HTTP_X_CLUSTER_CLIENT_IP`, `HTTP_FORWARDED_FOR`, `HTTP_FORWARDED`, `HTTP_VIA`, and `REMOTE_ADDR` (in that order) to locate the first valid public IP address. Either IPv4 or IPv6. Among other things, this improves s2Member's compatibility with sites using CloudFlare. See also: [issue #526](https://github.com/websharks/s2member/issues/526) if you'd like additional details.
+
 = v160801 =
 
 - (s2Member/s2Member Pro) **WP v4.6 Compatibility.** A full round of tests was performed against this release of s2Member, s2Member Pro, and the upcoming release of WordPress v4.6. In particular, the new HTTP API needed testing, along with the new optimized loading sequence in WordPress v4.6. Our tests indicate there are no compatibility issues, and we therefore encourage all s2Member site owners to upgrade to WordPress v4.6 whenever it becomes available publicly.
