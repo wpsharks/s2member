@@ -29,7 +29,7 @@ if (!function_exists ('wp_new_user_notification'))
 		*
 		* @return class Return-value of class method.
 		*/
-		if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_emails_enabled'])
+		if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_emails_enabled'] || $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_password'])
 			{
 				function wp_new_user_notification()
 					{
