@@ -38,7 +38,7 @@ if (!class_exists('c_ws_plugin__s2member_utils_ip')) {
             if ($ip !== null) {
                 return $ip;
             }
-            $sources = [
+            $sources = array(
                 'HTTP_CF_CONNECTING_IP',
                 'HTTP_CLIENT_IP',
                 'HTTP_X_FORWARDED_FOR',
@@ -48,10 +48,9 @@ if (!class_exists('c_ws_plugin__s2member_utils_ip')) {
                 'HTTP_FORWARDED',
                 'HTTP_VIA',
                 'REMOTE_ADDR',
-            ];
-            $prioritize_remote_addr = false; // Off by default; can be filtered however.
+            );
             $sources                = apply_filters('ws_plugin__s2member_current_ip_sources', $sources);
-            $prioritize_remote_addr = apply_filters('ws_plugin__s2member_current_ip_prioritize_remote_addr', $prioritize_remote_addr);
+            $prioritize_remote_addr = apply_filters('ws_plugin__s2member_current_ip_prioritize_remote_addr', false);
 
             if (!empty($_SERVER['REMOTE_ADDR']) && $prioritize_remote_addr) {
                 if (($_valid_public_ip = self::valid_public((string) $_SERVER['REMOTE_ADDR']))) {
