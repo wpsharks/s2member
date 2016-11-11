@@ -10,9 +10,9 @@
 
   _**New Approach:** The new approach taken in the latest release of s2Member is to automatically detect when a non-SSL redirection should occur, and when it should not occur (i.e., when the default WordPress core behavior should remain as-is)._
 
-  _s2Member does this by looking at your configured `siteurl` option in WordPress. If it begins with `https://` (indicating that your entire site is served over SSL), non-SSL redirects will no longer be forced by s2Member, which resolves problems on many sites that serve their entire site over SSL (a growing trend over the past couple years)._
+  _s2Member does this by looking at the `FORCE_SSL_LOGIN` and `FORCE_SSL_ADMIN` settings in WordPress, and also at your configured `siteurl` option in WordPress. If you are not forcing SSL logins, or your `siteurl` begins with `https://` (indicating that your entire site is served over SSL), non-SSL redirects will no longer be forced by s2Member, which resolves problems on many sites that serve their entire site over SSL (a growing trend over the past couple years)._
 
-  _Conversely, if your configured `siteurl` option in WordPress does NOT begin with `https://` (e.g., just plain `http://`), then a non-SSL redirect **is** forced, as necessary, in order to avoid login cookie conflicts; i.e., the old behavior is preserved by this automatic detection._
+  _Conversely, if `FORCE_SSL_LOGIN` or `FORCE_SSL_ADMIN` are true, and your configured `siteurl` option in WordPress does NOT begin with `https://` (e.g., just plain `http://`), then a non-SSL redirect **is** forced, as necessary, in order to avoid login cookie conflicts; i.e., the old behavior is preserved by this automatic detection._
 
   _Overall, this new approach improves compatibility with WordPress core, particularly on sites that serve all of their pages over `https://` (as recommended by Google)._
 
