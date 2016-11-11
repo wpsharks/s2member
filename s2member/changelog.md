@@ -1,12 +1,12 @@
 ## [coming soon]
 
-- **Bug Fix:** Stripe refund notifications via the Stripe Webhook were always interpreted by s2Member as full refunds. This release corrects this bug so that s2Member will handle partial refunds via the Stripe API properly in all cases. Props @raamdev for reporting.
+- (s2Member Pro) **Bug Fix:** Stripe refund notifications via the Stripe Webhook were always interpreted by s2Member as full refunds. This release corrects this bug so that s2Member will handle partial refunds via the Stripe API properly in all cases. Props @raamdev for reporting.
 
 - Enforce data types when determining PHP constants. See [this GitHub issue](https://github.com/websharks/s2member/issues/989) if you'd like further details.
 
-- **Bug Fix:** Updating profile via `[s2Member-Profile /]` when changing email addresses may leave the old email address on configured email list servers in some scenarios. Props @renzms for reporting. For further details see [issue #1007](https://github.com/websharks/s2member/issues/1007).
+- (s2Member/s2Member Pro) **Bug Fix:** Updating profile via `[s2Member-Profile /]` when changing email addresses may leave the old email address on configured email list servers in some scenarios. Props @renzms for reporting. For further details see [issue #1007](https://github.com/websharks/s2member/issues/1007).
 
-- **SSL Compatibility & Option Deprecation:** In previous versions of s2Member there was a setting in the UI that allowed you to force non-SSL redirects to the Login Welcome Page. By popular demand, this setting has been deprecated and removed from the UI.
+- (s2Member/s2Member Pro) **SSL Compatibility & Option Deprecation:** In previous versions of s2Member there was a setting in the UI that allowed you to force non-SSL redirects to the Login Welcome Page. By popular demand, this setting has been deprecated and removed from the UI.
 
   _**New Approach:** The new approach taken in the latest release of s2Member is to automatically detect when a non-SSL redirection should occur, and when it should not occur (i.e., when the default WordPress core behavior should remain as-is)._
 
@@ -24,9 +24,13 @@
   // OR add_filter('ws_plugin__s2member_login_redirection_always_http', '__return_false');
   ```
 
-- **Bug Fix:** Username/password email being sent to users whenever Custom Passwords are enabled in your s2Member configuration and registration occurs via the default `wp-login.php?action=register` form. Fixed in this release. See also: [issue #870](https://github.com/websharks/s2member/issues/870) if you'd like additional details.
+- (s2Member/s2Member Pro) **Bug Fix:** Username/password email being sent to users whenever Custom Passwords are enabled in your s2Member configuration and registration occurs via the default `wp-login.php?action=register` form. Fixed in this release. See also: [issue #870](https://github.com/websharks/s2member/issues/870) if you'd like additional details.
 
-- **IP Detection:** This release improves s2Member's ability to determine the current user's IP address. s2Member now searches through `HTTP_CF_CONNECTING_IP`, `HTTP_CLIENT_IP`, `HTTP_X_FORWARDED_FOR`, `HTTP_X_FORWARDED`, `HTTP_X_CLUSTER_CLIENT_IP`, `HTTP_FORWARDED_FOR`, `HTTP_FORWARDED`, `HTTP_VIA`, and `REMOTE_ADDR` (in that order) to locate the first valid public IP address. Either IPv4 or IPv6. Among other things, this improves s2Member's compatibility with sites using CloudFlare. See also: [issue #526](https://github.com/websharks/s2member/issues/526) if you'd like additional details.
+- (s2Member/s2Member Pro) **IP Detection:** This release improves s2Member's ability to determine the current user's IP address. s2Member now searches through `HTTP_CF_CONNECTING_IP`, `HTTP_CLIENT_IP`, `HTTP_X_FORWARDED_FOR`, `HTTP_X_FORWARDED`, `HTTP_X_CLUSTER_CLIENT_IP`, `HTTP_FORWARDED_FOR`, `HTTP_FORWARDED`, `HTTP_VIA`, and `REMOTE_ADDR` (in that order) to locate the first valid public IP address. Either IPv4 or IPv6. Among other things, this improves s2Member's compatibility with sites using CloudFlare. See also: [issue #526](https://github.com/websharks/s2member/issues/526) if you'd like additional details.
+
+- (s2Member Pro) **JSON API:** In the pro version it is now possible to use the s2Member Pro Remote Operations API to send and receive JSON input/output. This makes the Remote Operations API in s2Member compatible with a variety of scripting languages, not just PHP; i.e., prior to this release the Remote Operations API required that you always use PHP's `serialize()` and `unserialize()` functions when making API calls. The use of `serialize()` and `unserialize()` are no longer a requirement since input/output data is now sent and received in the more portable JSON format. For new code samples, please see: **Dashboard → s2Member → API / Scripting → Pro API For Remote Operations**. See also: [issue #987](https://github.com/websharks/s2member/issues/987) if you'd like additional details on this change.
+
+  _**Note:** The old s2Member Pro Remote Operations API has been deprecated but will continue to function just like before (via `serialize()` and `unserialize()`) for the foreseeable future. Moving forward, we recommend the new JSON code samples. Again, you will find those under: **Dashboard → s2Member → API / Scripting → Pro API For Remote Operations**_
 
 = v160801 =
 
