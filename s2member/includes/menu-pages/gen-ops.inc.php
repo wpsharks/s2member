@@ -1117,7 +1117,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_custom_reg_names" id="ws-plugin--s2member-custom-reg-names">'."\n";
-				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"]) ? ' selected="selected"' : '').'>Yes (always collect First/Last Names during registration)</option>'."\n";
+				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"]) ? ' selected="selected"' : '').'>Yes (always collect First/Last Names during registration)</option>'."\n";
 				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_names"]) ? ' selected="selected"' : '').'>No (do NOT collect First/Last Names during registration)</option>'."\n";
 				echo '</select><br />'."\n";
 				echo 'Recommended setting (<code>Yes</code>). It\'s usually a good idea to leave this on.'."\n";
