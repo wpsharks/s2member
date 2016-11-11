@@ -640,7 +640,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											$email       = $user->user_email;
 											$login       = $user->user_login;
 											$ip          = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_registration_ip'];
-											$ip          = (!$ip) ? $_SERVER['REMOTE_ADDR'] : $ip; // Else use environment variable.
+											$ip          = (!$ip) ? c_ws_plugin__s2member_utils_ip::current() : $ip;
 											$subscr_baid = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_baid'];
 											$subscr_cid  = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_cid'];
 
@@ -813,7 +813,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											$email          = $user->user_email;
 											$login          = $user->user_login;
 											$ip             = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_registration_ip'];
-											$ip             = (!$ip) ? $_SERVER['REMOTE_ADDR'] : $ip; // Else use environment variable.
+											$ip             = (!$ip) ? c_ws_plugin__s2member_utils_ip::current() : $ip;
 											$custom         = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_custom'];
 											$subscr_id      = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_id'];
 											$subscr_baid    = (string)@$_pmr['ws_plugin__s2member_custom_reg_field_s2member_subscr_baid'];

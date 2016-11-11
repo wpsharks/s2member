@@ -285,7 +285,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 
 										$user->user_email = ($user_email) ? $user_email : $user->user_email;
 										$user_full_name = trim ($user->first_name . ' ' . $user->last_name);
-										$user_ip = $_SERVER['REMOTE_ADDR'];
+										$user_ip = c_ws_plugin__s2member_utils_ip::current();
 
 										if (($sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_subject']))
 											if (($sbj = c_ws_plugin__s2member_utils_strings::fill_cvs($sbj, $custom)))
@@ -355,7 +355,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 
 										$user->user_email = ($user_email) ? $user_email : $user->user_email;
 										$user_full_name = trim ($user->first_name . ' ' . $user->last_name);
-										$user_ip = $_SERVER['REMOTE_ADDR'];
+										$user_ip = c_ws_plugin__s2member_utils_ip::current();
 
 										if (($rec = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_admin_email_recipients']))
 											if (($rec = c_ws_plugin__s2member_utils_strings::fill_cvs($rec, $custom)))

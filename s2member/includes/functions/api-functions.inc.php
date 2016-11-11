@@ -2531,7 +2531,7 @@ if(!function_exists("s2member_value_for_pp_inv"))
 	{
 		function s2member_value_for_pp_inv()
 			{
-				return uniqid()."~".$_SERVER["REMOTE_ADDR"];
+				return uniqid()."~".c_ws_plugin__s2member_utils_ip::current();
 			}
 	}
 /**

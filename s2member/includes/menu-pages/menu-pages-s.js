@@ -1068,7 +1068,7 @@ jQuery(document).ready(function($)
 						code.html(code.val().replace(/ name\="p3" value\="(.*?)"/, ' name="p3" value="'+esc_attr(regPeriod)+'"'));
 						code.html(code.val().replace(/ name\="t3" value\="(.*?)"/, ' name="t3" value="'+esc_attr(regTerm)+'"'));
 
-						$('div#ws-plugin--s2member-'+button+'-button-prev').html(code.val().replace(/\<form/, '<form target="_blank"').replace(/\<\?php echo S2MEMBER_VALUE_FOR_PP_INV\(\); \?\>/g, Math.round(new Date().getTime())+'~<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr ($_SERVER["REMOTE_ADDR"])); ?>').replace(/\<\?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_(ON0|OS0|ON1|OS1); \?\>/g, ''));
+						$('div#ws-plugin--s2member-'+button+'-button-prev').html(code.val().replace(/\<form/, '<form target="_blank"').replace(/\<\?php echo S2MEMBER_VALUE_FOR_PP_INV\(\); \?\>/g, Math.round(new Date().getTime())+'~<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr (c_ws_plugin__s2member_utils_ip::current())); ?>').replace(/\<\?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_(ON0|OS0|ON1|OS1); \?\>/g, ''));
 
 						(button === 'modification') ? alert('Your Modification Button has been generated.\nPlease copy/paste the Shortcode into your Login Welcome Page, or wherever you feel it would be most appropriate.\n\n* Remember, Modification Buttons should be displayed to existing Users/Members, and they should be logged-in, BEFORE clicking this Button.') : alert('Your Button has been generated.\nPlease copy/paste the Shortcode Format into your Membership Options Page.');
 
@@ -1137,7 +1137,7 @@ jQuery(document).ready(function($)
 
 						code.html(code.val().replace(/ name\="amount" value\="(.*?)"/, ' name="amount" value="'+esc_attr(regAmount)+'"'));
 
-						$('div#ws-plugin--s2member-ccap-button-prev').html(code.val().replace(/\<form/, '<form target="_blank"').replace(/\<\?php echo S2MEMBER_VALUE_FOR_PP_INV\(\); \?\>/g, Math.round(new Date().getTime())+'~<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr ($_SERVER["REMOTE_ADDR"])); ?>').replace(/\<\?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_(ON0|OS0|ON1|OS1); \?\>/g, ''));
+						$('div#ws-plugin--s2member-ccap-button-prev').html(code.val().replace(/\<form/, '<form target="_blank"').replace(/\<\?php echo S2MEMBER_VALUE_FOR_PP_INV\(\); \?\>/g, Math.round(new Date().getTime())+'~<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr (c_ws_plugin__s2member_utils_ip::current())); ?>').replace(/\<\?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_(ON0|OS0|ON1|OS1); \?\>/g, ''));
 
 						alert('Your Button has been generated.\nPlease copy/paste the Shortcode into your Login Welcome Page, or wherever you feel it would be most appropriate.\n\n* Remember, Independent Custom Capability Buttons should ONLY be displayed to existing Users/Members, and they MUST be logged-in, BEFORE clicking this Button.');
 
@@ -1205,7 +1205,7 @@ jQuery(document).ready(function($)
 
 						code.html(code.val().replace(/ name\="amount" value\="(.*?)"/, ' name="amount" value="'+esc_attr(regAmount)+'"'));
 
-						$('div#ws-plugin--s2member-sp-button-prev').html(code.val().replace(/\<form/, '<form target="_blank"').replace(/\<\?php echo S2MEMBER_VALUE_FOR_PP_INV\(\); \?\>/g, Math.round(new Date().getTime())+'~<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr ($_SERVER["REMOTE_ADDR"])); ?>').replace(/\<\?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_(ON0|OS0|ON1|OS1); \?\>/g, ''));
+						$('div#ws-plugin--s2member-sp-button-prev').html(code.val().replace(/\<form/, '<form target="_blank"').replace(/\<\?php echo S2MEMBER_VALUE_FOR_PP_INV\(\); \?\>/g, Math.round(new Date().getTime())+'~<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr (c_ws_plugin__s2member_utils_ip::current())); ?>').replace(/\<\?php echo S2MEMBER_CURRENT_USER_VALUE_FOR_PP_(ON0|OS0|ON1|OS1); \?\>/g, ''));
 
 						alert('Your Button has been generated.\nPlease copy/paste the Shortcode into your WordPress Editor.');
 

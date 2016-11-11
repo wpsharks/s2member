@@ -103,9 +103,9 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								$paypal_os0_input_value = /* Current User's Paid Subscr. ID, or WP User ID, or domain. */ ($referencing) ? $referencing : $_SERVER["HTTP_HOST"];
 
 								$paypal_on1_input_value = /* Identifies the Customer's IP Address for tracking purposes. */ "Customer IP Address";
-								$paypal_os1_input_value = /* Current User's IP Address for tracking purposes. */ $_SERVER["REMOTE_ADDR"];
+								$paypal_os1_input_value = /* Current User's IP Address for tracking purposes. */ c_ws_plugin__s2member_utils_ip::current();
 
-								$paypal_invoice_input_value = /* s2Member's Unique Code~IP combo. */ uniqid () . "~" . $_SERVER["REMOTE_ADDR"];
+								$paypal_invoice_input_value = /* s2Member's Unique Code~IP combo. */ uniqid () . "~" . c_ws_plugin__s2member_utils_ip::current();
 
 								$attr["sp_ids_exp"] = /* Combined "sp:ids:expiration hours". */ "sp:" . $attr["ids"] . ":" . $attr["exp"];
 
@@ -158,9 +158,9 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								$paypal_os0_input_value = /* Current User's Paid Subscr. ID, or WP User ID, or domain. */ ($referencing) ? $referencing : $_SERVER["HTTP_HOST"];
 
 								$paypal_on1_input_value = /* Identifies the Customer's IP Address for tracking purposes. */ "Customer IP Address";
-								$paypal_os1_input_value = /* Current User's IP Address for tracking purposes. */ $_SERVER["REMOTE_ADDR"];
+								$paypal_os1_input_value = /* Current User's IP Address for tracking purposes. */ c_ws_plugin__s2member_utils_ip::current();
 
-								$paypal_invoice_input_value = /* s2Member's Unique Code~IP combo. */ uniqid () . "~" . $_SERVER["REMOTE_ADDR"];
+								$paypal_invoice_input_value = /* s2Member's Unique Code~IP combo. */ uniqid () . "~" . c_ws_plugin__s2member_utils_ip::current();
 
 								$attr["level_ccaps_eotper"] = ($attr["rr"] === "BN" && $attr["rt"] !== "L") ? $attr["level"] . ":" . $attr["ccaps"] . ":" . $attr["rp"] . " " . $attr["rt"] : $attr["level"] . ":" . $attr["ccaps"];
 								$attr["level_ccaps_eotper"] = /* Clean any trailing separators from this string. */ rtrim ($attr["level_ccaps_eotper"], ":");
@@ -214,16 +214,16 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								$paypal_os0_input_value = /* Current User's Paid Subscr. ID, or WP User ID, or domain. */ ($referencing) ? $referencing : $_SERVER["HTTP_HOST"];
 
 								$paypal_on1_input_value = /* Identifies the Customer's IP Address for tracking purposes. */ "Customer IP Address";
-								$paypal_os1_input_value = /* Current User's IP Address for tracking purposes. */ $_SERVER["REMOTE_ADDR"];
+								$paypal_os1_input_value = /* Current User's IP Address for tracking purposes. */ c_ws_plugin__s2member_utils_ip::current();
 
-								$paypal_invoice_input_value = /* s2Member's Unique Code~IP combo. */ uniqid () . "~" . $_SERVER["REMOTE_ADDR"];
+								$paypal_invoice_input_value = /* s2Member's Unique Code~IP combo. */ uniqid () . "~" . c_ws_plugin__s2member_utils_ip::current();
 
 								$attr["desc"] = (!$attr["desc"]) ? $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $attr["level"] . "_label"] : $attr["desc"];
 
 								$attr["level_ccaps_eotper"] = ($attr["rr"] === "BN" && $attr["rt"] !== "L") ? $attr["level"] . ":" . $attr["ccaps"] . ":" . $attr["rp"] . " " . $attr["rt"] : $attr["level"] . ":" . $attr["ccaps"];
 								$attr["level_ccaps_eotper"] = /* Clean any trailing separators from this string. */ rtrim ($attr["level_ccaps_eotper"], ":");
 
-								$success_return_tra = array("ta" => $attr["ta"], "tp" => $attr["tp"], "tt" => $attr["tt"], "ra" => $attr["ra"], "rp" => $attr["rp"], "rt" => $attr["rt"], "rr" => $attr["rr"], "rrt" => $attr["rrt"], "rra" => $attr["rra"], "invoice" => $paypal_invoice_input_value, "checksum" => md5 ($paypal_invoice_input_value . $_SERVER["REMOTE_ADDR"] . $attr["level_ccaps_eotper"]));
+								$success_return_tra = array("ta" => $attr["ta"], "tp" => $attr["tp"], "tt" => $attr["tt"], "ra" => $attr["ra"], "rp" => $attr["rp"], "rt" => $attr["rt"], "rr" => $attr["rr"], "rrt" => $attr["rrt"], "rra" => $attr["rra"], "invoice" => $paypal_invoice_input_value, "checksum" => md5 ($paypal_invoice_input_value . c_ws_plugin__s2member_utils_ip::current() . $attr["level_ccaps_eotper"]));
 
 								$success_return_url = /* s2Member handles this all by itself. However, it can be Filtered (see below). */ home_url ("/?s2member_paypal_return=1", $force_return_url_scheme);
 								$success_return_url = add_query_arg ("s2member_paypal_return_tra", urlencode (c_ws_plugin__s2member_utils_encryption::encrypt (serialize ($success_return_tra))), $success_return_url);
