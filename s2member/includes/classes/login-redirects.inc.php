@@ -56,7 +56,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 				update_user_option($user_id, 's2member_login_counter', $logins);
 
 				if(!get_user_option('s2member_registration_ip', $user_id))
-					update_user_option($user_id, 's2member_registration_ip', $_SERVER['REMOTE_ADDR']);
+					update_user_option($user_id, 's2member_registration_ip', c_ws_plugin__s2member_utils_ip::current());
 
 				if($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_password'])
 					{
@@ -66,7 +66,7 @@ if(!class_exists('c_ws_plugin__s2member_login_redirects'))
 				$ok = TRUE; // Initialize IP restriction being OK here. This is for filters.
 				if($username !== 'demo' && !is_super_admin($user_id) // Exclude the `demo` user, super admins, and anyone who can edit posts.
 				   && !apply_filters('ws_plugin__s2member_disable_login_ip_restrictions', $user->has_cap('edit_posts') ? TRUE : FALSE, get_defined_vars())
-				) $ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok($_SERVER['REMOTE_ADDR'], strtolower($username));
+				) $ok = c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok(c_ws_plugin__s2member_utils_ip::current(), strtolower($username));
 
 				if(apply_filters('ws_plugin__s2member_login_redirection_always_http', force_ssl_admin() && stripos(get_option('siteurl'), 'https://') !== 0))
 					if(!empty($_REQUEST['redirect_to']) && is_string($_REQUEST['redirect_to']) && strpos($_REQUEST['redirect_to'], 'wp-admin') === FALSE)

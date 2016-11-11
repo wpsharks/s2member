@@ -883,7 +883,7 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			 * @see `$_SERVER['REMOTE_ADDR']`
 			 */
 			if(!defined('S2MEMBER_CURRENT_USER_IP'))
-				define ('S2MEMBER_CURRENT_USER_IP', ($c[] = (string)@$_SERVER['REMOTE_ADDR']));
+				define ('S2MEMBER_CURRENT_USER_IP', ($c[] = c_ws_plugin__s2member_utils_ip::current()));
 
 			/**
 			 * IP Address the current User had during registration.
@@ -2372,7 +2372,7 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			 * @see `Dashboard → s2Member → PayPal Buttons`
 			 */
 			if(!defined('S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1'))
-				define ('S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1', ($c[] = 'Customer IP Address' /* Via $_SERVER['REMOTE_ADDR'] below. */));
+				define ('S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1', ($c[] = 'Customer IP Address'));
 
 			/**
 			 * PayPal value for Payment Buttons with input name: `os1`.
@@ -2428,7 +2428,7 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			 * @see `Dashboard → s2Member → PayPal Buttons`
 			 */
 			if(!defined('S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1'))
-				define ('S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1', ($c[] = (string)@$_SERVER['REMOTE_ADDR']));
+				define ('S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1', ($c[] = c_ws_plugin__s2member_utils_ip::current()));
 
 			/*
 			Allows other Constants to be calculated with their checksums included too.

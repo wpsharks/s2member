@@ -143,7 +143,7 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 		/**
 		 * Creates a File Download Key.
 		 *
-		 * Builds a hash of: ``date('Y-m-d') . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] . $file``.
+		 * Builds a hash of: ``date('Y-m-d') . c_ws_plugin__s2member_utils_ip::current() . $_SERVER['HTTP_USER_AGENT'] . $file``.
 		 *
 		 * @package s2Member\Files
 		 * @since 3.5
@@ -165,13 +165,13 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 			$file = ($file && is_string($file) && ($file = trim($file, '/'))) ? $file : '';
 
 			if($directive === 'ip-forever' && c_ws_plugin__s2member_no_cache::no_cache_constants(TRUE))
-				$salt = $file.$_SERVER['REMOTE_ADDR'];
+				$salt = $file.c_ws_plugin__s2member_utils_ip::current();
 
 			else if($directive === 'universal' || $directive === 'cache-compatible' || $directive)
 				$salt = $file; // Just the file name. This IS cacheable.
 
 			else if(c_ws_plugin__s2member_no_cache::no_cache_constants(TRUE))
-				$salt = date('Y-m-d').$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'].$file;
+				$salt = date('Y-m-d').c_ws_plugin__s2member_utils_ip::current().$_SERVER['HTTP_USER_AGENT'].$file;
 
 			$key = (!empty($salt)) ? md5(c_ws_plugin__s2member_utils_encryption::xencrypt($salt, FALSE, FALSE)) : '';
 

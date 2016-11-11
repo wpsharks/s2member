@@ -101,7 +101,7 @@ if (!class_exists ('c_ws_plugin__s2member_utils_captchas'))
 
 						if(self::recaptcha_version() === '2') // New API verifier.
 							{
-								$api_post_vars = array('secret' => $keys['private'], 'response' => $response, 'remoteip' => $_SERVER['REMOTE_ADDR']);
+								$api_post_vars = array('secret' => $keys['private'], 'response' => $response, 'remoteip' => c_ws_plugin__s2member_utils_ip::current());
 								$api_response  = c_ws_plugin__s2member_utils_urls::remote('https://www.google.com/recaptcha/api/siteverify', $api_post_vars);
 								$api_response  = json_decode($api_response);
 
@@ -109,7 +109,7 @@ if (!class_exists ('c_ws_plugin__s2member_utils_captchas'))
 							}
 						else // Old API call; note that this is NOT over SSL for some reason.
 							{
-								$api_post_vars = array('privatekey' => $keys['private'], 'challenge' => $challenge, 'response' => $response, 'remoteip' => $_SERVER['REMOTE_ADDR']);
+								$api_post_vars = array('privatekey' => $keys['private'], 'challenge' => $challenge, 'response' => $response, 'remoteip' => c_ws_plugin__s2member_utils_ip::current());
 								$api_response  = c_ws_plugin__s2member_utils_urls::remote ('http://www.google.com/recaptcha/api/verify', $api_post_vars);
 
 								return preg_match('/^true/i', trim($api_response));

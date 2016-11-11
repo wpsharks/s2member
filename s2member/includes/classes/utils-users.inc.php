@@ -363,7 +363,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					return c_ws_plugin__s2member_user_access::user_access_ccaps($user);
 
 				else if(strcasecmp($field_id, 'ip') === 0 && !empty($current_user->ID) && $current_user->ID === $user_id)
-					return $_SERVER['REMOTE_ADDR']; // Current IP address.
+					return c_ws_plugin__s2member_utils_ip::current(); // Current IP address.
 
 				else if(strcasecmp($field_id, 's2member_registration_ip') === 0 || strcasecmp($field_id, 'reg_ip') === 0 || strcasecmp($field_id, 'ip') === 0)
 					return get_user_option('s2member_registration_ip', $user_id);

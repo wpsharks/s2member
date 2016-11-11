@@ -51,7 +51,7 @@ if(!class_exists('c_ws_plugin__s2member_brute_force'))
 				$exp_secs = strtotime('+'.apply_filters('ws_plugin__s2member_track_failed_logins__exp_time', '30 minutes', get_defined_vars())) - time();
 				// If you add Filters to this value, you should use a string that is compatible with PHP's strtotime() function.
 
-				$ip = $_SERVER['REMOTE_ADDR']; // Default value.
+				$ip = c_ws_plugin__s2member_utils_ip::current(); // Default value.
 				if(!empty($GLOBALS['s2member_pro_remote_op_auth_check_user_ip'])
 				   && c_ws_plugin__s2member_utils_conds::pro_is_installed()
 				   && c_ws_plugin__s2member_pro_remote_ops::is_remote_op('auth_check_user')
@@ -87,7 +87,7 @@ if(!class_exists('c_ws_plugin__s2member_brute_force'))
 
 			if(($max = $GLOBALS['WS_PLUGIN__']['s2member']['o']['max_failed_login_attempts']))
 			{
-				$ip = $_SERVER['REMOTE_ADDR']; // Default value.
+				$ip = c_ws_plugin__s2member_utils_ip::current(); // Default value.
 				if(!empty($GLOBALS['s2member_pro_remote_op_auth_check_user_ip'])
 				   && c_ws_plugin__s2member_utils_conds::pro_is_installed()
 				   && c_ws_plugin__s2member_pro_remote_ops::is_remote_op('auth_check_user')

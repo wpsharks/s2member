@@ -115,7 +115,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 				($email = $user->user_email),
 				($fname = $user->first_name),
 				($lname = $user->last_name),
-				($ip = @$_SERVER['REMOTE_ADDR']),
+				($ip = c_ws_plugin__s2member_utils_ip::current()),
 				($opt_in = $opt_in),
 				($double_opt_in = $double_opt_in),
 				($user_id = $user->ID)
@@ -202,7 +202,7 @@ if(!class_exists('c_ws_plugin__s2member_list_servers'))
 				($email = $user->user_email),
 				($fname = $user->first_name),
 				($lname = $user->last_name),
-				($ip = @$_SERVER['REMOTE_ADDR']),
+				($ip = c_ws_plugin__s2member_utils_ip::current()),
 				($opt_out = $opt_out),
 				($user_id = $user->ID)
 			);

@@ -117,7 +117,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 																if (!$read_only && !empty($_g["s2member_sp_access"])) // Add to session?
 																	c_ws_plugin__s2member_sp_access::sp_access_session ($_g["s2member_sp_access"]);
 
-																if ($read_only || c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok ($_SERVER["REMOTE_ADDR"], $sp_access_value))
+																if ($read_only || c_ws_plugin__s2member_ip_restrictions::ip_restrictions_ok (c_ws_plugin__s2member_utils_ip::current(), $sp_access_value))
 																	return apply_filters("ws_plugin__s2member_sp_access", $sp_access_value, get_defined_vars (), "auth-via-link-session");
 															}
 													}
