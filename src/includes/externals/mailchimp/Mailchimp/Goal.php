@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Goal {
     public function __construct(Mailchimp $master) {
@@ -45,5 +46,3 @@ a particular event multiple times, you will still only receive one entry for tha
     }
 
 }
-
-

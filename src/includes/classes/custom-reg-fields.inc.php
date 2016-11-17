@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
 * Custom Registration/Profile Fields for s2Member.
 *

@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * The main plugin file.
  *
@@ -19,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 160801
-Stable tag: 160801
+Version: 161117
+Stable tag: 161117
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -35,11 +36,11 @@ Authorize.Net Compatible: yes w/s2Member Pro
 Google Wallet Compatible: yes w/s2Member Pro
 ClickBank Compatible: yes w/s2Member Pro
 
-Tested up to: 4.6
+Tested up to: 4.7-alpha
 Requires at least: 4.2
 
-Requires PHP: 5.2+
-Tested up to PHP: 7.0.8
+Requires PHP: 5.2
+Tested up to PHP: 7.0.11
 
 Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License
@@ -80,7 +81,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '160801'; //version//
+${__FILE__}['tmp'] = '161117'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**
@@ -113,7 +114,7 @@ if(!defined('WS_PLUGIN__S2MEMBER_MIN_WP_VERSION'))
  *
  * @var string
  */
-${__FILE__}['tmp'] = '160801'; //version//
+${__FILE__}['tmp'] = '161117'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION', ${__FILE__}['tmp']);
 /*

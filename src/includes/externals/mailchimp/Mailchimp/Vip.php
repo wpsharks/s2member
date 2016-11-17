@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Vip {
     public function __construct(Mailchimp $master) {
@@ -107,5 +108,3 @@ class Mailchimp_Vip {
     }
 
 }
-
-

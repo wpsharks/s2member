@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Neapolitan {
     public function __construct(Mailchimp $master) {
@@ -6,5 +7,3 @@ class Mailchimp_Neapolitan {
     }
 
 }
-
-

@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * Cron routines handled by s2Member (inner processing routines).
  *

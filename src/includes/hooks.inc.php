@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * Primary Hooks/Filters used by the s2Member plugin.
  *

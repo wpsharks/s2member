@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Conversations {
     public function __construct(Mailchimp $master) {
@@ -76,5 +77,3 @@ class Mailchimp_Conversations {
     }
 
 }
-
-

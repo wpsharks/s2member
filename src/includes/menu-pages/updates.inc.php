@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * Newsletter/Updates for Menu Pages.
  *

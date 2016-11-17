@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * s2Member's Auto-EOT System *(EOT = End Of Term)*.
  *

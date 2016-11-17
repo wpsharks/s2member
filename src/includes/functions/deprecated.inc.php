@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
 * Deprecated functions from previous versions of s2Member.
 *

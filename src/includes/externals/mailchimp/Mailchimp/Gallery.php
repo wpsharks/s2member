@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Gallery {
     public function __construct(Mailchimp $master) {
@@ -102,5 +103,3 @@ class Mailchimp_Gallery {
     }
 
 }
-
-

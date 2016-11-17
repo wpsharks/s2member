@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * s2Member Profile modifications (inner processing routines).
  *

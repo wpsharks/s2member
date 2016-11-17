@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * s2Member's Page protection routines *(for current Page)*.
  *

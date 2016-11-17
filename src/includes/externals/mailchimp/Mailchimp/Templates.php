@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Templates {
     public function __construct(Mailchimp $master) {
@@ -110,5 +111,3 @@ class Mailchimp_Templates {
     }
 
 }
-
-

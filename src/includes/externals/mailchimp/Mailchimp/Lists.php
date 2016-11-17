@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Lists {
     public function __construct(Mailchimp $master) {
@@ -900,5 +901,3 @@ consider using lists/batch-subscribe() with the update_existing and possible rep
     }
 
 }
-
-

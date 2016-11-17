@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
 * s2Member's PayPal Auto-Return/PDT handler (inner processing routines).
 *

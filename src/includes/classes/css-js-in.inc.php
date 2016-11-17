@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * CSS/JS loading handlers for s2Member (inner processing routines).
  *

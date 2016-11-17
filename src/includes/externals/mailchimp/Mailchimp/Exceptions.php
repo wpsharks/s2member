@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Error extends Exception {}
 class Mailchimp_HttpError extends Mailchimp_Error {}
@@ -467,5 +468,3 @@ class Mailchimp_Folder_Not_Found_Exception extends Mailchimp_Error {}
  * None
  */
 class Mailchimp_Folder_Exists_Exception extends Mailchimp_Error {}
-
-

@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Ecomm {
     public function __construct(Mailchimp $master) {
@@ -82,5 +83,3 @@ class Mailchimp_Ecomm {
     }
 
 }
-
-

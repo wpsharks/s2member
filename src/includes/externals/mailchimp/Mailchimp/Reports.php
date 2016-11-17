@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Reports {
     public function __construct(Mailchimp $master) {
@@ -455,5 +456,3 @@ or campaignEmailStatsAIMAll() and generate any additional stats they require.
     }
 
 }
-
-

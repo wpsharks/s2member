@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * Shortcode `[s2Get /]` (inner processing routines).
  *

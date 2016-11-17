@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * Shortcode for `[s2Member-Security-Badge /]`.
  *

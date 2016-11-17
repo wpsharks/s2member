@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Users {
     public function __construct(Mailchimp $master) {
@@ -101,5 +102,3 @@ class Mailchimp_Users {
     }
 
 }
-
-

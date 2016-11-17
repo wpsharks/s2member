@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 /**
  * File Download routines for s2Member (inner processing routines).
  *

@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class Mailchimp_Helper {
     public function __construct(Mailchimp $master) {
@@ -233,5 +234,3 @@ string back that will explain our view on what is going on.
     }
 
 }
-
-

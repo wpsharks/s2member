@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 if(!defined('WPINC')) // MUST have WordPress.
 	 exit("Do not access this file directly.");
 ?>

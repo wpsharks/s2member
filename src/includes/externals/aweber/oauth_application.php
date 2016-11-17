@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 if (!class_exists('CurlObject')) require_once('curl_object.php');
 if (!class_exists('CurlResponse')) require_once('curl_response.php');
 

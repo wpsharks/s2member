@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 class AWeberEntryDataArray implements ArrayAccess, Countable, Iterator  {
     private $counter = 0;
