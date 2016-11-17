@@ -32,6 +32,8 @@
 
 - (s2Member/s2Member Pro) Enforce data types when determining PHP constants. See [this GitHub issue](https://github.com/websharks/s2member/issues/989) if you'd like further details.
 
+- (s2Member/s2Member Pro) **Phing Build Routines:** Starting with this release, developers working on the s2Member project are now able to perform builds of the software via the `websharks/phings` project; i.e., the structure of the plugin directories has been changed (slightly) to conform to Phing and PSR4 standards. This makes it easier for our developers to prepare and release new versions of the software in the future.
+
 = v160801 =
 
 - (s2Member/s2Member Pro) **WP v4.6 Compatibility.** A full round of tests was performed against this release of s2Member, s2Member Pro, and the upcoming release of WordPress v4.6. In particular, the new HTTP API needed testing, along with the new optimized loading sequence in WordPress v4.6. Our tests indicate there are no compatibility issues, and we therefore encourage all s2Member site owners to upgrade to WordPress v4.6 whenever it becomes available publicly.
