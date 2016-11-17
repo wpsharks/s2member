@@ -1,4 +1,4 @@
-== Translations ==
+## Translations
 
 s2Member and s2Member Pro are now equipped with support for front-end translation, using standardized WordPress® methodologies; i.e., we've implemented the use of `_x()`, and various other translation routines for many aspects of s2Member's front-end interfaces. For instance, things like Profile panels, Login/Registration Fields, and Pro-Form integrations; as well as error messages displayed to Users/Members. Translation support for back-end admin panels provided by s2Member will come in a future release, along with more extensive translation support for front-end aspects.
 
@@ -12,7 +12,7 @@ If this is your first translation of a WordPress® plugin, [this article](http:/
 
 Quick Tip: If you only need to translate the front-end of s2Member, please ignore entries in the `s2member.pot` file with a context matching `s2member-admin`. Those sections of s2Member are only seen by site Administrators; they are NOT used in s2Member's front-end integration with WordPress®. Skipping over translation entries with a context matching `s2member-admin` can save you time.
 
-== Existing Translations (Updating Your PO File)? ==
+### Existing Translations (Updating Your PO File)?
 
 FUZZY translation entries: If you're updating an existing PO file (e.g., recompiling your MO file after changes in a new release of s2Member); please be sure to manually review any "fuzzy" entries. A fuzzy entry can occur as a result of changes from one release of s2Member (or s2Member Pro) to the next; where small changes in text might render your translation invalid (e.g., fuzzy).
 
