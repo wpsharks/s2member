@@ -1,0 +1,18 @@
+project_title                                           = s2Member
+
+project_owner                                           = websharks
+project_slug                                            = s2member
+
+project_namespace                                       = WebSharks\\s2Member
+project_sub_namespace                                   = s2Member
+
+project_text_domain                                     = s2member
+project_slack_channel                                   = s2member
+
+project_version                                         = %y%m%d
+
+project_php_required_version                            = 5.2
+project_php_tested_up_to_version                        = ${php.version}
+
+project_wp_required_version                             = 4.2
+project_wp_tested_up_to_version                         = 4.7-alpha

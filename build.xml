@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="PHP PSR-4 Project" default="build">
+  <import file="phings/src/psr4/targets.xml" />
+</project>

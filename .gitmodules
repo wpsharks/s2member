@@ -1,0 +1,3 @@
+[submodule "phings"]
+	path = phings
+	url = https://github.com/websharks/phings.git
