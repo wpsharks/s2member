@@ -104,7 +104,7 @@ if(!class_exists("c_ws_plugin__s2member_translations"))
 			}
 			else if((isset ($s["is_wp_login_checkemail"]) && $s["is_wp_login_checkemail"]) || (!isset ($s["is_wp_login_checkemail"]) && ($s["is_wp_login_checkemail"] = (strpos($_SERVER["REQUEST_URI"], "/wp-login.php") !== FALSE && empty($_REQUEST["action"]) && !empty($_REQUEST["checkemail"]) && $_REQUEST["checkemail"] === "registered") ? TRUE : FALSE)))
 			{
-				if($original === "Registration complete. Please check your e-mail." && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"])
+				if(($original === "Registration complete. Please check your email." || $original === "Registration complete. Please check your e-mail.") && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"])
 				{
 					$translated = apply_filters("ws_plugin__s2member_translation_mangler", _x("Registration complete. Please log in.", "s2member-front", "s2member"), get_defined_vars());
 				}
