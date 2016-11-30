@@ -209,6 +209,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				while(@ob_end_clean()); // Clean output buffers.
 
 				if (!empty($paypal['s2member_paypal_proxy_return_url'])) {
+					if(preg_match('/^https?%3A/ui', $paypal['s2member_paypal_proxy_return_url'])) {
+						$paypal['s2member_paypal_proxy_return_url'] = urldecode($paypal['s2member_paypal_proxy_return_url']);
+					} // See: <https://github.com/websharks/s2member/issues/1024>
 					exit($paypal['s2member_paypal_proxy_return_url']);
 				} elseif (!empty($paypal['s2member_indicator'])) {
 					exit($paypal['s2member_indicator']);
