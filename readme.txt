@@ -50,7 +50,7 @@ PayPal Pro Integration: http://s2member.com/r/pp-account-types/
 Professional Installation URI: http://s2member.com/r/professional-installation/
 
 Description: s2Member®—a powerful (free) membership plugin for WordPress®. Protect members only content with roles/capabilities.
-Tags: s2, s2member, s2 member, membership, users, user, members, member, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, stripe, bitcoin, paypal, paypal pro, pay pal, authorize, authorize.net, google wallet, clickbank, click bank, buddypress, buddy press, bbpress, bb press, shopping cart, cart, checkout, ecommerce
+Tags: membership, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, ecommerce, restriction
 
 s2Member®—a powerful (free) membership plugin for WordPress®. Protect members only content with roles/capabilities.
 
