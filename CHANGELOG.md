@@ -1,7 +1,7 @@
 = [coming soon] =
 
 - (s2Member Pro) **Bug Fix:** Allow Pro-Forms to use `success="%%sp_access_url%%"` without issue. See [Issue #1024](https://github.com/websharks/s2member/issues/1024).
-- (s2Member/s2Member Pro) **AWS Region:** Adding AWS region `ap-northeast-2`. See [Issue #57](https://github.com/websharks/s2member.com/issues/57).
+- (s2Member/s2Member Pro) **AWS Region:** Adding AWS region `ap-northeast-2`. See [Issue #1033](https://github.com/websharks/s2member/issues/1033).
 
 = v161129 =
 
