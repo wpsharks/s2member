@@ -291,6 +291,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<option value="ap-southeast-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-southeast-1') ? ' selected="selected"' : '').'>ap-southeast-1</option>'."\n";
 				echo '<option value="ap-southeast-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-southeast-2') ? ' selected="selected"' : '').'>ap-southeast-2</option>'."\n";
 				echo '<option value="ap-northeast-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-northeast-1') ? ' selected="selected"' : '').'>ap-northeast-1</option>'."\n";
+				echo '<option value="ap-northeast-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-northeast-2') ? ' selected="selected"' : '').'>ap-northeast-2</option>'."\n";
 				echo '<option value="sa-east-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'sa-east-1') ? ' selected="selected"' : '').'>sa-east-1</option>'."\n";
 				echo '<option value="us-gov-west-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-gov-west-1') ? ' selected="selected"' : '').'>us-gov-west-1</option>'."\n";
 				echo '</select><br />'."\n";
