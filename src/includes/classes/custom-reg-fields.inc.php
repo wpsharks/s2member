@@ -573,7 +573,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 					$errors                   = array(); // Initialize the array of errors.
 					$force_personal_emails    = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_force_personal_emails'][0]) ? TRUE : FALSE;
-					$non_personal_email_users = '/^(?:'.implode('|', preg_split('/[\s;,]+/', preg_quote($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_force_personal_emails'], '/'))).'@/i';
+					$non_personal_email_users = '/^(?:'.implode('|', preg_split('/[\s;,]+/', preg_quote($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_force_personal_emails'], '/'))).')@/i';
 
 					foreach($fields_to_validate as $_field)
 					{

@@ -2,6 +2,7 @@
 
 - (s2Member Pro) **Bug Fix:** Allow Pro-Forms to use `success="%%sp_access_url%%"` without issue. See [Issue #1024](https://github.com/websharks/s2member/issues/1024).
 - (s2Member/s2Member Pro) **AWS Region:** Adding AWS region `ap-northeast-2`. See [Issue #1033](https://github.com/websharks/s2member/issues/1033).
+- (s2Member) **Bug Fix:** This release corrects a minor server-side validation bug that was related to the use of non-personal email address. See [Thread #1195](https://forums.wpsharks.com/t/bugfix-file-custom-reg-fields-inc-php-missing-bracket/1195).
 
 = v161129 =
 
