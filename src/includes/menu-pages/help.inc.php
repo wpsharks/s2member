@@ -82,7 +82,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_help"))
 						echo '<div class="ws-menu-page-group" title="s2Member Tech. Support (for Pro Customers)" default-state="open">' . "\n";
 
 						echo '<div class="ws-menu-page-section ws-plugin--s2member-support">' . "\n";
-						echo '<p style="max-width:900px;">Support for s2Member® is provided by WebSharks, Inc. Our customer support representatives are available Monday through Friday, excluding all major holidays. Or, you can discuss problems/solutions with others in our <a href="https://wordpress.org/support/plugin/s2member" target="_blank" rel="external">public community forum</a>.</p>'."\n";
+						echo '<p style="max-width:900px;">Support for s2Member® is provided by WebSharks, Inc. Our customer support representatives are available Monday through Friday, excluding all major holidays. Or, you can discuss problems/solutions with others in our <a href="http://s2member.com/r/forums/" target="_blank" rel="external">public community forum</a>.</p>'."\n";
 
 						echo '<ul>'."\n";
 						echo '<li>For pre-sale questions please see: <a href="http://s2member.com/kb/kb-tag/pre-sale-faqs/" target="_blank" rel="external">Pre-Sale FAQs</a>.</li>'."\n";

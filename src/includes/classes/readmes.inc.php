@@ -46,8 +46,8 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 					{
 						if (!($path = $specific_path)) // Was a specific path passed in?
 							{
-								$path = dirname (dirname (dirname (__FILE__))) . "/readme.txt";
-								$dev_path = dirname (dirname (dirname (__FILE__))) . "/readme-dev.txt";
+								$path = dirname (dirname (dirname (dirname (__FILE__)))) . "/readme.txt";
+								$dev_path = dirname (dirname (dirname (dirname (__FILE__)))) . "/readme-dev.txt";
 								$path = (file_exists ($dev_path)) ? $dev_path : $path;
 							}
 
@@ -207,8 +207,8 @@ if (!class_exists ("c_ws_plugin__s2member_readmes"))
 
 						if (!($path = $specific_path)) // Was a specific path passed in?
 							{
-								$path = dirname (dirname (dirname (__FILE__))) . "/readme.txt";
-								$dev_path = dirname (dirname (dirname (__FILE__))) . "/readme-dev.txt";
+								$path = dirname (dirname (dirname (dirname (__FILE__)))) . "/readme.txt";
+								$dev_path = dirname (dirname (dirname (dirname (__FILE__)))) . "/readme-dev.txt";
 								$path = (file_exists ($dev_path)) ? $dev_path : $path;
 							}
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;

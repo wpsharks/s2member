@@ -51,13 +51,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_pages_rs"))
 						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["menu_pages"]["upsell-pro"])
 							{
 								echo '<div class="ws-menu-page-others">' . "\n";
-								echo '<a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Pro Add-on / Prices")) . '" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/src/images/brand-upsell-pro.png" alt="." /></a>' . "\n";
-								echo '</div>' . "\n";
-							}
-						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["menu_pages"]["installation"])
-							{
-								echo '<div class="ws-menu-page-installation">' . "\n";
-								echo '<a href="' . esc_attr (c_ws_plugin__s2member_readmes::parse_readme_value ("Professional Installation URI")) . '" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/src/images/brand-installation.png" alt="." /></a>' . "\n";
+								echo '<a href="http://s2member.com/prices/" target="_blank"><img src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/src/images/brand-upsell-pro.png" alt="." /></a>' . "\n";
 								echo '</div>' . "\n";
 							}
 						if ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["menu_pages"]["tools"])

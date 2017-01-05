@@ -43,11 +43,7 @@ Changelog URI: http://s2member.com/changelog/
 Video Tutorials: http://s2member.com/videos/
 Knowledge Base: http://s2member.com/kb/
 Newsletter: http://s2member.com/r/subscribe/
-Pro Add-on / Home Page: http://s2member.com/
-Pro Add-on / Prices: http://s2member.com/prices/
-Pro Add-on / Auto-Update URL: https://www.s2member.com/
 PayPal Pro Integration: http://s2member.com/r/pp-account-types/
-Professional Installation URI: http://s2member.com/r/professional-installation/
 
 Description: s2Member®—a powerful (free) membership plugin for WordPress®. Protect members only content with roles/capabilities.
 Tags: membership, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, ecommerce, restriction
@@ -56,7 +52,7 @@ s2Member®—a powerful (free) membership plugin for WordPress®. Protect member
 
 == Description ==
 
-**NOTICE:** The support forum at WordPress is for community interaction only. If you are an s2Member Pro customer in need of support, please use [our support center](http://www.s2member.com/contact/).
+**NOTICE:** The support forum at WordPress is for community interaction only. If you are an s2Member Pro customer in need of support, please use [our support center](http://s2member.com/support/).
 
 ---
 
@@ -66,7 +62,7 @@ Protect your WordPress Posts, Pages, Tags, Categories, URIs, BuddyPress/bbPress,
 
 s2Member is powered almost entirely by WordPress shortcodes, making complex integrations quick & easy. Sell recurring (or non-recurring) subscriptions with lots of flexibility. Or sell "Buy Now" access in various ways. You can also sell specific Posts/Pages, sell access to file downloads, or sell Custom Capabilities that provide highly configurable access to specific portions of your content.
 
-You can learn more at [s2Member.com](http://www.s2member.com/).
+You can learn more at [s2Member.com](http://s2member.com/).
 
 = Reasons to upgrade to "s2Member® Pro" =
 
@@ -77,11 +73,11 @@ You can learn more at [s2Member.com](http://www.s2member.com/).
 
 With 1000's of customers, an intelligent open-community, comprehensive documentation, video tutorials, APIs, the s2Member Codex, KB articles, and over 50,000 forum posts; s2Member just can't be beat!
 
-Secure WordPress content and offer users/members a secure checkout solution that integrates seamlessly with WordPress Roles/Capabilities. It's like a cash machine. s2Member puts money back in your pocket with every customer you acquire. You can learn more at [s2Member.com](http://www.s2member.com/).
+Secure WordPress content and offer users/members a secure checkout solution that integrates seamlessly with WordPress Roles/Capabilities. It's like a cash machine. s2Member puts money back in your pocket with every customer you acquire. You can learn more at [s2Member.com](http://s2member.com/).
 
 == Installation ==
 
-**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://www.s2member.com/contact/).
+**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://s2member.com/support/).
 
 ---
 
@@ -93,7 +89,7 @@ Secure WordPress content and offer users/members a secure checkout solution that
 
 = See Also (s2Member.com) =
 
-[Detailed installation/upgrade instructions](http://www.s2member.com/framework/#!s2_tab_jump=s2-framework-install-update).
+[Detailed installation/upgrade instructions](http://s2member.com/installation/).
 
 = Is s2Member compatible with Multisite Networking? =
 
@@ -111,7 +107,7 @@ Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networki
 
 == Frequently Asked Questions ==
 
-**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://www.s2member.com/contact/).
+**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://s2member.com/support/).
 
 ---
 
@@ -293,7 +289,7 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 - (s2Member) **Multisite Support:** This release of s2Member (the free version only) removes full support for Multisite Networks, which is now a Pro feature; i.e., only available in the Pro version.
 
   ##### Is s2Member still compatible with WordPress Multisite Networking?
-  Multisite support is no longer included in the s2Member Framework. However, it is available with s2Member Pro. s2Member Pro is compatible with Multisite Networking. After you enable Multisite Networking, install the s2Member Pro Add-On. Then, navigate to `s2Member → Multisite (Config)` in the Dashboard of your Main Site. You can learn more about s2Member Pro at [s2Member.com](http://www.s2member.com/).
+  Multisite support is no longer included in the s2Member Framework. However, it is available with s2Member Pro. s2Member Pro is compatible with Multisite Networking. After you enable Multisite Networking, install the s2Member Pro Add-On. Then, navigate to `s2Member → Multisite (Config)` in the Dashboard of your Main Site. You can learn more about s2Member Pro at [s2Member.com](http://s2member.com/).
 
   ##### I was using the free version in a Multisite Network before. What happened?
   s2Member (when running on a Multisite Network) requires minor alterations in WordPress core that are not compatible with plugins available at WordPress.org (i.e., not allowed) at this time. For this reason, full support for Multisite Networks is now available only in the pro version.
