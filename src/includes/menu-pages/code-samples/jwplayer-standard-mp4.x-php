@@ -6,8 +6,10 @@ $s2_jw_config["mp4_video_file_name"] = "video.mp4"; // Name of your MP4 test fil
 ?>
 
 <div id="jw-container">JW Player® appears here.</div>
-<script type="text/javascript" src="<?php echo $s2_jw_config["jwplayer"]; ?>jwplayer.js"></script>
-<script type="text/javascript">
+<script src="<?php echo $s2_jw_config["jwplayer"]; ?>jwplayer.js"></script>
+<script>jwplayer.key = 'YOUR KEY HERE';</script>
+
+<script>
 	jwplayer('jw-container').setup({
 			playlist:
 				[{
