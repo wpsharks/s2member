@@ -131,5 +131,27 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 			}
 			do_action('ws_plugin__s2member_after_add_js_w_globals', get_defined_vars());
 		}
+
+		/**
+		 * Disallow async loading.
+		 *
+		 * @package s2Member\CSS_JS
+		 * @since 17xxxx Enhancing CloudFlare compat.
+		 *
+		 * @attaches-to ``add_filter('script_loader_tag');``
+		 *
+		 * @param string $tag The script tag.
+		 * @param string $handle The script handle.
+		 *
+		 * @return string Possibly altered script tag.
+		 */
+		public static function script_loader_tag($tag = '', $handle = '')
+		{
+			if ($handle === 'ws-plugin--s2member') {
+				$tag = str_replace(' src=', ' data-cfasync="false" src=', $tag);
+			}
+			return $tag; // Prevent RocketLoader from loading async.
+			// See: <https://support.cloudflare.com/hc/en-us/articles/200169436-How-can-I-have-Rocket-Loader-ignore-my-script-s-in-Automatic-Mode->
+		}
 	}
 }

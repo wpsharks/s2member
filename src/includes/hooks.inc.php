@@ -71,6 +71,7 @@ add_filter('widget_text', 'do_shortcode'); // Shortcodes in widgets.
 
 add_action('wp_print_styles', 'c_ws_plugin__s2member_css_js_themes::add_css');
 add_action('wp_print_scripts', 'c_ws_plugin__s2member_css_js_themes::add_js_w_globals');
+add_filter('script_loader_tag', 'c_ws_plugin__s2member_css_js_themes::script_loader_tag', 10, 2);
 
 add_action('wp_login_failed', 'c_ws_plugin__s2member_brute_force::track_failed_logins');
 add_filter('authenticate', 'c_ws_plugin__s2member_brute_force::stop_brute_force_logins', 100);
