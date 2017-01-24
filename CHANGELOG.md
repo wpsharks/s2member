@@ -1,5 +1,6 @@
 = $v =
 
+- (s2Member/s2Member Pro) **JW Player v7:** This release adds support for JW Player v7 in the `[s2Stream /]` shortcode. See [Issue #774](https://github.com/websharks/s2member/issues/774).
 - (s2Member Pro) **Bug Fix:** Allow Pro-Forms to use `success="%%sp_access_url%%"` without issue. See [Issue #1024](https://github.com/websharks/s2member/issues/1024).
 - (s2Member/s2Member Pro) **AWS Region:** Adding AWS region `ap-northeast-2`. See [Issue #1033](https://github.com/websharks/s2member/issues/1033).
 - (s2Member) **Bug Fix:** This release corrects a minor server-side validation bug that was related to the use of non-personal email address. See [Thread #1195](https://forums.wpsharks.com/t/bugfix-file-custom-reg-fields-inc-php-missing-bracket/1195).
