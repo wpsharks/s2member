@@ -1,4 +1,4 @@
-= $v =
+= v170126-RC =
 
 - (s2Member/s2Member Pro) **JW Player v7:** This release adds support for JW Player v7 in the `[s2Stream /]` shortcode. See [Issue #774](https://github.com/websharks/s2member/issues/774).
 - (s2Member Pro) **Bug Fix:** Allow Pro-Forms to use `success="%%sp_access_url%%"` without issue. See [Issue #1024](https://github.com/websharks/s2member/issues/1024).
@@ -7,6 +7,7 @@
 - (s2Member) **Bug Fix:** Updated several outdated links within the software; e.g., removing older `www.` references, correcting forum links, and more. Also corrected missing changelog. See [Issue #1027](https://github.com/websharks/s2member/issues/1027).
 - (s2Member Pro) **Pro Upgrader:** The pro upgrader has been refactored and now asks for your s2Member Pro License Key instead of your s2Member.com password. The next time you upgrade to the most recent version of s2Member Pro, you will be asked for your License Key. You can obtain your License Key by logging into your account at s2Member.com. Once logged in, visit your 'My Account' page, where you will find your License Key right at the top. See [Issue #668](https://github.com/websharks/s2member/issues/668).
 - (s2Member/s2Member Pro) **CloudFlare Compat.:** Enhancing compatibility with Rocket Loader via `data-cfasync="false"` on dynamic s2Member scripts. See: [Issue #1038](https://github.com/websharks/s2member/issues/1038).
+
 = v161129 =
 
 - (s2Member Pro) **Bug Fix:** Stripe refund notifications via the Stripe Webhook were always interpreted by s2Member as full refunds. This release corrects this bug so that s2Member will handle partial refunds via the Stripe API properly in all cases. Props @raamdev for reporting.
