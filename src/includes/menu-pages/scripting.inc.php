@@ -159,8 +159,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
-										echo '<strong>See Also:</strong> <a href="http://www.s2member.com/codex/stable/s2member/api_constants/package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
+										echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="https://s2member.com/r/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
+										echo '<strong>See Also:</strong> <a href="https://s2member.com/r/s2member-codex-api-constants-package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="https://s2member.com/r/s2member-codex-api-functions-package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -248,8 +248,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
-								echo '<strong>See Also:</strong> <a href="http://www.s2member.com/codex/stable/s2member/api_constants/package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
+								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="https://s2member.com/r/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
+								echo '<strong>See Also:</strong> <a href="https://s2member.com/r/s2member-codex-api-constants-package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="https://s2member.com/r/s2member-codex-api-functions-package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -317,8 +317,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
-								echo '<strong>See Also:</strong> <a href="http://www.s2member.com/codex/stable/s2member/api_constants/package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
+								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="https://s2member.com/r/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
+								echo '<strong>See Also:</strong> <a href="https://s2member.com/r/s2member-codex-api-constants-package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="https://s2member.com/r/s2member-codex-api-functions-package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -369,12 +369,12 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<p>Now, if you\'d like to package together some variations of each Membership Level that you\'re selling, you can! All you do is add <strong>Custom Capabilities</strong> whenever you create your Payment Button and/or Form Shortcode (<em>there is a field in the Button &amp; Form Generators where you can enter Custom Capabilities</em>). You can sell Membership Packages that come with Custom Capabilities, and even with custom prices.</p>' . "\n";
 								echo '<p>Custom Capabilities are an extension to a feature that already exists in WordPress. The <code>current_user_can()</code> function, can be used to test for these additional Capabilities that you allow. Whenever a Member completes the checkout process, after having purchased a Membership from you (one that included Custom Capabilities), s2Member will add those Custom Capabilities to the account for that specific Member.</p>' . "\n";
 								echo '<p>Custom Capabilities are always prepended with <code>access_s2member_ccap_</code>. You fill in the last part, with ONLY lowercase alpha-numerics and/or underscores. For example, let\'s say you want to sell Membership Level #1, as is. But, you also want to sell a slight variation of Membership Level #1, that includes the ability to access the Music &amp; Video sections of your site. So, instead of selling this additional access under a whole new Membership Level, you could just sell a modified version of Membership Level #1. Add the the Custom Capabilities: <code>music,videos</code>. Once a Member has these Capabilities, you can test for these Capabilities using <code>current_user_can("access_s2member_ccap_music")</code> and <code>current_user_can("access_s2member_ccap_videos")</code>.</p>' . "\n";
-								echo '<p>The important thing to realize, is that Custom Capabilities, are just that. They\'re custom. s2Member only deals with the default Capabilities that it uses. If you start using Custom Capabilities, you MUST use Simple or Advanced Conditionals (<em>i.e., <a href="http://codex.wordpress.org/Function_Reference/current_user_can" target="_blank" rel="external"><code>current_user_can()</code></a> logic</em>) to test for them. Either in your theme files with PHP, or in Posts/Pages using <a href="http://www.s2member.com/kb/simple-shortcode-conditionals/" target="_blank" rel="external">Simple Conditionals</a> <em>(powered by Shortcodes)</em>.</p>' . "\n";
+								echo '<p>The important thing to realize, is that Custom Capabilities, are just that. They\'re custom. s2Member only deals with the default Capabilities that it uses. If you start using Custom Capabilities, you MUST use Simple or Advanced Conditionals (<em>i.e., <a href="https://s2member.com/r/wordpress-codex-current_user_can/" target="_blank" rel="external"><code>current_user_can()</code></a> logic</em>) to test for them. Either in your theme files with PHP, or in Posts/Pages using <a href="http://www.s2member.com/kb/simple-shortcode-conditionals/" target="_blank" rel="external">Simple Conditionals</a> <em>(powered by Shortcodes)</em>.</p>' . "\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
 								echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/roles-caps/" target="_blank" rel="external">s2Member Roles/Capabilities (Including bbPress Support)</a>.</p>'."\n";
-								echo '<p><strong class="ws-menu-page-hilite">See also:</strong> This VIDEO tutorial: <a href="http://www.s2member.com/videos/A2C07377CF60025E/" target="_blank" rel="external">Using Custom Capabilities with s2Member</a> (by Lead Developer Jason Caldwell).</p>'."\n";
+								echo '<p><strong class="ws-menu-page-hilite">See also:</strong> This VIDEO tutorial: <a href="https://s2member.com/r/s2member-video-custom-capabilities-for-wordpress/" target="_blank" rel="external">Using Custom Capabilities with s2Member</a> (by Lead Developer Jason Caldwell).</p>'."\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -385,8 +385,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
-								echo '<strong>See Also:</strong> <a href="http://www.s2member.com/codex/stable/s2member/api_constants/package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.<br />' . "\n";
+								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="https://s2member.com/r/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
+								echo '<strong>See Also:</strong> <a href="https://s2member.com/r/s2member-codex-api-constants-package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="https://s2member.com/r/s2member-codex-api-functions-package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.<br />' . "\n";
 								echo '<strong>See Also:</strong> <a href="http://s2member.com/r/enhanced-capability-manager/" target="_blank" rel="external">Plugins → Enhanced Capability Manager</a> <em>(may come in handy for some)</em>.</p>' . "\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
@@ -417,8 +417,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
-								echo '<strong>See Also:</strong> <a href="http://www.s2member.com/codex/stable/s2member/api_constants/package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
+								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="https://s2member.com/r/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
+								echo '<strong>See Also:</strong> <a href="https://s2member.com/r/s2member-codex-api-constants-package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="https://s2member.com/r/s2member-codex-api-functions-package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -457,8 +457,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
-								echo '<strong>See Also:</strong> <a href="http://www.s2member.com/codex/stable/s2member/api_constants/package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
+								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="https://s2member.com/r/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
+								echo '<strong>See Also:</strong> <a href="https://s2member.com/r/s2member-codex-api-constants-package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="https://s2member.com/r/s2member-codex-api-functions-package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -735,8 +735,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-										echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
-										echo '<strong>See Also:</strong> <a href="http://www.s2member.com/codex/stable/s2member/api_constants/package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
+										echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="https://s2member.com/r/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
+										echo '<strong>See Also:</strong> <a href="https://s2member.com/r/s2member-codex-api-constants-package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="https://s2member.com/r/s2member-codex-api-functions-package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
 
 										echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
@@ -1086,13 +1086,13 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_scripting"))
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-api-hooks-section">' . "\n";
 								echo '<h3>WP Hooks For Theme/Plugin Developers (scripting required)</h3>' . "\n";
 								echo '<p>In addition to its API Constants, s2Member also makes several Hooks/Filters available throughout its framework. This makes it possible to build onto <em>(or even modify)</em> s2Member in lots of different ways. If you need to add custom processing routines, modify the behavior of existing processing routines, or tinker with things otherwise; you should use API Hooks/Filters. API Hooks &amp; Filters, give you the ability to "hook into", and/or "filter" processing routines, with files/functions of your own; instead of editing the s2Member plugin files directly. If you don\'t use a Hook/Filter, and instead, you edit the plugin files for s2Member, you\'ll have to merge all of your changes every time a new version of s2Member is released. If you create custom processing routines, you could place those routines into a PHP file here: <code>/wp-content/mu-plugins/s2-hacks.php</code>. If you don\'t have an <code>/mu-plugins/</code> directory, please create one. These are <em>(mu)</em> <a href="http://s2member.com/r/mu-plugins/" target="_blank" rel="external">MUST USE plugins</a>, which are loaded into WordPress automatically; that\'s what you want!</p>' . "\n";
-								echo '<p><strong>Attn Developers:</strong> There are simply too many Hooks/Filters spread throughout s2Member\'s framework <em>(over 1000 total)</em>. Rather than documenting each Hook/Filter, it is easier to browse through the files inside: <code>/s2member/src/includes/classes/</code>. Inspecting Hooks/Filters in this way, also leads you to a better understanding of how they work. One way to save time, is to run a search for <code>do_action</code> and/or <code>apply_filters</code>. If you\'re new to the concept of Hooks/Filters for WordPress/s2Member, we suggest <a href="http://www.s2member.com/codex/#src_doc_overview_description" target="_blank" rel="external">this article</a> as a primer. The <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a> also contains information about all Hooks/Filters that come with s2Member.</p>' . "\n";
+								echo '<p><strong>Attn Developers:</strong> There are simply too many Hooks/Filters spread throughout s2Member\'s framework <em>(over 1000 total)</em>. Rather than documenting each Hook/Filter, it is easier to browse through the files inside: <code>/s2member/src/includes/classes/</code>. Inspecting Hooks/Filters in this way, also leads you to a better understanding of how they work. One way to save time, is to run a search for <code>do_action</code> and/or <code>apply_filters</code>. If you\'re new to the concept of Hooks/Filters for WordPress/s2Member, we suggest <a href="https://s2member.com/r/s2member-codex-src_doc_overview_description/" target="_blank" rel="external">this article</a> as a primer. The <a href="https://s2member.com/r/codex/" target="_blank" rel="external">s2Member Codex</a> also contains information about all Hooks/Filters that come with s2Member.</p>' . "\n";
 								do_action("ws_plugin__s2member_during_scripting_page_during_left_sections_during_api_hooks", get_defined_vars ());
 
 								echo '<div class="ws-menu-page-hr"></div>' . "\n";
 
-								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="http://www.s2member.com/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
-								echo '<strong>See Also:</strong> <a href="http://www.s2member.com/codex/stable/s2member/api_constants/package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="http://www.s2member.com/codex/stable/s2member/api_functions/package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
+								echo '<p><strong>TIP:</strong> In addition to this documentation, you may also want to have a look at the <a href="https://s2member.com/r/codex/" target="_blank" rel="external">s2Member Codex</a>.<br />' . "\n";
+								echo '<strong>See Also:</strong> <a href="https://s2member.com/r/s2member-codex-api-constants-package-summary/" target="_blank" rel="external">s2Member Codex → API Constants</a>, and <a href="https://s2member.com/r/s2member-codex-api-functions-package-summary/" target="_blank" rel="external">s2Member Codex → API Functions</a>.</p>' . "\n";
 								echo '</div>' . "\n";
 
 								echo '</div>' . "\n";

@@ -48,17 +48,17 @@ Contributors: WebSharks, JasWSInc, anguz, raamdev, bruce-caldwell
 
 Author: s2Member / WebSharks, Inc.
 Author URI: http://s2member.com/
-Donate link: http://s2member.com/donate/
+Donate link: http://s2member.com/r/donate
 
 Text Domain: s2member
 Domain Path: /src/includes/translations
 
 Plugin Name: s2Member Framework
-Forum URI: http://s2member.com/forums/
+Forum URI: http://s2member.com/r/forum/
 Plugin URI: http://s2member.com/
 Privacy URI: http://s2member.com/privacy-policy/
 Changelog URI: http://s2member.com/changelog/
-Video Tutorials: http://s2member.com/videos/
+Video Tutorials: http://s2member.com/r/s2member-videos/
 Knowledge Base: http://s2member.com/kb/
 Newsletter: http://s2member.com/r/subscribe/
 PayPal Pro Integration: http://s2member.com/r/pp-account-types/

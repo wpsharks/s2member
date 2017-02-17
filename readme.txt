@@ -36,7 +36,7 @@ Text Domain: s2member
 Domain Path: /src/includes/translations
 
 Plugin Name: s2Member® Framework
-Forum URI: http://s2member.com/forums/
+Forum URI: http://s2member.com/r/forum/
 Plugin URI: http://s2member.com/
 Privacy URI: http://s2member.com/privacy-policy/
 Changelog URI: http://s2member.com/changelog/
@@ -116,7 +116,7 @@ Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networki
 * s2Member® FAQs: <http://s2member.com/faqs/>
 * Knowledge Base: <http://s2member.com/kb/>
 * Video Tutorials: <http://s2member.com/videos/>
-* Community: <http://s2member.com/forums/>
+* Community: <http://s2member.com/r/forum/>
 * Codex: <http://s2member.com/codex/>
 
 = Translating s2Member® =
