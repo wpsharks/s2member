@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 170126-RC
-Stable tag: 170126-RC
+Version: 170221
+Stable tag: 170221
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -21,7 +21,7 @@ Tested up to: 4.8-alpha
 Requires at least: 4.2
 
 Requires PHP: 5.2
-Tested up to PHP: 7.0.14
+Tested up to PHP: 7.0.15
 
 Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License v2 or later.
@@ -40,7 +40,7 @@ Forum URI: http://s2member.com/r/forum/
 Plugin URI: http://s2member.com/
 Privacy URI: http://s2member.com/privacy-policy/
 Changelog URI: http://s2member.com/changelog/
-Video Tutorials: http://s2member.com/videos/
+Video Tutorials: http://s2member.com/r/s2member-videos/
 Knowledge Base: http://s2member.com/kb/
 Newsletter: http://s2member.com/r/subscribe/
 PayPal Pro Integration: http://s2member.com/r/pp-account-types/
@@ -170,6 +170,24 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v170221 =
+
+- (s2Member/s2Member Pro) **JW Player v7:** This release adds support for JW Player v7 in the `[s2Stream /]` shortcode. See [Issue #774](https://github.com/websharks/s2member/issues/774).
+
+- (s2Member Pro) **Bug Fix:** Allow Pro-Forms to use `success="%%sp_access_url%%"` without issue. See [Issue #1024](https://github.com/websharks/s2member/issues/1024).
+
+- (s2Member/s2Member Pro) **AWS Region:** Adding AWS region `ap-northeast-2`. See [Issue #1033](https://github.com/websharks/s2member/issues/1033).
+
+- (s2Member/s2Member Pro) **AWS Region:** Adding AWS region `eu-west-2`. See [Issue #1033](https://github.com/websharks/s2member/issues/1033).
+
+- (s2Member) **Bug Fix:** This release corrects a minor server-side validation bug that was related to the use of non-personal email address. See [Thread #1195](https://forums.wpsharks.com/t/bugfix-file-custom-reg-fields-inc-php-missing-bracket/1195) and [Issue #1054](https://github.com/websharks/s2member/issues/1054).
+
+- (s2Member) **Bug Fix:** Updated several outdated links within the software; e.g., removing older `www.` references, correcting forum links, and more. Also corrected missing changelog. See [Issue #1027](https://github.com/websharks/s2member/issues/1027).
+
+- (s2Member Pro) **Pro Upgrader:** The pro upgrader has been refactored and now asks for your s2Member Pro License Key instead of your s2Member.com password. The next time you upgrade to the most recent version of s2Member Pro, you will be asked for your License Key. You can obtain your License Key by logging into your account at s2Member.com. Once logged in, visit your 'My Account' page, where you will find your License Key right at the top. See [Issue #668](https://github.com/websharks/s2member/issues/668).
+
+- (s2Member/s2Member Pro) **CloudFlare Compat.:** Enhancing compatibility with Rocket Loader via `data-cfasync="false"` on dynamic s2Member scripts. See: [Issue #1038](https://github.com/websharks/s2member/issues/1038).
 
 = v161129 =
 

@@ -136,7 +136,7 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 		 * Disallow async loading.
 		 *
 		 * @package s2Member\CSS_JS
-		 * @since 17xxxx Enhancing CloudFlare compat.
+		 * @since 170221 Enhancing CloudFlare compat.
 		 *
 		 * @attaches-to ``add_filter('script_loader_tag');``
 		 *
