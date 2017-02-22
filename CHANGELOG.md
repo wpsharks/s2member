@@ -1,3 +1,7 @@
+= $v =
+
+- (s2Member Pro) **Bug Fix:** Updating PHP syntax in Simple Export tool, for compatibility w/ modern versions of PHP. Props @patdumond for reporting and helping us locate the underlying cause of this problem. See [Issue #1005](https://github.com/websharks/s2member/issues/1055).
+
 = v170221 =
 
 - (s2Member/s2Member Pro) **JW Player v7:** This release adds support for JW Player v7 in the `[s2Stream /]` shortcode. See [Issue #774](https://github.com/websharks/s2member/issues/774).
