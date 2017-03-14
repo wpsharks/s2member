@@ -293,7 +293,7 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 
 						$file        = $GLOBALS['WS_PLUGIN__']['s2member']['c']['files_dir'].'/'.$req['file_download'];
 						$pathinfo    = (!$using_amazon_storage && $file) ? pathinfo($file) : array();
-						$mimetype    = ($mimetypes[$extension]) ? $mimetypes[$extension] : 'application/octet-stream';
+						$mimetype    = !empty($mimetypes[$extension]) ? $mimetypes[$extension] : 'application/octet-stream';
 						$disposition = (($inline) ? 'inline' : 'attachment').'; filename="'.c_ws_plugin__s2member_utils_strings::esc_dq($basename).'"; filename*=UTF-8\'\''.rawurlencode($basename);
 						$length      = (!$using_amazon_storage && $file) ? filesize($file) : -1;
 
