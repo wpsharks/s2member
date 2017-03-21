@@ -6,6 +6,8 @@
 
 - (s2Member/s2Member Pro) **Bug Fix:** Resolving internal warning: 'PHP Warning: Parameter 2 to c_ws_plugin__s2member_querys::_query_level_access_coms() expected to be a reference, value given'. This was resolved by removing the strict 'by reference' requirement from the list of parameters requested by s2Member.
 
+- (s2Member/s2Member Pro) **Bug Fix:** Resolving internal warning: 'PHP Warning: Illegal string offset 'user_id' in s2member/src/includes/classes/sc-eots-in.inc.php'. This was resolved by typecasting `$attr` to an array in cases where WordPress core passes this as a string; e.g., when there are no attributes.
+
 = v170221 =
 
 - (s2Member/s2Member Pro) **JW Player v7:** This release adds support for JW Player v7 in the `[s2Stream /]` shortcode. See [Issue #774](https://github.com/websharks/s2member/issues/774).

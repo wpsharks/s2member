@@ -50,6 +50,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 
 			c_ws_plugin__s2member_no_cache::no_cache_constants(true);
 
+			$attr = (array) $attr; // Force an array.
+
 			$mode = ''; // Initialize shortcode mode and validate.
 			if(!empty($attr['mode']) && in_array(strtolower($attr['mode']), array('fixed', 'next'), TRUE))
 				$mode = strtolower($attr['mode']); // A specific mode; i.e., `fixed`, `next`.
@@ -76,7 +78,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 					'next_format'          => $mode ? '%%date%%' : '<strong class="s2member-sc-eot-label -next">'._x('Next Payment:', 's2member-front', 's2member').'</strong> <span class="s2member-sc-eot-date -next">%%date%%</span>',
 					'empty_format'         => $mode ? (in_array($subscr_gateway, array('stripe', 'paypal', 'clickbank'), TRUE) ? _x('N/A', 's2member-front', 's2member') : _x('—', 's2member-front', 's2member')) : '',
 				),
-				c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr)
+				c_ws_plugin__s2member_utils_strings::trim_qts_deep($attr)
 			);
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_sc_eot_details_after_shortcode_atts', get_defined_vars());
