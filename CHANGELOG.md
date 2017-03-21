@@ -4,6 +4,8 @@
 
 - (s2Member Pro) **Stripe Bug Fix:** This releases corrects a seemingly rare conflict between s2Member and Stripe on certain mobile devices and in certain scenarios. In a case we examined, there was a problematic CSS `z-index` setting in the s2Member source code that was, at times, causing problems in the stacking order, which resulted in a user's inability to enter details into the Stripe popup form. In this release, s2Member's customization of the `z-index` stacking order has been removed entirely, as it is no longer necessary in the latest revision of the Stripe popup, which already handles `z-index` adequately. Props @jaspuduf for reporting and for helping us diagnose the problem. See [Issue #1057](https://github.com/websharks/s2member/issues/1057).
 
+- (s2Member/s2Member Pro) **Bug Fix:** Resolving internal warning: 'PHP Warning: Parameter 2 to c_ws_plugin__s2member_querys::_query_level_access_coms() expected to be a reference, value given'. This was resolved by removing the strict 'by reference' requirement from the list of parameters requested by s2Member.
+
 = v170221 =
 
 - (s2Member/s2Member Pro) **JW Player v7:** This release adds support for JW Player v7 in the `[s2Stream /]` shortcode. See [Issue #774](https://github.com/websharks/s2member/issues/774).
