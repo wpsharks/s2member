@@ -118,7 +118,7 @@ jQuery(document).ready( // DOM ready handler.
 						       src = (!src) ? $.trim($('img', html).attr('src')) : src;
 
 						       $inp.val(src),
-							       $inp.css({'background-color': '#FFFFCC'}),
+							       $inp.css({'background-color': '#485230'}),
 							       setTimeout(function()
 							                  {
 								                  $inp.css({'background-color': oBg});
@@ -132,7 +132,7 @@ jQuery(document).ready( // DOM ready handler.
 						       src = (!src) ? $.trim($('img', html).attr('src')) : src;
 
 						       $txt.val($.trim($txt.val()) + '\n' + src),
-							       $txt.css({'background-color': '#FFFFCC'}),
+							       $txt.css({'background-color': '#485230'}),
 							       setTimeout(function()
 							                  {
 								                  $txt.css({'background-color': oBg});

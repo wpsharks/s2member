@@ -31,6 +31,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 		public function __construct()
 		{
 			echo '<div class="wrap ws-menu-page">'."\n";
+			
+			echo '<div class="wp-header-end"></div>'."\n";
 
 			echo '<div class="ws-menu-page-toolbox">'."\n";
 			c_ws_plugin__s2member_menu_pages_tb::display();
