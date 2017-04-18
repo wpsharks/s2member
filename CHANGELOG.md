@@ -18,6 +18,8 @@
 
 - (s2Member Pro) **Stripe Bug Fix:** This releases corrects a seemingly rare conflict between s2Member and Stripe on certain mobile devices and in certain scenarios. In a case we examined, there was a problematic CSS `z-index` setting in the s2Member source code that was, at times, causing problems in the stacking order, which resulted in a user's inability to enter details into the Stripe popup form. In this release, s2Member's customization of the `z-index` stacking order has been removed entirely, as it is no longer necessary in the latest revision of the Stripe popup, which already handles `z-index` adequately. Props @jaspuduf for reporting and for helping us diagnose the problem. See [Issue #1057](https://github.com/websharks/s2member/issues/1057).
 
+- (s2Member/s2Member Pro) **Security Enhancement:** This release removes the `%%user_pass%%` Replacement Code from the API Registration Notification email that is sent to a site owner; i.e., when/if it is configured by a site owner. Props @patdumond see [Issue #954](https://github.com/websharks/s2member/issues/954). This Replacement Code was removed as a security precaution.
+
 - (s2Member/s2Member Pro) **Bug Fix:** Resolving internal warning: 'PHP Warning: Parameter 2 to c_ws_plugin__s2member_querys::_query_level_access_coms() expected to be a reference, value given'. This was resolved by removing the strict 'by reference' requirement from the list of parameters requested by s2Member.
 
 - (s2Member/s2Member Pro) **Bug Fix:** Resolving internal warning: 'PHP Warning: Illegal string offset 'user_id' in s2member/src/includes/classes/sc-eots-in.inc.php'. This was resolved by typecasting `$attr` to an array in cases where WordPress core passes this as a string; e.g., when there are no attributes.

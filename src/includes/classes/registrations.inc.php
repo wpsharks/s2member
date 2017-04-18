@@ -1138,7 +1138,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 												$msg .= 'user_full_name: %%user_full_name%%'."\n";
 												$msg .= 'user_email: %%user_email%%'."\n";
 												$msg .= 'user_login: %%user_login%%'."\n";
-												$msg .= 'user_pass: %%user_pass%%'."\n";
+												//$msg .= 'user_pass: %%user_pass%%'."\n";
 												$msg .= 'user_ip: %%user_ip%%'."\n";
 												$msg .= 'user_id: %%user_id%%'."\n";
 

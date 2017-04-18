@@ -223,7 +223,7 @@ div.ws-menu-page > :not(.notice):not(.updated):not(.error) div.ws-menu-page-hr
 {
 	height      : 1px;
 	line-height : 1px;
-	background  : #DDDDDD;
+	background  : #bdca9a;
 	margin      : 10px 0 10px 0;
 }
 div.ws-menu-page > :not(.notice):not(.updated):not(.error) .ws-menu-page-error
