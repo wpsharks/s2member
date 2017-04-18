@@ -84,4 +84,5 @@ if(!function_exists('ws_plugin__s2member_classes'))
 	}
 
 	spl_autoload_register('ws_plugin__s2member_classes');
+	require_once dirname(dirname(dirname(__FILE__))).'/vendor/autoload.php';
 }

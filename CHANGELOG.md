@@ -1,5 +1,13 @@
 = $v =
 
+- (s2Member/s2Member Pro) **PHP v7 Compat. Enhancements**: This release adds an integration with the [Defuse encryption library](https://github.com/defuse/php-encryption) for PHP, making it possible for s2Member to move away from the `mcrypt_*()` family of functions in versions of PHP >= 7.0.4, where the mcrypt library has been deprecated — `mcrypt_*()` will eventually be removed entirely.
+
+  Starting with this release of s2Member, if you're running s2Member on PHP v7.0.4+, the Defuse library will be used automatically instead of mcrypt. See [Issue #1079](https://github.com/websharks/s2member/pull/1079).
+
+  **Note:** Backward compatibility with mcrypt functions will remain for now, especially for the decryption of any data that was previously encrypted using RIJNDAEL-256; i.e., data encrypted by a previous release of the s2Member software. s2Member is capable of automatically determining the algorithm originally used to encrypt, which allows it to decrypt data using Defuse, else RIJNDAEL-256, else XOR as a last-ditch fallback.
+
+  **API Functions:** `s2member_encrypt()` & `s2member_decrypt()`. These two API Functions provided by s2Member are impacted by this change. Starting with this release, if you're running s2Member on PHP v7.0.4+, the Defuse library is used automatically instead of the older mcrypt extension. Not to worry though; the `s2member_decrypt()` function is still capable of decrypting data encrypted by previous versions of the s2Member software.
+
 - (s2Member/s2Member Pro) **UI Fix:** All menu page notices should be given the `notice` class and the additional `notice-[type]` class instead of the older generic `updated` and `error` classes. Fixed in this release. Related to [Issue #1034](https://github.com/websharks/s2member/issues/1034)
 
 - (s2Member/s2Member Pro) **UI Fix:** Plugins displaying Dashboard-wide notices using the older `updated` and `error` classes should be handled better to avoid displaying them below the s2Member header (on s2Member menu pages) and with non-default WordPress styles. See: [Issue #1034](https://github.com/websharks/s2member/issues/1034)
