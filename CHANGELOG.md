@@ -1,5 +1,11 @@
 = $v =
 
+- (s2Member/s2Member Pro) **UI Fix:** All menu page notices should be given the `notice` class and the additional `notice-[type]` class instead of the older generic `updated` and `error` classes. Fixed in this release. Related to [Issue #1034](https://github.com/websharks/s2member/issues/1034)
+
+- (s2Member/s2Member Pro) **UI Fix:** Plugins displaying Dashboard-wide notices using the older `updated` and `error` classes should be handled better to avoid displaying them below the s2Member header (on s2Member menu pages) and with non-default WordPress styles. See: [Issue #1034](https://github.com/websharks/s2member/issues/1034)
+
+- (s2Member/s2Member Pro) **UI Fix:** Improving color highlighting in input fields following a media library insertion; e.g., when adding a custom logo to the login/registration page.
+
 - (s2Member Pro) **Bug Fix:** Updating PHP syntax in Simple Export tool, for compatibility w/ modern versions of PHP. Props @patdumond for reporting and helping us locate the underlying cause of this problem. See [Issue #1005](https://github.com/websharks/s2member/issues/1055).
 
 - (s2Member Pro) **Stripe Bug Fix:** This releases corrects a seemingly rare conflict between s2Member and Stripe on certain mobile devices and in certain scenarios. In a case we examined, there was a problematic CSS `z-index` setting in the s2Member source code that was, at times, causing problems in the stacking order, which resulted in a user's inability to enter details into the Stripe popup form. In this release, s2Member's customization of the `z-index` stacking order has been removed entirely, as it is no longer necessary in the latest revision of the Stripe popup, which already handles `z-index` adequately. Props @jaspuduf for reporting and for helping us diagnose the problem. See [Issue #1057](https://github.com/websharks/s2member/issues/1057).
