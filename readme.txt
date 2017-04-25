@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 170221
-Stable tag: 170221
+Version: 170425-RC
+Stable tag: 170425-RC
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -21,7 +21,7 @@ Tested up to: 4.8-alpha
 Requires at least: 4.2
 
 Requires PHP: 5.2
-Tested up to PHP: 7.0.15
+Tested up to PHP: 7.0.17
 
 Copyright: © 2009 WebSharks, Inc.
 License: GNU General Public License v2 or later.
