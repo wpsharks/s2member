@@ -26,6 +26,8 @@
 
 - (s2Member/s2Member Pro) **Bug Fix:** Resolving internal warning: 'PHP Warning: Illegal string offset 'user_id' in s2member/src/includes/classes/sc-eots-in.inc.php'. This was resolved by typecasting `$attr` to an array in cases where WordPress core passes this as a string; e.g., when there are no attributes.
 
+- (s2Member Pro) **Bug Fix:** Incorrect default option value for `reject_prepaid=""` attribute in Stripe Pro-Forms. See: [Issue #1089](https://github.com/websharks/s2member/issues/1089)
+
 = v170221 =
 
 - (s2Member/s2Member Pro) **JW Player v7:** This release adds support for JW Player v7 in the `[s2Stream /]` shortcode. See [Issue #774](https://github.com/websharks/s2member/issues/774).
