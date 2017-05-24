@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 170425-RC
-Stable tag: 170425-RC
+Version: 170524
+Stable tag: 170524
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -170,6 +170,36 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v170524 =
+
+- (s2Member/s2Member Pro) **PHP v7 Compat. Enhancements**: This release adds an integration with the [Defuse encryption library](https://github.com/defuse/php-encryption) for PHP, making it possible for s2Member to move away from the `mcrypt_*()` family of functions in versions of PHP >= 7.0.4, where the mcrypt library has been deprecated — `mcrypt_*()` will eventually be removed entirely.
+
+  Starting with this release of s2Member, if you're running s2Member on PHP v7.0.4+, the Defuse library will be used automatically instead of mcrypt. See [Issue #1079](https://github.com/websharks/s2member/pull/1079).
+
+  **Note:** Backward compatibility with mcrypt functions will remain for now, especially for the decryption of any data that was previously encrypted using RIJNDAEL-256; i.e., data encrypted by a previous release of the s2Member software. s2Member is capable of automatically determining the algorithm originally used to encrypt, which allows it to decrypt data using Defuse, else RIJNDAEL-256, else XOR as a last-ditch fallback.
+
+  **API Functions:** `s2member_encrypt()` & `s2member_decrypt()`. These two API Functions provided by s2Member are impacted by this change. Starting with this release, if you're running s2Member on PHP v7.0.4+, the Defuse library is used automatically instead of the older mcrypt extension. Not to worry though; the `s2member_decrypt()` function is still capable of decrypting data encrypted by previous versions of the s2Member software.
+
+- (s2Member/s2Member Pro) **UI Fix:** All menu page notices should be given the `notice` class and the additional `notice-[type]` class instead of the older generic `updated` and `error` classes. Fixed in this release. Related to [Issue #1034](https://github.com/websharks/s2member/issues/1034)
+
+- (s2Member/s2Member Pro) **UI Fix:** Plugins displaying Dashboard-wide notices using the older `updated` and `error` classes should be handled better to avoid displaying them below the s2Member header (on s2Member menu pages) and with non-default WordPress styles. See: [Issue #1034](https://github.com/websharks/s2member/issues/1034)
+
+- (s2Member/s2Member Pro) **UI Fix:** Improving color highlighting in input fields following a media library insertion; e.g., when adding a custom logo to the login/registration page.
+
+- (s2Member Pro) **Bug Fix:** Merchants using PayPal Pro (Payflow Edition) to charge a fixed non-recurring fee following an initial 100% free trial period, were seeing their member accounts EOTd after the trial ended, instead of the EOT Time being set to the end of the fixed term period. Props @patdumond, James Hall, and many others for reporting this in the forums and at GitHub. See [Issue #1077](https://github.com/websharks/s2member/issues/1077).
+
+- (s2Member Pro) **Bug Fix:** Updating PHP syntax in Simple Export tool, for compatibility w/ modern versions of PHP. Props @patdumond for reporting and helping us locate the underlying cause of this problem. See [Issue #1055](https://github.com/websharks/s2member/issues/1055).
+
+- (s2Member Pro) **Stripe Bug Fix:** This releases corrects a seemingly rare conflict between s2Member and Stripe on certain mobile devices and in certain scenarios. In a case we examined, there was a problematic CSS `z-index` setting in the s2Member source code that was, at times, causing problems in the stacking order, which resulted in a user's inability to enter details into the Stripe popup form. In this release, s2Member's customization of the `z-index` stacking order has been removed entirely, as it is no longer necessary in the latest revision of the Stripe popup, which already handles `z-index` adequately. Props @jaspuduf for reporting and for helping us diagnose the problem. See [Issue #1057](https://github.com/websharks/s2member/issues/1057).
+
+- (s2Member/s2Member Pro) **Security Enhancement:** This release removes the `%%user_pass%%` Replacement Code from the API Registration Notification email that is sent to a site owner; i.e., when/if it is configured by a site owner. Props @patdumond see [Issue #954](https://github.com/websharks/s2member/issues/954). This Replacement Code was removed as a security precaution.
+
+- (s2Member/s2Member Pro) **Bug Fix:** Resolving internal warning: 'PHP Warning: Parameter 2 to c_ws_plugin__s2member_querys::_query_level_access_coms() expected to be a reference, value given'. This was resolved by removing the strict 'by reference' requirement from the list of parameters requested by s2Member.
+
+- (s2Member/s2Member Pro) **Bug Fix:** Resolving internal warning: 'PHP Warning: Illegal string offset 'user_id' in s2member/src/includes/classes/sc-eots-in.inc.php'. This was resolved by typecasting `$attr` to an array in cases where WordPress core passes this as a string; e.g., when there are no attributes.
+
+- (s2Member Pro) **Bug Fix:** Incorrect default option value for `reject_prepaid=""` attribute in Stripe Pro-Forms. See: [Issue #1089](https://github.com/websharks/s2member/issues/1089)
 
 = v170221 =
 
