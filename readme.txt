@@ -17,7 +17,7 @@ Authorize.Net® Compatible: yes w/s2Member® Pro
 Google® Checkout Compatible: yes w/s2Member® Pro
 ClickBank® Compatible: yes w/s2Member® Pro
 
-Tested up to: 4.8-alpha
+Tested up to: 4.9-alpha
 Requires at least: 4.2
 
 Requires PHP: 5.2
