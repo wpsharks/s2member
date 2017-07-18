@@ -1,3 +1,7 @@
+= $v =
+
+- (s2Member/s2Member Pro) **PayPal IPN Compatibility:** This release includes an updated PayPal IPN handler that is capable of reading number-suffixed IPN variables that are now being sent by PayPal's IPN system in some cases, for some customers. We strongly encourage all site owners to upgrade to this release as soon as possible, particularly if you're using PayPal to process transactions. Props @openmtbmap and @patdumond for reporting. See: [Issue #1112](https://github.com/websharks/s2member/issues/1112)
+
 = v170524 =
 
 - (s2Member/s2Member Pro) **PHP v7 Compat. Enhancements**: This release adds an integration with the [Defuse encryption library](https://github.com/defuse/php-encryption) for PHP, making it possible for s2Member to move away from the `mcrypt_*()` family of functions in versions of PHP >= 7.0.4, where the mcrypt library has been deprecated — `mcrypt_*()` will eventually be removed entirely.
