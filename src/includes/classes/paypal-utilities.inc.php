@@ -40,14 +40,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_paypal_postvars", get_defined_vars());
-						unset($__refs, $__v);
+						unset($__refs, $__v); // Housekeeping.
 						/*
-						Custom conditionals can be applied by filters.
-						*/
-						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
+						 * Custom conditionals can be applied by filters.
+						 */
+						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v; // Vars by reference.
 						if(!($postvars = apply_filters("ws_plugin__s2member_during_paypal_postvars_conditionals", array(), get_defined_vars())))
 							{
-								unset($__refs, $__v);
+								unset($__refs, $__v); // Housekeeping.
 
 								if(!empty($_GET["tx"]) && empty($_GET["s2member_paypal_proxy"]))
 									{
@@ -65,9 +65,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 														if(strlen($key = trim($key)) && strlen($value = trim($value)))
 															$postvars[$key] = trim(stripslashes(urldecode($value)));
 													}
+												$postvars = self::paypal_postvars_back_compat($postvars); // From verified data.
+
 												if(!empty($postvars["charset"]) && function_exists("mb_convert_encoding"))
 													{
-														foreach($postvars as &$value)
+														foreach($postvars as &$value) // Convert to UTF-8 encoding.
 															$value = @mb_convert_encoding($value, "UTF-8", (($postvars["charset"] === "gb2312") ? "GBK" : $postvars["charset"]));
 													}
 												return apply_filters("ws_plugin__s2member_paypal_postvars", $postvars, get_defined_vars());
@@ -80,14 +82,15 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											if(preg_match("/^s2member_/", $key))
 												unset($postvars[$key]);
 
-										$postback = /* Copy. */ $postvars;
+										$postback = $postvars; // Copy.
 										$postback["cmd"] = "_notify-validate";
 
+										$postvars = self::paypal_postvars_back_compat($postvars);
 										$postvars = c_ws_plugin__s2member_utils_strings::trim_deep($postvars);
 
 										if(!empty($postvars["charset"]) && function_exists("mb_convert_encoding"))
 											{
-												foreach($postvars as &$value)
+												foreach($postvars as &$value) // Convert to UTF-8 encoding.
 													$value = @mb_convert_encoding($value, "UTF-8", (($postvars["charset"] === "gb2312") ? "GBK" : $postvars["charset"]));
 											}
 										$endpoint = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com";
@@ -107,10 +110,32 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 						else // Else a custom conditional has been applied by Filters.
 							{
-								unset($__refs, $__v);
-
+								unset($__refs, $__v); // Housekeeping.
+								$postvars = self::paypal_postvars_back_compat($postvars);
 								return apply_filters("ws_plugin__s2member_paypal_postvars", $postvars, get_defined_vars());
 							}
+					}
+				/**
+				 * Back compat. PayPal post vars.
+				 *
+				 * @since 17xxxx PayPal IPN variable change.
+				 *
+				 * @return array Updated PayPal IPN data.
+				 *
+				 * @see https://github.com/websharks/s2member/issues/1112
+				 */
+				public static function paypal_postvars_back_compat($postvars)
+					{
+						$postvars = (array) $postvars;
+
+						foreach ($postvars as $_key => $_value) {
+							if (is_string($_key) && preg_match('/_?[0-9]+$/u', $_key)) {
+								$_old_key = preg_replace('/_?[0-9]+$/u', '', $_key);
+								if (!isset($postvars[$_old_key])) $postvars[$_old_key] = $_value;
+							}
+						} // unset($_key, $_old_key, $_value); // Housekeeping.
+
+						return $postvars; // w/ back. compat keys.
 					}
 				/**
 				* Generates a PayPal Proxy Key, for simulated IPN responses.
