@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 170524
-Stable tag: 170524
+Version: 170722
+Stable tag: 170722
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -170,6 +170,10 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v170722 =
+
+- (s2Member/s2Member Pro) **PayPal IPN Compatibility:** This release includes an updated PayPal IPN handler that is capable of reading number-suffixed IPN variables that are now being sent by PayPal's IPN system in some cases, for some customers. We strongly encourage all site owners to upgrade to this release as soon as possible, particularly if you're using PayPal to process transactions. Props @openmtbmap and @patdumond for reporting. See: [Issue #1112](https://github.com/websharks/s2member/issues/1112)
 
 = v170524 =
 

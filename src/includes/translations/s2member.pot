@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  170524\n"
+"Project-Id-Version:  170722\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2017-05-24 18:23:08+00:00\n"
+"POT-Creation-Date: 2017-07-22 16:14:25+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1308,17 +1308,17 @@ msgstr ""
 #. with `ws_plugin__s2member_paypal_payflow_api_response`.
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:96
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:325
-#: src/includes/classes/paypal-utilities.inc.php:315
-#: src/includes/classes/paypal-utilities.inc.php:323
+#: src/includes/classes/paypal-utilities.inc.php:340
+#: src/includes/classes/paypal-utilities.inc.php:348
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:99
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:328
-#: src/includes/classes/paypal-utilities.inc.php:189
-#: src/includes/classes/paypal-utilities.inc.php:317
-#: src/includes/classes/paypal-utilities.inc.php:325
+#: src/includes/classes/paypal-utilities.inc.php:214
+#: src/includes/classes/paypal-utilities.inc.php:342
+#: src/includes/classes/paypal-utilities.inc.php:350
 msgctxt "s2member-front"
 msgid "Error. Please contact Support for assistance."
 msgstr ""
@@ -4447,23 +4447,23 @@ msgstr ""
 #. by PayPal. Replace `%2$s` and `%3$s` with: `Unable to process, please try
 #. again`, or something to that affect. Or, if you prefer, you could Filter
 #. ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`.
-#: src/includes/classes/paypal-utilities.inc.php:186
+#: src/includes/classes/paypal-utilities.inc.php:211
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s. %3$s."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:233
-#: src/includes/classes/paypal-utilities.inc.php:239
+#: src/includes/classes/paypal-utilities.inc.php:258
+#: src/includes/classes/paypal-utilities.inc.php:264
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Please use an alternate funding source."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:236
+#: src/includes/classes/paypal-utilities.inc.php:261
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Express Checkout was NOT confirmed."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:370
+#: src/includes/classes/paypal-utilities.inc.php:395
 msgctxt "s2member-front"
 msgid " Please contact PayPal Merchant Technical Support (www.paypal.com/mts) and request `Recurring Billing` service, and also ask to have `Reference Transactions` enabled for Recurring Billing via Express Checkout."
 msgstr ""

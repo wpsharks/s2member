@@ -118,7 +118,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				/**
 				 * Back compat. PayPal post vars.
 				 *
-				 * @since 17xxxx PayPal IPN variable change.
+				 * @since 170722 PayPal IPN variable change.
 				 *
 				 * @return array Updated PayPal IPN data.
 				 *
