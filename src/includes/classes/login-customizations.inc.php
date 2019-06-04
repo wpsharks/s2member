@@ -58,7 +58,7 @@ if(!class_exists('c_ws_plugin__s2member_login_customizations'))
 		 * @package s2Member\Login_Customizations
 		 * @since 3.5
 		 *
-		 * @attaches-to ``add_filter('login_headertitle');``
+		 * @attaches-to ``add_filter('login_headertext');``
 		 *
 		 * @param string $title Expects a title passed in by the Filter.
 		 *
