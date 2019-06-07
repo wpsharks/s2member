@@ -430,7 +430,7 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:212
 msgctxt "s2member-admin"
-msgid "Authorize.Net configuration error. Your Authorize.Net Secret MD5 Hash is not yet configured."
+msgid "Authorize.Net configuration error. Your Authorize.Net Signature Key is not yet configured."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:234
