@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 170722
-Stable tag: 170722
+Version: 190608
+Stable tag: 190608
 
 SSL Compatible: yes
 bbPress® Compatible: yes
@@ -14,20 +14,19 @@ PayPal® Standard Compatible: yes
 Stripe™ Compatible: yes w/s2Member® Pro
 PayPal® Pro Compatible: yes w/s2Member® Pro
 Authorize.Net® Compatible: yes w/s2Member® Pro
-Google® Checkout Compatible: yes w/s2Member® Pro
 ClickBank® Compatible: yes w/s2Member® Pro
 
-Tested up to: 4.9-alpha
+Tested up to: 5.2.2-alpha
 Requires at least: 4.2
 
-Requires PHP: 5.2
-Tested up to PHP: 7.0.17
+Requires PHP: 5.6
+Tested up to PHP: 7.2.19-0ubuntu0.18.10.1
 
-Copyright: © 2009 WebSharks, Inc.
+Copyright: © 2009 WP Sharks
 License: GNU General Public License v2 or later.
-Contributors: WebSharks, JasWSInc, raamdev, KristineDS, renzms
+Contributors: WebSharks, JasWSInc, raamdev, clavaque
 
-Author: s2Member® / WebSharks, Inc.
+Author: WP Sharks
 Author URI: http://s2member.com/
 Donate link: http://s2member.com/donate/
 Beta link: http://s2member.com/beta-testers/
@@ -51,10 +50,6 @@ Tags: membership, subscribers, subscriber, members only, roles, capabilities, ca
 s2Member®—a powerful (free) membership plugin for WordPress®. Protect members only content with roles/capabilities.
 
 == Description ==
-
-**NOTICE:** The support forum at WordPress is for community interaction only. If you are an s2Member Pro customer in need of support, please use [our support center](http://s2member.com/support/).
-
----
 
 The s2Member® Framework (free) integrates with PayPal Website Payments Standard (also free). Sell "Buy Now" or Membership access to your site. Restrict access to Roles, Capabilities, Posts, Pages, or anything else in WordPress.
 
@@ -125,7 +120,7 @@ Please see: <http://s2member.com/r/translations/>
 
 == License ==
 
-Copyright: © 2013 [WebSharks, Inc.](http://www.websharks-inc.com/bizdev/) (coded in the USA)
+Copyright: © 2013 [WP Sharks](http://www.wpsharks.com/) (coded in the USA)
 
 Released under the terms of the [GNU General Public License](http://www.gnu.org/licenses/gpl-2.0.html).
 
@@ -170,6 +165,20 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v190617 =
+
+- (s2Member Pro) **Authorize.Net Hash Upgrade:** Authorize.Net [announced](https://support.authorize.net/s/article/MD5-Hash-End-of-Life-Signature-Key-Replacement) the end-of-life for their MD5 Hash in favor of their new SHA512 Signature Key. Support for this has been added to s2Member Pro. The MD5 Hash is not provided by Authorize.Net any more, so the field for it in s2Member has been disabled. Props @krumch for his work. For further details see [forum thread 5514](https://f.wpsharks.com/t/5514).
+
+  **Note:** For those that already used the MD5 Hash in their configuration, it is kept there and will keep working while Authorize.Net accepts it, which will not be much longer. It's important to update your integration with the new Signature Key. Once you have your Signature Key in the s2Member configuration, it will be favored over the old MD5 Hash._
+
+- (s2Member Pro) **Bug Fix:** The multisite patch for `wp-admin/user_new.php` wasn't finding the code to replace because of changes in the latest releases of WordPress. It has now been updated, as well as the instructions in the Dashboard for those that prefer to apply it manually. Props @crazycoolcam for reporting it. For further details see [Issue #1132](https://github.com/wpsharks/s2member/issues/1132).
+
+  **Note:** If you already had patched this file in the past, it's recommended that you remove the previous patch restoring it to the original file, and let s2Member Pro patch it again now, otherwise you risk getting it patched over the previous one and ending up with errors. After the new patch, please review that file to verify that it's correct._
+
+- (s2Member Pro) **Bug Fix:** The search results for `s2Member-List` were not being ordered as specified in the `orderby` attribute when this was a field from the `usermeta` table in the database, e.g. `first_name`, `last_name`. This is now fixed and working correctly. Props to @stevenwolock for reporting it. For further details see [Issue #1103](https://github.com/wpsharks/s2member/issues/1103).
+
+- (s2Member) **WP 5.2 Compat. Enhancement:** s2Member has been tested with WP up to 5.2.2-alpha. With `WP_DEBUG` enabled, only one "notice" was found. In `wp-login.php` it said 'login_headertitle is deprecated since version 5.2.0! Use login_headertext instead.' This release now uses `login_headertext` and doesn't get that notice anymore. Props Azunga for reporting it. See [forum thread 5962](https://f.wpsharks.com/t/5962).
 
 = v170722 =
 
