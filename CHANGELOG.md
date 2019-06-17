@@ -1,3 +1,17 @@
+= v190617 =
+
+- (s2Member Pro) **Authorize.Net Hash Upgrade:** Authorize.Net [announced](https://support.authorize.net/s/article/MD5-Hash-End-of-Life-Signature-Key-Replacement) the end-of-life for their MD5 Hash in favor of their new SHA512 Signature Key. Support for this has been added to s2Member Pro. The MD5 Hash is not provided by Authorize.Net any more, so the field for it in s2Member has been disabled. Props @krumch for his work. For further details see [forum thread 5514](https://f.wpsharks.com/t/5514).
+
+  **Note:** For those that already used the MD5 Hash in their configuration, it is kept there and will keep working while Authorize.Net accepts it, which will not be much longer. It's important to update your integration with the new Signature Key. Once you have your Signature Key in the s2Member configuration, it will be favored over the old MD5 Hash._
+
+- (s2Member Pro) **Bug Fix:** The multisite patch for `wp-admin/user_new.php` wasn't finding the code to replace because of changes in the latest releases of WordPress. It has now been updated, as well as the instructions in the Dashboard for those that prefer to apply it manually. Props @crazycoolcam for reporting it. For further details see [Issue #1132](https://github.com/wpsharks/s2member/issues/1132).
+
+  **Note:** If you already had patched this file in the past, it's recommended that you remove the previous patch restoring it to the original file, and let s2Member Pro patch it again now, otherwise you risk getting it patched over the previous one and ending up with errors. After the new patch, please review that file to verify that it's correct._
+
+- (s2Member Pro) **Bug Fix:** The search results for `s2Member-List` were not being ordered as specified in the `orderby` attribute when this was a field from the `usermeta` table in the database, e.g. `first_name`, `last_name`. This is now fixed and working correctly. Props to @stevenwolock for reporting it. For further details see [Issue #1103](https://github.com/wpsharks/s2member/issues/1103).
+
+- (s2Member) **WP 5.2 Compat. Enhancement:** s2Member has been tested with WP up to 5.2.2-alpha. With `WP_DEBUG` enabled, only one "notice" was found. In `wp-login.php` it said 'login_headertitle is deprecated since version 5.2.0! Use login_headertext instead.' This release now uses `login_headertext` and doesn't get that notice anymore. Props Azunga for reporting it. See [forum thread 5962](https://f.wpsharks.com/t/5962).
+
 = v170722 =
 
 - (s2Member/s2Member Pro) **PayPal IPN Compatibility:** This release includes an updated PayPal IPN handler that is capable of reading number-suffixed IPN variables that are now being sent by PayPal's IPN system in some cases, for some customers. We strongly encourage all site owners to upgrade to this release as soon as possible, particularly if you're using PayPal to process transactions. Props @openmtbmap and @patdumond for reporting. See: [Issue #1112](https://github.com/websharks/s2member/issues/1112)

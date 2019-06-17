@@ -7,7 +7,7 @@
  * PHP, WordPress and other compatibility requirements.
  *
  * Copyright: © 2009-2011
- * {@link http://websharks-inc.com/ WebSharks, Inc.}
+ * {@link http://wpsharks.com/ WP Sharks}
  * (coded in the USA)
  *
  * Released under the terms of the GNU General Public License.
@@ -20,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 170722
-Stable tag: 170722
+Version: 190617
+Stable tag: 190617
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -31,22 +31,22 @@ WP Multisite Compatible: yes
 Multisite Blog Farm Compatible: yes
 
 PayPal Standard Compatible: yes
+Stripe Compatible: yes w/s2Member Pro
 PayPal Pro Compatible: yes w/s2Member Pro
 Authorize.Net Compatible: yes w/s2Member Pro
-Google Wallet Compatible: yes w/s2Member Pro
 ClickBank Compatible: yes w/s2Member Pro
 
-Tested up to: 4.9-alpha
+Tested up to: 5.2.2-RC2
 Requires at least: 4.2
 
-Requires PHP: 5.2
-Tested up to PHP: 7.0.17
+Requires PHP: 5.6
+Tested up to PHP: 7.2.19-0ubuntu0.18.10.1
 
-Copyright: © 2009 WebSharks, Inc.
+Copyright: © 2009 WP Sharks
 License: GNU General Public License
-Contributors: WebSharks, JasWSInc, anguz, raamdev, bruce-caldwell
+Contributors: WebSharks, JasWSInc, anguz, raamdev, bruce-caldwell, clavaque
 
-Author: s2Member / WebSharks, Inc.
+Author: WP Sharks
 Author URI: http://s2member.com/
 Donate link: http://s2member.com/r/donate
 
@@ -77,7 +77,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '170722'; //version//
+${__FILE__}['tmp'] = '190617'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**
@@ -88,7 +88,7 @@ if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
  *
  * @var string
  */
-${__FILE__}['tmp'] = '5.2'; //php-required-version//
+${__FILE__}['tmp'] = '5.6'; //php-required-version//
 if(!defined('WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION', ${__FILE__}['tmp']);
 /**
@@ -110,7 +110,7 @@ if(!defined('WS_PLUGIN__S2MEMBER_MIN_WP_VERSION'))
  *
  * @var string
  */
-${__FILE__}['tmp'] = '170722'; //version//
+${__FILE__}['tmp'] = '190617'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION', ${__FILE__}['tmp']);
 /*
