@@ -103,6 +103,11 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 														if /* Enqueue an admin notice if the site owner is using the wrong domain variation. */ ($paypal["custom"] && ($paypal["custom"] === "www.".$_SERVER["HTTP_HOST"] || "www.".$paypal["custom"] === $_SERVER["HTTP_HOST"]))
 															c_ws_plugin__s2member_admin_notices::enqueue_admin_notice("<strong>s2Member:</strong> Post-processing failed on at least one transaction. It appears that you have a PayPal Button configured with a <code>custom=\"\"</code> Shortcode Attribute that does NOT match up with your installation domain name. If your site uses the <code>www.</code> prefix, please include that. If it does not, please exclude the <code>www.</code> prefix. You should have <code>custom=\"".preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"])."\"</code>", "*:*", true);
 
+														// Keep trying until we get it. TODO: may need improvement. https://f.wpsharks.com/t/5250/83
+														sleep(3);
+														wp_redirect( home_url( preg_replace( '`(&do_not_cache=[0-9]{5}){2,}`', '&do_not_cache=' . rand(10000,99999), $_SERVER["REQUEST_URI"] . '&do_not_cache=' . rand(10000,99999) ) ) );
+														exit;
+														
 														$paypal["s2member_log"][] = 'Unable to verify `$_SERVER["HTTP_HOST"]`. Please check the `custom` value in your Button Code. It MUST start with your domain name.';
 
 														$paypal["s2member_log"][] = "Redirecting Customer to the Home Page (after displaying an error message).";
