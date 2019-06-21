@@ -55,7 +55,10 @@ if(!class_exists('c_ws_plugin__s2member_register_access'))
 				$register_link = home_url('/?s2member_register='.urlencode($register)); // Generate long URL/link.
 
 				if($shrink && ($shorter_url = c_ws_plugin__s2member_utils_urls::shorten($register_link)))
-					$register_link = $shorter_url.'#'.$_SERVER['HTTP_HOST'];
+				{
+					$domain_tag    = (strpos($shorter_url, $_SERVER['HTTP_HOST'])) ? '' : '#'.$_SERVER['HTTP_HOST']; // Personalize the link with the site's domain name if it's not already there.
+					$register_link = $shorter_url.$domain_tag;
+				}
 			}
 			return apply_filters('ws_plugin__s2member_register_link_gen', ((!empty($register_link)) ? $register_link : FALSE), get_defined_vars());
 		}

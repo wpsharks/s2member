@@ -277,6 +277,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_urls'))
 										&& stripos($custom_url, 'http') === 0)
 									return ($shorter_url = $custom_url);
 
+								else if($api === 'none') // Don't shorten.
+									return $url;
+									
 								else if($api === 'tiny_url' // Using the TinyURL API in this case?
 										&& ($tiny_url = trim(self::remote('http://tinyurl.com/api-create.php?url='.rawurlencode($url))))
 										&& stripos($tiny_url, 'http') === 0)
@@ -290,15 +293,6 @@ if(!class_exists('c_ws_plugin__s2member_utils_urls'))
 										&& ($bitly_response          = json_decode(trim(self::remote($bitly_endpoint))))
 										&& !empty($bitly_response->data->url) && stripos($bitly_url = $bitly_response->data->url, 'http') === 0)
 									return ($shorter_url = $bitly_url);
-
-								else if($api === 'goo_gl' // Using the Google API in this case?
-										&& ($goo_gl_endpoint          = 'https://www.googleapis.com/urlshortener/v1/url')
-										&& ($goo_gl_endpoint_headers  = array('headers' => array('Content-Type' => 'application/json')))
-										&& ($goo_gl_endpoint_key      = $default_url_shortener_key) // Must be configured by site owner.
-										&& ($goo_gl_endpoint          = add_query_arg('key', urlencode($goo_gl_endpoint_key), $goo_gl_endpoint))
-										&& ($goo_gl_response          = json_decode(trim(self::remote($goo_gl_endpoint, json_encode(array('longUrl' => $url)), $goo_gl_endpoint_headers))))
-										&& !empty($goo_gl_response->id) && stripos($goo_gl_url = $goo_gl_response->id, 'http') === 0)
-									return ($shorter_url = $goo_gl_url);
 
 								else if($try_backups && count($apis) > 1) // Try backups?
 									{
