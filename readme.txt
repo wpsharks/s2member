@@ -1,50 +1,21 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 190617
-Stable tag: 190617
-
-SSL Compatible: yes
-bbPress® Compatible: yes
-WordPress® Compatible: yes
-BuddyPress® Compatible: yes
-WP® Multisite Compatible: yes
-Multisite Blog Farm Compatible: yes
-
-PayPal® Standard Compatible: yes
-Stripe™ Compatible: yes w/s2Member® Pro
-PayPal® Pro Compatible: yes w/s2Member® Pro
-Authorize.Net® Compatible: yes w/s2Member® Pro
-ClickBank® Compatible: yes w/s2Member® Pro
-
-Tested up to: 5.2.2-RC2
+Version: 190717
+Stable tag: 190717
+Tested up to: 5.2.2
 Requires at least: 4.2
-
 Requires PHP: 5.6
-Tested up to PHP: 7.2.19-0ubuntu0.18.10.1
-
-Copyright: © 2009 WP Sharks
+Tested up to PHP: 7.2.19
 License: GNU General Public License v2 or later.
 Contributors: WebSharks, JasWSInc, raamdev, clavaque
-
 Author: WP Sharks
 Author URI: http://s2member.com/
 Donate link: http://s2member.com/donate/
 Beta link: http://s2member.com/beta-testers/
-
 Text Domain: s2member
 Domain Path: /src/includes/translations
-
 Plugin Name: s2Member® Framework
-Forum URI: http://s2member.com/r/forum/
 Plugin URI: http://s2member.com/
-Privacy URI: http://s2member.com/privacy-policy/
-Changelog URI: http://s2member.com/changelog/
-Video Tutorials: http://s2member.com/r/s2member-videos/
-Knowledge Base: http://s2member.com/kb/
-Newsletter: http://s2member.com/r/subscribe/
-PayPal Pro Integration: http://s2member.com/r/pp-account-types/
-
-Description: s2Member®—a powerful (free) membership plugin for WordPress®. Protect members only content with roles/capabilities.
 Tags: membership, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, ecommerce, restriction
 
 s2Member®—a powerful (free) membership plugin for WordPress®. Protect members only content with roles/capabilities.
