@@ -1,11 +1,11 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 190717
-Stable tag: 190717
-Tested up to: 5.2.2
+Version: 190718
+Stable tag: 190718
+Tested up to: 5.2.3
 Requires at least: 4.2
 Requires PHP: 5.6
-Tested up to PHP: 7.2.19
+Tested up to PHP: 7.2.19-0ubuntu0.18.10.1
 License: GNU General Public License v2 or later.
 Contributors: WebSharks, JasWSInc, raamdev, clavaque
 Author: WP Sharks
