@@ -1509,23 +1509,25 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
-				echo '<tr>'."\n";
+				if (c_ws_plugin__s2member_utils_conds::pro_is_installed()) {
+					echo '<tr>'."\n";
 
-				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-default-custom-str-url-shortener">'."\n";
-				echo 'Custom URL Shortening Service API (Optional/Advanced):'."\n";
-				echo '</label>'."\n";
-				echo '</th>'."\n";
+					echo '<th>'."\n";
+					echo '<label for="ws-plugin--s2member-default-custom-str-url-shortener">'."\n";
+					echo 'Custom URL Shortening Service API (Optional/Advanced):'."\n";
+					echo '</label>'."\n";
+					echo '</th>'."\n";
 
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
+					echo '</tr>'."\n";
+					echo '<tr>'."\n";
 
-				echo '<td>'."\n";
-				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_default_custom_str_url_shortener" id="ws-plugin--s2member-default-custom-str-url-shortener" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_custom_str_url_shortener"]).'" /><br />'."\n";
-				echo 'Your own custom URL <code>(i.e., GET request)</code>, with <code>%%s2_long_url%%</code> Replacement Code. [<a href="#" onclick="alert(\'Advanced site owners can use a custom URL shortening service they prefer.\\n\\nIn order for this to work, your URL shortening service must support simple GET requests through its API (sometimes referred to as a REST or NVP API).\\n\\nIn addition, your URL shortening service must return a plain-text URL in the response. See example below.\\n\\nYOURLS example GET request with format=simple:\\n\\nhttp://yoursite.com/yourls/yourls-api.php?signature=1234567890&action=shorturl&format=simple&url=%%s2_long_url%%\\n\\ns2Member expects a shortened URL in the response from YOURLS.\\n\\nIf you configure s2Member to use your own custom URL shortening service, s2Member will try your configuration first, and if anything fails, it will fall back on its own pre-integrated backups.\\n\\nWhen configuring your URL for the GET request, s2Member makes two Replacement Codes available:\\n\\n%%s2_long_url%% = The full URL that needs to be shortened (raw URL-encoded).\\n\\n%%s2_long_url_md5%% = An MD5 hash of the full URL (might be useful in some APIs).\'); return false;" tabindex="-1">details</a>]<br />'."\n";
-				echo '</td>'."\n";
+					echo '<td>'."\n";
+					echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_default_custom_str_url_shortener" id="ws-plugin--s2member-default-custom-str-url-shortener" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["default_custom_str_url_shortener"]).'" /><br />'."\n";
+					echo 'Your own custom URL <code>(i.e., GET request)</code>, with <code>%%s2_long_url%%</code> Replacement Code. [<a href="#" onclick="alert(\'Advanced site owners can use a custom URL shortening service they prefer.\\n\\nIn order for this to work, your URL shortening service must support simple GET requests through its API (sometimes referred to as a REST or NVP API).\\n\\nIn addition, your URL shortening service must return a plain-text URL in the response. See example below.\\n\\nYOURLS example GET request with format=simple:\\n\\nhttp://yoursite.com/yourls/yourls-api.php?signature=1234567890&action=shorturl&format=simple&url=%%s2_long_url%%\\n\\ns2Member expects a shortened URL in the response from YOURLS.\\n\\nIf you configure s2Member to use your own custom URL shortening service, s2Member will try your configuration first, and if anything fails, it will fall back on its own pre-integrated backups.\\n\\nWhen configuring your URL for the GET request, s2Member makes two Replacement Codes available:\\n\\n%%s2_long_url%% = The full URL that needs to be shortened (raw URL-encoded).\\n\\n%%s2_long_url_md5%% = An MD5 hash of the full URL (might be useful in some APIs).\'); return false;" tabindex="-1">details</a>]<br />'."\n";
+					echo '</td>'."\n";
 
-				echo '</tr>'."\n";
+					echo '</tr>'."\n";
+				}
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 				echo '</div>'."\n";
