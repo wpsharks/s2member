@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 190718
-Stable tag: 190718
+Version: 190822
+Stable tag: 190822
 Tested up to: 5.2.3
 Requires at least: 4.2
 Requires PHP: 5.6
@@ -136,6 +136,18 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v190822 =
+
+- (s2Member) **PayPal Integration Update:** PayPal deprecated the subscription modification button. Using the old possible values for this, now gives an error on PayPal's site. This button has been removed from the PayPal Standard integration in s2Member. Props to Tim for reporting it, see [forum thread 5861](https://f.wpsharks.com/t/5861), and [issue #1157](https://github.com/wpsharks/s2member/issues/1157).
+
+- (s2Member) **Bug Fix:** PayPal would sometimes return the customer without the Custom Value expected by s2Member, incorrectly triggering an error. A small delay has now been added when needed to wait for PayPal to provide the missing value, so that the customer is met with the correct success message on return. Props to Josh Hartman for his help. See [forum thread 5250](https://f.wpsharks.com/t/5250).
+
+- (s2Member) **Bug Fix:** Google's URL shortening service has been [discontinued](https://developers.googleblog.com/2018/03/transitioning-google-url-shortener.html). The s2Member integration with it was removed in this release. Props to Felix Hartmann for reporting it.
+
+- (s2Member) **Feature Enhancement:** The popular URL shortening services have been abused in spam emails, and this can cause your site's emails with shortened signup URLs to end up in the spam folder. It's now possible to disable URL shortening when trying to avoid this problem. Props to Felix Hartmann for suggesting it. See [forum thread 5697](https://f.wpsharks.com/t/5697).
+
+- (s2Member Pro) **New Feature:** It is now possible to use a custom URL shortener other than the defaults in the s2Member Framework. This is particularly useful to use [YOURLS](http://yourls.org/) for your links, making them unique to your site, looking more professional and avoiding the spam filters issue mentioned above. For more info see this [forum post](https://f.wpsharks.com/t/5697/19).
 
 = v190617 =
 
