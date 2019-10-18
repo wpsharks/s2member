@@ -11,8 +11,8 @@ project_slack_channel                                   = wpsharks
 
 project_version                                         = %y%m%d
 
-project_php_required_version                            = 5.6
+project_php_required_version                            = 5.6.2
 project_php_tested_up_to_version                        = ${php.version}
 
 project_wp_required_version                             = 4.2
-project_wp_tested_up_to_version                         = 5.2.3
+project_wp_tested_up_to_version                         = 5.2.4
