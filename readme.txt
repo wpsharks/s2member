@@ -32,7 +32,7 @@ You can learn more at [s2Member.com](http://s2member.com/).
 
 = Reasons to upgrade to "s2Member® Pro" =
 
-- Stripe™ (+Bitcoin) integration via Pro-Forms (one-step checkout).
+- Stripe™ integration via Pro-Forms (one-step checkout).
 - PayPal Pro™ integration via Pro-Forms (one-step checkout).
 - Authorize.Net™ integration via Pro-Forms (one-step checkout).
 - Plus ClickBank™, Unlimited Membership Levels, Coupon Codes, Gift/Redemption Codes, Pro API, and more!
