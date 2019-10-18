@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  190822\n"
+"Project-Id-Version:  191018\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2019-08-22 20:23:23+00:00\n"
+"POT-Creation-Date: 2019-10-18 13:08:59+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: pro/src/includes/classes/coupons.inc.php:241
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:692
 #: pro/src/includes/classes/gateways/paypal/paypal-utilities.inc.php:312
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:900
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:966
 msgctxt "s2member-front percentage-symbol"
 msgid "%"
 msgstr ""
@@ -133,7 +133,7 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-update-in.inc.php:153
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:145
 #: pro/src/includes/classes/gateways/stripe/stripe-cancellation-in.inc.php:156
-#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:101
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:125
 msgctxt "s2member-front"
 msgid "You're <strong>NOT</strong> logged in."
 msgstr ""
@@ -158,8 +158,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:915
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:750
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1084
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:413
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:613
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:561
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:831
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">log in</a>."
 msgstr ""
@@ -184,8 +184,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1119
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:129
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:151
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:425
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:625
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:573
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:843
 #: pro/src/includes/classes/gateways/stripe/stripe-registration-in.inc.php:131
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> A slight problem. Please contact Support for assistance."
@@ -199,8 +199,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:941
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:776
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1110
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:414
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:614
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:562
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:832
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; You'll receive an email momentarily."
 msgstr ""
@@ -210,7 +210,7 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:961
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1130
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:136
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:629
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:847
 msgctxt "s2member-front"
 msgid "<strong>Unknown error.</strong> Please contact Support for assistance."
 msgstr ""
@@ -228,8 +228,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:197
 #: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:278
 #: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:351
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:438
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:595
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:449
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:620
 msgctxt "s2member-front"
 msgid "Security Verification"
 msgstr ""
@@ -239,7 +239,7 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:247
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:753
 #: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:251
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:568
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:592
 msgctxt "s2member-front"
 msgid "Additional Info"
 msgstr ""
@@ -1258,14 +1258,14 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:169
 #: pro/src/includes/classes/gateways/paypal/paypal-sp-checkout-in.inc.php:288
-#: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:155
+#: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:193
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your purchase has been approved.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">click here</a> to proceed."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-sp-checkout-in.inc.php:180
 #: pro/src/includes/classes/gateways/paypal/paypal-sp-checkout-in.inc.php:299
-#: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:162
+#: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:200
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> Unable to generate Access Link. Please contact Support for assistance."
 msgstr ""
@@ -1273,7 +1273,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-update-in.inc.php:110
 #: pro/src/includes/classes/gateways/paypal/paypal-update-in.inc.php:115
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:118
-#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:88
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:80
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:109
 msgctxt "s2member-front"
 msgid "<strong>Confirmed.</strong> Your billing information has been updated."
 msgstr ""
@@ -1281,7 +1282,7 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-update-in.inc.php:122
 #: pro/src/includes/classes/gateways/paypal/paypal-update-in.inc.php:131
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:130
-#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:97
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:121
 msgctxt "s2member-front"
 msgid "<strong>Unable to update.</strong> You have NO recurring fees. Or, your billing profile is no longer active. Please contact Support if you need assistance."
 msgstr ""
@@ -1502,8 +1503,17 @@ msgctxt "s2member-front"
 msgid "API failure. Please contact Support for assistance."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:249
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:501
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:237
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:435
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:626
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:739
+#: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:136
+msgctxt "s2member-front"
+msgid "Please submit a card."
+msgstr ""
+
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:328
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:684
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been updated :-)"
 msgstr ""
@@ -1545,55 +1555,65 @@ msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ta\" attribute. The Trial Amount. When provided, must be <= 999999.99."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:548
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:617
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:94
 msgctxt "s2member-front"
-msgid "Missing Billing Info. Please try again."
+msgid "We need a card to update your subscription. Please enter it below..."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:687
-msgctxt "s2member-front"
-msgid "Missing Billing Method. Please try again."
-msgstr ""
-
-#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:99
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:123
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> No Customer|Subscr. ID. Please contact Support for assistance."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:196
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:225
 msgctxt "s2member-front"
 msgid "Error: <strong>prepaid</strong> cards not accepted at this time. Please use a different card and try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:672
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:739
 msgctxt "s2member-front"
 msgid "Error code: <code>%1$s</code>. %2$s."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:676
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:742
 msgctxt "s2member-front"
 msgid "Invalid parameters to Stripe; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:679
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:745
 msgctxt "s2member-front"
 msgid "Invalid Stripe API keys; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:682
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:748
 msgctxt "s2member-front"
 msgid "Network communication failure with Stripe; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:685
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:751
 msgctxt "s2member-front"
 msgid "Stripe API error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:687
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:753
 msgctxt "s2member-front"
 msgid "Stripe error; please try again."
+msgstr ""
+
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1342
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1391
+msgctxt "s2member-front"
+msgid "Action required: 3D Secure authorization."
+msgstr ""
+
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1347
+msgctxt "s2member-front"
+msgid "Please try again with a different card."
+msgstr ""
+
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1396
+msgctxt "s2member-front"
+msgid "The payment failed, please try again with a different card."
 msgstr ""
 
 #: pro/src/includes/classes/login-widget.inc.php:131
@@ -1724,20 +1744,20 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:911
 #: pro/src/includes/separates/gateways/paypal/paypal.js:917
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:101
-#: pro/src/includes/separates/gateways/stripe/stripe.js:106
-#: pro/src/includes/separates/gateways/stripe/stripe.js:187
-#: pro/src/includes/separates/gateways/stripe/stripe.js:192
-#: pro/src/includes/separates/gateways/stripe/stripe.js:197
-#: pro/src/includes/separates/gateways/stripe/stripe.js:202
-#: pro/src/includes/separates/gateways/stripe/stripe.js:207
-#: pro/src/includes/separates/gateways/stripe/stripe.js:328
-#: pro/src/includes/separates/gateways/stripe/stripe.js:333
-#: pro/src/includes/separates/gateways/stripe/stripe.js:638
-#: pro/src/includes/separates/gateways/stripe/stripe.js:643
-#: pro/src/includes/separates/gateways/stripe/stripe.js:648
-#: pro/src/includes/separates/gateways/stripe/stripe.js:653
-#: pro/src/includes/separates/gateways/stripe/stripe.js:658
+#: pro/src/includes/separates/gateways/stripe/stripe.js:105
+#: pro/src/includes/separates/gateways/stripe/stripe.js:110
+#: pro/src/includes/separates/gateways/stripe/stripe.js:191
+#: pro/src/includes/separates/gateways/stripe/stripe.js:196
+#: pro/src/includes/separates/gateways/stripe/stripe.js:201
+#: pro/src/includes/separates/gateways/stripe/stripe.js:206
+#: pro/src/includes/separates/gateways/stripe/stripe.js:211
+#: pro/src/includes/separates/gateways/stripe/stripe.js:332
+#: pro/src/includes/separates/gateways/stripe/stripe.js:337
+#: pro/src/includes/separates/gateways/stripe/stripe.js:652
+#: pro/src/includes/separates/gateways/stripe/stripe.js:657
+#: pro/src/includes/separates/gateways/stripe/stripe.js:662
+#: pro/src/includes/separates/gateways/stripe/stripe.js:667
+#: pro/src/includes/separates/gateways/stripe/stripe.js:672
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 #: src/includes/s2member.js:311 src/includes/s2member.js:316
 #: src/includes/s2member.js:321 src/includes/s2member.js:326
@@ -1762,10 +1782,10 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:579
 #: pro/src/includes/separates/gateways/paypal/paypal.js:917
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:106
-#: pro/src/includes/separates/gateways/stripe/stripe.js:207
-#: pro/src/includes/separates/gateways/stripe/stripe.js:333
-#: pro/src/includes/separates/gateways/stripe/stripe.js:658
+#: pro/src/includes/separates/gateways/stripe/stripe.js:110
+#: pro/src/includes/separates/gateways/stripe/stripe.js:211
+#: pro/src/includes/separates/gateways/stripe/stripe.js:337
+#: pro/src/includes/separates/gateways/stripe/stripe.js:672
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 msgctxt "s2member-front"
 msgid "Security Verification missing. Please try again."
@@ -1787,8 +1807,8 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:262
 #: pro/src/includes/separates/gateways/paypal/paypal.js:899
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:192
-#: pro/src/includes/separates/gateways/stripe/stripe.js:643
+#: pro/src/includes/separates/gateways/stripe/stripe.js:196
+#: pro/src/includes/separates/gateways/stripe/stripe.js:657
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 #: src/includes/s2member.js:316 src/includes/s2member.js:417
 #: src/includes/s2member.min.js:1
@@ -1802,8 +1822,8 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:269
 #: pro/src/includes/separates/gateways/paypal/paypal.js:906
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:197
-#: pro/src/includes/separates/gateways/stripe/stripe.js:648
+#: pro/src/includes/separates/gateways/stripe/stripe.js:201
+#: pro/src/includes/separates/gateways/stripe/stripe.js:662
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 #: src/includes/s2member.js:321 src/includes/s2member.js:422
 #: src/includes/s2member.min.js:1
@@ -1817,8 +1837,8 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:274
 #: pro/src/includes/separates/gateways/paypal/paypal.js:911
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:202
-#: pro/src/includes/separates/gateways/stripe/stripe.js:653
+#: pro/src/includes/separates/gateways/stripe/stripe.js:206
+#: pro/src/includes/separates/gateways/stripe/stripe.js:667
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 #: src/includes/s2member.js:326 src/includes/s2member.js:427
 #: src/includes/s2member.min.js:1
@@ -1842,7 +1862,7 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:354
 #: pro/src/includes/separates/gateways/paypal/paypal.js:654
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:488
+#: pro/src/includes/separates/gateways/stripe/stripe.js:493
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 msgctxt "s2member-front"
 msgid "calculating sales tax..."
@@ -1854,7 +1874,7 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:365
 #: pro/src/includes/separates/gateways/paypal/paypal.js:665
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:505
+#: pro/src/includes/separates/gateways/stripe/stripe.js:510
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 msgctxt "s2member-front"
 msgid "<strong>Sales Tax%s:</strong> %s<br /><strong>— Total%s:</strong> %s"
@@ -1866,7 +1886,7 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:365
 #: pro/src/includes/separates/gateways/paypal/paypal.js:665
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:505
+#: pro/src/includes/separates/gateways/stripe/stripe.js:510
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 msgctxt "s2member-front"
 msgid "Today"
@@ -1876,7 +1896,7 @@ msgstr ""
 #: pro/src/includes/separates/gateways/authnet/authnet.min.js:1
 #: pro/src/includes/separates/gateways/paypal/paypal.js:727
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:432
+#: pro/src/includes/separates/gateways/stripe/stripe.js:437
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 #: pro/src/includes/templates/forms/authnet-checkout-form.php:60
 #: pro/src/includes/templates/forms/authnet-registration-form.php:44
@@ -1892,7 +1912,7 @@ msgstr ""
 #: pro/src/includes/separates/gateways/authnet/authnet.min.js:1
 #: pro/src/includes/separates/gateways/paypal/paypal.js:728
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/separates/gateways/stripe/stripe.js:433
+#: pro/src/includes/separates/gateways/stripe/stripe.js:438
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 msgctxt "s2member-front"
 msgid "Your Profile"
@@ -1937,10 +1957,10 @@ msgstr ""
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:178
 #: pro/src/includes/templates/forms/paypal-update-form.php:119
 #: pro/src/includes/templates/forms/stripe-cancellation-form.php:37
-#: pro/src/includes/templates/forms/stripe-checkout-form.php:159
+#: pro/src/includes/templates/forms/stripe-checkout-form.php:158
 #: pro/src/includes/templates/forms/stripe-registration-form.php:95
-#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:140
-#: pro/src/includes/templates/forms/stripe-update-form.php:53
+#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:139
+#: pro/src/includes/templates/forms/stripe-update-form.php:40
 msgctxt "s2member-front"
 msgid "Submit Form"
 msgstr ""
@@ -1961,15 +1981,14 @@ msgctxt "s2member-front paypal-button-lang-code"
 msgid "en_US"
 msgstr ""
 
-#: pro/src/includes/separates/gateways/stripe/stripe.js:292
-#: pro/src/includes/separates/gateways/stripe/stripe.js:599
+#: pro/src/includes/separates/gateways/stripe/stripe.js:296
+#: pro/src/includes/separates/gateways/stripe/stripe.js:618
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 msgctxt "s2member-front"
 msgid "Add"
 msgstr ""
 
-#: pro/src/includes/separates/gateways/stripe/stripe.js:312
-#: pro/src/includes/separates/gateways/stripe/stripe.js:623
+#: pro/src/includes/separates/gateways/stripe/stripe.js:316
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
 msgctxt "s2member-front"
 msgid "No Billing Method; please try again."
@@ -2156,8 +2175,7 @@ msgstr ""
 #: pro/src/includes/templates/forms/authnet-sp-checkout-form.php:86
 #: pro/src/includes/templates/forms/paypal-checkout-form.php:104
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:86
-#: pro/src/includes/templates/forms/stripe-checkout-form.php:104
-#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:86
+#: pro/src/includes/templates/forms/stripe-billing-div.php:9
 msgctxt "s2member-front"
 msgid "Billing Method"
 msgstr ""
@@ -2218,6 +2236,7 @@ msgstr ""
 #: pro/src/includes/templates/forms/paypal-checkout-form.php:146
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:128
 #: pro/src/includes/templates/forms/paypal-update-form.php:72
+#: pro/src/includes/templates/forms/stripe-checkout-form.php:107
 msgctxt "s2member-front"
 msgid "Billing Address"
 msgstr ""
@@ -2228,6 +2247,8 @@ msgstr ""
 #: pro/src/includes/templates/forms/paypal-checkout-form.php:150
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:132
 #: pro/src/includes/templates/forms/paypal-update-form.php:76
+#: pro/src/includes/templates/forms/stripe-checkout-form.php:111
+#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:93
 msgctxt "s2member-front"
 msgid "Street Address"
 msgstr ""
@@ -2238,6 +2259,8 @@ msgstr ""
 #: pro/src/includes/templates/forms/paypal-checkout-form.php:156
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:138
 #: pro/src/includes/templates/forms/paypal-update-form.php:82
+#: pro/src/includes/templates/forms/stripe-checkout-form.php:117
+#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:99
 msgctxt "s2member-front"
 msgid "City / Town"
 msgstr ""
@@ -2248,8 +2271,8 @@ msgstr ""
 #: pro/src/includes/templates/forms/paypal-checkout-form.php:162
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:144
 #: pro/src/includes/templates/forms/paypal-update-form.php:88
-#: pro/src/includes/templates/forms/stripe-checkout-form.php:124
-#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:106
+#: pro/src/includes/templates/forms/stripe-checkout-form.php:123
+#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:105
 msgctxt "s2member-front"
 msgid "State / Province"
 msgstr ""
@@ -2260,8 +2283,8 @@ msgstr ""
 #: pro/src/includes/templates/forms/paypal-checkout-form.php:168
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:150
 #: pro/src/includes/templates/forms/paypal-update-form.php:94
-#: pro/src/includes/templates/forms/stripe-checkout-form.php:130
-#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:112
+#: pro/src/includes/templates/forms/stripe-checkout-form.php:129
+#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:111
 msgctxt "s2member-front"
 msgid "Postal / Zip Code"
 msgstr ""
@@ -2272,8 +2295,8 @@ msgstr ""
 #: pro/src/includes/templates/forms/paypal-checkout-form.php:174
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:156
 #: pro/src/includes/templates/forms/paypal-update-form.php:100
-#: pro/src/includes/templates/forms/stripe-checkout-form.php:136
-#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:118
+#: pro/src/includes/templates/forms/stripe-checkout-form.php:135
+#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:117
 msgctxt "s2member-front"
 msgid "Country"
 msgstr ""
@@ -2282,8 +2305,8 @@ msgstr ""
 #: pro/src/includes/templates/forms/authnet-sp-checkout-form.php:174
 #: pro/src/includes/templates/forms/paypal-checkout-form.php:192
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:174
-#: pro/src/includes/templates/forms/stripe-checkout-form.php:154
-#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:136
+#: pro/src/includes/templates/forms/stripe-checkout-form.php:153
+#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:135
 msgctxt "s2member-front"
 msgid "Checkout Now"
 msgstr ""
@@ -2311,34 +2334,23 @@ msgstr ""
 
 #: pro/src/includes/templates/forms/authnet-update-form.php:30
 #: pro/src/includes/templates/forms/paypal-update-form.php:30
-#: pro/src/includes/templates/forms/stripe-update-form.php:30
-#: pro/src/includes/templates/forms/stripe-update-form.php:34
 msgctxt "s2member-front"
 msgid "New Billing Method"
 msgstr ""
 
 #: pro/src/includes/templates/forms/authnet-update-form.php:115
 #: pro/src/includes/templates/forms/paypal-update-form.php:115
-#: pro/src/includes/templates/forms/stripe-update-form.php:49
+#: pro/src/includes/templates/forms/stripe-update-form.php:36
 msgctxt "s2member-front"
 msgid "Update Billing Information"
 msgstr ""
 
-#: pro/src/includes/templates/forms/stripe-checkout-form.php:108
-#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:90
-#: pro/src/includes/templates/forms/stripe-update-form.php:34
+#: pro/src/includes/templates/forms/stripe-billing-div.php:12
 msgctxt "s2member-front"
-msgid "[+]"
+msgid "Credit or debit card"
 msgstr ""
 
-#: pro/src/includes/templates/forms/stripe-checkout-form.php:108
-#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:90
-msgctxt "s2member-front"
-msgid "Add Billing Method"
-msgstr ""
-
-#: pro/src/includes/templates/forms/stripe-checkout-form.php:120
-#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:102
+#: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:89
 msgctxt "s2member-front"
 msgid "Tax Location"
 msgstr ""

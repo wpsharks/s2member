@@ -20,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 190822
-Stable tag: 190822
+Version: 191018
+Stable tag: 191018
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -36,10 +36,10 @@ PayPal Pro Compatible: yes w/s2Member Pro
 Authorize.Net Compatible: yes w/s2Member Pro
 ClickBank Compatible: yes w/s2Member Pro
 
-Tested up to: 5.2.3
+Tested up to: 5.2.4
 Requires at least: 4.2
 
-Requires PHP: 5.6
+Requires PHP: 5.6.2
 Tested up to PHP: 7.2.19-0ubuntu0.18.10.1
 
 Copyright: © 2009 WP Sharks
@@ -77,7 +77,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '190822'; //version//
+${__FILE__}['tmp'] = '191018'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**
@@ -88,7 +88,7 @@ if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
  *
  * @var string
  */
-${__FILE__}['tmp'] = '5.6'; //php-required-version//
+${__FILE__}['tmp'] = '5.6.2'; //php-required-version//
 if(!defined('WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION', ${__FILE__}['tmp']);
 /**
@@ -110,7 +110,7 @@ if(!defined('WS_PLUGIN__S2MEMBER_MIN_WP_VERSION'))
  *
  * @var string
  */
-${__FILE__}['tmp'] = '190822'; //version//
+${__FILE__}['tmp'] = '191018'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION', ${__FILE__}['tmp']);
 /*
