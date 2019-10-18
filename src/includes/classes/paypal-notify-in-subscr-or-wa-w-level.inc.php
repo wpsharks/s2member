@@ -51,6 +51,28 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 			   && (!empty($paypal['payer_email']))
 			)
 			{
+				// Fix some IDs for Stripe...
+				if ($paypal['subscr_gateway'] == 'stripe' && $paypal['txn_type'] == 'web_accept') {
+					// Above, if subscr_id was empty, it got the value of txn_id.
+					// Only save the subscr_id if it's a Subscription ID (subscr_signup), not a Payment Intent ID (web_accept).
+					// If subscr_id has a value, s2Member will query Stripe for a subscription that doesn't exist and get errors.
+					// If it was empty, then this is not a subscr_signup, don't give it the wrong value, better empty it again.
+					// If it is needed to have a web_accept Payment Intent ID, then that may need its own field.
+					// !!! Seems s2 searches for customer in usermeta using the subscr_id instead of subscr_cid:
+					//  c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['subscr_id']...
+					//  Seems to be only in paypal-notify-in- and paypayl-return-in- files.
+					//  Will need to come back to this...
+					//  Leave subscr_id with txn_id for now, although it may cause the Stripe exception:
+					//  "Customer cus_xxxx does not have a subscription with ID pi_xxxx",
+					//  but it's not visible in the UI, only in the API log.
+					// $paypal['subscr_id'] = '';
+
+					// Above, if subscr_cid was empty (it's not a subscr_signup), it got the value of txn_id (Payment Intent ID).
+					// The cid is the Customer ID, should not be a Payment Intent or Subscription ID.
+					// !!! Maybe should rename this field to Stripe Customer ID (cus_id).
+					$paypal['subscr_cid'] = $paypal['txn_cid'];
+				}
+
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify_before_subscr_signup', get_defined_vars());
 				unset($__refs, $__v);
@@ -601,7 +623,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 					}
 					if($processing && $_REQUEST['s2member_paypal_proxy'] && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
 					{
-						if((!empty($user_id) && !empty($user) && is_object($user) && $user->ID) || (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['subscr_id'], $paypal['option_selection1'])) && is_object($user = new WP_User ($user_id)) && $user->ID))
+						if((!empty($user_id) && !empty($user) && is_object($user) && $user->ID) 
+							|| (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['subscr_id'], $paypal['option_selection1'])) && is_object($user = new WP_User ($user_id)) && $user->ID)
+							|| (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['subscr_cid'], $paypal['option_selection1'])) && is_object($user = new WP_User ($user_id)) && $user->ID)
+						)
 						{
 							$fields      = get_user_option('s2member_custom_fields', $user_id); // These will be needed in the routines below.
 							$user_reg_ip = get_user_option('s2member_registration_ip', $user_id); // Original IP during Registration.
