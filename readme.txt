@@ -137,6 +137,24 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Changelog ==
 
+= v191022 =
+
+- (s2Member Pro) **Feature Enhancement:** The Stripe pro-forms can now handle 3D Secure 2 for [Strong Customer Authentication](https://stripe.com/guides/strong-customer-authentication), as required by the new European regulation that came into effect recently. Props to those in the beta testing group, especially Brice and Felix. See [thread 5585](https://f.wpsharks.com/t/5585/).
+
+- (s2Member Pro) **Feature Enhancement:** The Stripe pro-form now has the card field inline, instead of opening a modal to enter it. Before it required clicking the link to open the modal, enter the card details, submit that, and then submit the pro-form. Now you enter the card details as part of the pro-form. See [issue #588](https://github.com/wpsharks/s2member/issues/588).
+
+- (s2Member Pro) **Stripe Integration Updates:** Upgraded the Stripe PHP SDK from v1.18 to v7.4.0, and the API from 2015-07-13 to 2019-10-08. Upgraded the integration from the Charges API to the latest Payment Intents API. Upgraded the card input from the old Stripe Checkout modal, to the new Stripe.js and Elements. 
+
+- (s2Member Pro) **Optimization:** Stripe's JavaScript now only gets included if the page has a Stripe pro-form.
+
+- (s2Member Pro) **Removed Stripe Bitcoin**: Stripe [dropped Bitcoin](https://stripe.com/blog/ending-bitcoin-support) last year, it's not available anymore. This update removes the Bitcoin options and mentions from the s2 admin pages.
+
+- (s2Member Pro) **Bug Fix:** Subscriptions without at trial were showing a "trialing" status in Stripe for the first period. This behavior has now been solved. It will only say trialing when you set a trial period (free or paid) in your Stripe pro-form shortcode. See [issue #1052](https://github.com/wpsharks/s2member/issues/1052).
+
+- (s2Member Pro) **Bug Fix:** The Stripe pro-form installments via the `rrt` shortcode attribute were charging an extra payment before ending the subscription. There was an error in the time calculation for this. This is solved in this release. Props to Brice. See [thread 5817](https://f.wpsharks.com/t/5817/).
+
+- (s2Member Pro) **Bug Fix:** Some payments through the Stripe pro-form were creating a new Stripe customer when the user was already a customer. The Stripe customer ID was not being saved correctly in the user's profile. This is solved in this release. Props to demeritcowboy for reporting it.
+
 = v190822 =
 
 - (s2Member) **PayPal Integration Update:** PayPal deprecated the subscription modification button. Using the old possible values for this, now gives an error on PayPal's site. This button has been removed from the PayPal Standard integration in s2Member. Props to Tim for reporting it, see [forum thread 5861](https://f.wpsharks.com/t/5861), and [issue #1157](https://github.com/wpsharks/s2member/issues/1157).
