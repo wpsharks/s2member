@@ -86,6 +86,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_cur'))
 			$symbols['HKD'] = '$'; // Hong Kong Dollar
 			$symbols['HUF'] = 'Ft'; // Hungarian Forint
 			$symbols['ILS'] = '₪'; // Israeli New Sheqel
+			$symbols['INR'] = 'Rs'; // Indian Rupee
 			$symbols['JPY'] = '¥'; // Japanese Yen
 			$symbols['MYR'] = 'RM'; // Malaysian Ringgit
 			$symbols['MXN'] = '$'; // Mexican Peso
