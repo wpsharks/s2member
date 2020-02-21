@@ -1,3 +1,19 @@
+= v200221 =
+
+- (s2Member Pro) **Bug Fix:** In some rare cases, another plugin loaded Stripe's class before s2Member, so when s2 tried loading it there'd be an error. This release fixes the check for the class before trying to load it. See [issue #1170](https://github.com/wpsharks/s2member/issues/1170)
+
+  **Note:** s2Member won't have control over what version of the Stripe SDK was loaded by the other plugin. You'll need to get that other plugin to have an up-to-date version. If you don't have another plugin loading Stripe, this is not relevant to you.
+
+- (s2Member Pro) **Bug Fix:** When using a 100% off coupon, requiring no payment, the Stripe pro-form was still loading the card field and requiring it, preventing the free signup. That's fixed in this release. See [issue #1171](https://github.com/wpsharks/s2member/issues/1171)
+
+- (s2Member Pro) **Bug Fix:** The Stripe pro-form, when given an invalid card, didn't give a clear error message for it, and instead just "invalid parameter". Now it shows the correct card error, making it possible for the customer to try a different card to complete the payment.
+
+- (s2Member Pro) **Feature Update:** The Indian Rupee was added to the list of currency symbols.
+
+- (s2Member Pro) **Feature Enhancement:** The s2Member Pro add-on, not being a regular plugin was not uploadable via the WP plugin manager. This made it necessary to FTP, which is complicated for some site owners. In this release I made it possible for the plugin manager to upload or remove the Pro add-on.
+
+  **Note:** It still is not a regular plugin. The activation link or status in the plugins manager is irrelevant, but I couldn't find how to remove it. s2Member Pro activates automatically when its version matches the Framework's, and it'll be mentioned next to the Framework's version in the plugins manager.
+
 = v191022 =
 
 - (s2Member Pro) **Feature Enhancement:** The Stripe pro-forms can now handle 3D Secure 2 for [Strong Customer Authentication](https://stripe.com/guides/strong-customer-authentication), as required by the new European regulation that came into effect recently. Props to those in the beta testing group, especially Brice and Felix. See [thread 5585](https://f.wpsharks.com/t/5585/).

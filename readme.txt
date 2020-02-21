@@ -1,8 +1,8 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 191022
-Stable tag: 191022
-Tested up to: 5.2.4
+Version: 200221
+Stable tag: 200221
+Tested up to: 5.4-beta2
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 7.2.19-0ubuntu0.18.10.1
@@ -136,6 +136,22 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v200221 =
+
+- (s2Member Pro) **Bug Fix:** In some rare cases, another plugin loaded Stripe's class before s2Member, so when s2 tried loading it there'd be an error. This release fixes the check for the class before trying to load it. See [issue #1170](https://github.com/wpsharks/s2member/issues/1170)
+
+  **Note:** s2Member won't have control over what version of the Stripe SDK was loaded by the other plugin. You'll need to get that other plugin to have an up-to-date version. If you don't have another plugin loading Stripe, this is not relevant to you.
+
+- (s2Member Pro) **Bug Fix:** When using a 100% off coupon, requiring no payment, the Stripe pro-form was still loading the card field and requiring it, preventing the free signup. That's fixed in this release. See [issue #1171](https://github.com/wpsharks/s2member/issues/1171)
+
+- (s2Member Pro) **Bug Fix:** The Stripe pro-form, when given an invalid card, didn't give a clear error message for it, and instead just "invalid parameter". Now it shows the correct card error, making it possible for the customer to try a different card to complete the payment.
+
+- (s2Member Pro) **Feature Update:** The Indian Rupee was added to the list of currency symbols.
+
+- (s2Member Pro) **Feature Enhancement:** The s2Member Pro add-on, not being a regular plugin was not uploadable via the WP plugin manager. This made it necessary to FTP, which is complicated for some site owners. In this release I made it possible for the plugin manager to upload or remove the Pro add-on.
+
+  **Note:** It still is not a regular plugin. The activation link or status in the plugins manager is irrelevant, but I couldn't find how to remove it. s2Member Pro activates automatically when its version matches the Framework's, and it'll be mentioned next to the Framework's version in the plugins manager.
 
 = v191022 =
 
