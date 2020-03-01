@@ -1,7 +1,7 @@
 === s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
 
-Version: 200221
-Stable tag: 200221
+Version: 200301
+Stable tag: 200301
 Tested up to: 5.4-beta2
 Requires at least: 4.2
 Requires PHP: 5.6.2
@@ -136,6 +136,16 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v200301 =
+
+- (s2Member Pro) **Enhancement:** Added "Powered by Stripe" to Stripe pro-form's payment card field. Kudos to Josh, see [post 6716](https://f.wpsharks.com/t/6716).
+
+- (s2Member Pro) **Bug Fix:** Stripe subscription cancellations were not happening when they should. This release updates the API integration for it and fixes that behavior. Kudos to Matt for reporting it, see [post 6909](https://f.wpsharks.com/t/6909).
+
+- (s2Member Pro) **Bug Fix:** Updating the card with Stripe's pro-form sometimes gave an incorrect "missing billing method" error. Kudos to Corey, see [post 7058](https://f.wpsharks.com/t/7058).
+
+- (s2Member Pro) **Small fix:** Removed Bitcoin mention next to Stripe in Gateways list. Missed it in [v191022](https://s2member.com/s2member-v191022-now-available/).
 
 = v200221 =
 

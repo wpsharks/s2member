@@ -1,3 +1,13 @@
+= v200301 =
+
+- (s2Member Pro) **Enhancement:** Added "Powered by Stripe" to Stripe pro-form's payment card field. Kudos to Josh, see [post 6716](https://f.wpsharks.com/t/6716).
+
+- (s2Member Pro) **Bug Fix:** Stripe subscription cancellations were not happening when they should. This release updates the API integration for it and fixes that behavior. Kudos to Matt for reporting it, see [post 6909](https://f.wpsharks.com/t/6909).
+
+- (s2Member Pro) **Bug Fix:** Updating the card with Stripe's pro-form sometimes gave an incorrect "missing billing method" error. Kudos to Corey, see [post 7058](https://f.wpsharks.com/t/7058).
+
+- (s2Member Pro) **Small fix:** Removed Bitcoin mention next to Stripe in Gateways list. Missed it in [v191022](https://s2member.com/s2member-v191022-now-available/).
+
 = v200221 =
 
 - (s2Member Pro) **Bug Fix:** In some rare cases, another plugin loaded Stripe's class before s2Member, so when s2 tried loading it there'd be an error. This release fixes the check for the class before trying to load it. See [issue #1170](https://github.com/wpsharks/s2member/issues/1170)
