@@ -174,11 +174,15 @@ else if(is_admin()) // Admin compatibility errors.
 {
 	if(!version_compare(PHP_VERSION, WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION, '>='))
 	{
-		add_action('all_admin_notices', create_function('', 'echo \'<div class="error fade"><p>You need PHP v\' . WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION . \'+ to use the s2Member plugin.</p></div>\';'));
+		add_action('all_admin_notices', function(){
+			echo '<div class="error fade"><p>You need PHP v' . WS_PLUGIN__S2MEMBER_MIN_PHP_VERSION . '+ to use the s2Member plugin.</p></div>';
+		});
 	}
 	else if(!version_compare(get_bloginfo('version'), WS_PLUGIN__S2MEMBER_MIN_WP_VERSION, '>='))
 	{
-		add_action('all_admin_notices', create_function('', 'echo \'<div class="error fade"><p>You need WordPress v\' . WS_PLUGIN__S2MEMBER_MIN_WP_VERSION . \'+ to use the s2Member plugin.</p></div>\';'));
+		add_action('all_admin_notices', function(){
+			echo '<div class="error fade"><p>You need WordPress v' . WS_PLUGIN__S2MEMBER_MIN_WP_VERSION . '+ to use the s2Member plugin.</p></div>';
+		});
 	}
 }
 unset(${__FILE__}); // Housekeeping.
