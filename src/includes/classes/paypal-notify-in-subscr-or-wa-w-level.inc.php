@@ -797,6 +797,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 																					}
 							$paypal['s2member_log'][] = 'Payment Notification Emails have been processed.';
 						}
+						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+						do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_or_wa_payment', get_defined_vars());
+						unset($__refs, $__v);
 					}
 					else if($processing // Process a payment now? Special cases for web_accept and/or Proxy requests with `subscr-signup-as-subscr-payment`.
 					        && (preg_match('/^web_accept$/i', $paypal['txn_type']) || ($_REQUEST['s2member_paypal_proxy'] && preg_match('/subscr-signup-as-subscr-payment/', $_REQUEST['s2member_paypal_proxy_use']) && $paypal['txn_id'] && $paypal['mc_gross'] > 0))
