@@ -29,7 +29,9 @@
   "require": {
     "defuse/php-encryption": "2.*"
   },
-  "require-dev": {},
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.5"
+  },
 
   "minimum-stability": "dev",
   "prefer-stable": true,
