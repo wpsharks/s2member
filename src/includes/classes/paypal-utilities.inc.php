@@ -61,9 +61,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											{
 												foreach(preg_split("/[\r\n]+/", preg_replace("/^SUCCESS/i", "", $response)) as $varline)
 													{
-														list($key, $value) = preg_split("/\=/", $varline, 2);
-														if(strlen($key = trim($key)) && strlen($value = trim($value)))
-															$postvars[$key] = trim(stripslashes(urldecode($value)));
+														if (!empty($varline)) {
+															list($key, $value) = preg_split("/\=/", $varline, 2);
+															if (strlen($key = trim($key)) && strlen($value = trim($value)))
+																$postvars[$key] = trim(stripslashes(urldecode($value)));
+														}
 													}
 												$postvars = self::paypal_postvars_back_compat($postvars); // From verified data.
 
