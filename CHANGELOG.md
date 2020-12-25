@@ -1,3 +1,23 @@
+= v201225 =
+
+- (s2Member Framework) **Bug Fix**: View Password icon WP's login page was not displaying correctly. Kudos to Beee4life for reporting it. See [issue #1187](https://github.com/wpsharks/s2member/issues/1187)
+
+- (s2Member Framework and Pro) **Enhancement**: Refactored PHP's deprecated _create_function_ with anonymous functions. Kudos to Berry for reporting it, see [post 6069](https://f.wpsharks.com/t/6069) 
+
+- (s2Member Framework) **Bug Fix**: Added a check for empty return variable before trying to use it in paypal-utilities.inc.php.
+
+- (s2Member Framework) **Bug Fix**: Added checks for undefined indexes before trying to use them in paypal-return-in-subscr-or-wa-w-level.inc.php.
+
+- (s2Member Framework) **Bug Fix:** Added a check for undefined index before using it to define a couple of s2 constants. Kudos to Berry for reporting it, see [post 8181](https://f.wpsharks.com/t/8181/) 
+
+- (s2Member Pro) **Bug Fix**: s2's payment notification when creating a Stripe subscription, was being sent twice. Added a check to ignore the webhook for the subscription's on-session first payment; s2's webhook endpoint is for off-session events. 
+
+- (s2Member Framework) **Enhancement**: Added a new hook for the payment notification on subscription creation or buy now payments.
+
+- (s2Member Pro) **Bug Fix**: Stripe paid trials were accumulating on failed payment attempts, causing a larger charge when it finally succeeded. Kudos to Alan for his help through the many attempts to fix this one, see [post 7002](https://f.wpsharks.com/t/7002).
+
+- (s2Member Pro) **Enhancement**: Stripe duplicate payments were happening randomly to a few site owners, apparently from bad communication between their server and Stripe's. Added idempotency to prevent duplicates. Kudos to Alan and everyone in the forum that reported and gave details on this behavior, see [post 7002](https://f.wpsharks.com/t/7002)
+
 = v200301 =
 
 - (s2Member Pro) **Enhancement:** Added "Powered by Stripe" to Stripe pro-form's payment card field. Kudos to Josh, see [post 6716](https://f.wpsharks.com/t/6716).

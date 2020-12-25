@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  200301\n"
+"Project-Id-Version:  201225\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2020-03-01 21:47:22+00:00\n"
+"POT-Creation-Date: 2020-12-25 21:31:45+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: pro/src/includes/classes/coupons.inc.php:241
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:692
 #: pro/src/includes/classes/gateways/paypal/paypal-utilities.inc.php:312
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:974
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:983
 msgctxt "s2member-front percentage-symbol"
 msgid "%"
 msgstr ""
@@ -1310,17 +1310,17 @@ msgstr ""
 #. with `ws_plugin__s2member_paypal_payflow_api_response`.
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:96
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:325
-#: src/includes/classes/paypal-utilities.inc.php:340
-#: src/includes/classes/paypal-utilities.inc.php:348
+#: src/includes/classes/paypal-utilities.inc.php:342
+#: src/includes/classes/paypal-utilities.inc.php:350
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:99
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:328
-#: src/includes/classes/paypal-utilities.inc.php:214
-#: src/includes/classes/paypal-utilities.inc.php:342
-#: src/includes/classes/paypal-utilities.inc.php:350
+#: src/includes/classes/paypal-utilities.inc.php:216
+#: src/includes/classes/paypal-utilities.inc.php:344
+#: src/includes/classes/paypal-utilities.inc.php:352
 msgctxt "s2member-front"
 msgid "Error. Please contact Support for assistance."
 msgstr ""
@@ -1571,48 +1571,48 @@ msgctxt "s2member-front"
 msgid "Error: <strong>prepaid</strong> cards not accepted at this time. Please use a different card and try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:747
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:756
 msgctxt "s2member-front"
 msgid "Error code: <code>%1$s</code>. %2$s."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:750
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:759
 msgctxt "s2member-front"
 msgid "Invalid parameters to Stripe; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:753
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:762
 msgctxt "s2member-front"
 msgid "Invalid Stripe API keys; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:756
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:765
 msgctxt "s2member-front"
 msgid "Network communication failure with Stripe; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:759
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:768
 msgctxt "s2member-front"
 msgid "Stripe API error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:761
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:770
 msgctxt "s2member-front"
 msgid "Stripe error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1350
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1399
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1361
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1410
 msgctxt "s2member-front"
 msgid "Action required: 3D Secure authorization."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1355
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1366
 msgctxt "s2member-front"
 msgid "Please try again with a different card."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1404
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1415
 msgctxt "s2member-front"
 msgid "The payment failed, please try again with a different card."
 msgstr ""
@@ -4460,23 +4460,23 @@ msgstr ""
 #. by PayPal. Replace `%2$s` and `%3$s` with: `Unable to process, please try
 #. again`, or something to that affect. Or, if you prefer, you could Filter
 #. ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`.
-#: src/includes/classes/paypal-utilities.inc.php:211
+#: src/includes/classes/paypal-utilities.inc.php:213
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s. %3$s."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:258
-#: src/includes/classes/paypal-utilities.inc.php:264
+#: src/includes/classes/paypal-utilities.inc.php:260
+#: src/includes/classes/paypal-utilities.inc.php:266
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Please use an alternate funding source."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:261
+#: src/includes/classes/paypal-utilities.inc.php:263
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Express Checkout was NOT confirmed."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:395
+#: src/includes/classes/paypal-utilities.inc.php:397
 msgctxt "s2member-front"
 msgid " Please contact PayPal Merchant Technical Support (www.paypal.com/mts) and request `Recurring Billing` service, and also ask to have `Reference Transactions` enabled for Recurring Billing via Express Checkout."
 msgstr ""
