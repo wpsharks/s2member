@@ -1,5 +1,8 @@
-=== s2Member Framework (Member Roles, Capabilities, Membership, PayPal Members) ===
+=== s2Member Framework (Membership, Member Level Roles, Access Capabilities, PayPal Members) ===
 
+Plugin Name: s2Member Framework
+Plugin URI: http://s2member.com/
+Tags: membership, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, ecommerce, restriction
 Version: 201225
 Stable tag: 201225
 Tested up to: 5.7
@@ -7,51 +10,84 @@ Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 7.4.6
 License: GNU General Public License v2 or later.
-Contributors: WebSharks, JasWSInc, raamdev, clavaque
+Contributors: WebSharks, JasWSInc, raamdev, clavaque, eduan
 Author: WP Sharks
 Author URI: http://s2member.com/
 Donate link: http://s2member.com/donate/
 Beta link: http://s2member.com/beta-testers/
+Forum URI: http://s2member.com/r/forum/
+Privacy URI: http://s2member.com/privacy-policy/
+Changelog URI: http://s2member.com/changelog/
+Video Tutorials: http://s2member.com/r/s2member-videos/
+Knowledge Base: http://s2member.com/kb/
+Newsletter: http://s2member.com/r/subscribe/
+PayPal Pro Integration: http://s2member.com/r/pp-account-types/
 Text Domain: s2member
 Domain Path: /src/includes/translations
-Plugin Name: s2Member® Framework
-Plugin URI: http://s2member.com/
-Tags: membership, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, ecommerce, restriction
 
-s2Member®—a powerful (free) membership plugin for WordPress®. Protect members only content with roles/capabilities.
+s2Member is a powerful free membership plugin for WordPress. Protect members only content with Level Member Roles and Access Capabilities.
 
 == Description ==
 
-The s2Member® Framework (free) integrates with PayPal Website Payments Standard (also free). Sell "Buy Now" or Membership access to your site. Restrict access to Roles, Capabilities, Posts, Pages, or anything else in WordPress.
+The free s2Member Framework integrates with PayPal's Website Payments Standard (also free).
 
-Protect your WordPress Posts, Pages, Tags, Categories, URIs, BuddyPress/bbPress, and even portions of content within Posts, Pages, themes, plugins. Easily configurable & highly extensible. You can even protect downloadable files and streaming audio/video. Store files locally, or use s2Member's integration with Amazon® S3/CloudFront.
+Easy to configure and highly extensible.
 
-s2Member is powered almost entirely by WordPress shortcodes, making complex integrations quick & easy. Sell recurring (or non-recurring) subscriptions with lots of flexibility. Or sell "Buy Now" access in various ways. You can also sell specific Posts/Pages, sell access to file downloads, or sell Custom Capabilities that provide highly configurable access to specific portions of your content.
+Sell recurring (or non-recurring) subscriptions with lots of flexibility. Or sell "Buy Now" access in various ways.
 
-You can learn more at [s2Member.com](http://s2member.com/).
+Protect your WordPress posts, pages, tags, categories, URIs, BuddyPress/bbPress, and even portions of them.
 
-= Reasons to upgrade to "s2Member® Pro" =
+You can protect the whole site, certain areas, or even just parts of pages.
 
-- Stripe™ integration via Pro-Forms (one-step checkout).
-- PayPal Pro™ integration via Pro-Forms (one-step checkout).
-- Authorize.Net™ integration via Pro-Forms (one-step checkout).
-- Plus ClickBank™, Unlimited Membership Levels, Coupon Codes, Gift/Redemption Codes, Pro API, and more!
+Provide highly configurable access to specific portions of your content with Levels or Access Capabilities.
 
-With 1000's of customers, an intelligent open-community, comprehensive documentation, video tutorials, APIs, the s2Member Codex, KB articles, and over 50,000 forum posts; s2Member just can't be beat!
+You can also protect downloadable files and streaming audio/video. Store files locally, or use s2Member's integration with Amazon S3 and CloudFront CDN.
 
-Secure WordPress content and offer users/members a secure checkout solution that integrates seamlessly with WordPress Roles/Capabilities. It's like a cash machine. s2Member puts money back in your pocket with every customer you acquire. You can learn more at [s2Member.com](http://s2member.com/).
+Sell specific Posts/Pages, File Downloads, or Access Capabilities.
+
+Secure WordPress content and offer users a secure checkout solution to get access.
+
+Sell access to your site's content with single "buy now" payments or recurring payments subscription Memberships.
+
+Like a cash machine, s2Member puts money back in your pocket. Monetize your website now with s2Member.
+
+Learn more at [s2Member.com](http://s2member.com/).
+
+= Some reasons to upgrade to "s2Member Pro" =
+
+- Unlimited Membership Levels.
+- Renewal reminder emails.
+- Content dripping.
+- Single-step registration and payment with s2Member Pro-forms.
+- Stripe, PayPal Pro and Authorize.Net integration via Pro-forms.
+- Pro-form Coupon Codes and Gift/Redemption Codes.
+- ClickBank buttons integration.
+- Pro API for new integrations.
+- Public Members Directory.
+- User bulk Import/Update/Exporter tools.
+- Multisite Network support.
+- Login and registration forms to include in your pages or posts.
+- ... and more!
+
+With thousands of customers, an intelligent open community, comprehensive documentation, video tutorials, APIs, the s2Member Codex, KB articles, and thousands of forum posts; s2Member just can't be beat!
+
+[-> Click Here for more details](http://s2member.com/)
 
 == Installation ==
 
-**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://s2member.com/support/).
+**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our forum at s2Member.com](http://s2member.com/r/forum/).
 
 ---
 
-= s2Member® is Very Easy to Install =
+= s2Member is Very Easy to Install =
 
-1. Upload the `/s2member` folder to your `/wp-content/plugins/` directory.
-2. Activate the plugin through the **Plugins** menu in WordPress®.
-3. Navigate to the **s2Member® Options** panel for configuration details.
+Just like any other normal plugin:
+
+- From the WP Admin's [Plugins Add New Screen](https://wordpress.org/support/article/plugins-add-new-screen/). 
+- Or via FTP upload the `s2member` folder from the zip to your `/wp-content/plugins/` directory.
+- Activate it from **Plugins** page in your WordPress Admin.
+
+Here's a [quick-start video](https://www.youtube.com/watch?v=qlKn-I-0W6U) for a simple basic setup to get you started.
 
 = See Also (s2Member.com) =
 
@@ -59,7 +95,7 @@ Secure WordPress content and offer users/members a secure checkout solution that
 
 = Is s2Member compatible with Multisite Networking? =
 
-Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networking. After you enable Multisite Networking, install the s2Member plugin. Then navigate to `s2Member → Multisite (Config)` in the Dashboard on your Main Site.
+Yes, s2Member Pro for Unlimited Sites is compatible with Multisite Networking. After you enable Multisite Networking, with s2Member Framework and Pro enabled, navigate to `s2Member → Multisite (Config)` in the Dashboard on your Main Site.
 
 == Screenshots ==
 
@@ -73,61 +109,27 @@ Yes. s2Member and s2Member Pro, are also both compatible with Multisite Networki
 
 == Frequently Asked Questions ==
 
-**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our support center at s2Member.com](http://s2member.com/support/).
+**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our forum at s2Member.com](http://s2member.com/r/forum/).
 
 ---
 
-= Please Check the Following s2Member® Resources =
+= Please Check the Following s2Member Resources =
 
-* s2Member® FAQs: <http://s2member.com/faqs/>
+* s2Member FAQs: <http://s2member.com/faqs/>
 * Knowledge Base: <http://s2member.com/kb/>
 * Video Tutorials: <http://s2member.com/videos/>
 * Community: <http://s2member.com/r/forum/>
 * Codex: <http://s2member.com/codex/>
 
-= Translating s2Member® =
+= Translating s2Member =
 
 Please see: <http://s2member.com/r/translations/>
 
 == License ==
 
-Copyright: © 2013 [WP Sharks](http://www.wpsharks.com/) (coded in the USA)
+Copyright: © 2013 [WP Sharks](https://www.wpsharks.com/) (coded in the USA)
 
 Released under the terms of the [GNU General Public License](http://www.gnu.org/licenses/gpl-2.0.html).
-
-= Credits / Additional Acknowledgments =
-
-* Software designed for WordPress®.
-	- GPL License <http://codex.wordpress.org/GPL>
-	- WordPress® <http://wordpress.org>
-* JavaScript extensions require jQuery.
-	- GPL License <http://jquery.org/license>
-	- jQuery <http://jquery.com/>
-* Readme parsing routines, powered (in part) by PHP Markdown.
-	- BSD / GPL Compatible License <http://michelf.com/projects/php-markdown/license/>
-	- PHP Markdown <http://michelf.com/projects/php-markdown/>
-* Administration panel (tools icon) was provided by Everaldo.com.
-	- LGPL License <http://www.everaldo.com/crystal/?action=license>
-	- Everaldo <http://www.everaldo.com/crystal/?action=downloads>
-* Administration panel (videos icon) was provided by David Vignoni.
-	- LGPL License <http://www.iconfinder.com/search/?q=iconset%3Anuvola2>
-	- David Vignoni <http://www.icon-king.com/>
-* PayPal® and its associated API, buttons & services have been integrated into this software via external hyperlinks.
-  The files/services provided by PayPal® are not distributed with this software. They have their own terms & conditions.
-	- PayPal®, a 3rd party service, is powered by eBay, Inc. <http://www.paypal.com/>
-	- PayPal® is a trademark of eBay, Inc. <http://www.ebay.com/>
-* The W3C® and its associated validator & services have been integrated into this software via external hyperlinks.
-  The files/services provided by the W3C® are not distributed with this software. They have their own terms & conditions.
-	- The W3C®, a 3rd party service, is powered by the World Wide Web Consortium <http://validator.w3.org/>
-	- W3C® is a trademark of the World Wide Web Consortium. <http://www.w3.org/>
-* The MailChimp® services have been integrated into this software through a GPL compatible API & hyperlinks.
-  The services provided by MailChimp® are not distributed with this software. They have their own terms & conditions.
-	- MailChimp®, a 3rd party service, is powered by The Rocket Science Group, LLC <http://www.mailchimp.com/>
-	- MailChimp® is a trademark of The Rocket Science Group, LLC. <http://www.mailchimp.com/terms-policies/terms-of-use/>
-* The AWeber® services have been integrated into this software through hyperlinks & email commands.
-  The services provided by AWeber® are not distributed with this software. They have their own terms & conditions.
-	- AWeber®, a 3rd party service, is powered by AWeber Communications <http://www.aweber.com/about.htm>
-	- AWeber® is a trademark of AWeber Communications. <http://www.aweber.com/service-agreement.htm>
 
 == Upgrade Notice ==
 
