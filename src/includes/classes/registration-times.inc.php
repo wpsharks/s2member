@@ -50,6 +50,9 @@ if(!class_exists("c_ws_plugin__s2member_registration_times"))
 			if($user_id && is_object($user = new WP_User ($user_id)) && !empty($user->ID) && ($level = c_ws_plugin__s2member_user_access::user_access_level($user)) > 0)
 			{
 				$pr_times                 = get_user_option("s2member_paid_registration_times", $user_id);
+				if (is_string($pr_times)) {
+					$pr_times = array();
+				}
 				$pr_times["level"]        = (empty($pr_times["level"])) ? time() : $pr_times["level"];
 				$pr_times["level".$level] = (empty($pr_times["level".$level])) ? time() : $pr_times["level".$level];
 				update_user_option($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
