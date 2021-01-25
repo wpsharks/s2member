@@ -25,7 +25,7 @@ PayPal Pro Integration: http://s2member.com/r/pp-account-types/
 Text Domain: s2member
 Domain Path: /src/includes/translations
 
-s2Member is a powerful free membership plugin for WordPress. Protect members only content with Level Member Roles and Access Capabilities.
+s2Member is a powerful free membership plugin for WordPress. Protect members only content with Member Level Roles and Access Capabilities.
 
 == Description ==
 
@@ -35,9 +35,9 @@ Easy to configure and highly extensible.
 
 Sell recurring (or non-recurring) subscriptions with lots of flexibility. Or sell "Buy Now" access in various ways.
 
-Protect your WordPress posts, pages, tags, categories, URIs, BuddyPress/bbPress, and even portions of them.
-
 You can protect the whole site, certain areas, or even just parts of pages.
+
+Protect your WordPress posts, pages, tags, categories, URIs, BuddyPress/bbPress, and even portions of them.
 
 Provide highly configurable access to specific portions of your content with Levels or Access Capabilities.
 
@@ -51,7 +51,7 @@ Sell access to your site's content with single "buy now" payments or recurring p
 
 Like a cash machine, s2Member puts money back in your pocket. Monetize your website now with s2Member.
 
-Learn more at [s2Member.com](http://s2member.com/).
+Add now s2Member Framework and start making money with it!
 
 = Some reasons to upgrade to "s2Member Pro" =
 
