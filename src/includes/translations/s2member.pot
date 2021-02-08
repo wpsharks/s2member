@@ -1,14 +1,14 @@
-# Copyright (C) 2020 
+# Copyright (C) 2021 
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  201225\n"
+"Project-Id-Version:  210208\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2020-12-25 21:31:45+00:00\n"
+"POT-Creation-Date: 2021-02-08 19:31:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
@@ -20,7 +20,7 @@ msgstr ""
 #: pro/src/includes/classes/coupons.inc.php:241
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:692
 #: pro/src/includes/classes/gateways/paypal/paypal-utilities.inc.php:312
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:983
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:995
 msgctxt "s2member-front percentage-symbol"
 msgid "%"
 msgstr ""
@@ -1571,48 +1571,48 @@ msgctxt "s2member-front"
 msgid "Error: <strong>prepaid</strong> cards not accepted at this time. Please use a different card and try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:756
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:768
 msgctxt "s2member-front"
 msgid "Error code: <code>%1$s</code>. %2$s."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:759
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:771
 msgctxt "s2member-front"
 msgid "Invalid parameters to Stripe; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:762
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:774
 msgctxt "s2member-front"
 msgid "Invalid Stripe API keys; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:765
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:777
 msgctxt "s2member-front"
 msgid "Network communication failure with Stripe; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:768
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:780
 msgctxt "s2member-front"
 msgid "Stripe API error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:770
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:782
 msgctxt "s2member-front"
 msgid "Stripe error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1361
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1410
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1373
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1422
 msgctxt "s2member-front"
 msgid "Action required: 3D Secure authorization."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1366
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1378
 msgctxt "s2member-front"
 msgid "Please try again with a different card."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1415
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1427
 msgctxt "s2member-front"
 msgid "The payment failed, please try again with a different card."
 msgstr ""
