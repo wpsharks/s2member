@@ -79,7 +79,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 					$get = c_ws_plugin__s2member_utils_users::get_user_field($attr['user_field'], (int)$attr['user_id'], $user_field_args);
 
 					if(preg_match('/time$/i', $attr['user_field']) && $attr['date_format'])
-					 	if(is_numeric($get) && strlen($get) === 10) // Timestamp?
+						if((is_numeric($get) && strlen($get) === 10) || ($get = strtotime($get))) // Timestamp?
 							{
 								if($attr['date_format'] === 'timestamp')
 									$get = (string)$get; // No change.
@@ -95,7 +95,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 					$get = get_user_option($attr['user_option'], (int)$attr['user_id']);
 
 					if(preg_match('/time$/i', $attr['user_option']) && $attr['date_format'])
-						if(is_numeric($get) && strlen($get) === 10) // Timestamp?
+						if((is_numeric($get) && strlen($get) === 10) || ($get = strtotime($get))) // Timestamp?
 							{
 								if($attr['date_format'] === 'timestamp')
 									$get = (string)$get; // No change.
