@@ -228,77 +228,91 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 			add_filter('plugin_action_links', 'c_ws_plugin__s2member_menu_pages::_add_settings_link', 10, 2);
 
-			if (apply_filters('ws_plugin__s2member_during_add_admin_options_create_menu_items', TRUE, get_defined_vars())) {
-				if ((is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site()) || apply_filters('ws_plugin__s2member_during_add_admin_options_clear_right_side', FALSE, get_defined_vars()))
-					$GLOBALS['WS_PLUGIN__']['s2member']['c']['menu_pages'] = array(); // Clear right side.
+			if (apply_filters('ws_plugin__s2member_during_add_admin_options_create_menu_items', true, get_defined_vars())) {
+				$is_multisite = is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site();
+				$pro_is_installed = c_ws_plugin__s2member_utils_conds::pro_is_installed();
+				$slug = apply_filters('ws_plugin__s2member_during_add_admin_options_menu_slug', 'ws-plugin--s2member-start', get_defined_vars());
 
-				$menu = apply_filters('ws_plugin__s2member_during_add_admin_options_menu_slug', 'ws-plugin--s2member-start', get_defined_vars());
+				// Add general settings first, this'll be the "landing page", the menu's first page.
+				add_menu_page(
+					($pro_is_installed ? 's2Member (Pro)' : 's2Member'),
+					($pro_is_installed ? 's2Member (Pro)' : 's2Member'),
+					'create_users',
+					$slug,
+					'c_ws_plugin__s2member_menu_pages::new_general_options_page',
+					$GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/src/images/brand-favicon.png'
+				);
 
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_menu_page', TRUE, get_defined_vars()))
-					add_menu_page(((c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? 's2Member (Pro)' : 's2Member'), ((c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? 's2Member (Pro)' : 's2Member'),
-						'create_users', $menu, 'c_ws_plugin__s2member_menu_pages::new_start_page', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/src/images/brand-favicon.png');
+				add_submenu_page($slug, 'Switching to old s2Member menu', 'Use old menu', 'create_users', 'ws-plugin--s2member-toggle-menu', 'c_ws_plugin__s2member_menu_pages::toggle_menu_page');
 
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_start_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 'Getting Started w/ s2Member', 'Getting Started', 'create_users', 'ws-plugin--s2member-start', 'c_ws_plugin__s2member_menu_pages::start_page');
-
-				add_submenu_page($menu, 'Switching to old s2Member menu', 'Use old menu', 'create_users', 'ws-plugin--s2member-toggle-menu', 'c_ws_plugin__s2member_menu_pages::toggle_menu_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_help_page', !is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site(), get_defined_vars()))
-					add_submenu_page($menu, 'Getting Help w/ s2Member', 'Getting Help', 'create_users', 'ws-plugin--s2member-help', 'c_ws_plugin__s2member_menu_pages::new_help_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_1', TRUE, get_defined_vars()))
-					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_mms_ops_page', (!is_multisite() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, 's2Member Multisite Configuration', 'Multisite (Config)', 'create_users', 'ws-plugin--s2member-mms-ops', 'c_ws_plugin__s2member_menu_pages::new_mms_ops_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_gen_ops_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member General Options', 'General Options', 'create_users', 'ws-plugin--s2member-gen-ops', 'c_ws_plugin__s2member_menu_pages::new_gen_ops_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_res_ops_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member Restriction Options', 'Restriction Options', 'create_users', 'ws-plugin--s2member-res-ops', 'c_ws_plugin__s2member_menu_pages::new_res_ops_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_down_ops_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, 's2Member Download Options', 'Download Options', 'create_users', 'ws-plugin--s2member-down-ops', 'c_ws_plugin__s2member_menu_pages::new_down_ops_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_2', TRUE, get_defined_vars()))
-					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member PayPal Options', 'PayPal Options', 'create_users', 'ws-plugin--s2member-paypal-ops', 'c_ws_plugin__s2member_menu_pages::new_paypal_ops_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member PayPal Buttons', 'PayPal Buttons', 'create_users', 'ws-plugin--s2member-paypal-buttons', 'c_ws_plugin__s2member_menu_pages::new_paypal_buttons_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_3', TRUE, get_defined_vars()))
-					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_trk_ops_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member API / Tracking', 'API / Tracking', 'create_users', 'ws-plugin--s2member-trk-ops', 'c_ws_plugin__s2member_menu_pages::new_trk_ops_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_els_ops_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member API / List Servers', 'API / List Servers', 'create_users', 'ws-plugin--s2member-els-ops', 'c_ws_plugin__s2member_menu_pages::new_els_ops_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_api_ops_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member API / Notifications', 'API / Notifications', 'create_users', 'ws-plugin--s2member-api-ops', 'c_ws_plugin__s2member_menu_pages::new_api_ops_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_scripting_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member API / Scripting', 'API / Scripting', 'create_users', 'ws-plugin--s2member-scripting', 'c_ws_plugin__s2member_menu_pages::new_scripting_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_4', TRUE, get_defined_vars()))
-					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_integrations_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, 's2Member / Other Integrations', 'Other Integrations', 'create_users', 'ws-plugin--s2member-integrations', 'c_ws_plugin__s2member_menu_pages::new_integrations_page');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_5', TRUE, get_defined_vars()))
-					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
-
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_logs_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
-					add_submenu_page($menu, 's2Member Logs', 'Log Files (Debug)', 'create_users', 'ws-plugin--s2member-logs', 'c_ws_plugin__s2member_menu_pages::new_logs_page');
-
-				do_action('ws_plugin__s2member_during_add_admin_options_additional_pages', get_defined_vars());
 			}
+
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_menu_page', TRUE, get_defined_vars()))
+//					add_menu_page(((c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? 's2Member (Pro)' : 's2Member'), ((c_ws_plugin__s2member_utils_conds::pro_is_installed()) ? 's2Member (Pro)' : 's2Member'),
+//						'create_users', $menu, 'c_ws_plugin__s2member_menu_pages::new_start_page', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/src/images/brand-favicon.png');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_start_page', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, 'Getting Started w/ s2Member', 'Getting Started', 'create_users', 'ws-plugin--s2member-start', 'c_ws_plugin__s2member_menu_pages::start_page');
+//
+//				add_submenu_page($menu, 'Switching to old s2Member menu', 'Use old menu', 'create_users', 'ws-plugin--s2member-toggle-menu', 'c_ws_plugin__s2member_menu_pages::toggle_menu_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_help_page', !is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site(), get_defined_vars()))
+//					add_submenu_page($menu, 'Getting Help w/ s2Member', 'Getting Help', 'create_users', 'ws-plugin--s2member-help', 'c_ws_plugin__s2member_menu_pages::new_help_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_1', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_mms_ops_page', (!is_multisite() || is_main_site()), get_defined_vars()))
+//					add_submenu_page($menu, 's2Member Multisite Configuration', 'Multisite (Config)', 'create_users', 'ws-plugin--s2member-mms-ops', 'c_ws_plugin__s2member_menu_pages::new_mms_ops_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_gen_ops_page', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, 's2Member General Options', 'General Options', 'create_users', 'ws-plugin--s2member-gen-ops', 'c_ws_plugin__s2member_menu_pages::new_gen_ops_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_res_ops_page', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, 's2Member Restriction Options', 'Restriction Options', 'create_users', 'ws-plugin--s2member-res-ops', 'c_ws_plugin__s2member_menu_pages::new_res_ops_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_down_ops_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
+//					add_submenu_page($menu, 's2Member Download Options', 'Download Options', 'create_users', 'ws-plugin--s2member-down-ops', 'c_ws_plugin__s2member_menu_pages::new_down_ops_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_2', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, 's2Member PayPal Options', 'PayPal Options', 'create_users', 'ws-plugin--s2member-paypal-ops', 'c_ws_plugin__s2member_menu_pages::new_paypal_ops_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, 's2Member PayPal Buttons', 'PayPal Buttons', 'create_users', 'ws-plugin--s2member-paypal-buttons', 'c_ws_plugin__s2member_menu_pages::new_paypal_buttons_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_3', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_trk_ops_page', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, 's2Member API / Tracking', 'API / Tracking', 'create_users', 'ws-plugin--s2member-trk-ops', 'c_ws_plugin__s2member_menu_pages::new_trk_ops_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_els_ops_page', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, 's2Member API / List Servers', 'API / List Servers', 'create_users', 'ws-plugin--s2member-els-ops', 'c_ws_plugin__s2member_menu_pages::new_els_ops_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_api_ops_page', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, 's2Member API / Notifications', 'API / Notifications', 'create_users', 'ws-plugin--s2member-api-ops', 'c_ws_plugin__s2member_menu_pages::new_api_ops_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_scripting_page', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, 's2Member API / Scripting', 'API / Scripting', 'create_users', 'ws-plugin--s2member-scripting', 'c_ws_plugin__s2member_menu_pages::new_scripting_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_4', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_integrations_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
+//					add_submenu_page($menu, 's2Member / Other Integrations', 'Other Integrations', 'create_users', 'ws-plugin--s2member-integrations', 'c_ws_plugin__s2member_menu_pages::new_integrations_page');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_divider_5', TRUE, get_defined_vars()))
+//					add_submenu_page($menu, '', '<span style="display:block; margin:1px 0 1px -5px; padding:0; height:1px; line-height:1px; background:#CCCCCC;"></span>', 'create_users', '#');
+//
+//				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_logs_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
+//					add_submenu_page($menu, 's2Member Logs', 'Log Files (Debug)', 'create_users', 'ws-plugin--s2member-logs', 'c_ws_plugin__s2member_menu_pages::new_logs_page');
+//
+//				do_action('ws_plugin__s2member_during_add_admin_options_additional_pages', get_defined_vars());
+//			}
+
 			do_action('ws_plugin__s2member_after_add_admin_options', get_defined_vars());
 		}
 
@@ -991,15 +1005,15 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		 * @package s2Member\Menu_Pages
 		 * @since 3.5
 		 */
-		public static function new_gen_ops_page()
+		public static function new_general_options_page()
 		{
-			do_action('ws_plugin__s2member_before_gen_ops_page', get_defined_vars());
+			do_action('ws_plugin__s2member_before_new_general_options_page', get_defined_vars());
 
 			c_ws_plugin__s2member_menu_pages::update_all_options();
 
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/gen-ops.inc.php';
+			include_once dirname(__FILE__, 2) . '/menu-pages-new/general-options.inc.php';
 
-			do_action('ws_plugin__s2member_after_gen_ops_page', get_defined_vars());
+			do_action('ws_plugin__s2member_after_new_general_options_page', get_defined_vars());
 		}
 
 		/**
