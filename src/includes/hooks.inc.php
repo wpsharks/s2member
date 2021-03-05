@@ -153,7 +153,11 @@ add_action('load-user-new.php', 'c_ws_plugin__s2member_user_new::admin_user_new_
 
 add_action('add_meta_boxes', 'c_ws_plugin__s2member_meta_boxes::add_meta_boxes');
 add_action('save_post', 'c_ws_plugin__s2member_meta_box_saves::save_meta_boxes');
-add_action('admin_menu', 'c_ws_plugin__s2member_menu_pages::add_admin_options');
+if (get_option('ws_plugin__s2member_use_new_menu', false)) {
+	add_action('admin_menu', 'c_ws_plugin__s2member_menu_pages::add_new_admin_options');
+} else {
+	add_action('admin_menu', 'c_ws_plugin__s2member_menu_pages::add_admin_options');
+}
 add_action('network_admin_menu', 'c_ws_plugin__s2member_menu_pages::add_network_admin_options');
 add_action('admin_bar_menu', 'c_ws_plugin__s2member_admin_lockouts::filter_admin_menu_bar', 100);
 add_action('admin_print_scripts', 'c_ws_plugin__s2member_menu_pages::add_admin_scripts');
