@@ -1709,6 +1709,436 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_general_options"))
 				do_action("s2x_during_general_options_page_during_left_sections_after_log_settings", get_defined_vars());
 			}
 
+			// TODO REVAMP:
+//			if(apply_filters("s2x_during_registration_options_page_during_left_sections_display_email_config", TRUE, get_defined_vars()))
+//			{
+//				do_action("s2x_during_registration_options_page_during_left_sections_before_email_config", get_defined_vars());
+//
+//				echo '<div class="ws-menu-page-group" title="Email Configuration">'."\n";
+//
+//				echo '<div class="ws-menu-page-section ws-plugin--s2member-email-section">'."\n";
+//				echo '<h3 style="margin:0;">Email From: '.esc_html('"Name" <address>').'</h3>'."\n";
+//				echo '<p style="margin:0;">This is the name/address that will appear in outgoing email notifications sent by the s2Member plugin.</p>'."\n";
+//				do_action("s2x_during_registration_options_page_during_left_sections_during_email_from_name_config", get_defined_vars());
+//
+//				echo '<table class="form-table">'."\n";
+//				echo '<tbody>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-reg-email-from-name">'."\n";
+//				echo 'Email From Name:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_reg_email_from_name" id="ws-plugin--s2member-reg-email-from-name" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_name"]).'" /><br />'."\n";
+//				echo 'We recommend that you use the name of your site here.'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-reg-email-from-email">'."\n";
+//				echo 'Email From Address:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_reg_email_from_email" id="ws-plugin--s2member-reg-email-from-email" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_from_email"]).'" /><br />'."\n";
+//				echo 'Example: support@your-domain.com. <em>Please read <a href="#" onclick="alert(\'Running WordPress with an SMTP mail plugin?\\n\\nPlease be advised. If you run an SMTP mail plugin with WordPress, be sure to configure s2Member with a valid `From:` address (i.e., one matching your SMTP configuration perhaps). Most free SMTP servers, such as Gmail and Yahoo, require that your `From:` header match the email address associated with your account. Please check with your SMTP service provider before attempting to configure plugins like s2Member to use a different `From:` address when sending email messages.\'); return false;">this important note</a></em>.'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-reg-email-support-link">'."\n";
+//				echo 'Email Support/Contact Link:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_reg_email_support_link" id="ws-plugin--s2member-reg-email-support-link" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["reg_email_support_link"]).'" /><br />'."\n";
+//				echo 'Ex: <code>mailto:support@your-domain.com</code> (<em>mailto link</em>)<br />'."\n";
+//				echo 'Or: <code>'.esc_html(home_url("/contact-us/")).'</code>'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '</tbody>'."\n";
+//				echo '</table>'."\n";
+//
+//				echo '<div class="ws-menu-page-hr"></div>'."\n";
+//
+//				echo '<h3 style="margin:0;">New User Email Configuration</h3>'."\n";
+//				echo '<input type="hidden" id="ws-plugin--s2member-pluggables-wp-new-user-notification" value="'.esc_attr((empty($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["pluggables"]["wp_new_user_notification"])) ? '0' : '1').'" />'."\n";
+//				echo (empty($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["pluggables"]["wp_new_user_notification"])) ? '<p class="ws-menu-page-error" style="margin:0;"><em><strong>Conflict warning:</strong> You have another theme or plugin installed that is preventing s2Member from controlling this aspect of your installation. When the pluggable function <code><a href="http://codex.wordpress.org/Function_Reference/wp_new_user_notification" target="_blank" rel="external">wp_new_user_notification()</a></code> is handled by another plugin, it\'s not possible for s2Member to allow customization of New User Emails. This is NOT a major issue. In fact, in some cases, it might be desirable. That being said, if you DO want to use s2Member\'s customization of New User Emails, you will need to deactivate one plugin at a time until this conflict warning goes away.</em></p>'."\n" : '';
+//				do_action("s2x_during_registration_options_page_during_left_sections_during_new_user_emails", get_defined_vars());
+//
+//				echo '<table class="form-table">'."\n";
+//				echo '<tbody>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<select name="ws_plugin__s2member_new_user_emails_enabled" id="ws-plugin--s2member-new-user-emails-enabled">'."\n";
+//				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_emails_enabled"]) ? ' selected="selected"' : '').'>No (default, use WordPress defaults)</option>'."\n";
+//				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_emails_enabled"]) ? ' selected="selected"' : '').'>Yes (customize New User Emails with s2Member)</option>'."\n";
+//				echo '</select>'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '</tbody>'."\n";
+//				echo '</table>'."\n";
+//
+//				echo '<div id="ws-plugin--s2member-new-user-emails">'."\n";
+//
+//				echo '<div class="ws-menu-page-hr"></div>'."\n";
+//
+//				echo '<h3 style="margin:0;">New User Email Message (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-new-user-email-details\').toggle(); return false;" class="ws-dotted-link">click to customize</a>)</h3>'."\n";
+//				echo '<p style="margin:0;">This email is sent to new Users/Members who did <em>not</em> set a Custom Password during registration.</p>'."\n";
+//				if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_password"])
+//					echo '<p class="info" style="font-size:80%; margin:.5em 0 0 0;"><strong>↑ NOTE:</strong> You currently have Custom Passwords enabled in your s2Member Registration/Profile Field options. Therefore, this email is not going to be sent; i.e., it is only sent to users who need it for the purpose of obtaining their password.</p>'."\n";
+//				do_action("s2x_during_registration_options_page_during_left_sections_during_new_user_email", get_defined_vars());
+//
+//				echo '<div id="ws-plugin--s2member-new-user-email-details" style="display:none;">'."\n";
+//				echo c_ws_plugin__s2member_utils_conds::bp_is_installed() ? '<p><em><strong>BuddyPress:</strong> please note that BuddyPress does NOT send this email to Users that register through the BuddyPress registration system. This is because BuddyPress sends each User an activation link; eliminating the need for this email altogether. However, you CAN still customize s2Member\'s separate email to paying Members. See: <strong>s2Member → PayPal Options → Signup Confirmation Email</strong>.</em></p>'."\n" : '';
+//				echo '<table class="form-table">'."\n";
+//				echo '<tbody>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-new-user-email-subject">'."\n";
+//				echo 'New User Email Subject:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_new_user_email_subject" id="ws-plugin--s2member-new-user-email-subject" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_email_subject"]).'" /><br />'."\n";
+//				echo 'Subject Line used in the email sent to new Users/Members.'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-new-user-email-message">'."\n";
+//				echo 'New User Email Message:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<p><em>(The purpose of this email is to send the user a password-setup link; i.e., <code>%%wp_set_pass_url%%</code>)</em></small><p>'."\n";
+//				echo '<textarea name="ws_plugin__s2member_new_user_email_message" id="ws-plugin--s2member-new-user-email-message" rows="10">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_email_message"]).'</textarea><br />'."\n";
+//				echo 'Message Body used in the email sent to new Users/Members.<br /><br />'."\n";
+//				echo '<strong>You can also use these special Replacement Codes if you need them:</strong>'."\n";
+//				echo '<ul>'."\n";
+//				echo '<li style="margin-bottom:1em;"><code>%%wp_set_pass_url%%</code> = The full URL where Users can set their password for the first time. Note that <code>%%wp_set_pass_url%%</code> should be used instead of the older/deprecated <code style="text-decoration:line-through;">%%user_pass%%</code> Replacement Code. Starting w/ WordPress v4.3+, a user can visit this link (i.e., <code>%%wp_set_pass_url%%</code>) to set a password of their own, and this is accomplished without sending a plain-text password via email; which improves security. It is suggested that you prefix this as follows: <em>To set your password, visit: <code>%%wp_set_pass_url%%</code></em></li>'."\n";
+//				echo '<li><code>%%role%%</code> = The Role ID <code>(subscriber, s2member_level[0-9]+, administrator, editor, author, contributor)</code>.</li>'."\n";
+//				echo '<li><code>%%label%%</code> = The Role ID Label <code>(Subscriber, s2Member Level 1, s2Member Level 2; or your own custom Labels—if configured)</code>.</li>'."\n";
+//				echo '<li><code>%%level%%</code> = The Level number <code>(0, 1, 2, 3, 4)</code>. (<em>deprecated, no longer recommended; use <code>%%role%%</code></em>)</li>'."\n";
+//				echo '<li><code>%%ccaps%%</code> = Custom Capabilities. Ex: <code>music,videos,free_gift</code> (<em>in comma-delimited format</em>).</li>'."\n";
+//				echo '<li><code>%%user_first_name%%</code> = The First Name of the Member who registered their Username.</li>'."\n";
+//				echo '<li><code>%%user_last_name%%</code> = The Last Name of the Member who registered their Username.</li>'."\n";
+//				echo '<li><code>%%user_full_name%%</code> = The Full Name (First &amp; Last) of the Member who registered their Username.</li>'."\n";
+//				echo '<li><code>%%user_email%%</code> = The Email Address of the Member who registered their Username.</li>'."\n";
+//				echo '<li><code>%%user_login%%</code> = The Username the Member selected during registration.</li>'."\n";
+//				echo '<li><code>%%user_ip%%</code> = The User\'s IP Address, detected via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>'."\n";
+//				echo '<li><code>%%user_id%%</code> = A unique WordPress User ID generated during registration.</li>'."\n";
+//				echo '<li><code>%%wp_login_url%%</code> = The full URL where Users can get logged into your site.</li>'."\n";
+//				echo '<li style="margin-top:1em;"><code style="text-decoration:line-through;">%%user_pass%%</code> = <em>Deprecated, please stop using this. Starting w/ WordPress v4.3, this email is only sent to users who did NOT set a Custom Password during registration; i.e., the New User Notification email is only sent to the user whenever they need it to set their password. In that scenario, you should be sending the user the <code>%%wp_set_pass_url%%</code> instead of sending a plain-text password via email; which is a security no-no.</em></li>'."\n";
+//				echo '</ul>'."\n";
+//
+//				echo '<strong>Custom Registration/Profile Fields are also supported in this email:</strong>'."\n";
+//				echo '<ul>'."\n";
+//				echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>'."\n";
+//				echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>'."\n";
+//				echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>'."\n";
+//				echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member → General Options → Registration/Profile Fields</em>.</li>'."\n";
+//				echo '</ul>'."\n";
+//
+//				echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>'."\n";
+//				echo '<ul>'."\n";
+//				echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>'."\n";
+//				echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>'."\n";
+//				echo '</ul>'."\n";
+//				echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />'."\n";
+//				echo '<em>(The campaign (i.e., christmas-promo) could be referenced using <code>%%cv1%%</code>)</em><br />'."\n";
+//				echo '<code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|christmas-promo"</code>'."\n";
+//
+//				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ?
+//					'<div class="ws-menu-page-hr"></div>'."\n".
+//					'<p style="margin:0;"><strong>PHP Code:</strong> It is also possible to use PHP tags—optional (for developers). If you use PHP tags, please run a test email with <code>&lt;?php print_r(get_defined_vars()); ?&gt;</code>. This will give you a full list of all PHP variables available to you in this email. The <code>$user</code> variable is the most important one. It\'s an instance of the <a href="https://s2member.com/r/wordpress-codex-wp_user/" target="_blank" rel="external"><code>WP_User</code></a> class (e.g., <code>$user->ID</code>, <code>$user->has_cap()</code>, etc). Please note that all Replacement Codes will be parsed first, and then any PHP tags that you\'ve included. Also, please remember that emails are sent in plain text format.</p>'."\n"
+//					: '';
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '</tbody>'."\n";
+//				echo '</table>'."\n";
+//				echo '</div>'."\n";
+//
+//				echo '<div class="ws-menu-page-hr"></div>'."\n";
+//
+//				echo '<h3 style="margin:0;">Administrative: New User Notification (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-new-user-admin-email-details\').toggle(); return false;" class="ws-dotted-link">click to customize</a>)</h3>'."\n";
+//				echo '<p style="margin:0;">This email notification is sent to you, each time a new User/Member registers.</p>'."\n";
+//				do_action("s2x_during_registration_options_page_during_left_sections_during_new_user_admin_email", get_defined_vars());
+//
+//				echo '<div id="ws-plugin--s2member-new-user-admin-email-details" style="display:none;">'."\n";
+//				echo '<table class="form-table">'."\n";
+//				echo '<tbody>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-new-user-admin-email-recipients">'."\n";
+//				echo 'New User Notification Recipients:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_new_user_admin_email_recipients" id="ws-plugin--s2member-new-user-admin-email-recipients" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_recipients"]).'" /><br />'."\n";
+//				echo 'This is a semicolon ( ; ) delimited list of Recipients. Here is an example:<br />'."\n";
+//				echo '<code>"Name" &lt;user@example.com&gt;; admin@example.com; "Webmaster" &lt;webmaster@example.com&gt;</code>'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-new-user-admin-email-subject">'."\n";
+//				echo 'New User Notification Subject:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_new_user_admin_email_subject" id="ws-plugin--s2member-new-user-admin-email-subject" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_subject"]).'" /><br />'."\n";
+//				echo 'Subject Line used in the email notification sent to Administrator.'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-new-user-admin-email-message">'."\n";
+//				echo 'New User Notification Message:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<textarea name="ws_plugin__s2member_new_user_admin_email_message" id="ws-plugin--s2member-new-user-admin-email-message" rows="10">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_message"]).'</textarea><br />'."\n";
+//				echo 'Message Body used in the email notification sent to Administrator.<br /><br />'."\n";
+//				echo '<strong>You can also use these special Replacement Codes if you need them:</strong>'."\n";
+//				echo '<ul>'."\n";
+//				echo '<li><code>%%role%%</code> = The Role ID <code>(subscriber, s2member_level[0-9]+, administrator, editor, author, contributor)</code>.</li>'."\n";
+//				echo '<li><code>%%label%%</code> = The Role ID Label <code>(Subscriber, s2Member Level 1, s2Member Level 2; or your own custom Labels—if configured)</code>.</li>'."\n";
+//				echo '<li><code>%%level%%</code> = The Level number <code>(0, 1, 2, 3, 4)</code>. (<em>deprecated, no longer recommended; use <code>%%role%%</code></em>)</li>'."\n";
+//				echo '<li><code>%%ccaps%%</code> = Custom Capabilities. Ex: <code>music,videos,free_gift</code> (<em>in comma-delimited format</em>).</li>'."\n";
+//				echo '<li><code>%%user_first_name%%</code> = The First Name of the Member who registered their Username.</li>'."\n";
+//				echo '<li><code>%%user_last_name%%</code> = The Last Name of the Member who registered their Username.</li>'."\n";
+//				echo '<li><code>%%user_full_name%%</code> = The Full Name (First &amp; Last) of the Member who registered their Username.</li>'."\n";
+//				echo '<li><code>%%user_email%%</code> = The Email Address of the Member who registered their Username.</li>'."\n";
+//				echo '<li><code>%%user_login%%</code> = The Username the Member selected during registration.</li>'."\n";
+//				echo '<li><code>%%user_ip%%</code> = The User\'s IP Address, detected via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>'."\n";
+//				echo '<li><code>%%user_id%%</code> = A unique WordPress User ID generated during registration.</li>'."\n";
+//				echo '<li><code>%%wp_login_url%%</code> = The full URL where Users can get logged into your site.</li>'."\n";
+//				echo '<li style="margin-top:1em;"><code style="text-decoration:line-through;">%%user_pass%%</code> = <em>Deprecated. Starting w/ WordPress v4.3, this is no longer applicable (or advised).</em></li>'."\n";
+//				echo '</ul>'."\n";
+//
+//				echo '<strong>Custom Registration/Profile Fields are also supported in this email:</strong>'."\n";
+//				echo '<ul>'."\n";
+//				echo '<li><code>%%date_of_birth%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>date_of_birth</code>.</li>'."\n";
+//				echo '<li><code>%%street_address%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>street_address</code>.</li>'."\n";
+//				echo '<li><code>%%country%%</code> would be valid; if you have a Custom Registration/Profile Field with the ID <code>country</code>.</li>'."\n";
+//				echo '<li><em><code>%%etc, etc...%%</code> <strong>see:</strong> s2Member → General Options → Registration/Profile Fields</em>.</li>'."\n";
+//				echo '</ul>'."\n";
+//
+//				echo '<strong>Custom Replacement Codes can also be inserted using these instructions:</strong>'."\n";
+//				echo '<ul>'."\n";
+//				echo '<li><code>%%cv0%%</code> = The domain of your site, which is passed through the `custom` attribute in your Shortcode.</li>'."\n";
+//				echo '<li><code>%%cv1%%</code> = If you need to track additional custom variables, you can pipe delimit them into the `custom` attribute; inside your Shortcode, like this: <code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|cv1|cv2|cv3"</code>. You can have an unlimited number of custom variables. Obviously, this is for advanced webmasters; but the functionality has been made available for those who need it.</li>'."\n";
+//				echo '</ul>'."\n";
+//				echo '<strong>This example uses cv1 to record a special marketing campaign:</strong><br />'."\n";
+//				echo '<em>(The campaign (i.e., christmas-promo) could be referenced using <code>%%cv1%%</code>)</em><br />'."\n";
+//				echo '<code>custom="'.esc_html($_SERVER["HTTP_HOST"]).'|christmas-promo"</code>'."\n";
+//
+//				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ?
+//					'<div class="ws-menu-page-hr"></div>'."\n".
+//					'<p style="margin:0;"><strong>PHP Code:</strong> It is also possible to use PHP tags—optional (for developers). If you use PHP tags, please run a test email with <code>&lt;?php print_r(get_defined_vars()); ?&gt;</code>. This will give you a full list of all PHP variables available to you in this email. The <code>$user</code> variable is the most important one. It\'s an instance of the <a href="https://s2member.com/r/wordpress-codex-wp_user/" target="_blank" rel="external"><code>WP_User</code></a> class (e.g., <code>$user->ID</code>, <code>$user->has_cap()</code>, etc). Please note that all Replacement Codes will be parsed first, and then any PHP tags that you\'ve included. Also, please remember that emails are sent in plain text format.</p>'."\n"
+//					: '';
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '</tbody>'."\n";
+//				echo '</table>'."\n";
+//				echo '</div>'."\n";
+//				echo '</div>'."\n";
+//
+//				echo '</div>'."\n";
+//
+//				echo '</div>'."\n";
+//
+//				do_action("s2x_during_registration_options_page_during_left_sections_after_email_config", get_defined_vars());
+//			}
+//			if(apply_filters("s2x_during_general_options_page_during_left_sections_display_login_welcome_page", TRUE, get_defined_vars()))
+//			{
+//				do_action("s2x_during_general_options_page_during_left_sections_before_login_welcome_page", get_defined_vars());
+//
+//				echo '<div class="ws-menu-page-group" title="Login Welcome Page">'."\n";
+//
+//				echo '<div class="ws-menu-page-section ws-plugin--s2member-login-welcome-page-section">'."\n";
+//				echo '<h3>Login Welcome Page (required, please customize this)</h3>'."\n";
+//				echo '<p>Please create and/or choose an existing Page to use as the first page Members will see after logging in.</p>'."\n";
+//				echo (c_ws_plugin__s2member_utils_conds::bp_is_installed()) ? '<p><em><strong>BuddyPress:</strong> s2Member integrates with BuddyPress. Your Login Welcome Page affects BuddyPress too.</em></p>'."\n" : '';
+//				echo '<p><em><strong>Always Private:</strong> This Page will always require a logged-in User/Member. In fact, this Page will be protected from public access by s2Member automatically. <strong>Note:</strong> for technical reasons, your Login Welcome Page <strong>cannot</strong> be set to your Front Page (i.e., your Home Page); or your Posts Page (i.e., your main Blog page). Please create a separate dedicated Page in WordPress, and then designate it as your Login Welcome Page below.</em></p>'."\n";
+//				echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/customizing-your-lwp/" target="_blank" rel="external">Customizing Your Login Welcome Page</a>.</p>'."\n";
+//				do_action("s2x_during_general_options_page_during_left_sections_during_login_welcome_page", get_defined_vars());
+//
+//				echo '<table class="form-table">'."\n";
+//				echo '<tbody>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-login-welcome-page">'."\n";
+//				echo 'Login Welcome Page:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<select name="ws_plugin__s2member_login_welcome_page" id="ws-plugin--s2member-login-welcome-page">'."\n";
+//				echo '<option value="">&mdash; Select &mdash;</option>'."\n";
+//				foreach(($ws_plugin__s2member_temp_a = array_merge((array)get_pages())) as $ws_plugin__s2member_temp_o)
+//					echo '<option value="'.esc_attr($ws_plugin__s2member_temp_o->ID).'"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"] && $ws_plugin__s2member_temp_o->ID == $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_welcome_page"]) ? ' selected="selected"' : '').'>'.esc_html($ws_plugin__s2member_temp_o->post_title).'</option>'."\n";
+//				echo '</select><br />'."\n";
+//				echo 'Please choose a Page to be used as the first page Members will see after logging in. This Page can contain anything you like. We recommend the following title: <code>Welcome To Our Members Area</code>.'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-login-redirection-override">'."\n";
+//				echo 'Or, a Special Redirection URL?'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_login_redirection_override" id="ws-plugin--s2member-login-redirection-override" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["login_redirection_override"]).'" /><br />'."\n";
+//				echo 'Or, you may configure a Special Redirection URL, if you prefer. You\'ll need to type in the full URL, starting with: <code>http://</code> or <code>https://</code>. <em>A few <a href="#" onclick="alert(\'Replacement Codes:\\n\\n%%current_user_login%% = The current User\\\'s Username, lowercase (deprecated, please use %%current_user_nicename%%).\\n\\n%%current_user_nicename%% = The current User\\\'s Nicename in lowercase format (i.e., a cleaner version of the username for URLs; recommended for best compatibility).\\n\\n%%current_user_id%% = The current User\\\'s ID.\\n\\n%%current_user_level%% = The current User\\\'s s2Member Level.\\n\\n%%current_user_role%% = The current User\\\'s WordPress Role.'.((!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? '\\n\\n%%current_user_ccaps%% = The current User\\\'s Custom Capabilities.' : '').'\\n\\n%%current_user_logins%% = Number of times the current User has logged in.\\n\\nFor example, if you\\\'re using BuddyPress, and you want to redirect Members to their BuddyPress Profile page after logging in, you would setup a Special Redirection URL, like this: '.home_url("/members/%%current_user_nicename%%/profile/").'\\n\\nOr ... using %%current_user_level%%, you could have a separate Login Welcome Page for each Membership Level that you plan to offer. BuddyPress not required.\'); return false;">Replacement Codes</a> are also supported here.</em>'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '</tbody>'."\n";
+//				echo '</table>'."\n";
+//				echo '</div>'."\n";
+//
+//				echo '</div>'."\n";
+//
+//				do_action("s2x_during_general_options_page_during_left_sections_after_login_welcome_page", get_defined_vars());
+//			}
+//			if(apply_filters("s2x_during_general_options_page_during_left_sections_display_membership_options_page", TRUE, get_defined_vars()))
+//			{
+//				do_action("s2x_during_general_options_page_during_left_sections_before_membership_options_page", get_defined_vars());
+//
+//				echo '<div class="ws-menu-page-group" title="Membership Options Page">'."\n";
+//
+//				echo '<div class="ws-menu-page-section ws-plugin--s2member-membership-options-page-section">'."\n";
+//				echo '<h3>Membership Options Page (required, please customize this)</h3>'."\n";
+//				echo '<p>Please create and/or choose an existing Page that showcases your Membership Options. This special Page is where you\'ll insert the Payment Button(s) generated for you by s2Member (or Pro-Forms; if you\'re running s2Member Pro). This Page serves as your lead-in signup page <em>(i.e., you\'ll give visitors one or more registration options here, and they\'ll pay for the option they choose)</em>.</p>'."\n";
+//				echo '<p>Your Membership Options Page should detail all of the features that come with Membership to your site, and provide a Payment Button (or Pro-Form; if you\'re running s2Member Pro) for each Level of access you plan to offer. This is also the Page that anyone could be redirected to <em>(by s2Member)</em>, should they attempt to access an area of your site that requires access to something they\'re currenty not allowed to view.</p>'."\n";
+//				echo '<p><em><strong>Tip:</strong> If you allow Open Registration (i.e., Free Subscribers), you might want to place a link on your Membership Options Page, which points directly to your free Registration Form, instead of routing a Customer through your Payment Gateway first. It\'s a matter of preference though. For further details, please check the section above: <strong>s2Member → General Options → Open Registration</strong>.</em></p>'."\n";
+//				echo c_ws_plugin__s2member_utils_conds::bp_is_installed() ? '<p><em><strong>BuddyPress:</strong> Even with BuddyPress, s2Member still needs a Membership Options Page. This is where your Payment Buttons (or Pro-Forms; if you\'re running s2Member Pro) will go, giving people the ability to pay you. And again, this is also the Page that anyone could be redirected to <em>(by s2Member)</em>, should they attempt to access an area of your site that requires access to something they\'re currenty not allowed to view.</em></p>'."\n" : '';
+//				echo '<p><em><strong>Always Public:</strong> This Page must be public at all times. In fact, s2Member will not allow this Page to be restricted in any way. <strong>Note:</strong> for technical reasons, your Membership Options Page <strong>cannot</strong> be set to your Front Page (i.e., your Home Page); or your Posts Page (i.e., your main Blog page). Please create a separate (dedicated) Page in WordPress, and then designate it as your Membership Options Page below.</em></p>'."\n";
+//				do_action("s2x_during_general_options_page_during_left_sections_during_membership_options_page", get_defined_vars());
+//
+//				echo '<table class="form-table">'."\n";
+//				echo '<tbody>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-membership-options-page">'."\n";
+//				echo 'Membership Options Page:'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<select name="ws_plugin__s2member_membership_options_page" id="ws-plugin--s2member-membership-options-page">'."\n";
+//				echo '<option value="">&mdash; Select &mdash;</option>'."\n";
+//				foreach(($ws_plugin__s2member_temp_a = array_merge((array)get_pages())) as $ws_plugin__s2member_temp_o)
+//					echo '<option value="'.esc_attr($ws_plugin__s2member_temp_o->ID).'"'.(($ws_plugin__s2member_temp_o->ID == $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page"]) ? ' selected="selected"' : '').'>'.esc_html($ws_plugin__s2member_temp_o->post_title).'</option>'."\n";
+//				echo '</select><br />'."\n";
+//				echo 'Please choose a Page that provides Users with a way to sign up. We recommend the following title: <code>Membership Signup</code>'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '</tbody>'."\n";
+//				echo '</table>'."\n";
+//
+//				echo '<div class="ws-menu-page-hr"></div>'."\n";
+//
+//				echo '<table class="form-table">'."\n";
+//				echo '<tbody>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<th>'."\n";
+//				echo '<label for="ws-plugin--s2member-membership-options-page-vars-enable">'."\n";
+//				echo 'Enable MOP Vars (i.e., Membership Options Page Variables)?'."\n";
+//				echo '</label>'."\n";
+//				echo '</th>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '<tr>'."\n";
+//
+//				echo '<td>'."\n";
+//				echo '<select name="ws_plugin__s2member_membership_options_page_vars_enable" id="ws-plugin--s2member-membership-options-page-vars-enable">'."\n";
+//				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page_vars_enable"]) ? ' selected="selected"' : '').'>Yes (enable MOP Vars in all redirections; recommended behavior)</option>'."\n";
+//				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_options_page_vars_enable"]) ? ' selected="selected"' : '').'>No (don\'t include the additional details provided by MOP Vars)</option>'."\n";
+//				echo '</select><br />'."\n";
+//				echo 'See also: <strong>Dashboard → s2Member → API / Scripting → Membership Options Page / Variables</strong><br />'."\n";
+//				echo 'Recommended setting: (<code>Yes, enable MOP Vars</code>)'."\n";
+//				echo '</td>'."\n";
+//
+//				echo '</tr>'."\n";
+//				echo '</tbody>'."\n";
+//				echo '</table>'."\n";
+//				echo '</div>'."\n";
+//
+//				echo '</div>'."\n";
+//
+//				do_action("s2x_during_general_options_page_during_left_sections_after_membership_options_page", get_defined_vars());
+//			}
+
 			do_action("s2x_during_general_options_page_after_left_sections", get_defined_vars());
 
 			echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";

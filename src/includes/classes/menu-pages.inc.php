@@ -250,17 +250,18 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				}
 
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_trk_ops_page', TRUE, get_defined_vars())) {
-					add_submenu_page($slug, 's2Member Tracking', 'Tracking', 'create_users', 'ws-plugin--s2member-trk-ops', 'c_ws_plugin__s2member_menu_pages::trk_ops_page');
+					add_submenu_page($slug, 's2Member Tracking', 'Tracking', 'create_users', 'ws-plugin--s2member-trk-ops', 'c_ws_plugin__s2member_menu_pages::new_trk_ops_page');
 				}
 
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_api_ops_page', TRUE, get_defined_vars())) {
-					add_submenu_page($slug, 's2Member Notifications', 'Notifications', 'create_users', 'ws-plugin--s2member-api-ops', 'c_ws_plugin__s2member_menu_pages::api_ops_page');
+					add_submenu_page($slug, 's2Member Notifications', 'Notifications', 'create_users', 'ws-plugin--s2member-api-ops', 'c_ws_plugin__s2member_menu_pages::new_api_ops_page');
 				}
 
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_mms_ops_page', (!is_multisite() || is_main_site()), get_defined_vars())) {
-					add_submenu_page($slug, 's2Member Multisite Config', 'Multisite Config', 'create_users', 'ws-plugin--s2member-mms-ops', 'c_ws_plugin__s2member_menu_pages::mms_ops_page');
+					add_submenu_page($slug, 's2Member Multisite Config', 'Multisite Config', 'create_users', 'ws-plugin--s2member-mms-ops', 'c_ws_plugin__s2member_menu_pages::new_mms_ops_page');
 				}
 
+				add_submenu_page($slug, 's2Member Registration Options', 'Registration Options', 'create_users', 'ws-plugin--s2member-registration-options', 'c_ws_plugin__s2member_menu_pages::new_registration_options_page');
 			}
 
 //				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_menu_page', TRUE, get_defined_vars()))
@@ -1257,51 +1258,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		}
 
 		/**
-		 * Builds and handles the Logs page.
-		 *
-		 * @package s2Member\Menu_Pages
-		 * @since 120310
-		 */
-		public static function new_logs_page()
-		{
-			do_action('ws_plugin__s2member_before_logs_page', get_defined_vars());
-
-			c_ws_plugin__s2member_menu_pages::update_all_options();
-			c_ws_plugin__s2member_menu_pages::archive_logs_start_fresh();
-			c_ws_plugin__s2member_menu_pages::delete_logs_start_fresh();
-
-			$logs_dir = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir'];
-
-			if (!is_dir($logs_dir) && is_writable(dirname(c_ws_plugin__s2member_utils_dirs::strip_dir_app_data($logs_dir))))
-				mkdir($logs_dir, 0777, TRUE) . clearstatcache();
-
-			$htaccess = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir'] . '/.htaccess';
-			$htaccess_contents = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir_htaccess'])));
-
-			if (is_dir($logs_dir) && is_writable($logs_dir) && !file_exists($htaccess))
-				file_put_contents($htaccess, $htaccess_contents) . clearstatcache();
-
-			if (!is_dir($logs_dir)) // If the security-enabled logs directory does not exist yet.
-				c_ws_plugin__s2member_admin_notices::display_admin_notice('The security-enabled logs directory (<code>' . esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)) . '</code>) does not exist. Please create this directory manually &amp; make it writable (chmod 777).', TRUE);
-
-			else if (!is_writable($logs_dir)) // If the logs directory is not writable yet.
-				c_ws_plugin__s2member_admin_notices::display_admin_notice('Permissions error. The security-enabled logs directory (<code>' . esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)) . '</code>) is not writable. Please make this directory writable (chmod 777).', TRUE);
-
-			if (!file_exists($htaccess)) // If the .htaccess file has not been created yet.
-				c_ws_plugin__s2member_admin_notices::display_admin_notice('The .htaccess protection file (<code>' . esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)) . '</code>) does not exist. Please create this file manually. Inside your .htaccess file, add this:<br /><pre>' . esc_html($htaccess_contents) . '</pre>', TRUE);
-
-			else if (!preg_match('/deny from all/i', file_get_contents($htaccess))) // Else if the .htaccess file does not offer the required protection.
-				c_ws_plugin__s2member_admin_notices::display_admin_notice('Unprotected. The .htaccess protection file (<code>' . esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)) . '</code>) does not contain <code>deny from all</code>. Inside your .htaccess file, add this:<br /><pre>' . esc_html($htaccess_contents) . '</pre>', TRUE);
-
-			if (!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs']) // Logging disabled?
-				c_ws_plugin__s2member_admin_notices::display_admin_notice('Logging is currently disabled by your configuration.');
-
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/logs.inc.php';
-
-			do_action('ws_plugin__s2member_after_logs_page', get_defined_vars());
-		}
-
-		/**
 		 * Builds and handles the Tools page.
 		 *
 		 * @package s2Member\Menu_Pages
@@ -1314,6 +1270,21 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/tools.inc.php';
 
 			do_action('s2x_after_new_tools_page', get_defined_vars());
+		}
+
+		/**
+		 * Builds and handles the Registration Options page.
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since 210208
+		 */
+		public static function new_registration_options_page()
+		{
+			do_action('s2x_before_new_registration_options_page', get_defined_vars());
+
+			include_once dirname(__FILE__, 2) . '/menu-pages-new/registration-options.inc.php';
+
+			do_action('s2x_after_new_registration_options_page', get_defined_vars());
 		}
 	}
 }
