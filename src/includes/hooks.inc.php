@@ -218,3 +218,7 @@ register_activation_hook($GLOBALS['WS_PLUGIN__']['s2member']['c']['plugin_basena
 register_deactivation_hook($GLOBALS['WS_PLUGIN__']['s2member']['c']['plugin_basename'], 'c_ws_plugin__s2member_installation::deactivate');
 register_uninstall_hook($GLOBALS['WS_PLUGIN__']['s2member']['c']['plugin_basename'], 'c_ws_plugin__s2member_installation::uninstall');
 add_filter('auto_update_plugin', 'c_ws_plugin__s2member_installation::auto_update_filter', PHP_INT_MAX-10, 2); // Disallow s2Member update.
+
+// Runs setup routines for pages with log viewer
+add_action('ws_plugin__s2member_before_logs_page', 'c_ws_plugin__s2member_menu_pages::prepare_logs_viewer');
+add_action('s2x_before_new_tools_page', 'c_ws_plugin__s2member_menu_pages::prepare_logs_viewer');
