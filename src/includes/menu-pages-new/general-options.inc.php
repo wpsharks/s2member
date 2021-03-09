@@ -356,67 +356,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_general_options"))
 				do_action("s2x_during_general_options_page_during_left_sections_after_lazy_load", get_defined_vars());
 			}
 			// TODO: DISABLED
-//			if(apply_filters("s2x_during_general_options_page_during_left_sections_display_s_badge_wp_footer_code", TRUE, get_defined_vars()))
-//			{
-//				do_action("s2x_during_general_options_page_during_left_sections_before_s_badge_wp_footer_code", get_defined_vars());
-//
-//				echo '<div class="ws-menu-page-group" title="s2Member Security Badge">'."\n";
-//
-//				echo '<div class="ws-menu-page-section ws-plugin--s2member-s-badge-wp-footer-code-section">'."\n";
-//				echo '<h3>Security Badge &amp; Footer Configuration (optional)</h3>'."\n";
-//				echo '<div class="ws-menu-page-right">'.c_ws_plugin__s2member_utilities::s_badge_gen("1", TRUE, TRUE).'</div>'."\n";
-//				echo '<p>An s2Member Security Badge can be used to express your site\'s concern for security. To qualify your site, you must enable the Badge Status API (see below), and you must <a href="http://www.s2member.com/kb/security-badges/" target="_blank" rel="external">properly configure all security features in WordPress &amp; s2Member</a>. If you enable the Badge Status API, s2Member will make a connection to your site <strong>once per day</strong>, to test your status. Once your status is <code>1</code> (secure), <strong>it can then take up to 12 hours</strong> for your s2Member Security Badge image to show a green status for the first time.</p>'."\n";
-//				echo '<p><strong>How does s2Member know when my site is secure?</strong><br />If enabled below, an API call for "Security Badge Status" will allow web service connections to determine your status. For example, clicking <a href="'.esc_attr(home_url("/?s2member_s_badge_status=1")).'" target="_blank" rel="external">this link</a> will report <code>1</code> (secure), <code>0</code> (at risk), or <code>-</code> (API disabled). Once you have <a href="http://www.s2member.com/kb/security-badges/" target="_blank" rel="external">properly configured all security features in WordPress &amp; s2Member</a>, the s2Member Badge Status API will report <code>1</code> (secure) for your installation. <strong>Note:</strong> this simple API will not, and should not, report any other information. It will only report the current status of your Security Badge, as determined by your installation of s2Member.</p>'."\n";
-//				do_action("s2x_during_general_options_page_during_left_sections_during_s_badge_wp_footer_code", get_defined_vars());
-//
-//				echo '<table class="form-table">'."\n";
-//				echo '<tbody>'."\n";
-//				echo '<tr>'."\n";
-//
-//				echo '<th>'."\n";
-//				echo '<label for="ws-plugin--s2member-s-badge-status-enabled">'."\n";
-//				echo 'Enable Security Badge Status API?'."\n";
-//				echo '</label>'."\n";
-//				echo '</th>'."\n";
-//
-//				echo '</tr>'."\n";
-//				echo '<tr>'."\n";
-//
-//				echo '<td>'."\n";
-//				echo '<select name="ws_plugin__s2member_s_badge_status_enabled" id="ws-plugin--s2member-s-badge-status-enabled">'."\n";
-//				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["s_badge_status_enabled"]) ? ' selected="selected"' : '').'>No (default, Badge Status API is disabled)</option>'."\n";
-//				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["s_badge_status_enabled"]) ? ' selected="selected"' : '').'>Yes (enable Badge Status API for verification)</option>'."\n";
-//				echo '</select><br />'."\n";
-//				echo '<em>This must be enabled if you want s2Member to verify your Security Badge each day.</em>'."\n";
-//				echo '</td>'."\n";
-//
-//				echo '</tr>'."\n";
-//				echo '<tr>'."\n";
-//
-//				echo '<th>'."\n";
-//				echo '<label for="ws-plugin--s2member-wp-footer-code">'."\n";
-//				echo 'Customize WordPress Footer:<br />'."\n";
-//				echo '<small>[ <a href="#" onclick="this.$code = jQuery(\'textarea#ws-plugin--s2member-wp-footer-code\'); this.$code.val(jQuery.trim(unescape(\''.rawurlencode('[s2Member-Security-Badge v="1" /]').'\')+\'\n\'+this.$code.val())); return false;">Click HERE to insert your Security Badge</a> ],<br />or use Shortcode <code>[s2Member-Security-Badge v="1" /]</code> in a Post/Page/Widget.<br />The <code>v="1"</code> attribute is a Security Badge style/variation. Try variations <code>1|2|3</code>.</small>'."\n";
-//				echo '</label>'."\n";
-//				echo '</th>'."\n";
-//
-//				echo '</tr>'."\n";
-//				echo '<tr>'."\n";
-//
-//				echo '<td>'."\n";
-//				echo '<textarea name="ws_plugin__s2member_wp_footer_code" id="ws-plugin--s2member-wp-footer-code" rows="8" wrap="off" spellcheck="false">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["wp_footer_code"]).'</textarea><br />'."\n";
-//				echo 'Any valid XHTML / JavaScript'.((is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site()) ? '' : ' (or even PHP)').' code will work just fine here.'."\n";
-//				echo '</td>'."\n";
-//
-//				echo '</tr>'."\n";
-//				echo '</tbody>'."\n";
-//				echo '</table>'."\n";
-//				echo '</div>'."\n";
-//
-//				echo '</div>'."\n";
-//
-//				do_action("s2x_during_general_options_page_during_left_sections_after_s_badge_wp_footer_code", get_defined_vars());
-//			}
 //			if(apply_filters("s2x_during_general_options_page_during_left_sections_display_email_config", TRUE, get_defined_vars()))
 //			{
 //				do_action("s2x_during_general_options_page_during_left_sections_before_email_config", get_defined_vars());
@@ -1769,6 +1708,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_general_options"))
 
 				do_action("s2x_during_general_options_page_during_left_sections_after_log_settings", get_defined_vars());
 			}
+
 			do_action("s2x_during_general_options_page_after_left_sections", get_defined_vars());
 
 			echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";

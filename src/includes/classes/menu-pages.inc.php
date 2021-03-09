@@ -245,6 +245,22 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 				add_submenu_page($slug, 'Switching to old s2Member menu', 'Use old menu', 'create_users', 'ws-plugin--s2member-toggle-menu', 'c_ws_plugin__s2member_menu_pages::toggle_menu_page');
 
+				if (!$is_multisite) {
+					add_submenu_page($slug, 's2Member Tools', 'Tools', 'create_users', 'ws-plugin--s2member-tools', 'c_ws_plugin__s2member_menu_pages::new_tools_page');
+				}
+
+				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_trk_ops_page', TRUE, get_defined_vars())) {
+					add_submenu_page($slug, 's2Member Tracking', 'Tracking', 'create_users', 'ws-plugin--s2member-trk-ops', 'c_ws_plugin__s2member_menu_pages::trk_ops_page');
+				}
+
+				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_api_ops_page', TRUE, get_defined_vars())) {
+					add_submenu_page($slug, 's2Member Notifications', 'Notifications', 'create_users', 'ws-plugin--s2member-api-ops', 'c_ws_plugin__s2member_menu_pages::api_ops_page');
+				}
+
+				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_mms_ops_page', (!is_multisite() || is_main_site()), get_defined_vars())) {
+					add_submenu_page($slug, 's2Member Multisite Config', 'Multisite Config', 'create_users', 'ws-plugin--s2member-mms-ops', 'c_ws_plugin__s2member_menu_pages::mms_ops_page');
+				}
+
 			}
 
 //				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_menu_page', TRUE, get_defined_vars()))
@@ -1283,6 +1299,21 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/logs.inc.php';
 
 			do_action('ws_plugin__s2member_after_logs_page', get_defined_vars());
+		}
+
+		/**
+		 * Builds and handles the Tools page.
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since 210208
+		 */
+		public static function new_tools_page()
+		{
+			do_action('s2x_before_new_tools_page', get_defined_vars());
+
+			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/tools.inc.php';
+
+			do_action('s2x_after_new_tools_page', get_defined_vars());
 		}
 	}
 }
