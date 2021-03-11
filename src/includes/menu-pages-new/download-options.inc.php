@@ -18,7 +18,7 @@
 if(!defined('WPINC')) // MUST have WordPress.
 	exit("Do not access this file directly.");
 
-if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
+if(!class_exists("c_ws_plugin__s2member_menu_page_download_options"))
 {
 	/**
 	 * Menu page for the s2Member plugin (File Download Options page).
@@ -26,12 +26,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 	 * @package s2Member\Menu_Pages
 	 * @since 110531
 	 */
-	class c_ws_plugin__s2member_menu_page_down_ops
+	class c_ws_plugin__s2member_menu_page_download_options
 	{
 		public function __construct()
 		{
 			echo '<div class="wrap ws-menu-page">'."\n";
-			
+
 			echo '<div class="wp-header-end"></div>'."\n";
 
 			echo '<div class="ws-menu-page-toolbox">'."\n";
@@ -50,11 +50,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 			echo '<input type="hidden" name="ws_plugin__s2member_amazon_cf_files_distros_auto_config_status" id="ws-plugin--s2member-amazon-cf-files-distros-auto-config-status" value="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distros_auto_config_status"]).'" />'."\n";
 			echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />'."\n";
 
-			do_action("ws_plugin__s2member_during_down_ops_page_before_left_sections", get_defined_vars());
+			do_action("s2x_during_download_options_page_before_left_sections", get_defined_vars());
 
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_restrictions", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_restrictions", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_restrictions", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_restrictions", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Basic Download Restrictions">'."\n";
 
@@ -62,7 +62,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<h3>File Download Restrictions (required, if providing access to protected files)</h3>'."\n";
 				echo '<p>If your Membership offering allows access to restricted files, you\'ll want to configure these options.</p>'."\n";
 				echo '<p class="info"><strong>NOTE:</strong> If you intend to offer File Downloads in one way or another, you must configure at least one of the options below (i.e., by filling in at least one row w/ the number of downloads and the number of days too). For security purposes, s2Member\'s File Download functionality is disabled unless &amp; until at least one of the options below have been configured; i.e., s2Member expects you to configure Basic Downloads for at least one Membership Level before any sort of download-related functionality will work. This includes functionality associated with the <code>[s2File /]</code> and <code>[s2Stream /]</code> Shortcodes also.</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_restrictions", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_restrictions", get_defined_vars());
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
@@ -110,18 +110,18 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_restrictions", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_restrictions", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_limit_exceeded_page", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_limit_exceeded_page", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_limit_exceeded_page", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_limit_exceeded_page", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Download Limit Exceeded Page">'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-limit-exceeded-page-section">'."\n";
 				echo '<h3>Download Limit Exceeded Page (required, if providing access to protected files)</h3>'."\n";
 				echo '<p>This Page will be shown when/if a Member reaches their download limit, based on your configuration of <strong>Basic Download Restrictions</strong> above. This Page should be created by you, in WordPress. This Page should provide an informative message to the Member, describing your file access restrictions. Just tell them a little bit about your policy on file downloads, and why they might have reached this Page.</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_limit_exceeded_page", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_limit_exceeded_page", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
@@ -152,18 +152,18 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_limit_exceeded_page", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_limit_exceeded_page", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_advanced_restrictions", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_advanced_restrictions", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_advanced_restrictions", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_advanced_restrictions", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Advanced Download Restrictions">'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-restrictions-section">'."\n";
 				echo '<h3>Advanced Download Restrictions (optional, for greater flexibility)</h3>'."\n";
 				echo '<p>By default, s2Member uses your Basic Download Restrictions, as configured above. However, you can force s2Member to allow File Downloads, using an extra query string parameter: <code>&amp;s2member_file_download_key=[Key]</code>. A File Download `Key` is passed through this parameter; it tells s2Member to allow the download of this particular file, regardless of Membership Level; and WITHOUT checking any Basic Restrictions, that you may or may not have configured above. The creation of a File Download `Key`, requires a small PHP code snippet. In order to use PHP scripting inside your Posts/Pages, you\'ll need to install this handy plugin (<a href="http://s2member.com/r/ezphp/" target="_blank" rel="external">ezPHP</a>). There is also a Shortcode equivalent, which does NOT require PHP at all, as seen below.</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_advanced_restrictions", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_advanced_restrictions", get_defined_vars());
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
@@ -187,11 +187,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_advanced_restrictions", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_advanced_restrictions", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_inline_extensions", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_inline_extensions", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_inline_extensions", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_inline_extensions", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Inline File Extensions">'."\n";
 
@@ -199,7 +199,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<h3>Inline File Extensions (optional, for content-disposition)</h3>'."\n";
 				echo '<p>There are two ways to serve files. Inline, or as an Attachment. By default, s2Member will serve all of your protected files, as downloadable attachments. Meaning, visitors will be given a file download prompt. Otherwise known as <code>Content-Disposition: attachment</code>. In some cases though, you may wish to serve files inline. For example, PDF files and images should usually be served inline. When you serve a file inline, it is displayed in your browser immediately, rather than your browser prompting you to download the file as an attachment.</p>'."\n";
 				echo '<p>Using the field below, you can list all of the extensions that you want s2Member to serve inline (ex: <code>htm,html,pdf,jpg,jpeg,jpe,gif,png,mp3,mp4,flv,ogg,webm</code>). Please understand, some files just cannot be displayed inline. For instance, there is no way to display an <code>exe</code> file inline. So only specify extensions that can, and should be displayed inline by a web browser. Alternatively, if you would rather handle this on a case-by-case basis, you can simply add the following to the end of your download links: <code>&amp;s2member_file_inline=yes</code>. Shortcode alternative: <code>[s2File download="example-file.zip" inline="yes" /]</code>.</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_inline_extensions", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_inline_extensions", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
@@ -226,11 +226,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_inline_extensions", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_inline_extensions", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_remote_authorization", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_remote_authorization", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_remote_authorization", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_remote_authorization", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Remote Auth / Podcasting">'."\n";
 
@@ -239,16 +239,16 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<p>This can be enabled on a case-by-case basis. Just add this to the end of your download links: <code>&amp;s2member_file_remote=yes</code></p>'."\n";
 				echo '<p>Shortcode alternative: <code>[s2File download="example-file.zip" remote="yes" /]</code></p>'."\n";
 				echo '<p>Remote Header Authorization allows access to file downloads through an entirely different approach. Instead of asking the Member to log into your site through a browser, a Member will be prompted automatically, to log in through HTTP Header Authorization prompts; which is the same technique used in more traditional security systems via .htaccess files. In other words, Remote Header Authorization makes it possible for your Members to access files through remote applications that may NOT use a browser. This is often the case when a Member needs to access protected files through a software client like iTunes; typical with podcasts. See <a href="https://s2member.com/r/file-downloads-remote-auth-podcasting/" target="_blank" rel="external">tutorial video here</a> for details about how to setup a Podcast for iTunes.</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_remote_authorization", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_remote_authorization", get_defined_vars());
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_remote_authorization", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_remote_authorization", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_amazon_s3", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_amazon_s3", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_amazon_s3", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_amazon_s3", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Amazon S3/CDN Storage Option"'.((!empty(c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"])) ? ' default-state="open"' : '').'>'."\n";
 
@@ -260,7 +260,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<p>Amazon Simple Storage Service (<a href="http://s2member.com/r/amazon-s3/" target="_blank" rel="external">Amazon S3</a>). Amazon S3 is storage for the Internet. It is designed to make web-scale computing easier for developers. Amazon S3 provides a simple web services interface that can be used to store and retrieve any amount of data, at any time, from anywhere on the web. It gives developers access to the same highly scalable, reliable, secure, fast, inexpensive infrastructure that Amazon uses to run its own global network of web sites. s2Member has been integrated with Amazon S3, so that <em>(if you wish)</em>, instead of using the <code>/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'/</code> directory, you can store all of your protected files inside an Amazon S3 Bucket.</p>'."\n";
 				echo '<p>If you configure the options below, s2Member will assume all protected files are inside your Amazon S3 Bucket; and the <code>/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'/</code> directory is no longer used at all. That being said, all other aspects of s2Member\'s File Download protection remain the same. The only thing that changes, is the location of your protected files. In other words, Basic Download Restrictions, Download Keys, Inline Extensions, Custom Capability and/or Membership Level Files will all continue to work just as before. The only difference is that s2Member will use your Amazon S3 Bucket as a CDN <em>(i.e., Content Delivery Network)</em> instead of the local <code>/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'/</code> directory.</p>'."\n";
 				echo '<p>s2Member assumes that you\'re creating a new Amazon S3 Bucket, specifically for this installation; and that your Bucket is NOT available publicly. In other words, if you type this URL into your browser <em>(i.e., <code>http://your-bucket-name.s3.amazonaws.com/</code>)</em>, you should get an error that says: <code>Access Denied</code>. That\'s good, that\'s exactly what you want. You can create your Amazon S3 Bucket using the <a href="http://s2member.com/r/amazon-s3-console/" target="_blank" rel="external">Amazon interface</a>. Or, some people prefer to use this popular Firefox extension (<a href="http://s2member.com/r/s3-fox-organizer/" target="_blank" rel="external">S3 Fox Organizer</a>).</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_amazon_s3", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_amazon_s3", get_defined_vars());
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
@@ -360,11 +360,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_amazon_s3", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_amazon_s3", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_amazon_cf", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_amazon_cf", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_amazon_cf", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_amazon_cf", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Amazon S3/CloudFront CDN Storage Option"'.((!empty(c_ws_plugin__s2member_menu_pages::$pre_display_errors["cf_files_auto_configure_distros"])) ? ' default-state="open"' : '').'>'."\n";
 
@@ -377,7 +377,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<p><strong>One of the great things about Amazon CloudFront</strong>, is its ability to <strong>stream/seek media files</strong> in the truest sense of the word. For sites delivering protected <em>FLV/MP4/OGG/WEBM</em> and other streaming audio/video file types over the <em>RTMP</em> protocol, Amazon CloudFront is our recommendation. Once you\'ve successfully configured s2Member to use both Amazon S3 and Amazon CloudFront together, please review the section below regarding <code>JW Player &amp; RTMP Protocol Examples</code>. s2Member will automatically serve your protected files over the <em>RTMP</em> protocol using an Amazon CloudFront Streaming Distribution.</p>'."\n";
 				echo '<p>If you configure the options below, s2Member will assume all protected files are inside your Amazon S3 Bucket; and the <code>/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'/</code> directory is no longer used at all. That being said, all other aspects of s2Member\'s File Download protection remain the same. The only thing that changes, is the location of your protected files. In other words, Basic Download Restrictions, Download Keys, Custom Capability and/or Membership Level Files will all continue to work just as before. The only difference is that s2Member will use your Amazon S3 Bucket, automatically connecting it to both of the Amazon CloudFront Distributions, which s2Member auto-configures for you <em>(see below)</em>. In this way, s2Member uses Amazon CloudFront as a CDN <em>(i.e., Content Delivery Network)</em> for your protected files.</p>'."\n";
 				echo '<p>s2Member assumes that you\'re creating a new Amazon S3 Bucket, specifically for this installation; and that your Bucket is NOT available publicly. In other words, if you type this URL into your browser <em>(i.e., <code>http://your-bucket-name.s3.amazonaws.com/</code>)</em>, you should get an error that says: <code>Access Denied</code>. That\'s good, that\'s exactly what you want. You can create your Amazon S3 Bucket using the <a href="http://s2member.com/r/amazon-s3-console/" target="_blank" rel="external">Amazon interface</a>. Or, some people prefer to use this popular Firefox extension (<a href="http://s2member.com/r/s3-fox-organizer/" target="_blank" rel="external">S3 Fox Organizer</a>). You will also need to enable CloudFront inside your Web Services account at Amazon. Don\'t worry about creating or configuring any CloudFront Distributions, s2Member will auto-create and auto-configure those for you, allowing you to serve protected files.</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_amazon_cf", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_amazon_cf", get_defined_vars());
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
@@ -549,11 +549,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '</div>'."\n";
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_amazon_cf", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_amazon_cf", get_defined_vars());
 			}
-			/*			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_amazon_s3_comp", TRUE, get_defined_vars()))
+			/*			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_amazon_s3_comp", TRUE, get_defined_vars()))
 						{
-							do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_amazon_s3_comp", get_defined_vars());
+							do_action("s2x_during_download_options_page_during_left_sections_before_amazon_s3_comp", get_defined_vars());
 
 							echo '<div class="ws-menu-page-group" title="S3-Compatible Content Delivery (e.g., DreamObjects, etc.)">'."\n";
 
@@ -640,11 +640,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 							echo '</div>'."\n";
 
-							do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_amazon_s3_comp", get_defined_vars());
+							do_action("s2x_during_download_options_page_during_left_sections_after_amazon_s3_comp", get_defined_vars());
 						}*/
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_rtmp_streaming", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_rtmp_streaming", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_rtmp_streaming", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_rtmp_streaming", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="JW Player v7 &amp; RTMP Protocol Examples">'."\n";
 
@@ -656,7 +656,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<p><strong>See also:</strong> This KB article: <a href="http://www.s2member.com/kb/jwplayer-s2stream-shortcodes/" target="_blank" rel="external">JW Player w/ <code>[s2Stream /]</code> Shortcodes</a>.</p>'."\n";
 				if(stripos(wp_get_theme(), 'infocus') !== FALSE)
 					echo '<p><strong>Note:</strong> It appears that you\'re using the inFocus WordPress theme. If you experience trouble with the shortcodes below, try wrapping the shortcode in <code>[raw][/raw]</code> tags (e.g., <code>[raw][s2Stream ... /][/raw]</code>).</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_rtmp_streaming", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_rtmp_streaming", get_defined_vars());
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
@@ -704,11 +704,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_rtmp_streaming", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_rtmp_streaming", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_rewrite_linkage", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_rewrite_linkage", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_rewrite_linkage", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_rewrite_linkage", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Advanced Mod-Rewrite Linkage">'."\n";
 
@@ -723,23 +723,23 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<p>Or even this, if you\'re using Remote Header Authorization:<br /><code>... /wp-content/plugins/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'<strong class="ws-menu-page-hilite">/s2member-file-remote</strong>/example-file.zip</code></p>'."\n";
 				echo '<p>Specifying storage location option dynamically:<br /><code>... /wp-content/plugins/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'<strong class="ws-menu-page-hilite">/s2member-file-storage-[local|s3|cf]</strong>/example-file.zip</code><br /><code>... /wp-content/plugins/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'<strong class="ws-menu-page-hilite">/s2member-file-storage-cf</strong>/example-cloudfront-file.zip</code><br /><code>... /wp-content/plugins/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'<strong class="ws-menu-page-hilite">/s2member-file-storage-s3/s2member-file-inline</strong>/example-s3-file.html</code></p>'."\n";
 				echo '<p><em>* Note, the order of your s2Member-specific parameters with Advanced Mod-Rewrite Linkage is irrelevant. Feel free to add/remove, or even change the order. Everything discussed here is also Multisite compatible. Everything discussed here is also compatible when/if combined with Amazon S3/CDN Storage. However, NONE of this will work on servers that do NOT support <code>mod_rewrite</code>. Almost all web servers do though.</em></p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_rewrite_linkage", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_rewrite_linkage", get_defined_vars());
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_rewrite_linkage", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_rewrite_linkage", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_shortcode_attrs", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_shortcode_attrs", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_shortcode_attrs", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_shortcode_attrs", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Shortcode Attributes &amp; API Functions (Explained)">'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-shortcode-attrs-section">'."\n";
 				echo '<h3>Shortcode Attributes &amp; API Functions (Explained In Full Detail)</h3>'."\n";
 				echo '<p>s2Member makes <a href="http://s2member.com/r/shortcode-reference/" target="_blank" rel="external">Shortcodes</a> available to you, which allow you to generate File Download URLs and/or File Download Keys. Like most Shortcodes for WordPress, s2Member reads Attributes in your Shortcode. Many site owners like to know exactly how these Shortcode Attributes work. Below, is a brief overview of each possible Shortcode Attribute.</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_shortcode_attrs", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_shortcode_attrs", get_defined_vars());
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
@@ -765,7 +765,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<li><code>count_against_user="no"</code> Defaults to <code>no</code> with <code>[s2File /]</code> Shortcode. Defaults to <code>yes</code> with <code>[s2Stream /]</code> Shortcode. If <code>count_against_user="1|on|yes|true"</code>, it will automatically force <code>check_user="true"</code> as well. In other words, s2Member will authenticate the current User, and if authenticated, count this File Download URL against the current User\'s account record in real-time <em>(i.e., as the URL is being generated) </em>. This is off by default with the <code>[s2File /]</code> Shortcode. By default, s2Member will simply generate a File Download URL, and upon a User/Member clicking the URL, s2Member will authenticate the User/Member at that time, count the File Download against their account record, and serve the File Download. In other words, under normal circumstances, there is no reason to set <code>check_user="true"</code> and/or <code>count_against_user="true"</code> when generating the URL itself. However, this is a useful Shortcode Attribute when <code>url_to_storage_source="true"</code>. Please note, when <code>check_user="true"</code> and/or <code>count_against_user="true"</code>, the Shortcode will return an empty and/or null object value in situations where the current User/Member does NOT have access to the file.</li>'."\n";
 				echo '<li><code>check_user="no"</code> Defaults to <code>no</code> with <code>[s2File /]</code> Shortcode. Defaults to <code>yes</code> with <code>[s2Stream /]</code> Shortcode. If <code>check_user="1|on|yes|true"</code>, s2Member will authenticate the current User before allowing the File Download URL to be generated. This is off by default with the <code>[s2File /]</code> Shortcode. By default, s2Member will simply generate a File Download URL, and upon a User/Member clicking the URL, s2Member will authenticate the User/Member at that time, and serve the File Download to the User/Member. In other words, under normal circumstances, there is no reason to set <code>check_user="true"</code> and/or <code>count_against_user="true"</code> when generating the URL itself. However, this IS a useful Shortcode Attribute when <code>url_to_storage_source="true"</code>. Please note, when <code>check_user="true"</code> and/or <code>count_against_user="true"</code>, the Shortcode will return an empty and/or null object value in situations where the current User/Member does NOT have access to the file.</li>'."\n";
 				echo '<li><code>get_streamer_json="no"</code> Defaults to <code>no</code>. N/A with <code>[s2Stream /]</code> Shortcode. If <code>get_streamer_json="1|on|yes|true"</code>, the <code>[s2File /]</code> Shortcode will return a JSON object for JavaScript notation, making it possible to integrate the <code>[s2File /]</code> Shortcode into JavaScript routines that configure streaming media players. For further details, please review the section above: <code>JW Player &amp; RTMP Protocol Examples</code>. Note, if you set <code>get_streamer_json="true"</code>, s2Member will automatically force <code>url_to_storage_source="true"</code> and <code>stream="true"</code>. For that reason, you should carefully review the details and warning above regarding <code>url_to_storage_source</code>. If you set <code>get_streamer_json="true"</code>, you should also set <code>check_user="true"</code> and <code>count_against_user="true"</code>.</li>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_shortcode_attrs_s2file_lis", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_shortcode_attrs_s2file_lis", get_defined_vars());
 				echo '</ul>'."\n";
 				echo '</td>'."\n";
 
@@ -792,7 +792,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<li><code>player_{setting}=""</code> Optional. Any additional configuration attributes supported by your audio/video player, prefixed with <code>player_</code>. For JW Player v7, see <a href="http://www.s2member.com/r/jw-player-config-options/" target="_blank" rel="external">this article please</a>. Examples: <code>player_width="480"</code>, <code>player_height="270"</code>, <code>player_title="My Video"</code>, <code>player_description="A video about something."</code>, <code>player_image="http://www.example.com/wp-content/uploads/video-preview.jpg"</code>, <code>player_mediaid="ei0wsx23"</code>, <code>player_autostart="true"</code>, <code>player_key="my-license-key"</code>, <code>player_tracks="{kind:\'captions\',file:\'/assets/captions-en.vtt\',label:\'English\'}"</code> (<em>With <a href="http://www.s2member.com/r/jw-player-video-captions/" target="_blank" rel="external">Captions</a>, you can exclude the square array brackets to avoid Shortcode parsing issues. s2Member will automatically wrap your Caption objects with square array brackets.</em>). Please note that "Advanced Options Blocks" listed on <a href="http://www.s2member.com/r/jw-player-config-options/" target="_blank" rel="external">this page</a> are NOT supported here. For those, please use: <code>player_option_blocks=""</code> (see below).</li>'."\n";
 				echo '<li><code>player_option_blocks=""</code> Optional. Any "Advanced Option Blocks" supported by your audio/video player. For JW Player v7, see <a href="http://www.s2member.com/r/jw-player-config-options/" target="_blank" rel="external">this article please</a>. Here are some examples: <code>player_option_blocks="sharing:{}"</code>, <code>player_option_blocks="sharing:{}, logo: {file: \'/logo.png\', link: \'http://example.com\'}"</code>. Or: <code>player_option_blocks="c2hhcmluZzoge30="</code> (base64 encoded version of <code>sharing:{}</code>). Please note that "Advanced Options Blocks" can be defined in plain text or with a <a href="http://s2member.com/r/base64-encoding/" target="_blank" rel="external">base64 encoded string</a>. Advanced Option Blocks are JavaScript objects with properties. If you have trouble defining JavaScript object properties inside a Shortcode Attribute, please use <a href="http://s2member.com/r/base64-encoding/" target="_blank" rel="external">this tool</a> to base64 encode your Advanced Option Blocks, so that you end up with a string that\'s compatible with Shortcode Attributes.</li>'."\n";
 				echo '<li>Please check the <strong>Shortcode Attributes</strong> Tab in <a href="http://www.s2member.com/kb/jwplayer-s2stream-shortcodes/#using-s2stream-shortcodes" target="_blank" rel="external">this KB article</a> for further details on everything here.</li>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_shortcode_attrs_s2stream_lis", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_shortcode_attrs_s2stream_lis", get_defined_vars());
 				echo '</ul>'."\n";
 				echo '</td>'."\n";
 
@@ -812,7 +812,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<ul class="ws-menu-page-li-margins">'."\n";
 				echo '<li><code>file_download="file.zip"</code> Location of the file, relative to the <code>/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'/</code> directory; or, relative to the root of your Amazon S3 Bucket, when applicable.</li>'."\n";
 				echo '<li><code>directive=""</code> Defaults to <code>[empty]</code>. If <code>directive="ip-forever|universal"</code>, s2Member will return a special File Download Key. If you set <code>directive="ip-forever"</code>, the File Download Key that s2Member generates will last forever, for a specific IP Address; otherwise, by default, all File Download Keys expire after 24 hours automatically. If you set <code>directive="universal"</code>, s2Member will generate a File Download Key that is good for anyone/everyone forever, with NO restrictions on who/where/when a file is accessed <em>(be careful with this one)</em>.</li>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_shortcode_attrs_s2key_lis", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_shortcode_attrs_s2key_lis", get_defined_vars());
 				echo '</ul>'."\n";
 				echo '</td>'."\n";
 
@@ -823,18 +823,18 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_shortcode_attrs", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_shortcode_attrs", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_gzip_conflicts", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_gzip_conflicts", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_gzip_conflicts", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_gzip_conflicts", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Preventing GZIP Conflicts On Server">'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-gzip-conflicts-section">'."\n";
 				echo '<h3>Preventing GZIP Conflicts On Server (Instructions)</h3>'."\n";
 				echo '<p>Protected files served by s2Member through PHP scripts, are already compressed. Therefore, <a href="http://s2member.com/r/gzip-compression-explained/" target="_blank" rel="nofollow external xlink">GZIP compression</a> is not needed during protected file delivery. Some web servers (i.e., Apache, LiteSpeed, and similar) include GZIP compression rules through server-side extensions, like <code>mod_deflate</code> for example. While s2Member encourages the use of extensions like <code>mod_deflate</code>, it is best to disable GZIP automatically (i.e., temporarily) during s2Member\'s delivery of a protected file through a PHP script. This avoids conflicts on the server which might otherwise lead to corrupted file downloads. s2Member makes a valiant effort to accomplish this via PHP, all on its own. However, it never hurts to add this section of code to the root <code>.htaccess</code> file for your WordPress installation. Optional, but highly recommended.</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_gzip_conflicts", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_gzip_conflicts", get_defined_vars());
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
@@ -874,11 +874,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_gzip_conflicts", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_gzip_conflicts", get_defined_vars());
 			}
-			if(apply_filters("ws_plugin__s2member_during_down_ops_page_during_left_sections_display_custom_capability_files", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
+			if(apply_filters("s2x_during_download_options_page_during_left_sections_display_custom_capability_files", (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_before_custom_capability_files", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_before_custom_capability_files", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="Custom Capability &amp; Member Level Files">'."\n";
 
@@ -886,7 +886,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<h3>Restricting Files, Based On Custom Capabilities</h3>'."\n";
 				echo '<p>If you\'re NOT familiar with Custom Capabilities yet, please read: <strong>Dashboard → s2Member → API Scripting → Custom Capability Packages</strong>. Once you understand the basic concept of Custom Capabilities &amp; Protected File Downloads, you\'ll see that (by default) s2Member does NOT handle File Download Protection with respect to Custom Capabilities. That\'s where Custom Capability Sub-directories come in.</p>'."\n";
 				echo '<p>You can create Custom Capability Sub-directories under: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'</code>. For instance, if you have a Custom Capability <code>music</code>, you can place protected files that should ONLY be accessible to Members with <code>access_s2member_ccap_music</code>, inside: <code>/'.esc_html(c_ws_plugin__s2member_utils_dirs::basename_dir_app_data($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["files_dir"])).'/access-s2member-ccap-music/</code>. Some examples are provided below.</p>'."\n";
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_during_custom_capability_files", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_during_custom_capability_files", get_defined_vars());
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
@@ -909,9 +909,9 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_down_ops_page_during_left_sections_after_custom_capability_files", get_defined_vars());
+				do_action("s2x_during_download_options_page_during_left_sections_after_custom_capability_files", get_defined_vars());
 			}
-			do_action("ws_plugin__s2member_during_down_ops_page_after_left_sections", get_defined_vars());
+			do_action("s2x_during_download_options_page_after_left_sections", get_defined_vars());
 
 			echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";
 
@@ -932,4 +932,4 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 	}
 }
 
-new c_ws_plugin__s2member_menu_page_down_ops();
+new c_ws_plugin__s2member_menu_page_download_options();
