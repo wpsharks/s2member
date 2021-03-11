@@ -266,6 +266,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_res_ops_page', TRUE, get_defined_vars())) {
 					add_submenu_page($slug, 's2Member Restriction Options', 'Restriction Options', 'create_users', 'ws-plugin--s2member-res-ops', 'c_ws_plugin__s2member_menu_pages::new_restriction_options_page');
 				}
+
+				add_submenu_page($slug, 's2Member Email Options', 'Email Options', 'create_users', 'ws-plugin--s2member-email-options', 'c_ws_plugin__s2member_menu_pages::new_email_options_page');
 			}
 
 //				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_menu_page', TRUE, get_defined_vars()))
@@ -1298,6 +1300,21 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 			if (!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs']) // Logging disabled?
 				c_ws_plugin__s2member_admin_notices::display_admin_notice('Logging is currently disabled by your configuration.');
+		}
+
+		/**
+		 * Builds and handles the Email Options page.
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since 210208
+		 */
+		public static function new_email_options_page()
+		{
+			do_action('s2x_before_new_email_options_page', get_defined_vars());
+
+			include_once dirname(__FILE__, 2) . '/menu-pages-new/email-options.inc.php';
+
+			do_action('s2x_after_new_email_options_page', get_defined_vars());
 		}
 	}
 }
