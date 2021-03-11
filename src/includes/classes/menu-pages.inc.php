@@ -262,6 +262,10 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				}
 
 				add_submenu_page($slug, 's2Member Registration Options', 'Registration Options', 'create_users', 'ws-plugin--s2member-registration-options', 'c_ws_plugin__s2member_menu_pages::new_registration_options_page');
+
+				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_res_ops_page', TRUE, get_defined_vars())) {
+					add_submenu_page($slug, 's2Member Restriction Options', 'Restriction Options', 'create_users', 'ws-plugin--s2member-res-ops', 'c_ws_plugin__s2member_menu_pages::new_restriction_options_page');
+				}
 			}
 
 //				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_menu_page', TRUE, get_defined_vars()))
@@ -999,6 +1003,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			c_ws_plugin__s2member_menu_pages::update_all_options();
 
 			include_once dirname(__FILE__, 2) . '/menu-pages-new/general-options.inc.php';
+			c_ws_plugin__s2member_menu_page_general_options::render();
 
 			do_action('ws_plugin__s2member_after_new_general_options_page', get_defined_vars());
 		}
@@ -1009,15 +1014,15 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		 * @package s2Member\Menu_Pages
 		 * @since 3.5
 		 */
-		public static function new_res_ops_page()
+		public static function new_restriction_options_page()
 		{
-			do_action('ws_plugin__s2member_before_res_ops_page', get_defined_vars());
+			do_action('s2x_before_restriction_options_page', get_defined_vars());
 
 			c_ws_plugin__s2member_menu_pages::update_all_options();
 
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/res-ops.inc.php';
+			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/restriction-options.inc.php';
 
-			do_action('ws_plugin__s2member_after_res_ops_page', get_defined_vars());
+			do_action('x2x_after_restriction_options_page', get_defined_vars());
 		}
 
 		/**

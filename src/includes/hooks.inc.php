@@ -222,3 +222,7 @@ add_filter('auto_update_plugin', 'c_ws_plugin__s2member_installation::auto_updat
 // Runs setup routines for pages with log viewer
 add_action('ws_plugin__s2member_before_logs_page', 'c_ws_plugin__s2member_menu_pages::prepare_logs_viewer');
 add_action('s2x_before_new_tools_page', 'c_ws_plugin__s2member_menu_pages::prepare_logs_viewer');
+
+// New setup for revamp for membership options page
+require_once dirname(__FILE__) . '/menu-pages-new/general-options.inc.php';
+add_action('s2x_during_res_ops_page_during_left_sections_before_post_level_access', 'c_ws_plugin__s2member_menu_page_general_options::render_membership_options_page_panel');

@@ -27,7 +27,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_general_options"))
 	 * @since 210208
 	 */
 	class c_ws_plugin__s2member_menu_page_general_options {
-		public function __construct() {
+		static public function render() {
 			echo '<div class="wrap ws-menu-page">'."\n";
 
 			echo '<div class="wp-header-end"></div>'."\n";
@@ -876,6 +876,9 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_general_options"))
 			echo '</div>'."\n";
 		}
 
+		/**
+		 * @attaches-to ``add_action('s2x_during_res_ops_page_during_left_sections_before_post_level_access');``
+		 */
 		static public function render_membership_options_page_panel() {
 			if(apply_filters("s2x_display_membership_options_page_panel", TRUE, get_defined_vars()))
 			{
@@ -954,5 +957,3 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_general_options"))
 		}
 	}
 }
-
-new c_ws_plugin__s2member_menu_page_general_options();
