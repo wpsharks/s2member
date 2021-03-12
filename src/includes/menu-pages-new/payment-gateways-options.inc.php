@@ -18,7 +18,7 @@
 if(!defined('WPINC')) // MUST have WordPress.
 	exit("Do not access this file directly.");
 
-if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
+if(!class_exists("c_ws_plugin__s2member_menu_page_payment_gateways_options"))
 {
 	/**
 	 * Menu page for the s2Member plugin (PayPal Options page).
@@ -26,7 +26,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 	 * @package s2Member\Menu_Pages
 	 * @since 110531
 	 */
-	class c_ws_plugin__s2member_menu_page_paypal_ops
+	class c_ws_plugin__s2member_menu_page_payment_gateways_options
 	{
 		public function __construct()
 		{
@@ -49,11 +49,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
 			echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />'."\n";
 
-			do_action("ws_plugin__s2member_during_paypal_ops_page_before_left_sections", get_defined_vars());
+			do_action("s2x_during_payment_gateways_options_page_before_left_sections", get_defined_vars());
 
-			if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_paypal_account_details", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_payment_gateways_options_page_during_left_sections_display_paypal_account_details", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_paypal_account_details", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_before_paypal_account_details", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="PayPal Account Details">'."\n";
 
@@ -62,7 +62,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<h3>PayPal Account Details (required, if using PayPal)</h3>'."\n";
 				echo '<p>s2Member integrates with <a href="https://s2member.com/r/paypal/" target="_blank" rel="external">PayPal Payments Standard</a>—for businesses. You do not need a PayPal Pro account. You just need to upgrade your Personal PayPal account to a Business status, which is free. A PayPal account can be <a href="http://s2member.com/r/paypal-business-upgrade/" target="_blank" rel="external">upgraded</a> from a Personal account to a Business account by clicking the "Profile" link under your "My Account" tab, selecting "Personal Business Information", and then clicking the "Upgrade Your Account" button. <strong>See also:</strong> This KB article: <a href="http://s2member.com/kb-article/supported-paypal-account-types/" target="_blank" rel="external">PayPal Compatibility (Account Types)</a>.</p>'."\n";
 				echo '<p><em><strong>PayPal API Credentials:</strong> Once you have a PayPal Business account, you\'ll need access to your <a href="http://s2member.com/r/paypal-profile-api-access/" target="_blank" rel="external">PayPal API Credentials</a>. Log into your PayPal account, and navigate to <strong>Profile → API Access (or → Request API Credentials)</strong>. From the available options, please choose "Request API Signature".</em></p>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_account_details", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_during_paypal_account_details", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
@@ -158,7 +158,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_account_detail_rows", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_during_paypal_account_detail_rows", get_defined_vars());
 
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
@@ -240,112 +240,16 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
 				echo '<p><em><strong>Sandbox Tip:</strong> If you\'re testing your site through a PayPal Sandbox account, please remember that Email Confirmations from s2Member will not be received after a test purchase. s2Member sends its Confirmation Emails to the PayPal Email Address of the Customer. Since PayPal Sandbox addresses are usually bogus (for testing), you will have to run live transactions before Email Confirmations from s2Member are received. That being said, all other s2Member functionality can be tested through a PayPal Sandbox account. Email Confirmations are the only hang-up.</em></p>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_account_details_after_sandbox_tip", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_during_paypal_account_details_after_sandbox_tip", get_defined_vars());
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_after_paypal_account_details", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_after_paypal_account_details", get_defined_vars());
 			}
-
-			if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_paypal_payflow_account_details", c_ws_plugin__s2member_utils_conds::pro_is_installed(), get_defined_vars()))
+			if(apply_filters("s2x_during_payment_gateways_options_page_during_left_sections_display_paypal_ipn", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_paypal_payflow_account_details", get_defined_vars());
-
-				echo '<div class="ws-menu-page-group" title="Payflow Account Details">'."\n";
-
-				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-payflow-account-details-section">'."\n";
-				echo '<a href="https://s2member.com/r/paypal/" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/src/images/paypal-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
-				echo '<h3>Payflow Account Details (required, if using Payflow)</h3>'."\n";
-				echo '<p>Newer PayPal Pro accounts (i.e., PayPal Pro w/ Payflow Edition), come with the Payflow API for Recurring Billing service. If you have a newer PayPal Pro account, and you wish to integrate PayPal\'s Recurring Billing service with s2Member Pro-Forms, you will need to fill in the details here. Providing Payflow API Credentials below, will automatically put s2Member\'s Recurring Billing integration through Pro-Forms into Payflow mode. Just fill in the details below, and you\'re ready to generate Pro-Forms that charge customers on a recurring basis. s2Member will use the Payflow Edition API instead of the older PayPal Pro DPRP service; which is being slowly phased out in favor of Payflow Edition APIs.</p>'."\n";
-				echo '<p><em><strong>Payflow API Credentials:</strong> Once you have a PayPal Pro account, you\'ll need access to your <a href="http://s2member.com/r/paypal-profile-api-access/" target="_blank" rel="external">Payflow API Credentials</a>. Log into your PayPal account, and navigate to <strong>Profile → API Access (or → Request API Credentials)</strong>. From the available options, please choose "Payflow / API Access". You will need the following credentials: Username, Password, Partner, and Vendor.</em></p>'."\n";
-				echo '<p><em><strong>Important Note:</strong> Supplying Payflow API Credentials here does not mean you can bypass other areas of s2Member\'s configuration; i.e., please supply s2Member with all of your PayPal account details. Your PayPal Pro (Payflow Edition) account is configured here, but up above you will need to configure other Account Details also.</em></p>'."\n";
-				echo '<p><strong>See also:</strong> This KB article: <a href="http://s2member.com/kb-article/supported-paypal-account-types/" target="_blank" rel="external">PayPal Account Types</a>.</p>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_payflow_account_details", get_defined_vars());
-
-				echo '<table class="form-table">'."\n";
-				echo '<tbody>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-paypal-payflow-api-username">'."\n";
-				echo 'Your Payflow API Username:'."\n";
-				echo '</label>'."\n";
-				echo '</th>'."\n";
-
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<td>'."\n";
-				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_payflow_api_username" id="ws-plugin--s2member-paypal-payflow-api-username" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_username"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials) → Payflow API Access</strong>'."\n";
-				echo '</td>'."\n";
-
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-paypal-payflow-api-password">'."\n";
-				echo 'Your Payflow API Password:'."\n";
-				echo '</label>'."\n";
-				echo '</th>'."\n";
-
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<td>'."\n";
-				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_payflow_api_password" id="ws-plugin--s2member-paypal-payflow-api-password" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_password"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials) → Payflow API Access</strong>'."\n";
-				echo '</td>'."\n";
-
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-paypal-payflow-api-partner">'."\n";
-				echo 'Your Payflow API Partner:'."\n";
-				echo '</label>'."\n";
-				echo '</th>'."\n";
-
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<td>'."\n";
-				echo '<input type="text" name="ws_plugin__s2member_paypal_payflow_api_partner" id="ws-plugin--s2member-paypal-payflow-api-partner" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_partner"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials) → Payflow API Access</strong>'."\n";
-				echo '</td>'."\n";
-
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-paypal-payflow-api-vendor">'."\n";
-				echo 'Your Payflow API Vendor:'."\n";
-				echo '</label>'."\n";
-				echo '</th>'."\n";
-
-				echo '</tr>'."\n";
-				echo '<tr>'."\n";
-
-				echo '<td>'."\n";
-				echo '<input type="text" name="ws_plugin__s2member_paypal_payflow_api_vendor" id="ws-plugin--s2member-paypal-payflow-api-vendor" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_payflow_api_vendor"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials) → Payflow API Access</strong>'."\n";
-				echo '</td>'."\n";
-
-				echo '</tr>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_payflow_account_detail_rows", get_defined_vars());
-				echo '</tbody>'."\n";
-				echo '</table>'."\n";
-				echo '</div>'."\n";
-
-				echo '</div>'."\n";
-
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_after_paypal_payflow_account_details", get_defined_vars());
-			}
-
-			if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_paypal_ipn", TRUE, get_defined_vars()))
-			{
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_paypal_ipn", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_before_paypal_ipn", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="PayPal IPN Integration">'."\n";
 
@@ -354,7 +258,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<p>Log into your PayPal account and navigate to this section:<br /><strong>Account Profile → <a href="http://s2member.com/r/paypal-com-ipn-configuration-page/" target="_blank" rel="external">Instant Payment Notification Preferences</a></strong></p>'."\n";
 				echo '<p>Edit your IPN settings &amp; turn IPN Notifications: <strong><code>On</code></strong></p>'."\n";
 				echo '<p>You\'ll need your IPN URL, which is:<br /><code>'.esc_html(home_url("/?s2member_paypal_notify=1", "https")).'</code></p>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_during_paypal_ipn", get_defined_vars());
 
 				echo '<h4 style="margin-bottom:0;"><strong class="ws-menu-page-hilite">Note: SSL is required by PayPal</strong></h4>'."\n";
 				echo '<p style="margin-top:0;">If you configure your PayPal.com account using the URL above, your site <strong><em>must</em> support SSL</strong> (i.e., the <code>https://</code> protocol). In other words, PayPal\'s system will refuse to accept any URL that does not begin with <code>https://</code>. The IPN URL that s2Member provides (see above) <em>does</em> start with <code>https://</code>. However, that doesn\'t necessarily mean that the URL actually works. Please be sure that your hosting account is configured with a valid SSL certificate before giving this URL to PayPal.</p>'."\n";
@@ -364,7 +268,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<h3 style="margin:0;">More Information (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-details\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
 				echo '<div id="ws-plugin--s2member-paypal-ipn-details" style="margin-top:10px; display:none;">'."\n";
 				echo '<p><em><strong>Quick Tip:</strong> In addition to the <a href="http://s2member.com/r/paypal-ipn-setup/" target="_blank" rel="external">default IPN settings inside your PayPal account</a>, the IPN URL is also set on a per-transaction basis by the special PayPal Button Code that s2Member provides you with. In other words, if you have multiple sites operating on one PayPal account, that\'s OK. s2Member dynamically sets the IPN URL for each transaction. The result is that the IPN URL configured from within your PayPal account, becomes the default, which is then overwritten on a per-transaction basis. In fact, PayPal recently updated their system to support IPN URL preservation. One PayPal account can handle multiple sites, all using different IPN URLs.</em></p>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn_after_quick_tip", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_during_paypal_ipn_after_quick_tip", get_defined_vars());
 				echo '<p><em><strong>IPN Communications:</strong> You\'ll be happy to know that s2Member handles cancellations, expirations, failed payments, terminations (e.g., refunds &amp; chargebacks) for you automatically. If you log into your PayPal account and cancel a Member\'s Subscription, or, if the Member logs into their PayPal account and cancels their own Subscription, s2Member will be notified of these important changes and react accordingly through the PayPal IPN service that runs silently behind-the-scene. The PayPal IPN service will notify s2Member whenever a Member\'s payments have been failing, and/or whenever a Member\'s Subscription has expired for any reason. Even refunds &amp; chargeback reversals are supported through the IPN service. If you issue a refund to an unhappy Customer through PayPal, s2Member will be notified, and the account for that Customer will either be demoted to a Free Subscriber, or deleted automatically (based on your configuration). The communication from PayPal → s2Member is seamless.</em></p>'."\n";
 				echo '</div>'."\n";
 
@@ -375,18 +279,17 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<p>If you\'re using a 3rd-party application that needs to POST simulated IPN transactions to your s2Member installation, you can use this alternate IPN URL, which includes a Proxy Key. This encrypted Proxy Key verifies incoming data being received by s2Member\'s IPN processor. You can change <em>[proxy-gateway]</em> to whatever you like. The <em>[proxy-gateway]</em> value is required. It will be stored by s2Member as the Customer\'s Paid Subscr. Gateway. Your [proxy-gateway] value will also be reflected in s2Member\'s IPN log.</p>'."\n";
 				echo '<input type="text" autocomplete="off" value="'.format_to_edit(home_url("/?s2member_paypal_notify=1&s2member_paypal_proxy=[proxy-gateway]&s2member_paypal_proxy_verification=".urlencode(c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()), "https")).'" style="width:99%;" />'."\n";
 				echo '<p><em>Any 3rd-party application that is sending IPN transactions to your s2Member installation must include the <code>custom</code> POST variable, and that variable must always start with your installation domain (i.e., custom=<code>'.esc_html($_SERVER["HTTP_HOST"]).'</code>). In addition, the <code>item_number</code> variable must always match a format that s2Member looks for. Generally speaking, the <code>item_number</code> should be <code>1, 2, 3, or 4</code>, indicating a specific s2Member Level #. However, s2Member also uses some advanced formats in this field. Just to be sure, we suggest creating a PayPal Button with the s2Member Button Generator, and then taking a look at the Full Button Code to see how s2Member expects <code>item_number</code> to be formatted. Other than the aforementioned exceptions, all other POST variables should follow PayPal standards. Please see: <a href="https://s2member.com/r/paypal/-ipn-pdt-vars" target="_blank" rel="external">PayPal\'s IPN/PDT reference guide</a> for full documentation.</em></p>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn_after_proxy", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_during_paypal_ipn_after_proxy", get_defined_vars());
 				echo '</div>'."\n";
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_after_paypal_ipn", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_after_paypal_ipn", get_defined_vars());
 			}
-
-			if(apply_filters("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_display_paypal_pdt", TRUE, get_defined_vars()))
+			if(apply_filters("s2x_during_payment_gateways_options_page_during_left_sections_display_paypal_pdt", TRUE, get_defined_vars()))
 			{
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_paypal_pdt", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_before_paypal_pdt", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="PayPal PDT/Auto-Return Integration">'."\n";
 
@@ -396,7 +299,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<p>Turn the Auto-Return feature: <strong><code>On</code></strong></p>'."\n";
 				echo '<p>You\'ll need your <a href="'.esc_attr(home_url("/?s2member_paypal_return=1&s2member_paypal_proxy=paypal&s2member_paypal_proxy_use=x-preview")).'" target="_blank" rel="external">Auto-Return URL</a>, which is:<br /><code>'.esc_html(home_url("/?s2member_paypal_return=1")).'</code></p>'."\n";
 				echo '<p>You must also enable PDT (Payment Data Transfer): <strong><code>On</code></strong><br /><em>You\'ll be issued an Identity Token that you can enter below.</em></p>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_pdt", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_during_paypal_pdt", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
@@ -425,19 +328,19 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<h3 style="margin:0;">More Information (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-pdt-details\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
 				echo '<div id="ws-plugin--s2member-paypal-pdt-details" style="margin-top:10px; display:none;">'."\n";
 				echo '<p><em><strong>Quick Tip:</strong> In addition to the <a href="http://s2member.com/r/paypal-pdt-setup/" target="_blank" rel="external">default Auto-Return/PDT configuration inside your PayPal account</a>, the Auto-Return URL is also set on a per-transaction basis from within the special PayPal Button Code that s2Member provides you with. In other words, if you have multiple sites operating on one PayPal account, that\'s OK. s2Member sets the Auto-Return URL (dynamically) for each transaction. The result is that the Auto-Return URL configured from within your PayPal account becomes the default, which is then overwritten on a per-transaction basis by the s2Member software.</em></p>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_pdt_after_quick_tip", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_during_paypal_pdt_after_quick_tip", get_defined_vars());
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_pdt_after_more_info", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_during_paypal_pdt_after_more_info", get_defined_vars());
 
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
 
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_after_paypal_pdt", get_defined_vars());
+				do_action("s2x_during_payment_gateways_options_page_during_left_sections_after_paypal_pdt", get_defined_vars());
 			}
 
-			do_action("ws_plugin__s2member_during_paypal_ops_page_after_left_sections", get_defined_vars());
+			do_action("s2x_during_payment_gateways_options_page_after_left_sections", get_defined_vars());
 
 			echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";
 
@@ -458,4 +361,4 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 	}
 }
 
-new c_ws_plugin__s2member_menu_page_paypal_ops();
+new c_ws_plugin__s2member_menu_page_payment_gateways_options();

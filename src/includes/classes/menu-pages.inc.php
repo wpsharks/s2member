@@ -276,6 +276,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_down_ops_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars())) {
 					add_submenu_page($slug, 's2Member Download Options', 'Download Options', 'create_users', 'ws-plugin--s2member-down-ops', 'c_ws_plugin__s2member_menu_pages::new_download_options_page');
 				}
+
+				add_submenu_page($slug, 's2Member Payment Gateways Options', 'Payment Gateways', 'create_users', 'ws-plugin--s2member-payment-gateways-options', 'c_ws_plugin__s2member_menu_pages::new_payment_gateways_options_page');
 			}
 
 //				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_menu_page', TRUE, get_defined_vars()))
@@ -1293,6 +1295,21 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			include_once dirname(__FILE__, 2) . '/menu-pages-new/email-options.inc.php';
 
 			do_action('s2x_after_new_email_options_page', get_defined_vars());
+		}
+
+		/**
+		 * Builds and handles the Payment Gateways Options page.
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since 210208
+		 */
+		public static function new_payment_gateways_options_page()
+		{
+			do_action('s2x_before_new_payment_gateways_options_page', get_defined_vars());
+
+			include_once dirname(__FILE__, 2) . '/menu-pages-new/payment-gateways-options.inc.php';
+
+			do_action('s2x_after_new_payment_gateways_options_page', get_defined_vars());
 		}
 	}
 }
