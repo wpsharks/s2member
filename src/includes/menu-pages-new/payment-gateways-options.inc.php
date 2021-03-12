@@ -38,7 +38,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_payment_gateways_options"))
 			c_ws_plugin__s2member_menu_pages_tb::display();
 			echo '</div>'."\n";
 
-			echo '<h2>PayPal Options</h2>'."\n";
+			echo '<h2>Payment Gateways Options</h2>'."\n";
 
 			echo '<table class="ws-menu-page-table">'."\n";
 			echo '<tbody class="ws-menu-page-table-tbody">'."\n";
@@ -339,6 +339,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_payment_gateways_options"))
 
 				do_action("s2x_during_payment_gateways_options_page_during_left_sections_after_paypal_pdt", get_defined_vars());
 			}
+
+			do_action('s2x_during_payment_gateways_options_page_after_paypal_options');
 
 			do_action("s2x_during_payment_gateways_options_page_after_left_sections", get_defined_vars());
 
