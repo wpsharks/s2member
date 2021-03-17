@@ -508,9 +508,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_general_options"))
 
 				do_action("s2x_during_general_options_page_during_left_sections_during_log_settings", get_defined_vars());
 
-				echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form" autocomplete="off">'."\n";
-				echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
-
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
@@ -555,13 +552,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_general_options"))
 				echo '<input type="submit" value="Update Logging Configuration" />'."\n";
 				echo '</p>'."\n";
 
-				echo '</form>'."\n";
-
 				echo '</div>'."\n";
 				echo '</div>'."\n";
 
 				do_action("s2x_during_general_options_page_during_left_sections_after_log_settings", get_defined_vars());
 			}
+
+			do_action('s2x_during_general_options_page_remote_operations');
 
 			do_action("s2x_during_general_options_page_after_left_sections", get_defined_vars());
 

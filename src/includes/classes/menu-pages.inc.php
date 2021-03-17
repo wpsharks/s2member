@@ -982,7 +982,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		{
 			do_action('ws_plugin__s2member_before_new_general_options_page', get_defined_vars());
 
-			c_ws_plugin__s2member_menu_pages::update_all_options();
+			self::update_all_options();
 
 			include_once dirname(__FILE__, 2) . '/menu-pages-new/general-options.inc.php';
 			c_ws_plugin__s2member_menu_page_general_options::render();
