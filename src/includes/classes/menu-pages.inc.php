@@ -250,7 +250,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				}
 
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_trk_ops_page', TRUE, get_defined_vars())) {
-					add_submenu_page($slug, 's2Member Tracking', 'Tracking', 'create_users', 'ws-plugin--s2member-trk-ops', 'c_ws_plugin__s2member_menu_pages::new_trk_ops_page');
+					add_submenu_page($slug, 's2Member Tracking', 'Tracking', 'create_users', 'ws-plugin--s2member-trk-ops', 'c_ws_plugin__s2member_menu_pages::new_tracking_options_page');
 				}
 
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_api_ops_page', TRUE, get_defined_vars())) {
@@ -1119,13 +1119,13 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		 * @package s2Member\Menu_Pages
 		 * @since 3.5
 		 */
-		public static function new_trk_ops_page()
+		public static function new_tracking_options_page()
 		{
 			do_action('ws_plugin__s2member_before_trk_ops_page', get_defined_vars());
 
 			c_ws_plugin__s2member_menu_pages::update_all_options();
 
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/trk-ops.inc.php';
+			include_once dirname(__FILE__, 2) . '/menu-pages-new/tracking-options.inc.php';
 
 			do_action('ws_plugin__s2member_after_trk_ops_page', get_defined_vars());
 		}

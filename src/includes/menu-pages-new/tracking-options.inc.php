@@ -18,7 +18,7 @@
 if(!defined('WPINC')) // MUST have WordPress.
 	exit("Do not access this file directly.");
 
-if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
+if(!class_exists("c_ws_plugin__s2member_menu_page_tracking_options"))
 {
 	/**
 	 * Menu page for the s2Member plugin (API Tracking page).
@@ -26,7 +26,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 	 * @package s2Member\Menu_Pages
 	 * @since 110531
 	 */
-	class c_ws_plugin__s2member_menu_page_trk_ops
+	class c_ws_plugin__s2member_menu_page_tracking_options
 	{
 		public function __construct()
 		{
@@ -410,13 +410,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 				do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_sp_tracking", get_defined_vars());
 			}
 
-			if(apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_integrations_divider", TRUE, get_defined_vars()))
-			{
-				do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_integrations_divider", get_defined_vars());
-				echo '<div style="border-bottom:1px solid #DFDFDF; margin:-20px 0 20px 0; padding:0;">&nbsp;</div>'."\n";
-				do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_after_integrations_divider", get_defined_vars());
-			}
-
 			if(apply_filters("ws_plugin__s2member_during_trk_ops_page_during_left_sections_display_idev", TRUE, get_defined_vars()))
 			{
 				do_action("ws_plugin__s2member_during_trk_ops_page_during_left_sections_before_idev", get_defined_vars());
@@ -557,4 +550,4 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_trk_ops"))
 	}
 }
 
-new c_ws_plugin__s2member_menu_page_trk_ops ();
+new c_ws_plugin__s2member_menu_page_tracking_options ();
