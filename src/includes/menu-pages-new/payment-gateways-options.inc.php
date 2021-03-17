@@ -340,7 +340,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_payment_gateways_options"))
 				do_action("s2x_during_payment_gateways_options_page_during_left_sections_after_paypal_pdt", get_defined_vars());
 			}
 
-			do_action('s2x_during_payment_gateways_options_page_after_paypal_options');
+			do_action('s2x_during_payment_gateways_options_page_gateways_settings');
+			do_action('s2x_during_payment_gateways_options_page_taxes');
+			do_action('s2x_during_payment_gateways_options_page_captcha');
+			do_action('s2x_during_payment_gateways_options_page_pro_forms');
+			do_action('s2x_during_payment_gateways_options_page_buttons');
+			do_action('s2x_during_payment_gateways_options_page_coupon_codes');
 
 			do_action("s2x_during_payment_gateways_options_page_after_left_sections", get_defined_vars());
 
