@@ -42,10 +42,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_tools"))
 			echo '<tr class="ws-menu-page-table-tr">'."\n";
 			echo '<td class="ws-menu-page-table-l">'."\n";
 
-			echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form" autocomplete="off">'."\n";
-			echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
-			echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />'."\n";
-
 			do_action("s2x_during_tools_page_before_left_sections", get_defined_vars());
 
 			if(apply_filters("s2x_during_tools_page_during_left_sections_display_s_badge_wp_footer_code", TRUE, get_defined_vars()))
@@ -53,6 +49,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_tools"))
 				do_action("s2x_during_tools_page_during_left_sections_before_s_badge_wp_footer_code", get_defined_vars());
 
 				echo '<div class="ws-menu-page-group" title="s2Member Security Badge">'."\n";
+
+				echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form" autocomplete="off">'."\n";
+				echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
+				echo '<input type="hidden" name="ws_plugin__s2member_configured" id="ws-plugin--s2member-configured" value="1" />'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-s-badge-wp-footer-code-section">'."\n";
 				echo '<h3>Security Badge &amp; Footer Configuration (optional)</h3>'."\n";
@@ -104,6 +104,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_tools"))
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 				echo '</div>'."\n";
+
+				echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";
+
+				echo '</form>'."\n";
 
 				echo '</div>'."\n";
 
@@ -277,6 +281,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_tools"))
 				do_action("s2x_during_tools_page_during_left_sections_during_logs", get_defined_vars());
 
 				$log_file_options = ""; // Initialize to an empty string.
+				$view_log_file    = (!empty($_POST["ws_plugin__s2member_log_file"])) ? esc_html($_POST["ws_plugin__s2member_log_file"]) : "";
 				$logs_dir         = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
 
 				if(is_dir($logs_dir)) // Do we have a logs directory on this installation?
@@ -399,10 +404,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_tools"))
 			}
 
 			do_action("s2x_during_tools_page_after_left_sections", get_defined_vars());
-
-			echo '<p class="submit"><input type="submit" value="Save All Changes" /></p>'."\n";
-
-			echo '</form>'."\n";
 
 			echo '</td>'."\n";
 
