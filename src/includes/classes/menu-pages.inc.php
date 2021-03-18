@@ -250,12 +250,10 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				}
 
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_trk_ops_page', TRUE, get_defined_vars())) {
-					add_submenu_page($slug, 's2Member Tracking', 'Tracking', 'create_users', 'ws-plugin--s2member-trk-ops', 'c_ws_plugin__s2member_menu_pages::new_tracking_options_page');
+					add_submenu_page($slug, 's2Member Tracking', 'Tracking', 'create_users', 'ws-plugin--s2member-tracking-options', 'c_ws_plugin__s2member_menu_pages::new_tracking_options_page');
 				}
 
-				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_api_ops_page', TRUE, get_defined_vars())) {
-					add_submenu_page($slug, 's2Member Notifications', 'Notifications', 'create_users', 'ws-plugin--s2member-api-ops', 'c_ws_plugin__s2member_menu_pages::new_api_ops_page');
-				}
+				add_submenu_page($slug, 's2Member Notifications', 'Notifications', 'create_users', 'ws-plugin--s2member-notifications', 'c_ws_plugin__s2member_menu_pages::new_notification_options_page');
 
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_mms_ops_page', (!is_multisite() || is_main_site()), get_defined_vars())) {
 					add_submenu_page($slug, 's2Member Multisite Config', 'Multisite Config', 'create_users', 'ws-plugin--s2member-mms-ops', 'c_ws_plugin__s2member_menu_pages::new_mms_ops_page');
@@ -264,7 +262,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				add_submenu_page($slug, 's2Member Registration Options', 'Registration Options', 'create_users', 'ws-plugin--s2member-registration-options', 'c_ws_plugin__s2member_menu_pages::new_registration_options_page');
 
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_res_ops_page', TRUE, get_defined_vars())) {
-					add_submenu_page($slug, 's2Member Restriction Options', 'Restriction Options', 'create_users', 'ws-plugin--s2member-res-ops', 'c_ws_plugin__s2member_menu_pages::new_restriction_options_page');
+					add_submenu_page($slug, 's2Member Restriction Options', 'Restriction Options', 'create_users', 'ws-plugin--s2member-restriction-options', 'c_ws_plugin__s2member_menu_pages::new_restriction_options_page');
 				}
 
 				add_submenu_page($slug, 's2Member Email Options', 'Email Options', 'create_users', 'ws-plugin--s2member-email-options', 'c_ws_plugin__s2member_menu_pages::new_email_options_page');
@@ -274,7 +272,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				}
 
 				if (apply_filters('ws_plugin__s2member_during_add_admin_options_add_down_ops_page', (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()), get_defined_vars())) {
-					add_submenu_page($slug, 's2Member Download Options', 'Download Options', 'create_users', 'ws-plugin--s2member-down-ops', 'c_ws_plugin__s2member_menu_pages::new_download_options_page');
+					add_submenu_page($slug, 's2Member Download Options', 'Download Options', 'create_users', 'ws-plugin--s2member-download-options', 'c_ws_plugin__s2member_menu_pages::new_download_options_page');
 				}
 
 				add_submenu_page($slug, 's2Member Payment Gateways Options', 'Payment Gateways', 'create_users', 'ws-plugin--s2member-payment-gateways-options', 'c_ws_plugin__s2member_menu_pages::new_payment_gateways_options_page');
@@ -928,21 +926,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		 */
 
 		/**
-		 * Builds and handles the Getting Started page.
-		 *
-		 * @package s2Member\Menu_Pages
-		 * @since 3.5
-		 */
-		public static function new_start_page()
-		{
-			do_action('ws_plugin__s2member_before_start_page', get_defined_vars());
-
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/start.inc.php';
-
-			do_action('ws_plugin__s2member_after_start_page', get_defined_vars());
-		}
-
-		/**
 		 * Builds and handles the Getting Help page.
 		 *
 		 * @package s2Member\Menu_Pages
@@ -1005,48 +988,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/restriction-options.inc.php';
 
 			do_action('x2x_after_restriction_options_page', get_defined_vars());
-		}
-
-		/**
-		 * Builds and handles the Paypal Options page.
-		 *
-		 * @package s2Member\Menu_Pages
-		 * @since 3.5
-		 */
-		public static function new_paypal_ops_page()
-		{
-			do_action('ws_plugin__s2member_before_paypal_ops_page', get_defined_vars());
-
-			c_ws_plugin__s2member_menu_pages::update_all_options();
-
-			$logs_dir = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir'];
-
-			if (!is_dir($logs_dir) && is_writable(dirname(c_ws_plugin__s2member_utils_dirs::strip_dir_app_data($logs_dir))))
-				mkdir($logs_dir, 0777, TRUE) . clearstatcache();
-
-			$htaccess = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir'] . '/.htaccess';
-			$htaccess_contents = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir_htaccess'])));
-
-			if (is_dir($logs_dir) && is_writable($logs_dir) && !file_exists($htaccess))
-				file_put_contents($htaccess, $htaccess_contents) . clearstatcache();
-
-			if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs']) // Logging enabled?
-			{
-				if (!is_dir($logs_dir)) // If the security-enabled logs directory does not exist yet.
-					c_ws_plugin__s2member_admin_notices::display_admin_notice('The security-enabled logs directory (<code>' . esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)) . '</code>) does not exist. Please create this directory manually &amp; make it writable (chmod 777).', TRUE);
-
-				else if (!is_writable($logs_dir)) // If the logs directory is not writable yet.
-					c_ws_plugin__s2member_admin_notices::display_admin_notice('Permissions error. The security-enabled logs directory (<code>' . esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($logs_dir)) . '</code>) is not writable. Please make this directory writable (chmod 777).', TRUE);
-
-				if (!file_exists($htaccess)) // If the .htaccess file has not been created yet.
-					c_ws_plugin__s2member_admin_notices::display_admin_notice('The .htaccess protection file (<code>' . esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)) . '</code>) does not exist. Please create this file manually. Inside your .htaccess file, add this:<br /><pre>' . esc_html($htaccess_contents) . '</pre>', TRUE);
-
-				else if (!preg_match('/deny from all/i', file_get_contents($htaccess))) // Else if the .htaccess file does not offer the required protection.
-					c_ws_plugin__s2member_admin_notices::display_admin_notice('Unprotected. The .htaccess protection file (<code>' . esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($htaccess)) . '</code>) does not contain <code>deny from all</code>. Inside your .htaccess file, add this:<br /><pre>' . esc_html($htaccess_contents) . '</pre>', TRUE);
-			}
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/paypal-ops.inc.php';
-
-			do_action('ws_plugin__s2member_after_paypal_ops_page', get_defined_vars());
 		}
 
 		/**
@@ -1131,87 +1072,20 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		}
 
 		/**
-		 * Builds and handles the API List Server options page.
+		 * Builds and handles the Notifications page.
 		 *
 		 * @package s2Member\Menu_Pages
 		 * @since 3.5
 		 */
-		public static function new_els_ops_page()
+		public static function new_notification_options_page()
 		{
-			do_action('ws_plugin__s2member_before_els_ops_page', get_defined_vars());
+			do_action('s2x_before_new_notifications_page', get_defined_vars());
 
 			c_ws_plugin__s2member_menu_pages::update_all_options();
 
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/els-ops.inc.php';
+			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/notification-options.inc.php';
 
-			do_action('ws_plugin__s2member_after_els_ops_page', get_defined_vars());
-		}
-
-		/**
-		 * Builds and handles the API Notifications page.
-		 *
-		 * @package s2Member\Menu_Pages
-		 * @since 3.5
-		 */
-		public static function new_api_ops_page()
-		{
-			do_action('ws_plugin__s2member_before_api_ops_page', get_defined_vars());
-
-			c_ws_plugin__s2member_menu_pages::update_all_options();
-
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/api-ops.inc.php';
-
-			do_action('ws_plugin__s2member_after_api_ops_page', get_defined_vars());
-		}
-
-		/**
-		 * Builds and handles the PayPal Button Generator page.
-		 *
-		 * @package s2Member\Menu_Pages
-		 * @since 3.5
-		 */
-		public static function new_paypal_buttons_page()
-		{
-			do_action('ws_plugin__s2member_before_paypal_buttons_page', get_defined_vars());
-
-			if (!$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_merchant_id'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_username'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_password'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_signature'])
-				c_ws_plugin__s2member_admin_notices::display_admin_notice('Please configure <strong>s2Member → PayPal Options</strong> first. Once all of your PayPal Options are configured; including your Email Address, Merchant ID, API Username, Password, and Signature; return to this page &amp; generate your PayPal Button(s).', TRUE);
-
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/paypal-buttons.inc.php';
-
-			do_action('ws_plugin__s2member_after_paypal_buttons_page', get_defined_vars());
-		}
-
-		/**
-		 * Builds and handles the API Scripting page.
-		 *
-		 * @package s2Member\Menu_Pages
-		 * @since 3.5
-		 */
-		public static function new_scripting_page()
-		{
-			do_action('ws_plugin__s2member_before_scripting_page', get_defined_vars());
-
-			c_ws_plugin__s2member_menu_pages::update_all_options();
-
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/scripting.inc.php';
-
-			do_action('ws_plugin__s2member_after_scripting_page', get_defined_vars());
-		}
-
-		/**
-		 * Builds and handles the Integrations page.
-		 *
-		 * @package s2Member\Menu_Pages
-		 * @since 3.5
-		 */
-		public static function new_integrations_page()
-		{
-			do_action('ws_plugin__s2member_before_integrations_page', get_defined_vars());
-
-			include_once dirname(dirname(__FILE__)) . '/menu-pages-new/integrations.inc.php';
-
-			do_action('ws_plugin__s2member_after_integrations_page', get_defined_vars());
+			do_action('s2x_after_new_notifications_page', get_defined_vars());
 		}
 
 		/**
@@ -1239,6 +1113,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		{
 			do_action('s2x_before_new_registration_options_page', get_defined_vars());
 
+			c_ws_plugin__s2member_menu_pages::update_all_options();
+
 			include_once dirname(__FILE__, 2) . '/menu-pages-new/registration-options.inc.php';
 
 			do_action('s2x_after_new_registration_options_page', get_defined_vars());
@@ -1246,6 +1122,9 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 		/**
 		 * Runs setup routines for pages with log viewer.
+		 *
+		 * @attaches-to ``add_action('ws_plugin__s2member_before_logs_page');``
+		 * @also-attaches-to ``add_action('s2x_before_new_tools_page');``
 		 *
 		 * @package s2Member\Menu_Pages
 		 * @since 210208
@@ -1292,6 +1171,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		{
 			do_action('s2x_before_new_email_options_page', get_defined_vars());
 
+			self::update_all_options();
+
 			include_once dirname(__FILE__, 2) . '/menu-pages-new/email-options.inc.php';
 
 			do_action('s2x_after_new_email_options_page', get_defined_vars());
@@ -1306,6 +1187,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		public static function new_payment_gateways_options_page()
 		{
 			do_action('s2x_before_new_payment_gateways_options_page', get_defined_vars());
+
+			self::update_all_options();
 
 			include_once dirname(__FILE__, 2) . '/menu-pages-new/payment-gateways-options.inc.php';
 
