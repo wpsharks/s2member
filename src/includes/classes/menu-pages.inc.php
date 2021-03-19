@@ -417,6 +417,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				wp_enqueue_script('jquery-sprintf', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/src/includes/jquery/jquery.sprintf/jquery.sprintf.min.js', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum());
 				wp_enqueue_script('jquery-json-ps', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/src/includes/jquery/jquery.json-ps/jquery.json-ps.min.js', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum());
 				wp_enqueue_script('jquery-ui-effects', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/src/includes/jquery/jquery.ui-effects/jquery.ui-effects.min.js', array('jquery', 'jquery-ui-core'), c_ws_plugin__s2member_utilities::ver_checksum());
+				wp_enqueue_script('ws-plugin--s2member-menu-pages-shortcodes-generator', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/assets/js/shortcodes-generator.js', [], c_ws_plugin__s2member_utilities::ver_checksum(), true);
 				wp_enqueue_script('ws-plugin--s2member-menu-pages', admin_url('admin.php?ws_plugin__s2member_menu_pages_js=' . urlencode(mt_rand()), is_ssl() ? 'https' : 'http'), array('jquery', 'thickbox', 'media-upload', 'jquery-sprintf', 'jquery-json-ps', 'jquery-ui-core', 'jquery-ui-effects', 'password-strength-meter'), c_ws_plugin__s2member_utilities::ver_checksum());
 
 				do_action('ws_plugin__s2member_during_add_admin_scripts', get_defined_vars());

@@ -341,6 +341,9 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_payment_gateways_options"))
 			}
 
 			do_action('s2x_during_payment_gateways_options_page_gateways_settings');
+
+			self::render_button_generators();
+
 			do_action('s2x_during_payment_gateways_options_page_taxes');
 			do_action('s2x_during_payment_gateways_options_page_captcha');
 			do_action('s2x_during_payment_gateways_options_page_pro_forms');
@@ -362,6 +365,18 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_payment_gateways_options"))
 			echo '</tr>'."\n";
 			echo '</tbody>'."\n";
 			echo '</table>'."\n";
+
+			echo '</div>'."\n";
+		}
+
+		private static function render_button_generators() {
+			echo '<div class="ws-menu-page-group" title="Buttons Generator">'."\n";
+
+			echo '<div class="ws-menu-page-section ws-plugin--s2member-buttons-generator-section">'."\n";
+
+			echo '<div id="s2x-shortcode-generator"></div>';
+
+			echo '</div>'."\n";
 
 			echo '</div>'."\n";
 		}

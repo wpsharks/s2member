@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.10",
+    "@babel/plugin-transform-react-jsx": "^7.12.17",
+    "@babel/preset-env": "^7.13.10",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.26.3",
+    "webpack-cli": "^4.5.0"
+  },
+  "browserslist": "last 2 versions",
+  "dependencies": {
+    "preact": "^10.5.13"
+  }
+}

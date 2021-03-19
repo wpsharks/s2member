@@ -108,3 +108,6 @@ Icon?
 /s2member-files/
 /s2member-logs/
 # </custom>
+
+assets/js/
+node_modules/
