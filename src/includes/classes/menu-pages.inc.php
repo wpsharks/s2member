@@ -409,6 +409,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		{
 			do_action('ws_plugin__s2member_before_add_admin_scripts', get_defined_vars());
 
+			self::load_shortcodes_generator();
+
 			if (!empty($_GET['page']) && preg_match('/ws-plugin--s2member-/', $_GET['page'])) {
 				wp_enqueue_script('jquery');
 				wp_enqueue_script('thickbox');
@@ -417,12 +419,52 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				wp_enqueue_script('jquery-sprintf', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/src/includes/jquery/jquery.sprintf/jquery.sprintf.min.js', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum());
 				wp_enqueue_script('jquery-json-ps', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/src/includes/jquery/jquery.json-ps/jquery.json-ps.min.js', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum());
 				wp_enqueue_script('jquery-ui-effects', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/src/includes/jquery/jquery.ui-effects/jquery.ui-effects.min.js', array('jquery', 'jquery-ui-core'), c_ws_plugin__s2member_utilities::ver_checksum());
-				wp_enqueue_script('ws-plugin--s2member-menu-pages-shortcodes-generator', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/assets/js/shortcodes-generator.js', [], c_ws_plugin__s2member_utilities::ver_checksum(), true);
 				wp_enqueue_script('ws-plugin--s2member-menu-pages', admin_url('admin.php?ws_plugin__s2member_menu_pages_js=' . urlencode(mt_rand()), is_ssl() ? 'https' : 'http'), array('jquery', 'thickbox', 'media-upload', 'jquery-sprintf', 'jquery-json-ps', 'jquery-ui-core', 'jquery-ui-effects', 'password-strength-meter'), c_ws_plugin__s2member_utilities::ver_checksum());
 
 				do_action('ws_plugin__s2member_during_add_admin_scripts', get_defined_vars());
 			}
 			do_action('ws_plugin__s2member_after_add_admin_scripts', get_defined_vars());
+		}
+
+		/**
+		 * Loads the JavaScript and configuration for the new Shortcodes Generator.
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since v20210208
+		 */
+		private static function load_shortcodes_generator() {
+			// If we're on the correct page
+			if (!empty($_GET['page']) && preg_match('/ws-plugin--s2member-payment-gateways-options/', $_GET['page'])) {
+				// Load script
+				wp_enqueue_script(
+					'ws-plugin--s2member-menu-pages-button-generator',
+					$GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'] . '/assets/js/button-generator.js',
+					[],
+					c_ws_plugin__s2member_utilities::ver_checksum(),
+					true
+				);
+
+				// Load the default config for the script
+				$button_generator_config = file_get_contents(dirname(__FILE__, 2) . '/button-generator-config.json');
+				$button_generator_config = json_decode($button_generator_config, true);
+
+				$button_generator_config = apply_filters('s2x_button_generator_config', $button_generator_config);
+
+				$levels = [];
+				for ($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++) {
+					$level_label = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['level' . $n . '_label']) ? $GLOBALS['WS_PLUGIN__']['s2member']['o']['level' . $n. '_label'] : 'Level #' . $n;
+					$levels[] = [$level_label, $n];
+				}
+
+				wp_localize_script(
+					'ws-plugin--s2member-menu-pages-button-generator',
+					'__s2x_button_generator_config',
+					[
+						'generator_config' => $button_generator_config,
+						'levels' => $levels,
+					]
+				);
+			}
 		}
 
 		/**

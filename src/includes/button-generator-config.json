@@ -1,0 +1,91 @@
+{
+  "version": "1",
+  "forms": [
+    {
+      "name": "PayPal",
+      "fields": {
+        "initial_term_length": {
+          "type": "text"
+        },
+        "initial_term_period": {
+          "type": "dropdown",
+          "options": [
+            ["Days", "days"],
+            ["Weeks", "weeks"],
+            ["Months", "months"],
+            ["Years", "years"]
+          ]
+        },
+        "initial_term_price_amount": {
+          "type": "price"
+        },
+
+        "after_term_type": {
+          "type": "dropdown",
+          "options": [
+            ["One-time Payment", "once", true],
+            ["Recurring Payment", "recurring"]
+          ]
+        },
+
+        "after_term_once_price_amount": {
+          "type": "price"
+        },
+        "after_term_once_access_length": {
+          "type": "text"
+        },
+        "after_term_once_access_period": {
+          "type": "dropdown",
+          "options": [
+            ["Days", "days"],
+            ["Weeks", "weeks"],
+            ["Months", "months"],
+            ["Years", "years"]
+          ]
+        },
+
+        "after_term_recurring_length": {
+          "type": "text"
+        },
+        "after_term_recurring_price_amount": {
+          "type": "price"
+        },
+        "after_term_recurring_period": {
+          "type": "dropdown",
+          "options": [
+            ["Days", "days"],
+            ["Weeks", "weeks"],
+            ["Months", "months"],
+            ["Years", "years"]
+          ]
+        },
+
+        "description": {
+          "type": "text"
+        },
+
+        "ccaps": {
+          "type": "text"
+        },
+
+        "level": {
+          "type": "level"
+        }
+      },
+
+      "fieldGroups": [
+        ["I'll offer the first %initial_term_length% %initial_term_period% for %initial_term_price_amount%"],
+        ["I want the subscription to be a %after_term_type%"],
+        [{ "if": { "after_term_type": "once" } }, "Then, I want to charge %after_term_once_price_amount% for access for %after_term_once_access_length% %after_term_once_access_period%"],
+        [{ "if": { "after_term_type": "recurring" } }, "Then, I want to charge %after_term_recurring_price_amount% every %after_term_recurring_length% %after_term_recurring_period%"],
+        ["Description %description%"],
+        ["Custom Capabilities (comma separated) %ccaps%"],
+        ["Level %level%"]
+      ],
+
+      "shortcode": {
+        "template": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"%ps%\" lc=\"%lc%\" cc=\"%cc%\" dg=\"%dg%\" ns=\"%ns%\" custom=\"%custom%\" ta=\"%ta%\" tp=\"%tp%\" tt=\"%tt%\" ra=\"%ra%\" rp=\"%rp%\" rt=\"%rt%\" rr=\"%rr%\" rrt=\"%rrt%\" rra=\"%rra%\" image=\"%image%\" output=\"button\" /]"
+      }
+    }
+  ]
+}

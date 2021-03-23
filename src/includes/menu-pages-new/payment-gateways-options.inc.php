@@ -374,7 +374,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_payment_gateways_options"))
 
 			echo '<div class="ws-menu-page-section ws-plugin--s2member-buttons-generator-section">'."\n";
 
-			echo '<div id="s2x-shortcode-generator"></div>';
+			echo '<div id="s2x-button-generator"></div>';
 
 			echo '</div>'."\n";
 

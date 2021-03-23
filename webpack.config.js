@@ -9,7 +9,7 @@ const config = {
   // One for frontend and one for the admin area.
   entry: {
     // frontend and admin will replace the [name] portion of the output config below.
-    'shortcodes-generator': path.resolve(__dirname, 'src/js/shortcodes-generator.jsx'),
+    'button-generator': path.resolve(__dirname, 'src/js/button-generator.jsx'),
   },
 
   // Create the output files.
@@ -35,15 +35,6 @@ const config = {
         loader: 'babel-loader',
       },
     ],
-  },
-
-  resolve: {
-    alias: {
-      'react': 'preact/compat',
-      'react-dom/test-utils': 'preact/test-utils',
-      'react-dom': 'preact/compat',
-      // Must be below test-utils
-    },
   },
 
   mode: isProduction ? 'production' : 'development',
