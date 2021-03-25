@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Questions from './Questions.jsx';
-import ShortcodesGenerator from "../ShortcodesGenerator.jsx";
+import Form from "./Form.jsx";
 
 class ShortcodeGenerator extends Component {
   constructor(props) {
@@ -23,12 +23,12 @@ class ShortcodeGenerator extends Component {
       <div className="s2x_shortcodegenerator">
         <Questions
           questions={this.props.config.questions}
-          answersToForm={this.props.config.answersToForm}
+          answersToFormMap={this.props.config.answersToFormMap}
           setForm={this.setForm}
         />
 
         {this.state.form !== null &&
-          <ShortcodesGenerator
+          <Form
             config={this.props.config.forms[this.state.form]}
             levels={this.props.levels}
           />

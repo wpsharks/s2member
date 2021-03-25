@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form as FormikForm, Field } from 'formik';
 import _isObject from 'lodash.isobject';
 
-class ShortcodesGenerator extends Component {
+class Form extends Component {
   constructor(props) {
     super(props);
 
@@ -14,12 +14,9 @@ class ShortcodesGenerator extends Component {
     this.state = {
       initialValues,
     };
-
-    this.renderFieldGroup = this.renderFieldGroup.bind(this);
-    this.generateShortcode = this.generateShortcode.bind(this);
   }
 
-  renderFieldGroup({ key, form, template }) {
+  renderFormTemplate({ key, form, template }) {
     const inBetweenText = template.split(/%[a-zA-Z0-9_-]*%/g);
     const fields = [...template.matchAll(/%([a-zA-Z0-9_-]*)%/g)].map(a => a[1]);
 
@@ -35,20 +32,20 @@ class ShortcodesGenerator extends Component {
         inBetweenTextIndex += 1;
       } else {
         const fieldName = fields[fieldsIndex];
-        const currentField = form.fields[fieldName];
+        const fieldConfig = form.fields[fieldName];
 
-        switch (currentField.type) {
+        switch (fieldConfig.type) {
           case 'text':
           case 'price':
             result.push(<Field key={fieldName} type="text" name={fieldName} />);
             break;
           case 'checkbox':
-            result.push(<Field key={fieldName} type="checkbox" name={fieldName} />)
+            result.push(<Field key={fieldName} type="checkbox" name={fieldName} />);
             break;
           case 'dropdown':
             result.push((
               <Field key={fieldName} as="select" name={fieldName}>
-                {currentField.options.map(([name, value], i) => (
+                {fieldConfig.options.map(([name, value], i) => (
                   <option key={i} value={value}>{name}</option>
                 ))}
               </Field>
@@ -93,31 +90,32 @@ class ShortcodesGenerator extends Component {
     return result;
   }
 
+  checkHasTemplateConditionals(group) {
+    return group.length > 1 && _isObject(group[0]) && _isObject(group[0].if);
+  }
+
+  testTemplateConditionals(conditionals, values) {
+    const valuesToCheck = Object.keys(conditionals.if);
+    return valuesToCheck.every(key => values[key] === conditionals.if[key]);
+  }
+
   render() {
     const config = this.props.config;
     return (
-      <div className="s2x_shortcodes_generator">
-        <Formik initialValues={this.state.initialValues} onSubmit={this.onSubmit}>
+      <div className="s2x_shortcodegenerator_form">
+        <Formik initialValues={this.state.initialValues}>
           {formikProps => (
-            <React.Fragment>
-              <Form className="s2x_shortcodes_generator__form">
-                {config.formTemplate.map((group, i) => {
-                  const key = i;
-                  if (_isObject(group[0]) && _isObject(group[0].if)) {
-                    const valuesToCheck = Object.keys(group[0].if);
-                    if (valuesToCheck.every(key => formikProps.values[key] === group[0].if[key])) {
-                      return this.renderFieldGroup({ key, form: config, template: group[1] });
-                    }
-                  } else {
-                    return this.renderFieldGroup({ key, form: config, template: group[0] });
+            <FormikForm>
+              {config.formTemplate.map((group, key) => {
+                if (this.checkHasTemplateConditionals(group)) {
+                  if (this.testTemplateConditionals(group[0], formikProps.values)) {
+                    return this.renderFormTemplate({ key, form: config, template: group[1] });
                   }
-                })}
-              </Form>
-
-              <div className="s2x_shortcodes_generator__shortcode">
-                <pre>{this.generateShortcode(config, formikProps.values)}</pre>
-              </div>
-            </React.Fragment>
+                } else {
+                  return this.renderFormTemplate({ key, form: config, template: group[0] });
+                }
+              })}
+            </FormikForm>
           )}
         </Formik>
       </div>
@@ -125,4 +123,4 @@ class ShortcodesGenerator extends Component {
   }
 }
 
-export default ShortcodesGenerator;
+export default Form;

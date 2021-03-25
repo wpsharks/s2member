@@ -37,8 +37,8 @@ class Questions extends Component {
       // If all the questions have answers
       Object.values(this.state.answers).every(a => a !== null)
     ) {
-      const match = this.props.answersToForm.find(({ answers }) =>
-        // If the amount of answers in the answersToForm object is the same as
+      const match = this.props.answersToFormMap.find(({ answers }) =>
+        // If the amount of answers in the answersToFormMap object is the same as
         // the amount of correct answers from the user, then it's a match.
         Object.keys(answers).length ===
         Object.entries(answers)

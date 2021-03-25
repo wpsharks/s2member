@@ -21,7 +21,7 @@
     }
   ],
 
-  "answersToForm": [
+  "answersToFormMap": [
     {
       "answers": {
         "payment_gateway": "paypal",
