@@ -453,8 +453,9 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				$levels = [];
 				for ($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++) {
 					$level_label = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['level' . $n . '_label']) ? $GLOBALS['WS_PLUGIN__']['s2member']['o']['level' . $n. '_label'] : 'Level #' . $n;
-					$levels[] = [$level_label, $n];
+					$levels[] = ['Level #' . $n . ' ' . $level_label, $n];
 				}
+				$levels[] = ['Don\'t provide a level (you _must_ provide custom capabilities)', '*'];
 
 				wp_localize_script(
 					'ws-plugin--s2member-menu-pages-button-generator',

@@ -1,91 +1,186 @@
 {
   "version": "1",
-  "forms": [
+
+  "questions": [
     {
-      "name": "PayPal",
+      "name": "payment_gateway",
+      "text": "Which payment gateway do you want to generate a button for?",
+      "options": [
+        ["PayPal", "paypal"]
+      ],
+      "initialValue": "paypal"
+    },
+    {
+      "name": "form",
+      "text": "What sort of access do you want to sell?",
+      "options": [
+        ["Level + (optional) Custom Capabilities", "level"],
+        ["Custom Capabilities (Buy Now)", "ccaps"],
+        ["Specific post/page access (Buy Now)", "specific"]
+      ]
+    }
+  ],
+
+  "answersToForm": [
+    {
+      "answers": {
+        "payment_gateway": "paypal",
+        "form": "level"
+      },
+      "form": "paypal_levels"
+    }
+  ],
+
+  "forms": {
+    "paypal_levels": {
       "fields": {
-        "initial_term_length": {
-          "type": "text"
-        },
-        "initial_term_period": {
+        "payment_type": {
           "type": "dropdown",
           "options": [
-            ["Days", "days"],
-            ["Weeks", "weeks"],
-            ["Months", "months"],
-            ["Years", "years"]
-          ]
+            ["Recurring Payment", "recurring"],
+            ["One-time Payment", "once"]
+          ],
+          "initialValue": "recurring"
         },
-        "initial_term_price_amount": {
-          "type": "price"
+
+        "offer_trial": {
+          "type": "checkbox",
+          "initialValue": true
+        },
+
+        "trial_term_length": {
+          "type": "text",
+          "initialValue": "1"
+        },
+        "trial_term_period": {
+          "type": "dropdown",
+          "options": [
+            ["Days", "D"],
+            ["Weeks", "W"],
+            ["Months", "M"],
+            ["Years", "Y"]
+          ],
+          "initialValue": "W"
+        },
+        "trial_term_price_amount": {
+          "type": "price",
+          "initialValue": "0.00"
         },
 
         "after_term_type": {
           "type": "dropdown",
           "options": [
-            ["One-time Payment", "once", true],
+            ["One-time Payment", "once"],
             ["Recurring Payment", "recurring"]
-          ]
+          ],
+          "initialValue": "once"
         },
 
         "after_term_once_price_amount": {
-          "type": "price"
+          "type": "price",
+          "initialValue": "5.0"
         },
         "after_term_once_access_length": {
-          "type": "text"
+          "type": "text",
+          "initialValue": "1"
         },
         "after_term_once_access_period": {
           "type": "dropdown",
           "options": [
-            ["Days", "days"],
-            ["Weeks", "weeks"],
-            ["Months", "months"],
-            ["Years", "years"]
-          ]
+            ["Days", "D"],
+            ["Weeks", "W"],
+            ["Months", "M"],
+            ["Years", "Y"],
+            ["Lifetime", "L"]
+          ],
+          "initialValue": "W"
         },
 
         "after_term_recurring_length": {
-          "type": "text"
+          "type": "text",
+          "initialValue": "1"
         },
         "after_term_recurring_price_amount": {
-          "type": "price"
+          "type": "price",
+          "initialValue": "10"
         },
         "after_term_recurring_period": {
           "type": "dropdown",
           "options": [
-            ["Days", "days"],
-            ["Weeks", "weeks"],
-            ["Months", "months"],
-            ["Years", "years"]
-          ]
+            ["Days", "D"],
+            ["Weeks", "W"],
+            ["Months", "M"],
+            ["Years", "Y"],
+            ["Lifetime", "L"]
+          ],
+          "initialValue": "M"
         },
 
         "description": {
-          "type": "text"
+          "type": "text",
+          "initialValue": ""
         },
 
         "ccaps": {
-          "type": "text"
+          "type": "text",
+          "initialValue": ""
         },
 
         "level": {
-          "type": "level"
+          "type": "level",
+          "initialValue": "1"
         }
       },
 
-      "fieldGroups": [
-        ["I'll offer the first %initial_term_length% %initial_term_period% for %initial_term_price_amount%"],
-        ["I want the subscription to be a %after_term_type%"],
-        [{ "if": { "after_term_type": "once" } }, "Then, I want to charge %after_term_once_price_amount% for access for %after_term_once_access_length% %after_term_once_access_period%"],
-        [{ "if": { "after_term_type": "recurring" } }, "Then, I want to charge %after_term_recurring_price_amount% every %after_term_recurring_length% %after_term_recurring_period%"],
+      "formTemplate": [
+        ["I want it to be a %payment_type%"],
+
+        ["%offer_trial% I want to offer a trial/initial period"],
+        [{ "if": { "offer_trial": true } }, "I'll offer the first %trial_term_length% %trial_term_period% for %trial_term_price_amount%"],
+
+        [
+          { "if": { "offer_trial": true, "after_term_type": "once" } },
+          "Then, I want to charge %after_term_once_price_amount% for access for %after_term_once_access_length% %after_term_once_access_period%"
+        ],
+        [
+          { "if": { "offer_trial": false, "after_term_type": "once" } },
+          "I want to charge %after_term_once_price_amount% for access for %after_term_once_access_length% %after_term_once_access_period%"
+        ],
+        [
+          { "if": {  "offer_trial": true, "after_term_type": "recurring" } },
+          "Then, I want to charge %after_term_recurring_price_amount% every %after_term_recurring_length% %after_term_recurring_period%"
+        ],
+        [
+          { "if": {  "offer_trial": false, "after_term_type": "recurring" } },
+          "I want to charge %after_term_recurring_price_amount% every %after_term_recurring_length% %after_term_recurring_period%"
+        ],
+
         ["Description %description%"],
         ["Custom Capabilities (comma separated) %ccaps%"],
         ["Level %level%"]
       ],
 
       "shortcode": {
-        "template": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"%ps%\" lc=\"%lc%\" cc=\"%cc%\" dg=\"%dg%\" ns=\"%ns%\" custom=\"%custom%\" ta=\"%ta%\" tp=\"%tp%\" tt=\"%tt%\" ra=\"%ra%\" rp=\"%rp%\" rt=\"%rt%\" rr=\"%rr%\" rrt=\"%rrt%\" rra=\"%rra%\" image=\"%image%\" output=\"button\" /]"
+        "states": {
+          "buy_now": {
+            "and": [
+              { "after_term_type": ["=", "once"] },
+              { "offer_trial":  ["=", false] }
+            ]
+          },
+          "subscription": {
+            "or": [
+              { "after_term_type": ["=", "recurring"] },
+              { "offer_trial":  ["=", true] }
+            ]
+          }
+        },
+        "templates": {
+          "buy_now": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"paypal\" lc=\"US\" cc=\"USD\" dg=\"0\" ns=\"0\" custom=\"%custom%\" ta=\"%initial_term_price_amount%\" tp=\"%initial_term_length%\" tt=\"%initial_term_period%\" ra=\"%after_term_recurring_price_amount%\" rp=\"%after_term_once_access_length%\" rt=\"%after_term_recurring_period%\" rr=\"%_rr%\" rrt=\"\" rra=\"1\" image=\"default\" output=\"button\" /]",
+          "subscription": ""
+        },
+        "template": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"paypal\" lc=\"US\" cc=\"USD\" dg=\"0\" ns=\"0\" custom=\"%custom%\" ta=\"%initial_term_price_amount%\" tp=\"%initial_term_length%\" tt=\"%initial_term_period%\" ra=\"%after_term_recurring_price_amount%\" rp=\"%after_term_once_access_length%\" rt=\"%after_term_recurring_period%\" rr=\"%_rr%\" rrt=\"\" rra=\"1\" image=\"default\" output=\"button\" /]"
       }
     }
-  ]
+  }
 }

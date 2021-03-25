@@ -2,31 +2,22 @@ import React, { Component } from 'react';
 import { Formik, Form, Field } from 'formik';
 import _isObject from 'lodash.isobject';
 
-/**
- * forms []
- * {
- *   name,
- *   fields {
- *     "key": {
- *       type = text|price|levels|dropdown,
- *       options = [["key", "value"], ...] when dropdown
- *     }
- *   },
- * }
- */
-
 class ShortcodesGenerator extends Component {
   constructor(props) {
     super(props);
 
+    const initialValues = {};
+    for (const [fieldName, fieldConfig] of Object.entries(props.config.fields)) {
+      initialValues[fieldName] = fieldConfig.initialValue || '';
+    }
+
     this.state = {
-      initialValues: {},
+      initialValues,
     };
 
     this.renderFieldGroup = this.renderFieldGroup.bind(this);
+    this.generateShortcode = this.generateShortcode.bind(this);
   }
-
-  onSubmit() {}
 
   renderFieldGroup({ key, form, template }) {
     const inBetweenText = template.split(/%[a-zA-Z0-9_-]*%/g);
@@ -50,6 +41,9 @@ class ShortcodesGenerator extends Component {
           case 'text':
           case 'price':
             result.push(<Field key={fieldName} type="text" name={fieldName} />);
+            break;
+          case 'checkbox':
+            result.push(<Field key={fieldName} type="checkbox" name={fieldName} />)
             break;
           case 'dropdown':
             result.push((
@@ -80,31 +74,53 @@ class ShortcodesGenerator extends Component {
     return <p key={key}>{result}</p>;
   }
 
+  /**
+   * Generates the shortcode (a string) based on the configuration and the values from the form.
+   * @param config
+   * @param values
+   * @return String
+   */
+  generateShortcode(config, values) {
+    const shortcodeTemplate = config.shortcode.template;
+
+    let result = shortcodeTemplate.replaceAll(
+      /%([a-zA-Z0-9_-]*)%/g,
+      (placeholder, fieldName) => {
+        return values[fieldName] || this.state.initialValues[fieldName];
+      }
+    );
+
+    return result;
+  }
+
   render() {
+    const config = this.props.config;
     return (
       <div className="s2x_shortcodes_generator">
-        <div className="s2x_shortcodes_generator__form">
-          {this.props.config.forms.map(form => (
-            <Formik key={form.name} initialValues={this.state.initialValues} onSubmit={this.onSubmit}>
-              {formikProps => (
-                <Form>
-                  {form.fieldGroups.map((group, i) => {
-                    const key = i;
-                    if (_isObject(group[0]) && _isObject(group[0].if)) {
-                      const valuesToCheck = Object.keys(group[0].if);
-                      if (valuesToCheck.every(key => formikProps.values[key] === group[0].if[key])) {
-                        return this.renderFieldGroup({ key, form, template: group[1] });
-                      }
-                    } else {
-                      return this.renderFieldGroup({ key, form, template: group[0] });
+        <Formik initialValues={this.state.initialValues} onSubmit={this.onSubmit}>
+          {formikProps => (
+            <React.Fragment>
+              <Form className="s2x_shortcodes_generator__form">
+                {config.formTemplate.map((group, i) => {
+                  const key = i;
+                  if (_isObject(group[0]) && _isObject(group[0].if)) {
+                    const valuesToCheck = Object.keys(group[0].if);
+                    if (valuesToCheck.every(key => formikProps.values[key] === group[0].if[key])) {
+                      return this.renderFieldGroup({ key, form: config, template: group[1] });
                     }
-                  })}
-                </Form>
-              )}
-            </Formik>
-          ))}
-        </div>
-    </div>
+                  } else {
+                    return this.renderFieldGroup({ key, form: config, template: group[0] });
+                  }
+                })}
+              </Form>
+
+              <div className="s2x_shortcodes_generator__shortcode">
+                <pre>{this.generateShortcode(config, formikProps.values)}</pre>
+              </div>
+            </React.Fragment>
+          )}
+        </Formik>
+      </div>
     );
   }
 }
