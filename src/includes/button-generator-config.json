@@ -15,8 +15,8 @@
       "text": "What sort of access do you want to sell?",
       "options": [
         ["Level + (optional) Custom Capabilities", "level"],
-        ["Custom Capabilities (Buy Now)", "ccaps"],
-        ["Specific post/page access (Buy Now)", "specific"]
+        ["Custom Capabilities", "ccaps"],
+        ["Specific post/page access", "specific"]
       ]
     }
   ],
@@ -65,15 +65,6 @@
         "trial_term_price_amount": {
           "type": "price",
           "initialValue": "0.00"
-        },
-
-        "after_term_type": {
-          "type": "dropdown",
-          "options": [
-            ["One-time Payment", "once"],
-            ["Recurring Payment", "recurring"]
-          ],
-          "initialValue": "once"
         },
 
         "after_term_once_price_amount": {
@@ -139,19 +130,19 @@
         [{ "if": { "offer_trial": true } }, "I'll offer the first %trial_term_length% %trial_term_period% for %trial_term_price_amount%"],
 
         [
-          { "if": { "offer_trial": true, "after_term_type": "once" } },
+          { "if": { "offer_trial": true, "payment_type": "once" } },
           "Then, I want to charge %after_term_once_price_amount% for access for %after_term_once_access_length% %after_term_once_access_period%"
         ],
         [
-          { "if": { "offer_trial": false, "after_term_type": "once" } },
+          { "if": { "offer_trial": false, "payment_type": "once" } },
           "I want to charge %after_term_once_price_amount% for access for %after_term_once_access_length% %after_term_once_access_period%"
         ],
         [
-          { "if": {  "offer_trial": true, "after_term_type": "recurring" } },
+          { "if": {  "offer_trial": true, "payment_type": "recurring" } },
           "Then, I want to charge %after_term_recurring_price_amount% every %after_term_recurring_length% %after_term_recurring_period%"
         ],
         [
-          { "if": {  "offer_trial": false, "after_term_type": "recurring" } },
+          { "if": {  "offer_trial": false, "payment_type": "recurring" } },
           "I want to charge %after_term_recurring_price_amount% every %after_term_recurring_length% %after_term_recurring_period%"
         ],
 
@@ -161,25 +152,42 @@
       ],
 
       "shortcode": {
-        "states": {
-          "buy_now": {
+        "states": [
+          {
+            "name": "buy_now",
             "and": [
-              { "after_term_type": ["=", "once"] },
+              { "payment_type": ["=", "once"] },
               { "offer_trial":  ["=", false] }
             ]
           },
-          "subscription": {
-            "or": [
-              { "after_term_type": ["=", "recurring"] },
+          {
+            "name": "single_payment_subscription_with_trial",
+            "and": [
+              { "payment_type": ["=", "once"] },
               { "offer_trial":  ["=", true] }
             ]
+          },
+          {
+            "name": "recurring_subscription_with_trial",
+            "and": [
+              { "payment_type": ["=", "recurring"] },
+              { "offer_trial":  ["=", true] }
+            ]
+          },
+          {
+            "name": "recurring_subscription_without_trial",
+            "and": [
+              { "payment_type": ["=", "recurring"] },
+              { "offer_trial":  ["=", false] }
+            ]
           }
-        },
+        ],
         "templates": {
-          "buy_now": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"paypal\" lc=\"US\" cc=\"USD\" dg=\"0\" ns=\"0\" custom=\"%custom%\" ta=\"%initial_term_price_amount%\" tp=\"%initial_term_length%\" tt=\"%initial_term_period%\" ra=\"%after_term_recurring_price_amount%\" rp=\"%after_term_once_access_length%\" rt=\"%after_term_recurring_period%\" rr=\"%_rr%\" rrt=\"\" rra=\"1\" image=\"default\" output=\"button\" /]",
-          "subscription": ""
-        },
-        "template": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"paypal\" lc=\"US\" cc=\"USD\" dg=\"0\" ns=\"0\" custom=\"%custom%\" ta=\"%initial_term_price_amount%\" tp=\"%initial_term_length%\" tt=\"%initial_term_period%\" ra=\"%after_term_recurring_price_amount%\" rp=\"%after_term_once_access_length%\" rt=\"%after_term_recurring_period%\" rr=\"%_rr%\" rrt=\"\" rra=\"1\" image=\"default\" output=\"button\" /]"
+          "buy_now": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"paypal\" lc=\"US\" cc=\"USD\" dg=\"0\" ns=\"0\" custom=\"%custom%\" ra=\"%after_term_recurring_price_amount%\" rp=\"%after_term_once_access_length%\" rt=\"%after_term_recurring_period%\" rr=\"BN\" rrt=\"\" rra=\"1\" image=\"default\" output=\"button\" /]",
+          "single_payment_subscription_with_trial": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"paypal\" lc=\"US\" cc=\"USD\" dg=\"0\" ns=\"0\" custom=\"%custom%\" ta=\"%initial_term_price_amount%\" tp=\"%initial_term_length%\" tt=\"%initial_term_period%\" ra=\"%after_term_recurring_price_amount%\" rp=\"%after_term_once_access_length%\" rt=\"%after_term_recurring_period%\" rr=\"0\" rrt=\"\" rra=\"1\" image=\"default\" output=\"button\" /]",
+          "recurring_subscription_with_trial": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"paypal\" lc=\"US\" cc=\"USD\" dg=\"0\" ns=\"0\" custom=\"%custom%\" ta=\"%initial_term_price_amount%\" tp=\"%initial_term_length%\" tt=\"%initial_term_period%\" ra=\"%after_term_recurring_price_amount%\" rp=\"%after_term_once_access_length%\" rt=\"%after_term_recurring_period%\" rr=\"1\" rrt=\"\" rra=\"1\" image=\"default\" output=\"button\" /]",
+          "recurring_subscription_without_trial": "[s2Member-PayPal-Button level=\"%level%\" ccaps=\"%ccaps%\" desc=\"%description%\" ps=\"paypal\" lc=\"US\" cc=\"USD\" dg=\"0\" ns=\"0\" custom=\"%custom%\" ta=\"%initial_term_price_amount%\" tp=\"%initial_term_length%\" tt=\"%initial_term_period%\" ra=\"%after_term_recurring_price_amount%\" rp=\"%after_term_once_access_length%\" rt=\"%after_term_recurring_period%\" rr=\"1\" rrt=\"\" rra=\"1\" image=\"default\" output=\"button\" /]"
+        }
       }
     }
   }

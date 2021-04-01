@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Formik, Form as FormikForm, Field } from 'formik';
 import _isObject from 'lodash.isobject';
 
+import ShortcodeDisplay from './ShortcodeDisplay.jsx';
+
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -71,25 +73,6 @@ class Form extends Component {
     return <p key={key}>{result}</p>;
   }
 
-  /**
-   * Generates the shortcode (a string) based on the configuration and the values from the form.
-   * @param config
-   * @param values
-   * @return String
-   */
-  generateShortcode(config, values) {
-    const shortcodeTemplate = config.shortcode.template;
-
-    let result = shortcodeTemplate.replaceAll(
-      /%([a-zA-Z0-9_-]*)%/g,
-      (placeholder, fieldName) => {
-        return values[fieldName] || this.state.initialValues[fieldName];
-      }
-    );
-
-    return result;
-  }
-
   checkHasTemplateConditionals(group) {
     return group.length > 1 && _isObject(group[0]) && _isObject(group[0].if);
   }
@@ -105,17 +88,25 @@ class Form extends Component {
       <div className="s2x_shortcodegenerator_form">
         <Formik initialValues={this.state.initialValues}>
           {formikProps => (
-            <FormikForm>
-              {config.formTemplate.map((group, key) => {
-                if (this.checkHasTemplateConditionals(group)) {
-                  if (this.testTemplateConditionals(group[0], formikProps.values)) {
-                    return this.renderFormTemplate({ key, form: config, template: group[1] });
+            <React.Fragment>
+              <FormikForm>
+                {config.formTemplate.map((group, key) => {
+                  if (this.checkHasTemplateConditionals(group)) {
+                    if (this.testTemplateConditionals(group[0], formikProps.values)) {
+                      return this.renderFormTemplate({ key, form: config, template: group[1] });
+                    }
+                  } else {
+                    return this.renderFormTemplate({ key, form: config, template: group[0] });
                   }
-                } else {
-                  return this.renderFormTemplate({ key, form: config, template: group[0] });
-                }
-              })}
-            </FormikForm>
+                })}
+              </FormikForm>
+
+              <ShortcodeDisplay
+                shortcodeConfig={config.shortcode}
+                formValues={formikProps.values}
+                initialValues={this.state.initialValues}
+              />
+            </React.Fragment>
           )}
         </Formik>
       </div>

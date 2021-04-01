@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Questions from './Questions.jsx';
-import Form from "./Form.jsx";
+import Form from './Form.jsx';
 
 class ShortcodeGenerator extends Component {
   constructor(props) {
@@ -31,6 +31,7 @@ class ShortcodeGenerator extends Component {
           <Form
             config={this.props.config.forms[this.state.form]}
             levels={this.props.levels}
+            domain={this.props.domain}
           />
         }
       </div>
