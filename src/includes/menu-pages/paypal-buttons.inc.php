@@ -77,11 +77,36 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 										echo '<td>' . "\n";
 										echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
-										echo '<p id="ws-plugin--s2member-level' . $n . '-trial-line">I\'ll offer the first <input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-trial-period" value="0" size="6" /> <select id="ws-plugin--s2member-level' . $n . '-trial-term">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-membership-trial-terms.php"))) . '</select> @ $<input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-trial-amount" value="0.00" size="4" /></p>' . "\n";
-										echo '<p><span id="ws-plugin--s2member-level' . $n . '-trial-then">Then, </span>I want to charge: $<input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-amount" value="0.01" size="4" /> / <select id="ws-plugin--s2member-level' . $n . '-term">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-membership-regular-terms.php"))) . '</select></p>' . "\n";
-										echo '<p>Checkout Page Style <a href="#" onclick="alert(\'Optional. This can be configured inside your PayPal account. PayPal allows you to create Custom Page Styles, and assign a unique name to them. You can add your own header image and color selection to the checkout form. Once you\\\'ve created a Custom Page Style at PayPal, you can enter that Page Style here.\\n\\nIn addition. The Shortcode below, provided by s2Member; supports an image attribute: image=\\\'\\\'default\\\'\\\'. This can be changed to a full URL, pointing to a custom image of your own; instead of the default PayPal Button image.\'); return false;" tabindex="-1">[?]</a>: <input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-page-style" value="paypal" size="18" /> <select id="ws-plugin--s2member-level' . $n . '-currency">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-currencies.php"))) . '</select> <input type="button" value="Generate Button Code" onclick="ws_plugin__s2member_paypalButtonGenerate(\'level' . $n . '\');" /></p>' . "\n";
-										echo '<p>Description: <input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-desc" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_label"]) . ' / description and pricing details here." size="73" /></p>' . "\n";
-										echo '<p' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '>Custom Capabilities (comma-delimited) <a href="#" onclick="alert(\'Optional. This is VERY advanced.\\nSee: s2Member → API Scripting → Custom Capabilities.\\n\\n*ADVANCED TIP: You can specifiy a list of Custom Capabilities that will be (Added) with this purchase. Or, you could tell s2Member to (Remove All) Custom Capabilities that may or may not already exist for a particular Member, and (Add) only the new ones that you specify. To do this, just start your list of Custom Capabilities with `-all`.\\n\\nSo instead of just (Adding) Custom Capabilities:\\nmusic,videos,archives,gifts\\n\\nYou could (Remove All) that may already exist, and then (Add) new ones:\\n-all,calendar,forums,tools\\n\\nOr to just (Remove All) and (Add) nothing:\\n-all\'); return false;" tabindex="-1">[?]</a> <input type="text" maxlength="125" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-ccaps" size="40" /></p>' . "\n";
+
+										echo '<table class="btn-generator">
+										<tr id="ws-plugin--s2member-level' . $n . '-trial-line" class="trial">
+											<td>I\'ll offer the first</td>
+											<td><input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-trial-period" class="trial-period" value="0" size="6" /> <select id="ws-plugin--s2member-level' . $n . '-trial-term" class="trial-term">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-membership-trial-terms.php"))) . '</select> for <input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-trial-amount" class="amount" value="0.00" size="4" /></td>
+										</tr>
+										<tr class="regular">
+											<td><span id="ws-plugin--s2member-level' . $n . '-trial-then">Then </span>I want to charge</td>
+											<td><input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-amount" class="amount" value="0.01" size="4" /> <select id="ws-plugin--s2member-level' . $n . '-currency">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-currencies.php"))) . '</select></td>
+										</tr>
+										<tr>
+										<td>&nbsp;</td>
+										<td><select id="ws-plugin--s2member-level' . $n . '-term" class="regular-term">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-membership-regular-terms.php"))) . '</select></td>
+										</tr>
+										<tr class="co-style">
+											<td>Checkout Page Style <a href="#" onclick="alert(\'Optional. This can be configured inside your PayPal account. PayPal allows you to create Custom Page Styles, and assign a unique name to them. You can add your own header image and color selection to the checkout form. Once you\\\'ve created a Custom Page Style at PayPal, you can enter that Page Style here.\\n\\nIn addition. The Shortcode below, provided by s2Member; supports an image attribute: image=\\\'\\\'default\\\'\\\'. This can be changed to a full URL, pointing to a custom image of your own; instead of the default PayPal Button image.\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+											<td><input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-page-style" value="paypal" size="18" /></td>
+										</tr>
+										<tr class="desc">
+											<td>Description:</td>
+											<td><input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-desc" value="' . format_to_edit ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_label"]) . ' / description and pricing details here." size="73" /></td>
+										</tr>
+										<tr class="ccaps" ' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '>
+											<td>Custom Capabilities <a href="#" onclick="alert(\'Optional.\\nSee: s2Member → API Scripting → Custom Capabilities.\\n\\n*ADVANCED TIP: You can specifiy a comma-separated list of Custom Capabilities that will be (Added) with this purchase. Or, you could tell s2Member to (Remove All) Custom Capabilities that may or may not already exist for a particular Member, and (Add) only the new ones that you specify. To do this, just start your list of Custom Capabilities with `-all`.\\n\\nSo instead of just (Adding) Custom Capabilities:\\nmusic,videos,archives,gifts\\n\\nYou could (Remove All) that may already exist, and then (Add) new ones:\\n-all,calendar,forums,tools\\n\\nOr to just (Remove All) and (Add) nothing:\\n-all\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+											<td><input type="text" maxlength="125" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-ccaps" size="40" /></td>
+										</tr>
+										</table>
+										';
+
+										echo '<input type="button" value="Generate Button Code" onclick="ws_plugin__s2member_paypalButtonGenerate(\'level' . $n . '\');" /></p>' . "\n";
 										echo '</form>' . "\n";
 										echo '</td>' . "\n";
 
@@ -103,7 +128,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 										echo '<div' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '><br />' . "\n";
 										echo '<strong>Resulting PayPal Button Code:</strong> (ultimately, your Shortcode will produce this snippet)<br />' . "\n";
-										echo '<textarea id="ws-plugin--s2member-level' . $n . '-button" rows="8" wrap="off" onclick="this.select ();">';
+										echo '<textarea id="ws-plugin--s2member-level' . $n . '-button" rows="2" wrap="off" onclick="this.select ();">';
 										$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-checkout-button.php")));
 										$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 										$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
@@ -118,7 +143,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 										$ws_plugin__s2member_temp_s = preg_replace ("/%%wpurl%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ())), $ws_plugin__s2member_temp_s);
 										echo format_to_edit ($ws_plugin__s2member_temp_s);
 										echo '</textarea><br />' . "\n";
-										echo '&uarr; <em>This <span class="ws-menu-page-hilite">may contain PHP code too</span>; so be careful if you use this.</em>' . "\n";
+										echo '&uarr; <em>This <span class="ws-menu-page-hilite">contains PHP code with s2 constants</span>, so it needs to be used in WordPress and with PHP execution possible.</em>' . "\n";
 										echo '</div>' . "\n";
 
 										echo '</form>' . "\n";
@@ -144,7 +169,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-ccap-buttons-section">' . "\n";
 								echo '<h3>Button Code Generator For Independent Custom Capabilities</h3>' . "\n";
-								echo '<p>This is VERY advanced. For further details, please check your Dashboard: <strong>s2Member → API Scripting → Custom Capabiities</strong>.</p>' . "\n";
+								echo '<p>For further details, please check your Dashboard: <strong>s2Member → API Scripting → Custom Capabiities</strong>.</p>' . "\n";
 								echo '<p>With s2Member, you can sell one or more Custom Capabilities using Buy Now functionality, to "existing" Users/Members, regardless of which Membership Level they have on your site <em>(i.e., you could even sell Independent Custom Capabilities to Users at Membership Level #0, normally referred to as Free Subscribers, if you like)</em>. So this is quite flexible. Independent Custom Capabilities do NOT rely on any specific Membership Level. That\'s why s2Member refers to these as `Independent` Custom Capabilities, because you can sell Capabilities this way, through Buy Now functionality, and the Customer\'s Membership Level Access, along with any existing paid Subscription they may already have with you, will remain completely unaffected. That being said, if you intend to charge a recurring fee for Custom Capabilities, please use a <code>Subscr. Modification Button</code> instead; because Independent Custom Capabilities can only be sold through Buy Now functionality.</p>' . "\n";
 								echo '<p>Independent Custom Capabilities are added to a Customer\'s account immediately after checkout, and the Customer will have the Custom Capabilities for as long as their Membership lasts, based on their primary Subscription with your site, and/or forever, if they have a Lifetime account with you. In other words, Independent Custom Capabilities will exist on the Customer\'s account forever, or until an EOT <em>(End Of Term)</em> occurs on their primary Subscription with you; in which case s2Member would demote or delete the Customer\'s account <em>(based on your EOT configuration)</em>, and all Custom Capabilities are removed as well.</p>' . "\n";
 								echo '<p>Very simple. All you do is customize the form fields provided, for each set of Custom Capabilities that you plan to sell. Then press (Generate Button Code). These special PayPal Buttons are customized to work with s2Member seamlessly. The Customer will be granted additional access to one or more Custom Capabilities that you specify; while the Customer\'s Membership Level Access and any existing paid Subscription they may already have with you, will remain completely unaffected.</p>' . "\n";
@@ -165,10 +190,32 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<td>' . "\n";
 								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
-								echo '<p>I want to charge: $<input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-amount" value="0.01" size="4" /> / <select id="ws-plugin--s2member-ccap-term">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-membership-ccap-terms.php"))) . '</select></p>' . "\n";
-								echo '<p>Checkout Page Style <a href="#" onclick="alert(\'Optional. This can be configured inside your PayPal account. PayPal allows you to create Custom Page Styles, and assign a unique name to them. You can add your own header image and color selection to the checkout form. Once you\\\'ve created a Custom Page Style at PayPal, you can enter that Page Style here.\\n\\nIn addition. The Shortcode below, provided by s2Member; supports an image attribute: image=\\\'\\\'default\\\'\\\'. This can be changed to a full URL, pointing to a custom image of your own; instead of the default PayPal Button image.\'); return false;" tabindex="-1">[?]</a>: <input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-page-style" value="paypal" size="18" /> <select id="ws-plugin--s2member-ccap-currency">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-currencies.php"))) . '</select> <input type="button" value="Generate Button Code" onclick="ws_plugin__s2member_paypalCcapButtonGenerate();" /></p>' . "\n";
-								echo '<p>Description: <input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-desc" value="Description and pricing details here." size="73" /></p>' . "\n";
-								echo '<p>Custom Capabilities (comma-delimited) <a href="#" onclick="alert(\'Optional. This is VERY advanced.\\nSee: s2Member → API Scripting → Custom Capabilities.\\n\\n*ADVANCED TIP: You can specifiy a list of Custom Capabilities that will be (Added) with this purchase. Or, you could tell s2Member to (Remove All) Custom Capabilities that may or may not already exist for a particular Member, and (Add) only the new ones that you specify. To do this, just start your list of Custom Capabilities with `-all`.\\n\\nSo instead of just (Adding) Custom Capabilities:\\nmusic,videos,archives,gifts\\n\\nYou could (Remove All) that may already exist, and then (Add) new ones:\\n-all,calendar,forums,tools\'); return false;" tabindex="-1">[?]</a> <input type="text" maxlength="125" autocomplete="off" id="ws-plugin--s2member-ccap-ccaps" size="40" /></p>' . "\n";
+
+								echo '<table class="btn-generator">
+								<tr>
+									<td>I want to charge</td>
+									<td><input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-amount" class="amount" value="0.01" size="4" /> <select id="ws-plugin--s2member-ccap-currency">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-currencies.php"))) . '</select></td>
+								</tr>
+								<tr class="ccap-term">
+									<td>&nbsp;</td>
+									<td><select id="ws-plugin--s2member-ccap-term">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-membership-ccap-terms.php"))) . '</select></td>
+								</tr>
+								<tr class="co-style">
+									<td>Checkout Page Style <a href="#" onclick="alert(\'Optional. This can be configured inside your PayPal account. PayPal allows you to create Custom Page Styles, and assign a unique name to them. You can add your own header image and color selection to the checkout form. Once you\\\'ve created a Custom Page Style at PayPal, you can enter that Page Style here.\\n\\nIn addition. The Shortcode below, provided by s2Member; supports an image attribute: image=\\\'\\\'default\\\'\\\'. This can be changed to a full URL, pointing to a custom image of your own; instead of the default PayPal Button image.\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td><input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-page-style" value="paypal" size="18" /></td>
+								</tr>
+								<tr class="desc">
+									<td>Description:</td>
+									<td><input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-desc" value="Description and pricing details here." size="73" /></td>
+								</tr>
+								<tr class="ccaps">
+									<td>Custom Capabilities <a href="#" onclick="alert(\'See: s2Member → API Scripting → Custom Capabilities.\\n\\nSpecifiy a comma-separed list of Custom Capabilities that will be (Added) with this purchase. Or, you could tell s2Member to (Remove All) Custom Capabilities that may or may not already exist for a particular Member, and (Add) only the new ones that you specify. To do this, just start your list of Custom Capabilities with `-all`.\\n\\nSo instead of just (Adding) Custom Capabilities:\\nmusic,videos,archives,gifts\\n\\nYou could (Remove All) that may already exist, and then (Add) new ones:\\n-all,calendar,forums,tools\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td><input type="text" maxlength="125" autocomplete="off" id="ws-plugin--s2member-ccap-ccaps" size="40" /></td>
+								</tr>
+								</table>
+								';
+								echo '<input type="button" value="Generate Button Code" onclick="ws_plugin__s2member_paypalCcapButtonGenerate();" />';
+
 								echo '</form>' . "\n";
 								echo '</td>' . "\n";
 
@@ -185,7 +232,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<div' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '><br />' . "\n";
 								echo '<strong>Resulting PayPal Button Code:</strong> (ultimately, your Shortcode will produce this snippet)<br />' . "\n";
-								echo '<textarea id="ws-plugin--s2member-ccap-button" rows="8" wrap="off" onclick="this.select ();">';
+								echo '<textarea id="ws-plugin--s2member-ccap-button" rows="2" wrap="off" onclick="this.select ();">';
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-ccaps-checkout-button.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
@@ -198,7 +245,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%wpurl%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ())), $ws_plugin__s2member_temp_s);
 								echo format_to_edit ($ws_plugin__s2member_temp_s);
 								echo '</textarea><br />' . "\n";
-								echo '&uarr; <em>This <span class="ws-menu-page-hilite">may contain PHP code too</span>; so be careful if you use this.</em>' . "\n";
+								echo '&uarr; <em>This <span class="ws-menu-page-hilite">contains PHP code with s2 constants</span>, so it needs to be used in WordPress and with PHP execution possible.</em>'. "\n";
 								echo '</div>' . "\n";
 
 								echo '</form>' . "\n";
@@ -266,7 +313,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<div' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '><br />' . "\n";
 								echo '<strong>Resulting PayPal Button Code:</strong> (ultimately, your Shortcode will produce this snippet)<br />' . "\n";
-								echo '<textarea id="ws-plugin--s2member-cancellation-button" rows="8" wrap="off" onclick="this.select ();">';
+								echo '<textarea id="ws-plugin--s2member-cancellation-button" rows="2" wrap="off" onclick="this.select ();">';
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-cancellation-button.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
@@ -308,15 +355,36 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<td>' . "\n";
 								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
-								echo '<p>Paid Membership Level#: <select id="ws-plugin--s2member-reg-link-level" style="min-width:200px;">' . "\n";
-								for ($n = 1; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
-									echo '<option value="' . $n . '">s2Member Level #' . $n . '</option>' . "\n";
-								echo '</select></p>' . "\n";
-								echo '<p>Paid Subscr. ID: <input type="text" autocomplete="off" id="ws-plugin--s2member-reg-link-subscr-id" value="" size="50" /> <a href="#" onclick="alert(\'The Customer\\\'s Paid Subscr. ID (aka: Recurring Profile ID, Transaction ID) must be unique. This value can be obtained from inside your PayPal account under the History tab. Each paying Customer MUST be associated with a unique Paid Subscr. ID. If the Customer is NOT associated with a Paid Subscr. ID, you will need to generate a unique value for this field on your own. But keep in mind, s2Member will be unable to maintain future communication with the PayPal IPN (i.e., Notification) service if this value does not reflect a real Paid Subscr. ID that exists in your PayPal History log.\'); return false;" tabindex="-1">[?]</a></p>' . "\n";
-								echo '<p>Custom String Value: <input type="text" autocomplete="off" id="ws-plugin--s2member-reg-link-custom" value="' . esc_attr ($_SERVER["HTTP_HOST"]) . '" size="30" /> <a href="#" onclick="alert(\'A Paid Subscription is always associated with a Custom String that is passed through the custom=\\\'\\\'' . c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr ($_SERVER["HTTP_HOST"]), 3) . '\\\'\\\' attribute of your Shortcode. This Custom Value, MUST always start with your domain name. However, you can also pipe delimit additional values after your domain, if you need to.\\n\\nFor example:\n' . c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr ($_SERVER["HTTP_HOST"]), 3) . '|cv1|cv2|cv3\'); return false;" tabindex="-1">[?]</a> <input type="button" value="Generate Access Link" onclick="ws_plugin__s2member_paypalRegLinkGenerate();" /> <img id="ws-plugin--s2member-reg-link-loading" src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/src/images/ajax-loader.gif" alt="" style="display:none;" /></p>' . "\n";
-								echo '<p' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '>Custom Capabilities (comma-delimited) <a href="#" onclick="alert(\'Optional. This is VERY advanced.\\nSee: s2Member → API Scripting → Custom Capabilities.\'); return false;" tabindex="-1">[?]</a> <input type="text" maxlength="125" autocomplete="off" id="ws-plugin--s2member-reg-link-ccaps" size="40" onkeyup="if(this.value.match(/[^a-z_0-9,]/)) this.value = jQuery.trim (jQuery.trim (this.value).replace (/[ \-]/g, \'_\').replace (/[^a-z_0-9,]/gi, \'\').toLowerCase ());" /></p>' . "\n";
-								echo '<p>Fixed Term Length (for Buy Now transactions): <input type="text" autocomplete="off" id="ws-plugin--s2member-reg-link-fixed-term" value="" size="10" /> <a href="#" onclick="alert(\'If the Customer purchased Membership through a Buy Now transaction (i.e., there is no Initial/Trial Period and no recurring charges for ongoing access), you may configure a Fixed Term Length in this field. This way the Customer\\\'s Membership Access is automatically revoked by s2Member at the appropriate time. This will be a numeric value, followed by a space, then a single letter.\\n\\nHere are some examples:\\n\\n1 D (this means 1 Day)\\n1 W (this means 1 Week)\\n1 M (this means 1 Month)\\n1 Y (this means 1 Year)\\n1 L (this means 1 Lifetime)\'); return false;">[?]</a></p>' . "\n";
+
+								echo '<table class="btn-generator">
+								<tr class="level">
+									<td>Paid Membership Level</td>
+									<td><select id="ws-plugin--s2member-reg-link-level" style="min-width:200px;">';
+									for ($n = 1; $n <= $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]; $n++)
+										echo '<option value="' . $n . '">s2Member Level ' . $n . '</option>';
+								echo '</select></td>
+								</tr>
+								<tr class="subscr-id">
+									<td>Paid Subscr. ID <a href="#" onclick="alert(\'The Customer\\\'s Paid Subscr. ID (aka: Recurring Profile ID, Transaction ID) must be unique. This value can be obtained from inside your PayPal account under the History tab. Each paying Customer MUST be associated with a unique Paid Subscr. ID. If the Customer is NOT associated with a Paid Subscr. ID, you will need to generate a unique value for this field on your own. But keep in mind, s2Member will be unable to maintain future communication with the PayPal IPN (i.e., Notification) service if this value does not reflect a real Paid Subscr. ID that exists in your PayPal History log.\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td><input type="text" autocomplete="off" id="ws-plugin--s2member-reg-link-subscr-id" value="" size="50" /></td>
+								</tr>
+								<tr class="custom">
+									<td>Custom String Value <a href="#" onclick="alert(\'A Paid Subscription is always associated with a Custom String that is passed through the custom=\\\'\\\'' . c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr ($_SERVER["HTTP_HOST"]), 3) . '\\\'\\\' attribute of your Shortcode. This Custom Value, MUST always start with your domain name. However, you can also pipe delimit additional values after your domain, if you need to.\\n\\nFor example:\n' . c_ws_plugin__s2member_utils_strings::esc_js_sq (esc_attr ($_SERVER["HTTP_HOST"]), 3) . '|cv1|cv2|cv3\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td><input type="text" autocomplete="off" id="ws-plugin--s2member-reg-link-custom" value="' . esc_attr ($_SERVER["HTTP_HOST"]) . '" size="30" /></td>
+								</tr>
+								<tr class="ccaps"' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '>
+									<td>Custom Capabilities <a href="#" onclick="alert(\'Optional.\\nSee: s2Member → API Scripting → Custom Capabilities.\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td><input type="text" maxlength="125" autocomplete="off" id="ws-plugin--s2member-reg-link-ccaps" size="40" onkeyup="if(this.value.match(/[^a-z_0-9,]/)) this.value = jQuery.trim (jQuery.trim (this.value).replace (/[ \-]/g, \'_\').replace (/[^a-z_0-9,]/gi, \'\').toLowerCase ());" /></td>
+								</tr>
+								<tr class="term">
+									<td>Fixed Term Length <a href="#" onclick="alert(\'If the Customer purchased Membership through a Buy Now transaction (i.e., there is no Initial/Trial Period and no recurring charges for ongoing access), you may configure a Fixed Term Length in this field. This way the Customer\\\'s Membership Access is automatically revoked by s2Member at the appropriate time. This will be a numeric value, followed by a space, then a single letter.\\n\\nHere are some examples:\\n\\n1 D (this means 1 Day)\\n1 W (this means 1 Week)\\n1 M (this means 1 Month)\\n1 Y (this means 1 Year)\\n1 L (this means 1 Lifetime)\'); return false;"><i class="fa fa-question-circle icon"></i></a><br />(for Buy Now transactions)</td>
+									<td><input type="text" autocomplete="off" id="ws-plugin--s2member-reg-link-fixed-term" value="" size="10" /></td>
+								</tr>
+								</table>';
+								
+								echo '<input type="button" value="Generate Access Link" onclick="ws_plugin__s2member_paypalRegLinkGenerate();" /> <img id="ws-plugin--s2member-reg-link-loading" src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/src/images/ajax-loader.gif" alt="" style="display:none;" />';
 								echo '<p id="ws-plugin--s2member-reg-link" style="display:none;"></p>' . "\n";
+
 								echo '</form>' . "\n";
 								echo '</td>' . "\n";
 
@@ -359,27 +427,43 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<td>' . "\n";
 								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 
-								echo '<p><select id="ws-plugin--s2member-sp-leading-id">' . "\n";
-								echo '<option value="">&mdash; Select a Leading Post/Page that you\'ve protected &mdash;</option>' . "\n";
+								echo '
+								<table class="btn-generator">
+								<tr class="sp-lead">
+									<td><a href="#" onclick="alert(\'Required. The Leading Post/Page, is what your Customers will land on after checkout.\n\n*Tip* If there are no Posts/Pages in the menu, it\\\'s because you\\\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td class="sp-lead"><select id="ws-plugin--s2member-sp-leading-id">
+									<option value="">Select a Leading Post/Page that you\'ve protected</option>';
+									$ws_plugin__s2member_temp_a_singulars = c_ws_plugin__s2member_utils_gets::get_all_singulars_with_sp ("exclude-conflicts");
+									foreach ($ws_plugin__s2member_temp_a_singulars as $ws_plugin__s2member_temp_o)
+										echo '<option value="' . esc_attr ($ws_plugin__s2member_temp_o->ID) . '">' . esc_html ($ws_plugin__s2member_temp_o->post_title) . '</option>' . "\n";
+									echo '</select></td>
+								</tr>
+								<tr class="sp-additional">
+									<td><a href="#" onclick="alert(\'Hold down your `Ctrl` key to select multiples.\\n\\nOptional. If you include Additional Posts/Pages, Customers will still land on your Leading Post/Page; BUT, they\\\'ll ALSO have access to some Additional Posts/Pages that you\\\'ve protected. This gives you the ability to create Post/Page Packages.\\n\\nIn other words, a Customer is sold a Specific Post/Page (they\\\'ll land on your Leading Post/Page after checkout), which might contain links to some other Posts/Pages that you\\\'ve packaged together under one transaction.\\n\\nBundling Additional Posts/Pages into one Package, authenticates the Customer for access to the Additional Posts/Pages automatically (i.e., only one Access Link is needed, and s2Member generates this automatically). However, you will STILL need to design your Leading Post/Page (which is what a Customer will actually land on), with links pointing to the other Posts/Pages. This way your Customers will have clickable links to everything they\\\'ve paid for.\\n\\n*Quick Summary* s2Member sends Customers to your Leading Post/Page, and also authenticates them for access to any Additional Posts/Pages automatically. You handle it from there.\\n\\n*Tip* If there are no Posts/Pages in this menu, it\\\'s because you\\\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td><select id="ws-plugin--s2member-sp-additional-ids" multiple="multiple" style="height:100px;"><optgroup label="Package Additional Posts/Pages that you\'ve protected">';
+									foreach ($ws_plugin__s2member_temp_a_singulars as $ws_plugin__s2member_temp_o)
+										echo '<option value="' . esc_attr ($ws_plugin__s2member_temp_o->ID) . '">' . esc_html ($ws_plugin__s2member_temp_o->post_title) . '</option>' . "\n";
+									echo '</optgroup></select></td>
+								</tr>
+								<tr class="amount">
+									<td>I want to charge</td>
+									<td><input type="text" autocomplete="off" id="ws-plugin--s2member-sp-amount" class="amount" value="0.01" size="4" /> <select id="ws-plugin--s2member-sp-currency">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-currencies.php"))) . '</select></td>
+								</tr>
+								<tr class="expiration">
+									<td>Expiration</td>
+									<td><select id="ws-plugin--s2member-sp-hours">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-sp-hours.php"))) . '</select></td>
+								</tr>
+								<tr class="desc">
+									<td>Description</td>
+									<td><input type="text" autocomplete="off" id="ws-plugin--s2member-sp-desc" value="Description and pricing details here." size="68" /></td>
+								</tr>
+								<tr class="co-style">
+									<td>Checkout Page Style <a href="#" onclick="alert(\'Optional. This can be configured inside your PayPal account. PayPal allows you to create Custom Page Styles, and assign a unique name to them. You can add your own header image and color selection to the checkout form. Once you\\\'ve created a Custom Page Style at PayPal, you can enter that Page Style here.\\n\\nIn addition. The Shortcode below, provided by s2Member; supports an image attribute: image=\\\'\\\'default\\\'\\\'. This can be changed to a full URL, pointing to a custom image of your own; instead of the default PayPal Button image.\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td><input type="text" autocomplete="off" id="ws-plugin--s2member-sp-page-style" value="paypal" size="18" /></td>
+								</tr>
+								</table>';
+								echo '<input type="button" value="Generate Button Code" onclick="ws_plugin__s2member_paypalSpButtonGenerate();" />';
 
-								$ws_plugin__s2member_temp_a_singulars = c_ws_plugin__s2member_utils_gets::get_all_singulars_with_sp ("exclude-conflicts");
-
-								foreach ($ws_plugin__s2member_temp_a_singulars as $ws_plugin__s2member_temp_o)
-									echo '<option value="' . esc_attr ($ws_plugin__s2member_temp_o->ID) . '">' . esc_html ($ws_plugin__s2member_temp_o->post_title) . '</option>' . "\n";
-
-								echo '</select> <a href="#" onclick="alert(\'Required. The Leading Post/Page, is what your Customers will land on after checkout.\n\n*Tip* If there are no Posts/Pages in the menu, it\\\'s because you\\\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.\'); return false;" tabindex="-1">[?]</a></p>' . "\n";
-
-								echo '<p><select id="ws-plugin--s2member-sp-additional-ids" multiple="multiple" style="height:100px;">' . "\n";
-								echo '<optgroup label="&mdash; Package Additional Posts/Pages that you\'ve protected &mdash;">' . "\n";
-
-								foreach ($ws_plugin__s2member_temp_a_singulars as $ws_plugin__s2member_temp_o)
-									echo '<option value="' . esc_attr ($ws_plugin__s2member_temp_o->ID) . '">' . esc_html ($ws_plugin__s2member_temp_o->post_title) . '</option>' . "\n";
-
-								echo '</optgroup></select> <a href="#" onclick="alert(\'Hold down your `Ctrl` key to select multiples.\\n\\nOptional. If you include Additional Posts/Pages, Customers will still land on your Leading Post/Page; BUT, they\\\'ll ALSO have access to some Additional Posts/Pages that you\\\'ve protected. This gives you the ability to create Post/Page Packages.\\n\\nIn other words, a Customer is sold a Specific Post/Page (they\\\'ll land on your Leading Post/Page after checkout), which might contain links to some other Posts/Pages that you\\\'ve packaged together under one transaction.\\n\\nBundling Additional Posts/Pages into one Package, authenticates the Customer for access to the Additional Posts/Pages automatically (i.e., only one Access Link is needed, and s2Member generates this automatically). However, you will STILL need to design your Leading Post/Page (which is what a Customer will actually land on), with links pointing to the other Posts/Pages. This way your Customers will have clickable links to everything they\\\'ve paid for.\\n\\n*Quick Summary* s2Member sends Customers to your Leading Post/Page, and also authenticates them for access to any Additional Posts/Pages automatically. You handle it from there.\\n\\n*Tip* If there are no Posts/Pages in this menu, it\\\'s because you\\\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.\'); return false;" tabindex="-1">[?]</a></p>' . "\n";
-
-								echo '<p>I want to charge: $<input type="text" autocomplete="off" id="ws-plugin--s2member-sp-amount" value="0.01" size="4" /> / <select id="ws-plugin--s2member-sp-hours">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-sp-hours.php"))) . '</select></p>' . "\n";
-								echo '<p>Description: <input type="text" autocomplete="off" id="ws-plugin--s2member-sp-desc" value="Description and pricing details here." size="68" /></p>' . "\n";
-								echo '<p>Checkout Page Style <a href="#" onclick="alert(\'Optional. This can be configured inside your PayPal account. PayPal allows you to create Custom Page Styles, and assign a unique name to them. You can add your own header image and color selection to the checkout form. Once you\\\'ve created a Custom Page Style at PayPal, you can enter that Page Style here.\\n\\nIn addition. The Shortcode below, provided by s2Member; supports an image attribute: image=\\\'\\\'default\\\'\\\'. This can be changed to a full URL, pointing to a custom image of your own; instead of the default PayPal Button image.\'); return false;" tabindex="-1">[?]</a>: <input type="text" autocomplete="off" id="ws-plugin--s2member-sp-page-style" value="paypal" size="18" /> <select id="ws-plugin--s2member-sp-currency">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-currencies.php"))) . '</select> <input type="button" value="Generate Button Code" onclick="ws_plugin__s2member_paypalSpButtonGenerate();" /></p>' . "\n";
 								echo '</form>' . "\n";
 								echo '</td>' . "\n";
 
@@ -396,7 +480,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 
 								echo '<div' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '><br />' . "\n";
 								echo '<strong>Resulting PayPal Button Code:</strong> (ultimately, your Shortcode will produce this snippet)<br />' . "\n";
-								echo '<textarea id="ws-plugin--s2member-sp-button" rows="8" wrap="off" onclick="this.select ();">';
+								echo '<textarea id="ws-plugin--s2member-sp-button" rows="2" wrap="off" onclick="this.select ();">';
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-sp-checkout-button.php")));
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
@@ -409,7 +493,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%wpurl%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ())), $ws_plugin__s2member_temp_s);
 								echo format_to_edit ($ws_plugin__s2member_temp_s);
 								echo '</textarea><br />' . "\n";
-								echo '&uarr; <em>This <span class="ws-menu-page-hilite">may contain PHP code too</span>; so be careful if you use this.</em>' . "\n";
+								echo '&uarr; <em>This <span class="ws-menu-page-hilite">contains PHP code with s2 constants</span>, so it needs to be used in WordPress and with PHP execution possible.</em>' . "\n";
 								echo '</div>' . "\n";
 
 								echo '</form>' . "\n";
@@ -443,25 +527,29 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo '<td>' . "\n";
 								echo '<form onsubmit="return false;" autocomplete="off">' . "\n";
 
-								echo '<p><select id="ws-plugin--s2member-sp-link-leading-id">' . "\n";
-								echo '<option value="">&mdash; Select a Leading Post/Page that you\'ve protected &mdash;</option>' . "\n";
+								echo '<table class="btn-generator">
+								<tr class="sp-lead">
+									<td><a href="#" onclick="alert(\'Required. The Leading Post/Page, is what your Customers will land on after checkout.\n\n*Tip* If there are no Posts/Pages in the menu, it\\\'s because you\\\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td><select id="ws-plugin--s2member-sp-link-leading-id"><option value="">Select a Leading Post/Page that you\'ve protected</option>';
+									$ws_plugin__s2member_temp_a_singulars = c_ws_plugin__s2member_utils_gets::get_all_singulars_with_sp ("exclude-conflicts");
+									foreach ($ws_plugin__s2member_temp_a_singulars as $ws_plugin__s2member_temp_o)
+										echo '<option value="' . esc_attr ($ws_plugin__s2member_temp_o->ID) . '">' . esc_html ($ws_plugin__s2member_temp_o->post_title) . '</option>';
+									echo '</select></td>
+								</tr>
+								<tr class="sp-additional">
+									<td><a href="#" onclick="alert(\'Hold down your `Ctrl` key to select multiples.\\n\\nOptional. If you include Additional Posts/Pages, Customers will still land on your Leading Post/Page; BUT, they\\\'ll ALSO have access to some Additional Posts/Pages that you\\\'ve protected. This gives you the ability to create Post/Page Packages.\\n\\nIn other words, a Customer is sold a Specific Post/Page (they\\\'ll land on your Leading Post/Page after checkout), which might contain links to some other Posts/Pages that you\\\'ve packaged together under one transaction.\\n\\nBundling Additional Posts/Pages into one Package, authenticates the Customer for access to the Additional Posts/Pages automatically (i.e., only one Access Link is needed, and s2Member generates this automatically). However, you will STILL need to design your Leading Post/Page (which is what a Customer will actually land on), with links pointing to the other Posts/Pages. This way your Customers will have clickable links to everything they\\\'ve paid for.\\n\\n*Quick Summary* s2Member sends Customers to your Leading Post/Page, and also authenticates them for access to any Additional Posts/Pages automatically. You handle it from there.\\n\\n*Tip* If there are no Posts/Pages in this menu, it\\\'s because you\\\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.\'); return false;" tabindex="-1"><i class="fa fa-question-circle icon"></i></a></td>
+									<td><select id="ws-plugin--s2member-sp-link-additional-ids" multiple="multiple" style="height:100px;"><optgroup label="Package Additional Posts/Pages that you\'ve protected">';
+									foreach ($ws_plugin__s2member_temp_a_singulars as $ws_plugin__s2member_temp_o)
+										echo '<option value="' . esc_attr ($ws_plugin__s2member_temp_o->ID) . '">' . esc_html ($ws_plugin__s2member_temp_o->post_title) . '</option>';
+									echo '</optgroup></select></td>
+								</tr>
+								<tr class="sp-expire">
+									<td>Expiration</td>
+									<td><select id="ws-plugin--s2member-sp-link-hours">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-sp-hours.php"))) . '</select></td>
+								</tr>
+								</table>';
+								echo '<input type="button" value="Generate Access Link" onclick="ws_plugin__s2member_paypalSpLinkGenerate();" /> <img id="ws-plugin--s2member-sp-link-loading" src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/src/images/ajax-loader.gif" alt="" style="display:none;" />';
 
-								$ws_plugin__s2member_temp_a_singulars = c_ws_plugin__s2member_utils_gets::get_all_singulars_with_sp ("exclude-conflicts");
-
-								foreach ($ws_plugin__s2member_temp_a_singulars as $ws_plugin__s2member_temp_o)
-									echo '<option value="' . esc_attr ($ws_plugin__s2member_temp_o->ID) . '">' . esc_html ($ws_plugin__s2member_temp_o->post_title) . '</option>' . "\n";
-
-								echo '</select> <a href="#" onclick="alert(\'Required. The Leading Post/Page, is what your Customers will land on after checkout.\n\n*Tip* If there are no Posts/Pages in the menu, it\\\'s because you\\\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.\'); return false;" tabindex="-1">[?]</a></p>' . "\n";
-
-								echo '<p><select id="ws-plugin--s2member-sp-link-additional-ids" multiple="multiple" style="height:100px; min-width:450px;">' . "\n";
-								echo '<optgroup label="&mdash; Package Additional Posts/Pages that you\'ve protected &mdash;">' . "\n";
-
-								foreach ($ws_plugin__s2member_temp_a_singulars as $ws_plugin__s2member_temp_o)
-									echo '<option value="' . esc_attr ($ws_plugin__s2member_temp_o->ID) . '">' . esc_html ($ws_plugin__s2member_temp_o->post_title) . '</option>' . "\n";
-
-								echo '</optgroup></select> <a href="#" onclick="alert(\'Hold down your `Ctrl` key to select multiples.\\n\\nOptional. If you include Additional Posts/Pages, Customers will still land on your Leading Post/Page; BUT, they\\\'ll ALSO have access to some Additional Posts/Pages that you\\\'ve protected. This gives you the ability to create Post/Page Packages.\\n\\nIn other words, a Customer is sold a Specific Post/Page (they\\\'ll land on your Leading Post/Page after checkout), which might contain links to some other Posts/Pages that you\\\'ve packaged together under one transaction.\\n\\nBundling Additional Posts/Pages into one Package, authenticates the Customer for access to the Additional Posts/Pages automatically (i.e., only one Access Link is needed, and s2Member generates this automatically). However, you will STILL need to design your Leading Post/Page (which is what a Customer will actually land on), with links pointing to the other Posts/Pages. This way your Customers will have clickable links to everything they\\\'ve paid for.\\n\\n*Quick Summary* s2Member sends Customers to your Leading Post/Page, and also authenticates them for access to any Additional Posts/Pages automatically. You handle it from there.\\n\\n*Tip* If there are no Posts/Pages in this menu, it\\\'s because you\\\'ve not configured s2Member for Specific Post/Page Access yet. See: s2Member → Restriction Options → Specific Post/Page Access.\'); return false;" tabindex="-1">[?]</a></p>' . "\n";
-
-								echo '<p><select id="ws-plugin--s2member-sp-link-hours">' . trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/options/paypal-sp-hours.php"))) . '</select> <input type="button" value="Generate Access Link" onclick="ws_plugin__s2member_paypalSpLinkGenerate();" /> <img id="ws-plugin--s2member-sp-link-loading" src="' . esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]) . '/src/images/ajax-loader.gif" alt="" style="display:none;" /></p>' . "\n";
 								echo '<p id="ws-plugin--s2member-sp-link" style="display:none;"></p>' . "\n";
 								echo '</form>' . "\n";
 								echo '</td>' . "\n";
