@@ -1,3 +1,13 @@
+= v210526 =
+
+- (s2Member Framework & Pro) **UI Enhancement**: Started improving the admin interface. Lightened up the colors, and changed the layout a little bit. 
+
+- (s2Member Framework) **UI Enhancement**: Added title tag to buttons to manage custom profile fields in admin, to improve use with screen-reader. [Thread 8836](https://f.wpsharks.com/t/8836/12)
+
+- (s2Member Pro) **UI Fix**: Fixed typo in pro-form `rrt` attribute description. [Issue 1204](https://github.com/wpsharks/s2member/issues/1204)
+
+- (s2Member Framework) **Bug Fix**: Registration Date sometimes wasn't formatted correctly with the s2Get shortcode. [Thread 8730](https://f.wpsharks.com/t/8730)
+
 = v210208 =
 
 - (s2Member Pro) **Enhancement**: In the Stripe integration, cancelling a subscription in the last minutes of a period, may cause the invoice for the new period to remain there and still be charged later. Now s2Member Pro attempts to find a draft or open invoice for the subscription being cancelled, and void it. Thanks Alan for reporting it. See [post 8386](https://f.wpsharks.com/t/8098).

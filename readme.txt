@@ -3,9 +3,9 @@
 Plugin Name: s2Member® Framework
 Plugin URI: http://s2member.com/
 Tags: membership, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, ecommerce, restriction
-Version: 210208
-Stable tag: 210208
-Tested up to: 5.7-alpha
+Version: 210526
+Stable tag: 210526
+Tested up to: 5.7-RC3-50511
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 7.4.6
@@ -138,6 +138,16 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v210526 =
+
+- (s2Member Framework & Pro) **UI Enhancement**: Started improving the admin interface. Lightened up the colors, and changed the layout a little bit. 
+
+- (s2Member Framework) **UI Enhancement**: Added title tag to buttons to manage custom profile fields in admin, to improve use with screen-reader. [Thread 8836](https://f.wpsharks.com/t/8836/12)
+
+- (s2Member Pro) **UI Fix**: Fixed typo in pro-form `rrt` attribute description. [Issue 1204](https://github.com/wpsharks/s2member/issues/1204)
+
+- (s2Member Framework) **Bug Fix**: Registration Date sometimes wasn't formatted correctly with the s2Get shortcode. [Thread 8730](https://f.wpsharks.com/t/8730)
 
 = v210208 =
 
