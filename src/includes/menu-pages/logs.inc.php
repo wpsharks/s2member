@@ -54,11 +54,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 				echo '<div class="ws-menu-page-group" title="Logging Configuration">'."\n";
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-log-settings-section">'."\n";
 
-				echo '<h3>Logging Configuration</h3>'."\n";
-
-				echo '<div class="info">'."\n";
-				echo '<p style="margin-top:0;"><span>We highly recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems that occur during processing. Enable logging here, and then view your log files below, in the s2Member Log Viewer.</span></p>'."\n";
-				echo '<p style="margin-bottom:0;"><span class="ws-menu-page-error">However, it is very important to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, secret API credentials, passwords and/or other sensitive information. We strongly suggest that logging be disabled on a live site (for security reasons).</span></p>'."\n";
+				echo '<div class="">'."\n";
+				echo '<p>We highly recommend that you enable logging during your initial testing phase. Logs produce lots of useful details that can help in debugging. Logs can help you find issues in your configuration and/or problems that occur during processing. Enable logging here, and then view your log files below, in the s2Member Log Viewer.</p>'."\n";
+				echo '<p>However, it is recommended to disable logging once you go live. Log files may contain personally identifiable information, credit card numbers, API credentials, passwords and/or other sensitive information. We strongly suggest that logging be disabled on a live site (for security reasons) when not needed.</p>'."\n";
+				echo '<p>It is fine to enable logging on a live site for troubleshooting purposes. This is what the logs are meant for. Troubleshooting is not just done while building the site, they are sometimes needed after the site has been live a while and being used. Just remember to disable logging after you are done with it.</p>'."\n";
+				echo '<p></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '<div class="warning" style="margin-bottom:0;">'."\n";
