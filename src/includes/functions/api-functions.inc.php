@@ -2770,3 +2770,33 @@ if(!function_exists('s2member_eot'))
 				return c_ws_plugin__s2member_utils_users::get_user_eot($user_id, $check_gateway, $favor);
 			}
 	}
+
+/**
+* Conditional to determine if the current User has a specific gateway set in his profile.
+*
+* ———— Code Sample Using Both Functions ————
+* ```
+* <!php
+* if(current_user_gateway_is("stripe"))
+* 	echo "Current user's payment gateway is set to Stripe (e.g. last paid through s2's Stripe pro-form)";
+* !>
+* ```
+*
+* ———— Shortcode Conditional Equivalent ————
+* ```
+* [s2If current_user_gateway_is(stripe)]
+* 	Current user's payment gateway is set to Stripe (e.g. last paid through s2's Stripe pro-form)
+* [/s2If]
+* ```
+*
+* @package s2Member\API_Functions
+* @since 220316
+*
+* @param string $gateway A gateway ID *( e.g. `stripe`, `paypal`, `authnet`, `clickbank` )*.
+* @return bool True if the specific User has the specified gateway, else false.
+*/
+if (!function_exists("current_user_gateway_is")) {
+    function current_user_gateway_is($gateway) {
+        return ($gateway === S2MEMBER_CURRENT_USER_SUBSCR_GATEWAY);
+    }
+}
