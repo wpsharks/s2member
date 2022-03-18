@@ -1,3 +1,9 @@
+= v220318 =
+
+- (Framework) **Enhancement**: New `current_user_gateway_is` function for conditionals. Useful for sites using more than one gateway. E.g. `[s2If current_user_gateway_is(stripe)] ...`
+
+- (Pro) **UI Fix**: Removed "Image Branding" setting from s2's Stripe options, not used in current integration.
+
 = v210526 =
 
 - (s2Member Framework & Pro) **UI Enhancement**: Started improving the admin interface. Lightened up the colors, and changed the layout a little bit. 

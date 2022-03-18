@@ -15,4 +15,4 @@ project_php_required_version                            = 5.6.2
 project_php_tested_up_to_version                        = ${php.version}
 
 project_wp_required_version                             = 4.2
-project_wp_tested_up_to_version                         = 5.7-RC3-50511
+project_wp_tested_up_to_version                         = 6.0-alpha-52937
