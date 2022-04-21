@@ -20,6 +20,7 @@ Privacy URI: http://s2member.com/privacy-policy/
 Changelog URI: http://s2member.com/changelog/
 Video Tutorials: http://s2member.com/r/s2member-videos/
 Knowledge Base: http://s2member.com/kb/
+More Updates: https://s2member.com/category/news-updates/
 Newsletter: http://s2member.com/r/subscribe/
 PayPal Pro Integration: http://s2member.com/r/pp-account-types/
 Text Domain: s2member
