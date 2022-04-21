@@ -1,3 +1,9 @@
+= v220421 =
+
+- (Framework & Pro) **Enhancement**: Improved PHP compatibility to 8.1.
+
+- (Framework) **UI Fix**: `More Updates` link fixed.
+
 = v220318 =
 
 - (Framework) **Enhancement**: New `current_user_gateway_is` function for conditionals. Useful for sites using more than one gateway. E.g. `[s2If current_user_gateway_is(stripe)] ...`
