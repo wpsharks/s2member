@@ -2774,7 +2774,7 @@ if(!function_exists('s2member_eot'))
 /**
 * Conditional to determine if the current User has a specific gateway set in his profile.
 *
-* ———— Code Sample Using Both Functions ————
+* ———— PHP Code Sample ————
 * ```
 * <!php
 * if(current_user_gateway_is("stripe"))
@@ -2799,4 +2799,42 @@ if (!function_exists("current_user_gateway_is")) {
     function current_user_gateway_is($gateway) {
         return ($gateway === S2MEMBER_CURRENT_USER_SUBSCR_GATEWAY);
     }
+}
+
+/**
+* Conditional to determine if the current User's EOT is closer than a number of days.
+*
+* ———— PHP Code Sample ————
+* ```
+* <!php
+* if(current_user_days_to_eot_less_than(31))
+* 	echo "Renew your membership";
+* !>
+* ```
+*
+* ———— Shortcode Conditional Equivalent ————
+* ```
+* [s2If current_user_days_to_eot_less_than(31)]
+* 	Renew your membership.
+* [/s2If]
+* ```
+*
+* @package s2Member\API_Functions
+* @since 220707
+*
+* @param int $less_than Days from today, to check if the user's EOT time falls within that number of coming days.
+* @return bool True if the current User's EOT is closer than $less_than, else false.
+*/
+if (!function_exists('current_user_days_to_eot_less_than')) {
+	function current_user_days_to_eot_less_than($less_than) {
+		$eot_time = get_user_field('s2member_auto_eot_time');
+		if (empty($eot_time)) {
+			return false;
+		}
+		$now       = time();
+		$time_diff = ((int) $eot_time - $now);
+		$days_left = round($time_diff / (60 * 60 * 24));
+		$less_than = (int) $less_than;
+		return ($days_left < $less_than);
+	}
 }
