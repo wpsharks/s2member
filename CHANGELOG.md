@@ -1,3 +1,7 @@
+= v220809 =
+
+- (Framework) **Enhancement**: New `current_user_days_to_eot_less_than` function for conditionals. Useful when you want to show a message to a user on his last days of access before the EOT time in his profile. E.g. `[s2If current_user_days_to_eot_less_than(31)]Please renew your membership[/s2If]`. Kudos to Felix for his help, see [post 6783](https://f.wpsharks.com/t/6783).
+
 = v220421 =
 
 - (Framework & Pro) **Enhancement**: Improved PHP compatibility to 8.1.

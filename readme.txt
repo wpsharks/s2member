@@ -3,9 +3,9 @@
 Plugin Name: s2Member® Framework
 Plugin URI: http://s2member.com/
 Tags: membership, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, ecommerce, restriction
-Version: 220421
-Stable tag: 220421
-Tested up to: 6.0-beta2-53236
+Version: 220809
+Stable tag: 220809
+Tested up to: 6.1-alpha-53862
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.1
@@ -139,6 +139,10 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v220809 =
+
+- (Framework) **Enhancement**: New `current_user_days_to_eot_less_than` function for conditionals. Useful when you want to show a message to a user on his last days of access before the EOT time in his profile. E.g. `[s2If current_user_days_to_eot_less_than(31)]Please renew your membership[/s2If]`. Kudos to Felix for his help, see [post 6783](https://f.wpsharks.com/t/6783).
 
 = v220421 =
 
