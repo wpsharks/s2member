@@ -1092,7 +1092,6 @@ table.ws-menu-page-table div.ws-menu-page-r-group-header.open {
 	background: #f0f0f0;
 	border-radius: 0;
 	margin: 5px 0 0 0;
-	max-width: 676px;
 }
 
 table.ws-menu-page-table div.ws-menu-page-group.open {
@@ -1105,7 +1104,6 @@ table.ws-menu-page-table div.ws-menu-page-group.open {
 	margin: 0;
 	padding: 25px;
 	width: 100%;
-	max-width: 700px;
 	border-left: 5px solid #72aee6;
 }
 
@@ -1118,7 +1116,7 @@ table.ws-menu-page-table div.ws-menu-page-group.open {
 
 table.ws-menu-page-table div.ws-menu-page-group-header.open,
 table.ws-menu-page-table div.ws-menu-page-group.open {
-	background: white;
+	background: white !important;
 }
 
 .ws-menu-page-table {
