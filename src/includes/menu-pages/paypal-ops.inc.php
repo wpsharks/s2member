@@ -79,7 +79,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_merchant_id" id="ws-plugin--s2member-paypal-merchant-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile → Secure Merchant ID</strong>'."\n";
+				echo 'At PayPal, see: <strong><a href="https://www.paypal.com/businessmanage/account/aboutBusiness" target="_blank" rel="external">Account Settings → Business Information → PayPal Merchant ID</a></strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -96,7 +96,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_business" id="ws-plugin--s2member-paypal-business" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile → Email Accounts</strong>'."\n";
+				echo 'At PayPal, see: <strong><a href="https://www.paypal.com/businessmanage/account/accountOwner" target="_blank" rel="external">Account Settings → Account Owner Information → Email Address</a></strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -120,7 +120,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_api_username" id="ws-plugin--s2member-paypal-api-username" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_username"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials)</strong>'."\n";
+				echo 'At PayPal, see: <strong><a href="https://www.paypal.com/businessprofile/mytools/apiaccess/firstparty/signature" target="_blank" rel="external">Account Settings → Website Payments → API Access → NVP/SOAP API integration (Classic) → Manage API Credentials</a></strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -137,7 +137,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_api_password" id="ws-plugin--s2member-paypal-api-password" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_password"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile → API Access (or → Request API Credentials)</strong>'."\n";
+				echo 'At PayPal, see: <strong><a href="https://www.paypal.com/businessprofile/mytools/apiaccess/firstparty/signature" target="_blank" rel="external">Account Settings → Website Payments → API Access → NVP/SOAP API integration (Classic) → Manage API Credentials</a></strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -154,7 +154,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_api_signature" id="ws-plugin--s2member-paypal-api-signature" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_api_signature"]).'" /><br />'."\n";
-				echo 'At PayPal, see: <strong>Profile → API Access (or  → "Request API Credentials")</strong>'."\n";
+				echo 'At PayPal, see: <strong><a href="https://www.paypal.com/businessprofile/mytools/apiaccess/firstparty/signature" target="_blank" rel="external">Account Settings → Website Payments → API Access → NVP/SOAP API integration (Classic) → Manage API Credentials</a></strong>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -198,7 +198,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="radio" name="ws_plugin__s2member_paypal_btn_encryption" id="ws-plugin--s2member-paypal-btn-encryption-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-btn-encryption-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_btn_encryption" id="ws-plugin--s2member-paypal-btn-encryption-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-btn-encryption-1">Yes, enable PayPal Button encryption.</label><br />'."\n";
-				echo '<em>If enabled, all of your PayPal Button Shortcodes will produce <em>encrypted</em> PayPal Buttons. This improves security against fraudulent transactions. For extra security, you should update your PayPal account too, under: <strong>My Profile → Website Payment Preferences</strong>. You\'ll want to block all non-encrypted payments. <strong>Note:</strong> this will NOT work until you\'ve supplied s2Member with your PayPal Email Address, and also with your API Username/Password/Signature.</em>'."\n";
+				echo '<em>If enabled, all of your PayPal Button Shortcodes will produce <em>encrypted</em> PayPal Buttons. This improves security against fraudulent transactions. For extra security, you should update your PayPal account too, under: <strong><a href="https://www.paypal.com/businessmanage/preferences/website" target="_blank" rel="external">Account Settings → Website Payments → Website Preferences → Encrypted Website Payments</a></strong>. You\'ll want to block all non-encrypted payments. <strong>Note:</strong> this will NOT work until you\'ve supplied s2Member with your PayPal Email Address, and also with your API Username/Password/Signature.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -252,7 +252,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			{
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_paypal_payflow_account_details", get_defined_vars());
 
-				echo '<div class="ws-menu-page-group" title="Payflow Account Details">'."\n";
+				echo '<div class="ws-menu-page-group" title="PayPal Pro Payflow Edition API Credentials">'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-payflow-account-details-section">'."\n";
 				echo '<a href="https://s2member.com/r/paypal/" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/src/images/paypal-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
@@ -351,7 +351,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-ipn-section">'."\n";
 				echo '<h3>PayPal IPN / Instant Payment Notifications (required, please enable)</h3>'."\n";
-				echo '<p>Log into your PayPal account and navigate to this section:<br /><strong>Account Profile → <a href="http://s2member.com/r/paypal-com-ipn-configuration-page/" target="_blank" rel="external">Instant Payment Notification Preferences</a></strong></p>'."\n";
+				echo '<p>Log into your PayPal account and navigate to this section:<br /><strong><a href="http://s2member.com/r/paypal-com-ipn-configuration-page/" target="_blank" rel="external">Account Settings → Website Payments → Instant Payment Notifications</a></strong></p>'."\n";
 				echo '<p>Edit your IPN settings &amp; turn IPN Notifications: <strong><code>On</code></strong></p>'."\n";
 				echo '<p>You\'ll need your IPN URL, which is:<br /><code>'.esc_html(home_url("/?s2member_paypal_notify=1", "https")).'</code></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn", get_defined_vars());
@@ -392,7 +392,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-pdt-section">'."\n";
 				echo '<h3>PayPal PDT Identity Token (required, please enable)</h3>'."\n";
-				echo '<p>Log into your PayPal account and navigate to this section:<br /><strong>Account Profile → Website Payment Preferences</strong></p>'."\n";
+				echo '<p>Log into your PayPal account and navigate to this section:<br /><strong><a href="https://www.paypal.com/businessmanage/preferences/website" target="_blank" rel="external">Account Settings → Website Payments → Website Preferences</a></strong></p>'."\n";
 				echo '<p>Turn the Auto-Return feature: <strong><code>On</code></strong></p>'."\n";
 				echo '<p>You\'ll need your <a href="'.esc_attr(home_url("/?s2member_paypal_return=1&s2member_paypal_proxy=paypal&s2member_paypal_proxy_use=x-preview")).'" target="_blank" rel="external">Auto-Return URL</a>, which is:<br /><code>'.esc_html(home_url("/?s2member_paypal_return=1")).'</code></p>'."\n";
 				echo '<p>You must also enable PDT (Payment Data Transfer): <strong><code>On</code></strong><br /><em>You\'ll be issued an Identity Token that you can enter below.</em></p>'."\n";
@@ -413,7 +413,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_identity_token" id="ws-plugin--s2member-paypal-identity-token" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_identity_token"]).'" /><br />'."\n";
-				echo 'Your PDT Identity Token will appear under <strong>Profile → Website Payment Preferences</strong> in your PayPal account.'."\n";
+				echo 'Your PDT Identity Token will appear under <strong>Account Settings → Website Payments → Website Preferences</strong> in your PayPal account.'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
