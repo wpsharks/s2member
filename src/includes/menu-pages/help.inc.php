@@ -89,23 +89,6 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_help"))
 
 						do_action("ws_plugin__s2member_during_help_page_during_left_sections_after_help", get_defined_vars ());
 
-						do_action("ws_plugin__s2member_during_help_page_during_left_sections_before_support", get_defined_vars ());
-
-						echo '<div class="ws-menu-page-group" title="Pre-sale Questions" default-state="open">' . "\n";
-
-						echo '<div class="ws-menu-page-section ws-plugin--s2member-support">' . "\n";
-
-						echo '<p>For pre-sale questions, please see: <a href="http://s2member.com/kb/kb-tag/pre-sale-faqs/" target="_blank" rel="external">Pre-Sale FAQs</a>.</p>'."\n";
-						echo '<p>If you have other questions, please <a href="http://s2member.com/r/new-pre-sale-inquiry/" target="_blank" rel="external">contact our sales dept</a>.</p>'."\n";
-
-						do_action("ws_plugin__s2member_during_start_page_during_left_sections_during_support", get_defined_vars ());
-
-						echo '</div>' . "\n";
-
-						echo '</div>' . "\n";
-
-						do_action("ws_plugin__s2member_during_help_page_during_left_sections_after_support", get_defined_vars ());
-
 						if (apply_filters("ws_plugin__s2member_during_help_page_during_left_sections_display_pro", !c_ws_plugin__s2member_utils_conds::pro_is_installed(), get_defined_vars ()))
 							{
 								do_action("ws_plugin__s2member_during_help_page_during_left_sections_before_pro", get_defined_vars ());
@@ -113,8 +96,10 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_help"))
 								echo '<div class="ws-menu-page-group" title="Upgrading to s2Member Pro<em>!</em>" default-state="open">' . "\n";
 
 								echo '<div class="ws-menu-page-section ws-plugin--s2member-pro">' . "\n";
-								echo '<p>Among many other features/enhancements, <a href="http://s2member.com/" target="_blank" rel="external">s2Member Pro</a> comes pre-integrated with additional payment gateways that work with s2Member Pro-Forms (a powerful s2Member Pro feature). For instance, Stripe (most popular), PayPal Payments Pro, and Authorize.Net. Each of these payment gateways allow you to accept most major credit cards on-site; i.e., customers never leave your site! s2Member Pro-Forms also support PayPal Express Checkout (if you integrate with PayPal Pro); for customers who actually prefer to pay with PayPal.</p>' . "\n";
+								echo '<p>Among many other features/enhancements, <a href="http://s2member.com/" target="_blank" rel="external">s2Member Pro</a> comes pre-integrated with additional payment gateways that work with s2Member Pro-Forms (a powerful s2Member Pro feature). For instance, Stripe (most popular), PayPal Payments Pro, and Authorize.Net. Each of these payment gateways allow you to accept most major credit cards on-site, so customers never leave your site! s2Member Pro-Forms also support PayPal Express Checkout, for customers who actually prefer to pay with PayPal.</p>' . "\n";
 								echo '<p><strong>Learn more here:</strong> <a href="http://s2member.com/features/" target="_blank" rel="external">s2Member Pro Features</a></p>'."\n";
+								echo '<p>For pre-sale questions, please see: <a href="http://s2member.com/kb/kb-tag/pre-sale-faqs/" target="_blank" rel="external">Pre-Sale FAQs</a>.</p>'."\n";
+								echo '<p>If you have other questions, please <a href="http://s2member.com/r/new-pre-sale-inquiry/" target="_blank" rel="external">contact our sales dept</a>.</p>'."\n";
 								do_action("ws_plugin__s2member_during_help_page_during_left_sections_during_pro", get_defined_vars ());
 								echo '</div>' . "\n";
 
