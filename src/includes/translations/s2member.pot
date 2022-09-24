@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  220809\n"
+"Project-Id-Version:  220924\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2022-08-09 00:11:54+00:00\n"
+"POT-Creation-Date: 2022-09-24 02:40:52+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -140,24 +140,24 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:290
 #: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:643
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:343
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:677
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:346
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:680
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:411
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:760
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:478
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:926
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:481
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:929
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been updated."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:498
 #: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:764
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:507
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:834
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:510
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:837
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:592
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:915
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:750
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1084
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:753
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1087
 #: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:565
 #: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:839
 msgctxt "s2member-front"
@@ -170,18 +170,18 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:799
 #: pro/src/includes/classes/gateways/authnet/authnet-registration-in.inc.php:129
 #: pro/src/includes/classes/gateways/authnet/authnet-registration-in.inc.php:151
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:516
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:542
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:843
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:869
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:519
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:545
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:846
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:872
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:601
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:627
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:924
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:950
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:759
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:785
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1093
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1119
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:762
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:788
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1096
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1122
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:129
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:151
 #: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:577
@@ -193,12 +193,12 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:529
 #: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:790
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:533
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:860
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:536
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:863
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:618
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:941
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:776
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1110
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:779
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1113
 #: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:566
 #: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:840
 msgctxt "s2member-front"
@@ -206,9 +206,9 @@ msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; 
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:810
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:880
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:883
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:961
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1130
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1133
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:136
 #: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:855
 msgctxt "s2member-front"
@@ -1354,10 +1354,10 @@ msgctxt "s2member-front"
 msgid "Please <a href=\"%s\" rel=\"nofollow\">log in at PayPal</a> to cancel your Subscription."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:355
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:689
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:495
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:938
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:358
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:692
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:498
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:941
 msgctxt "s2member-front"
 msgid "<strong>Sorry.</strong> Your account is pending other changes. Please try again in 15 minutes."
 msgstr ""

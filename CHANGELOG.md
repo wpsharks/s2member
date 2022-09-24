@@ -1,3 +1,19 @@
+= v220924 =
+
+- (Pro) **UI Enhancement**: In ClickBank Options admin page, added note about keeping IPN encryption disabled.
+
+- (Pro) **Enhancement**: Removed ClickBank's name from the notify, return, and success URLs, replaced with just `cb`. Kudos to Eduardo for telling me about this. See [thread 9910](https://f.wpsharks.com/t/9910)
+
+- (Pro) **Enhancement**: Added a PayPal payment request ID to help prevent random/rare PayPal duplicate charges. Kudos to Nathan for his help. See [thread 7999](https://f.wpsharks.com/t/7999/27)
+
+- (Framework) **UI Enhancement**: Admin page panels widened for larger displays.
+
+- (Framework) **UI Enhancement**: Simplified Getting Started and Getting Help admin pages.
+
+- (Framework) **UI Enhancement**: In PayPal Options admin page, updated paths and links to PayPal settings.
+
+- (Framework) **Bug Fix**: Removed the Security Badge's link to the old Flash powered page on s2Member's site.
+
 = v220809 =
 
 - (Framework) **Enhancement**: New `current_user_days_to_eot_less_than` function for conditionals. Useful when you want to show a message to a user on his last days of access before the EOT time in his profile. E.g. `[s2If current_user_days_to_eot_less_than(31)]Please renew your membership[/s2If]`. Kudos to Felix for his help, see [post 6783](https://f.wpsharks.com/t/6783).

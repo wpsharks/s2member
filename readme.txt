@@ -1,11 +1,11 @@
-=== s2Member® Framework (Membership, Member Level Roles, Access Capabilities, PayPal Members) ===
+=== s2Member ===
 
 Plugin Name: s2Member® Framework
-Plugin URI: http://s2member.com/
-Tags: membership, subscribers, subscriber, members only, roles, capabilities, capability, register, signup, paypal, ecommerce, restriction
-Version: 220809
-Stable tag: 220809
-Tested up to: 6.1-alpha-53862
+Plugin URI: https://s2member.com/
+Tags: membership, members, protect content, members only, paypal, subscribers, registration, signup, ecommerce, restrict content, security
+Version: 220924
+Stable tag: 220924
+Tested up to: 6.1-beta1-54288
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.1
@@ -26,61 +26,60 @@ PayPal Pro Integration: http://s2member.com/r/pp-account-types/
 Text Domain: s2member
 Domain Path: /src/includes/translations
 
-s2Member® is a powerful free membership plugin for WordPress. Protect members only content with Member Level Roles and Access Capabilities.
+Awesome membership plugin. Monetize your site. Easy and quick to use. You can protect your content in a moment, and a moment later be ready to get payments for access. Feature packed.
 
 == Description ==
 
-The free s2Member® Framework lets you protect WordPress content and offer users a secure checkout solution to get access.
+Awesome membership plugin. Monetize your site. Easy and quick to use. You can protect your content in a moment, and a moment later be ready to get payments for access. Easy to configure and very versatile. Protect the whole site, nothing, or just parts, even files for download. Sell access with single payments or as subscriptions.
 
-Easy to configure and highly extensible.
+https://youtu.be/qlKn-I-0W6U
 
-You can protect the whole site, certain areas, or even just parts of pages.
+Packed with features, but not required to use all, just those you want. Some of them:
 
-Sell recurring (or non-recurring) subscriptions with lots of flexibility. Or sell "Buy Now" access in various ways.
+- User levels and custom access capabilities
+- Content protection (post, page, category, tag, etc)
+- Protect anything served by WP (post types, URLs)
+- File protection (sell downloads)
+- Prevent account sharing (limit IPs, simultaneous logins)
+- Protect accounts (limit failed login attempts)
+- Cool security/trust badge with your domain
+- PayPal Standard buttons for payments (more in Pro)
+- Automatic user demotion at end of paid access time
+- Tracking software integration (affiliates, etc)
+- Email services (Mailchimp, etc)
+- Notifications (signups, payments, etc)
+- Integrate with bbPress, BuddyPress
+- Compatible with any well coded theme (Elementor, etc)
+- Customize the WP login/registration look
+- Create custom profile fields
+- Customize the user welcome email
 
-Protect your WordPress posts, pages, tags, categories, URIs, BuddyPress/bbPress, and even portions of them.
+Not needed to know PHP code or be a developer. Just copy-paste wp shortcodes (paypal buttons), and tweak it (price, description, etc).
 
-Provide highly configurable access to specific portions of your content with Levels or Access Capabilities.
+Over 11 years of experience, development, releases... Still going and growing!
 
-You can also protect downloadable files and streaming audio/video. Store files locally, or use s2Member's integration with Amazon S3 and CloudFront CDN.
+= Some reasons to get s2Member Pro =
 
-Sell specific Posts/Pages, File Downloads, or Access Capabilities.
-
-Sell access to your site's content with single "buy now" payments or recurring payments subscription Memberships.
-
-Integrates with PayPal's Website Payments Standard (also free).
-
-Like a cash machine, s2Member puts money back in your pocket. Monetize your website now with s2Member.
-
-Add now s2Member Framework to your site and start making money with it!
-
-= Some reasons to upgrade to "s2Member Pro" =
-
-- Unlimited Membership Levels.
-- Renewal reminder emails.
-- Content dripping.
-- Single-step registration and payment with s2Member Pro-forms.
-- Stripe, PayPal Pro and Authorize.Net integration via Pro-forms.
-- Pro-form Coupon Codes and Gift/Redemption Codes.
-- ClickBank buttons integration.
-- Pro API for new integrations.
-- Public Members Directory.
-- User bulk Import/Update/Exporter tools.
-- Multisite Network support.
-- Login and registration forms to include in your pages or posts.
-- ... and more!
-
-With thousands of customers, an intelligent open community, comprehensive documentation, video tutorials, APIs, the s2Member Codex, KB articles, and thousands of forum posts; s2Member just can't be beat!
-
-[-> Click Here for more details](http://s2member.com/)
+- Content dripping
+- Stripe, PayPal Pro, Authorize.Net, ClickBank
+- Unlimited membership Levels
+- Renewal reminder emails
+- Single-step registration and payment with pro-forms
+- Custom redirection after payment
+- Coupon codes and gift/redemption codes
+- Custom offers after login
+- Pro API for new integrations
+- Public members directory
+- User bulk import/update/exporter
+- Multisite network support
+- Login and registration forms to use in pages/posts
+- [Click here for more](https://s2member.com/features/) :)
 
 == Installation ==
 
-**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our forum at s2Member.com](http://s2member.com/r/forum/).
+**NOTICE:** For help with s2Member Pro, please use [our forum](http://s2member.com/r/forum/).
 
----
-
-= s2Member is Very Easy to Install =
+= s2Member is very easy to install =
 
 Just like any other normal plugin:
 
@@ -90,13 +89,13 @@ Just like any other normal plugin:
 
 Here's a [quick-start video](https://www.youtube.com/watch?v=qlKn-I-0W6U) for a simple basic setup to get you started.
 
-= See Also (s2Member.com) =
+= See also =
 
 [Detailed installation/upgrade instructions](http://s2member.com/installation/).
 
 = Is s2Member compatible with Multisite Networking? =
 
-Yes, s2Member Pro for Unlimited Sites is compatible with Multisite Networking. After you enable Multisite Networking, with s2Member Framework and Pro enabled, navigate to `s2Member → Multisite (Config)` in the Dashboard on your Main Site.
+Yes, requires s2Member Pro for Unlimited Sites. After you enable Multisite Networking, with s2Member Framework and Pro active, navigate to `s2Member → Multisite (Config)` in the Dashboard on your Main Site.
 
 == Screenshots ==
 
@@ -110,11 +109,13 @@ Yes, s2Member Pro for Unlimited Sites is compatible with Multisite Networking. A
 
 == Frequently Asked Questions ==
 
-**NOTICE:** If you are an s2Member Pro customer in need of support, please use [our forum at s2Member.com](http://s2member.com/r/forum/).
+**NOTICE:** For help with s2Member Pro, please use [our forum](http://s2member.com/r/forum/).
 
----
+= Is s2Member compatible with Multisite Networking? =
 
-= Please Check the Following s2Member Resources =
+Yes, s2Member Pro for Unlimited Sites is compatible with Multisite Networking. After you enable Multisite Networking, with s2Member Framework and Pro enabled, navigate to `s2Member → Multisite (Config)` in the Dashboard on your Main Site.
+
+= Where can I find more information? =
 
 * s2Member FAQs: <http://s2member.com/faqs/>
 * Knowledge Base: <http://s2member.com/kb/>
@@ -128,7 +129,7 @@ Please see: <http://s2member.com/r/translations/>
 
 == License ==
 
-Copyright: © 2013 [WP Sharks](https://www.wpsharks.com/) (coded in the USA)
+Copyright ©2013 [WP Sharks](https://www.wpsharks.com/)
 
 Released under the terms of the [GNU General Public License](http://www.gnu.org/licenses/gpl-2.0.html).
 
@@ -139,6 +140,22 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v220924 =
+
+- (Pro) **UI Enhancement**: In ClickBank Options admin page, added note about keeping IPN encryption disabled.
+
+- (Pro) **Enhancement**: Removed ClickBank's name from the notify, return, and success URLs, replaced with just `cb`. Kudos to Eduardo for telling me about this. See [thread 9910](https://f.wpsharks.com/t/9910)
+
+- (Pro) **Enhancement**: Added a PayPal payment request ID to help prevent random/rare PayPal duplicate charges. Kudos to Nathan for his help. See [thread 7999](https://f.wpsharks.com/t/7999/27)
+
+- (Framework) **UI Enhancement**: Admin page panels widened for larger displays.
+
+- (Framework) **UI Enhancement**: Simplified Getting Started and Getting Help admin pages.
+
+- (Framework) **UI Enhancement**: In PayPal Options admin page, updated paths and links to PayPal settings.
+
+- (Framework) **Bug Fix**: Removed the Security Badge's link to the old Flash powered page on s2Member's site.
 
 = v220809 =
 
