@@ -1423,6 +1423,13 @@ div.ws-menu-page .ws-menu-page-warning-hilite code {
 	background: #f86368 !important;
 }
 
+#ws-plugin--s2member-pro-upgrade-username,
+#ws-plugin--s2member-pro-upgrade-password,
+#ws-plugin--s2member-pro-upgrade-submit {
+	padding: 0 10px !important;
+	margin: 5px 0 !important;
+}
+
 div.ws-menu-page input[type="text"],
 div.ws-menu-page input[type="password"] {
 	border-left: 5px solid lightgray !important;

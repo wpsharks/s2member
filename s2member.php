@@ -110,7 +110,7 @@ if(!defined('WS_PLUGIN__S2MEMBER_MIN_WP_VERSION'))
  *
  * @var string
  */
-${__FILE__}['tmp'] = '220924'; //version//
+${__FILE__}['tmp'] = '210526'; //!!!version//
 if(!defined('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_MIN_PRO_VERSION', ${__FILE__}['tmp']);
 /*
