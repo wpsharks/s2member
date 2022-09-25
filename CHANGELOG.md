@@ -1,4 +1,4 @@
-= v220924 =
+= v220925 =
 
 - (Pro) **UI Enhancement**: In ClickBank Options admin page, added note about keeping IPN encryption disabled.
 
@@ -13,6 +13,8 @@
 - (Framework) **UI Enhancement**: In PayPal Options admin page, updated paths and links to PayPal settings.
 
 - (Framework) **Bug Fix**: Removed the Security Badge's link to the old Flash powered page on s2Member's site.
+
+- (Pro) **UI Enhancement**: Small improvements to the Pro upgrader.
 
 = v220809 =
 

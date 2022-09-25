@@ -3,8 +3,8 @@
 Plugin Name: s2Member® Framework
 Plugin URI: https://s2member.com/
 Tags: membership, members, protect content, members only, paypal, subscribers, registration, signup, ecommerce, restrict content, security
-Version: 220924
-Stable tag: 220924
+Version: 220925
+Stable tag: 220925
 Tested up to: 6.1-beta1-54288
 Requires at least: 4.2
 Requires PHP: 5.6.2
@@ -141,7 +141,7 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 
 == Changelog ==
 
-= v220924 =
+= v220925 =
 
 - (Pro) **UI Enhancement**: In ClickBank Options admin page, added note about keeping IPN encryption disabled.
 
@@ -156,6 +156,8 @@ Released under the terms of the [GNU General Public License](http://www.gnu.org/
 - (Framework) **UI Enhancement**: In PayPal Options admin page, updated paths and links to PayPal settings.
 
 - (Framework) **Bug Fix**: Removed the Security Badge's link to the old Flash powered page on s2Member's site.
+
+- (Pro) **UI Enhancement**: Small improvements to the Pro upgrader.
 
 = v220809 =
 
