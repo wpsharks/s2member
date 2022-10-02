@@ -62,6 +62,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				c_ws_plugin__s2member_email_configs::email_config_release(); // Release s2Member Filters.
 
 				$paypal = array(); // Initialize PayPal array; we also reference this with a variable for a possible proxy handler.
+				foreach (array('level', 'ccaps', 'option_name2', 'option_selection2', 'invoice', 'payment_status') as $key)
+					$paypal[$key] = '';
+
 				if(!empty($_REQUEST['s2member_paypal_proxy']) && in_array($_REQUEST['s2member_paypal_proxy'], array('alipay', 'stripe', 'authnet', 'clickbank', 'ccbill', 'google'), TRUE))
 					${esc_html(trim(stripslashes($_REQUEST['s2member_paypal_proxy'])))} = & $paypal; // Internal alias by reference.
 
