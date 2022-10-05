@@ -62,14 +62,16 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				c_ws_plugin__s2member_email_configs::email_config_release(); // Release s2Member Filters.
 
 				$paypal = array(); // Initialize PayPal array; we also reference this with a variable for a possible proxy handler.
-				foreach (array('level', 'ccaps', 'option_name2', 'option_selection2', 'invoice', 'payment_status') as $key)
-					$paypal[$key] = '';
 
 				if(!empty($_REQUEST['s2member_paypal_proxy']) && in_array($_REQUEST['s2member_paypal_proxy'], array('alipay', 'stripe', 'authnet', 'clickbank', 'ccbill', 'google'), TRUE))
 					${esc_html(trim(stripslashes($_REQUEST['s2member_paypal_proxy'])))} = & $paypal; // Internal alias by reference.
 
 				if(is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars()) && ($_paypal = $paypal) && ($_paypal_s = serialize($_paypal)))
 				{
+					// Initialize a few keys to prevent PHP8 warnings.
+					foreach (array('level', 'ccaps', 'option_name1', 'option_selection1', 'option_name2', 'option_selection2', 'invoice', 'payment_status', 'mc_currency', 's2member_paypal_proxy') as $key)
+						$paypal[$key] = isset($paypal[$key]) ? $paypal[$key] : '';
+
 					$paypal['s2member_log'][] = 'IPN received on: '.date('D M j, Y g:i:s a T');
 					$paypal['s2member_log'][] = 's2Member POST vars verified '.((!empty($paypal['proxy_verified'])) ? 'with a Proxy Key' : 'through a POST back to PayPal.');
 
