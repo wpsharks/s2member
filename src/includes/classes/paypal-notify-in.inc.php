@@ -68,7 +68,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 
 				if(is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars()) && ($_paypal = $paypal) && ($_paypal_s = serialize($_paypal)))
 				{
-					// Initialize a few keys to prevent PHP8 warnings.
+					// Initialize a few array keys to prevent PHP warnings.
+					if (!isset($_REQUEST['s2member_paypal_proxy']))
+						$_REQUEST['s2member_paypal_proxy'] = '';
 					foreach (array('level', 'ccaps', 'option_name1', 'option_selection1', 'option_name2', 'option_selection2', 'invoice', 'payment_status', 'mc_currency', 's2member_paypal_proxy') as $key)
 						$paypal[$key] = isset($paypal[$key]) ? $paypal[$key] : '';
 					// Prevent list() warning when missing a value, e.g. no ccaps
