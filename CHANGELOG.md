@@ -1,3 +1,13 @@
+= v221028 =
+
+- (Framework) **Fix**: Initialized some array keys to prevent PHP warnings in PayPal notify and return files. Thanks Greg Mulhauser for your help.
+
+- (Framework) **UI**: Widened the Logs viewer. Thanks Sim. See [thread 10064](https://f.wpsharks.com/t/10064)
+
+- (Framework) **UI**: Framework auto-update is now allowed when Pro add-on installed.
+
+- (Pro) **UI**: The Pro updater now shows when a newer version available, not just when required.
+
 = v220925 =
 
 - (Pro) **UI Enhancement**: In ClickBank Options admin page, added note about keeping IPN encryption disabled.

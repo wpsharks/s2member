@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, member, members only, memberships, paywall, content restriction, paid access, sell downloads, paypal, paid subscriptions, paid registration, custom login
-Version: 220925
-Stable tag: 220925
-Tested up to: 6.1-beta2-54351
+Version: 221028
+Stable tag: 221028
+Tested up to: 6.1-RC4-54709
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.1
@@ -175,6 +175,16 @@ Yes, s2Member Pro for Unlimited Sites is compatible with Multisite Networking. A
 Please see: <http://s2member.com/r/translations/>
 
 == Changelog ==
+
+= v221028 =
+
+- (Framework) **Fix**: Initialized some array keys to prevent PHP warnings in PayPal notify and return files. Thanks Greg Mulhauser for your help.
+
+- (Framework) **UI**: Widened the Logs viewer. Thanks Sim. See [thread 10064](https://f.wpsharks.com/t/10064)
+
+- (Framework) **UI**: Framework auto-update is now allowed when Pro add-on installed.
+
+- (Pro) **UI**: The Pro updater now shows when a newer version available, not just when required.
 
 = v220925 =
 
