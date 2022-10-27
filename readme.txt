@@ -1,4 +1,4 @@
-=== s2Member – Membership Plugin for All Kinds of Memberships, Content Restriction Paywalls & Member Access Subscriptions ===
+=== s2Member – Best Membership Plugin for All Kinds of Memberships, Content Restriction Paywalls & Member Access Subscriptions ===
 
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
@@ -26,55 +26,101 @@ PayPal Pro Integration: https://s2member.com/r/pp-account-types/
 Text Domain: s2member
 Domain Path: /src/includes/translations
 
-❤️ Great membership plugin! Easy and quick to use. Monetize your site selling unlimited memberships, single payment or recurring paid subscriptions. Protect your content in a moment, and a moment later be ready to get payments for access. Simple and flexible. Protect the whole site, or just parts, even files for download. 
+❤️ The best membership plugin! Easy and quick to use. Monetize your site selling unlimited memberships, single payment or recurring paid subscriptions. Protect your content in a moment, and a moment later be ready to get payments for access. Simple and flexible. Protect the whole site, or just parts, even files for download. 
 
 == Description ==
 
-Great membership plugin! Over 11 years of experience, development, releases... Still going and growing!
+❤️ The **best membership plugin!** Over 11 years of experience, development, releases... Still going and growing!
 
-Sell unlimited memberships, turning free subscribers into members (subscriber to member → s. 2 member → s2Member), single payment or recurring paid subscriptions. Easy and quick to use. Protect your membership content in a moment, and a moment later be ready to get payments for member access. Easy to configure and very flexible. Protect the whole site, nothing, or just parts, even member files for paid downloads.
+**Start your membership profits!** Build your tribe, gather your followers, enroll your students, bring in your clients!
+
+💵 Enjoy the benefits of getting paid repeatedly for access to your site!
+
+> ⭐⭐⭐⭐⭐ **Brilliant** "So glad I found this. It works brilliantly for our needs... love the seamless integration with PayPal. Everything we need. Thank you so much for creating this!" _-[zarverk2000](https://wordpress.org/support/topic/brilliant-1268/)_
+
+= The best way to make money from your WordPress site! =
+
+🤩 Sell **unlimited memberships**, turn free subscribers into members (subscriber to member → s. 2 member → s2Member), with a single payment or recurring payments subscriptions.
+
+**Easy and quick to use.** Protect your membership content in a moment, and a moment later be ready to get payments for member access! 
+
+**Easy to configure and very flexible.** Protect the whole site, nothing, or just parts, even member files for paid downloads!
+
+👉 Install s2Member now and **make money!** 😀
 
 https://youtu.be/qlKn-I-0W6U
 
-Packed with features, but not required to use all, just those you want. Some of them:
+> ⭐⭐⭐⭐⭐ **So much capacity & great support** "I’m a novice and was able to quickly figure it out. When I got stuck I go to the support forum and Cristian is there with a quick answer to get me going again." _-[blueruck](https://wordpress.org/support/topic/so-much-capacity-great-support/)_
 
-- Member user levels and custom access capabilities
-- Membership content protection (post, page, category, tag, etc)
-- Protect anything served by WP (post types, URLs)
-- Member file protection (sell downloads)
-- Prevent member account sharing (limit IPs, simultaneous logins)
-- Protect accounts (limit failed login attempts)
-- Cool security/trust badge with your domain
-- PayPal Standard buttons for membership payments (more in Pro)
-- Automatic member access demotion at end of paid access time
-- Tracking software integration (affiliates, etc)
-- Email services (Mailchimp, etc)
-- Notifications (signups, payments, etc)
-- Integrate with bbPress, BuddyPress for member communities
-- Compatible with any well coded theme (Elementor, Divi, etc)
-- Customize the WP login/registration look
-- Custom redirection after member login
-- Create custom profile fields for member accounts
-- Customize the user welcome email
+> ⭐⭐⭐⭐⭐ **The very best plugin and support service** "Great plugin, neat, easy to configure, and with interesting security features.  A special mention to Cristian whose support is awesome, fast, clear even to free members like myself" _-[aflorarte](https://wordpress.org/support/topic/the-very-best-plugin-and-support-service/)_
 
-Not needed to know any PHP code or be a developer. Only code needed is copy-paste wp shortcodes, like for the paypal buttons.
+**Packed with features**, but not required to use them all, just those you want. Some of them:
+
+➡️ Member user levels and custom access capabilities
+➡️ Membership content protection (post, page, category, tag, etc)
+➡️ Protect anything served by WP (post types, URLs)
+➡️ Member file protection (sell downloads)
+➡️ Prevent member account sharing (limit IPs, simultaneous logins)
+➡️ Protect accounts (limit failed login attempts)
+➡️ Cool security/trust badge with your domain
+➡️ PayPal Standard buttons for membership payments (more in Pro)
+➡️ Automatic member access demotion at end of paid access time
+➡️ Tracking software integration (affiliates, etc)
+➡️ Email list services (Mailchimp, etc)
+➡️ Notifications (signups, payments, etc)
+➡️ Integrate with bbPress, BuddyPress for member communities
+➡️ Compatible with any well coded theme (Elementor, Divi, etc)
+➡️ Customize the WP login/registration look
+➡️ Custom redirection after member login
+➡️ Create custom profile fields for member accounts
+➡️ Customize the user welcome email
+➡️ And more!
+
+👉 Install and start using s2Member now! 🤩
+
+> ⭐⭐⭐⭐⭐ **Very Powerful Membership Plugin** "This membership plugin does a lot and has many, many configuration options to achieve whatever you want... I received extremely quick and reliable support." _-[liltrucks](https://wordpress.org/support/topic/very-powerful-membership-plugin/)_
+
+> ⭐⭐⭐⭐⭐ **Simple, Compatible, Secure, and Versatile!** "We are seriously impressed with this plugin and we highly recommend it... We have not found ANY limitations to what we are trying to accomplish... a very smooth process... straight-forward and user-friendly!... exceeded our expectations!" _-[tips4gamers](https://wordpress.org/support/topic/simple-compatible-secure-and-versatile/)_
+
+> ⭐⭐⭐⭐⭐ **Excellent plugin** "This plugin does everything it says on the box. It does it well... the functionality is absolutely spot on. The developers/maintainers are also active and helpful. Totally recommended!" _-[richardfoley](https://wordpress.org/support/topic/excellent-plugin-5188/)_
+
+> ⭐⭐⭐⭐⭐ **Best Membership Plugin I’ve Used** "I switched to s2 Member around 3 years ago after trying a few plugins. I found these other plugins inflexible and difficult to configure... Well worth investigating if you want a robust membership solution." _-[rnwhalley](https://wordpress.org/support/topic/best-membership-plugin-ive-used/)_
+
+🤖 Not needed to know any PHP code or be a developer. Only code needed is copy-paste wp shortcodes, like for the paypal buttons... But is also developer-friendly to customize your installation if wanted.
 
 = Some reasons to get s2Member Pro =
 
-- Membership content dripping
-- Stripe, PayPal Pro, Authorize.Net, ClickBank
-- Unlimited membership levels
-- Membership renewal reminder emails
-- Single-step member registration and payment with pro-forms
-- Custom redirection after payment
-- Coupon codes and gift/redemption codes
-- Custom member offer redirections after login
-- Pro API for new integrations
-- Public members directory
-- Members bulk import/update/exporter
-- Multisite network support
-- Login and registration forms to use in pages/posts
-- [Click here for more](https://s2member.com/features/) :)
+✅ Membership content dripping
+✅ Stripe, PayPal Pro, Authorize.Net, ClickBank
+✅ On-site one-step checkout with pro-forms (Stripe, PayPal, Auth.Net)
+✅ Unlimited membership levels
+✅ Membership renewal reminder emails
+✅ Single-step member registration and payment with pro-forms
+✅ Custom redirection after payment
+✅ Coupon codes and gift/redemption codes
+✅ Custom member offer redirections after login
+✅ Pro API for new integrations
+✅ Public members directory
+✅ Members bulk import/update/exporter
+✅ Multisite network support
+✅ Login and registration forms to use in pages/posts
+👉 [Click here for more](https://s2member.com/features/) 🙂
+
+> ⭐⭐⭐⭐⭐ **The Best Membership Plugin** "I have built with most Membership plugins and literally dozens using S2 Pro and I can tell you, bar none it is the best of all of them. Extremely powerful, anything you might want to do it can do... I highly recommend you try it out." _-[antwoords](https://wordpress.org/support/topic/the-best-membership-plugin-5/)_
+
+> ⭐⭐⭐⭐⭐ **Excellent plugin & top support** "We’ve used s2member pro on a few projects now & find it has met all our membership needs. Most impressive has been the support. Excellent communication, knowledgeable, friendly and super patient 🙂" _-[aaee6](https://wordpress.org/support/topic/excellent-plugin-top-support-3/)_
+
+> ⭐⭐⭐⭐⭐ **Awesome Support** "I’ve been using s2Member for 9 years... Amazing support of a high-end plugin and much appreciated. This is one of the reasons I stick with s2Member. Support has always been great!" _-[graphichome](https://wordpress.org/support/topic/awesome-support-712/)_
+
+> ⭐⭐⭐⭐⭐ **Wonderful Support** "Above and beyond. I’ve used this plugin for over ten years with various clients and whenever I need help, they’ve helped find a solution." _-[germars](https://wordpress.org/support/topic/wonderful-support-68/)_
+
+The free s2Member Framework integrates with PayPal Website Payments Standard (also free). Sell "Buy Now" or Membership access to your site. Restrict access to Roles, Capabilities, Posts, Pages, or anything else in WordPress.
+
+Protect your WordPress Posts, Pages, Tags, Categories, URIs, BuddyPress, bbPress, and even portions of content within Posts, Pages, themes, plugins. **Easily configurable and highly extensible.** You can even protect downloadable files and streaming audio/video. Store files locally, or use s2Member's integration with Amazon S3/CloudFront.
+
+s2Member is powered almost entirely by WordPress shortcodes, making advanced integrations quick and easy. Sell recurring (or non-recurring) subscriptions with lots of flexibility. Or sell "Buy Now" membership access in various ways. You can also sell specific Posts/Pages, sell member access to file downloads, or sell members Custom Capabilities that provide highly configurable access to specific portions of your content.
+
+👉 Install now s2Member and **start making money!** 😀
 
 == Installation ==
 
