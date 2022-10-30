@@ -36,11 +36,11 @@ Domain Path: /src/includes/translations
 
 💵 Enjoy the benefits of getting paid repeatedly for access to your site!
 
-> ⭐⭐⭐⭐⭐ **Brilliant** "So glad I found this. It works brilliantly for our needs... love the seamless integration with PayPal. Everything we need. Thank you so much for creating this!" _-[zarverk2000](https://wordpress.org/support/topic/brilliant-1268/)_
+⭐⭐⭐⭐⭐ _**Brilliant** "So glad I found this. It works brilliantly for our needs... love the seamless integration with PayPal. Everything we need. Thank you so much for creating this!" -[zarverk2000](https://wordpress.org/support/topic/brilliant-1268/)_
 
 = The best way to make money from your WordPress site! =
 
-🤩 Sell **unlimited memberships**, turn free subscribers into members (subscriber to member → s. 2 member → s2Member), with a single payment or recurring payments subscriptions.
+🤩 Sell **unlimited memberships**, turn free subscribers into members (_subscriber to member → s. 2 member → s2Member_), with a single payment or recurring payments subscriptions.
 
 **Easy and quick to use.** Protect your membership content in a moment, and a moment later be ready to get payments for member access! 
 
@@ -50,9 +50,9 @@ Domain Path: /src/includes/translations
 
 https://youtu.be/qlKn-I-0W6U
 
-> ⭐⭐⭐⭐⭐ **So much capacity & great support** "I’m a novice and was able to quickly figure it out. When I got stuck I go to the support forum and Cristian is there with a quick answer to get me going again." _-[blueruck](https://wordpress.org/support/topic/so-much-capacity-great-support/)_
+⭐⭐⭐⭐⭐ _**So much capacity & great support** "I’m a novice and was able to quickly figure it out. When I got stuck I go to the support forum and Cristian is there with a quick answer to get me going again." -[blueruck](https://wordpress.org/support/topic/so-much-capacity-great-support/)_
 
-> ⭐⭐⭐⭐⭐ **The very best plugin and support service** "Great plugin, neat, easy to configure, and with interesting security features.  A special mention to Cristian whose support is awesome, fast, clear even to free members like myself" _-[aflorarte](https://wordpress.org/support/topic/the-very-best-plugin-and-support-service/)_
+⭐⭐⭐⭐⭐ _**The very best plugin and support service** "Great plugin, neat, easy to configure, and with interesting security features.  A special mention to Cristian whose support is awesome, fast, clear even to free members like myself" -[aflorarte](https://wordpress.org/support/topic/the-very-best-plugin-and-support-service/)_
 
 **Packed with features**, but not required to use them all, just those you want. Some of them:
 
@@ -78,13 +78,13 @@ https://youtu.be/qlKn-I-0W6U
 
 👉 Install and start using s2Member now! 🤩
 
-> ⭐⭐⭐⭐⭐ **Very Powerful Membership Plugin** "This membership plugin does a lot and has many, many configuration options to achieve whatever you want... I received extremely quick and reliable support." _-[liltrucks](https://wordpress.org/support/topic/very-powerful-membership-plugin/)_
+⭐⭐⭐⭐⭐ _**Very Powerful Membership Plugin** "This membership plugin does a lot and has many, many configuration options to achieve whatever you want... I received extremely quick and reliable support." -[liltrucks](https://wordpress.org/support/topic/very-powerful-membership-plugin/)_
 
-> ⭐⭐⭐⭐⭐ **Simple, Compatible, Secure, and Versatile!** "We are seriously impressed with this plugin and we highly recommend it... We have not found ANY limitations to what we are trying to accomplish... a very smooth process... straight-forward and user-friendly!... exceeded our expectations!" _-[tips4gamers](https://wordpress.org/support/topic/simple-compatible-secure-and-versatile/)_
+⭐⭐⭐⭐⭐ _**Simple, Compatible, Secure, and Versatile!** "We are seriously impressed with this plugin and we highly recommend it... We have not found ANY limitations to what we are trying to accomplish... a very smooth process... straight-forward and user-friendly!... exceeded our expectations!" -[tips4gamers](https://wordpress.org/support/topic/simple-compatible-secure-and-versatile/)_
 
-> ⭐⭐⭐⭐⭐ **Excellent plugin** "This plugin does everything it says on the box. It does it well... the functionality is absolutely spot on. The developers/maintainers are also active and helpful. Totally recommended!" _-[richardfoley](https://wordpress.org/support/topic/excellent-plugin-5188/)_
+⭐⭐⭐⭐⭐ _**Excellent plugin** "This plugin does everything it says on the box. It does it well... the functionality is absolutely spot on. The developers/maintainers are also active and helpful. Totally recommended!" -[richardfoley](https://wordpress.org/support/topic/excellent-plugin-5188/)_
 
-> ⭐⭐⭐⭐⭐ **Best Membership Plugin I’ve Used** "I switched to s2 Member around 3 years ago after trying a few plugins. I found these other plugins inflexible and difficult to configure... Well worth investigating if you want a robust membership solution." _-[rnwhalley](https://wordpress.org/support/topic/best-membership-plugin-ive-used/)_
+⭐⭐⭐⭐⭐ _**Best Membership Plugin I’ve Used** "I switched to s2 Member around 3 years ago after trying a few plugins. I found these other plugins inflexible and difficult to configure... Well worth investigating if you want a robust membership solution." -[rnwhalley](https://wordpress.org/support/topic/best-membership-plugin-ive-used/)_
 
 🤖 Not needed to know any PHP code or be a developer. Only code needed is copy-paste wp shortcodes, like for the paypal buttons... But is also developer-friendly to customize your installation if wanted.
 
@@ -106,13 +106,13 @@ https://youtu.be/qlKn-I-0W6U
 ✅ Login and registration forms to use in pages/posts
 👉 [Click here for more](https://s2member.com/features/) 🙂
 
-> ⭐⭐⭐⭐⭐ **The Best Membership Plugin** "I have built with most Membership plugins and literally dozens using S2 Pro and I can tell you, bar none it is the best of all of them. Extremely powerful, anything you might want to do it can do... I highly recommend you try it out." _-[antwoords](https://wordpress.org/support/topic/the-best-membership-plugin-5/)_
+⭐⭐⭐⭐⭐ _**The Best Membership Plugin** "I have built with most Membership plugins and literally dozens using S2 Pro and I can tell you, bar none it is the best of all of them. Extremely powerful, anything you might want to do it can do... I highly recommend you try it out." -[antwoords](https://wordpress.org/support/topic/the-best-membership-plugin-5/)_
 
-> ⭐⭐⭐⭐⭐ **Excellent plugin & top support** "We’ve used s2member pro on a few projects now & find it has met all our membership needs. Most impressive has been the support. Excellent communication, knowledgeable, friendly and super patient 🙂" _-[aaee6](https://wordpress.org/support/topic/excellent-plugin-top-support-3/)_
+⭐⭐⭐⭐⭐ _**Excellent plugin & top support** "We’ve used s2member pro on a few projects now & find it has met all our membership needs. Most impressive has been the support. Excellent communication, knowledgeable, friendly and super patient 🙂" -[aaee6](https://wordpress.org/support/topic/excellent-plugin-top-support-3/)_
 
-> ⭐⭐⭐⭐⭐ **Awesome Support** "I’ve been using s2Member for 9 years... Amazing support of a high-end plugin and much appreciated. This is one of the reasons I stick with s2Member. Support has always been great!" _-[graphichome](https://wordpress.org/support/topic/awesome-support-712/)_
+⭐⭐⭐⭐⭐ _**Awesome Support** "I’ve been using s2Member for 9 years... Amazing support of a high-end plugin and much appreciated. This is one of the reasons I stick with s2Member. Support has always been great!" -[graphichome](https://wordpress.org/support/topic/awesome-support-712/)_
 
-> ⭐⭐⭐⭐⭐ **Wonderful Support** "Above and beyond. I’ve used this plugin for over ten years with various clients and whenever I need help, they’ve helped find a solution." _-[germars](https://wordpress.org/support/topic/wonderful-support-68/)_
+⭐⭐⭐⭐⭐ _**Wonderful Support** "Above and beyond. I’ve used this plugin for over ten years with various clients and whenever I need help, they’ve helped find a solution." -[germars](https://wordpress.org/support/topic/wonderful-support-68/)_
 
 The free s2Member Framework integrates with PayPal Website Payments Standard (also free). Sell "Buy Now" or Membership access to your site. Restrict access to Roles, Capabilities, Posts, Pages, or anything else in WordPress.
 
