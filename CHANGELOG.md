@@ -1,6 +1,10 @@
+= v221031 =
+
+- (Framework) **Bug Fix**: Fix PayPal IPNs being ignored because a bug in the last release. After updating to this release, you may want to [review your latest IPNs](https://www.paypal.com/merchantnotification/ipn/history) since updating to v221028, and re-send them from PayPal. See [thread 10208](https://f.wpsharks.com/t/10208)
+
 = v221028 =
 
-- (Framework) **Fix**: Initialized some array keys to prevent PHP warnings in PayPal notify and return files. Thanks Greg Mulhauser for your help.
+- (Framework) **Fix**: Initialized some array keys to prevent PHP warnings in PayPal notify and return files. Thanks Greg M. for your help.
 
 - (Framework) **UI**: Widened the Logs viewer. Thanks Sim. See [thread 10064](https://f.wpsharks.com/t/10064)
 

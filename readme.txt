@@ -3,8 +3,8 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, member, members only, memberships, paywall, content restriction, paid access, sell downloads, paypal, paid subscriptions, paid registration, custom login
-Version: 221028
-Stable tag: 221028
+Version: 221031
+Stable tag: 221031
 Tested up to: 6.1-RC4-54709
 Requires at least: 4.2
 Requires PHP: 5.6.2
@@ -174,11 +174,20 @@ Yes, s2Member Pro for Unlimited Sites is compatible with Multisite Networking. A
 
 Please see: <http://s2member.com/r/translations/>
 
+== Upgrade Notice ==
+
+= 221031 =
+Bug Fix PayPal IPNs being ignored since last release.
+
 == Changelog ==
+
+= v221031 =
+
+- (Framework) **Bug Fix**: Fix PayPal IPNs being ignored because a bug in the last release. After updating to this release, you may want to [review your latest IPNs](https://www.paypal.com/merchantnotification/ipn/history) since updating to v221028, and re-send them from PayPal. See [thread 10208](https://f.wpsharks.com/t/10208)
 
 = v221028 =
 
-- (Framework) **Fix**: Initialized some array keys to prevent PHP warnings in PayPal notify and return files. Thanks Greg Mulhauser for your help.
+- (Framework) **Fix**: Initialized some array keys to prevent PHP warnings in PayPal notify and return files. Thanks Greg M. for your help.
 
 - (Framework) **UI**: Widened the Logs viewer. Thanks Sim. See [thread 10064](https://f.wpsharks.com/t/10064)
 
