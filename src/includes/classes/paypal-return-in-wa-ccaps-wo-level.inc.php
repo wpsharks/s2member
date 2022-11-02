@@ -58,7 +58,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level'))
 				{
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `web_accept` ) w/ update vars for Capabilities w/o Level.';
 
-					list ($paypal['level'], $paypal['ccaps'], $paypal['eotper']) = preg_split('/\:/', $paypal['item_number'].':', 3);
+					list ($paypal['level'], $paypal['ccaps'], $paypal['eotper']) = preg_split('/\:/', $paypal['item_number'], 3);
 
 					$paypal['ip'] = (preg_match('/ip address/i', $paypal['option_name2']) && $paypal['option_selection2']) ? $paypal['option_selection2'] : '';
 					$paypal['ip'] = (!$paypal['ip'] && preg_match('/^[a-z0-9]+~[0-9\.]+$/i', $paypal['invoice'])) ? preg_replace('/^[a-z0-9]+~/i', '', $paypal['invoice']) : $paypal['ip'];
