@@ -20,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 221031
-Stable tag: 221031
+Version: 221103
+Stable tag: 221103
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -77,7 +77,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '221031'; //version//
+${__FILE__}['tmp'] = '221103'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**

@@ -1,3 +1,7 @@
+= v221103 =
+
+- (Framework) **Bug Fix**: Removed latest changes to gateway notification and return handlers, that were causing difficulties with member access in some scenarios. 
+
 = v221031 =
 
 - (Framework) **Bug Fix**: Fix PayPal IPNs being ignored because a bug in the last release. After updating to this release, you may want to [review your latest IPNs](https://www.paypal.com/merchantnotification/ipn/history) since updating to v221028, and re-send them from PayPal. See [thread 10208](https://f.wpsharks.com/t/10208)

@@ -3,8 +3,8 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, member, members only, memberships, paywall, content restriction, paid access, sell downloads, paypal, paid subscriptions, paid registration, custom login
-Version: 221031
-Stable tag: 221031
+Version: 221103
+Stable tag: 221103
 Tested up to: 6.1-RC4-54709
 Requires at least: 4.2
 Requires PHP: 5.6.2
@@ -176,10 +176,17 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
+= 221103 =
+**Bug Fix**: Removed latest changes to gateway notification and return handlers, that were causing difficulties with member access in some scenarios. 
+
 = 221031 =
 Bug Fix PayPal IPNs being ignored since last release.
 
 == Changelog ==
+
+= v221103 =
+
+- (Framework) **Bug Fix**: Removed latest changes to gateway notification and return handlers, that were causing difficulties with member access in some scenarios. 
 
 = v221031 =
 
