@@ -528,7 +528,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 
 						if($level > 0 /* We only process this if they are higher than Level #0. */)
 						{
-							$pr_times                 = get_user_option("s2member_paid_registration_times", $user_id);
+							$pr_times                 = (array) get_user_option("s2member_paid_registration_times", $user_id);
 							$pr_times["level"]        = (empty($pr_times["level"])) ? time() : $pr_times["level"];
 							$pr_times["level".$level] = (empty($pr_times["level".$level])) ? time() : $pr_times["level".$level];
 							update_user_option($user_id, "s2member_paid_registration_times", $pr_times); // Update now.
