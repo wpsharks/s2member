@@ -1,8 +1,8 @@
-= v230412 =
+= v230413 =
 
 - (Pro) **Bug Fix**: An error could happen on PHP8 during Pro installation in a multisite network. Fixed in this release.
 
-- (Framework) **Bug Fix**: An error could happen on PHP8 when saving an edited user profile . Fixed in this release.
+- (Framework) **Bug Fix**: An error could happen on PHP8 when saving an edited user profile. Fixed in this release.
 
 - (Framework) **UI Enhancement**: In the List Servers admin page, removed mentions of the AWeber email parser, which isn't available any more. 
 
