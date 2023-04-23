@@ -703,7 +703,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 										break;
 
 									case 'domain':
-										if(!preg_match('/^[a-zA-Z0-9]+(?:\-*[a-zA-Z0-9]+)*(?:\.[a-zA-Z0-9]+(?:\-*[a-zA-Z0-9]+)*)*(?:\.[a-zA-Z][a-zA-Z0-9]+)?$/', $input[$_field_var]))
+										if(!preg_match('~^[0-9a-z][0-9a-z-]{0,61}[0-9a-z](\.[a-z]{2,}){1,2}$~i', $input[$_field_var]))
 											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a domain name (domain name only, without http).', 's2member-front', 's2member').'</em>';
 										break;
 
