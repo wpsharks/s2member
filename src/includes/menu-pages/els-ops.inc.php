@@ -232,7 +232,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 				echo '<tr>'."\n";
 
 				echo '<td>'."\n";
-				echo '<input type="hidden" name="ws_plugin__s2member_aweber_api_type" value="api">API (recommended for a more robust integration) />'."\n";
+				echo '<input type="hidden" name="ws_plugin__s2member_aweber_api_type" value="api" />'."\n";
 				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_aweber_api_key" id="ws-plugin--s2member-aweber-api-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["aweber_api_key"]).'" /><br />'."\n";
 				echo 'Once you have an AWeber account, <a href="http://www.s2member.com/r/aweber-api-key" target="_blank" rel="external">click here to get the Authorization Code</a> needed by s2Member.'."\n";
 				echo '</td>'."\n";
