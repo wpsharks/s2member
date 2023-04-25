@@ -1,3 +1,11 @@
+= v230425 =
+
+- (Framework) **Fix**: Fixed domain name format validation for custom profile fields.
+
+- (Framework) **Fix**: Fixes to markdown parser for PHP8 compatibility.
+
+- (Framework) **Fix**: Fixed HTML near AWeber's API key field.
+
 = v230413 =
 
 - (Pro) **Bug Fix**: An error could happen on PHP8 during Pro installation in a multisite network. Fixed in this release.

@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, member, members only, memberships, paywall, content restriction, paid access, sell downloads, paypal, paid subscriptions, paid registration, custom login
-Version: 230413
-Stable tag: 230413
-Tested up to: 6.3-alpha-55647
+Version: 230425
+Stable tag: 230425
+Tested up to: 6.3-alpha-55678
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.1
@@ -176,11 +176,19 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v230413 =
+= v230425 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v230425 =
+
+- (Framework) **Fix**: Fixed domain name format validation for custom profile fields.
+
+- (Framework) **Fix**: Fixes to markdown parser for PHP8 compatibility.
+
+- (Framework) **Fix**: Fixed HTML near AWeber's API key field.
 
 = v230413 =
 
