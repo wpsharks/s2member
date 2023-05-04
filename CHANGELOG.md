@@ -1,3 +1,9 @@
+= v230504 =
+
+- (Pro) **Fix**: Stripe subscriptions weren't using customer cards updated with the Billing Update pro-form. The subscription saved the first card, instead of defaulting to the card in the customer's profile. This release fixes that. The card is not added to a new subscription anymore, only to the customer's profile, and updating his profile's card with the Billing Update pro-form, will also update the subscription so it uses it. Thanks to Jim Antonucci for his help with this.
+
+- (Pro) **Enhancement**: The Stripe Billing Update pro-form now includes a field for the cardholder's name (i.e. Name On Card). Adding the name to the card will improve successful subscription charges. Thanks to Andy Johnsen for the idea.
+
 = v230425 =
 
 - (Framework) **Fix**: Fixed domain name format validation for custom profile fields.
