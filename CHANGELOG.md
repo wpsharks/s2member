@@ -1,3 +1,7 @@
+= v230530 =
+
+- (Framework) **Enhancement**: Updated the Mailchimp integration to v3 of their API.  I made it so you shouldn't need to change anything, it should work with your existing configuration. Still worth doing a test or checking that things are normal after the update, and report any issues you notice. See: [thread 10666](https://f.wpsharks.com/t/10666)
+
 = v230504 =
 
 - (Pro) **Fix**: Stripe subscriptions weren't using customer cards updated with the Billing Update pro-form. The subscription saved the first card, instead of defaulting to the card in the customer's profile. This release fixes that. The card is not added to a new subscription anymore, only to the customer's profile, and updating his profile's card with the Billing Update pro-form, will also update the subscription so it uses it. Thanks to Jim Antonucci for his help with this.
