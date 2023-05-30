@@ -2,7 +2,7 @@
 
 /*
 Updated class to Mailchimp API v3
-Since v230529
+Since v230530
 */
 
 class Mailchimp
@@ -32,8 +32,11 @@ class MailchimpV3
     {
         $url = "https://{$this->server}.api.mailchimp.com/3.0/lists/{$list_id}/members";
 
+        $merge_fields['FNAME'] = $merge_fields['MERGE1'];
+        $merge_fields['LNAME'] = $merge_fields['MERGE2'];
+    
         $data = [
-            'email_address' => $email,
+            'email_address' => $email['email'],
             'status' => $double_optin ? 'pending' : 'subscribed',
             'email_type' => $email_type,
             'merge_fields' => (object)$merge_fields,
@@ -63,7 +66,7 @@ class MailchimpV3
 
     public function unsubscribe($list_id, $email, $delete_member = false, $send_goodbye = false, $send_notify = false)
     {
-        $subscriber_hash = md5(strtolower($email));
+        $subscriber_hash = md5(strtolower($email['email']));
         $url = "https://{$this->server}.api.mailchimp.com/3.0/lists/{$list_id}/members/{$subscriber_hash}";
 
         $options = [
