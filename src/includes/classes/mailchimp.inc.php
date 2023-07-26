@@ -185,8 +185,9 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 					if(($_mc['api_response'] = $mc_api->lists->unsubscribe($_mc['list_id'], array('email' => $args->email), // See: `http://apidocs.mailchimp.com/`.
 							($_mc['api_delete_member'] = apply_filters('ws_plugin__s2member_mailchimp_removal_delete_member', FALSE, get_defined_vars())), // Completely delete?
 							($_mc['api_send_goodbye'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_goodbye', FALSE, get_defined_vars())), // Send goodbye letter?
-							($_mc['api_send_notify'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_notify', FALSE, get_defined_vars()))))
-					   && !empty($_mc['api_response']['complete'])
+							($_mc['api_send_notify'] = apply_filters('ws_plugin__s2member_mailchimp_removal_send_notify', FALSE, get_defined_vars())), // Send notification?
+							$_mc['interest_groups'] //230714 Interest groups
+						)) && !empty($_mc['api_response']['complete'])
 					) $_mc['api_success'] = $success = TRUE;
 				}
 				catch(Exception $exception)
