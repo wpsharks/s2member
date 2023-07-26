@@ -490,14 +490,15 @@ div.ws-menu-page div.ws-menu-page-groups-hide
 	line-height         : 1em;
 	font-size           : 150%;
 	font-weight         : bold;
-	color               : #627689;
-	background          : #05141E;
+	color               : #dddddd;
+	background          : #3a424a;
 
 	border-radius       : 4px;
 	border              : 1px solid rgba(0, 0, 0, 0.5);
 	box-shadow          : 0 1px 1px 0 rgba(0, 0, 0, 0.25), -1px -1px 0 0 rgba(0, 0, 0, 0.2) inset, 1px 1px 0 0 rgba(255, 255, 255, 0.1) inset;
 
 	margin              : 0;
+	margin-right        : 25px;
 	box-sizing          : border-box;
 	padding             : 6px 12px 6px 12px;
 
@@ -1265,11 +1266,6 @@ div.ws-menu-page > h2 {
 	padding: 10px 0 0 150px;
 	margin: 0 0 15px 0;
 	font-size: 2.8em;
-}
-
-div.ws-menu-page div.ws-menu-page-groups-show,
-div.ws-menu-page div.ws-menu-page-groups-hide {
-	display: none;
 }
 
 table.ws-menu-page-table div.ws-menu-page-group-header::after {
