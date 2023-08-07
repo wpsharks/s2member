@@ -187,3 +187,28 @@ else if(is_admin()) // Admin compatibility errors.
 }
 unset(${__FILE__}); // Housekeeping.
 
+//2300808 PayPal button encryption notice if they're using it
+if (is_admin() && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]) {
+	// Dismiss
+	add_action('admin_init', function(){
+		$user_id = get_current_user_id();
+		if (isset($_GET['s2-dismiss-2300808']))
+				add_user_meta($user_id, 's2_notice_dismissed_2300808', 'true', true);
+	});
+	// Notice
+	add_action('admin_notices', function(){
+		$user_id = get_current_user_id();
+		$logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
+		$dismiss_url = add_query_arg('s2-dismiss-2300808', '', $_SERVER['REQUEST_URI']);
+		if (isset($_GET['s2-show-notice']) || !get_user_meta($user_id, 's2_notice_dismissed_2300808')) {
+			echo '
+				<div class="notice notice-warning" style="position:relative; margin: 0 0 15px 2px !important; padding: 0 40px 0 0 !important">
+					<table cellspacing="11" cellpadding="0"><tr>
+					<td><img src="'.$logo_url.'" height="40" width="40" align="top" /></td>
+					<td><span>⚠️ PayPal has given some trouble recently with encrypted buttons, so for the time being it\'s recommended to leave encryption disabled and allow non-encrypted payments. See: <em>s2Member > PayPal Options > Account Details > Button Encryption</em></span></td>
+					</tr></table>
+					<a href="'.$dismiss_url.'" class="notice-dismiss" style="text-decoration:none;"><span class="screen-reader-text">Dismiss this notice.</span></a>
+				</div>';
+		}
+});
+}
