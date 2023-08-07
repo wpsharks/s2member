@@ -189,7 +189,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-paypal-btn-encryption">'."\n";
-				echo 'Enable Button Encryption?'."\n";
+				echo 'Button Encryption'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -197,6 +197,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<tr>'."\n";
 
 				echo '<td>'."\n";
+				echo '<p style="margin-bottom: 0.5em;"><span class="ws-menu-page-error">⚠️ Button encryption has given some trouble recently, so for the time being it\'s recommended to leave it disabled and allow non-encrypted payments. <a href="https://www.paypal.com/businessmanage/preferences/website" target="_blank" rel="external" style="font-style: italic;">PayPal Account Settings → Website Payments → Website Preferences → Encrypted Website Payments</a></span></p>'."\n"; //230807
 				echo '<input type="radio" name="ws_plugin__s2member_paypal_btn_encryption" id="ws-plugin--s2member-paypal-btn-encryption-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-btn-encryption-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_btn_encryption" id="ws-plugin--s2member-paypal-btn-encryption-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-btn-encryption-1">Yes, enable PayPal Button encryption.</label><br />'."\n";
 				echo '<em>If enabled, all of your PayPal Button Shortcodes will produce <em>encrypted</em> PayPal Buttons. This improves security against fraudulent transactions. For extra security, you should update your PayPal account too, under: <strong><a href="https://www.paypal.com/businessmanage/preferences/website" target="_blank" rel="external">Account Settings → Website Payments → Website Preferences → Encrypted Website Payments</a></strong>. You\'ll want to block all non-encrypted payments. <strong>Note:</strong> this will NOT work until you\'ve supplied s2Member with your PayPal Email Address, and also with your API Username/Password/Signature.</em>'."\n";
 				echo '</td>'."\n";
