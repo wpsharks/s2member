@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, member, members only, memberships, paywall, content restriction, paid access, sell downloads, paypal, paid subscriptions, paid registration, custom login
-Version: 230530
-Stable tag: 230530
-Tested up to: 6.3-alpha-55864
+Version: 230808
+Stable tag: 230808
+Tested up to: 6.3-RC4-56369
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.1
@@ -176,11 +176,27 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v230530 =
+= v230808 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v230808 =
+
+- (Framework) **Fix**: Potential security issue under rare circumstances. Fixed in this release.
+
+- (Framework) **Fix**: Mailchimp's groups/interests were not transitioning correctly with the updated integration. Fixed in this release.
+
+- (Framework) **UI**: Added a notice about PayPal giving trouble with encrypted buttons recently, recommending to not encrypt them for now. You may need to disable button encryption, and allow non-encrypted payments. _s2Member > PayPal Options > Account Details > Button Encryption_ 
+ 
+- (Framework) **UI**: Brought back the "Expand All" and "Collapse All" buttons for the admin panels. See [thread 10796](https://f.wpsharks.com/t/10796)
+
+- (Framework) **UI**: Updated the link to the PayPal IPN configuration.
+
+- (Framework) **UI**: Added link to PayPal's IPN History page. _s2Member > PayPal Options > PayPal IPN > More Information_
+
+- (Pro) **Fix**: Stripe's billing update pro-form gave an error sometimes. Fixed in this release.  See [thread 10752](https://f.wpsharks.com/t/10752)
 
 = v230530 =
 
@@ -243,5 +259,139 @@ Please see: <http://s2member.com/r/translations/>
 - (Framework) **Bug Fix**: Removed the Security Badge's link to the old Flash powered page on s2Member's site.
 
 - (Pro) **UI Enhancement**: Small improvements to the Pro upgrader.
+
+= v220809 =
+
+- (Framework) **Enhancement**: New `current_user_days_to_eot_less_than` function for conditionals. Useful when you want to show a message to a user on his last days of access before the EOT time in his profile. E.g. `[s2If current_user_days_to_eot_less_than(31)]Please renew your membership[/s2If]`. Kudos to Felix for his help, see [post 6783](https://f.wpsharks.com/t/6783).
+
+= v220421 =
+
+- (Framework & Pro) **Enhancement**: Improved PHP compatibility to 8.1.
+
+- (Framework) **UI Fix**: `More Updates` link fixed.
+
+= v220318 =
+
+- (Framework) **Enhancement**: New `current_user_gateway_is` function for conditionals. Useful for sites using more than one gateway. E.g. `[s2If current_user_gateway_is(stripe)] ...`
+
+- (Pro) **UI Fix**: Removed "Image Branding" setting from s2's Stripe options, not used in current integration.
+
+= v210526 =
+
+- (s2Member Framework & Pro) **UI Enhancement**: Started improving the admin interface. Lightened up the colors, and changed the layout a little bit. 
+
+- (s2Member Framework) **UI Enhancement**: Added title tag to buttons to manage custom profile fields in admin, to improve use with screen-reader. [Thread 8836](https://f.wpsharks.com/t/8836/12)
+
+- (s2Member Pro) **UI Fix**: Fixed typo in pro-form `rrt` attribute description. [Issue 1204](https://github.com/wpsharks/s2member/issues/1204)
+
+- (s2Member Framework) **Bug Fix**: Registration Date sometimes wasn't formatted correctly with the s2Get shortcode. [Thread 8730](https://f.wpsharks.com/t/8730)
+
+= v210208 =
+
+- (s2Member Pro) **Enhancement**: In the Stripe integration, cancelling a subscription in the last minutes of a period, may cause the invoice for the new period to remain there and still be charged later. Now s2Member Pro attempts to find a draft or open invoice for the subscription being cancelled, and void it. Thanks Alan for reporting it. See [post 8386](https://f.wpsharks.com/t/8098).
+
+- (s2Member Pro) **UI Enhancement**: Improved Stripe pro-form error message when trying to create a subscription with a bad card. Thanks everyone that reported it. See [issue #1184](https://github.com/wpsharks/s2member/issues/1184), [post 6043](https://f.wpsharks.com/t/6043), and [post 8386](https://f.wpsharks.com/t/8386).
+
+- (s2Member Pro) **Enhancement**: Added the new action hooks `ws_plugin__s2member_pro_before_stripe_notify_event_switch` and `ws_plugin__s2member_pro_after_stripe_notify_event_switch` in the Stripe endpoint to allow customizations, e.g. new event handlers.
+
+- (s2Member Pro) **UI Fix**: Removed some leftover mentions of Bitcoin support in Stripe's options.
+
+- (s2Member Pro) **UI Fix**: Removed a couple of deprecated shortcode attributes from the documentation for Stripe's pro-form, leftovers from the old integration. Kudos to Debbie for bringing my attention to them. See [post 8053](https://f.wpsharks.com/t/8053).
+
+- (s2Member Framework) **UI Fix**: Fixed some broken links and video players in the admin pages.
+
+- (s2Member Framework) **Bug Fix**: Resolved a warning given when changing users role in bulk from the WP Admin > Users page.
+
+- (s2Member Server Scanner) **Bug Fix**: Updated the [Server Scanner](https://s2member.com/kb-article/server-scanner/) to remove some outdated warnings.
+
+= v201225 =
+
+- (s2Member Framework) **Bug Fix**: View Password icon WP's login page was not displaying correctly. Kudos to Beee4life for reporting it. See [issue #1187](https://github.com/wpsharks/s2member/issues/1187)
+
+- (s2Member Framework and Pro) **Enhancement**: Refactored PHP's deprecated _create_function_ with anonymous functions. Kudos to Berry for reporting it, see [post 6069](https://f.wpsharks.com/t/6069) 
+
+- (s2Member Framework) **Bug Fix**: Added a check for empty return variable before trying to use it in paypal-utilities.inc.php.
+
+- (s2Member Framework) **Bug Fix**: Added checks for undefined indexes before trying to use them in paypal-return-in-subscr-or-wa-w-level.inc.php.
+
+- (s2Member Framework) **Bug Fix:** Added a check for undefined index before using it to define a couple of s2 constants. Kudos to Berry for reporting it, see [post 8181](https://f.wpsharks.com/t/8181/) 
+
+- (s2Member Pro) **Bug Fix**: s2's payment notification when creating a Stripe subscription, was being sent twice. Added a check to ignore the webhook for the subscription's on-session first payment; s2's webhook endpoint is for off-session events. 
+
+- (s2Member Framework) **Enhancement**: Added a new hook for the payment notification on subscription creation or buy now payments.
+
+- (s2Member Pro) **Bug Fix**: Stripe paid trials were accumulating on failed payment attempts, causing a larger charge when it finally succeeded. Kudos to Alan for his help through the many attempts to fix this one, see [post 7002](https://f.wpsharks.com/t/7002).
+
+- (s2Member Pro) **Enhancement**: Stripe duplicate payments were happening randomly to a few site owners, apparently from bad communication between their server and Stripe's. Added idempotency to prevent duplicates. Kudos to Alan and everyone in the forum that reported and gave details on this behavior, see [post 7002](https://f.wpsharks.com/t/7002)
+
+= v200301 =
+
+- (s2Member Pro) **Enhancement:** Added "Powered by Stripe" to Stripe pro-form's payment card field. Kudos to Josh, see [post 6716](https://f.wpsharks.com/t/6716).
+
+- (s2Member Pro) **Bug Fix:** Stripe subscription cancellations were not happening when they should. This release updates the API integration for it and fixes that behavior. Kudos to Matt for reporting it, see [post 6909](https://f.wpsharks.com/t/6909).
+
+- (s2Member Pro) **Bug Fix:** Updating the card with Stripe's pro-form sometimes gave an incorrect "missing billing method" error. Kudos to Corey, see [post 7058](https://f.wpsharks.com/t/7058).
+
+- (s2Member Pro) **Small fix:** Removed Bitcoin mention next to Stripe in Gateways list. Missed it in [v191022](https://s2member.com/s2member-v191022-now-available/).
+
+= v200221 =
+
+- (s2Member Pro) **Bug Fix:** In some rare cases, another plugin loaded Stripe's class before s2Member, so when s2 tried loading it there'd be an error. This release fixes the check for the class before trying to load it. See [issue #1170](https://github.com/wpsharks/s2member/issues/1170)
+
+  **Note:** s2Member won't have control over what version of the Stripe SDK was loaded by the other plugin. You'll need to get that other plugin to have an up-to-date version. If you don't have another plugin loading Stripe, this is not relevant to you.
+
+- (s2Member Pro) **Bug Fix:** When using a 100% off coupon, requiring no payment, the Stripe pro-form was still loading the card field and requiring it, preventing the free signup. That's fixed in this release. See [issue #1171](https://github.com/wpsharks/s2member/issues/1171)
+
+- (s2Member Pro) **Bug Fix:** The Stripe pro-form, when given an invalid card, didn't give a clear error message for it, and instead just "invalid parameter". Now it shows the correct card error, making it possible for the customer to try a different card to complete the payment.
+
+- (s2Member Pro) **Feature Update:** The Indian Rupee was added to the list of currency symbols.
+
+- (s2Member Pro) **Feature Enhancement:** The s2Member Pro add-on, not being a regular plugin was not uploadable via the WP plugin manager. This made it necessary to FTP, which is complicated for some site owners. In this release I made it possible for the plugin manager to upload or remove the Pro add-on.
+
+  **Note:** It still is not a regular plugin. The activation link or status in the plugins manager is irrelevant, but I couldn't find how to remove it. s2Member Pro activates automatically when its version matches the Framework's, and it'll be mentioned next to the Framework's version in the plugins manager.
+
+= v191022 =
+
+- (s2Member Pro) **Feature Enhancement:** The Stripe pro-forms can now handle 3D Secure 2 for [Strong Customer Authentication](https://stripe.com/guides/strong-customer-authentication), as required by the new European regulation that came into effect recently. Props to those in the beta testing group, especially Brice and Felix. See [thread 5585](https://f.wpsharks.com/t/5585/).
+
+- (s2Member Pro) **Feature Enhancement:** The Stripe pro-form now has the card field inline, instead of opening a modal to enter it. Before it required clicking the link to open the modal, enter the card details, submit that, and then submit the pro-form. Now you enter the card details as part of the pro-form. See [issue #588](https://github.com/wpsharks/s2member/issues/588).
+
+- (s2Member Pro) **Stripe Integration Updates:** Upgraded the Stripe PHP SDK from v1.18 to v7.4.0, and the API from 2015-07-13 to 2019-10-08. Upgraded the integration from the Charges API to the latest Payment Intents API. Upgraded the card input from the old Stripe Checkout modal, to the new Stripe.js and Elements. 
+
+- (s2Member Pro) **Optimization:** Stripe's JavaScript now only gets included if the page has a Stripe pro-form.
+
+- (s2Member Pro) **Removed Stripe Bitcoin**: Stripe [dropped Bitcoin](https://stripe.com/blog/ending-bitcoin-support) last year, it's not available anymore. This update removes the Bitcoin options and mentions from the s2 admin pages.
+
+- (s2Member Pro) **Bug Fix:** Subscriptions without at trial were showing a "trialing" status in Stripe for the first period. This behavior has now been solved. It will only say trialing when you set a trial period (free or paid) in your Stripe pro-form shortcode. See [issue #1052](https://github.com/wpsharks/s2member/issues/1052).
+
+- (s2Member Pro) **Bug Fix:** The Stripe pro-form installments via the `rrt` shortcode attribute were charging an extra payment before ending the subscription. There was an error in the time calculation for this. This is solved in this release. Props to Brice. See [thread 5817](https://f.wpsharks.com/t/5817/).
+
+- (s2Member Pro) **Bug Fix:** Some payments through the Stripe pro-form were creating a new Stripe customer when the user was already a customer. The Stripe customer ID was not being saved correctly in the user's profile. This is solved in this release. Props to demeritcowboy for reporting it.
+
+= v190822 =
+
+- (s2Member) **PayPal Integration Update:** PayPal deprecated the subscription modification button. Using the old possible values for this, now gives an error on PayPal's site. This button has been removed from the PayPal Standard integration in s2Member. Props to Tim for reporting it, see [forum thread 5861](https://f.wpsharks.com/t/5861), and [issue #1157](https://github.com/wpsharks/s2member/issues/1157).
+
+- (s2Member) **Bug Fix:** PayPal would sometimes return the customer without the Custom Value expected by s2Member, incorrectly triggering an error. A small delay has now been added when needed to wait for PayPal to provide the missing value, so that the customer is met with the correct success message on return. Props to Josh Hartman for his help. See [forum thread 5250](https://f.wpsharks.com/t/5250).
+
+- (s2Member) **Bug Fix:** Google's URL shortening service has been [discontinued](https://developers.googleblog.com/2018/03/transitioning-google-url-shortener.html). The s2Member integration with it was removed in this release. Props to Felix Hartmann for reporting it.
+
+- (s2Member) **Feature Enhancement:** The popular URL shortening services have been abused in spam emails, and this can cause your site's emails with shortened signup URLs to end up in the spam folder. It's now possible to disable URL shortening when trying to avoid this problem. Props to Felix Hartmann for suggesting it. See [forum thread 5697](https://f.wpsharks.com/t/5697).
+
+- (s2Member Pro) **New Feature:** It is now possible to use a custom URL shortener other than the defaults in the s2Member Framework. This is particularly useful to use [YOURLS](http://yourls.org/) for your links, making them unique to your site, looking more professional and avoiding the spam filters issue mentioned above. For more info see this [forum post](https://f.wpsharks.com/t/5697/19).
+
+= v190617 =
+
+- (s2Member Pro) **Authorize.Net Hash Upgrade:** Authorize.Net [announced](https://support.authorize.net/s/article/MD5-Hash-End-of-Life-Signature-Key-Replacement) the end-of-life for their MD5 Hash in favor of their new SHA512 Signature Key. Support for this has been added to s2Member Pro. The MD5 Hash is not provided by Authorize.Net any more, so the field for it in s2Member has been disabled. Props @krumch for his work. For further details see [forum thread 5514](https://f.wpsharks.com/t/5514).
+
+  **Note:** For those that already used the MD5 Hash in their configuration, it is kept there and will keep working while Authorize.Net accepts it, which will not be much longer. It's important to update your integration with the new Signature Key. Once you have your Signature Key in the s2Member configuration, it will be favored over the old MD5 Hash._
+
+- (s2Member Pro) **Bug Fix:** The multisite patch for `wp-admin/user_new.php` wasn't finding the code to replace because of changes in the latest releases of WordPress. It has now been updated, as well as the instructions in the Dashboard for those that prefer to apply it manually. Props @crazycoolcam for reporting it. For further details see [Issue #1132](https://github.com/wpsharks/s2member/issues/1132).
+
+  **Note:** If you already had patched this file in the past, it's recommended that you remove the previous patch restoring it to the original file, and let s2Member Pro patch it again now, otherwise you risk getting it patched over the previous one and ending up with errors. After the new patch, please review that file to verify that it's correct._
+
+- (s2Member Pro) **Bug Fix:** The search results for `s2Member-List` were not being ordered as specified in the `orderby` attribute when this was a field from the `usermeta` table in the database, e.g. `first_name`, `last_name`. This is now fixed and working correctly. Props to @stevenwolock for reporting it. For further details see [Issue #1103](https://github.com/wpsharks/s2member/issues/1103).
+
+- (s2Member) **WP 5.2 Compat. Enhancement:** s2Member has been tested with WP up to 5.2.2-alpha. With `WP_DEBUG` enabled, only one "notice" was found. In `wp-login.php` it said 'login_headertitle is deprecated since version 5.2.0! Use login_headertext instead.' This release now uses `login_headertext` and doesn't get that notice anymore. Props Azunga for reporting it. See [forum thread 5962](https://f.wpsharks.com/t/5962).
 
 You can find the [full changelog here](https://s2member.com/changelog/).
