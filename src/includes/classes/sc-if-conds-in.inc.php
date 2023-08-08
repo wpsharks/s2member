@@ -73,7 +73,9 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 			                                      'is_category', 'is_tax', 'is_tag', 'has_tag', 'is_author', 'is_date',
 			                                      'is_day', 'is_month', 'is_time', 'is_year', 'is_sticky', 'is_paged',
 			                                      'is_preview', 'is_comments_popup', 'in_the_loop', 'comments_open',
-			                                      'pings_open', 'has_excerpt', 'has_post_thumbnail'), get_defined_vars());
+			                                      'pings_open', 'has_excerpt', 'has_post_thumbnail',
+																						'current_user_days_to_eot_less_than', 'current_user_gateway_is',
+																					), get_defined_vars());
 
 			$pro_is_installed = c_ws_plugin__s2member_utils_conds::pro_is_installed(); // Has pro version?
 
