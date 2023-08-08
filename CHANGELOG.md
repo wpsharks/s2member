@@ -1,3 +1,19 @@
+= v230808 =
+
+- (Framework) **Fix**: Potential security issue under rare circumstances. Fixed in this release.
+
+- (Framework) **Fix**: Mailchimp's groups/interests were not transitioning correctly with the updated integration. Fixed in this release.
+
+- (Framework) **UI**: Added a notice about PayPal giving trouble with encrypted buttons recently, recommending to not encrypt them for now. You may need to disable button encryption, and allow non-encrypted payments. _s2Member > PayPal Options > Account Details > Button Encryption_ 
+ 
+- (Framework) **UI**: Brought back the "Expand All" and "Collapse All" buttons for the admin panels. See [thread 10796](https://f.wpsharks.com/t/10796)
+
+- (Framework) **UI**: Updated the link to the PayPal IPN configuration.
+
+- (Framework) **UI**: Added link to PayPal's IPN History page. _s2Member > PayPal Options > PayPal IPN > More Information_
+
+- (Pro) **Fix**: Stripe's billing update pro-form gave an error sometimes. Fixed in this release.  See [thread 10752](https://f.wpsharks.com/t/10752)
+
 = v230530 =
 
 - (Framework) **Enhancement**: Updated the Mailchimp integration to v3 of their API.  I made it so you shouldn't need to change anything, it should work with your existing configuration. Still worth doing a test or checking that things are normal after the update, and report any issues you notice. See: [thread 10666](https://f.wpsharks.com/t/10666)

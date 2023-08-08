@@ -148,7 +148,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 						{
 							if(is_array($args = preg_split('/[;,]+/', $attr_args, 0, PREG_SPLIT_NO_EMPTY))) // Convert all arguments into an array. And take note; possibly into an empty array.
 							{
-								if(!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site() || in_array(strtolower($conditional), $blog_farm_safe))
+								if((!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) && in_array(strtolower($conditional), $blog_farm_safe))
 								{
 									$test = ($exclamation) ? FALSE : TRUE; // If !exclamation (false) otherwise this defaults to true.
 
@@ -231,7 +231,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 						{
 							if(is_array($args = preg_split('/[;,]+/', $attr_args, 0, PREG_SPLIT_NO_EMPTY))) // Convert all arguments into an array. And take note; possibly into an empty array.
 							{
-								if(!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site() || in_array(strtolower($conditional), $blog_farm_safe))
+								if((!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) && in_array(strtolower($conditional), $blog_farm_safe))
 								{
 									$test = ($exclamation) ? FALSE : TRUE; // If !exclamation (false) otherwise this defaults to true.
 

@@ -20,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 230530
-Stable tag: 230530
+Version: 230808
+Stable tag: 230808
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -36,7 +36,7 @@ PayPal Pro Compatible: yes w/s2Member Pro
 Authorize.Net Compatible: yes w/s2Member Pro
 ClickBank Compatible: yes w/s2Member Pro
 
-Tested up to: 6.3-alpha-55864
+Tested up to: 6.3-RC4-56369
 Requires at least: 4.2
 
 Requires PHP: 5.6.2
@@ -77,7 +77,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '230530'; //version//
+${__FILE__}['tmp'] = '230808'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**
@@ -187,3 +187,28 @@ else if(is_admin()) // Admin compatibility errors.
 }
 unset(${__FILE__}); // Housekeeping.
 
+//2300808 PayPal button encryption notice if they're using it
+if (is_admin() && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]) {
+	// Dismiss
+	add_action('admin_init', function(){
+		$user_id = get_current_user_id();
+		if (isset($_GET['s2-dismiss-2300808']))
+				add_user_meta($user_id, 's2_notice_dismissed_2300808', 'true', true);
+	});
+	// Notice
+	add_action('admin_notices', function(){
+		$user_id = get_current_user_id();
+		$logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
+		$dismiss_url = add_query_arg('s2-dismiss-2300808', '', $_SERVER['REQUEST_URI']);
+		if (isset($_GET['s2-show-notice']) || !get_user_meta($user_id, 's2_notice_dismissed_2300808')) {
+			echo '
+				<div class="notice notice-warning" style="position:relative; margin: 0 0 15px 2px !important; padding: 0 40px 0 0 !important">
+					<table cellspacing="11" cellpadding="0"><tr>
+					<td><img src="'.$logo_url.'" height="40" width="40" align="top" /></td>
+					<td><span>⚠️ PayPal has given some trouble recently with encrypted buttons, so for the time being it\'s recommended to leave encryption disabled and allow non-encrypted payments. See: <em>s2Member > PayPal Options > Account Details > Button Encryption</em></span></td>
+					</tr></table>
+					<a href="'.$dismiss_url.'" class="notice-dismiss" style="text-decoration:none;"><span class="screen-reader-text">Dismiss this notice.</span></a>
+				</div>';
+		}
+});
+}
