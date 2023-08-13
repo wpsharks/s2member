@@ -107,7 +107,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_els_ops"))
 					echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_level'.$n.'_mailchimp_list_ids" id="ws-plugin--s2member-level'.$n.'-mailchimp-list-ids" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_mailchimp_list_ids"]).'" /><br />'."\n";
 					echo 'New '.(($n === 0) ? 'Free Subscribers' : 'Level #'.$n.' Members').' will be subscribed to these List IDs.<br />'."\n";
 					echo 'Ex: <code>4a44fRio5d, 434ksvviEdf, 8834jsdf923, ee9djfs4jel3</code><br />'."\n";
-					echo 'Or: <code>4a44fRio5d::Group Title::Group|Another Group</code>'."\n";
+					echo 'Or: <code>4a44fRio5d::Group Category::Group|Another Group</code>'."\n";
 					echo '</td>'."\n";
 
 					echo '</tr>'."\n";
