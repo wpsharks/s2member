@@ -129,6 +129,17 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 			);
 			$blog_farm_safe = apply_filters('ws_plugin__s2member_sc_if_conditionals_blog_farm_safe', $blog_farm_safe, get_defined_vars());
 
+			//230814 Custom whitelist
+			if (!empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_whitelist"])) {
+				$sc_conds_whitelist = explode(',', $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_whitelist"]);
+				foreach ($sc_conds_whitelist as $white_func) {
+					$white_func = trim(strtolower($white_func));
+					if (function_exists($white_func)) {
+            $blog_farm_safe[] = $white_func;
+					}
+				}
+			}
+
 			$pro_is_installed = c_ws_plugin__s2member_utils_conds::pro_is_installed(); // Has pro version?
 
 			$sc_conds_allow_arbitrary_php = $GLOBALS['WS_PLUGIN__']['s2member']['o']['sc_conds_allow_arbitrary_php'];

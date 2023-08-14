@@ -386,6 +386,34 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_res_ops"))
 					echo '</tr>'."\n";
 					echo '</tbody>'."\n";
 					echo '</table>'."\n";
+
+					//230813 Whitelist more conditional functions
+					echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+					echo '<h3>Whitelist Additional Conditional Functions for <code>[s2If]</code></h3>'."\n";
+					echo '<p>Enter a comma-separated list of additional conditional functions you\'d like to whitelist for the <code>[s2If]</code> shortcode. These functions will be added to the existing set of <a href="https://s2member.com/kb-article/s2if-simple-shortcode-conditionals/#toc-5bb69568" target="_blank" rel="external">allowed functions</a>.</p>'."\n";
+
+					echo '<table class="form-table">'."\n";
+					echo '<tbody>'."\n";
+					echo '<tr>'."\n";
+
+					echo '<th>'."\n";
+					echo '<label for="ws-plugin--s2member-sc-conds-whitelist">'."\n";
+					echo 'Allowed Conditional Functions:'."\n";
+					echo '</label>'."\n";
+					echo '</th>'."\n";
+
+					echo '</tr>'."\n";
+					echo '<tr>'."\n";
+
+					echo '<td>'."\n";
+					echo '<input type="text" name="ws_plugin__s2member_sc_conds_whitelist" id="ws-plugin--s2member-sc-conds-whitelist" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_whitelist"]).'" placeholder="" style="width:100%;" /><br />'."\n";
+					echo 'Ex: <code>get_user_field, my_custom_function</code><br />'."\n";
+					echo '</td>'."\n";
+
+					echo '</tr>'."\n";
+					echo '</tbody>'."\n";
+					echo '</table>'."\n";
 				}
 				echo '</div>'."\n";
 
