@@ -63,6 +63,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 			c_ws_plugin__s2member_no_cache::no_cache_constants(true);
 
+			$pro_is_installed = c_ws_plugin__s2member_utils_conds::pro_is_installed(); // Has pro version?
+
 			//230811 Whitelist of conditional functions
 			$blog_farm_safe = array(
 				'comments_open',
@@ -129,8 +131,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 			);
 			$blog_farm_safe = apply_filters('ws_plugin__s2member_sc_if_conditionals_blog_farm_safe', $blog_farm_safe, get_defined_vars());
 
-			//230814 Custom whitelist
-			if (!empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_whitelist"])) {
+			//230814 Custom whitelist (pro)
+			if ($pro_is_installed && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_whitelist"])) {
 				$sc_conds_whitelist = explode(',', $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_whitelist"]);
 				foreach ($sc_conds_whitelist as $white_func) {
 					$white_func = trim(strtolower($white_func));
@@ -139,8 +141,6 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 					}
 				}
 			}
-
-			$pro_is_installed = c_ws_plugin__s2member_utils_conds::pro_is_installed(); // Has pro version?
 
 			$sc_conds_allow_arbitrary_php = $GLOBALS['WS_PLUGIN__']['s2member']['o']['sc_conds_allow_arbitrary_php'];
 			if(!$pro_is_installed || (is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site()))
