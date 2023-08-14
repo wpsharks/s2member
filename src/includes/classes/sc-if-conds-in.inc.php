@@ -172,7 +172,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 			}
 			else if(isset($attr['php'])) // Site owner is trying to use `php`, but it's NOT allowed on this installation.
 			{
-				trigger_error('s2If syntax error. Simple Conditionals are not currently configured to allow arbitrary PHP code evaluation.', E_USER_ERROR);
+				c_ws_plugin__s2member_sc_if_conds_in::warning('s2If syntax error. Simple Conditionals are not currently configured to allow arbitrary PHP code evaluation.');
 				return ''; // Return now; empty string in this case.
 			}
 			# Default behavior otherwise...
@@ -188,13 +188,13 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 					if(preg_match('/^[\!\=\<\>]+$/i', $attr_value)) // Error on these operators.
 					{
-						trigger_error('s2If, invalid operator [ '.$attr_value.' ]. Simple Conditionals cannot process operators like ( == != <> ). Please use Advanced (PHP) Conditionals instead.', E_USER_ERROR);
+						c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, invalid operator [ '.$attr_value.' ]. Simple Conditionals cannot process operators like ( == != <> ). Please use Advanced (PHP) Conditionals instead.');
 						return ''; // Return now; empty string in this case.
 					}
 				}
 			if(!empty($logicals) && is_array($logicals) && count(array_unique($logicals)) > 1)
 			{
-				trigger_error('s2If, AND/OR malformed conditional logic. It\'s NOT possible to mix logic using AND/OR combinations. You MUST stick to one type of logic or another. If both types of logic are needed, you MUST use two different Shortcode expressions. Or, use Advanced (PHP) Conditionals instead.', E_USER_ERROR);
+				c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, AND/OR malformed conditional logic. It\'s NOT possible to mix logic using AND/OR combinations. You MUST stick to one type of logic or another. If both types of logic are needed, you MUST use two different Shortcode expressions. Or, use Advanced (PHP) Conditionals instead.');
 				return ''; // Return now; empty string in this case.
 			}
 			$conditional_logic = (!empty($logicals) && is_array($logicals) && preg_match('/^(\|\||OR)$/i', $logicals[0])) ? 'OR' : 'AND';
@@ -256,25 +256,25 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 								}
 								else
 								{
-									trigger_error('s2If, unsafe conditional function [ '.$attr_value.' ]', E_USER_ERROR);
+									c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, unsafe conditional function [ '.$attr_value.' ]');
 									return ''; // Return now; empty string in this case.
 								}
 							}
 							else
 							{
-								trigger_error('s2If, conditional args are NOT an array [ '.$attr_value.' ]', E_USER_ERROR);
+								c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, conditional args are NOT an array [ '.$attr_value.' ]');
 								return ''; // Return now; empty string in this case.
 							}
 						}
 						else
 						{
-							trigger_error('s2If, unsafe conditional args [ '.$attr_value.' ]', E_USER_ERROR);
+							c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, unsafe conditional args [ '.$attr_value.' ]');
 							return ''; // Return now; empty string in this case.
 						}
 					}
 					else
 					{
-						trigger_error('s2If, malformed conditional [ '.$attr_value.' ]', E_USER_ERROR);
+						c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, malformed conditional [ '.$attr_value.' ]');
 						return ''; // Return now; empty string in this case.
 					}
 				}
@@ -339,25 +339,25 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 								}
 								else
 								{
-									trigger_error('s2If, unsafe conditional function [ '.$attr_value.' ]', E_USER_ERROR);
+									c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, unsafe conditional function [ '.$attr_value.' ]');
 									return ''; // Return now; empty string in this case.
 								}
 							}
 							else
 							{
-								trigger_error('s2If, conditional args are NOT an array [ '.$attr_value.' ]', E_USER_ERROR);
+								c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, conditional args are NOT an array [ '.$attr_value.' ]');
 								return ''; // Return now; empty string in this case.
 							}
 						}
 						else
 						{
-							trigger_error('s2If, unsafe conditional args [ '.$attr_value.' ]', E_USER_ERROR);
+							c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, unsafe conditional args [ '.$attr_value.' ]');
 							return ''; // Return now; empty string in this case.
 						}
 					}
 					else
 					{
-						trigger_error('s2If, malformed conditional [ '.$attr_value.' ]', E_USER_ERROR);
+						c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, malformed conditional [ '.$attr_value.' ]');
 						return ''; // Return now; empty string in this case.
 					}
 				}
@@ -385,6 +385,27 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 		public static function evl($expression)
 		{
 			return eval('return ('.(string)$expression.');');
+		}
+
+		/**
+		 * Warning handler for s2If problems.
+		 * 
+		 * Instead of trigger_error, which prevents the page from loading, 
+		 * this will simply not show the s2If block's content, letting the rest load,
+		 * and log the error, with the URI where it happened.
+		 *
+		 * @package s2Member\s2If
+		 * @since 230814
+		 *
+		 * @param string Warning message.
+		 *
+		 * @return
+		 * @todo Asynch admin notice, enqueued for the admin to see later
+		 */
+		public static function warning($message)
+		{
+			$log_message = $message . ' - URI: ' . esc_url($_SERVER['REQUEST_URI']);
+			error_log($log_message);
 		}
 	}
 }
