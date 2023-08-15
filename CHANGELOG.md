@@ -1,3 +1,15 @@
+= v230815 =
+
+- (Framework) **Fix**: Added some missing functions to the list of conditionals allowed by default for s2If (e.g. `current_user_days_to_eot_less_than`, `current_user_gateway_is`). See also: https://s2member.com/kb-article/s2if-simple-shortcode-conditionals/#toc-5bb69568
+
+- (Pro) **Enhancement**: New s2If whitelist option for custom conditional functions to be allowed. _s2Member Pro > Restriction Options > Simple Shortcode Conditionals > Whitelist_
+
+- (Framework) **Enhancement**: Handle s2If conditional problems more gracefully. Instead of giving an error that prevents loading the rest of the page, it now just doesn't display that s2If's block, and enters a message in the error log (e.g. `/wp-content/debug.log`).
+
+- (Framework & Pro) **Enhancement**: Prevent output from s2If conditions, only _true_ or _false_.
+
+- (Framework) **UI**: Update the Mailchimp example from `Group Title` to `Group Category`, to match Mailchimp's current name in their settings. _s2Member > API / List Servers > Mailchimp_
+
 = v230808 =
 
 - (Framework) **Fix**: Potential security issue under rare circumstances. Fixed in this release.

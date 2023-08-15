@@ -63,19 +63,84 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 			c_ws_plugin__s2member_no_cache::no_cache_constants(true);
 
-			$blog_farm_safe = apply_filters('ws_plugin__s2member_sc_if_conditionals_blog_farm_safe',
-			                                array('is_user_logged_in', 'is_user_not_logged_in',
-			                                      'user_is', 'user_is_not', 'user_can', 'user_cannot',
-			                                      'current_user_is', 'current_user_is_not', 'current_user_can', 'current_user_cannot',
-			                                      'is_admin', 'is_blog_admin', 'is_user_admin', 'is_network_admin',
-			                                      'is_404', 'is_home', 'is_front_page', 'is_singular', 'is_single', 'is_page',
-			                                      'is_page_template', 'is_attachment', 'is_feed', 'is_archive', 'is_search',
-			                                      'is_category', 'is_tax', 'is_tag', 'has_tag', 'is_author', 'is_date',
-			                                      'is_day', 'is_month', 'is_time', 'is_year', 'is_sticky', 'is_paged',
-			                                      'is_preview', 'is_comments_popup', 'in_the_loop', 'comments_open',
-			                                      'pings_open', 'has_excerpt', 'has_post_thumbnail'), get_defined_vars());
-
 			$pro_is_installed = c_ws_plugin__s2member_utils_conds::pro_is_installed(); // Has pro version?
+
+			//230811 Whitelist of conditional functions
+			$blog_farm_safe = array(
+				'comments_open',
+				'current_user_can',
+				'current_user_can_for_blog',
+				'current_user_cannot',
+				'current_user_cannot_for_blog',
+				'current_user_days_to_eot_less_than',
+				'current_user_gateway_is',
+				'current_user_is',
+				'current_user_is_for_blog',
+				'current_user_is_not',
+				'current_user_is_not_for_blog',
+				'has_excerpt',
+				'has_post_thumbnail',
+				'has_tag',
+				'has_term',
+				'in_category',
+				'in_the_loop',
+				'is_404',
+				'is_active_sidebar',
+				'is_admin',
+				'is_archive',
+				'is_attachment',
+				'is_author',
+				'is_blog_admin',
+				'is_category',
+				'is_child_theme',
+				'is_comments_popup',
+				'is_customize_preview',
+				'is_date',
+				'is_day',
+				'is_feed',
+				'is_front_page',
+				'is_home',
+				'is_main_site',
+				'is_month',
+				'is_multi_author',
+				'is_multisite',
+				'is_network_admin',
+				'is_page',
+				'is_page_template',
+				'is_paged',
+				'is_preview',
+				'is_rtl',
+				'is_search',
+				'is_single',
+				'is_singular',
+				'is_sticky',
+				'is_super_admin',
+				'is_tag',
+				'is_tax',
+				'is_time',
+				'is_trackback',
+				'is_user_admin',
+				'is_user_logged_in',
+				'is_user_not_logged_in',
+				'is_year',
+				'pings_open',
+				'user_can',
+				'user_cannot',
+				'user_is',
+				'user_is_not',
+			);
+			$blog_farm_safe = apply_filters('ws_plugin__s2member_sc_if_conditionals_blog_farm_safe', $blog_farm_safe, get_defined_vars());
+
+			//230814 Custom whitelist (pro)
+			if ($pro_is_installed && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_whitelist"])) {
+				$sc_conds_whitelist = explode(',', $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_conds_whitelist"]);
+				foreach ($sc_conds_whitelist as $white_func) {
+					$white_func = trim(strtolower($white_func));
+					if (function_exists($white_func)) {
+            $blog_farm_safe[] = $white_func;
+					}
+				}
+			}
 
 			$sc_conds_allow_arbitrary_php = $GLOBALS['WS_PLUGIN__']['s2member']['o']['sc_conds_allow_arbitrary_php'];
 			if(!$pro_is_installed || (is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site()))
@@ -107,7 +172,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 			}
 			else if(isset($attr['php'])) // Site owner is trying to use `php`, but it's NOT allowed on this installation.
 			{
-				trigger_error('s2If syntax error. Simple Conditionals are not currently configured to allow arbitrary PHP code evaluation.', E_USER_ERROR);
+				c_ws_plugin__s2member_sc_if_conds_in::warning('s2If syntax error. Simple Conditionals are not currently configured to allow arbitrary PHP code evaluation.');
 				return ''; // Return now; empty string in this case.
 			}
 			# Default behavior otherwise...
@@ -123,13 +188,13 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 					if(preg_match('/^[\!\=\<\>]+$/i', $attr_value)) // Error on these operators.
 					{
-						trigger_error('s2If, invalid operator [ '.$attr_value.' ]. Simple Conditionals cannot process operators like ( == != <> ). Please use Advanced (PHP) Conditionals instead.', E_USER_ERROR);
+						c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, invalid operator [ '.$attr_value.' ]. Simple Conditionals cannot process operators like ( == != <> ). Please use Advanced (PHP) Conditionals instead.');
 						return ''; // Return now; empty string in this case.
 					}
 				}
 			if(!empty($logicals) && is_array($logicals) && count(array_unique($logicals)) > 1)
 			{
-				trigger_error('s2If, AND/OR malformed conditional logic. It\'s NOT possible to mix logic using AND/OR combinations. You MUST stick to one type of logic or another. If both types of logic are needed, you MUST use two different Shortcode expressions. Or, use Advanced (PHP) Conditionals instead.', E_USER_ERROR);
+				c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, AND/OR malformed conditional logic. It\'s NOT possible to mix logic using AND/OR combinations. You MUST stick to one type of logic or another. If both types of logic are needed, you MUST use two different Shortcode expressions. Or, use Advanced (PHP) Conditionals instead.');
 				return ''; // Return now; empty string in this case.
 			}
 			$conditional_logic = (!empty($logicals) && is_array($logicals) && preg_match('/^(\|\||OR)$/i', $logicals[0])) ? 'OR' : 'AND';
@@ -154,12 +219,12 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 									if(preg_match('/^\{(.*?)\}$/', $attr_args)) // Single argument passed as an array.
 									{
-										if($test === TRUE && !call_user_func($conditional, $args))
+										if($test === TRUE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 										{
 											$condition_failed = TRUE;
 											break;
 										}
-										else if($test === FALSE && call_user_func($conditional, $args))
+										else if($test === FALSE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 										{
 											$condition_failed = TRUE;
 											break;
@@ -167,23 +232,23 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 									}
 									else if(empty($args)) // No arguments at all.
 									{
-										if($test === TRUE && !call_user_func($conditional))
+										if($test === TRUE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional))
 										{
 											$condition_failed = TRUE;
 											break;
 										}
-										else if($test === FALSE && call_user_func($conditional))
+										else if($test === FALSE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional))
 										{
 											$condition_failed = TRUE;
 											break;
 										}
 									}
-									else if($test === TRUE && !call_user_func_array($conditional, $args))
+									else if($test === TRUE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 									{
 										$condition_failed = TRUE;
 										break;
 									}
-									else if($test === FALSE && call_user_func_array($conditional, $args))
+									else if($test === FALSE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 									{
 										$condition_failed = TRUE;
 										break;
@@ -191,25 +256,25 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 								}
 								else
 								{
-									trigger_error('s2If, unsafe conditional function [ '.$attr_value.' ]', E_USER_ERROR);
+									c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, unsafe conditional function [ '.$attr_value.' ]');
 									return ''; // Return now; empty string in this case.
 								}
 							}
 							else
 							{
-								trigger_error('s2If, conditional args are NOT an array [ '.$attr_value.' ]', E_USER_ERROR);
+								c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, conditional args are NOT an array [ '.$attr_value.' ]');
 								return ''; // Return now; empty string in this case.
 							}
 						}
 						else
 						{
-							trigger_error('s2If, unsafe conditional args [ '.$attr_value.' ]', E_USER_ERROR);
+							c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, unsafe conditional args [ '.$attr_value.' ]');
 							return ''; // Return now; empty string in this case.
 						}
 					}
 					else
 					{
-						trigger_error('s2If, malformed conditional [ '.$attr_value.' ]', E_USER_ERROR);
+						c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, malformed conditional [ '.$attr_value.' ]');
 						return ''; // Return now; empty string in this case.
 					}
 				}
@@ -237,12 +302,12 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 									if(preg_match('/^\{(.*?)\}$/', $attr_args)) // Single argument passed as an array.
 									{
-										if($test === TRUE && call_user_func($conditional, $args))
+										if($test === TRUE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 										{
 											$condition_succeeded = TRUE;
 											break;
 										}
-										else if($test === FALSE && !call_user_func($conditional, $args))
+										else if($test === FALSE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 										{
 											$condition_succeeded = TRUE;
 											break;
@@ -250,23 +315,23 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 									}
 									else if(empty($args)) // No arguments at all.
 									{
-										if($test === TRUE && call_user_func($conditional))
+										if($test === TRUE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional))
 										{
 											$condition_succeeded = TRUE;
 											break;
 										}
-										else if($test === FALSE && !call_user_func($conditional))
+										else if($test === FALSE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional))
 										{
 											$condition_succeeded = TRUE;
 											break;
 										}
 									}
-									else if($test === TRUE && call_user_func_array($conditional, $args))
+									else if($test === TRUE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 									{
 										$condition_succeeded = TRUE;
 										break;
 									}
-									else if($test === FALSE && !call_user_func_array($conditional, $args))
+									else if($test === FALSE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 									{
 										$condition_succeeded = TRUE;
 										break;
@@ -274,25 +339,25 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 								}
 								else
 								{
-									trigger_error('s2If, unsafe conditional function [ '.$attr_value.' ]', E_USER_ERROR);
+									c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, unsafe conditional function [ '.$attr_value.' ]');
 									return ''; // Return now; empty string in this case.
 								}
 							}
 							else
 							{
-								trigger_error('s2If, conditional args are NOT an array [ '.$attr_value.' ]', E_USER_ERROR);
+								c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, conditional args are NOT an array [ '.$attr_value.' ]');
 								return ''; // Return now; empty string in this case.
 							}
 						}
 						else
 						{
-							trigger_error('s2If, unsafe conditional args [ '.$attr_value.' ]', E_USER_ERROR);
+							c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, unsafe conditional args [ '.$attr_value.' ]');
 							return ''; // Return now; empty string in this case.
 						}
 					}
 					else
 					{
-						trigger_error('s2If, malformed conditional [ '.$attr_value.' ]', E_USER_ERROR);
+						c_ws_plugin__s2member_sc_if_conds_in::warning('s2If, malformed conditional [ '.$attr_value.' ]');
 						return ''; // Return now; empty string in this case.
 					}
 				}
@@ -319,7 +384,67 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 		 */
 		public static function evl($expression)
 		{
-			return eval('return ('.(string)$expression.');');
+			// Buffer the output.
+			ob_start();
+			$result = eval('return (' . (string)$expression . ');');
+			$output = ob_get_clean();
+			
+			// Return bool true if result true or there's output.
+			return ((bool)!empty($output) || (bool)$result);
+		}
+
+		/**
+		 * Warning handler for s2If problems.
+		 * 
+		 * Instead of trigger_error, which prevents the page from loading, 
+		 * this will simply not show the s2If block's content, letting the rest load,
+		 * and log the error, with the URI where it happened.
+		 *
+		 * @package s2Member\s2If
+		 * @since 230814
+		 *
+		 * @param string Warning message.
+		 *
+		 * @return
+		 * @todo Asynch admin notice, enqueued for the admin to see later
+		 */
+		public static function warning($message)
+		{
+			$log_message = $message . ' - URI: ' . esc_url($_SERVER['REQUEST_URI']);
+			error_log($log_message);
+		}
+
+		/**
+		 * Do a safer call_user_func and call_user_func_array, 
+		 * with sanitation and output buffering.
+		 *
+		 * @package s2Member\s2If
+		 * @since 230814
+		 *
+		 * @param string $conditional The callable function or method to be invoked.
+		 * @param array $args Optional array of arguments to pass to the function.
+		 *
+		 * @return bool The boolean result of the condition.
+		 */
+		public static function safer_call_func($conditional, $args = array())
+		{
+			// Sanitize
+			$chars = '\'`"\=:;*<>()[]/\\|?!&%#';
+			$trans = '                        ';
+			$conditional = strtr($conditional, $chars, $trans);
+			if (!empty($args)) {
+				foreach ($args as $k => $arg) {
+					$args[$k] = strtr($arg, $chars, $trans);
+				}
+			}
+
+			// Buffer output
+			ob_start();
+			$result = call_user_func_array($conditional, $args);
+			$output = ob_get_clean();
+
+			// Return bool true if result true or there's output.
+			return ((bool)!empty($output) || (bool)$result);
 		}
 	}
 }
