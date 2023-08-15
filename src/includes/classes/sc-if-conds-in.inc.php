@@ -219,12 +219,12 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 									if(preg_match('/^\{(.*?)\}$/', $attr_args)) // Single argument passed as an array.
 									{
-										if($test === TRUE && !call_user_func($conditional, $args))
+										if($test === TRUE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 										{
 											$condition_failed = TRUE;
 											break;
 										}
-										else if($test === FALSE && call_user_func($conditional, $args))
+										else if($test === FALSE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 										{
 											$condition_failed = TRUE;
 											break;
@@ -232,23 +232,23 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 									}
 									else if(empty($args)) // No arguments at all.
 									{
-										if($test === TRUE && !call_user_func($conditional))
+										if($test === TRUE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional))
 										{
 											$condition_failed = TRUE;
 											break;
 										}
-										else if($test === FALSE && call_user_func($conditional))
+										else if($test === FALSE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional))
 										{
 											$condition_failed = TRUE;
 											break;
 										}
 									}
-									else if($test === TRUE && !call_user_func_array($conditional, $args))
+									else if($test === TRUE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 									{
 										$condition_failed = TRUE;
 										break;
 									}
-									else if($test === FALSE && call_user_func_array($conditional, $args))
+									else if($test === FALSE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 									{
 										$condition_failed = TRUE;
 										break;
@@ -302,12 +302,12 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 
 									if(preg_match('/^\{(.*?)\}$/', $attr_args)) // Single argument passed as an array.
 									{
-										if($test === TRUE && call_user_func($conditional, $args))
+										if($test === TRUE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 										{
 											$condition_succeeded = TRUE;
 											break;
 										}
-										else if($test === FALSE && !call_user_func($conditional, $args))
+										else if($test === FALSE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 										{
 											$condition_succeeded = TRUE;
 											break;
@@ -315,23 +315,23 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 									}
 									else if(empty($args)) // No arguments at all.
 									{
-										if($test === TRUE && call_user_func($conditional))
+										if($test === TRUE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional))
 										{
 											$condition_succeeded = TRUE;
 											break;
 										}
-										else if($test === FALSE && !call_user_func($conditional))
+										else if($test === FALSE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional))
 										{
 											$condition_succeeded = TRUE;
 											break;
 										}
 									}
-									else if($test === TRUE && call_user_func_array($conditional, $args))
+									else if($test === TRUE && c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 									{
 										$condition_succeeded = TRUE;
 										break;
 									}
-									else if($test === FALSE && !call_user_func_array($conditional, $args))
+									else if($test === FALSE && !c_ws_plugin__s2member_sc_if_conds_in::safer_call_func($conditional, $args))
 									{
 										$condition_succeeded = TRUE;
 										break;
@@ -384,7 +384,13 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 		 */
 		public static function evl($expression)
 		{
-			return eval('return ('.(string)$expression.');');
+			// Buffer the output.
+			ob_start();
+			$result = eval('return (' . (string)$expression . ');');
+			$output = ob_get_clean();
+			
+			// Return bool true if result true or there's output.
+			return ((bool)!empty($output) || (bool)$result);
 		}
 
 		/**
@@ -406,6 +412,39 @@ if(!class_exists('c_ws_plugin__s2member_sc_if_conds_in'))
 		{
 			$log_message = $message . ' - URI: ' . esc_url($_SERVER['REQUEST_URI']);
 			error_log($log_message);
+		}
+
+		/**
+		 * Do a safer call_user_func and call_user_func_array, 
+		 * with sanitation and output buffering.
+		 *
+		 * @package s2Member\s2If
+		 * @since 230814
+		 *
+		 * @param string $conditional The callable function or method to be invoked.
+		 * @param array $args Optional array of arguments to pass to the function.
+		 *
+		 * @return bool The boolean result of the condition.
+		 */
+		public static function safer_call_func($conditional, $args = array())
+		{
+			// Sanitize
+			$chars = '\'`"\=:;*<>()[]/\\|?!&%#';
+			$trans = '                        ';
+			$conditional = strtr($conditional, $chars, $trans);
+			if (!empty($args)) {
+				foreach ($args as $k => $arg) {
+					$args[$k] = strtr($arg, $chars, $trans);
+				}
+			}
+
+			// Buffer output
+			ob_start();
+			$result = call_user_func_array($conditional, $args);
+			$output = ob_get_clean();
+
+			// Return bool true if result true or there's output.
+			return ((bool)!empty($output) || (bool)$result);
 		}
 	}
 }
