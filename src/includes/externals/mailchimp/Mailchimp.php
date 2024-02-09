@@ -49,8 +49,10 @@ class MailchimpV3
             'status_if_new' => $double_optin ? 'pending' : 'subscribed',
             'email_type' => $email_type,
             'merge_fields' => (object)$merge_fields,
-            'interests' => $interests,
         ];
+        //230925
+        if (!empty($interests))
+            $data['interests'] = (object)$interests; //231103 object
 
         $options = [
             'http' => [
@@ -95,8 +97,11 @@ class MailchimpV3
     
             $data = [
                 'status' => 'unsubscribed',
-                'interests' => $interests,
             ];
+            //230925
+            if (!empty($interests))
+                $data['interests'] = (object)$interests; //231103 object
+                
             $method = 'PATCH';
         }
     
