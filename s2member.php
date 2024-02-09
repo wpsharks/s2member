@@ -188,7 +188,7 @@ else if(is_admin()) // Admin compatibility errors.
 unset(${__FILE__}); // Housekeeping.
 
 //2300808 PayPal button encryption notice if they're using it
-if (is_admin() && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"]) {
+if (is_admin() && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"])) {
 	// Dismiss
 	add_action('admin_init', function(){
 		$user_id = get_current_user_id();
