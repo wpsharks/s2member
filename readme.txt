@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, member, members only, memberships, paywall, content restriction, paid access, sell downloads, paypal, paid subscriptions, paid registration, custom login
-Version: 230815
-Stable tag: 230815
-Tested up to: 6.4-alpha-56395
+Version: 240218
+Stable tag: 240218
+Tested up to: 6.5-beta1-57644
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.1
@@ -176,11 +176,17 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v230815 =
+= v240218 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v240218 =
+
+- (Framework) **Fix**: PayPal button encryption default changed to "disabled".
+
+- (Framework) **Fix**: Mailchimp interest groups integration wasn't working correctly all the time. Fixed in this release.
 
 = v230815 =
 
