@@ -1,3 +1,9 @@
+= v240218 =
+
+- (Framework) **Fix**: PayPal button encryption default changed to "disabled".
+
+- (Framework) **Fix**: Mailchimp interest groups integration wasn't working correctly all the time. Fixed in this release.
+
 = v230815 =
 
 - (Framework) **Fix**: Added some missing functions to the list of conditionals allowed by default for s2If (e.g. `current_user_days_to_eot_less_than`, `current_user_gateway_is`). See also: https://s2member.com/kb-article/s2if-simple-shortcode-conditionals/#toc-5bb69568
