@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, member, members only, memberships, paywall, content restriction, paid access, sell downloads, paypal, paid subscriptions, paid registration, custom login
-Version: 240218
-Stable tag: 240218
-Tested up to: 6.5-beta1-57644
+Version: 240315
+Stable tag: 240315
+Tested up to: 6.5-RC2-57834
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.1
@@ -176,11 +176,15 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v240218 =
+= v240315 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v240315 =
+
+- (Framework) **Enhancement**: Improved access restrictions applied to WP REST requests.
 
 = v240218 =
 

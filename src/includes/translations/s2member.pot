@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  240218\n"
+"Project-Id-Version:  240315\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2024-02-17 23:02:16+00:00\n"
+"POT-Creation-Date: 2024-03-15 02:18:17+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -4585,6 +4585,70 @@ msgstr ""
 #: src/includes/classes/sc-eots-in.inc.php:79
 msgctxt "s2member-front"
 msgid "—"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:95
+#: src/includes/classes/security-rest.inc.php:104
+#: src/includes/classes/security-rest.inc.php:112
+msgid "You do not have access to this page. [sys level 0]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:129
+#: src/includes/classes/security-rest.inc.php:136
+#: src/includes/classes/security-rest.inc.php:145
+msgid "You do not have access to this category. [catg level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:158
+#: src/includes/classes/security-rest.inc.php:168
+msgid "You do not have access to this tag. [ptag level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:182
+#: src/includes/classes/security-rest.inc.php:189
+#: src/includes/classes/security-rest.inc.php:196
+msgid "You do not have access to this post. [post level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:205
+#: src/includes/classes/security-rest.inc.php:212
+msgid "You do not have access to this post. [catg level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:222
+#: src/includes/classes/security-rest.inc.php:228
+msgid "You do not have access to this post. [ptag level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:239
+msgid "You do not have access to this post. [ccap %s]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:246
+msgid "You do not have access to this post. [sp %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:259
+#: src/includes/classes/security-rest.inc.php:266
+#: src/includes/classes/security-rest.inc.php:273
+msgid "You do not have access to this page. [page level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:285
+#: src/includes/classes/security-rest.inc.php:292
+msgid "You do not have access to this page. [ptag level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:304
+msgid "You do not have access to this page. [ccap %s]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:312
+msgid "You do not have access to this page. [sp %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:327
+msgid "You do not have access to this content. [ruri level %d]"
 msgstr ""
 
 #: src/includes/classes/translations.inc.php:83

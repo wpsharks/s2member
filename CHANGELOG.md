@@ -1,3 +1,7 @@
+= v240315 =
+
+- (Framework) **Enhancement**: Improved access restrictions applied to WP REST requests.
+
 = v240218 =
 
 - (Framework) **Fix**: PayPal button encryption default changed to "disabled".
