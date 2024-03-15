@@ -64,6 +64,8 @@ add_filter('wp_list_pages_excludes', 'c_ws_plugin__s2member_querys::_query_level
 
 add_action('wp', 'c_ws_plugin__s2member_ssl::check_force_ssl', 1);
 add_action('wp', 'c_ws_plugin__s2member_security::security_gate', 1);
+//240315 Apply s2 restrictions to WP REST API
+add_filter('rest_pre_dispatch', 'c_ws_plugin__s2member_security_rest::security_gate', 10, 3);
 
 add_filter('wp_mail', 'c_ws_plugin__s2member_email_configs::email_filter');
 
