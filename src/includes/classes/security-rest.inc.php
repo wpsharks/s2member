@@ -42,6 +42,10 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 		{
       $route = $request->get_route(); // e.g. /wp/v2/pages
       $route = explode('/', trim($route, '/'));
+
+      if (empty($route[2]) || empty($route[3]))
+        return $response;
+      
       $type  = sanitize_key($route[2]); // e.g. pages
       $id    = (int)$route[3];
     
