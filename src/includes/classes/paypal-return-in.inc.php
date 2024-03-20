@@ -50,8 +50,14 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								if(!empty($_GET["s2member_paypal_proxy"]) && in_array($_GET["s2member_paypal_proxy"], array("alipay", "stripe", "authnet", "clickbank", "ccbill", "google"), TRUE))
 									${esc_html(trim(stripslashes($_GET["s2member_paypal_proxy"])))} = &$paypal; // Internal alias by reference.
 
-								$custom_success_redirection = (!empty($_GET["s2member_paypal_return_success"])) ? esc_html (trim (stripslashes ($_GET["s2member_paypal_return_success"]))) : false;
-								$custom_success_redirection = ($custom_success_redirection) ? str_ireplace (array("&#038;", "&amp;"), "&", $custom_success_redirection) : $custom_success_redirection;
+								//240320 Pro success valid redir
+								$custom_success_redirection = false;
+								if (c_ws_plugin__s2member_utils_conds::pro_is_installed()
+								&& isset($_GET["s2member_paypal_return_success"])
+								&& wp_validate_redirect($_GET["s2member_paypal_return_success"])) {
+									$custom_success_redirection = esc_html(trim(stripslashes($_GET["s2member_paypal_return_success"])));
+									$custom_success_redirection = str_ireplace(["&#038;", "&amp;"], "&", $custom_success_redirection);
+								}
 
 								if (is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
 									{
