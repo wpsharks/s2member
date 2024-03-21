@@ -614,7 +614,17 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 													$_p[$_key] = $_value; // Add each of these key conversions.
 										unset ($_key, $_value /* Just a little housekeeping here. */);
 
-										if(!is_admin() && (isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway']) || isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_subscr_id']) || isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_subscr_baid']) || isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_subscr_cid']) || isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_custom']) || isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_ccaps']) || isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_auto_eot_time']) || isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_notes'])))
+										if(!is_admin() 
+										&& (isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_subscr_gateway']) 
+											|| isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_subscr_id']) 
+											|| isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_subscr_baid']) 
+											|| isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_subscr_cid']) 
+											|| isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_custom']) 
+											|| isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_level']) //240321
+											|| isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_ccaps']) 
+											|| isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_auto_eot_time']) 
+											|| isset ($_p['ws_plugin__s2member_custom_reg_field_s2member_notes']))
+										)
 											exit (_x('s2Member security violation. You attempted to POST administrative variables that will NOT be trusted in a NON-administrative zone!', 's2member-front', 's2member'));
 
 										$_pmr = array_merge($_p, $meta, $rvs); // Merge all of these arrays together now, in this specific order.
