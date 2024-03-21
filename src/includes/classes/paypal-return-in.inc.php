@@ -54,7 +54,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								$custom_success_redirection = false;
 								if (c_ws_plugin__s2member_utils_conds::pro_is_installed()
 								&& isset($_GET["s2member_paypal_return_success"])
-								&& wp_validate_redirect($_GET["s2member_paypal_return_success"])) {
+								&& (bool)wp_validate_redirect($_GET["s2member_paypal_return_success"])) {
 									$custom_success_redirection = esc_html(trim(stripslashes($_GET["s2member_paypal_return_success"])));
 									$custom_success_redirection = str_ireplace(["&#038;", "&amp;"], "&", $custom_success_redirection);
 								}
