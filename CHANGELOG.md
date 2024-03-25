@@ -1,3 +1,11 @@
+= v240325 =
+
+- (Framework) **Fix**: Some sites were getting a warning from v240315's restriction improvement when the WP REST request doesn't include a type or ID. Fixed in this release.See [thread 11347](https://f.wpsharks.com/t/11347)
+
+- (Pro) **Enhancement**: Checkout success redirection URLs are now validated as safe with WordPress' _wp_validate_redirect_. To use a domain different than the site's, it can be allowed with wp's filter [allowed_redirect_hosts](https://developer.wordpress.org/reference/hooks/allowed_redirect_hosts/).
+
+- (Framework) **Enhancement**: Additional validation to prevent an invalid s2Member Level role during registration. 
+
 = v240315 =
 
 - (Framework) **Enhancement**: Improved access restrictions applied to WP REST requests.
