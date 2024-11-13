@@ -218,11 +218,11 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['new_user_emails_enabled'] = '0';
 
 		$default_options['new_user_email_subject'] = sprintf(_x('[%s] Username/Password', 's2member-front', 's2member'), get_bloginfo('name'));
-		$default_options['new_user_email_message'] = sprintf(_x("Your Username/Password for:\n%s\n\nUsername: %%%%user_login%%%%\nTo set your password, visit: %%%%wp_set_pass_url%%%%\n\n%%%%wp_login_url%%%%", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['new_user_email_message'] = sprintf(_x("Your Username/Password for: \n%s\n\nUsername: %%%%user_login%%%%\nTo set your password, visit: %%%%wp_set_pass_url%%%%\n\n%%%%wp_login_url%%%%", 's2member-front', 's2member'), get_bloginfo('name'));
 
 		$default_options['new_user_admin_email_recipients'] = get_bloginfo('admin_email');
 		$default_options['new_user_admin_email_subject']    = sprintf(_x('[%s] New User Registration', 's2member-front', 's2member'), get_bloginfo('name'));
-		$default_options['new_user_admin_email_message']    = sprintf(_x("New User Registration on your site:\n%s\n\nUser ID: %%%%user_id%%%%\nUsername: %%%%user_login%%%%\nEmail: %%%%user_email%%%%\nIP Address: %%%%user_ip%%%%", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['new_user_admin_email_message']    = sprintf(_x("New User Registration on your site: \n%s\n\nUser ID: %%%%user_id%%%%\nUsername: %%%%user_login%%%%\nEmail: %%%%user_email%%%%\nIP Address: %%%%user_ip%%%%", 's2member-front', 's2member'), get_bloginfo('name'));
 
 		$default_options['paypal_sandbox']        = '0';
 		$default_options['paypal_business']       = '';
@@ -245,7 +245,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['signup_email_recipients'] = '"%%full_name%%" <%%payer_email%%>';
 		$default_options['signup_email_subject']    = _x('Congratulations! (your membership has been approved)', 's2member-front', 's2member');
-		$default_options['signup_email_message']    = sprintf(_x("Thanks %%%%first_name%%%%! Your membership has been approved.\n\nIf you haven't already done so, the next step is to Register a Username.\n\nComplete your registration here:\n%%%%registration_url%%%%\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['signup_email_message']    = sprintf(_x("Thanks %%%%first_name%%%%! Your membership has been approved.\n\nIf you haven't already done so, the next step is to Register a Username.\n\nComplete your registration here: \n%%%%registration_url%%%%\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name'));
 
 		$default_options['modification_email_recipients'] = '"%%full_name%%" <%%payer_email%%>';
 		$default_options['modification_email_subject']    = _x('Thank you! Your account has been updated.', 's2member-front', 's2member');
@@ -257,7 +257,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['sp_email_recipients'] = '"%%full_name%%" <%%payer_email%%>';
 		$default_options['sp_email_subject']    = _x('Thank You! (instructions for access)', 's2member-front', 's2member');
-		$default_options['sp_email_message']    = sprintf(_x("Thanks %%%%first_name%%%%!\n\n%%%%item_name%%%%\n\nYour order can be retrieved here:\n%%%%sp_access_url%%%%\n(link expires in %%%%sp_access_exp%%%%)\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['sp_email_message']    = sprintf(_x("Thanks %%%%first_name%%%%! \n\n%%%%item_name%%%%\n\nYour order can be retrieved here: \n%%%%sp_access_url%%%%\n(link expires in %%%%sp_access_exp%%%%)\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name'));
 
 		$default_options['mailchimp_api_key']       = '';
 		$default_options['getresponse_api_key']     = '';

@@ -68,10 +68,10 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 			do_action('ws_plugin__s2member_before_sc_get_details_after_shortcode_atts', get_defined_vars());
 			unset($__refs, $__v); // Allow variables to be modified by reference.
 
-			if($attr['constant'] && defined($attr['constant'])) // Security check here. It must start with S2MEMBER_ on a Blog Farm.
+			//241110 Only S2MEMBER_CURRENT_USER constants.
+			if($attr['constant'] && defined($attr['constant']) && strpos($attr['constant'], 'S2MEMBER_CURRENT_USER') === 0)
 			{
-				if(!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site() || preg_match('/^S2MEMBER_/i', $attr['constant']))
-					$get = constant($attr['constant']);
+				$get = constant($attr['constant']);
 			}
 			else if($attr['user_field'] && (is_user_logged_in() || $attr['user_id']))
 				{
