@@ -1,3 +1,9 @@
+= v241114 =
+
+- (Framework & Pro) **Fix**: An error could happen on PHP8 during Pro activation. Fixed in this release.
+
+- (Framework) **Enhancement**: s2Get shortcode can now be used to show s2's current user constants. E.g. `[s2Get constant="S2MEMBER_CURRENT_USER_DISPLAY_NAME" /]` _WP Admin > s2Member > API / Scripting > s2Member PHP/API Constants_
+
 = v240325 =
 
 - (Framework) **Fix**: Some sites were getting a warning from v240315's restriction improvement when the WP REST request doesn't include a type or ID. Fixed in this release.See [thread 11347](https://f.wpsharks.com/t/11347)
