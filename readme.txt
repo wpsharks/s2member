@@ -1,8 +1,8 @@
-=== s2Member – Best Membership Plugin for All Kinds of Memberships, Content Restriction Paywalls & Member Access Subscriptions ===
+=== s2Member – Excellent for All Kinds of Memberships, Content Restriction Paywalls & Member Access Subscriptions ===
 
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
-Tags: membership, member, members only, memberships, paywall, content restriction, paid access, sell downloads, paypal, paid subscriptions, paid registration, custom login
+Tags: membership, content restriction, paid subscriptions, members only, paid access
 Version: 240325
 Stable tag: 240325
 Tested up to: 6.5-RC3-57866
@@ -26,11 +26,11 @@ PayPal Pro Integration: https://s2member.com/r/pp-account-types/
 Text Domain: s2member
 Domain Path: /src/includes/translations
 
-❤️ The best membership plugin! Easy and quick to use. Monetize your site selling unlimited memberships, single payment or recurring paid subscriptions. Protect your content in a moment, and a moment later be ready to get payments for access. Simple and flexible. Protect the whole site, or just parts, even files for download. 
+❤️ Excellent membership plugin! Easy, quick, flexible. Monetize your site with memberships and subscriptions. Protect content instantly and securely.
 
 == Description ==
 
-❤️ The **best membership plugin!** Over 11 years of experience, development, releases... Still going and growing!
+❤️ **Excellent membership plugin!** Over 14 years of experience, development, releases... Still going and growing!
 
 **Start your membership profits!** Build your tribe, gather your followers, enroll your students, bring in your clients!
 
