@@ -185,6 +185,26 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		}
 
 		/**
+		 * Sanitizes a string by stripping PHP tags.
+		 * @package s2Member\Utilities
+		 * @since 241207
+		 * @param string $string Input string.
+		 * @return string Output string, after PHP tags have been stripped.
+		 */
+		public static function strip_php_tags($string = '') {
+			$php_tags = array('<?php', '<?', '<?=', '?>');
+			foreach (array('?', '&#63;', '&#x3F;', '&#003F;') as $qm) {
+				foreach (array('<', '&lt;', '&#60;', '&#x3C;') as $lt) {
+					$php_tags[] = $lt . $qm;
+				}
+				foreach (array('>', '&gt;', '&#62;', '&#x3E;') as $gt) {
+					$php_tags[] = $qm . $gt;
+				}
+			}
+			return str_ireplace($php_tags, '', $string);
+		}
+
+		/**
 		 * Trims deeply; alias of ``trim_deep``.
 		 *
 		 * @package s2Member\Utilities
