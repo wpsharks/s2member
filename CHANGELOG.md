@@ -1,3 +1,9 @@
+= v241216 =
+
+- (Framework) **Enhancement**: Added extra attribute validation to the s2Get shortcode. Props to wcraft.
+
+- (Framework) **Enhancement**: Improved New User email preparation before send. Props to Hakiduck.
+
 = v241114 =
 
 - (Framework & Pro) **Fix**: An error could happen on PHP8 during Pro activation. Fixed in this release.
