@@ -199,8 +199,8 @@ if (is_admin() && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_en
 	add_action('admin_notices', function(){
 		$user_id = get_current_user_id();
 		$logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
-		$dismiss_url = add_query_arg('s2-dismiss-2300808', '', $_SERVER['REQUEST_URI']);
-		if (isset($_GET['s2-show-notice']) || !get_user_meta($user_id, 's2_notice_dismissed_2300808')) {
+		$dismiss_url = esc_url(add_query_arg('s2-dismiss-2300808', '', $_SERVER['REQUEST_URI']));
+		if (!get_user_meta($user_id, 's2_notice_dismissed_2300808')) {
 			echo '
 				<div class="notice notice-warning" style="position:relative; margin: 0 0 15px 2px !important; padding: 0 40px 0 0 !important">
 					<table cellspacing="11" cellpadding="0"><tr>
