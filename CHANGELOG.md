@@ -1,3 +1,19 @@
+= v250214 =
+
+- (Pro) **Enhancement**: Improved coupon usage logging for better tracking.
+
+- (Pro) **Enhancement**: Added a new single-use per user option for coupons. Thanks to Carl Borsani for sponsoring this.
+
+- (Pro) **Enhancement**: Coupons can now be limited to specific pro-forms. Thanks to Carl Borsani for sponsoring this.
+
+- (Framework) **Fix**: s2Get can now handle s2Member’s custom profile fields. Thanks to Gerard Earley for reporting this.
+
+- (Framework) **Fix**: Updated the admin notice about the PayPal button encryption setting. 
+
+- (Pro) **Enhancement**: Improved data handling in the Remote Operations API. Props to István.
+
+- (Pro) **Enhancement**: Improved validation of the template attribute in pro-forms and s2Member-List shortcodes. Props to István.
+
 = v241216 =
 
 - (Framework) **Enhancement**: Added extra attribute validation to the s2Get shortcode. Props to wcraft.

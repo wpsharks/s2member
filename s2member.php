@@ -20,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 241216
-Stable tag: 241216
+Version: 250214
+Stable tag: 250214
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -36,7 +36,7 @@ PayPal Pro Compatible: yes w/s2Member Pro
 Authorize.Net Compatible: yes w/s2Member Pro
 ClickBank Compatible: yes w/s2Member Pro
 
-Tested up to: 6.8-alpha-59514
+Tested up to: 6.8-alpha-59819
 Requires at least: 4.2
 
 Requires PHP: 5.6.2
@@ -77,7 +77,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '241216'; //version//
+${__FILE__}['tmp'] = '250214'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**
@@ -199,8 +199,8 @@ if (is_admin() && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_en
 	add_action('admin_notices', function(){
 		$user_id = get_current_user_id();
 		$logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
-		$dismiss_url = add_query_arg('s2-dismiss-2300808', '', $_SERVER['REQUEST_URI']);
-		if (isset($_GET['s2-show-notice']) || !get_user_meta($user_id, 's2_notice_dismissed_2300808')) {
+		$dismiss_url = esc_url(add_query_arg('s2-dismiss-2300808', '', $_SERVER['REQUEST_URI']));
+		if (!get_user_meta($user_id, 's2_notice_dismissed_2300808')) {
 			echo '
 				<div class="notice notice-warning" style="position:relative; margin: 0 0 15px 2px !important; padding: 0 40px 0 0 !important">
 					<table cellspacing="11" cellpadding="0"><tr>
