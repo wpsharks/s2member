@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 241216
-Stable tag: 241216
-Tested up to: 6.8-alpha-59514
+Version: 250214
+Stable tag: 250214
+Tested up to: 6.8-alpha-59819
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.3
@@ -30,7 +30,7 @@ Domain Path: /src/includes/translations
 
 == Description ==
 
-❤️ **Excellent membership plugin!** Over 14 years of experience, development, releases... Still going and growing!
+❤️ **Excellent membership plugin!** Over 15 years of experience, development, releases... Still going and growing!
 
 **Start your membership profits!** Build your tribe, gather your followers, enroll your students, bring in your clients!
 
@@ -176,11 +176,27 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v241216 =
+= v250214 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v250214 =
+
+- (Pro) **Enhancement**: Improved coupon usage logging for better tracking.
+
+- (Pro) **Enhancement**: Added a new single-use per user option for coupons. Thanks to Carl Borsani for sponsoring this.
+
+- (Pro) **Enhancement**: Coupons can now be limited to specific pro-forms. Thanks to Carl Borsani for sponsoring this.
+
+- (Framework) **Fix**: s2Get can now handle s2Member’s custom profile fields. Thanks to Gerard Earley for reporting this.
+
+- (Framework) **Fix**: Updated the admin notice about the PayPal button encryption setting. 
+
+- (Pro) **Enhancement**: Improved data handling in the Remote Operations API. Props to István.
+
+- (Pro) **Enhancement**: Improved validation of the template attribute in pro-forms and s2Member-List shortcodes. Props to István.
 
 = v241216 =
 
