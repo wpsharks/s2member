@@ -119,6 +119,7 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 				delete_user_option($user_id, 's2member_paid_registration_times');
 				delete_user_option($user_id, 's2member_access_cap_times');
 				delete_user_option($user_id, 's2member_coupon_codes');
+				delete_user_option($user_id, 's2member_coupon_uses');
 				delete_user_option($user_id, 's2member_sp_references');
 
 				delete_user_option($user_id, 's2member_last_status_scan');
