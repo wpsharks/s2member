@@ -235,9 +235,9 @@ if (is_admin() && !defined('WS_PLUGIN__S2MEMBER_PRO_VERSION')) {
 					<table><tr>
 					<td><a href="https://s2member.com/" target="_blank"><img src="'.$logo_url.'" height="70" width="70" align="top" style="padding-right:1em; filter: hue-rotate(0deg) saturate(80) brightness(100%); -webkit-filter: hue-rotate(0deg) saturate(80) brightness(100%);" /></a></td>
 					<td>
-						<b>🐰 Happy Easter! <i>I\'m very happy you\'re using s2Member!</b></i> 💕 <i>I\'ve discounted <a href="https://s2member.com/checkout/?s2p-option=2" target="_blank" style="color:'.$color3.' !important; font-weight:bold;">20% OFF s2Member Pro</a> for you, if you get it now...<br />
+						<b>🐰 HAPPY EASTER! <i>I\'m very happy you\'re using s2Member!</b></i> 💕 <i>I\'ve discounted <a href="https://s2member.com/checkout/?s2p-option=2" target="_blank" style="color:'.$color3.' !important; font-weight:bold;">20% OFF s2Member Pro</a> for you, if you get it now...<br />
 						Make more money with <a href="https://s2member.com/testimonials/" target="_blank" style="color:'.$color3.' !important; font-weight:bold;">s2Member Pro!</a> with on-site payments, success redirections, reminder emails, <a href="https://s2member.com/features/" target="_blank">and more!</a></i><br />
-						<b><i>This is a SHORT limited offer and expires VERY soon...</i> ➡️ <i><a href="https://s2member.com/checkout/?s2p-option=2/" target="_blank" style="color:'.$color1.' !important;">Secure your lifetime license NOW at the best price!</a></i></b>&nbsp; ⬅️ 😀<br />
+						<b><i>This is a SHORT limited offer and expires VERY soon...</i> ➡️ <i><a href="https://s2member.com/checkout/?s2p-option=2/" target="_blank" style="color:'.$color1.' !important;">CLICK HERE and secure your lifetime license NOW at the best price!</a></i></b>&nbsp; ⬅️ 😀<br />
 					</td>
 					</tr></table>
 					<a href="'.$dismiss_url.'" class="notice-dismiss" style="text-decoration:none;"><span class="screen-reader-text">Dismiss this notice.</span></a>
