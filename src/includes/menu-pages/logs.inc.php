@@ -176,7 +176,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 				do_action("ws_plugin__s2member_during_logs_page_during_left_sections_during_logs", get_defined_vars());
 
 				$log_file_options = ""; // Initialize to an empty string.
-				$view_log_file    = (!empty($_POST["ws_plugin__s2member_log_file"])) ? esc_html($_POST["ws_plugin__s2member_log_file"]) : "";
+				$view_log_file    = (!empty($_POST["ws_plugin__s2member_log_file"])) ? sanitize_file_name($_POST["ws_plugin__s2member_log_file"]) : ""; //250422 Sanitize log file name.
+				$view_log_file    = (preg_match('/\.log$/i', $view_log_file)) ? $view_log_file : "";
 				$logs_dir         = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"];
 
 				if(is_dir($logs_dir)) // Do we have a logs directory on this installation?
