@@ -156,10 +156,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 		 * @param integer|string $user_id Optional. A numeric WordPress User ID.
 		 *
 		 * @param string         $subscr_txn_baid_cid_id Optional. Can be used instead of passing in a ``$user_id``.
-		 *   If ``$subscr_baid_cid_id`` is passed in, it has to match the one found inside the resulting IPN Signup Vars collected by this routine.
+		 *   If ``$subscr_txn_baid_cid_id`` is passed in, it has to match the one found inside the resulting IPN Signup Vars collected by this routine.
 		 *   If neither of these parameters are passed in, the current User is assumed instead, obtained through ``wp_get_current_user()``.
 		 *
 		 * @return array|bool A User's IPN Signup Vars on success, else false on failure.
+		 *   If no IPN Signup Vars is found for this user, a makeshift array may be returned if fallback behavior is enabled.
 		 */
 		public static function get_user_ipn_signup_vars($user_id = 0, $subscr_txn_baid_cid_id = '')
 		{
@@ -171,10 +172,38 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 				$_subscr_cid  = get_user_option('s2member_subscr_cid', $user_id);
 				$_subscr_id   = get_user_option('s2member_subscr_id', $user_id);
 
-				if($_subscr_id && (!$subscr_txn_baid_cid_id || $subscr_txn_baid_cid_id === $_subscr_id || $subscr_txn_baid_cid_id === $_subscr_baid || $subscr_txn_baid_cid_id === $_subscr_cid))
-					if(is_array($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id)))
-						if($ipn_signup_vars['subscr_id'] === $_subscr_id)
+				if ($_subscr_id) {
+					$ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id);
+					if (is_array($ipn_signup_vars)) {
+						// If we have ipn_signup_vars, subscr_id should match.
+						if (!empty($ipn_signup_vars['subscr_id']) && $ipn_signup_vars['subscr_id'] == $_subscr_id) {
 							return $ipn_signup_vars;
+						} else {
+							return FALSE;
+						}
+					}
+					//250426 Fall back to a makeshift ipn_signup_vars array.
+					if (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['ipn_signup_vars_fallback'])) {
+						$userdata = get_userdata((int)$user_id);
+						$ipn_signup_vars = array(
+							'subscr_cid'        => !empty($_subscr_cid) ? $_subscr_cid : '',
+							'subscr_id'         => $_subscr_id,
+							'custom'            => esc_html($_SERVER["HTTP_HOST"]),
+							'period1'           => '',
+							'period3'           => '',
+							'payer_email'       => !empty($userdata->user_email) ? $userdata->user_email : 'USER EMAIL',
+							'first_name'        => !empty($userdata->first_name) ? $userdata->first_name : 'FIRST NAME',
+							'last_name'         => !empty($userdata->last_name) ? $userdata->last_name : 'LAST NAME',
+							'option_name1'      => '',
+							'option_selection1' => '',
+							'option_name2'      => '',
+							'option_selection2' => '',
+							'item_name'         => 'ITEM NAME',
+							'item_number'       => 'ITEM NUMBER',
+						);
+						return $ipn_signup_vars;
+					}
+				}
 			}
 			return FALSE; // Otherwise, return false.
 		}
