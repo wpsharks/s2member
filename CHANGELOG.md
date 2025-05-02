@@ -1,3 +1,9 @@
+= v250502 =
+
+- (Pro) **Enhancement**: Added optional fallback behavior for missing IPN Signup Vars during Stripe webhook processing. When enabled, s2Member will generate a makeshift IPN vars array if none are stored for the user. This helps support migrated or manually imported subscriptions. The setting is available under _s2Member Pro > Stripe Options > Stripe Webhook/IPN Integration_. See [thread 11334](https://f.wpsharks.com/t/11334).
+
+- (Framework) **UI**: Removed admin notice about Easter promo for Pro add-on.
+
 = v250424 =
 
 - (Framework) **Enhancement**: Added additional sanitation/validation to the Logs Viewer, although only Administrators have access to it.
