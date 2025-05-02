@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  250424\n"
+"Project-Id-Version:  250502\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2025-04-24 00:21:22+00:00\n"
+"POT-Creation-Date: 2025-05-02 00:41:42+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1995,7 +1995,7 @@ msgctxt "s2member-front"
 msgid "No Billing Method; please try again."
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:95 src/includes/syscon.inc.php:247
+#: pro/src/includes/syscon.inc.php:95 src/includes/syscon.inc.php:249
 msgctxt "s2member-front"
 msgid "Congratulations! (your membership has been approved)"
 msgstr ""
@@ -2017,7 +2017,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:99 src/includes/syscon.inc.php:259
+#: pro/src/includes/syscon.inc.php:99 src/includes/syscon.inc.php:261
 msgctxt "s2member-front"
 msgid "Thank You! (instructions for access)"
 msgstr ""
@@ -5116,7 +5116,7 @@ msgid ""
 "IP Address: %%%%user_ip%%%%"
 msgstr ""
 
-#: src/includes/syscon.inc.php:248
+#: src/includes/syscon.inc.php:250
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your membership has been approved.\n"
@@ -5132,12 +5132,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/includes/syscon.inc.php:251 src/includes/syscon.inc.php:255
+#: src/includes/syscon.inc.php:253 src/includes/syscon.inc.php:257
 msgctxt "s2member-front"
 msgid "Thank you! Your account has been updated."
 msgstr ""
 
-#: src/includes/syscon.inc.php:252 src/includes/syscon.inc.php:256
+#: src/includes/syscon.inc.php:254 src/includes/syscon.inc.php:258
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n"
@@ -5148,7 +5148,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/includes/syscon.inc.php:260
+#: src/includes/syscon.inc.php:262
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! \n"
@@ -5165,32 +5165,32 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/includes/syscon.inc.php:299
+#: src/includes/syscon.inc.php:301
 msgctxt "s2member-front"
 msgid "Free Subscriber"
 msgstr ""
 
-#: src/includes/syscon.inc.php:299
+#: src/includes/syscon.inc.php:301
 msgctxt "s2member-front"
 msgid "Bronze Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:299
+#: src/includes/syscon.inc.php:301
 msgctxt "s2member-front"
 msgid "Silver Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:299
+#: src/includes/syscon.inc.php:301
 msgctxt "s2member-front"
 msgid "Gold Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:299
+#: src/includes/syscon.inc.php:301
 msgctxt "s2member-front"
 msgid "Platinum Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:299
+#: src/includes/syscon.inc.php:301
 msgctxt "s2member-front"
 msgid "Level %s Member"
 msgstr ""

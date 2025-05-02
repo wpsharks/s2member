@@ -238,6 +238,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['paypal_payflow_api_vendor']   = '';
 		$default_options['paypal_payflow_api_password'] = '';
 
+		$default_options['ipn_signup_vars_fallback'] = '0'; //250427
+
 		$default_options['signup_tracking_codes']       = '';
 		$default_options['modification_tracking_codes'] = '';
 		$default_options['ccap_tracking_codes']         = '';
