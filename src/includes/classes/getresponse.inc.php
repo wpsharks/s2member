@@ -56,7 +56,7 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 
 			extract((array)$args); // Extract the arguments for back compat. w/ filters that relied upon them.
 
-			foreach(preg_split('/['."\r\n\t".';,]+/', $gr_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_gr_list)
+			foreach(preg_split('/['."\r\n\t".';,]+/', $gr_level_list_ids, -1, PREG_SPLIT_NO_EMPTY) as $_gr_list)
 			{
 				$_gr = array(
 					'args'       => $args,
@@ -142,7 +142,7 @@ if(!class_exists('c_ws_plugin__s2member_getresponse'))
 
 			extract((array)$args); // Extract the arguments for back compat. w/ filters that relied upon them.
 
-			foreach(preg_split('/['."\r\n\t".';,]+/', $gr_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_gr_list)
+			foreach(preg_split('/['."\r\n\t".';,]+/', $gr_level_list_ids, -1, PREG_SPLIT_NO_EMPTY) as $_gr_list)
 			{
 				$_gr = array(
 					'args'       => $args,
