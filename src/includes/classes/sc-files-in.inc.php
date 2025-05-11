@@ -158,7 +158,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 					$file_download_wo_resolution_extension = preg_replace('/\-r[0-9]+([^.]*)$/i', '', $file_download_resolution_wo_extension); // e.g., `r720p-HD` is removed here.
 
 					$file_download_resolutions = array(); // Initialize the array of resolutions.
-					foreach(preg_split('/[,;\s]+/', $attr['player_resolutions'], NULL, PREG_SPLIT_NO_EMPTY) as $_player_resolution)
+					foreach(preg_split('/[,;\s]+/', $attr['player_resolutions'], -1, PREG_SPLIT_NO_EMPTY) as $_player_resolution)
 					{
 						$_player_resolution                             = ltrim($_player_resolution, 'Rr'); // Remove R|r prefix.
 						$file_download_resolutions[$_player_resolution] = $file_download_wo_resolution_extension.'-r'.$_player_resolution.'.'.$file_download_extension;

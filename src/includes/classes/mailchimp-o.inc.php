@@ -76,7 +76,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp_o'))
 
 			extract((array)$args); // Extract the arguments for back compat. w/ filters that relied upon them.
 
-			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_mc_list)
+			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, -1, PREG_SPLIT_NO_EMPTY) as $_mc_list)
 			{
 				$_mc = array(
 					'args'           => $args,
@@ -94,7 +94,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp_o'))
 					list($_mc['list_id'], $_mc['interest_groups_title'], $_mc['interest_groups']) = preg_split('/\:\:/', $_mc['list'], 3);
 
 					if(($_mc['interest_groups_title'] = trim($_mc['interest_groups_title'])))
-						if(($_mc['interest_groups'] = $_mc['interest_groups'] ? preg_split('/\|/', trim($_mc['interest_groups']), NULL, PREG_SPLIT_NO_EMPTY) : array()))
+						if(($_mc['interest_groups'] = $_mc['interest_groups'] ? preg_split('/\|/', trim($_mc['interest_groups']), -1, PREG_SPLIT_NO_EMPTY) : array()))
 							$_mc['interest_groups'] = array('GROUPINGS' => array(array('name' => $_mc['interest_groups_title'], 'groups' => implode(',', $_mc['interest_groups']))));
 
 					if(!$_mc['list_id']) continue; // List ID is missing now; after parsing interest groups.
@@ -150,7 +150,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp_o'))
 
 			extract((array)$args); // Extract the arguments for back compat. w/ filters that relied upon them.
 
-			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_mc_list)
+			foreach(preg_split('/['."\r\n\t".';,]+/', $mc_level_list_ids, -1, PREG_SPLIT_NO_EMPTY) as $_mc_list)
 			{
 				$_mc = array(
 					'args'           => $args,
@@ -168,7 +168,7 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp_o'))
 					list($_mc['list_id'], $_mc['interest_groups_title'], $_mc['interest_groups']) = preg_split('/\:\:/', $_mc['list'], 3);
 
 					if(($_mc['interest_groups_title'] = trim($_mc['interest_groups_title'])))
-						if(($_mc['interest_groups'] = $_mc['interest_groups'] ? preg_split('/\|/', trim($_mc['interest_groups']), NULL, PREG_SPLIT_NO_EMPTY) : array()))
+						if(($_mc['interest_groups'] = $_mc['interest_groups'] ? preg_split('/\|/', trim($_mc['interest_groups']), -1, PREG_SPLIT_NO_EMPTY) : array()))
 							$_mc['interest_groups'] = array('GROUPINGS' => array(array('name' => $_mc['interest_groups_title'], 'groups' => implode(',', $_mc['interest_groups']))));
 
 					if(!$_mc['list_id']) continue; // List ID is missing now; after parsing interest groups.

@@ -83,13 +83,13 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 			{
 				if($dismiss && !empty($dismissal_link))
 					$notice = $dismissal_link.$notice;
-				echo '<div class="notice notice-error"><p>'.$notice.'</p></div>';
+				echo '<div class="notice notice-error"><p>'.wp_kses_post($notice).'</p></div>';
 			}
 			else if($notice && is_string($notice))
 			{
 				if($dismiss && !empty($dismissal_link))
 					$notice = $dismissal_link.$notice;
-				echo '<div class="notice notice-info"><p>'.$notice.'</p></div>';
+				echo '<div class="notice notice-info"><p>'.wp_kses_post($notice).'</p></div>';
 			}
 			do_action('ws_plugin__s2member_after_display_admin_notice', get_defined_vars());
 		}
@@ -119,7 +119,11 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 				$a = (!$a) ? 'blog' : $a; // Default blog admin.
 
 				foreach($notices as $i => $notice) // Check several things about each notice.
-					foreach(!$notice['on_pages'] ? array('*') : (array)$notice['on_pages'] as $page)
+				{
+					//250510 Fixed for PHP 8.1+: safely normalize on_pages before foreach
+					$notice = (array)$notice;
+					$notice['on_pages'] = empty($notice['on_pages']) ? array('*') : (array)$notice['on_pages'];
+					foreach($notice['on_pages'] as $page) 
 					{
 						if(!preg_match('/^(.+?)\:/', $page)) // NO prefix?
 							$page = 'blog:'.ltrim($page, ':'); // `blog:`
@@ -147,6 +151,7 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 								continue 2; // This notice processed; continue.
 							}
 					}
+				}
 				$notices = array_merge($notices); // Re-index array.
 
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;

@@ -51,7 +51,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber_e'))
 
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
-			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_aw_list)
+			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, -1, PREG_SPLIT_NO_EMPTY) as $_aw_list)
 			{
 				$_aw = array(
 					'args'       => $args,
@@ -105,7 +105,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber_e'))
 			if(!$email_configs_were_on) c_ws_plugin__s2member_email_configs::email_config(); // MUST be ON for removal requests.
 			// `From:` address MUST match AWeber account. See: <http://www.aweber.com/faq/questions/62/Can+I+Unsubscribe+People+Via+Email%3F>.
 
-			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_aw_list)
+			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, -1, PREG_SPLIT_NO_EMPTY) as $_aw_list)
 			{
 				$_aw = array(
 					'args'       => $args,

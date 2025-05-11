@@ -146,7 +146,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
-			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_aw_list)
+			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, -1, PREG_SPLIT_NO_EMPTY) as $_aw_list)
 			{
 				$_aw = array(
 					'args'       => $args,
@@ -253,7 +253,7 @@ if(!class_exists('c_ws_plugin__s2member_aweber'))
 
 			$aw_level_list_ids = $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$args->level.'_aweber_list_ids'];
 
-			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, NULL, PREG_SPLIT_NO_EMPTY) as $_aw_list)
+			foreach(preg_split('/['."\r\n\t".'\s;,]+/', $aw_level_list_ids, -1, PREG_SPLIT_NO_EMPTY) as $_aw_list)
 			{
 				$_aw = array(
 					'args'       => $args,

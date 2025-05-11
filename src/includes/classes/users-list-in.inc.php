@@ -481,7 +481,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 							update_user_option($user_id, "s2member_custom", $_p["ws_plugin__s2member_profile_s2member_custom"]);
 
 						if(isset($_p["ws_plugin__s2member_profile_s2member_coupon_codes"]))
-							update_user_option($user_id, "s2member_coupon_codes", array_map('trim', preg_split('/,+/', $_p["ws_plugin__s2member_profile_s2member_coupon_codes"], NULL, PREG_SPLIT_NO_EMPTY)));
+							update_user_option($user_id, "s2member_coupon_codes", array_map('trim', preg_split('/,+/', $_p["ws_plugin__s2member_profile_s2member_coupon_codes"], -1, PREG_SPLIT_NO_EMPTY)));
 
 						if(isset($_p["ws_plugin__s2member_profile_s2member_registration_ip"]))
 							update_user_option($user_id, "s2member_registration_ip", $_p["ws_plugin__s2member_profile_s2member_registration_ip"]);
