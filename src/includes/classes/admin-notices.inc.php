@@ -83,13 +83,13 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 			{
 				if($dismiss && !empty($dismissal_link))
 					$notice = $dismissal_link.$notice;
-				echo '<div class="notice notice-error"><p>'.$notice.'</p></div>';
+				echo '<div class="notice notice-error"><p>'.wp_kses_post($notice).'</p></div>';
 			}
 			else if($notice && is_string($notice))
 			{
 				if($dismiss && !empty($dismissal_link))
 					$notice = $dismissal_link.$notice;
-				echo '<div class="notice notice-info"><p>'.$notice.'</p></div>';
+				echo '<div class="notice notice-info"><p>'.wp_kses_post($notice).'</p></div>';
 			}
 			do_action('ws_plugin__s2member_after_display_admin_notice', get_defined_vars());
 		}
