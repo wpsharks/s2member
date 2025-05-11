@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 250502
-Stable tag: 250502
-Tested up to: 6.9-alpha-60174
+Version: 250511
+Stable tag: 250511
+Tested up to: 6.9-alpha-60229
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.3
@@ -176,11 +176,23 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v250502 =
+= v250511 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v250511 =
+
+- (Framework) **Fix**: Improved the admin notices handler to prevent a PHP 8.1+ error in rare cases when the data wasn't an array as expected.
+
+- (Framework) **Enhancement**: Added sanitization to the admin notices handler for improved safety.
+
+- (Framework & Pro) **Fix**: Updated all uses of preg_split() with `-1` instead of `NULL` as the limit to prevent PHP 8.1+ deprecation warnings.
+
+- (Pro) **Fix**: Fixed an s2Member-List database query with a typo that prevented some custom searches from working as expected.
+
+- (Pro) **Fix**: Removed a check in Stripe pro-forms that blocked using the same details for trial and regular payments for subscriptions. See [thread 12818](https://f.wpsharks.com/t/12818).
 
 = v250502 =
 

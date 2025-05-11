@@ -1,3 +1,15 @@
+= v250511 =
+
+- (Framework) **Fix**: Improved the admin notices handler to prevent a PHP 8.1+ error in rare cases when the data wasn't an array as expected.
+
+- (Framework) **Enhancement**: Added sanitization to the admin notices handler for improved safety.
+
+- (Framework & Pro) **Fix**: Updated all uses of preg_split() with `-1` instead of `NULL` as the limit to prevent PHP 8.1+ deprecation warnings.
+
+- (Pro) **Fix**: Fixed an s2Member-List database query with a typo that prevented some custom searches from working as expected.
+
+- (Pro) **Fix**: Removed a check in Stripe pro-forms that blocked using the same details for trial and regular payments for subscriptions. See [thread 12818](https://f.wpsharks.com/t/12818).
+
 = v250502 =
 
 - (Pro) **Enhancement**: Added optional fallback behavior for missing IPN Signup Vars during Stripe webhook processing. When enabled, s2Member will generate a makeshift IPN vars array if none are stored for the user. This helps support migrated or manually imported subscriptions. The setting is available under _s2Member Pro > Stripe Options > Stripe Webhook/IPN Integration_. See [thread 11334](https://f.wpsharks.com/t/11334).
