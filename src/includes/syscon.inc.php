@@ -82,7 +82,7 @@ $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir_htaccess'] = dirname(__FILE__
 /*
 Configure the global reCaptcha (www.websharks-inc.net / or any domain). These public/private keys work on any installation.
 */
-$GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']  = array('public_key' => '6LeCANsSAAAAAIIrlB3FrXe42mr0OSSZpT0pkpFK', 'private_key' => '6LeCANsSAAAAAGBXMIKAirv6G4PmaGa-ORxdD-oZ', 'lang' => _x('en', 's2member-front recaptcha-lang-code', 's2member'));
+$GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']  = array('public_key' => '6LeCANsSAAAAAIIrlB3FrXe42mr0OSSZpT0pkpFK', 'private_key' => '6LeCANsSAAAAAGBXMIKAirv6G4PmaGa-ORxdD-oZ', 'lang' => 'en');
 /*
 Configure the right menu options panel for s2Member.
 */
@@ -160,7 +160,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['custom_reg_password_min_strength'] = 'good'; // `weak`, `good` or `strong`.
 
 		$default_options['custom_reg_opt_in']       = '1';
-		$default_options['custom_reg_opt_in_label'] = _x('Yes, I want to receive updates via email.', 's2member-front', 's2member');
+		$default_options['custom_reg_opt_in_label'] = 'Yes, I want to receive updates via email.';
 
 		$default_options['custom_reg_auto_opt_outs']            = array();
 		$default_options['custom_reg_auto_opt_out_transitions'] = '0';
@@ -217,12 +217,12 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['new_user_emails_enabled'] = '0';
 
-		$default_options['new_user_email_subject'] = sprintf(_x('[%s] Username/Password', 's2member-front', 's2member'), get_bloginfo('name'));
-		$default_options['new_user_email_message'] = sprintf(_x("Your Username/Password for: \n%s\n\nUsername: %%%%user_login%%%%\nTo set your password, visit: %%%%wp_set_pass_url%%%%\n\n%%%%wp_login_url%%%%", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['new_user_email_subject'] = sprintf('[%s] Username/Password', get_bloginfo('name'));
+		$default_options['new_user_email_message'] = sprintf("Your Username/Password for: \n%s\n\nUsername: %%%%user_login%%%%\nTo set your password, visit: %%%%wp_set_pass_url%%%%\n\n%%%%wp_login_url%%%%", get_bloginfo('name'));
 
 		$default_options['new_user_admin_email_recipients'] = get_bloginfo('admin_email');
-		$default_options['new_user_admin_email_subject']    = sprintf(_x('[%s] New User Registration', 's2member-front', 's2member'), get_bloginfo('name'));
-		$default_options['new_user_admin_email_message']    = sprintf(_x("New User Registration on your site: \n%s\n\nUser ID: %%%%user_id%%%%\nUsername: %%%%user_login%%%%\nEmail: %%%%user_email%%%%\nIP Address: %%%%user_ip%%%%", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['new_user_admin_email_subject']    = sprintf('[%s] New User Registration', get_bloginfo('name'));
+		$default_options['new_user_admin_email_message']    = sprintf("New User Registration on your site: \n%s\n\nUser ID: %%%%user_id%%%%\nUsername: %%%%user_login%%%%\nEmail: %%%%user_email%%%%\nIP Address: %%%%user_ip%%%%", get_bloginfo('name'));
 
 		$default_options['paypal_sandbox']        = '0';
 		$default_options['paypal_business']       = '';
@@ -246,20 +246,20 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['sp_tracking_codes']           = '';
 
 		$default_options['signup_email_recipients'] = '"%%full_name%%" <%%payer_email%%>';
-		$default_options['signup_email_subject']    = _x('Congratulations! (your membership has been approved)', 's2member-front', 's2member');
-		$default_options['signup_email_message']    = sprintf(_x("Thanks %%%%first_name%%%%! Your membership has been approved.\n\nIf you haven't already done so, the next step is to Register a Username.\n\nComplete your registration here: \n%%%%registration_url%%%%\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['signup_email_subject']    = 'Congratulations! (your membership has been approved)';
+		$default_options['signup_email_message']    = sprintf("Thanks %%%%first_name%%%%! Your membership has been approved.\n\nIf you haven't already done so, the next step is to Register a Username.\n\nComplete your registration here: \n%%%%registration_url%%%%\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", get_bloginfo('name'));
 
 		$default_options['modification_email_recipients'] = '"%%full_name%%" <%%payer_email%%>';
-		$default_options['modification_email_subject']    = _x('Thank you! Your account has been updated.', 's2member-front', 's2member');
-		$default_options['modification_email_message']    = sprintf(_x("Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['modification_email_subject']    = 'Thank you! Your account has been updated.';
+		$default_options['modification_email_message']    = sprintf("Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", get_bloginfo('name'));
 
 		$default_options['ccap_email_recipients'] = '"%%full_name%%" <%%payer_email%%>';
-		$default_options['ccap_email_subject']    = _x('Thank you! Your account has been updated.', 's2member-front', 's2member');
-		$default_options['ccap_email_message']    = sprintf(_x("Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['ccap_email_subject']    = 'Thank you! Your account has been updated.';
+		$default_options['ccap_email_message']    = sprintf("Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", get_bloginfo('name'));
 
 		$default_options['sp_email_recipients'] = '"%%full_name%%" <%%payer_email%%>';
-		$default_options['sp_email_subject']    = _x('Thank You! (instructions for access)', 's2member-front', 's2member');
-		$default_options['sp_email_message']    = sprintf(_x("Thanks %%%%first_name%%%%! \n\n%%%%item_name%%%%\n\nYour order can be retrieved here: \n%%%%sp_access_url%%%%\n(link expires in %%%%sp_access_exp%%%%)\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name'));
+		$default_options['sp_email_subject']    = 'Thank You! (instructions for access)';
+		$default_options['sp_email_message']    = sprintf("Thanks %%%%first_name%%%%! \n\n%%%%item_name%%%%\n\nYour order can be retrieved here: \n%%%%sp_access_url%%%%\n(link expires in %%%%sp_access_exp%%%%)\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", get_bloginfo('name'));
 
 		$default_options['mailchimp_api_key']       = '';
 		$default_options['getresponse_api_key']     = '';
@@ -298,7 +298,9 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['sp_sale_notification_recipients']      = '';
 		$default_options['sp_ref_rev_notification_recipients']   = '';
 
-		for($n = 0, $l = array(_x('Free Subscriber', 's2member-front', 's2member'), _x('Bronze Member', 's2member-front', 's2member'), _x('Silver Member', 's2member-front', 's2member'), _x('Gold Member', 's2member-front', 's2member'), _x('Platinum Member', 's2member-front', 's2member')); $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++) $default_options['level'.$n.'_label'] = (!empty($l[$n])) ? $l[$n] : sprintf(_x('Level %s Member', 's2member-front', 's2member'), $n);
+		for ($n = 0, $l = array('Free Subscriber', 'Bronze Member', 'Silver Member', 'Gold Member', 'Platinum Member'); $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++) {
+				$default_options['level'.$n.'_label'] = (!empty($l[$n])) ? $l[$n] : 'Level '.$n.' Member';
+		}
 
 		$default_options['apply_label_translations'] = '0';
 
@@ -633,8 +635,54 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 			$GLOBALS['WS_PLUGIN__']['s2member']['o']['options_checksum'] = md5($checksum_prefix.serialize(array_merge($GLOBALS['WS_PLUGIN__']['s2member']['o'], array('options_checksum' => 0))));
 		}
-		$GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in_label'] = _x($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_opt_in_label'], 's2member-front', 's2member');
 
 		return apply_filters_ref_array('ws_plugin__s2member_options', array(&$GLOBALS['WS_PLUGIN__']['s2member']['o']));
 	}
 }
+
+//250506 Move _x's to init to avoid PHP Notice since WP 6.7
+add_action('init', function () {
+	$o =& $GLOBALS['WS_PLUGIN__']['s2member']['o'];
+
+	// Apply the filter to retrieve default values (not global)
+	$default_values = apply_filters('ws_plugin__s2member_default_options', []);
+
+	// Translated defaults for $o[...] options, only applied if still at their original defaults
+	$translated_defaults = [
+			'custom_reg_opt_in_label' => _x('Yes, I want to receive updates via email.', 's2member-front', 's2member'),
+			'new_user_email_subject' => sprintf(_x('[%s] Username/Password', 's2member-front', 's2member'), get_bloginfo('name')),
+			'new_user_email_message' => sprintf(_x("Your Username/Password for: \n%s\n\nUsername: %%%%user_login%%%%\nTo set your password, visit: %%%%wp_set_pass_url%%%%\n\n%%%%wp_login_url%%%%", 's2member-front', 's2member'), get_bloginfo('name')),
+			'new_user_admin_email_subject' => sprintf(_x('[%s] New User Registration', 's2member-front', 's2member'), get_bloginfo('name')),
+			'new_user_admin_email_message' => sprintf(_x("New User Registration on your site: \n%s\n\nUser ID: %%%%user_id%%%%\nUsername: %%%%user_login%%%%\nEmail: %%%%user_email%%%%\nIP Address: %%%%user_ip%%%%", 's2member-front', 's2member'), get_bloginfo('name')),
+			'signup_email_subject' => _x('Congratulations! (your membership has been approved)', 's2member-front', 's2member'),
+			'signup_email_message' => sprintf(_x("Thanks %%%%first_name%%%%! Your membership has been approved.\n\nIf you haven't already done so, the next step is to Register a Username.\n\nComplete your registration here: \n%%%%registration_url%%%%\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name')),
+			'modification_email_subject' => _x('Thank you! Your account has been updated.', 's2member-front', 's2member'),
+			'modification_email_message' => sprintf(_x("Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name')),
+			'ccap_email_subject' => _x('Thank you! Your account has been updated.', 's2member-front', 's2member'),
+			'ccap_email_message' => sprintf(_x("Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name')),
+			'sp_email_subject' => _x('Thank You! (instructions for access)', 's2member-front', 's2member'),
+			'sp_email_message' => sprintf(_x("Thanks %%%%first_name%%%%! \n\n%%%%item_name%%%%\n\nYour order can be retrieved here: \n%%%%sp_access_url%%%%\n(link expires in %%%%sp_access_exp%%%%)\n\nIf you have any trouble, please feel free to contact us.\n\nBest Regards,\n%s", 's2member-front', 's2member'), get_bloginfo('name')),
+			'level0_label' => _x('Free Subscriber', 's2member-front', 's2member'),
+			'level1_label' => _x('Bronze Member', 's2member-front', 's2member'),
+			'level2_label' => _x('Silver Member', 's2member-front', 's2member'),
+			'level3_label' => _x('Gold Member', 's2member-front', 's2member'),
+			'level4_label' => _x('Platinum Member', 's2member-front', 's2member'),
+	];
+
+	// Add extra levels if they exist.
+	for ($n = 5; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++) {
+		$translated_defaults['level'.$n.'_label'] = sprintf(_x('Level %s Member', 's2member-front', 's2member'), $n);
+	}
+
+	// Apply translations to options if they are at their default
+	foreach ($translated_defaults as $key => $translated) {
+			if (isset($default_values[$key]) && isset($o[$key]) && $default_values[$key] === $o[$key]) {
+					$o[$key] = $translated;
+			}
+	}
+
+	// Handle recaptcha_lang separately
+	if (isset($GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['lang']) && $GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['lang'] === 'en') {
+			$GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['lang'] = _x('en', 's2member-front recaptcha-lang-code', 's2member');
+	}
+});

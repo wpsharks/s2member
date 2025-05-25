@@ -1,3 +1,7 @@
+= v250525 =
+
+- (Framework & Pro) **Fix**: Some translations were being applied too early, causing PHP notices since WP 6.7. Now all translations are only loaded at the `init` hook or later. See [thread 12813](https://f.wpsharks.com/t/12813)
+
 = v250511 =
 
 - (Framework) **Fix**: Improved the admin notices handler to prevent a PHP 8.1+ error in rare cases when the data wasn't an array as expected.
