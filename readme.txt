@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 250511
-Stable tag: 250511
-Tested up to: 6.9-alpha-60229
+Version: 250525
+Stable tag: 250525
+Tested up to: 6.9-alpha-60248
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.3
@@ -176,11 +176,15 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v250511 =
+= v250525 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v250525 =
+
+- (Framework & Pro) **Fix**: Some translations were being applied too early, causing PHP notices since WP 6.7. Now all translations are only loaded at the `init` hook or later. See [thread 12813](https://f.wpsharks.com/t/12813)
 
 = v250511 =
 
