@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 250525
-Stable tag: 250525
-Tested up to: 6.9-alpha-60248
+Version: 250607
+Stable tag: 250607
+Tested up to: 6.9-alpha-60290
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.3
@@ -176,11 +176,23 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v250525 =
+= v250607 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v250607 =
+
+- (Framework & Pro) **Enhancement**: Added a new option to skip the domain validation for notifications from the payment gateways. This allows continued processing of incoming notifications even if the domain in the `custom` value doesn't match the current site's. Useful for subscriptions originated outside of s2Member, or under a different domain. The setting is available under: _WP Admin > s2Member > PayPal Options > PayPal IPN / Instant Payment Notifications_
+
+- (Pro) **UI**: Added the recent IPN Signup Vars Fallback and new Skip Domain Validation to all the gateway options pages.
+
+- (Framework) **Enhancement**: Added the site's language code when loading the reCaptcha.
+
+- (Pro) **UI**: Added a page refresh after the Pro Updater finishes installing the latest Pro release, to update the WP Admin interface and not show the Pro Updater again.
+
+- (Pro) **UI**: Added a page refresh after the Other Gateways options are saved, to update the WP Admin left menu.
 
 = v250525 =
 
