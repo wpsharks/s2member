@@ -405,7 +405,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 					echo '<td>'."\n";
 					echo '<input type="radio" name="ws_plugin__s2member_skip_ipn_domain_validation" id="ws-plugin--s2member-skip-ipn-domain-validation-0" value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-skip-ipn-domain-validation-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_skip_ipn_domain_validation" id="ws-plugin--s2member-skip-ipn-domain-validation-1" value="1"'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-skip-ipn-domain-validation-1">Yes, skip domain checks in the `custom` value.</label><br />'."\n";
-					echo '<em>This allows continued processing of notifications even if the domain in the `custom` value doesn\'t match the current <code>'.esc_html($_SERVER["HTTP_HOST"]).'</code>. Useful for subscriptions originated outside of s2Member installation, or under a different domain.</em><br />'."\n";
+					echo '<em>This allows continued processing of notifications even if the domain in the `custom` value doesn\'t match the current <code>'.esc_html($_SERVER["HTTP_HOST"]).'</code>. Useful for subscriptions originated outside of s2Member, or under a different domain.</em><br />'."\n";
 					echo '</td>'."\n";
 
 					echo '</tr>'."\n";
