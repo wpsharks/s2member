@@ -1,3 +1,15 @@
+= v250607 =
+
+- (Framework & Pro) **Enhancement**: Added a new option to skip the domain validation for notifications from the payment gateways. This allows continued processing of incoming notifications even if the domain in the `custom` value doesn't match the current site's. Useful for subscriptions originated outside of s2Member, or under a different domain. The setting is available under: _WP Admin > s2Member > PayPal Options > PayPal IPN / Instant Payment Notifications_
+
+- (Pro) **UI**: Added the recent IPN Signup Vars Fallback and new Skip Domain Validation to all the gateway options pages.
+
+- (Framework) **Enhancement**: Added the site's language code when loading the reCaptcha.
+
+- (Pro) **UI**: Added a page refresh after the Pro Updater finishes installing the latest Pro release, to update the WP Admin interface and not show the Pro Updater again.
+
+- (Pro) **UI**: Added a page refresh after the Other Gateways options are saved, to update the WP Admin left menu.
+
 = v250525 =
 
 - (Framework & Pro) **Fix**: Some translations were being applied too early, causing PHP notices since WP 6.7. Now all translations are only loaded at the `init` hook or later. See [thread 12813](https://f.wpsharks.com/t/12813)

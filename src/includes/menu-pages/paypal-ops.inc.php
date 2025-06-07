@@ -360,6 +360,58 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<h4 style="margin-bottom:0;"><strong class="ws-menu-page-hilite">Note: SSL is required by PayPal</strong></h4>'."\n";
 				echo '<p style="margin-top:0;">If you configure your PayPal.com account using the URL above, your site <strong><em>must</em> support SSL</strong> (i.e., the <code>https://</code> protocol). In other words, PayPal\'s system will refuse to accept any URL that does not begin with <code>https://</code>. The IPN URL that s2Member provides (see above) <em>does</em> start with <code>https://</code>. However, that doesn\'t necessarily mean that the URL actually works. Please be sure that your hosting account is configured with a valid SSL certificate before giving this URL to PayPal.</p>'."\n";
 
+					//250426 Fallback for IPN Signup Vars.
+					echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+					echo '<table class="form-table">'."\n";
+					echo '<tbody>'."\n";
+					echo '<tr>'."\n";
+
+					echo '<th>'."\n";
+					echo '<label for="ws-plugin--s2member-ipn-signup-vars-fallback">'."\n";
+					echo 'Enable Fallback for Missing User "IPN Signup Vars"? (beta)<br />'."\n";
+					echo '<small><em class="ws-menu-page-hilite">* This setting applies to all gateways. [ <a href="#" onclick="alert(\'This configuration option may also appear under the other gateways. You can change it here, but remember that this setting is shared among all Payment Gateways integrated with s2Member.\'); return false;">?</a> ]</em></small>'."\n";
+					echo '</label>'."\n";
+					echo '</th>'."\n";
+
+					echo '</tr>'."\n";
+					echo '<tr>'."\n";
+
+					echo '<td>'."\n";
+					echo '<input type="radio" name="ws_plugin__s2member_ipn_signup_vars_fallback" id="ws-plugin--s2member-ipn-signup-vars-fallback-0" value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['ipn_signup_vars_fallback']) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-ipn-signup-vars-fallback-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_ipn_signup_vars_fallback" id="ws-plugin--s2member-ipn-signup-vars-fallback-1" value="1"'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['ipn_signup_vars_fallback']) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-ipn-signup-vars-fallback-1">Yes, enable user IPN Signup Vars fallback.</label><br />'."\n";
+					echo '<em>Enable fallback behavior when the user\'s IPN Signup Variables are missing during the IPN event processing (useful for migrated or imported subscriptions, for example).</em><br />'."\n";
+					echo '</td>'."\n";
+
+					echo '</tr>'."\n";
+					echo '</tbody>'."\n";
+					echo '</table>'."\n";
+
+					//250606 Skip Custom Value Domain Validation.
+					echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+					echo '<table class="form-table">'."\n";
+					echo '<tbody>'."\n";
+					echo '<tr>'."\n";
+
+					echo '<th>'."\n";
+					echo '<label for="ws-plugin--s2member-skip-ipn-domain-validation">'."\n";
+					echo 'Skip Domain Validation of the `custom` Value? (beta)<br />'."\n";
+					echo '<small><em class="ws-menu-page-hilite">* This setting applies to all gateways. [ <a href="#" onclick="alert(\'This configuration option may also appear under the other gateways. You can change it here, but remember that this setting is shared among all Payment Gateways integrated with s2Member.\'); return false;">?</a> ]</em></small>'."\n";
+					echo '</label>'."\n";
+					echo '</th>'."\n";
+
+					echo '</tr>'."\n";
+					echo '<tr>'."\n";
+
+					echo '<td>'."\n";
+					echo '<input type="radio" name="ws_plugin__s2member_skip_ipn_domain_validation" id="ws-plugin--s2member-skip-ipn-domain-validation-0" value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-skip-ipn-domain-validation-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_skip_ipn_domain_validation" id="ws-plugin--s2member-skip-ipn-domain-validation-1" value="1"'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-skip-ipn-domain-validation-1">Yes, skip domain checks in the `custom` value.</label><br />'."\n";
+					echo '<em>This allows continued processing of notifications even if the domain in the `custom` value doesn\'t match the current <code>'.esc_html($_SERVER["HTTP_HOST"]).'</code>. Useful for subscriptions originated outside of s2Member, or under a different domain.</em><br />'."\n";
+					echo '</td>'."\n";
+
+					echo '</tr>'."\n";
+					echo '</tbody>'."\n";
+					echo '</table>'."\n";
+
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
 				echo '<h3 style="margin:0;">More Information (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-details\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";

@@ -87,9 +87,18 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 					else if(empty($paypal['custom']) && !empty($paypal['mp_id'])) // Billing Agreement ID.
 						$paypal['custom'] = c_ws_plugin__s2member_utils_users::get_user_custom_with($paypal['mp_id']);
 
-					if(!empty($paypal['custom']) && preg_match('/^'.preg_quote(preg_replace('/\:([0-9]+)$/', '', $_SERVER['HTTP_HOST']), '/').'/i', $paypal['custom']))
+					//250522 At least set it to an empty string.
+					else if(empty($paypal['custom']))
+						$paypal['custom'] = '';
+					
+					//250606 Added option to skip domain validation.
+					if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']
+					|| (!empty($paypal['custom']) && preg_match('/^'.preg_quote(preg_replace('/\:([0-9]+)$/', '', $_SERVER['HTTP_HOST']), '/').'/i', $paypal['custom'])))
 					{
-						$paypal['s2member_log'][] = 's2Member originating domain (`$_SERVER["HTTP_HOST"]`) validated.';
+						if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) 
+							$paypal['s2member_log'][] = 's2Member originating domain validation was skipped.';
+						else
+							$paypal['s2member_log'][] = 's2Member originating domain (`$_SERVER["HTTP_HOST"]`) validated.';
 
 						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 						if(!apply_filters('ws_plugin__s2member_during_paypal_notify_conditionals', FALSE, get_defined_vars()))

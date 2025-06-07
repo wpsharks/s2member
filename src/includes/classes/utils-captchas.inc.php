@@ -137,8 +137,10 @@ if (!class_exists ('c_ws_plugin__s2member_utils_captchas'))
 						if(self::recaptcha_version() === '2') // New API verifier.
 						{
 							$theme = !$theme || in_array($theme, array('red', 'white', 'clean', 'blackglass'), TRUE) ? 'light' : $theme;
+              $locale = get_locale();
+              $lang_code = substr($locale, 0, 2);
 							return '<div class="g-recaptcha" data-sitekey="'.esc_attr($keys['public']).'" data-size="normal" data-theme="'.esc_attr($theme).'" data-tabindex="'.esc_attr($tabindex).'"></div>'.
-									'<script src="https://www.google.com/recaptcha/api.js"></script>';
+									'<script src="https://www.google.com/recaptcha/api.js?hl='.esc_attr($lang_code).'"></script>'; //250606 Added the site's language.
 						}
 						$options           = '<script type="text/javascript">'."if(typeof RecaptchaOptions !== 'object'){ var RecaptchaOptions = {theme: '".c_ws_plugin__s2member_utils_strings::esc_js_sq($theme)."', lang: '".c_ws_plugin__s2member_utils_strings::esc_js_sq($GLOBALS['WS_PLUGIN__']['s2member']['c']['recaptcha']['lang'])."', tabindex: ".$tabindex." }; }".'</script>'."\n";
 						$no_tabindex_icons = '<script type="text/javascript">'."if(typeof jQuery === 'function'){ jQuery('td a[id^=\"recaptcha\"]').removeAttr('tabindex'); }".'</script>';
