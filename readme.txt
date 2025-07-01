@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 250607
-Stable tag: 250607
-Tested up to: 6.9-alpha-60290
+Version: 250701
+Stable tag: 250701
+Tested up to: 6.9-alpha-60398
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.3
@@ -176,11 +176,15 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v250607 =
+= v250701 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v250701 =
+
+- (Framework & Pro) **Enhancement**: s2Member now supports sending emails in HTML format, allowing for richer, styled messages with formatting, links, and branding. You can enable this feature under _General Options > Email Configuration > Enable HTML Emails_. When disabled, emails continue to use plain text as before. This feature is currently in beta, so feedback is welcome!
 
 = v250607 =
 

@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  250607\n"
+"Project-Id-Version:  250701\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2025-06-07 21:54:11+00:00\n"
+"POT-Creation-Date: 2025-07-01 19:18:17+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1676,7 +1676,7 @@ msgctxt "s2member-front"
 msgid "My Profile Summary"
 msgstr ""
 
-#: pro/src/includes/classes/reminders.inc.php:240
+#: pro/src/includes/classes/reminders.inc.php:245
 msgid "0 / non-recurring"
 msgstr ""
 
@@ -1994,7 +1994,7 @@ msgctxt "s2member-front"
 msgid "No Billing Method; please try again."
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:284 src/includes/syscon.inc.php:658
+#: pro/src/includes/syscon.inc.php:284 src/includes/syscon.inc.php:660
 msgctxt "s2member-front"
 msgid "Congratulations! (your membership has been approved)"
 msgstr ""
@@ -2016,7 +2016,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:286 src/includes/syscon.inc.php:664
+#: pro/src/includes/syscon.inc.php:286 src/includes/syscon.inc.php:666
 msgctxt "s2member-front"
 msgid "Thank You! (instructions for access)"
 msgstr ""
@@ -5071,17 +5071,17 @@ msgctxt "s2member-front"
 msgid "every %s-day period"
 msgstr ""
 
-#: src/includes/syscon.inc.php:653
+#: src/includes/syscon.inc.php:655
 msgctxt "s2member-front"
 msgid "Yes, I want to receive updates via email."
 msgstr ""
 
-#: src/includes/syscon.inc.php:654
+#: src/includes/syscon.inc.php:656
 msgctxt "s2member-front"
 msgid "[%s] Username/Password"
 msgstr ""
 
-#: src/includes/syscon.inc.php:655
+#: src/includes/syscon.inc.php:657
 msgctxt "s2member-front"
 msgid ""
 "Your Username/Password for: \n"
@@ -5093,12 +5093,12 @@ msgid ""
 "%%%%wp_login_url%%%%"
 msgstr ""
 
-#: src/includes/syscon.inc.php:656
+#: src/includes/syscon.inc.php:658
 msgctxt "s2member-front"
 msgid "[%s] New User Registration"
 msgstr ""
 
-#: src/includes/syscon.inc.php:657
+#: src/includes/syscon.inc.php:659
 msgctxt "s2member-front"
 msgid ""
 "New User Registration on your site: \n"
@@ -5110,7 +5110,7 @@ msgid ""
 "IP Address: %%%%user_ip%%%%"
 msgstr ""
 
-#: src/includes/syscon.inc.php:659
+#: src/includes/syscon.inc.php:661
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your membership has been approved.\n"
@@ -5126,12 +5126,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/includes/syscon.inc.php:660 src/includes/syscon.inc.php:662
+#: src/includes/syscon.inc.php:662 src/includes/syscon.inc.php:664
 msgctxt "s2member-front"
 msgid "Thank you! Your account has been updated."
 msgstr ""
 
-#: src/includes/syscon.inc.php:661 src/includes/syscon.inc.php:663
+#: src/includes/syscon.inc.php:663 src/includes/syscon.inc.php:665
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n"
@@ -5142,7 +5142,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/includes/syscon.inc.php:665
+#: src/includes/syscon.inc.php:667
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! \n"
@@ -5159,37 +5159,37 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/includes/syscon.inc.php:666
+#: src/includes/syscon.inc.php:668
 msgctxt "s2member-front"
 msgid "Free Subscriber"
 msgstr ""
 
-#: src/includes/syscon.inc.php:667
+#: src/includes/syscon.inc.php:669
 msgctxt "s2member-front"
 msgid "Bronze Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:668
+#: src/includes/syscon.inc.php:670
 msgctxt "s2member-front"
 msgid "Silver Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:669
+#: src/includes/syscon.inc.php:671
 msgctxt "s2member-front"
 msgid "Gold Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:670
+#: src/includes/syscon.inc.php:672
 msgctxt "s2member-front"
 msgid "Platinum Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:675
+#: src/includes/syscon.inc.php:677
 msgctxt "s2member-front"
 msgid "Level %s Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:687
+#: src/includes/syscon.inc.php:689
 msgctxt "s2member-front recaptcha-lang-code"
 msgid "en"
 msgstr ""

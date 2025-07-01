@@ -1,3 +1,7 @@
+= v250701 =
+
+- (Framework & Pro) **Enhancement**: s2Member now supports sending emails in HTML format, allowing for richer, styled messages with formatting, links, and branding. You can enable this feature under _General Options > Email Configuration > Enable HTML Emails_. When disabled, emails continue to use plain text as before. This feature is currently in beta, so feedback is welcome!
+
 = v250607 =
 
 - (Framework & Pro) **Enhancement**: Added a new option to skip the domain validation for notifications from the payment gateways. This allows continued processing of incoming notifications even if the domain in the `custom` value doesn't match the current site's. Useful for subscriptions originated outside of s2Member, or under a different domain. The setting is available under: _WP Admin > s2Member > PayPal Options > PayPal IPN / Instant Payment Notifications_
