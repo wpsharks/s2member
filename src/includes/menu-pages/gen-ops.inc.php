@@ -328,6 +328,31 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 
+					// New table for HTML Emails option.
+					echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+					echo '<table class="form-table">' . "\n";
+					echo '<tbody>' . "\n";
+
+					echo '<tr>' . "\n";
+					echo '<th>' . "\n";
+					echo '<label for="ws-plugin--s2member-html-emails-enabled">' . "\n";
+					echo 'Enable HTML Emails? (beta)' . "\n";
+					echo '</label>' . "\n";
+					echo '</th>' . "\n";
+					echo '</tr>' . "\n";
+
+					echo '<tr>' . "\n";
+					echo '<td>' . "\n";
+					echo '<input type="radio" name="ws_plugin__s2member_html_emails_enabled" id="ws-plugin--s2member-html-emails-enabled-0" value="0"' . (empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["html_emails_enabled"]) ? ' checked="checked"' : '') . ' /> <label for="ws-plugin--s2member-html-emails-enabled-0">No</label> &nbsp;&nbsp;&nbsp;' . "\n";
+					echo '<input type="radio" name="ws_plugin__s2member_html_emails_enabled" id="ws-plugin--s2member-html-emails-enabled-1" value="1"' . (!empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["html_emails_enabled"]) ? ' checked="checked"' : '') . ' /> <label for="ws-plugin--s2member-html-emails-enabled-1">Yes, enable HTML emails.</label><br />' . "\n";
+					echo '<em>This enables s2Member to send HTML emails instead of just plain text. It applies to all emails you can edit in the s2Member options.</em>' . "\n";
+					echo '</td>' . "\n";
+					echo '</tr>' . "\n";
+
+					echo '</tbody>' . "\n";
+					echo '</table>' . "\n";
+
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
 				echo '<h3 style="margin:0;">New User Email Configuration</h3>'."\n";
@@ -394,7 +419,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<td>'."\n";
 				echo '<p><em>(The purpose of this email is to send the user a password-setup link; i.e., <code>%%wp_set_pass_url%%</code>)</em></small><p>'."\n";
-				echo '<textarea name="ws_plugin__s2member_new_user_email_message" id="ws-plugin--s2member-new-user-email-message" rows="10">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_email_message"]).'</textarea><br />'."\n";
+				//250615 Visual editor for HTML emails.
+				if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
+					echo '<textarea name="ws_plugin__s2member_new_user_email_message" id="ws-plugin--s2member-new-user-email-message" rows="10">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_email_message"]).'</textarea><br />'."\n";
+				} else {
+					c_ws_plugin__s2member_utilities::editor('new_user_email_message'); 
+				}
+
 				echo 'Message Body used in the email sent to new Users/Members.<br /><br />'."\n";
 				echo '<strong>You can also use these special Replacement Codes if you need them:</strong>'."\n";
 				echo '<ul>'."\n";
@@ -498,7 +529,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<tr>'."\n";
 
 				echo '<td>'."\n";
-				echo '<textarea name="ws_plugin__s2member_new_user_admin_email_message" id="ws-plugin--s2member-new-user-admin-email-message" rows="10">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_message"]).'</textarea><br />'."\n";
+				//250615 Visual editor for HTML emails.
+				if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
+					echo '<textarea name="ws_plugin__s2member_new_user_admin_email_message" id="ws-plugin--s2member-new-user-admin-email-message" rows="10">'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["new_user_admin_email_message"]).'</textarea><br />'."\n";
+				} else {
+					c_ws_plugin__s2member_utilities::editor('new_user_admin_email_message'); 
+				}
+
 				echo 'Message Body used in the email notification sent to Administrator.<br /><br />'."\n";
 				echo '<strong>You can also use these special Replacement Codes if you need them:</strong>'."\n";
 				echo '<ul>'."\n";

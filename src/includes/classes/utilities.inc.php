@@ -244,5 +244,112 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 
 			return array_map('strtolower', array_unique($callers));
 		}
+
+		/**
+		 * Sends an email using WordPress' `wp_mail()`, supporting HTML formatting and auto From header.
+		 *
+		 * Automatically sets Content-Type to `text/html` if HTML markers are found.
+		 * If no `From:` header is provided, adds one using s2Member options via `email_config()` filters.
+		 *
+		 * @since 250605
+		 *
+		 * @param string|string[] $to          Recipient email address(es).
+		 * @param string          $subject     Email subject line.
+		 * @param string          $message     Email body. May contain HTML.
+		 * @param string|string[] $headers     Optional. Additional headers.
+		 * @param string|string[] $attachments Optional. File paths to attach.
+		 *
+		 * @return bool True if the email was sent successfully, false otherwise.
+		 */
+		public static function mail($to, $subject, $message, $headers = '', $attachments = [])
+		{
+			// If From: not already in headers, add it using configured options.
+			if (stripos($headers, 'From:') === false) {
+				c_ws_plugin__s2member_email_configs::email_config(); // Setup From filters
+				$from_email = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email']) ? $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'] : '';
+				$from_name  = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']) ? str_replace('"', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']) : '';
+				$headers   .= (empty($headers) ? '' : "\r\n") . 'From: "' . $from_name . '" <' . $from_email . '>';
+				c_ws_plugin__s2member_email_configs::email_config_release(); // Remove filters.
+			}
+
+			// Check HTML tags.
+			$is_html = false;
+			foreach (['</', '/>', '<i', '<b', '<h'] as $tag) {
+				if (strpos($message, $tag) !== false) {
+					$is_html = true;
+					break;
+				}
+			}
+			if ($is_html && strpos($message, '<p') === false && strpos($message, '<br') === false) {
+				$message = wpautop($message);
+			}
+
+			// Add correct content type.
+			$headers .= (empty($headers) ? '' : "\r\n");
+			$headers .= 'Content-Type: ' . ($is_html ? 'text/html' : 'text/plain') . '; charset=UTF-8';
+
+			return wp_mail($to, $subject, $message, $headers, $attachments);
+		}
+
+		/**
+		 * Renders an s2Member email template editor (TinyMCE if HTML emails are enabled).
+		 * Falls back to a plain <textarea> if HTML emails are disabled.
+		 * Displays a soft warning if the database charset may strip emojis.
+		 *
+		 * @since 250610
+		 *
+		 * @param string $option_key  The s2Member option key (w/o prefix).
+		 * @param string $editor_id   Optional. The DOM ID for the editor. Defaults to derived from option_key.
+		 * @param array  $editor_args Optional. Extra arguments for `wp_editor()`.
+		 */
+		public static function editor($option_key, $editor_id = '', array $editor_args = [])
+		{
+			$value     = isset($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option_key]) ? $GLOBALS['WS_PLUGIN__']['s2member']['o'][$option_key] : '';
+			$editor_id = $editor_id ? $editor_id : strtr('ws_plugin__s2member_' . $option_key, ['_' => '-']);
+
+			// If HTML emails are enabled, use wp_editor()
+			$html_enabled = !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled']);
+			if ($html_enabled) {
+				$args = wp_parse_args($editor_args, [
+					'textarea_name'     => 'ws_plugin__s2member_' . $option_key,
+					'textarea_rows'     => 20,
+					'editor_height'     => null,
+					'media_buttons'     => false,
+					'teeny'             => false,
+					'quicktags'         => true,
+					'tinymce'           => [
+						'height'   => 400,
+						'resize'   => true,
+						'wp_autoresize_on' => false,
+						'toolbar1' => 'formatselect | bold italic underline strikethrough | bullist numlist blockquote | alignleft aligncenter alignright | link unlink | undo redo | removeformat',
+						'toolbar2' => '',
+					],
+				]);
+				wp_editor($value, $editor_id, $args);
+			} else {
+				echo '<textarea name="ws_plugin__s2member_' . esc_attr($option_key) . '" id="' . esc_attr($editor_id) . '" rows="20">'
+					. format_to_edit($value) . '</textarea><br />' . "\n";
+			}
+
+			// Check charset and warn about emojis.
+			global $wpdb;
+			$collation = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COLLATION_NAME
+					FROM information_schema.COLUMNS
+					WHERE TABLE_SCHEMA = %s
+						AND TABLE_NAME = %s
+						AND COLUMN_NAME = 'option_value'",
+					$wpdb->dbname,
+					$wpdb->options
+				)
+			);
+			$charset = $collation ? strtolower(preg_replace('/_.+$/', '', $collation)) : '';
+			if ($charset && $charset !== 'utf8mb4') {
+				echo '<div class="ws-menu-page-hilite" style="margin-bottom:.2em;">';
+				echo '⚠️ <strong>Note:</strong> Your database uses the <code>' . esc_html($charset) . '</code> charset for WordPress option values. Changes to your email will be lost if you use emojis, as they require the <code>utf8mb4</code> charset.';
+				echo '</div>';
+			}
+		}
 	}
 }
