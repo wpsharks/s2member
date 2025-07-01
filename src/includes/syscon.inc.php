@@ -211,6 +211,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['login_reg_footer_backtoblog'] = '0';
 		$default_options['login_reg_footer_design']     = '';
 
+		$default_options['html_emails_enabled'] = 0; //250615
+
 		$default_options['reg_email_from_name']    = get_bloginfo('name');
 		$default_options['reg_email_from_email']   = get_bloginfo('admin_email');
 		$default_options['reg_email_support_link'] = 'mailto:'.get_bloginfo('admin_email');

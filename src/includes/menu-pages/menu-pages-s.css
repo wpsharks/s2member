@@ -118,3 +118,47 @@ a.ws-plugin--s2member-custom-reg-field-configuration-delete
 	{
 		background: url('<?php echo $i; ?>/delete-icon.png') no-repeat;
 	}
+
+/* 250611 Style the wp editor for s2's HTML emails. */
+.ws-menu-page-section div.mce-edit-area {
+	border: 1px solid lightgray;
+	border-left: 5px solid lightgray !important;
+}
+.ws-menu-page-section .wp-editor-tabs {
+	display: flex !important;
+	overflow: visible !important;
+}
+.ws-menu-page-section .wp-editor-tabs button {
+	background-color: #2271b1 !important;
+	height: auto !important;
+	line-height: 1em !important;
+	padding: 0.5em !important;
+	margin-left: 0.3em !important;
+	color: #fff !important;
+	border: none;
+	border-radius: 3px;
+}
+.ws-menu-page-section .mce-btn-group button {
+	background-color: #2271b1 !important;
+	line-height: 1em !important;
+	padding: 0.3em !important;
+}
+.ws-menu-page-section .mce-btn-group button span.mce-txt {
+	line-height: 1em !important;
+	padding: 0.2em !important;
+}
+.ws-menu-page-section .mce-btn-group button i.mce-ico:before {
+	font-family: dashicons !important;
+	color: white !important;
+}
+.ws-menu-page-section .quicktags-toolbar input.button {
+	background-color: #2271b1 !important;
+	line-height: 1em !important;
+	padding: 0.5em !important;
+	margin: 0.2em !important;
+	color: #fff !important;
+}
+/* Visual editor resize not working, hide resizer for now */
+.mce-i-resize::before { 
+  display: none;
+}

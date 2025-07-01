@@ -275,7 +275,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 																																																																$msg = c_ws_plugin__s2member_utilities::evl($msg, get_defined_vars());
 																																																															}
 																																																															foreach(c_ws_plugin__s2member_utils_strings::parse_emails($rec) as $recipient /* Go through a possible list of recipients. */)
-																																																																c_ws_plugin__s2member_email_configs::email_config().wp_mail($recipient, apply_filters('ws_plugin__s2member_modification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_modification_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8').c_ws_plugin__s2member_email_configs::email_config_release();
+																																																															{
+																																																																//250617 HTML email support.
+																																																																if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
+																																																																	c_ws_plugin__s2member_email_configs::email_config().wp_mail($recipient, apply_filters('ws_plugin__s2member_modification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_modification_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8').c_ws_plugin__s2member_email_configs::email_config_release();;
+																																																																} else {
+																																																																	c_ws_plugin__s2member_utilities::mail($recipient, apply_filters('ws_plugin__s2member_modification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_modification_email_msg', $msg, get_defined_vars()));
+																																																																}
+																																																															}
 
 																																																															$paypal['s2member_log'][] = 'Modification Confirmation Email sent to: '.$rec.'.';
 																																																														}
@@ -507,8 +514,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 																																																$msg = c_ws_plugin__s2member_utilities::evl($msg, get_defined_vars());
 																																															}
 																																															foreach(c_ws_plugin__s2member_utils_strings::parse_emails($rec) as $recipient) // Go through a possible list of recipients.
-																																																c_ws_plugin__s2member_email_configs::email_config().wp_mail($recipient, apply_filters('ws_plugin__s2member_signup_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_signup_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8').c_ws_plugin__s2member_email_configs::email_config_release();
-
+																																															{
+																																																//250617 HTML email support.
+																																																if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
+																																																	c_ws_plugin__s2member_email_configs::email_config().wp_mail($recipient, apply_filters('ws_plugin__s2member_signup_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_signup_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8').c_ws_plugin__s2member_email_configs::email_config_release();;
+																																																} else {
+																																																	c_ws_plugin__s2member_utilities::mail($recipient, apply_filters('ws_plugin__s2member_signup_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_signup_email_msg', $msg, get_defined_vars()));
+																																																}
+																																															}
 																																															$paypal['s2member_log'][] = 'Signup Confirmation Email sent to: '.$rec.'.';
 																																														}
 							if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_notification_urls'])
