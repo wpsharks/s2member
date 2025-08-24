@@ -45,6 +45,8 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_start"))
 			echo '<tr class="ws-menu-page-table-tr">' . "\n";
 			echo '<td class="ws-menu-page-table-l">' . "\n";
 
+			do_action("ws_plugin__s2member_during_start_page_before_left_sections", get_defined_vars());
+
 			echo
 			'<div class="ws-menu-page-group" title="Getting Started Quick and Easy" default-state="open">',"\n",
 				'<div class="ws-menu-page-section ws-plugin--s2member-quick-start-section">',"\n",
