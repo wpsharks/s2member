@@ -45,6 +45,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 			echo '<tr class="ws-menu-page-table-tr">'."\n";
 			echo '<td class="ws-menu-page-table-l">'."\n";
 
+			do_action("ws_plugin__s2member_during_down_ops_page_before_left_sections_form", get_defined_vars());
+
 			echo '<form method="post" name="ws_plugin__s2member_options_form" id="ws-plugin--s2member-options-form" action="'.esc_attr(remove_query_arg('ws_plugin__s2member_cf_options_reset')).'" autocomplete="off">'."\n";
 			echo '<input type="hidden" name="ws_plugin__s2member_options_save" id="ws-plugin--s2member-options-save" value="'.esc_attr(wp_create_nonce("ws-plugin--s2member-options-save")).'" />'."\n";
 			echo '<input type="hidden" name="ws_plugin__s2member_amazon_cf_files_distros_auto_config_status" id="ws-plugin--s2member-amazon-cf-files-distros-auto-config-status" value="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_cf_files_distros_auto_config_status"]).'" />'."\n";

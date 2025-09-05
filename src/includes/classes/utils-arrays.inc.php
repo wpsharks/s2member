@@ -228,5 +228,33 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 
 						return /* Now return the array. */ $array;
 					}
+
+				/**
+				 * Like maybe_unserialize(), but skips objects.
+				 *
+				 * @package s2Member\Utilities
+				 * @since 250801
+				 * 
+				 * @param mixed $value The value to be unserialized.
+				 * @return mixed The unserialized value, or original if not serialized or blocked.
+				 */
+				public static function maybe_unserialize($value) {
+					if (!is_string($value) || !is_serialized($value)) {
+						return $value;
+					}
+
+					$value = trim($value);
+
+					if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+						return @unserialize($value, ['allowed_classes' => false]);
+					}
+
+					if (strpos($value, 'O:') !== false) {
+						do_action('ws_plugin__s2member_security_object_detected', $value);
+						return null;
+					}
+
+					return @unserialize($value);
+				}
 			}
 	}

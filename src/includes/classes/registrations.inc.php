@@ -288,7 +288,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 					foreach(c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)) as $key => $value)
 						if(preg_match('/^ws_plugin__s2member_(custom_reg_field|user_new)_/', $key))
 							if($key = preg_replace('/_user_new_/', '_custom_reg_field_', $key))
-								$meta['s2member_ms_signup_meta'][$key] = maybe_unserialize($value);
+								$meta['s2member_ms_signup_meta'][$key] = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($value);
 				}
 			return apply_filters('ws_plugin__s2member_ms_process_signup_meta', $meta, get_defined_vars());
 		}

@@ -1,3 +1,9 @@
+= v250905 =
+
+- (Framework) **Security**: Improve handling of registration fields in multisite.
+
+- (Framework & Pro) **UI**: Add a Help panel with contact form to all admin pages.
+
 = v250701 =
 
 - (Framework & Pro) **Enhancement**: s2Member now supports sending emails in HTML format, allowing for richer, styled messages with formatting, links, and branding. You can enable this feature under _General Options > Email Configuration > Enable HTML Emails_. When disabled, emails continue to use plain text as before. This feature is currently in beta, so feedback is welcome!

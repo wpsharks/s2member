@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 250701
-Stable tag: 250701
-Tested up to: 6.9-alpha-60398
+Version: 250905
+Stable tag: 250905
+Tested up to: 6.9-alpha-60709
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.3
@@ -176,11 +176,17 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v250701 =
+= v250905 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v250905 =
+
+- (Framework) **Security**: Improve handling of registration fields in multisite.
+
+- (Framework & Pro) **UI**: Add a Help panel with contact form to all admin pages.
 
 = v250701 =
 
