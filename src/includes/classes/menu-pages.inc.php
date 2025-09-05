@@ -830,5 +830,188 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 			do_action('ws_plugin__s2member_after_logs_page', get_defined_vars());
 		}
+
+		/**
+		 * Registers the Get Help panel across admin pages.
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since 250824
+		 *
+		 * @attaches-to ``add_action('admin_menu');``
+		 */
+		public static function get_help_panel() {
+			$hooks = array(
+				// Framework
+				'ws_plugin__s2member_during_api_ops_page_before_left_sections_form',
+				'ws_plugin__s2member_during_down_ops_page_before_left_sections_form',
+				'ws_plugin__s2member_during_els_ops_page_before_left_sections_form',
+				'ws_plugin__s2member_during_gen_ops_page_before_left_sections_form',
+				'ws_plugin__s2member_during_help_page_before_left_sections',
+				'ws_plugin__s2member_during_integrations_page_before_left_sections',
+				'ws_plugin__s2member_during_logs_page_before_left_sections',
+				'ws_plugin__s2member_during_paypal_buttons_page_before_left_sections',
+				'ws_plugin__s2member_during_paypal_ops_page_before_left_sections_form',
+				'ws_plugin__s2member_during_res_ops_page_before_left_sections_form',
+				'ws_plugin__s2member_during_scripting_page_before_left_sections',
+				'ws_plugin__s2member_during_start_page_before_left_sections',
+				'ws_plugin__s2member_during_trk_ops_page_before_left_sections_form',
+				// Pro
+				'ws_plugin__s2member_during_authnet_forms_page_before_left_sections',
+				'ws_plugin__s2member_during_authnet_ops_page_before_left_sections_form',
+				'ws_plugin__s2member_during_clickbank_buttons_page_before_left_sections',
+				'ws_plugin__s2member_during_clickbank_ops_page_before_left_sections_form',
+				'ws_plugin__s2member_during_coupon_codes_page_before_left_sections_form',
+				'ws_plugin__s2member_during_import_export_page_before_left_sections',
+				'ws_plugin__s2member_during_mms_ops_page_before_left_sections_form',
+				'ws_plugin__s2member_during_other_gateways_page_before_left_sections_form',
+				'ws_plugin__s2member_during_paypal_forms_page_before_left_sections',
+				'ws_plugin__s2member_during_stripe_forms_page_before_left_sections',
+				'ws_plugin__s2member_during_stripe_ops_page_before_left_sections_form',
+			);
+
+			foreach ($hooks as $hook) {
+				add_action($hook, 'c_ws_plugin__s2member_menu_pages::get_help_panel_load', 1, 1);
+			}
+		}
+
+		/**
+		 * Renders the Get Help panel (computes $notice/$draft and includes template).
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since 250824
+		 *
+		 * @param array $vars Optional vars passed by the hook (unused).
+		 */
+		public static function get_help_panel_load($vars = array()) {
+			if (!current_user_can('manage_options')) return;
+
+			// Build notice (if POST).
+			$notice = array('type' => '', 'text' => '');
+			if (!empty($_POST['s2m_help_nonce']) && isset($_POST['s2m_help_submit']) && wp_verify_nonce($_POST['s2m_help_nonce'], 's2member_get_help')) {
+				$result = c_ws_plugin__s2member_menu_pages::get_help_mail();
+				if (!empty($result['ok'])) {
+					$notice = array('type' => 'success', 'text' => __('Thanks — your message was sent. You’ll receive a copy by email.', 's2member'));
+					$_POST = array(); // clear fields after success so defaults repopulate
+				} else {
+					$msg = isset($result['msg']) ? $result['msg'] : __('Sorry, your message could not be sent. Please try again.', 's2member');
+					$notice = array('type' => 'error', 'text' => $msg);
+				}
+			}
+
+			// Build draft (preserve POST on error; else defaults from current user).
+			$current = wp_get_current_user();
+			$draft   = array(
+				'name'    => is_object($current) ? trim($current->display_name) : '',
+				'email'   => is_object($current) ? trim($current->user_email) : '',
+				'subject' => '',
+				'details' => '',
+				'meta'    => home_url()."\n"
+				.'PHP v'.PHP_VERSION
+				.', WordPress v'.(isset($GLOBALS['wp_version']) ? $GLOBALS['wp_version'] : '')
+				.', s2Member v'.(defined('WS_PLUGIN__S2MEMBER_VERSION') ? WS_PLUGIN__S2MEMBER_VERSION : '')
+				.(defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') ? ', Pro v'.WS_PLUGIN__S2MEMBER_PRO_VERSION : ''),
+			);
+
+			if (isset($_POST['name']))    $draft['name']    = wp_strip_all_tags(trim(wp_unslash($_POST['name'])));
+			if (isset($_POST['email']))   $draft['email']   = sanitize_email(trim(wp_unslash($_POST['email'])));
+			if (isset($_POST['subject'])) $draft['subject'] = sanitize_text_field(trim(wp_unslash($_POST['subject'])));
+			if (isset($_POST['details'])) $draft['details'] = trim(wp_unslash($_POST['details']));
+			if (isset($_POST['meta']))    $draft['meta']    = trim(wp_unslash($_POST['meta']));
+
+			// Include template (variables $draft and $notice are in scope for the include).
+			include_once dirname(dirname(__FILE__)).'/menu-pages/get-help-panel.inc.php';
+		}
+
+		/**
+		 * Sends the Get Help email (simple contact form, Bcc user).
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since 250824
+		 *
+		 * @return array Array like ['ok' => bool, 'msg' => string].
+		 */
+		public static function get_help_mail() {
+			if (!current_user_can('manage_options')) {
+				return array('ok' => false, 'msg' => __('You do not have permission to send support requests from this page.', 's2member'));
+			}
+
+			$name       = isset($_POST['name'])    ? wp_strip_all_tags(trim(wp_unslash($_POST['name'])))      : '';
+			$email      = isset($_POST['email'])   ? sanitize_email(trim(wp_unslash($_POST['email'])))        : '';
+			$subject_in = isset($_POST['subject']) ? sanitize_text_field(trim(wp_unslash($_POST['subject']))) : '';
+			$details    = isset($_POST['details']) ? trim(wp_unslash($_POST['details']))                      : '';
+			$meta       = isset($_POST['meta'])    ? trim(wp_unslash($_POST['meta']))                         : '';
+
+			$email = str_replace(array("\r", "\n"), '', $email); // header-injection safety
+			if (empty($email) || !is_email($email)) {
+				return array('ok' => false, 'msg' => __('Please provide a valid email address.', 's2member'));
+			}
+			if ($details === '') {
+				return array('ok' => false, 'msg' => __('Please describe how I can help.', 's2member'));
+			}
+
+			// Cap length and normalize body fields
+			$max_len = 100000;
+			if (strlen($details) > $max_len) $details = substr($details, 0, $max_len);
+			if (strlen($meta)    > $max_len) $meta    = substr($meta, 0, $max_len);
+
+			$details = str_replace(array("\r\n", "\r"), "\n", $details);
+			$meta    = str_replace(array("\r\n", "\r"), "\n", $meta);
+			$message = $details."\n\n".$meta;
+
+			// Subject with fallback/prefix
+			$subject = (string) apply_filters('ws_plugin__s2member_get_help_subject', $subject_in);
+			$subject = str_replace(array("\r\n", "\r", "\n"), ' ', trim($subject));
+			$subject = ($subject === '') ? __('s2Member help request', 's2member') : 's2Member help: '.$subject;
+
+			// Sanitize display names
+			$name_hdr = str_replace(array("\r\n", "\r", "\n"), ' ', (string) $name);
+			$name_hdr = str_replace('"', "'", $name_hdr);
+
+			$sitename = wp_parse_url(home_url(), PHP_URL_HOST);
+			$sitename = is_string($sitename) ? strtolower($sitename) : '';
+			if (strpos($sitename, 'www.') === 0) $sitename = substr($sitename, 4);
+
+			$default_from_email = 'wordpress@'.$sitename;
+			$default_from_name  = ($name_hdr !== '' ? $name_hdr : get_bloginfo('name'));
+
+			// Honor WP and s2 filters, then cleanup
+			$from_email = (string) apply_filters('wp_mail_from', $default_from_email);
+			$from_name  = (string) apply_filters('wp_mail_from_name', $default_from_name);
+			
+			$from_email = (string) apply_filters('ws_plugin__s2member_get_help_from_email', $from_email);
+			$from_name  = (string) apply_filters('ws_plugin__s2member_get_help_from_name',  $from_name);
+
+			$from_email = str_replace(array("\r", "\n"), '', $from_email);
+			$from_name  = str_replace(array("\r\n", "\r", "\n"), ' ', $from_name);
+			$from_name  = str_replace('"', "'", $from_name);
+
+			// Build headers
+			$from_line = '"'.$from_name.'" <'.$from_email.'>';
+			$user_line = ($name_hdr !== '' ? '"'.$name_hdr.'" ' : '').'<'.$email.'>';
+
+			$headers   = array('Content-Type: text/plain; charset=UTF-8');
+			$headers[] = 'From: '.$from_line;
+			$headers[] = 'Reply-To: '.$user_line;
+			$headers[] = 'Bcc: '.$user_line;
+			$headers[] = 'X-s2Member-Help: 1';
+
+			$headers = apply_filters('ws_plugin__s2member_get_help_headers', $headers, compact('name','email','subject','details','meta'));
+
+			// Recipient
+			$to = (string) apply_filters('ws_plugin__s2member_get_help_mailbox', 'support@wpsharks.com');
+			if (empty($to) || !is_email($to)) {
+				return array('ok' => false, 'msg' => __('Support mailbox is not configured correctly.', 's2member'));
+			}
+
+			$sent = wp_mail($to, $subject, $message, $headers);
+
+			if (!$sent) {
+				if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+					error_log('s2Member Get Help: wp_mail() returned false. To='.$to.' | Subject='.$subject);
+				}
+				return array('ok' => false, 'msg' => __('Email could not be sent (mail server issue). Please try again or contact us directly.', 's2member'));
+			}
+			return array('ok' => true, 'msg' => __('Thanks — your message was sent. You’ll receive a copy by email.', 's2member'));
+		}
 	}
 }
