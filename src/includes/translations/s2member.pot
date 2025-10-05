@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  250905\n"
+"Project-Id-Version:  251005\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2025-09-05 00:29:25+00:00\n"
+"POT-Creation-Date: 2025-10-05 18:53:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1309,17 +1309,17 @@ msgstr ""
 #. with `ws_plugin__s2member_paypal_payflow_api_response`.
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:96
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:325
-#: src/includes/classes/paypal-utilities.inc.php:342
-#: src/includes/classes/paypal-utilities.inc.php:350
+#: src/includes/classes/paypal-utilities.inc.php:344
+#: src/includes/classes/paypal-utilities.inc.php:352
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:99
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:328
-#: src/includes/classes/paypal-utilities.inc.php:216
-#: src/includes/classes/paypal-utilities.inc.php:344
-#: src/includes/classes/paypal-utilities.inc.php:352
+#: src/includes/classes/paypal-utilities.inc.php:218
+#: src/includes/classes/paypal-utilities.inc.php:346
+#: src/includes/classes/paypal-utilities.inc.php:354
 msgctxt "s2member-front"
 msgid "Error. Please contact Support for assistance."
 msgstr ""
@@ -4370,7 +4370,7 @@ msgstr ""
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:164
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:175
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:186
-#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:127
+#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:128
 #: src/includes/classes/paypal-return-in.inc.php:102
 #: src/includes/classes/paypal-return-in.inc.php:123
 #: src/includes/classes/paypal-return-in.inc.php:149
@@ -4384,7 +4384,7 @@ msgid "<strong>Thank you! (this is a preview, no action necessary).</strong><br 
 msgstr ""
 
 #: src/includes/classes/paypal-return-in-proxy-x-preview.inc.php:66
-#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:116
+#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:117
 msgctxt "s2member-front"
 msgid "Continue (Click Here)"
 msgstr ""
@@ -4417,7 +4417,7 @@ msgstr ""
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:229
 #: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:384
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:196
-#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:137
+#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:138
 msgctxt "s2member-front"
 msgid "Thank you! Please check your email for further details regarding your purchase."
 msgstr ""
@@ -4425,7 +4425,7 @@ msgstr ""
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:230
 #: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:385
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:197
-#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:138
+#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:139
 msgctxt "s2member-front"
 msgid "Return to Home Page"
 msgstr ""
@@ -4462,12 +4462,12 @@ msgctxt "s2member-front"
 msgid "<strong>ERROR:</strong> Unable to add new Capabilities.<br />Please contact Support for assistance.<br /><br />Missing User/Member details."
 msgstr ""
 
-#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:115
+#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:116
 msgctxt "s2member-front"
 msgid "<strong>Thank You! Your transaction has been approved.</strong>"
 msgstr ""
 
-#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:126
+#: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:127
 msgctxt "s2member-front"
 msgid "<strong>ERROR:</strong> Unable to generate Access Link.<br />Please contact Support for assistance."
 msgstr ""
@@ -4491,23 +4491,23 @@ msgstr ""
 #. by PayPal. Replace `%2$s` and `%3$s` with: `Unable to process, please try
 #. again`, or something to that affect. Or, if you prefer, you could Filter
 #. ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`.
-#: src/includes/classes/paypal-utilities.inc.php:213
+#: src/includes/classes/paypal-utilities.inc.php:215
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s. %3$s."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:260
-#: src/includes/classes/paypal-utilities.inc.php:266
+#: src/includes/classes/paypal-utilities.inc.php:262
+#: src/includes/classes/paypal-utilities.inc.php:268
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Please use an alternate funding source."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:263
+#: src/includes/classes/paypal-utilities.inc.php:265
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Express Checkout was NOT confirmed."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:397
+#: src/includes/classes/paypal-utilities.inc.php:399
 msgctxt "s2member-front"
 msgid " Please contact PayPal Merchant Technical Support (www.paypal.com/mts) and request `Recurring Billing` service, and also ask to have `Reference Transactions` enabled for Recurring Billing via Express Checkout."
 msgstr ""

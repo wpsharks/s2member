@@ -1,3 +1,11 @@
+= v251005 =
+
+- (Framework) **Security**: Improved sanitization for Tracking API replacement values.
+
+- (Framework) **Fix**: Use the site URL host instead of HTTP_HOST for proxy key when Skip Domain Check is enabled.
+
+- (Framework) **Fix**: Ensure the Fallback IPN Signup Vars provide a valid item_number for cancellation handling.
+
 = v250905 =
 
 - (Framework) **Security**: Improve handling of registration fields in multisite.
