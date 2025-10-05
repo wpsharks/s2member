@@ -210,7 +210,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 
 				// Break all openers by removing all occurrences of '<?'.
 				while (strpos($copy, '<?') !== false) {
-						$copy = str_replace('<?', '', $copy);
+						$copy = str_replace('<?', 'NEUTERED_', $copy);
 				}
 
 				return $copy;
