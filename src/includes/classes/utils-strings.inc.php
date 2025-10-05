@@ -185,23 +185,58 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		}
 
 		/**
-		 * Sanitizes a string by stripping PHP tags.
+		 * Sanitizes a string by breaking PHP opening tags (including encoded/mixed/double-encoded forms).
+		 *
 		 * @package s2Member\Utilities
 		 * @since 241207
-		 * @param string $string Input string.
-		 * @return string Output string, after PHP tags have been stripped.
+		 *
+		 * @param string $input Input string to sanitize.
+		 * @return string Original input when safe, otherwise decoded string with PHP opening tags removed.
 		 */
-		public static function strip_php_tags($string = '') {
-			$php_tags = array('<?php', '<?', '<?=', '?>');
-			foreach (array('?', '&#63;', '&#x3F;', '&#003F;') as $qm) {
-				foreach (array('<', '&lt;', '&#60;', '&#x3C;') as $lt) {
-					$php_tags[] = $lt . $qm;
+		public static function strip_php_tags($input = '') {
+				$copy = (string) $input;
+
+				//251002 Collapse mixed/double encodings (HTML entities + URL encodings).
+				$flags = ENT_QUOTES | (defined('ENT_HTML5') ? ENT_HTML5 : 0);
+				for ($i = 0; $i < 3; $i++) {
+						$copy = html_entity_decode($copy, $flags, 'UTF-8'); // &lt;, &#60;, &#x3C;, etc.
+						$copy = rawurldecode($copy);                        // %3C, %3F, %3E, etc.
 				}
-				foreach (array('>', '&gt;', '&#62;', '&#x3E;') as $gt) {
-					$php_tags[] = $qm . $gt;
+
+				// If no opener after normalization, return the original.
+				if (strpos($copy, '<?') === false) {
+					return $input;
 				}
-			}
-			return str_ireplace($php_tags, '', $string);
+
+				// Break all openers by removing all occurrences of '<?'.
+				while (strpos($copy, '<?') !== false) {
+						$copy = str_replace('<?', 'NEUTERED_', $copy);
+				}
+
+				return $copy;
+		}
+
+		/**
+		 * Recursively breaks PHP opening tags from strings in arrays/objects using strip_php_tags().
+		 *
+		 * @package s2Member\Utilities
+		 * @since 251002
+		 *
+		 * @param mixed $input A scalar, array, or object to sanitize.
+		 * @return mixed The sanitized value with PHP opening tags removed from all scalar leaves.
+		 */
+		public static function strip_php_tags_deep($input) {
+				if (is_array($input)) {
+						foreach ($input as $k => $v)
+								$input[$k] = self::strip_php_tags_deep($v);
+						return $input;
+				}
+				if (is_object($input)) {
+						foreach (get_object_vars($input) as $k => $v)
+								$input->$k = self::strip_php_tags_deep($v);
+						return $input;
+				}
+				return self::strip_php_tags($input);
 		}
 
 		/**

@@ -198,8 +198,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 							'option_selection1' => '',
 							'option_name2'      => '',
 							'option_selection2' => '',
-							'item_name'         => 'ITEM NAME',
-							'item_number'       => 'ITEM NUMBER',
+							'item_name'         => 'FALLBACK IPN SIGNUP VARS',
+							'item_number'       => (string) c_ws_plugin__s2member_user_access::user_access_level($userdata), //250916
 						);
 						return $ipn_signup_vars;
 					}
