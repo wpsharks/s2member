@@ -109,6 +109,33 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 			do_action('ws_plugin__s2member_before_sc_get_stream', get_defined_vars());
 			unset($__refs, $__v); // Housekeeping.
 
+			//251225 Validate s2Stream player-related shortcode attributes.
+			$attr = (array) $attr;
+			if (isset($attr['player_primary'])) {
+					$attr['player_primary'] = strtolower(trim($attr['player_primary']));
+					if (!in_array($attr['player_primary'], array('html5', 'flash'), true)) {
+							unset($attr['player_primary']); // fallback to default
+					}
+			}
+			if (isset($attr['player_stretching'])) {
+					$attr['player_stretching'] = strtolower(trim($attr['player_stretching']));
+					if (!in_array($attr['player_stretching'], array('uniform', 'exactfit', 'fill', 'none'), true)) {
+							unset($attr['player_stretching']);
+					}
+			}
+			if (isset($attr['player_startparam'])) {
+					$attr['player_startparam'] = (int) $attr['player_startparam'];
+			}
+			if (isset($attr['player_option_blocks'])) {
+					$value = (string) $attr['player_option_blocks'];
+					if (preg_match('/[<>]/', $value)) {
+							unset($attr['player_option_blocks']);
+					} else {
+							$value = preg_replace('/\b(on\w+|eval|Function|alert|prompt|confirm)\b/i', '', $value);
+							$attr['player_option_blocks'] = trim($value);
+					}
+			}
+
 			$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr);
 
 			$attr = shortcode_atts(array('download'             => '', 'file_download' => '', 'download_key' => '',
