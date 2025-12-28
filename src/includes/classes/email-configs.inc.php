@@ -288,11 +288,19 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 										$user_full_name = trim ($user->first_name . ' ' . $user->last_name);
 										$user_ip = c_ws_plugin__s2member_utils_ip::current();
 
-										$do_eval = (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ());
-										$def_vars = get_defined_vars();
+										//251228 Sanitize values before replacements.
+										foreach (array('user_ip', 'user_pass', 'wp_set_pass_url', 'fields', 'custom', 'user_full_name', 'ccaps') as $_var) {
+											if (isset($$_var)) {
+												$$_var = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($$_var);
+											}
+										}
+										foreach (array('first_name','last_name','user_email','user_login') as $_var) {
+											if (isset($user->$_var)) {
+												$user->$_var = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($user->$_var);
+											}
+										}
 
 										if (($sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_subject']))
-											if (($sbj = $do_eval ? c_ws_plugin__s2member_utilities::evl($sbj, $def_vars) : $sbj))
 											if (($sbj = c_ws_plugin__s2member_utils_strings::fill_cvs($sbj, $custom)))
 												if (($sbj = preg_replace ('/%%wp_set_pass_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($wp_set_pass_url), $sbj)))
 													if (($sbj = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $sbj)))
@@ -315,7 +323,6 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 																														break; // Empty; we can stop here.
 
 																											if (($msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_email_message']))
-																											if (($msg = $do_eval ? c_ws_plugin__s2member_utilities::evl($msg, $def_vars) : $msg))
 																												if (($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)))
 																													if (($msg = preg_replace ('/%%wp_set_pass_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($wp_set_pass_url), $msg)))
 																														if (($msg = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $msg)))
@@ -339,6 +346,11 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 
 																																												if (($sbj = trim (preg_replace ('/%%(.+?)%%/i', '', $sbj))) && ($msg = trim (preg_replace ('/%%(.+?)%%/i', '', $msg))))
 																																													{
+																																														if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
+																																															{
+																																																$sbj = c_ws_plugin__s2member_utilities::evl($sbj, get_defined_vars());
+																																																$msg = c_ws_plugin__s2member_utilities::evl($msg, get_defined_vars());
+																																															}
 																																														//250617 HTML email support.
 																																														if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
 																																															c_ws_plugin__s2member_email_configs::email_config () . wp_mail ($user->user_email, apply_filters('ws_plugin__s2member_welcome_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_welcome_email_msg', $msg, get_defined_vars()), 'From: "' . preg_replace ('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']) . '" <' . $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'] . '>'."\r\n".'Content-Type: text/plain; charset=UTF-8') . c_ws_plugin__s2member_email_configs::email_config_release ();;
@@ -363,11 +375,19 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 										$user_full_name = trim ($user->first_name . ' ' . $user->last_name);
 										$user_ip = c_ws_plugin__s2member_utils_ip::current();
 
-										$do_eval = (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ());
-										$def_vars = get_defined_vars();
+										//251228 Sanitize values before replacements.
+										foreach (array('user_ip', 'user_pass', 'wp_set_pass_url', 'fields', 'custom', 'user_full_name', 'ccaps') as $_var) {
+											if (isset($$_var)) {
+												$$_var = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($$_var);
+											}
+										}
+										foreach (array('first_name','last_name','user_email','user_login') as $_var) {
+											if (isset($user->$_var)) {
+												$user->$_var = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($user->$_var);
+											}
+										}
 
 										if (($rec = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_admin_email_recipients']))
-											if (($rec = $do_eval ? c_ws_plugin__s2member_utilities::evl($rec, $def_vars) : $rec))
 											if (($rec = c_ws_plugin__s2member_utils_strings::fill_cvs($rec, $custom)))
 												if (($rec = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $rec)))
 													if (($rec = preg_replace ('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($role), $rec)))
@@ -389,7 +409,6 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 																													break; // Empty; we can stop here.
 
 																										if (($sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_admin_email_subject']))
-																											if (($sbj = $do_eval ? c_ws_plugin__s2member_utilities::evl($sbj, $def_vars) : $sbj))
 																											if (($sbj = c_ws_plugin__s2member_utils_strings::fill_cvs($sbj, $custom)))
 																												if (($sbj = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $sbj)))
 																													if (($sbj = preg_replace ('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($role), $sbj)))
@@ -411,7 +430,6 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 																																													break; // Empty; we can stop here.
 
 																																										if (($msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['new_user_admin_email_message']))
-																																											if (($msg = $do_eval ? c_ws_plugin__s2member_utilities::evl($msg, $def_vars) : $msg))
 																																											if (($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)))
 																																												if (($msg = preg_replace ('/%%wp_login_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs (wp_login_url ()), $msg)))
 																																													if (($msg = preg_replace ('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs ($role), $msg)))
@@ -434,6 +452,12 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 
 																																																										if (($rec = trim (preg_replace ('/%%(.+?)%%/i', '', $rec))) && ($sbj = trim (preg_replace ('/%%(.+?)%%/i', '', $sbj))) && ($msg = trim (preg_replace ('/%%(.+?)%%/i', '', $msg))))
 																																																											{
+																																																												if (!is_multisite () || !c_ws_plugin__s2member_utils_conds::is_multisite_farm () || is_main_site ())
+																																																													{
+																																																														$rec = c_ws_plugin__s2member_utilities::evl($rec, get_defined_vars());
+																																																														$sbj = c_ws_plugin__s2member_utilities::evl($sbj, get_defined_vars());
+																																																														$msg = c_ws_plugin__s2member_utilities::evl($msg, get_defined_vars());
+																																																													}
 																																																												foreach (c_ws_plugin__s2member_utils_strings::parse_emails ($rec) as $recipient) // A list of receipients.
 																																																													{
 																																																														//250617 HTML email support.
