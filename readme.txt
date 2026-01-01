@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 251005
-Stable tag: 251005
-Tested up to: 6.9-alpha-60900
+Version: 260101
+Stable tag: 260101
+Tested up to: 7.0-alpha-61413
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.3
@@ -176,11 +176,17 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v251005 =
+= v260101 =
 
 (Maintenance Release) Upgrade immediately.
 
 == Changelog ==
+
+= v260101 =
+
+- (Framework) **Security**: Improved sanitization and normalization of attribute values for the s2Eot, s2Strem and s2Member-Security-Badge  shortcodes.
+
+- (Framework) **Security**: Improved sanitization of replacement values for confirmation and notification emails.
 
 = v251005 =
 
