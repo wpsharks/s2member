@@ -84,6 +84,17 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 			do_action('ws_plugin__s2member_before_sc_eot_details_after_shortcode_atts', get_defined_vars());
 			unset($__refs, $__v); // Allow variables to be modified by reference.
 
+			//251223 Sanitize shortcode attributes
+			foreach ($attr as $key => $value) {
+					if (in_array($key, array('user_id', 'offset'), true)) {
+							$attr[$key] = (int) $value;
+					} elseif (in_array($key, array('debug', 'date_format', 'round_to', 'timezone'), true)) {
+							$attr[$key] = sanitize_text_field($value);
+					} elseif (in_array($key, array('future_format', 'past_format', 'next_format', 'empty_format'), true)) {
+							$attr[$key] = wp_kses_post($value);
+					}
+			}
+
 			// Collect and cache the EOT for this user.
 
 			$prefix    = 's2m_eot_'; // Transient prefix for this shortcode.

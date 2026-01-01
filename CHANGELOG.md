@@ -1,3 +1,9 @@
+= v260101 =
+
+- (Framework) **Security**: Improved sanitization and normalization of attribute values for the s2Eot, s2Strem and s2Member-Security-Badge  shortcodes.
+
+- (Framework) **Security**: Improved sanitization of replacement values for confirmation and notification emails.
+
 = v251005 =
 
 - (Framework) **Security**: Improved sanitization for Tracking API replacement values.
