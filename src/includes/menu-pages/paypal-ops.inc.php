@@ -57,6 +57,126 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			{
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_paypal_account_details", get_defined_vars());
 
+				//260106
+				echo '<div class="ws-menu-page-group" title="PayPal Checkout (Beta)">'."\n";
+
+				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-checkout-account-details-section">'."\n";
+				echo '<a href="https://s2member.com/r/paypal/" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/src/images/paypal-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
+				echo '<h3>PayPal Checkout (Beta)</h3>'."\n";
+				echo '<p><em>This is for PayPal\'s REST-based Checkout integration. Leave these blank to continue using PayPal Standard.</em></p>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th>'."\n";
+				
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-enable">'."\n";
+				echo 'Enable PayPal Checkout (Beta)?'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-1">Yes</label>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox">'."\n";
+				echo 'Use Sandbox for PayPal Checkout?'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="radio" name="ws_plugin__s2member_paypal_checkout_sandbox" id="ws-plugin--s2member-paypal-checkout-sandbox-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-sandbox-0">Live</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_checkout_sandbox" id="ws-plugin--s2member-paypal-checkout-sandbox-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-sandbox-1">Sandbox</label>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-client-id">'."\n";
+				echo 'PayPal Checkout Client ID (Live):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_client_id" id="ws-plugin--s2member-paypal-checkout-client-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"]).'" />'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-client-secret">'."\n";
+				echo 'PayPal Checkout Client Secret (Live):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_client_secret" id="ws-plugin--s2member-paypal-checkout-client-secret" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"]).'" />'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox-client-id">'."\n";
+				echo 'PayPal Checkout Client ID (Sandbox):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_sandbox_client_id" id="ws-plugin--s2member-paypal-checkout-sandbox-client-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"]).'" />'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox-client-secret">'."\n";
+				echo 'PayPal Checkout Client Secret (Sandbox):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_sandbox_client_secret" id="ws-plugin--s2member-paypal-checkout-sandbox-client-secret" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"]).'" />'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '</div>'."\n"; // .ws-menu-page-section
+
+				echo '</div>'."\n"; // .ws-menu-page-group
+
+
 				echo '<div class="ws-menu-page-group" title="PayPal Account Details">'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-account-details-section">'."\n";

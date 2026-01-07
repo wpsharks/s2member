@@ -49,6 +49,7 @@ add_action('init', 'c_ws_plugin__s2member_constants::constants', 6);
 
 add_action('init', 'c_ws_plugin__s2member_css_js::js_w_globals', 7);
 add_action('init', 'c_ws_plugin__s2member_paypal_return::paypal_return', 7);
+add_action('init', 'c_ws_plugin__s2member_paypal_checkout::paypal_checkout', 6); //260106
 add_action('init', 'c_ws_plugin__s2member_profile::profile', 7);
 
 add_action('init', 'c_ws_plugin__s2member_labels::config_label_translations', 10);

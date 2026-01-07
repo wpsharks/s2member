@@ -235,6 +235,14 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['paypal_identity_token'] = '';
 		$default_options['paypal_btn_encryption'] = '0';
 
+		//260106
+		$default_options['paypal_checkout_enable']               = '0';
+		$default_options['paypal_checkout_sandbox']              = '0';
+		$default_options['paypal_checkout_client_id']            = '';
+		$default_options['paypal_checkout_client_secret']        = '';
+		$default_options['paypal_checkout_sandbox_client_id']    = '';
+		$default_options['paypal_checkout_sandbox_client_secret']= '';
+
 		$default_options['paypal_payflow_api_username'] = '';
 		$default_options['paypal_payflow_api_partner']  = 'PayPal';
 		$default_options['paypal_payflow_api_vendor']   = '';
@@ -536,6 +544,14 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 					$value = $default_options[$key];
 
 				else if($key === 'paypal_btn_encryption' && (!is_string($value) || !is_numeric($value)))
+					$value = $default_options[$key];
+
+				//260106
+				else if($key === 'paypal_checkout_enable' && (!is_string($value) || !is_numeric($value)))
+					$value = $default_options[$key];
+				else if($key === 'paypal_checkout_sandbox' && (!is_string($value) || !is_numeric($value)))
+					$value = $default_options[$key];
+				else if(preg_match('/^paypal_checkout_(?:client_id|client_secret|sandbox_client_id|sandbox_client_secret)$/', $key) && !is_string($value))
 					$value = $default_options[$key];
 
 				else if(preg_match('/^(?:signup|modification|ccap|sp)_tracking_codes$/', $key) && (!is_string($value) || !strlen($value)))

@@ -712,5 +712,175 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 						else return apply_filters("ws_plugin__s2member_paypal_pro_period3", $default, get_defined_vars());
 					}
+
+				//260106 PayPal Checkout
+				public static function paypal_checkout_is_enabled()
+					{
+						if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_enable']))
+							return false;
+
+						if(self::paypal_checkout_is_sandbox())
+							return (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_id'])
+								&& !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_secret']));
+
+						return (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_id'])
+							&& !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_secret']));
+					}
+
+				public static function paypal_checkout_is_sandbox()
+					{
+						return !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox']);
+					}
+
+				public static function paypal_checkout_api_base()
+					{
+						return (self::paypal_checkout_is_sandbox())
+							? 'https://api-m.sandbox.paypal.com'
+							: 'https://api-m.paypal.com';
+					}
+
+				public static function paypal_checkout_creds()
+					{
+						if(self::paypal_checkout_is_sandbox())
+							return array(
+								'client_id' => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_id'],
+								'secret'    => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_secret'],
+							);
+
+						return array(
+							'client_id' => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_id'],
+							'secret'    => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_secret'],
+						);
+					}
+
+				public static function paypal_checkout_access_token()
+					{
+						$transient = self::paypal_checkout_is_sandbox() ? 's2m_ppco_at_sandbox' : 's2m_ppco_at_live';
+
+						if(($cached = get_transient($transient)) && is_array($cached) && !empty($cached['access_token']))
+							return $cached['access_token'];
+
+						$creds     = self::paypal_checkout_creds();
+						$client_id = (string)$creds['client_id'];
+						$secret    = (string)$creds['secret'];
+
+						if(!$client_id || !$secret)
+							return '';
+
+						$url  = self::paypal_checkout_api_base().'/v1/oauth2/token';
+						$body = 'grant_type=client_credentials';
+
+						$args = array(
+							'timeout' => 20,
+							'headers' => array(
+								'Authorization'   => 'Basic '.base64_encode($client_id.':'.$secret),
+								'Content-Type'    => 'application/x-www-form-urlencoded',
+								'Accept'          => 'application/json',
+								'Accept-Language' => 'en_US',
+							),
+						);
+
+						$r = c_ws_plugin__s2member_utils_urls::remote($url, $body, $args, true);
+
+						$data = array();
+						if(!empty($r['body']))
+							$data = json_decode($r['body'], true);
+
+						if(!empty($data['access_token']) && !empty($data['expires_in']))
+						{
+							$ttl = max(60, (int)$data['expires_in'] - 60);
+							set_transient($transient, array('access_token' => $data['access_token']), $ttl);
+
+							return $data['access_token'];
+						}
+						return '';
+					}
+
+				public static function paypal_checkout_api_request($method = 'GET', $path = '/', $body = null, $headers = array())
+					{
+						$method = strtoupper((string)$method);
+						$url    = self::paypal_checkout_api_base().$path;
+
+						$args = array(
+							'timeout' => 20,
+							'method'  => $method,
+							'headers' => array_merge(array(
+								'Authorization' => 'Bearer '.self::paypal_checkout_access_token(),
+								'Content-Type'  => 'application/json',
+								'Accept'        => 'application/json',
+							), (array)$headers),
+						);
+
+						if($body !== null)
+							$args['body'] = is_string($body) ? $body : json_encode($body);
+
+						return c_ws_plugin__s2member_utils_urls::remote($url, false, $args, true);
+					}
+
+				public static function paypal_checkout_order_create($token = array())
+					{
+						// token: invoice, custom, item_name, item_number, amount, cc, ns, return, cancel.
+						$invoice = (string)$token['invoice'];
+						$custom  = (string)$token['custom'];
+						$amount  = (string)$token['amount'];
+						$cc      = strtoupper((string)$token['cc']);
+
+						$purchase_unit = array(
+							'invoice_id' => $invoice,
+							'amount'     => array(
+								'currency_code' => $cc,
+								'value'         => $amount,
+							),
+							'description' => (string)$token['item_name'],
+						);
+
+						// PayPal limits custom_id length; keep it short/consistent.
+						if($custom && strlen($custom) <= 127)
+							$purchase_unit['custom_id'] = $custom;
+
+						$body = array(
+							'intent'         => 'CAPTURE',
+							'purchase_units' => array($purchase_unit),
+							'application_context' => array(
+								'user_action'          => 'PAY_NOW',
+								'shipping_preference'  => (!empty($token['ns']) && (string)$token['ns'] === '1') ? 'NO_SHIPPING' : 'GET_FROM_FILE',
+								'return_url'           => (string)$token['return'],
+								'cancel_url'           => (string)$token['cancel'],
+							),
+						);
+
+						// Idempotency: stable per invoice for create-order retries.
+						$headers = array(
+							'PayPal-Request-Id' => 's2m-ppco-order-'.md5($invoice),
+						);
+
+						$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders', $body, $headers);
+
+						$data = array();
+						if(!empty($r['body']))
+							$data = json_decode($r['body'], true);
+
+						return is_array($data) ? $data : array();
+					}
+
+				public static function paypal_checkout_order_capture($order_id = '', $token = array())
+					{
+						$order_id = trim((string)$order_id);
+						if(!$order_id)
+							return array();
+
+						// Idempotency: stable per order capture retries.
+						$headers = array(
+							'PayPal-Request-Id' => 's2m-ppco-cap-'.md5($order_id),
+						);
+
+						$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders/'.$order_id.'/capture', array(), $headers);
+
+						$data = array();
+						if(!empty($r['body']))
+							$data = json_decode($r['body'], true);
+
+						return is_array($data) ? $data : array();
+					}
 			}
 	}
