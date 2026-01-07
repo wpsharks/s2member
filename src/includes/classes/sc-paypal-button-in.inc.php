@@ -241,8 +241,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										static $ppco_sdk_loaded = false;
 										static $ppco_sdk_cc = '';
 
-										$ppco_client_id = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"];
 										$ppco_sandbox   = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox();
+										$ppco_client_id = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"][($ppco_sandbox) ? "paypal_checkout_sandbox_client_id" : "paypal_checkout_client_id"];
 
 										$ppco_cc = strtoupper((string)$attr["cc"]);
 										if($ppco_sdk_loaded && $ppco_sdk_cc && $ppco_sdk_cc !== $ppco_cc)
