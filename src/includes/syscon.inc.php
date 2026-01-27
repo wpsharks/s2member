@@ -242,6 +242,10 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['paypal_checkout_client_secret']        = '';
 		$default_options['paypal_checkout_sandbox_client_id']    = '';
 		$default_options['paypal_checkout_sandbox_client_secret']= '';
+		$default_options['paypal_checkout_webhook_id']           = '';
+		$default_options['paypal_checkout_sandbox_webhook_id']   = '';
+
+		$default_options['paypal_checkout_cache']                = array();
 
 		$default_options['paypal_payflow_api_username'] = '';
 		$default_options['paypal_payflow_api_partner']  = 'PayPal';

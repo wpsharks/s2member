@@ -30,7 +30,162 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 	{
 		public function __construct()
 		{
-            echo '<div class="wrap ws-menu-page">'."\n";
+			$ppco_webhook_notice = '';
+			$ppco_creds_notice   = '';
+			$ppco_cache_notice   = '';
+
+			$ppco_flash_key = 's2member_ppco_notice_' . get_current_user_id();
+
+			if(empty($_GET['s2member_ppco_webhook']) && empty($_GET['s2member_ppco_creds_test']) && empty($_GET['s2member_ppco_clear_cache']))
+				if(($ppco_flash = get_transient($ppco_flash_key)))
+				{
+					if(!empty($ppco_flash['webhook']))
+						$ppco_webhook_notice = (string)$ppco_flash['webhook'];
+
+					if(!empty($ppco_flash['creds']))
+						$ppco_creds_notice = (string)$ppco_flash['creds'];
+
+					if(!empty($ppco_flash['cache']))
+						$ppco_cache_notice = (string)$ppco_flash['cache'];
+
+					delete_transient($ppco_flash_key);
+				}
+
+			if(!empty($_GET['s2member_ppco_webhook']) && empty($_GET['s2member_ppco_creds_test']) && empty($_GET['s2member_ppco_clear_cache']) && current_user_can('manage_options'))
+			{
+				if(!empty($_GET['_wpnonce']) && wp_verify_nonce((string)$_GET['_wpnonce'], 's2member_ppco_webhook'))
+				{
+					$env = (!empty($_GET['ppco_webhook_env']) && $_GET['ppco_webhook_env'] === 'sandbox') ? 'sandbox' : 'live';
+					$env_label = ($env === 'sandbox') ? esc_html__('Sandbox', 's2member') : esc_html__('Live', 's2member');
+
+					$client_id = '';
+					$secret    = '';
+
+					if($env === 'sandbox')
+					{
+						$client_id = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"];
+						$secret    = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"];
+					}
+					else // live
+					{
+						$client_id = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"];
+						$secret    = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"];
+					}
+
+					if(!empty($client_id) && !empty($secret))
+					{
+						$scheme = strtolower((string)wp_parse_url(home_url('/'), PHP_URL_SCHEME));
+
+						if($scheme !== 'https')
+							$ppco_webhook_notice = '<div class="error"><p>'.esc_html__('Unable to create/update PayPal Checkout webhook. PayPal requires an HTTPS (SSL) webhook URL, but your site URL appears to be configured without HTTPS. Please enable SSL and update your WordPress Site URL/Home URL to use https://, then try again.', 's2member').'</p></div>'."\n";
+						else
+						{
+							$ppco_https_probe = wp_remote_head(home_url("/", 'https'), array('timeout' => 8, 'redirection' => 0));
+							$ppco_https_code  = !is_wp_error($ppco_https_probe) ? (int)wp_remote_retrieve_response_code($ppco_https_probe) : 0;
+							$ppco_https_loc   = !is_wp_error($ppco_https_probe) ? (string)wp_remote_retrieve_header($ppco_https_probe, 'location') : '';
+
+							if(is_wp_error($ppco_https_probe))
+								$ppco_webhook_notice = '<div class="error"><p>'.esc_html__('Unable to create/update PayPal Checkout webhook because your HTTPS endpoint is not reachable from this server. Please configure SSL for this domain first.', 's2member').'</p><p><code>'.esc_html($ppco_https_probe->get_error_message()).'</code></p></div>'."\n";
+							else if($ppco_https_loc && stripos($ppco_https_loc, 'cgi-sys/defaultwebpage.cgi') !== false)
+								$ppco_webhook_notice = '<div class="error"><p>'.esc_html__('Unable to create/update PayPal Checkout webhook because your HTTPS endpoint appears to redirect to a hosting default page (/cgi-sys/defaultwebpage.cgi). Please correct SSL/virtual-host configuration first.', 's2member').'</p></div>'."\n";
+							else if($ppco_https_code && $ppco_https_code >= 400)
+								$ppco_webhook_notice = '<div class="error"><p>'.sprintf(esc_html__('Unable to create/update PayPal Checkout webhook because your HTTPS endpoint returned HTTP %1$s. Please correct SSL/virtual-host configuration first.', 's2member'), (int)$ppco_https_code).'</p></div>'."\n";
+							else
+							{
+								$r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_webhook_upsert($env);
+
+								if(!empty($r['id']))
+									$ppco_webhook_notice = '<div class="updated"><p>'.sprintf(esc_html__('PayPal Checkout %1$s webhook created/updated successfully.', 's2member'), $env_label).'</p></div>'."\n";
+								else
+									$ppco_webhook_notice = '<div class="error"><p>'.sprintf(esc_html__('Unable to create/update PayPal Checkout %1$s webhook. See the s2Member paypal-checkout.log for details.', 's2member'), $env_label).' <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">'.esc_html__('Log Viewer', 's2member').'</a></p></div>'."\n";
+							}
+						}
+					}
+					else
+						$ppco_webhook_notice = '<div class="error"><p>'.sprintf(esc_html__('PayPal Checkout %1$s credentials are not configured.', 's2member'), $env_label).'</p></div>'."\n";
+				}
+				else
+					$ppco_webhook_notice = '<div class="error"><p>'.esc_html__('Invalid request. Please try again.', 's2member').'</p></div>'."\n";
+			}
+
+			if($ppco_webhook_notice && !empty($_GET['s2member_ppco_webhook']))
+			{
+				set_transient($ppco_flash_key, array('webhook' => $ppco_webhook_notice), 30);
+				wp_safe_redirect(remove_query_arg(array('s2member_ppco_webhook','ppco_webhook_env','s2member_ppco_creds_test','ppco_creds_env','s2member_ppco_clear_cache','ppco_clear_env','_wpnonce')));
+				exit;
+			}
+
+
+			if(!empty($_GET['s2member_ppco_creds_test']) && empty($_GET['s2member_ppco_webhook']) && empty($_GET['s2member_ppco_clear_cache']) && current_user_can('manage_options'))
+			{
+				if(!empty($_GET['_wpnonce']) && wp_verify_nonce((string)$_GET['_wpnonce'], 's2member_ppco_creds_test'))
+				{
+					$env = (!empty($_GET['ppco_creds_env']) && $_GET['ppco_creds_env'] === 'sandbox') ? 'sandbox' : 'live';
+					$env_label = ($env === 'sandbox') ? esc_html__('Sandbox', 's2member') : esc_html__('Live', 's2member');
+
+					$client_id = '';
+					$secret    = '';
+
+					if($env === 'sandbox')
+					{
+						$client_id = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"];
+						$secret    = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"];
+					}
+					else // live
+					{
+						$client_id = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"];
+						$secret    = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"];
+					}
+
+					if(!empty($client_id) && !empty($secret))
+					{
+						$ok = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_creds_test($env);
+
+						if($ok)
+							$ppco_creds_notice = '<div class="updated"><p>'.sprintf(esc_html__('PayPal Checkout %1$s credentials test OK.', 's2member'), $env_label).'</p></div>'."\n";
+						else
+							$ppco_creds_notice = '<div class="error"><p>'.sprintf(esc_html__('PayPal Checkout %1$s credentials test failed. See the s2Member paypal-checkout.log for details.', 's2member'), $env_label).' <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">'.esc_html__('Log Viewer', 's2member').'</a></p></div>'."\n";
+					}
+					else
+						$ppco_creds_notice = '<div class="error"><p>'.sprintf(esc_html__('PayPal Checkout %1$s credentials are not configured.', 's2member'), $env_label).'</p></div>'."\n";
+				}
+				else
+					$ppco_creds_notice = '<div class="error"><p>'.esc_html__('Invalid request. Please try again.', 's2member').'</p></div>'."\n";
+			}
+
+			if($ppco_creds_notice && !empty($_GET['s2member_ppco_creds_test']))
+			{
+				set_transient($ppco_flash_key, array('creds' => $ppco_creds_notice), 30);
+				wp_safe_redirect(remove_query_arg(array('s2member_ppco_webhook','ppco_webhook_env','s2member_ppco_creds_test','ppco_creds_env','s2member_ppco_clear_cache','ppco_clear_env','_wpnonce')));
+				exit;
+			}
+
+			if(!empty($_GET['s2member_ppco_clear_cache']) && empty($_GET['s2member_ppco_webhook']) && empty($_GET['s2member_ppco_creds_test']) && current_user_can('manage_options'))
+			{
+				if(!empty($_GET['_wpnonce']) && wp_verify_nonce((string)$_GET['_wpnonce'], 's2member_ppco_clear_cache'))
+				{
+					$env = (!empty($_GET['ppco_clear_env']) && $_GET['ppco_clear_env'] === 'sandbox') ? 'sandbox' : 'live';
+					$env_label = ($env === 'sandbox') ? esc_html__('Sandbox', 's2member') : esc_html__('Live', 's2member');
+
+					c_ws_plugin__s2member_paypal_utilities::paypal_checkout_clear_cache($env);
+
+					$ppco_cache_notice = '<div class="updated"><p>'.sprintf(esc_html__('PayPal Checkout cache cleared for %1$s.', 's2member'), $env_label).'</p></div>'."\n";
+				}
+				else
+					$ppco_cache_notice = '<div class="error"><p>'.esc_html__('Invalid request. Please try again.', 's2member').'</p></div>'."\n";
+			}
+
+			if($ppco_cache_notice && !empty($_GET['s2member_ppco_clear_cache']))
+			{
+				set_transient($ppco_flash_key, array('cache' => $ppco_cache_notice), 30);
+				wp_safe_redirect(remove_query_arg(array('s2member_ppco_webhook','ppco_webhook_env','s2member_ppco_creds_test','ppco_creds_env','s2member_ppco_clear_cache','ppco_clear_env','_wpnonce')));
+				exit;
+			}
+
+			echo '<div class="wrap ws-menu-page">'."\n";
+			echo $ppco_webhook_notice;
+			echo $ppco_creds_notice;
+			echo $ppco_cache_notice;
 
 			echo '<div class="wp-header-end"></div>'."\n";
 
@@ -61,54 +216,210 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<div class="ws-menu-page-group" title="PayPal Checkout (Beta)">'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-checkout-account-details-section">'."\n";
-				echo '<a href="https://s2member.com/r/paypal/" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/src/images/paypal-logo.png" class="ws-menu-page-right" style="width:125px; height:125px; border:0;" alt="." /></a>'."\n";
-				echo '<h3>PayPal Checkout (Beta)</h3>'."\n";
-				echo '<p><em>This is for PayPal\'s REST-based Checkout integration. Leave these blank to continue using PayPal Standard.</em></p>'."\n";
+				echo '<a href="https://s2member.com/r/paypal/" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/src/images/paypal-pp-logo-200px.png" class="ws-menu-page-right s2m-ppco-paypal-logo" style="width:250px; max-width:25%; height:auto; margin:0 20px 20px 0;" alt="PayPal" /></a>'."\n";
 
-				echo '<table class="form-table">'."\n";
+				echo '<div class="ws-menu-page-notice ws-menu-page-notice-info">'."\n";
+				echo '<p>'.esc_html__('When enabled, existing s2Member PayPal Button shortcodes are powered by PayPal Checkout without requiring shortcode edits. If disabled, s2Member continues using PayPal Standard.', 's2member').'</p>'."\n";
+
+				echo '<p style="margin:0 0 6px 0;"><strong>'.esc_html__('Quick Setup (Live or Sandbox)', 's2member').'</strong></p>'."\n";
+				echo '<ol style="margin:0 0 0 20px;">'."\n";
+				echo '<li>'.esc_html__('Enable PayPal Checkout below, choose the environment (Live or Sandbox).', 's2member').'</li>'."\n";
+				echo '<li>'.esc_html__('Go to PayPal\'s “Apps & Credentials”, and click “Create App” for your site (s2Member).', 's2member').' <a href="https://developer.paypal.com/dashboard/applications/live" target="_blank" rel="external">'.esc_html__('Live', 's2member').'</a> / <a href="https://developer.paypal.com/dashboard/applications/sandbox" target="_blank" rel="external">'.esc_html__('Sandbox', 's2member').'</a></li>'."\n";
+				echo '<li>'.esc_html__('Copy the app\'s Client ID and Secret (REST API, not NVP) and paste them below.', 's2member').'</li>'."\n";
+				echo '<li>'.esc_html__('Click “Save All Changes”.', 's2member').'</li>'."\n";
+				echo '<li>'.esc_html__('Click “Test Credentials” to verify the saved Client ID and Secret are correct.', 's2member').'</li>'."\n";
+				echo '<li>'.esc_html__('Click “Create/Update Webhook” to register your webhook URL with PayPal and populate the Webhook ID field.', 's2member').'</li>'."\n";
+				echo '<li>'.esc_html__('Click “Test Webhook Endpoint” to check it.', 's2member').'</li>'."\n";
+				echo '</ol>'."\n";
+
+				echo '<p style="margin:12px 0 0 0;"><strong>'.esc_html__('Useful PayPal links', 's2member').'</strong></p>'."\n";
+				echo '<ul style="margin:0 0 0 20px; list-style:disc;">'."\n";
+				echo '<li><a href="https://developer.paypal.com/api/rest/webhooks/" target="_blank" rel="external">'.esc_html__('Webhooks overview (PayPal docs)', 's2member').'</a></li>'."\n";
+				echo '<li><a href="https://developer.paypal.com/api/rest/webhooks/simulator/" target="_blank" rel="external">'.esc_html__('Webhooks simulator (connectivity testing)', 's2member').'</a></li>'."\n";
+				echo '<li><a href="https://developer.paypal.com/api/rest/webhooks/events-dashboard/" target="_blank" rel="external">'.esc_html__('Webhooks Events dashboard (view/re-deliver events)', 's2member').'</a></li>'."\n";
+				echo '</ul>'."\n";
+
+				echo '</div>'."\n";
+
+				echo '<p><em>'.esc_html__('Leave these fields blank to continue using PayPal Standard.', 's2member').'</em></p>'."\n";
+
+				$ppco_https_ready  = true;
+				$ppco_https_reason = '';
+
+				$ppco_https_scheme = strtolower((string)wp_parse_url(home_url('/'), PHP_URL_SCHEME));
+
+				if($ppco_https_scheme !== 'https')
+				{
+					$ppco_https_ready  = false;
+					$ppco_https_reason = __('Your WordPress Site URL/Home URL is currently not configured for HTTPS.', 's2member');
+				}
+				else
+				{
+					$ppco_https_probe = wp_remote_head(home_url("/", 'https'), array('timeout' => 8, 'redirection' => 0));
+					$ppco_https_code  = !is_wp_error($ppco_https_probe) ? (int)wp_remote_retrieve_response_code($ppco_https_probe) : 0;
+					$ppco_https_loc   = !is_wp_error($ppco_https_probe) ? (string)wp_remote_retrieve_header($ppco_https_probe, 'location') : '';
+
+					if(is_wp_error($ppco_https_probe))
+					{
+						$ppco_https_ready  = false;
+						$ppco_https_reason = $ppco_https_probe->get_error_message();
+					}
+					else if($ppco_https_loc && stripos($ppco_https_loc, 'cgi-sys/defaultwebpage.cgi') !== false)
+					{
+						$ppco_https_ready  = false;
+						$ppco_https_reason = __('HTTPS endpoint redirects to /cgi-sys/defaultwebpage.cgi.', 's2member');
+					}
+					else if($ppco_https_code && $ppco_https_code >= 400)
+					{
+						$ppco_https_ready  = false;
+						$ppco_https_reason = sprintf(__('HTTPS endpoint returned HTTP %1$s.', 's2member'), (int)$ppco_https_code);
+					}
+				}
+
+				if(!$ppco_https_ready)
+				{
+					echo '<div class="ws-menu-page-notice ws-menu-page-notice-info">'."\n";
+					echo '<p><span class="ws-menu-page-error"><strong>'.esc_html__('PayPal Checkout requires HTTPS (SSL).', 's2member').'</strong></span></p>'."\n";
+					echo '<p><span class="ws-menu-page-error">'.esc_html__('This site does not currently have a working HTTPS endpoint for this domain. PayPal Checkout is disabled here because webhooks cannot be delivered without HTTPS.', 's2member').'</span></p>'."\n";
+					echo '<p><code>'.esc_html($ppco_https_reason).'</code></p>'."\n";
+					echo '</div>'."\n";
+				}
+
+				echo '<table class="form-table" style="margin:0;">'."\n";
 				echo '<tbody>'."\n";
-
 				echo '<tr>'."\n";
-				echo '<th>'."\n";
-				
-				echo '<table class="form-table">'."\n";
-				echo '<tbody>'."\n";
 
-				echo '<tr>'."\n";
-				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-paypal-checkout-enable">'."\n";
+				echo '<th style="padding-top:0;">'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-enable-0">'."\n";
 				echo 'Enable PayPal Checkout (Beta)?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
-				echo '</tr>'."\n";
 
+				echo '</tr>'."\n";
 				echo '<tr>'."\n";
+
 				echo '<td>'."\n";
-				echo '<input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-1">Yes</label>'."\n";
+				echo '<input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-0" value="0" onclick="window.s2mPpcoApplyEnvCues&&window.s2mPpcoApplyEnvCues();"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-1" value="1" onclick="window.s2mPpcoApplyEnvCues&&window.s2mPpcoApplyEnvCues();"'.((!$ppco_https_ready) ? ' disabled="disabled"' : '').(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-1">Yes, enable PayPal Checkout.</label><br />'."\n";
+				echo '<em>Only enable this after you have configured PayPal Checkout credentials below. If disabled, s2Member continues using PayPal Standard.</em>'."\n";
+
+				if(!$ppco_https_ready)
+					echo '<br /><span class="ws-menu-page-error">'.esc_html__('Disabled: PayPal Checkout requires HTTPS (SSL) for webhooks. Fix HTTPS for this domain, then enable PayPal Checkout.', 's2member').'</span>'."\n";
 				echo '</td>'."\n";
+
 				echo '</tr>'."\n";
+				echo '<tr>'."\n";
 
-				echo '</tbody>'."\n";
-				echo '</table>'."\n";
-
-				echo '<div class="ws-menu-page-hr"></div>'."\n";
-
-				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox">'."\n";
-				echo 'Use Sandbox for PayPal Checkout?'."\n";
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox-0">'."\n";
+				echo 'PayPal Checkout Environment'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
-				echo '</tr>'."\n";
 
+				echo '</tr>'."\n";
 				echo '<tr>'."\n";
-				echo '<td>'."\n";
-				echo '<input type="radio" name="ws_plugin__s2member_paypal_checkout_sandbox" id="ws-plugin--s2member-paypal-checkout-sandbox-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-sandbox-0">Live</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_checkout_sandbox" id="ws-plugin--s2member-paypal-checkout-sandbox-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-sandbox-1">Sandbox</label>'."\n";
-				echo '</td>'."\n";
-				echo '</tr>'."\n";
 
+				echo '<td>'."\n";
+				echo '<input type="radio" name="ws_plugin__s2member_paypal_checkout_sandbox" id="ws-plugin--s2member-paypal-checkout-sandbox-0" value="0" onclick="window.s2mPpcoApplyEnvCues && window.s2mPpcoApplyEnvCues(\'click-live\');"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-sandbox-0">Live</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_checkout_sandbox" id="ws-plugin--s2member-paypal-checkout-sandbox-1" value="1" onclick="window.s2mPpcoApplyEnvCues && window.s2mPpcoApplyEnvCues(\'click-sandbox\');"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-sandbox-1">Sandbox</label><br />'."\n";
+				echo '<em>This controls which credentials and webhook ID are used at runtime.</em>'."\n";
+				echo '</td>'."\n";
+
+				echo '</tr>'."\n";
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<style type="text/css">'."\n";
+				echo '/* PayPal Checkout (Beta): environment cues (Live vs Sandbox) */'."\n";
+				echo '.ws-plugin--s2member-paypal-checkout-account-details-section .s2m-ppco-env-wrap{border-radius:8px;}'."\n";
+				echo '.ws-plugin--s2member-paypal-checkout-account-details-section .s2m-ppco-env-live-wrap{margin:0 0 18px 0;}'."\n";
+				echo '.ws-plugin--s2member-paypal-checkout-account-details-section .s2m-ppco-env-sandbox-wrap{background:#fcfeff; margin:0 -12px 18px -12px; padding:12px;}'."\n";
+				echo '.ws-plugin--s2member-paypal-checkout-account-details-section .s2m-ppco-env-inactive{opacity:0.50;}'."\n";
+				echo '/* Prevent long <code> strings from forcing horizontal overflow (e.g., webhook URL). */'."\n";
+				echo '.ws-plugin--s2member-paypal-checkout-account-details-section code{display:inline-block; max-width:100%; margin:0 !important; white-space:normal; overflow-wrap:anywhere; word-break:break-word;}'."\n";
+				echo '/* Keep inputs inside the section from overflowing the container when zoomed. */'."\n";
+				echo '.ws-plugin--s2member-paypal-checkout-account-details-section input[type="text"],'."\n";
+				echo '.ws-plugin--s2member-paypal-checkout-account-details-section input[type="password"]{max-width:100%; box-sizing:border-box;}'."\n";
+				echo '</style>'."\n";
+
+				echo '<script type="text/javascript">'."\n";
+				echo 'window.s2mPpcoApplyEnvCues=function(){'."\n";
+				echo '  var en=document.getElementById(\'ws-plugin--s2member-paypal-checkout-enable-1\');'."\n";
+				echo '  var sb=document.getElementById(\'ws-plugin--s2member-paypal-checkout-sandbox-1\');'."\n";
+				echo '  var live=document.querySelector(\'.ws-plugin--s2member-paypal-checkout-account-details-section .s2m-ppco-env-live-wrap\');'."\n";
+				echo '  var sandbox=document.querySelector(\'.ws-plugin--s2member-paypal-checkout-account-details-section .s2m-ppco-env-sandbox-wrap\');'."\n";
+				echo '  if(!live||!sandbox){return;}'."\n";
+				echo '  var enabled=!!(en&&en.checked);'."\n";
+				echo '  var isSandbox=!!(sb&&sb.checked);'."\n";
+				echo '  live.classList.toggle(\'s2m-ppco-env-inactive\', !enabled||isSandbox);'."\n";
+				echo '  sandbox.classList.toggle(\'s2m-ppco-env-inactive\', !enabled||!isSandbox);'."\n";
+				echo '};'."\n";
+				echo 'window.s2mPpcoApplyEnvCues();'."\n";
+				echo '</script>'."\n";
+
+				$ppco_webhook_live_url = add_query_arg(array(
+					's2member_ppco_webhook' => '1',
+					'ppco_webhook_env'      => 'live',
+					'_wpnonce'              => wp_create_nonce('s2member_ppco_webhook'),
+				), remove_query_arg(array('s2member_ppco_webhook', 'ppco_webhook_env', 's2member_ppco_creds_test', 'ppco_creds_env', 's2member_ppco_clear_cache', 'ppco_clear_env', '_wpnonce')));
+
+				$ppco_creds_test_live_url = add_query_arg(array(
+					's2member_ppco_creds_test' => '1',
+					'ppco_creds_env'           => 'live',
+					'_wpnonce'                 => wp_create_nonce('s2member_ppco_creds_test'),
+				), remove_query_arg(array('s2member_ppco_creds_test', 'ppco_creds_env', 's2member_ppco_webhook', 'ppco_webhook_env', 's2member_ppco_clear_cache', 'ppco_clear_env', '_wpnonce')));
+
+				$ppco_clear_cache_live_url = add_query_arg(array(
+					's2member_ppco_clear_cache' => '1',
+					'ppco_clear_env'            => 'live',
+					'_wpnonce'                  => wp_create_nonce('s2member_ppco_clear_cache'),
+				), remove_query_arg(array('s2member_ppco_clear_cache', 'ppco_clear_env', 's2member_ppco_webhook', 'ppco_webhook_env', 's2member_ppco_creds_test', 'ppco_creds_env', '_wpnonce')));
+
+				$ppco_webhook_test_live_url = add_query_arg(array(
+					's2member_paypal_webhook'      => '1',
+					's2member_paypal_webhook_test' => '1',
+					'ppco_webhook_env'             => 'live',
+					'_wpnonce'                     => wp_create_nonce('s2member_ppco_webhook_test'),
+				), home_url("/", 'https'));
+
+				$ppco_webhook_sandbox_url = add_query_arg(array(
+					's2member_ppco_webhook' => '1',
+					'ppco_webhook_env'      => 'sandbox',
+					'_wpnonce'              => wp_create_nonce('s2member_ppco_webhook'),
+				), remove_query_arg(array('s2member_ppco_webhook', 'ppco_webhook_env', 's2member_ppco_creds_test', 'ppco_creds_env', 's2member_ppco_clear_cache', 'ppco_clear_env', '_wpnonce')));
+
+				$ppco_creds_test_sandbox_url = add_query_arg(array(
+					's2member_ppco_creds_test' => '1',
+					'ppco_creds_env'           => 'sandbox',
+					'_wpnonce'                 => wp_create_nonce('s2member_ppco_creds_test'),
+				), remove_query_arg(array('s2member_ppco_creds_test', 'ppco_creds_env', 's2member_ppco_webhook', 'ppco_webhook_env', 's2member_ppco_clear_cache', 'ppco_clear_env', '_wpnonce')));
+
+				$ppco_clear_cache_sandbox_url = add_query_arg(array(
+					's2member_ppco_clear_cache' => '1',
+					'ppco_clear_env'            => 'sandbox',
+					'_wpnonce'                  => wp_create_nonce('s2member_ppco_clear_cache'),
+				), remove_query_arg(array('s2member_ppco_clear_cache', 'ppco_clear_env', 's2member_ppco_webhook', 'ppco_webhook_env', 's2member_ppco_creds_test', 'ppco_creds_env', '_wpnonce')));
+
+				$ppco_webhook_test_sandbox_url = add_query_arg(array(
+					's2member_paypal_webhook'      => '1',
+					's2member_paypal_webhook_test' => '1',
+					'ppco_webhook_env'             => 'sandbox',
+					'_wpnonce'                     => wp_create_nonce('s2member_ppco_webhook_test'),
+				), home_url("/", 'https'));
+
+				$ppco_cache = !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"]) && is_array($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"]) ? $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"] : array();
+
+				$ppco_live_cred_id    = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_cred_id('live');
+				$ppco_sandbox_cred_id = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_cred_id('sandbox');
+
+				$ppco_plan_count_live    = (!empty($ppco_cache[$ppco_live_cred_id]['live']['plan_ids']) && is_array($ppco_cache[$ppco_live_cred_id]['live']['plan_ids'])) ? count($ppco_cache[$ppco_live_cred_id]['live']['plan_ids']) : 0;
+				$ppco_prod_count_live    = (!empty($ppco_cache[$ppco_live_cred_id]['live']['product_ids']) && is_array($ppco_cache[$ppco_live_cred_id]['live']['product_ids'])) ? count($ppco_cache[$ppco_live_cred_id]['live']['product_ids']) : 0;
+
+				$ppco_plan_count_sandbox = (!empty($ppco_cache[$ppco_sandbox_cred_id]['sandbox']['plan_ids']) && is_array($ppco_cache[$ppco_sandbox_cred_id]['sandbox']['plan_ids'])) ? count($ppco_cache[$ppco_sandbox_cred_id]['sandbox']['plan_ids']) : 0;
+				$ppco_prod_count_sandbox = (!empty($ppco_cache[$ppco_sandbox_cred_id]['sandbox']['product_ids']) && is_array($ppco_cache[$ppco_sandbox_cred_id]['sandbox']['product_ids'])) ? count($ppco_cache[$ppco_sandbox_cred_id]['sandbox']['product_ids']) : 0;
+
+				echo '<div class="s2m-ppco-env-wrap s2m-ppco-env-live-wrap'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox"]) ? ' s2m-ppco-env-inactive' : '').'">'."\n";
+				echo '<h3 style="margin:0 0 6px 0;">Live</h3>'."\n";
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
@@ -116,66 +427,296 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<tr>'."\n";
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-paypal-checkout-client-id">'."\n";
-				echo 'PayPal Checkout Client ID (Live):'."\n";
+				echo 'PayPal Checkout Client ID (Live — REST API):'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 				echo '</tr>'."\n";
 
 				echo '<tr>'."\n";
 				echo '<td>'."\n";
-				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_client_id" id="ws-plugin--s2member-paypal-checkout-client-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"]).'" />'."\n";
+				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_client_id" id="ws-plugin--s2member-paypal-checkout-client-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"]).'" /><br />'."\n";
+				echo 'At PayPal, see: <strong><a href="https://developer.paypal.com/dashboard/applications/live" target="_blank" rel="external">My Apps &amp; Credentials (Live)</a></strong>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 
 				echo '<tr>'."\n";
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-paypal-checkout-client-secret">'."\n";
-				echo 'PayPal Checkout Client Secret (Live):'."\n";
+				echo 'PayPal Checkout Client Secret (Live — REST API):'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 				echo '</tr>'."\n";
 
 				echo '<tr>'."\n";
 				echo '<td>'."\n";
-				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_client_secret" id="ws-plugin--s2member-paypal-checkout-client-secret" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"]).'" />'."\n";
+				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_client_secret" id="ws-plugin--s2member-paypal-checkout-client-secret" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"]).'" /><br />'."\n";
+				echo 'At PayPal, see: <strong><a href="https://developer.paypal.com/dashboard/applications/live" target="_blank" rel="external">My Apps &amp; Credentials (Live)</a></strong>'."\n";
+
+				echo '<table class="form-table" style="margin:10px 0 0 0;">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr>'."\n";
+				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
+				if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"])
+					echo '<a class="button" style="min-width:240px; text-align:center;" href="'.esc_attr($ppco_creds_test_live_url).'">'.esc_html__('Test Credentials', 's2member').'</a>'."\n";
+				else echo '<span class="button" style="min-width:240px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Live credentials first.', 's2member').'">'.esc_html__('Test Credentials', 's2member').'</span>'."\n";
+				echo '</th>'."\n";
+				echo '<td style="padding:0;">'."\n";
+				echo '<em>'.esc_html__('Verifies your Live Client ID/Secret by requesting an access token.', 's2member').'</em>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 
 				echo '<tr>'."\n";
 				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox-client-id">'."\n";
-				echo 'PayPal Checkout Client ID (Sandbox):'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-webhook-id">'."\n";
+				echo 'PayPal Checkout Webhook ID (Live):'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 				echo '</tr>'."\n";
 
 				echo '<tr>'."\n";
 				echo '<td>'."\n";
-				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_sandbox_client_id" id="ws-plugin--s2member-paypal-checkout-sandbox-client-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"]).'" />'."\n";
+				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_webhook_id" id="ws-plugin--s2member-paypal-checkout-webhook-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_webhook_id"]).'" />'."\n";
+				echo '<br /><em>'.esc_html__('From your PayPal app webhook settings (Live).', 's2member').'</em><br />'."\n";
+
+				echo '<table class="form-table" style="margin:12px 0 0 0;">'."\n";
+				echo '<tbody>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
+				if($ppco_https_ready && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"])
+					echo '<a class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important;" href="'.esc_attr($ppco_webhook_live_url).'">'.esc_html__('Create/Update Webhook', 's2member').'</a>'."\n";
+				else if(!$ppco_https_ready)
+					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('HTTPS required.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
+				else
+					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Live credentials first.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
+				echo '</th>'."\n";
+				echo '<td style="padding:0;">'."\n";
+				echo '<em>'.esc_html__('Registers your webhook URL with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 
 				echo '<tr>'."\n";
-				echo '<th>'."\n";
-				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox-client-secret">'."\n";
-				echo 'PayPal Checkout Client Secret (Sandbox):'."\n";
-				echo '</label>'."\n";
+				echo '<th style="width:260px; padding:8px 10px 0 0;">'."\n";
+				if($ppco_https_ready && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_webhook_id"])
+					echo '<a class="button" style="min-width:250px; text-align:center;" target="_blank" href="'.esc_attr($ppco_webhook_test_live_url).'">'.esc_html__('Test Webhook Endpoint', 's2member').'</a>'."\n";
+				else if(!$ppco_https_ready)
+					echo '<span class="button disabled" style="min-width:250px; text-align:center;" title="'.esc_attr__('HTTPS required.', 's2member').'">'.esc_html__('Test Webhook Endpoint', 's2member').'</span>'."\n";
+				else if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"])
+					echo '<span class="button disabled" style="min-width:250px; text-align:center;" title="'.esc_attr__('Save Live credentials first.', 's2member').'">'.esc_html__('Test Webhook Endpoint', 's2member').'</span>'."\n";
+				else
+					echo '<span class="button" style="min-width:250px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Set a Live Webhook ID first (or use Create/Update Webhook).', 's2member').'">'.esc_html__('Test Webhook Endpoint', 's2member').'</span>'."\n";
 				echo '</th>'."\n";
-				echo '</tr>'."\n";
-
-				echo '<tr>'."\n";
-				echo '<td>'."\n";
-				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_sandbox_client_secret" id="ws-plugin--s2member-paypal-checkout-sandbox-client-secret" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"]).'" />'."\n";
+				echo '<td style="padding:8px 0 0 0;">'."\n";
+				echo '<em>'.esc_html__('Reachability-only check. Use real webhooks for end-to-end verification.', 's2member').'</em>'."\n";
+				echo '<br /><em>'.esc_html__('Test URL: ', 's2member').'<code>'.esc_html($ppco_webhook_test_live_url).'</code></em>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 
+				echo '<br /><br />'."\n";
+				echo '<em>'.esc_html__('Webhook URL:', 's2member').'</em><br /><code>'.esc_html(add_query_arg("s2member_paypal_webhook", "1", home_url("/", 'https'))).'</code>'."\n";
+				echo '<br /><em class="ws-menu-page-hilite">'.esc_html__('Note: PayPal requires an HTTPS (SSL) webhook URL.', 's2member').'</em>'."\n";
+
+				$ppco_https_scheme = strtolower((string)wp_parse_url(home_url('/'), PHP_URL_SCHEME));
+
+				if($ppco_https_scheme !== 'https')
+					echo '<br /><span class="ws-menu-page-error">'.esc_html__('Warning: Your WordPress Site URL/Home URL is currently not configured for HTTPS. PayPal may reject webhook creation and delivery until your site supports SSL and your Site URL uses https://.', 's2member').'</span>'."\n";
+				else
+				{
+					$ppco_https_probe = wp_remote_head(home_url("/", 'https'), array('timeout' => 8, 'redirection' => 0));
+					$ppco_https_code  = !is_wp_error($ppco_https_probe) ? (int)wp_remote_retrieve_response_code($ppco_https_probe) : 0;
+					$ppco_https_loc   = !is_wp_error($ppco_https_probe) ? (string)wp_remote_retrieve_header($ppco_https_probe, 'location') : '';
+
+					if(is_wp_error($ppco_https_probe))
+						echo '<br /><span class="ws-menu-page-error">'.esc_html__('Warning: Your HTTPS endpoint could not be reached from this server. This often indicates SSL/TLS or virtual-host configuration issues; PayPal webhooks may not be delivered successfully.', 's2member').'<br /><code>'.esc_html($ppco_https_probe->get_error_message()).'</code></span>'."\n";
+					else if($ppco_https_loc && stripos($ppco_https_loc, 'cgi-sys/defaultwebpage.cgi') !== false)
+						echo '<br /><span class="ws-menu-page-error">'.esc_html__('Warning: Your HTTPS endpoint appears to redirect to a hosting default page (cgi-sys/defaultwebpage.cgi). This suggests SSL/virtual-host configuration issues; PayPal webhooks may not be delivered successfully.', 's2member').'</span>'."\n";
+					else if($ppco_https_code && $ppco_https_code >= 400)
+						echo '<br /><span class="ws-menu-page-error">'.sprintf(esc_html__('Warning: Your HTTPS endpoint returned HTTP %1$s. This suggests SSL/virtual-host configuration issues; PayPal webhooks may not be delivered successfully.', 's2member'), (int)$ppco_https_code).'</span>'."\n";
+				}
+
+				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
+
+				echo '<p style="margin:10px 0 0 0;"><em>'.esc_html__('Tip: Use PayPal\'s Webhooks Events dashboard to view and re-deliver webhook events while testing.', 's2member').' <a href="https://developer.paypal.com/api/rest/webhooks/events-dashboard/" target="_blank" rel="external">'.esc_html__('Open Events Dashboard', 's2member').'</a></em></p>'."\n";
+
+				if(!$ppco_https_ready)
+					echo '<p style="margin:10px 0 0 0;"><span class="ws-menu-page-error">'.esc_html__('Disabled: PayPal webhooks require a working HTTPS (SSL) endpoint on this domain.', 's2member').'</span></p>'."\n";
+
+				echo '<p style="margin:16px 0 10px 0;"><strong>'.esc_html__('Plan/Product Cache (Live)', 's2member').'</strong></p>'."\n";
+				echo '<table class="form-table" style="margin:0;">'."\n";
+				echo '<tbody>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
+				if((int)$ppco_plan_count_live || (int)$ppco_prod_count_live)
+					echo '<a class="button" style="min-width:250px; text-align:center;" href="'.esc_attr($ppco_clear_cache_live_url).'">'.esc_html__('Clear Plan/Product Cache', 's2member').'</a>'."\n";
+				else echo '<span class="button disabled" style="min-width:250px; text-align:center;" title="'.esc_attr__('Cache is already empty.', 's2member').'">'.esc_html__('Clear Plan/Product Cache', 's2member').'</span>'."\n";
+				echo '</th>'."\n";
+				echo '<td style="padding:0;">'."\n";
+				echo '<em>'.sprintf(esc_html__('Clears the local PayPal Checkout Product/Plan ID cache (used to avoid creating duplicates). Existing subscriptions are unaffected. Next checkout will create new Products/Plans as needed. Current cache: %1$s plan(s), %2$s product(s).', 's2member'), (int)$ppco_plan_count_live, (int)$ppco_prod_count_live).'</em>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+				echo '</div>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<div class="s2m-ppco-env-wrap s2m-ppco-env-sandbox-wrap'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox"]) ? ' s2m-ppco-env-inactive' : '').'">'."\n";
+				echo '<h3 style="margin:0 0 6px 0;">Sandbox</h3>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox-client-id">'."\n";
+				echo 'PayPal Checkout Client ID (Sandbox — REST API):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_sandbox_client_id" id="ws-plugin--s2member-paypal-checkout-sandbox-client-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"]).'" /><br />'."\n";
+				echo 'At PayPal, see: <strong><a href="https://developer.paypal.com/dashboard/applications/sandbox" target="_blank" rel="external">My Apps &amp; Credentials (Sandbox)</a></strong>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox-client-secret">'."\n";
+				echo 'PayPal Checkout Client Secret (Sandbox — REST API):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="password" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_sandbox_client_secret" id="ws-plugin--s2member-paypal-checkout-sandbox-client-secret" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"]).'" /><br />'."\n";
+				echo 'At PayPal, see: <strong><a href="https://developer.paypal.com/dashboard/applications/sandbox" target="_blank" rel="external">My Apps &amp; Credentials (Sandbox)</a></strong>'."\n";
+
+				echo '<table class="form-table" style="margin:10px 0 0 0;">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr>'."\n";
+				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
+				if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"])
+					echo '<a class="button" style="min-width:240px; text-align:center;" href="'.esc_attr($ppco_creds_test_sandbox_url).'">'.esc_html__('Test Credentials', 's2member').'</a>'."\n";
+				else echo '<span class="button" style="min-width:240px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Sandbox credentials first.', 's2member').'">'.esc_html__('Test Credentials', 's2member').'</span>'."\n";
+				echo '</th>'."\n";
+				echo '<td style="padding:0;">'."\n";
+				echo '<em>'.esc_html__('Verifies your Sandbox Client ID/Secret by requesting an access token.', 's2member').'</em>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-paypal-checkout-sandbox-webhook-id">'."\n";
+				echo 'PayPal Checkout Webhook ID (Sandbox):'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="text" autocomplete="off" name="ws_plugin__s2member_paypal_checkout_sandbox_webhook_id" id="ws-plugin--s2member-paypal-checkout-sandbox-webhook-id" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_webhook_id"]).'" />'."\n";
+				echo '<br /><em>'.esc_html__('From your PayPal app webhook settings (Sandbox).', 's2member').'</em><br />'."\n";
+
+				echo '<table class="form-table" style="margin:12px 0 0 0;">'."\n";
+				echo '<tbody>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
+				if($ppco_https_ready && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"])
+					echo '<a class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important;" href="'.esc_attr($ppco_webhook_sandbox_url).'">'.esc_html__('Create/Update Webhook', 's2member').'</a>'."\n";
+				else if(!$ppco_https_ready)
+					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('HTTPS required.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
+				else
+					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Sandbox credentials first.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
+				echo '</th>'."\n";
+				echo '<td style="padding:0;">'."\n";
+				echo '<em>'.esc_html__('Registers your webhook URL with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th style="width:260px; padding:8px 10px 0 0;">'."\n";
+				if($ppco_https_ready && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_webhook_id"])
+					echo '<a class="button" style="min-width:250px; text-align:center;" target="_blank" href="'.esc_attr($ppco_webhook_test_sandbox_url).'">'.esc_html__('Test Webhook Endpoint', 's2member').'</a>'."\n";
+				else if(!$ppco_https_ready)
+					echo '<span class="button" style="min-width:250px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('HTTPS required.', 's2member').'">'.esc_html__('Test Webhook Endpoint', 's2member').'</span>'."\n";
+				else if(!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"] || !$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"])
+					echo '<span class="button" style="min-width:250px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Sandbox credentials first.', 's2member').'">'.esc_html__('Test Webhook Endpoint', 's2member').'</span>'."\n";
+				else
+					echo '<span class="button" style="min-width:250px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Set a Sandbox Webhook ID first (or use Create/Update Webhook).', 's2member').'">'.esc_html__('Test Webhook Endpoint', 's2member').'</span>'."\n";
+				echo '</th>'."\n";
+				echo '<td style="padding:8px 0 0 0;">'."\n";
+				echo '<em>'.esc_html__('Reachability-only check. Use real webhooks for end-to-end verification.', 's2member').'</em>'."\n";
+				echo '<br /><em>'.esc_html__('Test URL: ', 's2member').'<code>'.esc_html($ppco_webhook_test_sandbox_url).'</code></em>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<br /><br />'."\n";
+				echo '<em>'.esc_html__('Webhook URL:', 's2member').'</em><br /><code>'.esc_html(add_query_arg("s2member_paypal_webhook", "1", home_url("/", 'https'))).'</code>'."\n";
+				echo '<br /><em class="ws-menu-page-hilite">'.esc_html__('Note: PayPal requires an HTTPS (SSL) webhook URL.', 's2member').'</em>'."\n";
+
+				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
+
+				echo '<p style="margin:10px 0 0 0;"><em>'.esc_html__('Tip: Use PayPal\'s Webhooks Events dashboard to view and re-deliver webhook events while testing.', 's2member').' <a href="https://developer.paypal.com/api/rest/webhooks/events-dashboard/" target="_blank" rel="external">'.esc_html__('Open Events Dashboard', 's2member').'</a></em></p>'."\n";
+
+				if(!$ppco_https_ready)
+					echo '<p style="margin:10px 0 0 0;"><span class="ws-menu-page-error">'.esc_html__('Disabled: PayPal webhooks require a working HTTPS (SSL) endpoint on this domain.', 's2member').'</span></p>'."\n";
+
+				echo '<p style="margin:16px 0 10px 0;"><strong>'.esc_html__('Plan/Product Cache (Sandbox)', 's2member').'</strong></p>'."\n";
+				echo '<table class="form-table" style="margin:0;">'."\n";
+				echo '<tbody>'."\n";
+
+				echo '<tr>'."\n";
+				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
+				if((int)$ppco_plan_count_sandbox || (int)$ppco_prod_count_sandbox)
+					echo '<a class="button" style="min-width:250px; text-align:center;" href="'.esc_attr($ppco_clear_cache_sandbox_url).'">'.esc_html__('Clear Plan/Product Cache', 's2member').'</a>'."\n";
+				else echo '<span class="button" style="min-width:250px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Cache is already empty.', 's2member').'">'.esc_html__('Clear Plan/Product Cache', 's2member').'</span>'."\n";
+				echo '</th>'."\n";
+				echo '<td style="padding:0;">'."\n";
+				echo '<em>'.sprintf(esc_html__('Clears the local PayPal Checkout Product/Plan ID cache (used to avoid creating duplicates). Existing subscriptions are unaffected. Next checkout will create new Products/Plans as needed. Current cache: %1$s plan(s), %2$s product(s).', 's2member'), (int)$ppco_plan_count_sandbox, (int)$ppco_prod_count_sandbox).'</em>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+				echo '</div>'."\n";
+
 				echo '</div>'."\n"; // .ws-menu-page-section
 
 				echo '</div>'."\n"; // .ws-menu-page-group
-
 
 				echo '<div class="ws-menu-page-group" title="PayPal Account Details">'."\n";
 
