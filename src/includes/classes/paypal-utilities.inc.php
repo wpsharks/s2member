@@ -714,6 +714,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				//260106 PayPal Checkout
+				/**
+				 * Returns true when PayPal Checkout is enabled and required credentials exist.
+				 *
+				 * @since 260106
+				 *
+				 * @return bool
+				 */
 				public static function paypal_checkout_is_enabled()
 					{
 						if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_enable']))
@@ -727,11 +734,25 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							&& !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_secret']));
 					}
 
+				/**
+				 * Returns true when PayPal Checkout is in sandbox mode.
+				 *
+				 * @since 260101
+				 *
+				 * @return bool
+				 */
 				public static function paypal_checkout_is_sandbox()
 					{
 						return !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox']);
 					}
 
+				/**
+				 * Returns the PayPal REST API base URL for the active environment.
+				 *
+				 * @since 260101
+				 *
+				 * @return string
+				 */
 				public static function paypal_checkout_api_base()
 					{
 						return (self::paypal_checkout_is_sandbox())
@@ -739,6 +760,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							: 'https://api-m.paypal.com';
 					}
 
+				/**
+				 * Returns PayPal Checkout REST credentials for the active environment.
+				 *
+				 * @since 260101
+				 *
+				 * @return array{client_id:string,secret:string}
+				 */
 				public static function paypal_checkout_creds()
 					{
 						if(self::paypal_checkout_is_sandbox())
@@ -753,6 +781,42 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						);
 					}
 
+				/**
+				 * Returns a stable short id derived from the PayPal Client ID (per env).
+				 *
+				 * Used to bucket caches in:
+				 * - $options['paypal_checkout_cache'][$cred_id][...]
+				 *
+				 * @since 260127
+				 *
+				 * @param string $env 'live' or 'sandbox'. Defaults to 'live'.
+				 *
+				 * @return string 12-char hash prefix or empty string.
+				 */
+				public static function paypal_checkout_cred_id($env = '')
+					{
+						$env = ($env === 'sandbox') ? 'sandbox' : 'live';
+
+						$client_id = ($env === 'sandbox')
+							? (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_id']
+							: (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_id'];
+
+						$client_id = trim($client_id);
+						if(!$client_id)
+							return '';
+
+						return substr(md5(strtolower($client_id)), 0, 12);
+					}
+
+				/**
+				 * Returns a cached PayPal REST access token (fetches a new one when needed).
+				 *
+				 * Stored in a transient keyed by environment.
+				 *
+				 * @since 260101
+				 *
+				 * @return string Access token or empty string on failure.
+				 */
 				public static function paypal_checkout_access_token()
 					{
 						$transient = self::paypal_checkout_is_sandbox() ? 's2m_ppco_at_sandbox' : 's2m_ppco_at_live';
@@ -782,6 +846,17 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						$r = c_ws_plugin__s2member_utils_urls::remote($url, $body, $args, true);
 
+						if(!isset($r['code']) || (int)$r['code'] !== 200)
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'    => 'oauth',
+								'event'   => 'token_failed',
+								'env'     => self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live',
+								'url'     => $url,
+								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message' => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'    => !empty($r['body']) ? $r['body'] : '',
+							));
+
 						$data = array();
 						if(!empty($r['body']))
 							$data = json_decode($r['body'], true);
@@ -796,6 +871,129 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return '';
 					}
 
+				/**
+				 * Tests PayPal Checkout REST credentials for the selected environment.
+				 *
+				 * Forces a real access token request (clears cached token transient first).
+				 * Intended for admin UI diagnostics during beta/QA.
+				 *
+				 * @since 260115
+				 *
+				 * @param string $env 'live' or 'sandbox'. Defaults to 'live'.
+				 *
+				 * @return bool True if an access token was obtained; otherwise false.
+				 */
+				public static function paypal_checkout_creds_test($env = '')
+					{
+						$env = ($env === 'sandbox') ? 'sandbox' : 'live';
+
+						$orig_sandbox = self::paypal_checkout_is_sandbox();
+						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = ($env === 'sandbox') ? '1' : '0';
+
+						// Force a real token request (ignore cached transient).
+						$transient = self::paypal_checkout_is_sandbox() ? 's2m_ppco_at_sandbox' : 's2m_ppco_at_live';
+						delete_transient($transient);
+
+						$token = self::paypal_checkout_access_token();
+						$ok    = ($token) ? true : false;
+
+						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+							'ppco'  => 'checkout',
+							'event' => $ok ? 'creds_test_ok' : 'creds_test_failed',
+							'env'   => $env,
+						));
+
+						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
+						return $ok;
+					}
+
+				/**
+				 * Clears PayPal Checkout plan/product caches (per environment) and the cached access token.
+				 *
+				 * Cache storage:
+				 * - $options['paypal_checkout_cache'][$cred_id][$env]['plan_ids']
+				 * - $options['paypal_checkout_cache'][$cred_id][$env]['product_ids']
+				 *
+				 * Intended for QA and for situations where a cached plan/product id becomes stale
+				 * due to changes in billing attributes.
+				 *
+				 * @since 260127
+				 *
+				 * @param string $env 'live' or 'sandbox'. Defaults to 'live'.
+				 *
+				 * @return bool
+				 */
+				public static function paypal_checkout_clear_cache($env = '')
+					{
+						$env = ($env === 'sandbox') ? 'sandbox' : 'live';
+
+						$orig_sandbox = self::paypal_checkout_is_sandbox();
+						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = ($env === 'sandbox') ? '1' : '0';
+
+						$cred_id = self::paypal_checkout_cred_id($env);
+
+						$options = get_option('ws_plugin__s2member_options');
+						if(!is_array($options))
+							$options = array();
+
+						// New cache format: $options['paypal_checkout_cache'][$cred_id][$env]['plan_ids'|'product_ids'].
+						if($cred_id && !empty($options['paypal_checkout_cache']) && is_array($options['paypal_checkout_cache'])
+							&& !empty($options['paypal_checkout_cache'][$cred_id]) && is_array($options['paypal_checkout_cache'][$cred_id])
+							&& !empty($options['paypal_checkout_cache'][$cred_id][$env]) && is_array($options['paypal_checkout_cache'][$cred_id][$env]))
+						{
+							if(isset($options['paypal_checkout_cache'][$cred_id][$env]['plan_ids']))
+								unset($options['paypal_checkout_cache'][$cred_id][$env]['plan_ids']);
+
+							if(isset($options['paypal_checkout_cache'][$cred_id][$env]['product_ids']))
+								unset($options['paypal_checkout_cache'][$cred_id][$env]['product_ids']);
+
+							if(empty($options['paypal_checkout_cache'][$cred_id][$env]))
+								unset($options['paypal_checkout_cache'][$cred_id][$env]);
+
+							if(empty($options['paypal_checkout_cache'][$cred_id]))
+								unset($options['paypal_checkout_cache'][$cred_id]);
+						}
+
+						// Delete legacy cache keys (no migration; just remove).
+						if(isset($options['paypal_checkout_plan_ids']))
+							unset($options['paypal_checkout_plan_ids']);
+
+						if(isset($options['paypal_checkout_product_ids']))
+							unset($options['paypal_checkout_product_ids']);
+
+						$options = ws_plugin__s2member_configure_options_and_their_defaults($options);
+
+						update_option('ws_plugin__s2member_options', $options).((is_multisite() && is_main_site()) ? update_site_option('ws_plugin__s2member_options', $options) : NULL);
+
+						$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]['paypal_checkout_cache'] = (!empty($options['paypal_checkout_cache']) && is_array($options['paypal_checkout_cache'])) ? $options['paypal_checkout_cache'] : array();
+
+						// Clear cached access token for this env too.
+						$transient = self::paypal_checkout_is_sandbox() ? 's2m_ppco_at_sandbox' : 's2m_ppco_at_live';
+						delete_transient($transient);
+
+						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+							'ppco'    => 'checkout',
+							'event'   => 'cleared_cache',
+							'env'     => $env,
+							'cred_id' => $cred_id,
+						));
+
+						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
+						return true;
+					}
+
+				/**
+				 * Performs a PayPal REST API request using the current environment access token.
+				 *
+				 * @since 260101
+				 *
+				 * @param string $method  HTTP method.
+				 * @param string $path    API path beginning with '/'.
+				 * @param mixed  $body    Array/object body or raw string; null for no body.
+				 * @param array  $headers Additional headers.
+				 *
+				 * @return array Response array from c_ws_plugin__s2member_utils_urls::remote().
+				 */
 				public static function paypal_checkout_api_request($method = 'GET', $path = '/', $body = null, $headers = array())
 					{
 						$method = strtoupper((string)$method);
@@ -814,9 +1012,33 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if($body !== null)
 							$args['body'] = is_string($body) ? $body : json_encode($body);
 
-						return c_ws_plugin__s2member_utils_urls::remote($url, false, $args, true);
+						$r = c_ws_plugin__s2member_utils_urls::remote($url, false, $args, true);
+
+						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'    => 'api_request',
+								'method'  => $method,
+								'path'    => $path,
+								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message' => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'    => !empty($r['body']) ? $r['body'] : '',
+							));
+
+						return $r;
 					}
 
+				/**
+				 * Creates a PayPal Checkout order for one-time (Buy Now) purchases.
+				 *
+				 * This must be server-side to prevent client-side manipulation of amount, item_number,
+				 * custom fields, etc. The resulting order id is returned to the JS SDK or used for
+				 * redirect-mode approval.
+				 *
+				 * @since 260101
+				 *
+				 * @param array $token Signed/validated purchase token.
+				 *
+				 * @return array API request result array from paypal_checkout_api_request().
+				 */
 				public static function paypal_checkout_order_create($token = array())
 					{
 						// token: invoice, custom, item_name, item_number, amount, cc, ns, return, cancel.
@@ -825,14 +1047,45 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$amount  = (string)$token['amount'];
 						$cc      = strtoupper((string)$token['cc']);
 
+						$item_name = trim((string)$token['item_name']);
+						if(!$item_name)
+							$item_name = 's2Member Purchase';
+
+						// PayPal limits various fields; keep item name within common limits.
+						if(strlen($item_name) > 127)
+							$item_name = substr($item_name, 0, 127);
+
+						$item_sku = trim((string)$token['item_number']);
+						if(strlen($item_sku) > 127)
+							$item_sku = substr($item_sku, 0, 127);
+
 						$purchase_unit = array(
 							'invoice_id' => $invoice,
 							'amount'     => array(
 								'currency_code' => $cc,
 								'value'         => $amount,
+								'breakdown'     => array(
+									'item_total' => array(
+										'currency_code' => $cc,
+										'value'         => $amount,
+									),
+								),
 							),
-							'description' => (string)$token['item_name'],
+							'description' => $item_name,
+							'items'       => array(
+								array(
+									'name'        => $item_name,
+									'quantity'    => '1',
+									'unit_amount' => array(
+										'currency_code' => $cc,
+										'value'         => $amount,
+									),
+								),
+							),
 						);
+
+						if($item_sku)
+							$purchase_unit['items'][0]['sku'] = $item_sku;
 
 						// PayPal limits custom_id length; keep it short/consistent.
 						if($custom && strlen($custom) <= 127)
@@ -863,6 +1116,50 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return is_array($data) ? $data : array();
 					}
 
+				/**
+				 * Cancels a PayPal Checkout subscription via the Subscriptions REST API.
+				 *
+				 * Used by the optional on-site cancellation flow (logged-in users).
+				 *
+				 * @since 260114
+				 *
+				 * @param string $subscription_id PayPal subscription id (I-...).
+				 * @param string $reason          Short human readable reason (PayPal limit applies).
+				 *
+				 * @return array API request result array from paypal_checkout_api_request().
+				 */
+				public static function paypal_checkout_subscription_cancel($subscription_id = '', $reason = '')
+					{
+						$subscription_id = trim((string)$subscription_id);
+						$reason          = trim((string)$reason);
+
+						if(!$subscription_id)
+							return array('code' => 0, 'message' => 'missing_subscription_id', 'body' => '');
+
+						// PayPal docs: reason 1..128 chars.
+						$reason = substr(preg_replace('/\s+/', ' ', strip_tags($reason)), 0, 128);
+						if(!$reason)
+							$reason = 'Cancelled by subscriber.';
+
+						$body = array('reason' => $reason);
+
+						return self::paypal_checkout_api_request('POST', '/v1/billing/subscriptions/'.rawurlencode($subscription_id).'/cancel', $body);
+					}
+
+				/**
+				 * Captures a PayPal Checkout order (server-side) after buyer approval.
+				 *
+				 * Used by the JS SDK onApprove callback (capture_order op) and by redirect-mode
+				 * return handling. On success, the capture details are proxied into the legacy
+				 * s2Member PayPal notify/return handlers.
+				 *
+				 * @since 260101
+				 *
+				 * @param string $order_id PayPal Checkout order id.
+				 * @param array  $token    Signed/validated purchase token.
+				 *
+				 * @return array API request result array from paypal_checkout_api_request().
+				 */
 				public static function paypal_checkout_order_capture($order_id = '', $token = array())
 					{
 						$order_id = trim((string)$order_id);
@@ -874,13 +1171,623 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							'PayPal-Request-Id' => 's2m-ppco-cap-'.md5($order_id),
 						);
 
-						$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders/'.$order_id.'/capture', array(), $headers);
+						$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders/'.$order_id.'/capture', (object)array(), $headers);
 
 						$data = array();
 						if(!empty($r['body']))
 							$data = json_decode($r['body'], true);
 
 						return is_array($data) ? $data : array();
+					}
+
+				/**
+				 * Creates a PayPal Checkout subscription (server-side) when using redirect-mode approval.
+				 *
+				 * In JS SDK button mode, subscriptions are created client-side using plan_id and
+				 * then confirmed server-side. Redirect-mode requires server-side creation.
+				 *
+				 * @since 260114
+				 *
+				 * @param array $token Signed/validated purchase token.
+				 *
+				 * @return array API request result array from paypal_checkout_api_request().
+				 */
+				public static function paypal_checkout_subscription_create($token = array())
+					{
+						if(!is_array($token))
+							return array();
+
+						$invoice = (string)$token['invoice'];
+
+						$plan_id = self::paypal_checkout_plan_get_id($token);
+						if(!$plan_id)
+							return array();
+
+						$brand_name = get_bloginfo('name');
+						$brand_name = substr(preg_replace('/\s+/', ' ', trim(strip_tags($brand_name))), 0, 127);
+
+						$body = array(
+							'plan_id'              => $plan_id,
+							'custom_id'            => $invoice,
+							'application_context'  => array(
+								'brand_name'          => $brand_name,
+								'return_url'          => (string)$token['return'],
+								'cancel_url'          => (string)$token['cancel'],
+								'user_action'         => 'SUBSCRIBE_NOW',
+								'shipping_preference' => 'NO_SHIPPING',
+							),
+						);
+
+						// Idempotency: stable per invoice for create-subscription retries.
+						$headers = array(
+							'PayPal-Request-Id' => 's2m-ppco-sub-'.md5($invoice),
+						);
+
+						$r = self::paypal_checkout_api_request('POST', '/v1/billing/subscriptions', $body, $headers);
+
+						$data = array();
+						if(!empty($r['body']))
+							$data = json_decode($r['body'], true);
+
+						return is_array($data) ? $data : array();
+					}
+
+				/**
+				 * Returns a PayPal Checkout Plan ID for a subscription token (creates product/plan if needed).
+				 *
+				 * Plan/product creation is cached in ws_plugin__s2member_options to avoid duplicates.
+				 * Cache key is derived from plan-affecting attributes (currency, billing cycles, trial).
+				 *
+				 * @since 260101
+				 *
+				 * @param array $token Signed/validated purchase token from shortcode flow.
+				 *
+				 * @return string PayPal plan id (P-...) or empty string on failure.
+				 */
+				public static function paypal_checkout_plan_get_id($token = array())
+					{
+						if(!is_array($token))
+							return '';
+
+						$cc = !empty($token['cc']) ? strtoupper(trim((string)$token['cc'])) : '';
+						$rr = isset($token['rr']) ? strtoupper(trim((string)$token['rr'])) : '';
+						$ra = isset($token['amount']) ? (string)$token['amount'] : '';
+						$rp = !empty($token['rp']) ? (int)$token['rp'] : 0;
+						$rt = !empty($token['rt']) ? strtoupper(trim((string)$token['rt'])) : '';
+
+						$rrt = !empty($token['rrt']) ? (int)$token['rrt'] : 0;
+						$rra = isset($token['rra']) ? (int)$token['rra'] : 1;
+
+						// rrt/rra are only meaningful when rr="1" (recurring).
+						if($rr !== '1')
+						{
+							$rrt = 0;
+							$rra = 0;
+						}
+
+						$ta = isset($token['ta']) ? (string)$token['ta'] : '';
+						$tp = !empty($token['tp']) ? (int)$token['tp'] : 0;
+						$tt = !empty($token['tt']) ? strtoupper(trim((string)$token['tt'])) : '';
+
+						if(!$cc || $rr === '' || $rr === 'BN' || $rp < 1 || !$rt)
+							return '';
+
+						$env     = self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live';
+						$cred_id = self::paypal_checkout_cred_id($env);
+						if(!$cred_id)
+							return '';
+
+						$plan_key = md5(serialize(array(
+							'env'         => $env,
+							'cc'          => $cc,
+							'rr'          => $rr,
+							'ra'          => (string)$ra,
+							'rp'          => (int)$rp,
+							'rt'          => (string)$rt,
+
+							'rrt'         => (int)$rrt,
+							'rra'         => (int)$rra,
+
+							'ta'          => (string)$ta,
+							'tp'          => (int)$tp,
+							'tt'          => (string)$tt,
+							'item_number' => !empty($token['item_number']) ? (string)$token['item_number'] : '',
+							'item_name'   => !empty($token['item_name']) ? (string)$token['item_name'] : '',
+						)));
+
+						$ppco_opt = !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"]) ? $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"] : array();
+						if(!is_array($ppco_opt))
+							$ppco_opt = array();
+
+						$plan_ids = (!empty($ppco_opt[$cred_id][$env]['plan_ids']) && is_array($ppco_opt[$cred_id][$env]['plan_ids'])) ? $ppco_opt[$cred_id][$env]['plan_ids'] : array();
+
+						if(!empty($plan_ids[$plan_key]) && is_string($plan_ids[$plan_key]))
+							return $plan_ids[$plan_key];
+
+						$product_id = self::paypal_checkout_product_get_id();
+						if(!$product_id)
+							return '';
+
+						$unit_map = array('D' => 'DAY', 'W' => 'WEEK', 'M' => 'MONTH', 'Y' => 'YEAR');
+						$rt_unit  = !empty($unit_map[$rt]) ? $unit_map[$rt] : 'MONTH';
+						$tt_unit  = !empty($unit_map[$tt]) ? $unit_map[$tt] : $rt_unit;
+
+						$rp = max(1, (int)$rp);
+						$tp = max(0, (int)$tp);
+
+						$ra_v = number_format((float)$ra, 2, '.', '');
+						$ta_v = number_format((float)$ta, 2, '.', '');
+
+						$regular_total_cycles = 0; // 0 = infinite.
+
+						// rrt = number of payments (limited recurring). Only applies to rr="1".
+						if($rr === '1' && $rrt > 0)
+							$regular_total_cycles = min(999, max(1, (int)$rrt));
+						else if($rr === '0')
+							$regular_total_cycles = 1;
+
+						$payment_failure_threshold = ($rr === '1' && $rra) ? 2 : 1;
+
+						$billing_cycles = array();
+						$seq = 1;
+
+						if($tp > 0)
+						{
+							$billing_cycles[] = array(
+								'frequency' => array(
+									'interval_unit'  => $tt_unit,
+									'interval_count' => $tp,
+								),
+								'tenure_type'    => 'TRIAL',
+								'sequence'       => $seq++,
+								'total_cycles'   => 1,
+								'pricing_scheme' => array(
+									'fixed_price' => array(
+										'value'         => $ta_v,
+										'currency_code' => $cc,
+									),
+								),
+							);
+						}
+
+						$billing_cycles[] = array(
+							'frequency' => array(
+								'interval_unit'  => $rt_unit,
+								'interval_count' => $rp,
+							),
+							'tenure_type'    => 'REGULAR',
+							'sequence'       => $seq++,
+							'total_cycles'   => $regular_total_cycles,
+							'pricing_scheme' => array(
+								'fixed_price' => array(
+									'value'         => $ra_v,
+									'currency_code' => $cc,
+								),
+							),
+						);
+
+						$plan_name = !empty($token['item_name']) ? (string)$token['item_name'] : 's2Member Plan';
+						$plan_name = substr(preg_replace('/\s+/', ' ', trim(strip_tags($plan_name))), 0, 127);
+
+						$plan_desc = $plan_name;
+						if(!empty($token['rr']) && $token['rr'] !== 'BN' && !empty($token['rp']) && !empty($token['rt']))
+						{
+							$plan_desc .= ' (recurring)';
+						}
+						$plan_desc = substr(preg_replace('/\s+/', ' ', trim(strip_tags($plan_desc))), 0, 127);
+
+						$body = array(
+							'product_id'          => $product_id,
+							'name'                => $plan_name,
+							'description'         => $plan_desc,
+							'status'              => 'ACTIVE',
+							'billing_cycles'      => $billing_cycles,
+							'payment_preferences' => array(
+								'auto_bill_outstanding'      => true,
+								'setup_fee'                  => array('value' => '0.00', 'currency_code' => $cc),
+								'setup_fee_failure_action'   => 'CONTINUE',
+								'payment_failure_threshold'  => $payment_failure_threshold,
+							),
+						);
+
+						$headers = array(
+							'PayPal-Request-Id' => 's2m-ppco-plan-'.md5($env.'|'.$plan_key.'|'.md5(json_encode($body))),
+						);
+
+						$r = self::paypal_checkout_api_request('POST', '/v1/billing/plans', $body, $headers);
+
+						$data = array();
+						if(!empty($r['body']))
+							$data = json_decode($r['body'], true);
+
+						$plan_id = !empty($data['id']) ? (string)$data['id'] : '';
+						if(!$plan_id)
+						{
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'    => 'plan',
+								'event'   => 'plan_create_failed',
+								'env'     => $env,
+								'plan_key'=> $plan_key,
+								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message' => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'    => !empty($r['body']) ? (string)$r['body'] : '',
+								'request' => $body,
+							));
+							return '';
+						}
+
+						$plan_ids[$plan_key] = $plan_id;
+
+						$options = get_option('ws_plugin__s2member_options');
+						if(!is_array($options))
+							$options = array();
+
+						if(empty($options['paypal_checkout_cache']) || !is_array($options['paypal_checkout_cache']))
+							$options['paypal_checkout_cache'] = array();
+
+						if(empty($options['paypal_checkout_cache'][$cred_id]) || !is_array($options['paypal_checkout_cache'][$cred_id]))
+							$options['paypal_checkout_cache'][$cred_id] = array();
+
+						if(empty($options['paypal_checkout_cache'][$cred_id][$env]) || !is_array($options['paypal_checkout_cache'][$cred_id][$env]))
+							$options['paypal_checkout_cache'][$cred_id][$env] = array();
+
+						if(empty($options['paypal_checkout_cache'][$cred_id][$env]['plan_ids']) || !is_array($options['paypal_checkout_cache'][$cred_id][$env]['plan_ids']))
+							$options['paypal_checkout_cache'][$cred_id][$env]['plan_ids'] = array();
+
+						$options['paypal_checkout_cache'][$cred_id][$env]['plan_ids'] = $plan_ids;
+
+						// Delete legacy cache keys (no migration; just remove).
+						if(isset($options['paypal_checkout_plan_ids']))
+							unset($options['paypal_checkout_plan_ids']);
+
+						$options = ws_plugin__s2member_configure_options_and_their_defaults($options);
+
+						update_option('ws_plugin__s2member_options', $options).((is_multisite() && is_main_site()) ? update_site_option('ws_plugin__s2member_options', $options) : NULL);
+						$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"] = (!empty($options['paypal_checkout_cache']) && is_array($options['paypal_checkout_cache'])) ? $options['paypal_checkout_cache'] : array();
+
+						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+							'ppco'    => 'plan',
+							'event'   => 'plan_cached',
+							'env'     => $env,
+							'cred_id' => $cred_id,
+							'plan_key'=> $plan_key,
+							'plan_id' => $plan_id,
+						));
+
+						return $plan_id;
+					}
+
+				/**
+				 * Returns a PayPal Catalog Product ID (creates and caches if needed).
+				 *
+				 * Cached under:
+				 * - $options['paypal_checkout_cache'][$cred_id][$env]['product_ids'][$product_key]
+				 *
+				 * @since 260101
+				 *
+				 * @return string PayPal product id (PROD-...) or empty string on failure.
+				 */
+				public static function paypal_checkout_product_get_id()
+					{
+						$env     = self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live';
+						$cred_id = self::paypal_checkout_cred_id($env);
+						if(!$cred_id)
+							return '';
+
+						$product_key = 'default';
+
+						$ppco_opt = !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"]) ? $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"] : array();
+						if(!is_array($ppco_opt))
+							$ppco_opt = array();
+
+						$product_ids = (!empty($ppco_opt[$cred_id][$env]['product_ids']) && is_array($ppco_opt[$cred_id][$env]['product_ids'])) ? $ppco_opt[$cred_id][$env]['product_ids'] : array();
+
+						if(!empty($product_ids[$product_key]) && is_string($product_ids[$product_key]))
+							return $product_ids[$product_key];
+
+						$name = get_bloginfo('name');
+						$url  = home_url('/');
+
+						$name = substr(preg_replace('/\s+/', ' ', trim(strip_tags((string)$name))), 0, 127);
+						if(!$name)
+							$name = 's2Member';
+
+						$body = array(
+							'name'        => $name.' Membership',
+							'description' => 'Membership billing product (created by s2Member).',
+							'type'        => 'SERVICE',
+							'category'    => 'SOFTWARE',
+							'home_url'    => $url,
+						);
+
+						$headers = array(
+							'PayPal-Request-Id' => 's2m-ppco-prod-'.md5($env),
+						);
+
+						$r = self::paypal_checkout_api_request('POST', '/v1/catalogs/products', $body, $headers);
+
+						$data = array();
+						if(!empty($r['body']))
+							$data = json_decode($r['body'], true);
+
+						$product_id = !empty($data['id']) ? (string)$data['id'] : '';
+						if(!$product_id)
+						{
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'    => 'product',
+								'event'   => 'product_create_failed',
+								'env'     => $env,
+								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message' => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'    => !empty($r['body']) ? (string)$r['body'] : '',
+							));
+							return '';
+						}
+
+						$product_ids[$product_key] = $product_id;
+
+						$options = get_option('ws_plugin__s2member_options');
+						if(!is_array($options))
+							$options = array();
+
+						if(empty($options['paypal_checkout_cache']) || !is_array($options['paypal_checkout_cache']))
+							$options['paypal_checkout_cache'] = array();
+
+						if(empty($options['paypal_checkout_cache'][$cred_id]) || !is_array($options['paypal_checkout_cache'][$cred_id]))
+							$options['paypal_checkout_cache'][$cred_id] = array();
+
+						if(empty($options['paypal_checkout_cache'][$cred_id][$env]) || !is_array($options['paypal_checkout_cache'][$cred_id][$env]))
+							$options['paypal_checkout_cache'][$cred_id][$env] = array();
+
+						if(empty($options['paypal_checkout_cache'][$cred_id][$env]['product_ids']) || !is_array($options['paypal_checkout_cache'][$cred_id][$env]['product_ids']))
+							$options['paypal_checkout_cache'][$cred_id][$env]['product_ids'] = array();
+
+						$options['paypal_checkout_cache'][$cred_id][$env]['product_ids'] = $product_ids;
+
+						// Delete legacy cache keys (no migration; just remove).
+						if(isset($options['paypal_checkout_product_ids']))
+							unset($options['paypal_checkout_product_ids']);
+
+						$options = ws_plugin__s2member_configure_options_and_their_defaults($options);
+
+						update_option('ws_plugin__s2member_options', $options).((is_multisite() && is_main_site()) ? update_site_option('ws_plugin__s2member_options', $options) : NULL);
+						$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"] = (!empty($options['paypal_checkout_cache']) && is_array($options['paypal_checkout_cache'])) ? $options['paypal_checkout_cache'] : array();
+
+						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+							'ppco'    => 'product',
+							'event'   => 'product_cached',
+							'env'     => $env,
+							'cred_id' => $cred_id,
+							'product_key' => $product_key,
+							'product_id' => $product_id,
+						));
+
+						return $product_id;
+					}
+
+				/**
+				 * Returns the stored PayPal webhook id for the active environment.
+				 *
+				 * @since 260101
+				 *
+				 * @return string Webhook id or empty string.
+				 */
+				public static function paypal_checkout_webhook_id()
+					{
+						return self::paypal_checkout_is_sandbox()
+							? (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_webhook_id"]
+							: (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_webhook_id"];
+					}
+
+				/**
+				 * Verifies a PayPal webhook signature via PayPal's verify-webhook-signature API.
+				 *
+				 * @since 260115
+				 *
+				 * @param mixed  $event    Decoded event array (or raw JSON string in $raw_body).
+				 * @param string $raw_body Raw webhook body.
+				 * @param array  $headers  Request headers (lowercase keys expected).
+				 *
+				 * @return bool True if signature verifies; otherwise false.
+				 */
+				public static function paypal_checkout_verify_webhook_signature($event, $raw_body, $headers = array())
+					{
+						$webhook_id = self::paypal_checkout_webhook_id();
+						if(!$webhook_id)
+							return false;
+
+						$tx_id   = !empty($headers['paypal-transmission-id']) ? $headers['paypal-transmission-id'] : '';
+						$tx_time = !empty($headers['paypal-transmission-time']) ? $headers['paypal-transmission-time'] : '';
+						$tx_sig  = !empty($headers['paypal-transmission-sig']) ? $headers['paypal-transmission-sig'] : '';
+						$cert    = !empty($headers['paypal-cert-url']) ? $headers['paypal-cert-url'] : '';
+						$algo    = !empty($headers['paypal-auth-algo']) ? $headers['paypal-auth-algo'] : '';
+
+						if(!$tx_id || !$tx_time || !$tx_sig || !$cert || !$algo)
+							return false;
+
+						$body = array(
+							'transmission_id'   => $tx_id,
+							'transmission_time' => $tx_time,
+							'cert_url'          => $cert,
+							'auth_algo'         => $algo,
+							'transmission_sig'  => $tx_sig,
+							'webhook_id'        => $webhook_id,
+							'webhook_event'     => is_array($event) ? $event : json_decode((string)$raw_body, true),
+						);
+
+						$r = self::paypal_checkout_api_request('POST', '/v1/notifications/verify-webhook-signature', $body);
+						if(empty($r['code']) || (int)$r['code'] !== 200 || empty($r['body']))
+							return false;
+
+						$data = json_decode($r['body'], true);
+						return !empty($data['verification_status']) && $data['verification_status'] === 'SUCCESS';
+					}
+
+				/**
+				 * Returns the PayPal Checkout webhook event names processed by s2Member.
+				 *
+				 * These events are used for:
+				 * - Recurring payment bookkeeping (completed payments).
+				 * - Subscription lifecycle changes (cancel/suspend/expire/payment failed).
+				 *
+				 * @since 260115
+				 *
+				 * @return array<string> Event type names.
+				 */
+				public static function paypal_checkout_webhook_event_names()
+					{
+						return array(
+							'BILLING.SUBSCRIPTION.CANCELLED',
+							'BILLING.SUBSCRIPTION.SUSPENDED',
+							'BILLING.SUBSCRIPTION.EXPIRED',
+							'BILLING.SUBSCRIPTION.PAYMENT.FAILED',
+
+							'PAYMENT.SALE.COMPLETED',
+							'PAYMENT.CAPTURE.COMPLETED',
+						);
+					}
+
+				/**
+				 * Creates or updates a PayPal Checkout webhook for the current site URL and required events.
+				 *
+				 * Used by the admin "Create/Update Webhook Automatically" buttons.
+				 * Persists the webhook id into ws_plugin__s2member_options for the selected environment.
+				 *
+				 * @since 260115
+				 *
+				 * @param string $env 'live' or 'sandbox'. Defaults to 'live'.
+				 *
+				 * @return array Result array on success with keys:
+				 *               - id (string) webhook id
+				 *               - op (string) 'created'|'updated'
+				 *               - env (string) 'live'|'sandbox'
+				 *              Empty array on failure.
+				 */
+				public static function paypal_checkout_webhook_upsert($env = '')
+					{
+						$env = ($env === 'sandbox') ? 'sandbox' : 'live';
+
+						$orig_sandbox = self::paypal_checkout_is_sandbox();
+						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = ($env === 'sandbox') ? '1' : '0';
+
+						$url = add_query_arg('s2member_paypal_webhook', '1', home_url('/', 'https'));
+
+						$event_types = array();
+						foreach(self::paypal_checkout_webhook_event_names() as $name)
+							$event_types[] = array('name' => $name);
+
+						$existing_id = self::paypal_checkout_webhook_id();
+
+						if($existing_id)
+						{
+							$patch = array(
+								array('op' => 'replace', 'path' => '/url', 'value' => $url),
+								array('op' => 'replace', 'path' => '/event_types', 'value' => $event_types),
+							);
+							$r = self::paypal_checkout_api_request('PATCH', '/v1/notifications/webhooks/'.rawurlencode($existing_id), $patch);
+
+							if(!empty($r['code']) && (int)$r['code'] === 200)
+							{
+								self::paypal_checkout_webhook_store_id($existing_id);
+
+								c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+									'ppco'  => 'webhook',
+									'event' => 'updated_webhook',
+									'env'   => $env,
+									'id'    => $existing_id,
+									'url'   => $url,
+									'code'  => (int)$r['code'],
+								));
+
+								$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
+								return array('id' => $existing_id, 'op' => 'updated', 'env' => $env);
+							}
+
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'    => 'webhook',
+								'event'   => 'update_webhook_failed',
+								'env'     => $env,
+								'id'      => $existing_id,
+								'url'     => $url,
+								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message' => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'    => !empty($r['body']) ? (string)$r['body'] : '',
+							));
+						}
+
+						$body = array(
+							'url'         => $url,
+							'event_types' => $event_types,
+						);
+						$r = self::paypal_checkout_api_request('POST', '/v1/notifications/webhooks', $body);
+
+						$id = '';
+						if(!empty($r['code']) && (int)$r['code'] === 201 && !empty($r['body']))
+						{
+							$data = json_decode($r['body'], true);
+							if(!empty($data['id']))
+								$id = (string)$data['id'];
+						}
+
+						if($id)
+						{
+							self::paypal_checkout_webhook_store_id($id);
+
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'  => 'webhook',
+								'event' => 'created_webhook',
+								'env'   => $env,
+								'id'    => $id,
+								'url'   => $url,
+								'code'  => (int)$r['code'],
+							));
+
+							$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
+							return array('id' => $id, 'op' => 'created', 'env' => $env);
+						}
+
+						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+							'ppco'    => 'webhook',
+							'event'   => 'create_webhook_failed',
+							'env'     => $env,
+							'url'     => $url,
+							'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
+							'message' => !empty($r['message']) ? (string)$r['message'] : '',
+							'body'    => !empty($r['body']) ? (string)$r['body'] : '',
+						));
+
+						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
+						return array();
+					}
+
+				/**
+				 * Stores a PayPal Checkout webhook id into ws_plugin__s2member_options for the current env.
+				 *
+				 * @since 260115
+				 *
+				 * @param string $webhook_id Webhook id returned by PayPal.
+				 *
+				 * @return void
+				 */
+				protected static function paypal_checkout_webhook_store_id($webhook_id)
+					{
+						$options = get_option('ws_plugin__s2member_options');
+						if(!is_array($options))
+							$options = array();
+
+						if(self::paypal_checkout_is_sandbox())
+							$options['paypal_checkout_sandbox_webhook_id'] = (string)$webhook_id;
+						else
+							$options['paypal_checkout_webhook_id'] = (string)$webhook_id;
+
+						$options = ws_plugin__s2member_configure_options_and_their_defaults($options);
+
+						update_option('ws_plugin__s2member_options', $options).((is_multisite() && is_main_site()) ? update_site_option('ws_plugin__s2member_options', $options) : NULL);
+
+						if(self::paypal_checkout_is_sandbox())
+							$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_webhook_id"] = (string)$webhook_id;
+						else
+							$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_webhook_id"] = (string)$webhook_id;
 					}
 			}
 	}
