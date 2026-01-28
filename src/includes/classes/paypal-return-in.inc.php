@@ -58,6 +58,20 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 									$custom_success_redirection = esc_html(trim(stripslashes($_GET["s2member_paypal_return_success"])));
 									$custom_success_redirection = str_ireplace(["&#038;", "&amp;"], "&", $custom_success_redirection);
 								}
+								// //240320 Pro success valid redir
+								// $custom_success_redirection = false;
+								// if (c_ws_plugin__s2member_utils_conds::pro_is_installed()
+								// && isset($_GET["s2member_paypal_return_success"])) {
+
+								// 	$_success = (string)$_GET["s2member_paypal_return_success"];
+								// 	$_success = trim(stripslashes($_success));
+								// 	$_success = rawurldecode($_success); //260112
+								// 	$_success = str_ireplace(["&#038;", "&amp;"], "&", $_success);
+
+								// 	if ($_success && ($_success = wp_validate_redirect($_success, false))) {
+								// 		$custom_success_redirection = $_success;
+								// 	}
+								// }
 
 								if (is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
 									{

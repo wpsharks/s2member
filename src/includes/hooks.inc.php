@@ -21,7 +21,7 @@ if(!defined('WPINC')) // MUST have WordPress.
 Add the plugin Actions/Filters here.
 */
 
-//260506 Translations loaded at init to avoid PHP Notice since WP 6.7.
+//250506 Translations loaded at init to avoid PHP Notice since WP 6.7.
 add_action('init', 'c_ws_plugin__s2member_translations::load');
 
 add_action('set_current_user', 'c_ws_plugin__s2member_user_securities::set_current_user', 2);
@@ -49,6 +49,8 @@ add_action('init', 'c_ws_plugin__s2member_constants::constants', 6);
 
 add_action('init', 'c_ws_plugin__s2member_css_js::js_w_globals', 7);
 add_action('init', 'c_ws_plugin__s2member_paypal_return::paypal_return', 7);
+add_action('init', 'c_ws_plugin__s2member_paypal_checkout::paypal_checkout', 6); //260106
+add_action('init', 'c_ws_plugin__s2member_paypal_webhook::paypal_webhook', 6); //260112
 add_action('init', 'c_ws_plugin__s2member_profile::profile', 7);
 
 add_action('init', 'c_ws_plugin__s2member_labels::config_label_translations', 10);
