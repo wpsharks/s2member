@@ -1,3 +1,7 @@
+= v260127 =
+
+- (Framework) **PayPal Enhancement**: Modernized s2Member’s PayPal integration by adding support for PayPal Checkout with their latest REST APIs, Smart Buttons, and webhook event handling. This release introduces PayPal’s current Checkout platform as an optional, reliable alternative to the legacy PayPal Standard buttons. Existing s2Member PayPal button shortcodes continue to work as-is (no edits required). See: _WP Admin > s2Member > PayPal Options > PayPal Checkout (Beta)_. Thanks to the beta testers, especially Sim Architect.
+
 = v260101 =
 
 - (Framework) **Security**: Improved sanitization and normalization of attribute values for the s2Eot, s2Strem and s2Member-Security-Badge  shortcodes.
