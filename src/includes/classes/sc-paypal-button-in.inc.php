@@ -69,6 +69,9 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 						$force_notify_url_scheme = apply_filters("ws_plugin__s2member_during_sc_paypal_button_force_notify_url_scheme", null, get_defined_vars ());
 						$force_return_url_scheme = apply_filters("ws_plugin__s2member_during_sc_paypal_button_force_return_url_scheme", null, get_defined_vars ());
 
+						// PayPal Checkout SDK memoization (per request; shared across all button variants).
+						static $ppco_sdks = array();
+
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_sc_paypal_button_after_shortcode_atts", get_defined_vars ());
 						unset($__refs, $__v);
@@ -235,8 +238,6 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								// Uses server-side create + server-side capture, then posts into existing IPN + Return handlers.
 								if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled())
 									{
-										static $ppco_sdks = array();
-
 										$ppco_sandbox   = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox();
 										$ppco_client_id = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"][($ppco_sandbox) ? "paypal_checkout_sandbox_client_id" : "paypal_checkout_client_id"];
 
@@ -447,8 +448,6 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								// Uses server-side create + server-side capture, then posts into existing IPN + Return handlers.
 								if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled())
 									{
-										static $ppco_sdks = array();
-
 										$ppco_sandbox   = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox();
 										$ppco_client_id = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"][($ppco_sandbox) ? "paypal_checkout_sandbox_client_id" : "paypal_checkout_client_id"];
 
@@ -673,8 +672,6 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								// Uses server-side create + server-side capture/confirm, then posts into existing IPN + Return handlers.
 								if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled())
 									{
-										static $ppco_sdks = array();
-
 										$ppco_sandbox   = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox();
 										$ppco_client_id = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"][($ppco_sandbox) ? "paypal_checkout_sandbox_client_id" : "paypal_checkout_client_id"];
 
