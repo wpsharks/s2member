@@ -59,7 +59,19 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				exit();
 			}
 			$raw = c_ws_plugin__s2member_utils_encryption::decrypt($t);
-			$token = is_string($raw) ? @unserialize($raw, array('allowed_classes' => false)) : false;
+
+			if(is_string($raw))
+			{
+				if(defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70000)
+					$token = @unserialize($raw, array('allowed_classes' => false));
+				else
+					$token = @unserialize($raw);
+
+				// Hard fail on objects (PHP < 7 cannot disable allowed_classes).
+				if(is_object($token))
+					$token = false;
+			}
+			else $token = false;
 
 			if(!$token || !is_array($token))
 			{
@@ -607,6 +619,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					));
 					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
 
+					if(!is_array($notify_r))
+						$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
+
 					$notify_code = !empty($notify_r['code']) ? (int)$notify_r['code'] : 0;
 					$notify_msg  = !empty($notify_r['message']) ? (string)$notify_r['message'] : '';
 					$notify_body = !empty($notify_r['body']) ? $notify_r['body'] : '';
@@ -754,6 +769,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					));
 
 					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
+
+					if(!is_array($notify_r))
+						$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
 
 					$notify_code = !empty($notify_r['code']) ? (int)$notify_r['code'] : 0;
 					if(!($notify_code >= 200 && $notify_code <= 299))
@@ -992,6 +1010,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
 					));
 					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
+
+					if(!is_array($notify_r))
+						$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
 
 					$notify_code = !empty($notify_r['code']) ? (int)$notify_r['code'] : 0;
 					$notify_msg  = !empty($notify_r['message']) ? (string)$notify_r['message'] : '';

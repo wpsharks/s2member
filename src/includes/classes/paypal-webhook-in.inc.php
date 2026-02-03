@@ -281,6 +281,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				'timeout' => 20,
 			), true);
 
+			if(!is_array($r))
+				$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
+
 			$code = !empty($r['code']) ? (int)$r['code'] : 0;
 
 			if($code >= 200 && $code <= 299)

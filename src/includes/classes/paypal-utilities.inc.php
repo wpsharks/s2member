@@ -1013,7 +1013,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						);
 
 						if($body !== null)
-							$args['body'] = is_string($body) ? $body : wp_json_encode($body);
+						{
+							$encoded = is_string($body) ? $body : wp_json_encode($body);
+							$args['body'] = ($encoded !== false) ? $encoded : '{}';
+						}
 
 						$r = c_ws_plugin__s2member_utils_urls::remote($url, false, $args, true);
 
