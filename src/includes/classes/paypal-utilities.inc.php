@@ -846,6 +846,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						$r = c_ws_plugin__s2member_utils_urls::remote($url, $body, $args, true);
 
+						if(!is_array($r))
+							$r = array('code' => 0, 'message' => 'request_failed', 'headers' => array(), 'body' => '');
+
 						if(!isset($r['code']) || (int)$r['code'] !== 200)
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 								'ppco'    => 'oauth',
@@ -858,7 +861,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							));
 
 						$data = array();
-						if(!empty($r['body']))
+						if(!empty($r['body']) && is_string($r['body']))
 							$data = json_decode($r['body'], true);
 
 						if(!empty($data['access_token']) && !empty($data['expires_in']))
@@ -1010,9 +1013,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						);
 
 						if($body !== null)
-							$args['body'] = is_string($body) ? $body : json_encode($body);
+							$args['body'] = is_string($body) ? $body : wp_json_encode($body);
 
 						$r = c_ws_plugin__s2member_utils_urls::remote($url, false, $args, true);
+
+						if(!is_array($r))
+							$r = array('code' => 0, 'message' => 'request_failed', 'headers' => array(), 'body' => '');
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 								'ppco'    => 'api_request',
@@ -1110,7 +1116,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders', $body, $headers);
 
 						$data = array();
-						if(!empty($r['body']))
+						if(!empty($r['body']) && is_string($r['body']))
 							$data = json_decode($r['body'], true);
 
 						return is_array($data) ? $data : array();
@@ -1174,7 +1180,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders/'.$order_id.'/capture', (object)array(), $headers);
 
 						$data = array();
-						if(!empty($r['body']))
+						if(!empty($r['body']) && is_string($r['body']))
 							$data = json_decode($r['body'], true);
 
 						return is_array($data) ? $data : array();
@@ -1226,7 +1232,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$r = self::paypal_checkout_api_request('POST', '/v1/billing/subscriptions', $body, $headers);
 
 						$data = array();
-						if(!empty($r['body']))
+						if(!empty($r['body']) && is_string($r['body']))
 							$data = json_decode($r['body'], true);
 
 						return is_array($data) ? $data : array();
@@ -1391,13 +1397,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						);
 
 						$headers = array(
-							'PayPal-Request-Id' => 's2m-ppco-plan-'.md5($env.'|'.$plan_key.'|'.md5(json_encode($body))),
+							'PayPal-Request-Id' => 's2m-ppco-plan-'.md5($env.'|'.$plan_key.'|'.md5((string)wp_json_encode($body))),
 						);
 
 						$r = self::paypal_checkout_api_request('POST', '/v1/billing/plans', $body, $headers);
 
 						$data = array();
-						if(!empty($r['body']))
+						if(!empty($r['body']) && is_string($r['body']))
 							$data = json_decode($r['body'], true);
 
 						$plan_id = !empty($data['id']) ? (string)$data['id'] : '';
@@ -1507,7 +1513,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$r = self::paypal_checkout_api_request('POST', '/v1/catalogs/products', $body, $headers);
 
 						$data = array();
-						if(!empty($r['body']))
+						if(!empty($r['body']) && is_string($r['body']))
 							$data = json_decode($r['body'], true);
 
 						$product_id = !empty($data['id']) ? (string)$data['id'] : '';
