@@ -36,11 +36,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 			$is_redirect_mode = in_array($op, array('redirect', 'return', 'cancel'), true);
 
-			nocache_headers();
-			if($is_redirect_mode)
-				header('Content-Type: text/html; charset=UTF-8');
-			else
-				header('Content-Type: application/json; charset=UTF-8');
+			if(!headers_sent())
+			{
+				nocache_headers();
+				if($is_redirect_mode)
+					header('Content-Type: text/html; charset=UTF-8');
+				else
+					header('Content-Type: application/json; charset=UTF-8');
+			}
 
 			c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'    => 'checkout',
@@ -60,18 +63,13 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 			}
 			$raw = c_ws_plugin__s2member_utils_encryption::decrypt($t);
 
-			if(is_string($raw))
-			{
-				if(defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 70000)
-					$token = @unserialize($raw, array('allowed_classes' => false));
-				else
-					$token = @unserialize($raw);
+			//260204 Use the plugin's hardened unserialize routine:
+			// - PHP 7+: allowed_classes => false
+			// - PHP <7: blocks object payloads before calling unserialize()
+			$token = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($raw);
 
-				// Hard fail on objects (PHP < 7 cannot disable allowed_classes).
-				if(is_object($token))
-					$token = false;
-			}
-			else $token = false;
+			if(!is_array($token))
+				$token = false;
 
 			if(!$token || !is_array($token))
 			{
@@ -273,7 +271,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 					if(!is_array($notify_r))
 					{
-						echo 'notify_proxy_failed';
+						if($is_redirect_mode)
+							echo 'notify_proxy_failed';
+						else
+						{
+							if(!headers_sent())
+								status_header(500);
+
+							echo wp_json_encode(array('error' => 'notify_proxy_failed'));
+						}
 						exit();
 					}
 
@@ -392,7 +398,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 						if(!is_array($notify_r))
 						{
-							echo 'notify_proxy_failed';
+							if($is_redirect_mode)
+								echo 'notify_proxy_failed';
+							else
+							{
+								if(!headers_sent())
+									status_header(500);
+
+								echo wp_json_encode(array('error' => 'notify_proxy_failed'));
+							}
 							exit();
 						}
 					}
