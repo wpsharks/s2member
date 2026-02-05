@@ -1628,6 +1628,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(empty($r['code']) || (int)$r['code'] !== 200 || empty($r['body']))
 							return false;
 
+						if(!is_string($r['body']))
+							return false;
+
 						$data = json_decode($r['body'], true);
 						return !empty($data['verification_status']) && $data['verification_status'] === 'SUCCESS';
 					}
@@ -1731,7 +1734,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$r = self::paypal_checkout_api_request('POST', '/v1/notifications/webhooks', $body);
 
 						$id = '';
-						if(!empty($r['code']) && (int)$r['code'] === 201 && !empty($r['body']))
+						if(!empty($r['code']) && (int)$r['code'] === 201 && !empty($r['body']) && is_string($r['body']))
 						{
 							$data = json_decode($r['body'], true);
 							if(!empty($data['id']))
