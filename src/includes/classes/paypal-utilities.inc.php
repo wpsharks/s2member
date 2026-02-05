@@ -1601,10 +1601,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 */
 				public static function paypal_checkout_verify_webhook_signature($event, $raw_body, $headers = array())
 					{
-						$webhook_id = self::paypal_checkout_webhook_id();
-						if(!$webhook_id)
-							return false;
-
 						$tx_id   = !empty($headers['paypal-transmission-id']) ? $headers['paypal-transmission-id'] : '';
 						$tx_time = !empty($headers['paypal-transmission-time']) ? $headers['paypal-transmission-time'] : '';
 						$tx_sig  = !empty($headers['paypal-transmission-sig']) ? $headers['paypal-transmission-sig'] : '';
@@ -1613,6 +1609,19 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						if(!$tx_id || !$tx_time || !$tx_sig || !$cert || !$algo)
 							return false;
+
+						//260205 Detect sandbox vs live from the cert URL.
+						$orig_sandbox = self::paypal_checkout_is_sandbox();
+						$cert_is_sandbox = (strpos((string)$cert, 'sandbox') !== false);
+
+						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $cert_is_sandbox ? '1' : '0';
+
+						$webhook_id = self::paypal_checkout_webhook_id();
+						if(!$webhook_id)
+						{
+							$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
+							return false;
+						}
 
 						$body = array(
 							'transmission_id'   => $tx_id,
@@ -1626,12 +1635,20 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						$r = self::paypal_checkout_api_request('POST', '/v1/notifications/verify-webhook-signature', $body);
 						if(empty($r['code']) || (int)$r['code'] !== 200 || empty($r['body']))
+						{
+							$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
 							return false;
+						}
 
 						if(!is_string($r['body']))
+						{
+							$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
 							return false;
+						}
 
 						$data = json_decode($r['body'], true);
+
+						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
 						return !empty($data['verification_status']) && $data['verification_status'] === 'SUCCESS';
 					}
 
@@ -1715,6 +1732,30 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								return array('id' => $existing_id, 'op' => 'updated', 'env' => $env);
 							}
 
+							//260205 PayPal may return 400 when there is no change; treat as success.
+							$no_change = false;
+							if(!empty($r['body']) && is_string($r['body']))
+							{
+								$d = json_decode($r['body'], true);
+								$no_change = !empty($d['name']) && $d['name'] === 'WEBHOOK_PATCH_REQUEST_NO_CHANGE';
+							}
+							if($no_change)
+							{
+								self::paypal_checkout_webhook_store_id($existing_id);
+
+								c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+									'ppco'  => 'webhook',
+									'event' => 'updated_webhook_no_change',
+									'env'   => $env,
+									'id'    => $existing_id,
+									'url'   => $url,
+									'code'  => !empty($r['code']) ? (int)$r['code'] : 0,
+								));
+
+								$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
+								return array('id' => $existing_id, 'op' => 'updated', 'env' => $env);
+							}
+
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 								'ppco'    => 'webhook',
 								'event'   => 'update_webhook_failed',
@@ -1741,21 +1782,47 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$id = (string)$data['id'];
 						}
 
+						$adopted_existing = false;
+
+						//260205 If URL already exists, lookup existing webhook by URL and adopt its ID.
+						if(!$id && !empty($r['code']) && (int)$r['code'] === 400 && !empty($r['body']) && is_string($r['body']))
+						{
+							$d = json_decode($r['body'], true);
+							if(!empty($d['name']) && $d['name'] === 'WEBHOOK_URL_ALREADY_EXISTS')
+							{
+								$lr = self::paypal_checkout_api_request('GET', '/v1/notifications/webhooks');
+								if(!empty($lr['code']) && (int)$lr['code'] === 200 && !empty($lr['body']) && is_string($lr['body']))
+								{
+									$ld = json_decode($lr['body'], true);
+									if(!empty($ld['webhooks']) && is_array($ld['webhooks']))
+									{
+										foreach($ld['webhooks'] as $_wh)
+											if(!empty($_wh['url']) && (string)$_wh['url'] === $url && !empty($_wh['id']))
+											{
+												$id = (string)$_wh['id'];
+												$adopted_existing = true;
+												break;
+											}
+									}
+								}
+							}
+						}
+
 						if($id)
 						{
 							self::paypal_checkout_webhook_store_id($id);
 
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 								'ppco'  => 'webhook',
-								'event' => 'created_webhook',
+								'event' => $adopted_existing ? 'adopted_webhook' : 'created_webhook',
 								'env'   => $env,
 								'id'    => $id,
 								'url'   => $url,
-								'code'  => (int)$r['code'],
+								'code'  => $adopted_existing ? 200 : (int)$r['code'],
 							));
 
 							$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
-							return array('id' => $id, 'op' => 'created', 'env' => $env);
+							return array('id' => $id, 'op' => $adopted_existing ? 'adopted' : 'created', 'env' => $env);
 						}
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
