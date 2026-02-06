@@ -1025,6 +1025,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 								'ppco'    => 'api_request',
+								'env'     => self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live',
 								'method'  => $method,
 								'path'    => $path,
 								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,

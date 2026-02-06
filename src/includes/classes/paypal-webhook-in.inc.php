@@ -104,11 +104,16 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				if(empty($headers[$_key]) && !empty($_SERVER[$_server]))
 					$headers[$_key] = (string)$_SERVER[$_server];
 
+			//260206 Detect environment from inbound PayPal cert URL.
+			$cert_url = !empty($headers['paypal-cert-url']) ? (string)$headers['paypal-cert-url'] : '';
+			$env      = (strpos($cert_url, 'sandbox') !== false) ? 'sandbox' : 'live';
+
 			$verified = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_verify_webhook_signature($event, $raw_body, $headers);
 			if(!$verified)
 			{
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
+					'env'        => $env,
 					'event'      => 'signature_failed',
 					'event_id'   => (string)$event['id'],
 					'event_type' => (string)$event['event_type'],
@@ -130,6 +135,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			{
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
+					'env'        => $env,
 					'event'      => 'duplicate_event',
 					'action'     => 'ignored',
 					'note'       => 'Duplicate webhook delivery (event_id already processed).',
@@ -168,6 +174,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					// Ignore other BILLING.SUBSCRIPTION.* events for MVP.
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'       => 'webhook',
+						'env'        => $env,
 						'event'      => 'ignored',
 						'event_id'   => $event_id,
 						'event_type' => $event_type,
@@ -255,6 +262,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'       => 'webhook',
+						'env'        => $env,
 						'event'      => 'duplicate_txn',
 						'action'     => 'ignored',
 						'note'       => 'Duplicate webhook delivery (txn_id already processed).',
@@ -294,6 +302,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
+					'env'        => $env,
 					'event'      => 'notify_proxy_response',
 					'event_id'   => $event_id,
 					'event_type' => $event_type,
@@ -307,6 +316,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			else
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
+					'env'        => $env,
 					'event'      => 'notify_proxy_failed',
 					'event_id'   => $event_id,
 					'event_type' => $event_type,
