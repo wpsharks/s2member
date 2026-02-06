@@ -113,7 +113,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if($op === 'cancel')
 				{
-					wp_redirect(!empty($token['cancel']) ? (string)$token['cancel'] : home_url('/'));
+					$cancel = !empty($token['cancel']) ? (string)$token['cancel'] : home_url('/');
+					$cancel = wp_validate_redirect($cancel, home_url('/'));
+					wp_redirect($cancel);
 					exit();
 				}
 

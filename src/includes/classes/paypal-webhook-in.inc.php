@@ -100,7 +100,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			//260206 Detect environment from inbound PayPal cert URL.
 			$cert_url     = !empty($headers['paypal-cert-url']) ? (string)$headers['paypal-cert-url'] : '';
 			$env_site     = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox() ? 'sandbox' : 'live';
-			$env_webhook  = (strpos($cert_url, 'sandbox') !== false) ? 'sandbox' : 'live';
+
+			$cert_host    = $cert_url ? (string)parse_url($cert_url, PHP_URL_HOST) : '';
+			$env_webhook  = 'unknown';
+
+			if($cert_host && preg_match('/(^|\.)paypal\.com$/i', $cert_host))
+				$env_webhook = (stripos($cert_host, 'sandbox') !== false || strpos($cert_url, 'sandbox') !== false) ? 'sandbox' : 'live';
 
 			if(!is_array($event) || empty($event['id']) || empty($event['event_type']))
 			{
@@ -308,9 +313,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 			if($code >= 200 && $code <= 299)
 			{
-				set_transient($event_id_transient, time(), 315569260);
+				set_transient($event_id_transient, time(), 31556952);
 				if($txn_transient)
-					set_transient($txn_transient, time(), 315569260);
+					set_transient($txn_transient, time(), 31556952);
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
