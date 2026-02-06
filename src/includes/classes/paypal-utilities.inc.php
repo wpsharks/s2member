@@ -851,13 +851,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						if(!isset($r['code']) || (int)$r['code'] !== 200)
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-								'ppco'    => 'oauth',
-								'event'   => 'token_failed',
-								'env'     => self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live',
-								'url'     => $url,
-								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
-								'message' => !empty($r['message']) ? (string)$r['message'] : '',
-								'body'    => !empty($r['body']) ? $r['body'] : '',
+								'ppco'     => 'oauth',
+								'event'    => 'token_failed',
+								'env_setting' => self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live',
+								'url'      => $url,
+								'code'     => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message'  => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'     => !empty($r['body']) ? $r['body'] : '',
 							));
 
 						$data = array();
@@ -901,9 +901,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$ok    = ($token) ? true : false;
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'  => 'checkout',
-							'event' => $ok ? 'creds_test_ok' : 'creds_test_failed',
-							'env'   => $env,
+							'ppco'     => 'checkout',
+							'event'    => $ok ? 'creds_test_ok' : 'creds_test_failed',
+							'env_setting' => $env,
 						));
 
 						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
@@ -975,10 +975,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						delete_transient($transient);
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'    => 'checkout',
-							'event'   => 'cleared_cache',
-							'env'     => $env,
-							'cred_id' => $cred_id,
+							'ppco'     => 'checkout',
+							'event'    => 'cleared_cache',
+							'env_setting' => $env,
+							'cred_id'  => $cred_id,
 						));
 
 						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
@@ -1024,13 +1024,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							$r = array('code' => 0, 'message' => 'request_failed', 'headers' => array(), 'body' => '');
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-								'ppco'    => 'api_request',
-								'env'     => self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live',
-								'method'  => $method,
-								'path'    => $path,
-								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
-								'message' => !empty($r['message']) ? (string)$r['message'] : '',
-								'body'    => !empty($r['body']) ? $r['body'] : '',
+								'ppco'     => 'api_request',
+								'env_setting' => self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live',
+								'method'   => $method,
+								'path'     => $path,
+								'code'     => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message'  => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'     => !empty($r['body']) ? $r['body'] : '',
 							));
 
 						return $r;
@@ -1414,14 +1414,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(!$plan_id)
 						{
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-								'ppco'    => 'plan',
-								'event'   => 'plan_create_failed',
-								'env'     => $env,
-								'plan_key'=> $plan_key,
-								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
-								'message' => !empty($r['message']) ? (string)$r['message'] : '',
-								'body'    => !empty($r['body']) ? (string)$r['body'] : '',
-								'request' => $body,
+								'ppco'     => 'plan',
+								'event'    => 'plan_create_failed',
+								'env_setting' => $env,
+								'plan_key' => $plan_key,
+								'code'     => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message'  => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'     => !empty($r['body']) ? (string)$r['body'] : '',
+								'request'  => $body,
 							));
 							return '';
 						}
@@ -1456,12 +1456,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"] = (!empty($options['paypal_checkout_cache']) && is_array($options['paypal_checkout_cache'])) ? $options['paypal_checkout_cache'] : array();
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'    => 'plan',
-							'event'   => 'plan_cached',
-							'env'     => $env,
-							'cred_id' => $cred_id,
-							'plan_key'=> $plan_key,
-							'plan_id' => $plan_id,
+							'ppco'     => 'plan',
+							'event'    => 'plan_cached',
+							'env_setting' => $env,
+							'cred_id'  => $cred_id,
+							'plan_key' => $plan_key,
+							'plan_id'  => $plan_id,
 						));
 
 						return $plan_id;
@@ -1524,12 +1524,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(!$product_id)
 						{
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-								'ppco'    => 'product',
-								'event'   => 'product_create_failed',
-								'env'     => $env,
-								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
-								'message' => !empty($r['message']) ? (string)$r['message'] : '',
-								'body'    => !empty($r['body']) ? (string)$r['body'] : '',
+								'ppco'     => 'product',
+								'event'    => 'product_create_failed',
+								'env_setting' => $env,
+								'code'     => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message'  => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'     => !empty($r['body']) ? (string)$r['body'] : '',
 							));
 							return '';
 						}
@@ -1564,10 +1564,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_cache"] = (!empty($options['paypal_checkout_cache']) && is_array($options['paypal_checkout_cache'])) ? $options['paypal_checkout_cache'] : array();
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'    => 'product',
-							'event'   => 'product_cached',
-							'env'     => $env,
-							'cred_id' => $cred_id,
+							'ppco'     => 'product',
+							'event'    => 'product_cached',
+							'env_setting' => $env,
+							'cred_id'  => $cred_id,
 							'product_key' => $product_key,
 							'product_id' => $product_id,
 						));
@@ -1721,12 +1721,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								self::paypal_checkout_webhook_store_id($existing_id);
 
 								c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-									'ppco'  => 'webhook',
-									'event' => 'updated_webhook',
-									'env'   => $env,
-									'id'    => $existing_id,
-									'url'   => $url,
-									'code'  => (int)$r['code'],
+									'ppco'     => 'webhook',
+									'event'    => 'updated_webhook',
+									'env_setting' => $env,
+									'id'       => $existing_id,
+									'url'      => $url,
+									'code'     => (int)$r['code'],
 								));
 
 								$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
@@ -1745,12 +1745,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								self::paypal_checkout_webhook_store_id($existing_id);
 
 								c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-									'ppco'  => 'webhook',
-									'event' => 'updated_webhook_no_change',
-									'env'   => $env,
-									'id'    => $existing_id,
-									'url'   => $url,
-									'code'  => !empty($r['code']) ? (int)$r['code'] : 0,
+									'ppco'     => 'webhook',
+									'event'    => 'updated_webhook_no_change',
+									'env_setting' => $env,
+									'id'       => $existing_id,
+									'url'      => $url,
+									'code'     => !empty($r['code']) ? (int)$r['code'] : 0,
 								));
 
 								$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
@@ -1758,14 +1758,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-								'ppco'    => 'webhook',
-								'event'   => 'update_webhook_failed',
-								'env'     => $env,
-								'id'      => $existing_id,
-								'url'     => $url,
-								'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
-								'message' => !empty($r['message']) ? (string)$r['message'] : '',
-								'body'    => !empty($r['body']) ? (string)$r['body'] : '',
+								'ppco'     => 'webhook',
+								'event'    => 'update_webhook_failed',
+								'env_setting' => $env,
+								'id'       => $existing_id,
+								'url'      => $url,
+								'code'     => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message'  => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'     => !empty($r['body']) ? (string)$r['body'] : '',
 							));
 						}
 
@@ -1814,12 +1814,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							self::paypal_checkout_webhook_store_id($id);
 
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-								'ppco'  => 'webhook',
-								'event' => $adopted_existing ? 'adopted_webhook' : 'created_webhook',
-								'env'   => $env,
-								'id'    => $id,
-								'url'   => $url,
-								'code'  => $adopted_existing ? 200 : (int)$r['code'],
+								'ppco'     => 'webhook',
+								'event'    => $adopted_existing ? 'adopted_webhook' : 'created_webhook',
+								'env_setting' => $env,
+								'id'       => $id,
+								'url'      => $url,
+								'code'     => $adopted_existing ? 200 : (int)$r['code'],
 							));
 
 							$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
@@ -1827,13 +1827,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						}
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'    => 'webhook',
-							'event'   => 'create_webhook_failed',
-							'env'     => $env,
-							'url'     => $url,
-							'code'    => !empty($r['code']) ? (int)$r['code'] : 0,
-							'message' => !empty($r['message']) ? (string)$r['message'] : '',
-							'body'    => !empty($r['body']) ? (string)$r['body'] : '',
+							'ppco'     => 'webhook',
+							'event'    => 'create_webhook_failed',
+							'env_setting' => $env,
+							'url'      => $url,
+							'code'     => !empty($r['code']) ? (int)$r['code'] : 0,
+							'message'  => !empty($r['message']) ? (string)$r['message'] : '',
+							'body'     => !empty($r['body']) ? (string)$r['body'] : '',
 						));
 
 						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
