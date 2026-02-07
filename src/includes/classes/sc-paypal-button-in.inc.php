@@ -82,16 +82,17 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								// - output="button": on-site cancel via REST API (logged-in users only).
 								// - output="anchor|url": link to PayPal subscription management UI (sandbox/live aware).
 								// Falls back to legacy PayPal cancellation flow when user is not logged in or has no subscription id.
-								if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled() && in_array($attr["output"], array("button", "anchor", "url"), true) && is_user_logged_in() && get_user_option('s2member_subscr_id', (int)get_current_user_id()))
+								if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled() && in_array($attr["output"], array("button", "anchor", "url"), true) && is_user_logged_in())
 									{
 										$user_id   = (int)get_current_user_id();
 										$subscr_id = (string)get_user_option('s2member_subscr_id', $user_id);
 
-										if($subscr_id)
-											{
-												$ppco_sandbox  = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox();
-												$pp_manage_url = ($ppco_sandbox) ? 'https://www.sandbox.paypal.com/myaccount/autopay/connect/' : 'https://www.paypal.com/myaccount/autopay/connect/';
+										$ppco_sandbox  = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox();
+										$pp_manage_url = ($ppco_sandbox) ? 'https://www.sandbox.paypal.com/myaccount/autopay/connect/' : 'https://www.paypal.com/myaccount/autopay/connect/';
 
+										// output="url|anchor": always link to PayPal subscription management UI.
+										if(in_array($attr["output"], array("url", "anchor"), true))
+											{
 												// output="url": return the PayPal management URL.
 												if($attr["output"] === "url")
 													{
@@ -106,6 +107,26 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 													}
 												// output="anchor": real anchor tag to PayPal management UI (no JS).
 												else if($attr["output"] === "anchor")
+													{
+														$default_image = "https://www.paypal.com/" . (($attr["lang"]) ? $attr["lang"] : _x ("en_US", "s2member-front paypal-button-lang-code", "s2member")) . "/i/btn/btn_unsubscribe_LG.gif";
+														$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
+
+														$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+
+														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
+														do_action("ws_plugin__s2member_during_sc_paypal_cancellation_button", get_defined_vars ());
+														unset($__refs, $__v);
+
+														$code = c_ws_plugin__s2member_sc_paypal_button_e::sc_paypal_button_encryption ($code, get_defined_vars ());
+														return apply_filters("ws_plugin__s2member_sc_paypal_button", $code, get_defined_vars ());
+													}
+											}
+
+										if($subscr_id)
+											{
+
+												// output="button": if Paid Subscr. ID is not a subscription id, fall back to PayPal management UI.
+												if($attr["output"] === "button" && !preg_match('/^I-[A-Z0-9]+$/', $subscr_id))
 													{
 														$default_image = "https://www.paypal.com/" . (($attr["lang"]) ? $attr["lang"] : _x ("en_US", "s2member-front paypal-button-lang-code", "s2member")) . "/i/btn/btn_unsubscribe_LG.gif";
 														$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
