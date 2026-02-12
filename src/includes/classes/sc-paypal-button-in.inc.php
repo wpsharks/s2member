@@ -363,6 +363,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 										if($ppco_sdk_just_loaded)
 											{
+												$ppco_sdk_src = apply_filters('ws_plugin__s2member_ppco_sdk_src', $ppco_sdk_src, get_defined_vars());
 												$code .= '<script id="'.esc_attr($ppco_sdk_id).'" data-namespace="'.esc_attr($ppco_sdk_ns).'" src="'.esc_attr($ppco_sdk_src).'"></script>'."\n";
 											}
 
@@ -573,6 +574,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 										if($ppco_sdk_just_loaded)
 											{
+												$ppco_sdk_src = apply_filters('ws_plugin__s2member_ppco_sdk_src', $ppco_sdk_src, get_defined_vars());
 												$code .= '<script id="'.esc_attr($ppco_sdk_id).'" data-namespace="'.esc_attr($ppco_sdk_ns).'" src="'.esc_attr($ppco_sdk_src).'"></script>'."\n";
 											}
 
@@ -805,6 +807,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 										if($ppco_sdk_just_loaded)
 											{
+												$ppco_sdk_src = apply_filters('ws_plugin__s2member_ppco_sdk_src', $ppco_sdk_src, get_defined_vars());
 												$code .= '<script id="'.esc_attr($ppco_sdk_id).'" data-namespace="'.esc_attr($ppco_sdk_ns).'" src="'.esc_attr($ppco_sdk_src).'"></script>'."\n";
 											}
 
