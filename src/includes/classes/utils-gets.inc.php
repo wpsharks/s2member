@@ -234,7 +234,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 					if(!is_object($user) || empty($user->ID)) // No ``$user`` object? Maybe not logged-in?.
 						$singular_ids[] = (int)$r->post_id; // It's NOT available. There is no ``$user``.
 
-					else if(is_array($ccaps = @unserialize($r->meta_value))) // Make sure we unserialize.
+					else if(is_array($ccaps = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($r->meta_value))) // Make sure we unserialize.
 					{
 						foreach($ccaps as $ccap) // Test for Custom Capability Restrictions now.
 							if(strlen($ccap) && !$user->has_cap('access_s2member_ccap_'.$ccap))

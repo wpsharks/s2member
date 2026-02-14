@@ -183,6 +183,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 						}
 					}
 					//250426 Fall back to a makeshift ipn_signup_vars array.
+					//!!! TO-DO: Gateway enrichment for missing term details (period1/period3) when signup vars are missing.
+					//	PayPal Checkout subs: use REST Subscriptions API.
+					//	Legacy PayPal recurring profiles: use legacy NVP/Payflow APIs.
+					//	Do not guess term values in fallback vars (risk of incorrect EOT decisions).
 					if (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['ipn_signup_vars_fallback'])) {
 						$userdata = get_userdata((int)$user_id);
 						$ipn_signup_vars = array(
@@ -478,7 +482,52 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 
 			if($check_gateway) switch($subscr_gateway) // A bit different for each payment gateway.
 			{
-				case 'paypal': // PayPal (PayPal Pro only).
+				case 'paypal': // PayPal (legacy Pro NVP/Payflow + PayPal Checkout REST).
+
+					//260213 PayPal Checkout subscriptions: use REST Subscriptions API for reconciliation (NVP GetRecurringPaymentsProfileDetails returns 11592).
+					if(!empty($ipn_signup_vars['s2member_paypal_proxy_use']) && $ipn_signup_vars['s2member_paypal_proxy_use'] === 'paypal_checkout')
+						{
+							$ppco_enabled = !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_enable']) && (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_enable'] !== '0';
+
+							$ppco_creds = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_creds();
+
+							if(!$ppco_enabled || empty($ppco_creds['client_id']) || empty($ppco_creds['secret']))
+								return array_merge($empty_response, array(
+									'debug' => 'PayPal Checkout subscription reconciliation skipped (disabled or missing REST API credentials).',
+								));
+
+							$subscription_r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_api_request('GET', '/v1/billing/subscriptions/'.rawurlencode($subscr_id));
+
+							$subscription_code = !empty($subscription_r['code']) ? (int)$subscription_r['code'] : 0;
+							$subscription_body = !empty($subscription_r['body']) ? (string)$subscription_r['body'] : '';
+
+							$subscription = array();
+							if($subscription_body)
+								$subscription = json_decode($subscription_body, true);
+
+							if(!is_array($subscription))
+								$subscription = array();
+
+							if(!($subscription_code >= 200 && $subscription_code <= 299 && !empty($subscription['id'])))
+								return array_merge($empty_response, array(
+									'debug' => 'PayPal Checkout subscription reconciliation failed (REST subscription lookup unsuccessful); skipping legacy PayPal status checks.',
+								));
+
+							$status = !empty($subscription['status']) ? strtoupper((string)$subscription['status']) : '';
+							$next   = !empty($subscription['billing_info']['next_billing_time']) ? (string)$subscription['billing_info']['next_billing_time'] : '';
+
+							if($status && $status !== 'ACTIVE')
+								return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+									'debug' => 'This is the estimated EOT time. PayPal Checkout says this subscription is no longer active, and thus, access should be terminated at this time.');
+
+							if($next && ($time = strtotime($next)) > $now)
+								return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
+									'debug' => 'PayPal Checkout says this is the next payment time.');
+
+							return array_merge($empty_response, array(
+								'debug' => 'PayPal Checkout says this subscription is active; no next billing time was returned.',
+							));
+						}
 
 					if(!c_ws_plugin__s2member_utils_conds::pro_is_installed()
 						|| !class_exists('c_ws_plugin__s2member_pro_paypal_utilities')
