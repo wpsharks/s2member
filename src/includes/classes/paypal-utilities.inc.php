@@ -559,6 +559,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							&& ($ipn_signup_var_item_number = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_number", FALSE, $array["mp_id"])))
 							$_item_number = trim($ipn_signup_var_item_number); // Found w/ a Billing Agreement ID.
 
+						//260213 Backfill from stored IPN Signup Vars using recurring_payment_id/subscr_id (PayPal may omit item_number on cancellations).
+						else if(is_array($array = $array_or_string) && (!empty($array["recurring_payment_id"]) || !empty($array["subscr_id"]))
+							&& ($ipn_signup_var_item_number = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_number", FALSE, ((!empty($array["recurring_payment_id"])) ? $array["recurring_payment_id"] : $array["subscr_id"]))))
+							$_item_number = trim($ipn_signup_var_item_number); // Found w/ a Subscription ID.
+
 						else if(is_string($string = $array_or_string) && !empty($string)) $_item_number = trim($string);
 
 						if(!empty($_item_number) && preg_match($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_or_wo_level_regex"], $_item_number))
@@ -597,6 +602,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							&& ($ipn_signup_var_item_name = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_name", FALSE, $array["mp_id"])))
 							$item_name = trim($ipn_signup_var_item_name); // Found w/ a Billing Agreement ID.
 
+						//260213 Backfill from stored IPN Signup Vars using recurring_payment_id/subscr_id (PayPal may omit item_name on cancellations).
+						else if(is_array($array = $array_or_string) && (!empty($array["recurring_payment_id"]) || !empty($array["subscr_id"]))
+							&& ($ipn_signup_var_item_name = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("item_name", FALSE, ((!empty($array["recurring_payment_id"])) ? $array["recurring_payment_id"] : $array["subscr_id"]))))
+							$item_name = trim($ipn_signup_var_item_name); // Found w/ a Subscription ID.
+
 						else if(is_string($string = $array_or_string) && !empty($string)) $item_name = trim($string);
 
 						return apply_filters("ws_plugin__s2member_paypal_pro_item_name", ((!empty($item_name)) ? $item_name : false), get_defined_vars());
@@ -634,6 +644,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						else if(is_array($array = $array_or_string) && !empty($array["mp_id"])
 							&& ($ipn_signup_var_period1 = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("period1", FALSE, $array["mp_id"])))
 							$_period1 = trim($ipn_signup_var_period1); // Found w/ a Billing Agreement ID.
+
+						//260213 Backfill from stored IPN Signup Vars using recurring_payment_id/subscr_id (PayPal may omit period1 on cancellations).
+						else if(is_array($array = $array_or_string) && (!empty($array["recurring_payment_id"]) || !empty($array["subscr_id"]))
+							&& ($ipn_signup_var_period1 = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("period1", FALSE, ((!empty($array["recurring_payment_id"])) ? $array["recurring_payment_id"] : $array["subscr_id"]))))
+							$_period1 = trim($ipn_signup_var_period1); // Found w/ a Subscription ID.
 
 						else if(is_string($string = $array_or_string) && !empty($string)) $_period1 = trim($string);
 
@@ -690,6 +705,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						else if(is_array($array = $array_or_string) && !empty($array["mp_id"])
 							&& ($ipn_signup_var_period3 = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("period3", FALSE, $array["mp_id"])))
 							$_period3 = trim($ipn_signup_var_period3); // Found w/ a Billing Agreement ID.
+
+						//260213 Backfill from stored IPN Signup Vars using recurring_payment_id/subscr_id (PayPal may omit period3 on cancellations).
+						else if(is_array($array = $array_or_string) && (!empty($array["recurring_payment_id"]) || !empty($array["subscr_id"]))
+							&& ($ipn_signup_var_period3 = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var("period3", FALSE, ((!empty($array["recurring_payment_id"])) ? $array["recurring_payment_id"] : $array["subscr_id"]))))
+							$_period3 = trim($ipn_signup_var_period3); // Found w/ a Subscription ID.
 
 						else if(is_string($string = $array_or_string) && !empty($string)) $_period3 = trim($string);
 

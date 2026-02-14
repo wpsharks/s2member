@@ -207,6 +207,28 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				// Best-effort payer email for logs/fallback logic.
 				if(!empty($resource['subscriber']['email_address']))
 					$paypal['payer_email'] = (string)$resource['subscriber']['email_address'];
+
+				// Enrich lifecycle events with stored signup vars so legacy notify handlers can match and set EOT properly.
+				//!!! TO-DO: Deduplicate signup-vars enrichment logic (also used in PayPal Checkout proxy confirm flow).
+				if(!empty($paypal['txn_type']) && $subscr_id
+				   && in_array($paypal['txn_type'], array('subscr_cancel', 'subscr_eot', 'subscr_failed', 'recurring_payment_suspended_due_to_max_failed_payment'), true)
+				   && ($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($subscr_id))
+				   && is_array($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id))
+				   && !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id
+				)
+				{
+					if(empty($paypal['item_number']) && !empty($ipn_signup_vars['item_number']))
+						$paypal['item_number'] = (string)$ipn_signup_vars['item_number'];
+
+					if(empty($paypal['item_name']) && !empty($ipn_signup_vars['item_name']))
+						$paypal['item_name'] = (string)$ipn_signup_vars['item_name'];
+
+					if(empty($paypal['period1']) && !empty($ipn_signup_vars['period1']))
+						$paypal['period1'] = (string)$ipn_signup_vars['period1'];
+
+					if(empty($paypal['period3']) && !empty($ipn_signup_vars['period3']))
+						$paypal['period3'] = (string)$ipn_signup_vars['period3'];
+				}
 			}
 
 			// Recurring payment events (PayPal often emits PAYMENT.SALE.COMPLETED for subscription payments).

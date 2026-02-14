@@ -773,9 +773,30 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'txn_id'    => $subscr_id,
 						'subscr_id' => $subscr_id,
 
-						// Helps some older cancel paths/logs; not required for user resolution.
+						// Help legacy notify logic resolve user in some fallback cases.
+						'mp_id'                => $subscr_id,
+						'recurring_payment_id' => $subscr_id,
+
+						// Best-effort payer email for logs/fallback logic.
 						'payer_email' => (string)wp_get_current_user()->user_email,
 					);
+
+					// Enrich with stored signup vars so legacy cancel handler can match and compute EOT.
+					if(($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id)) && is_array($ipn_signup_vars)
+					   && !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id)
+					{
+						if(empty($paypal['item_number']) && !empty($ipn_signup_vars['item_number']))
+							$paypal['item_number'] = (string)$ipn_signup_vars['item_number'];
+
+						if(empty($paypal['item_name']) && !empty($ipn_signup_vars['item_name']))
+							$paypal['item_name'] = (string)$ipn_signup_vars['item_name'];
+
+						if(empty($paypal['period1']) && !empty($ipn_signup_vars['period1']))
+							$paypal['period1'] = (string)$ipn_signup_vars['period1'];
+
+						if(empty($paypal['period3']) && !empty($ipn_signup_vars['period3']))
+							$paypal['period3'] = (string)$ipn_signup_vars['period3'];
+					}
 
 					$notify_url  = home_url('/?s2member_paypal_notify=1');
 					$notify_post = array_merge($paypal, array(
