@@ -73,6 +73,9 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 		 */
 		public static function generate_password($password = '')
 		{
+			if (did_action('retrieve_password') || did_action('login_form_rp') || did_action('login_form_resetpass')) //260214
+				return $password;
+
 			static $did_generate_password = false; // Once only.
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
@@ -81,7 +84,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 
 			$ci = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
 
-			if(!$did_generate_password && !is_admin() && (preg_match('/\/wp-login\.php/'.$ci, $_SERVER['REQUEST_URI']) || (c_ws_plugin__s2member_utils_conds::bp_is_installed() && bp_is_register_page())))
+			if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_password']) && !$did_generate_password && !is_admin() && ((preg_match('/\/wp-login\.php/'.$ci, $_SERVER['REQUEST_URI']) && did_action('login_form_register')) || (c_ws_plugin__s2member_utils_conds::bp_is_installed() && bp_is_register_page()))) //260214
 				{
 					$GLOBALS['ws_plugin__s2member_custom_wp_login_bp_password'] = false; // Initialize.
 
