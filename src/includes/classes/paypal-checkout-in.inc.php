@@ -36,11 +36,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 			$is_redirect_mode = in_array($op, array('redirect', 'return', 'cancel'), true);
 
-			nocache_headers();
-			if($is_redirect_mode)
-				header('Content-Type: text/html; charset=UTF-8');
-			else
-				header('Content-Type: application/json; charset=UTF-8');
+			if(!headers_sent())
+			{
+				nocache_headers();
+				if($is_redirect_mode)
+					header('Content-Type: text/html; charset=UTF-8');
+				else
+					header('Content-Type: application/json; charset=UTF-8');
+			}
 
 			c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'    => 'checkout',
@@ -55,27 +58,37 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 			if(!$op || !$t)
 			{
-				echo json_encode(array('error' => 'missing_op_or_token'));
+				echo wp_json_encode(array('error' => 'missing_op_or_token'));
 				exit();
 			}
-			if(!($token = @unserialize(c_ws_plugin__s2member_utils_encryption::decrypt($t))) || !is_array($token))
+			$raw = c_ws_plugin__s2member_utils_encryption::decrypt($t);
+
+			//260204 Use the plugin's hardened unserialize routine:
+			// - PHP 7+: allowed_classes => false
+			// - PHP <7: blocks object payloads before calling unserialize()
+			$token = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($raw);
+
+			if(!is_array($token))
+				$token = false;
+
+			if(!$token || !is_array($token))
 			{
-				echo json_encode(array('error' => 'invalid_token'));
+				echo wp_json_encode(array('error' => 'invalid_token'));
 				exit();
 			}
 			if(!empty($token['exp']) && is_numeric($token['exp']) && time() > (int)$token['exp'])
 			{
-				echo json_encode(array('error' => 'token_expired'));
+				echo wp_json_encode(array('error' => 'token_expired'));
 				exit();
 			}
 			if(empty($token['invoice']) || empty($token['ip']) || empty($token['item_number']) || empty($token['checksum']))
 			{
-				echo json_encode(array('error' => 'token_incomplete'));
+				echo wp_json_encode(array('error' => 'token_incomplete'));
 				exit();
 			}
 			if($token['checksum'] !== md5($token['invoice'].$token['ip'].$token['item_number']))
 			{
-				echo json_encode(array('error' => 'token_checksum_mismatch'));
+				echo wp_json_encode(array('error' => 'token_checksum_mismatch'));
 				exit();
 			}
 
@@ -88,7 +101,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'ip'    => c_ws_plugin__s2member_utils_ip::current(),
 					));
 
-				echo json_encode(array('error' => 'token_ip_mismatch'));
+				echo wp_json_encode(array('error' => 'token_ip_mismatch'));
 				exit();
 			}
 
@@ -100,7 +113,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if($op === 'cancel')
 				{
-					wp_redirect(!empty($token['cancel']) ? (string)$token['cancel'] : home_url('/'));
+					$cancel = !empty($token['cancel']) ? (string)$token['cancel'] : home_url('/');
+					$cancel = wp_validate_redirect($cancel, home_url('/'));
+					wp_redirect($cancel);
 					exit();
 				}
 
@@ -258,7 +273,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 					if(!is_array($notify_r))
 					{
-						echo 'notify_proxy_failed';
+						if($is_redirect_mode)
+							echo 'notify_proxy_failed';
+						else
+						{
+							if(!headers_sent())
+								status_header(500);
+
+							echo wp_json_encode(array('error' => 'notify_proxy_failed'));
+						}
 						exit();
 					}
 
@@ -377,7 +400,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 						if(!is_array($notify_r))
 						{
-							echo 'notify_proxy_failed';
+							if($is_redirect_mode)
+								echo 'notify_proxy_failed';
+							else
+							{
+								if(!headers_sent())
+									status_header(500);
+
+								echo wp_json_encode(array('error' => 'notify_proxy_failed'));
+							}
 							exit();
 						}
 					}
@@ -404,7 +435,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 			{
 				if((!isset($token['rr']) || (string)$token['rr'] === '') || strtoupper((string)$token['rr']) === 'BN')
 				{
-					echo json_encode(array('error' => 'not_subscription'));
+					echo wp_json_encode(array('error' => 'not_subscription'));
 					exit();
 				}
 
@@ -419,11 +450,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if(!$plan_id)
 				{
-					echo json_encode(array('error' => 'plan_create_failed'));
+					echo wp_json_encode(array('error' => 'plan_create_failed'));
 					exit();
 				}
 
-				echo json_encode(array('plan_id' => $plan_id));
+				echo wp_json_encode(array('plan_id' => $plan_id));
 				exit();
 			}
 
@@ -431,14 +462,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 			{
 				if((!isset($token['rr']) || (string)$token['rr'] === '') || strtoupper((string)$token['rr']) === 'BN')
 				{
-					echo json_encode(array('error' => 'not_subscription'));
+					echo wp_json_encode(array('error' => 'not_subscription'));
 					exit();
 				}
 				$subscription_id = !empty($_POST['subscription_id']) ? trim(stripslashes((string)$_POST['subscription_id'])) : '';
 
 				if(!$subscription_id)
 				{
-					echo json_encode(array('error' => 'missing_subscription_id'));
+					echo wp_json_encode(array('error' => 'missing_subscription_id'));
 					exit();
 				}
 				$subscription_r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_api_request('GET', '/v1/billing/subscriptions/'.rawurlencode($subscription_id));
@@ -470,7 +501,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'code'            => $subscription_code,
 						'body'            => $subscription_body,
 					));
-					echo json_encode(array('error' => 'subscription_get_failed'));
+					echo wp_json_encode(array('error' => 'subscription_get_failed'));
 					exit();
 				}
 				$status = !empty($subscription['status']) ? strtoupper((string)$subscription['status']) : '';
@@ -503,7 +534,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'status'          => $status,
 					));
 
-					echo json_encode(array('error' => 'subscription_status_invalid'));
+					echo wp_json_encode(array('error' => 'subscription_status_invalid'));
 					exit();
 				}
 				$expected_plan_id = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_plan_get_id($token);
@@ -516,7 +547,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'expected'        => $expected_plan_id,
 						'actual'          => (string)$subscription['plan_id'],
 					));
-					echo json_encode(array('error' => 'plan_mismatch'));
+					echo wp_json_encode(array('error' => 'plan_mismatch'));
 					exit();
 				}
 				$custom_id = !empty($subscription['custom_id']) ? (string)$subscription['custom_id'] : '';
@@ -529,7 +560,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'expected'        => (string)$token['invoice'],
 						'actual'          => $custom_id,
 					));
-					echo json_encode(array('error' => 'subscription_custom_id_mismatch'));
+					echo wp_json_encode(array('error' => 'subscription_custom_id_mismatch'));
 					exit();
 				}
 
@@ -604,6 +635,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					));
 					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
 
+					if(!is_array($notify_r))
+						$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
+
 					$notify_code = !empty($notify_r['code']) ? (int)$notify_r['code'] : 0;
 					$notify_msg  = !empty($notify_r['message']) ? (string)$notify_r['message'] : '';
 					$notify_body = !empty($notify_r['body']) ? $notify_r['body'] : '';
@@ -629,7 +663,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'message'         => $notify_msg,
 							'body'            => $notify_body,
 						));
-						echo json_encode(array('error' => 'notify_proxy_failed'));
+						echo wp_json_encode(array('error' => 'notify_proxy_failed'));
 						exit();
 					}
 				}
@@ -643,7 +677,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
 				));
 
-				echo json_encode(array(
+				echo wp_json_encode(array(
 					'rtn_url'  => $return_url,
 					'rtn_post' => $return_post,
 				));
@@ -660,7 +694,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'token' => $token,
 					));
 
-					echo json_encode(array('error' => 'not_logged_in'));
+					echo wp_json_encode(array('error' => 'not_logged_in'));
 					exit();
 				}
 				$user_id = (int)get_current_user_id();
@@ -674,7 +708,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'user_id'=> $user_id,
 					));
 
-					echo json_encode(array('error' => 'bad_nonce'));
+					echo wp_json_encode(array('error' => 'bad_nonce'));
 					exit();
 				}
 
@@ -690,7 +724,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'token'   => $token,
 					));
 
-					echo json_encode(array('error' => 'token_mismatch'));
+					echo wp_json_encode(array('error' => 'token_mismatch'));
 					exit();
 				}
 
@@ -705,7 +739,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'token_subscr'=> $token_subscr_id,
 					));
 
-					echo json_encode(array('error' => 'user_mismatch'));
+					echo wp_json_encode(array('error' => 'user_mismatch'));
 					exit();
 				}
 
@@ -739,9 +773,30 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'txn_id'    => $subscr_id,
 						'subscr_id' => $subscr_id,
 
-						// Helps some older cancel paths/logs; not required for user resolution.
+						// Help legacy notify logic resolve user in some fallback cases.
+						'mp_id'                => $subscr_id,
+						'recurring_payment_id' => $subscr_id,
+
+						// Best-effort payer email for logs/fallback logic.
 						'payer_email' => (string)wp_get_current_user()->user_email,
 					);
+
+					// Enrich with stored signup vars so legacy cancel handler can match and compute EOT.
+					if(($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id)) && is_array($ipn_signup_vars)
+					   && !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id)
+					{
+						if(empty($paypal['item_number']) && !empty($ipn_signup_vars['item_number']))
+							$paypal['item_number'] = (string)$ipn_signup_vars['item_number'];
+
+						if(empty($paypal['item_name']) && !empty($ipn_signup_vars['item_name']))
+							$paypal['item_name'] = (string)$ipn_signup_vars['item_name'];
+
+						if(empty($paypal['period1']) && !empty($ipn_signup_vars['period1']))
+							$paypal['period1'] = (string)$ipn_signup_vars['period1'];
+
+						if(empty($paypal['period3']) && !empty($ipn_signup_vars['period3']))
+							$paypal['period3'] = (string)$ipn_signup_vars['period3'];
+					}
 
 					$notify_url  = home_url('/?s2member_paypal_notify=1');
 					$notify_post = array_merge($paypal, array(
@@ -751,6 +806,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					));
 
 					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
+
+					if(!is_array($notify_r))
+						$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
 
 					$notify_code = !empty($notify_r['code']) ? (int)$notify_r['code'] : 0;
 					if(!($notify_code >= 200 && $notify_code <= 299))
@@ -765,11 +823,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						));
 					}
 
-					echo json_encode(array('ok' => 1));
+					echo wp_json_encode(array('ok' => 1));
 					exit();
 				}
 
-				echo json_encode(array('error' => 'cancel_failed'));
+				echo wp_json_encode(array('error' => 'cancel_failed'));
 				exit();
 			}
 
@@ -793,10 +851,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'token' => $token,
 						));
 
-					echo json_encode(array('error' => 'order_create_failed'));
+					echo wp_json_encode(array('error' => 'order_create_failed'));
 					exit();
 				}
-				echo json_encode(array('order_id' => $order['id']));
+				echo wp_json_encode(array('order_id' => $order['id']));
 				exit();
 			}
 			else if($op === 'capture_order')
@@ -805,7 +863,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if(!$order_id)
 				{
-					echo json_encode(array('error' => 'missing_order_id'));
+					echo wp_json_encode(array('error' => 'missing_order_id'));
 					exit();
 				}
 				$capture = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_capture($order_id, $token);
@@ -826,7 +884,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if(empty($capture['status']) || strtoupper($capture['status']) !== 'COMPLETED')
 				{
-					echo json_encode(array('error' => 'order_capture_failed'));
+					echo wp_json_encode(array('error' => 'order_capture_failed'));
 					exit();
 				}
 
@@ -851,7 +909,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'token'    => $token,
 						));
 
-					echo json_encode(array('error' => 'capture_missing_fields'));
+					echo wp_json_encode(array('error' => 'capture_missing_fields'));
 					exit();
 				}
 
@@ -865,7 +923,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'token'    => $token,
 						'pu'       => array('amount' => $pu_amount, 'cc' => $pu_cc),
 					));
-					echo json_encode(array('error' => 'amount_mismatch'));
+					echo wp_json_encode(array('error' => 'amount_mismatch'));
 					exit();
 				}
 				if(!empty($token['cc']) && strtoupper((string)$token['cc']) !== strtoupper((string)$pu_cc))
@@ -877,7 +935,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'token'    => $token,
 						'pu'       => array('amount' => $pu_amount, 'cc' => $pu_cc),
 					));
-					echo json_encode(array('error' => 'currency_mismatch'));
+					echo wp_json_encode(array('error' => 'currency_mismatch'));
 					exit();
 				}
 				$cap_invoice_id = '';
@@ -895,7 +953,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'token'    => $token,
 						'invoice'  => $cap_invoice_id,
 					));
-					echo json_encode(array('error' => 'invoice_mismatch'));
+					echo wp_json_encode(array('error' => 'invoice_mismatch'));
 					exit();
 				}
 
@@ -917,7 +975,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'paypal'  => $cap_custom_id,
 						),
 					));
-					echo json_encode(array('error' => 'custom_mismatch'));
+					echo wp_json_encode(array('error' => 'custom_mismatch'));
 					exit();
 				}
 
@@ -990,6 +1048,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					));
 					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
 
+					if(!is_array($notify_r))
+						$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
+
 					$notify_code = !empty($notify_r['code']) ? (int)$notify_r['code'] : 0;
 					$notify_msg  = !empty($notify_r['message']) ? (string)$notify_r['message'] : '';
 					$notify_body = !empty($notify_r['body']) ? $notify_r['body'] : '';
@@ -1017,7 +1078,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'message'  => $notify_msg,
 							'body'     => $notify_body,
 						));
-						echo json_encode(array('error' => 'notify_proxy_failed'));
+						echo wp_json_encode(array('error' => 'notify_proxy_failed'));
 						exit();
 					}
 				}
@@ -1032,14 +1093,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
 				));
 
-				echo json_encode(array(
+				echo wp_json_encode(array(
 					'rtn_url'  => $return_url,
 					'rtn_post' => $return_post,
 				));
 				exit();
 			}
 
-			echo json_encode(array('error' => 'unknown_op'));
+			echo wp_json_encode(array('error' => 'unknown_op'));
 			exit();
 		}
 	}

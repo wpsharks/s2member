@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  260127\n"
+"Project-Id-Version:  260215\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-01-27 22:55:03+00:00\n"
+"POT-Creation-Date: 2026-02-15 02:54:57+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1969,11 +1969,12 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:597
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
 #: src/includes/classes/sc-paypal-button-e.inc.php:83
-#: src/includes/classes/sc-paypal-button-in.inc.php:107
-#: src/includes/classes/sc-paypal-button-in.inc.php:191
-#: src/includes/classes/sc-paypal-button-in.inc.php:219
-#: src/includes/classes/sc-paypal-button-in.inc.php:429
-#: src/includes/classes/sc-paypal-button-in.inc.php:641
+#: src/includes/classes/sc-paypal-button-in.inc.php:111
+#: src/includes/classes/sc-paypal-button-in.inc.php:131
+#: src/includes/classes/sc-paypal-button-in.inc.php:215
+#: src/includes/classes/sc-paypal-button-in.inc.php:243
+#: src/includes/classes/sc-paypal-button-in.inc.php:452
+#: src/includes/classes/sc-paypal-button-in.inc.php:663
 #: src/includes/templates/buttons/paypal-cancellation-button.php:8
 #: src/includes/templates/buttons/paypal-ccaps-checkout-button.php:35
 #: src/includes/templates/buttons/paypal-checkout-button.php:47
@@ -4569,7 +4570,7 @@ msgctxt "s2member-front"
 msgid "<strong>Your Link Expired:</strong><br />Please contact Support if you need assistance."
 msgstr ""
 
-#: src/includes/classes/registrations.inc.php:628
+#: src/includes/classes/registrations.inc.php:631
 msgctxt "s2member-front"
 msgid "s2Member security violation. You attempted to POST administrative variables that will NOT be trusted in a NON-administrative zone!"
 msgstr ""
@@ -4978,310 +4979,310 @@ msgid_plural "for %1$s %3$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:59
-#: src/includes/menu-pages/paypal-ops.inc.php:124
-#: src/includes/menu-pages/paypal-ops.inc.php:168
-#: src/includes/menu-pages/paypal-ops.inc.php:227
+#: src/includes/menu-pages/paypal-ops.inc.php:43
+#: src/includes/menu-pages/paypal-ops.inc.php:102
+#: src/includes/menu-pages/paypal-ops.inc.php:141
+#: src/includes/menu-pages/paypal-ops.inc.php:195
 msgid "Sandbox"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:59
-#: src/includes/menu-pages/paypal-ops.inc.php:124
-#: src/includes/menu-pages/paypal-ops.inc.php:168
-#: src/includes/menu-pages/paypal-ops.inc.php:227
+#: src/includes/menu-pages/paypal-ops.inc.php:43
+#: src/includes/menu-pages/paypal-ops.inc.php:102
+#: src/includes/menu-pages/paypal-ops.inc.php:141
+#: src/includes/menu-pages/paypal-ops.inc.php:195
 msgid "Live"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:80
+#: src/includes/menu-pages/paypal-ops.inc.php:64
 msgid "Unable to create/update PayPal Checkout webhook. PayPal requires an HTTPS (SSL) webhook URL, but your site URL appears to be configured without HTTPS. Please enable SSL and update your WordPress Site URL/Home URL to use https://, then try again."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:88
+#: src/includes/menu-pages/paypal-ops.inc.php:72
 msgid "Unable to create/update PayPal Checkout webhook because your HTTPS endpoint is not reachable from this server. Please configure SSL for this domain first."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:90
+#: src/includes/menu-pages/paypal-ops.inc.php:74
 msgid "Unable to create/update PayPal Checkout webhook because your HTTPS endpoint appears to redirect to a hosting default page (/cgi-sys/defaultwebpage.cgi). Please correct SSL/virtual-host configuration first."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:92
+#: src/includes/menu-pages/paypal-ops.inc.php:76
 msgid "Unable to create/update PayPal Checkout webhook because your HTTPS endpoint returned HTTP %1$s. Please correct SSL/virtual-host configuration first."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:98
+#: src/includes/menu-pages/paypal-ops.inc.php:82
 msgid "PayPal Checkout %1$s webhook created/updated successfully."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:100
+#: src/includes/menu-pages/paypal-ops.inc.php:84
 msgid "Unable to create/update PayPal Checkout %1$s webhook. See the s2Member paypal-checkout.log for details."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:100
-#: src/includes/menu-pages/paypal-ops.inc.php:147
+#: src/includes/menu-pages/paypal-ops.inc.php:84
+#: src/includes/menu-pages/paypal-ops.inc.php:125
 msgid "Log Viewer"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:105
-#: src/includes/menu-pages/paypal-ops.inc.php:150
+#: src/includes/menu-pages/paypal-ops.inc.php:89
+#: src/includes/menu-pages/paypal-ops.inc.php:128
 msgid "PayPal Checkout %1$s credentials are not configured."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:108
-#: src/includes/menu-pages/paypal-ops.inc.php:153
-#: src/includes/menu-pages/paypal-ops.inc.php:175
+#: src/includes/menu-pages/paypal-ops.inc.php:92
+#: src/includes/menu-pages/paypal-ops.inc.php:131
+#: src/includes/menu-pages/paypal-ops.inc.php:148
 msgid "Invalid request. Please try again."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:145
+#: src/includes/menu-pages/paypal-ops.inc.php:123
 msgid "PayPal Checkout %1$s credentials test OK."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:147
+#: src/includes/menu-pages/paypal-ops.inc.php:125
 msgid "PayPal Checkout %1$s credentials test failed. See the s2Member paypal-checkout.log for details."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:172
+#: src/includes/menu-pages/paypal-ops.inc.php:145
 msgid "PayPal Checkout cache cleared for %1$s."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:222
+#: src/includes/menu-pages/paypal-ops.inc.php:190
 msgid "When enabled, existing s2Member PayPal Button shortcodes are powered by PayPal Checkout without requiring shortcode edits. If disabled, s2Member continues using PayPal Standard."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:224
+#: src/includes/menu-pages/paypal-ops.inc.php:192
 msgid "Quick Setup (Live or Sandbox)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:226
+#: src/includes/menu-pages/paypal-ops.inc.php:194
 msgid "Enable PayPal Checkout below, choose the environment (Live or Sandbox)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:227
+#: src/includes/menu-pages/paypal-ops.inc.php:195
 msgid "Go to PayPal's “Apps & Credentials”, and click “Create App” for your site (s2Member)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:228
+#: src/includes/menu-pages/paypal-ops.inc.php:196
 msgid "Copy the app's Client ID and Secret (REST API, not NVP) and paste them below."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:229
+#: src/includes/menu-pages/paypal-ops.inc.php:197
 msgid "Click “Save All Changes”."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:230
+#: src/includes/menu-pages/paypal-ops.inc.php:198
 msgid "Click “Test Credentials” to verify the saved Client ID and Secret are correct."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:231
+#: src/includes/menu-pages/paypal-ops.inc.php:199
 msgid "Click “Create/Update Webhook” to register your webhook URL with PayPal and populate the Webhook ID field."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:232
+#: src/includes/menu-pages/paypal-ops.inc.php:200
 msgid "Click “Test Webhook Endpoint” to check it."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:235
+#: src/includes/menu-pages/paypal-ops.inc.php:203
 msgid "Useful PayPal links"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:237
+#: src/includes/menu-pages/paypal-ops.inc.php:205
 msgid "Webhooks overview (PayPal docs)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:238
+#: src/includes/menu-pages/paypal-ops.inc.php:206
 msgid "Webhooks simulator (connectivity testing)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:239
+#: src/includes/menu-pages/paypal-ops.inc.php:207
 msgid "Webhooks Events dashboard (view/re-deliver events)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:244
+#: src/includes/menu-pages/paypal-ops.inc.php:212
 msgid "Leave these fields blank to continue using PayPal Standard."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:254
+#: src/includes/menu-pages/paypal-ops.inc.php:222
 msgid "Your WordPress Site URL/Home URL is currently not configured for HTTPS."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:270
+#: src/includes/menu-pages/paypal-ops.inc.php:238
 msgid "HTTPS endpoint redirects to /cgi-sys/defaultwebpage.cgi."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:275
+#: src/includes/menu-pages/paypal-ops.inc.php:243
 msgid "HTTPS endpoint returned HTTP %1$s."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:282
+#: src/includes/menu-pages/paypal-ops.inc.php:250
 msgid "PayPal Checkout requires HTTPS (SSL)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:283
+#: src/includes/menu-pages/paypal-ops.inc.php:251
 msgid "This site does not currently have a working HTTPS endpoint for this domain. PayPal Checkout is disabled here because webhooks cannot be delivered without HTTPS."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:306
+#: src/includes/menu-pages/paypal-ops.inc.php:274
 msgid "Disabled: PayPal Checkout requires HTTPS (SSL) for webhooks. Fix HTTPS for this domain, then enable PayPal Checkout."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:460
-#: src/includes/menu-pages/paypal-ops.inc.php:461
-#: src/includes/menu-pages/paypal-ops.inc.php:618
-#: src/includes/menu-pages/paypal-ops.inc.php:619
+#: src/includes/menu-pages/paypal-ops.inc.php:453
+#: src/includes/menu-pages/paypal-ops.inc.php:454
+#: src/includes/menu-pages/paypal-ops.inc.php:611
+#: src/includes/menu-pages/paypal-ops.inc.php:612
 msgid "Test Credentials"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:461
-#: src/includes/menu-pages/paypal-ops.inc.php:496
-#: src/includes/menu-pages/paypal-ops.inc.php:510
+#: src/includes/menu-pages/paypal-ops.inc.php:454
+#: src/includes/menu-pages/paypal-ops.inc.php:489
+#: src/includes/menu-pages/paypal-ops.inc.php:503
 msgid "Save Live credentials first."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:464
+#: src/includes/menu-pages/paypal-ops.inc.php:457
 msgid "Verifies your Live Client ID/Secret by requesting an access token."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:484
+#: src/includes/menu-pages/paypal-ops.inc.php:477
 msgid "From your PayPal app webhook settings (Live)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:492
-#: src/includes/menu-pages/paypal-ops.inc.php:494
-#: src/includes/menu-pages/paypal-ops.inc.php:496
-#: src/includes/menu-pages/paypal-ops.inc.php:650
-#: src/includes/menu-pages/paypal-ops.inc.php:652
-#: src/includes/menu-pages/paypal-ops.inc.php:654
+#: src/includes/menu-pages/paypal-ops.inc.php:485
+#: src/includes/menu-pages/paypal-ops.inc.php:487
+#: src/includes/menu-pages/paypal-ops.inc.php:489
+#: src/includes/menu-pages/paypal-ops.inc.php:643
+#: src/includes/menu-pages/paypal-ops.inc.php:645
+#: src/includes/menu-pages/paypal-ops.inc.php:647
 msgid "Create/Update Webhook"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:494
-#: src/includes/menu-pages/paypal-ops.inc.php:508
-#: src/includes/menu-pages/paypal-ops.inc.php:652
-#: src/includes/menu-pages/paypal-ops.inc.php:666
+#: src/includes/menu-pages/paypal-ops.inc.php:487
+#: src/includes/menu-pages/paypal-ops.inc.php:501
+#: src/includes/menu-pages/paypal-ops.inc.php:645
+#: src/includes/menu-pages/paypal-ops.inc.php:659
 msgid "HTTPS required."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:499
-#: src/includes/menu-pages/paypal-ops.inc.php:657
+#: src/includes/menu-pages/paypal-ops.inc.php:492
+#: src/includes/menu-pages/paypal-ops.inc.php:650
 msgid "Registers your webhook URL with PayPal (HTTPS required)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:499
-#: src/includes/menu-pages/paypal-ops.inc.php:657
+#: src/includes/menu-pages/paypal-ops.inc.php:492
+#: src/includes/menu-pages/paypal-ops.inc.php:650
 msgid "If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:506
-#: src/includes/menu-pages/paypal-ops.inc.php:508
-#: src/includes/menu-pages/paypal-ops.inc.php:510
-#: src/includes/menu-pages/paypal-ops.inc.php:512
-#: src/includes/menu-pages/paypal-ops.inc.php:664
-#: src/includes/menu-pages/paypal-ops.inc.php:666
-#: src/includes/menu-pages/paypal-ops.inc.php:668
-#: src/includes/menu-pages/paypal-ops.inc.php:670
+#: src/includes/menu-pages/paypal-ops.inc.php:499
+#: src/includes/menu-pages/paypal-ops.inc.php:501
+#: src/includes/menu-pages/paypal-ops.inc.php:503
+#: src/includes/menu-pages/paypal-ops.inc.php:505
+#: src/includes/menu-pages/paypal-ops.inc.php:657
+#: src/includes/menu-pages/paypal-ops.inc.php:659
+#: src/includes/menu-pages/paypal-ops.inc.php:661
+#: src/includes/menu-pages/paypal-ops.inc.php:663
 msgid "Test Webhook Endpoint"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:512
+#: src/includes/menu-pages/paypal-ops.inc.php:505
 msgid "Set a Live Webhook ID first (or use Create/Update Webhook)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:515
-#: src/includes/menu-pages/paypal-ops.inc.php:673
+#: src/includes/menu-pages/paypal-ops.inc.php:508
+#: src/includes/menu-pages/paypal-ops.inc.php:666
 msgid "Reachability-only check. Use real webhooks for end-to-end verification."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:516
-#: src/includes/menu-pages/paypal-ops.inc.php:674
+#: src/includes/menu-pages/paypal-ops.inc.php:509
+#: src/includes/menu-pages/paypal-ops.inc.php:667
 msgid "Test URL: "
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:524
-#: src/includes/menu-pages/paypal-ops.inc.php:682
+#: src/includes/menu-pages/paypal-ops.inc.php:517
+#: src/includes/menu-pages/paypal-ops.inc.php:675
 msgid "Webhook URL:"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:525
-#: src/includes/menu-pages/paypal-ops.inc.php:683
+#: src/includes/menu-pages/paypal-ops.inc.php:518
+#: src/includes/menu-pages/paypal-ops.inc.php:676
 msgid "Note: PayPal requires an HTTPS (SSL) webhook URL."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:530
+#: src/includes/menu-pages/paypal-ops.inc.php:523
 msgid "Warning: Your WordPress Site URL/Home URL is currently not configured for HTTPS. PayPal may reject webhook creation and delivery until your site supports SSL and your Site URL uses https://."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:538
+#: src/includes/menu-pages/paypal-ops.inc.php:531
 msgid "Warning: Your HTTPS endpoint could not be reached from this server. This often indicates SSL/TLS or virtual-host configuration issues; PayPal webhooks may not be delivered successfully."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:540
+#: src/includes/menu-pages/paypal-ops.inc.php:533
 msgid "Warning: Your HTTPS endpoint appears to redirect to a hosting default page (cgi-sys/defaultwebpage.cgi). This suggests SSL/virtual-host configuration issues; PayPal webhooks may not be delivered successfully."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:542
+#: src/includes/menu-pages/paypal-ops.inc.php:535
 msgid "Warning: Your HTTPS endpoint returned HTTP %1$s. This suggests SSL/virtual-host configuration issues; PayPal webhooks may not be delivered successfully."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:545
-#: src/includes/menu-pages/paypal-ops.inc.php:685
+#: src/includes/menu-pages/paypal-ops.inc.php:538
+#: src/includes/menu-pages/paypal-ops.inc.php:678
 msgid "Required Events:"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:547
-#: src/includes/menu-pages/paypal-ops.inc.php:687
+#: src/includes/menu-pages/paypal-ops.inc.php:540
+#: src/includes/menu-pages/paypal-ops.inc.php:680
 msgid "Tip: Use PayPal's Webhooks Events dashboard to view and re-deliver webhook events while testing."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:547
-#: src/includes/menu-pages/paypal-ops.inc.php:687
+#: src/includes/menu-pages/paypal-ops.inc.php:540
+#: src/includes/menu-pages/paypal-ops.inc.php:680
 msgid "Open Events Dashboard"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:550
-#: src/includes/menu-pages/paypal-ops.inc.php:690
+#: src/includes/menu-pages/paypal-ops.inc.php:543
+#: src/includes/menu-pages/paypal-ops.inc.php:683
 msgid "Disabled: PayPal webhooks require a working HTTPS (SSL) endpoint on this domain."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:552
+#: src/includes/menu-pages/paypal-ops.inc.php:545
 msgid "Plan/Product Cache (Live)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:559
-#: src/includes/menu-pages/paypal-ops.inc.php:560
-#: src/includes/menu-pages/paypal-ops.inc.php:699
-#: src/includes/menu-pages/paypal-ops.inc.php:700
+#: src/includes/menu-pages/paypal-ops.inc.php:552
+#: src/includes/menu-pages/paypal-ops.inc.php:553
+#: src/includes/menu-pages/paypal-ops.inc.php:692
+#: src/includes/menu-pages/paypal-ops.inc.php:693
 msgid "Clear Plan/Product Cache"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:560
-#: src/includes/menu-pages/paypal-ops.inc.php:700
+#: src/includes/menu-pages/paypal-ops.inc.php:553
+#: src/includes/menu-pages/paypal-ops.inc.php:693
 msgid "Cache is already empty."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:563
-#: src/includes/menu-pages/paypal-ops.inc.php:703
+#: src/includes/menu-pages/paypal-ops.inc.php:556
+#: src/includes/menu-pages/paypal-ops.inc.php:696
 msgid "Clears the local PayPal Checkout Product/Plan ID cache (used to avoid creating duplicates). Existing subscriptions are unaffected. Next checkout will create new Products/Plans as needed. Current cache: %1$s plan(s), %2$s product(s)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:619
-#: src/includes/menu-pages/paypal-ops.inc.php:654
-#: src/includes/menu-pages/paypal-ops.inc.php:668
+#: src/includes/menu-pages/paypal-ops.inc.php:612
+#: src/includes/menu-pages/paypal-ops.inc.php:647
+#: src/includes/menu-pages/paypal-ops.inc.php:661
 msgid "Save Sandbox credentials first."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:622
+#: src/includes/menu-pages/paypal-ops.inc.php:615
 msgid "Verifies your Sandbox Client ID/Secret by requesting an access token."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:642
+#: src/includes/menu-pages/paypal-ops.inc.php:635
 msgid "From your PayPal app webhook settings (Sandbox)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:670
+#: src/includes/menu-pages/paypal-ops.inc.php:663
 msgid "Set a Sandbox Webhook ID first (or use Create/Update Webhook)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:692
+#: src/includes/menu-pages/paypal-ops.inc.php:685
 msgid "Plan/Product Cache (Sandbox)"
 msgstr ""
 

@@ -34,28 +34,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			$ppco_creds_notice   = '';
 			$ppco_cache_notice   = '';
 
-			$ppco_flash_key = 's2member_ppco_notice_' . get_current_user_id();
-
-			if(empty($_GET['s2member_ppco_webhook']) && empty($_GET['s2member_ppco_creds_test']) && empty($_GET['s2member_ppco_clear_cache']))
-				if(($ppco_flash = get_transient($ppco_flash_key)))
-				{
-					if(!empty($ppco_flash['webhook']))
-						$ppco_webhook_notice = (string)$ppco_flash['webhook'];
-
-					if(!empty($ppco_flash['creds']))
-						$ppco_creds_notice = (string)$ppco_flash['creds'];
-
-					if(!empty($ppco_flash['cache']))
-						$ppco_cache_notice = (string)$ppco_flash['cache'];
-
-					delete_transient($ppco_flash_key);
-				}
-
-			if(!empty($_GET['s2member_ppco_webhook']) && empty($_GET['s2member_ppco_creds_test']) && empty($_GET['s2member_ppco_clear_cache']) && current_user_can('manage_options'))
+			$ppco_r = !empty($_POST) ? $_POST : $_GET;
+			if(!empty($ppco_r['s2member_ppco_webhook']) && empty($ppco_r['s2member_ppco_creds_test']) && empty($ppco_r['s2member_ppco_clear_cache']) && current_user_can('manage_options'))
 			{
-				if(!empty($_GET['_wpnonce']) && wp_verify_nonce((string)$_GET['_wpnonce'], 's2member_ppco_webhook'))
+				if(!empty($ppco_r['_wpnonce']) && wp_verify_nonce((string)$ppco_r['_wpnonce'], 's2member_ppco_webhook'))
 				{
-					$env = (!empty($_GET['ppco_webhook_env']) && $_GET['ppco_webhook_env'] === 'sandbox') ? 'sandbox' : 'live';
+					$env = (!empty($ppco_r['ppco_webhook_env']) && $ppco_r['ppco_webhook_env'] === 'sandbox') ? 'sandbox' : 'live';
 					$env_label = ($env === 'sandbox') ? esc_html__('Sandbox', 's2member') : esc_html__('Live', 's2member');
 
 					$client_id = '';
@@ -108,19 +92,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					$ppco_webhook_notice = '<div class="error"><p>'.esc_html__('Invalid request. Please try again.', 's2member').'</p></div>'."\n";
 			}
 
-			if($ppco_webhook_notice && !empty($_GET['s2member_ppco_webhook']))
-			{
-				set_transient($ppco_flash_key, array('webhook' => $ppco_webhook_notice), 30);
-				wp_safe_redirect(remove_query_arg(array('s2member_ppco_webhook','ppco_webhook_env','s2member_ppco_creds_test','ppco_creds_env','s2member_ppco_clear_cache','ppco_clear_env','_wpnonce')));
-				exit;
-			}
+			// No redirect; display notice inline.
 
-
-			if(!empty($_GET['s2member_ppco_creds_test']) && empty($_GET['s2member_ppco_webhook']) && empty($_GET['s2member_ppco_clear_cache']) && current_user_can('manage_options'))
+			if(!empty($ppco_r['s2member_ppco_creds_test']) && empty($ppco_r['s2member_ppco_webhook']) && empty($ppco_r['s2member_ppco_clear_cache']) && current_user_can('manage_options'))
 			{
-				if(!empty($_GET['_wpnonce']) && wp_verify_nonce((string)$_GET['_wpnonce'], 's2member_ppco_creds_test'))
+				if(!empty($ppco_r['_wpnonce']) && wp_verify_nonce((string)$ppco_r['_wpnonce'], 's2member_ppco_creds_test'))
 				{
-					$env = (!empty($_GET['ppco_creds_env']) && $_GET['ppco_creds_env'] === 'sandbox') ? 'sandbox' : 'live';
+					$env = (!empty($ppco_r['ppco_creds_env']) && $ppco_r['ppco_creds_env'] === 'sandbox') ? 'sandbox' : 'live';
 					$env_label = ($env === 'sandbox') ? esc_html__('Sandbox', 's2member') : esc_html__('Live', 's2member');
 
 					$client_id = '';
@@ -153,18 +131,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					$ppco_creds_notice = '<div class="error"><p>'.esc_html__('Invalid request. Please try again.', 's2member').'</p></div>'."\n";
 			}
 
-			if($ppco_creds_notice && !empty($_GET['s2member_ppco_creds_test']))
-			{
-				set_transient($ppco_flash_key, array('creds' => $ppco_creds_notice), 30);
-				wp_safe_redirect(remove_query_arg(array('s2member_ppco_webhook','ppco_webhook_env','s2member_ppco_creds_test','ppco_creds_env','s2member_ppco_clear_cache','ppco_clear_env','_wpnonce')));
-				exit;
-			}
+			// No redirect; display notice inline.
 
-			if(!empty($_GET['s2member_ppco_clear_cache']) && empty($_GET['s2member_ppco_webhook']) && empty($_GET['s2member_ppco_creds_test']) && current_user_can('manage_options'))
+			if(!empty($ppco_r['s2member_ppco_clear_cache']) && empty($ppco_r['s2member_ppco_webhook']) && empty($ppco_r['s2member_ppco_creds_test']) && current_user_can('manage_options'))
 			{
-				if(!empty($_GET['_wpnonce']) && wp_verify_nonce((string)$_GET['_wpnonce'], 's2member_ppco_clear_cache'))
+				if(!empty($ppco_r['_wpnonce']) && wp_verify_nonce((string)$ppco_r['_wpnonce'], 's2member_ppco_clear_cache'))
 				{
-					$env = (!empty($_GET['ppco_clear_env']) && $_GET['ppco_clear_env'] === 'sandbox') ? 'sandbox' : 'live';
+					$env = (!empty($ppco_r['ppco_clear_env']) && $ppco_r['ppco_clear_env'] === 'sandbox') ? 'sandbox' : 'live';
 					$env_label = ($env === 'sandbox') ? esc_html__('Sandbox', 's2member') : esc_html__('Live', 's2member');
 
 					c_ws_plugin__s2member_paypal_utilities::paypal_checkout_clear_cache($env);
@@ -175,12 +148,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					$ppco_cache_notice = '<div class="error"><p>'.esc_html__('Invalid request. Please try again.', 's2member').'</p></div>'."\n";
 			}
 
-			if($ppco_cache_notice && !empty($_GET['s2member_ppco_clear_cache']))
-			{
-				set_transient($ppco_flash_key, array('cache' => $ppco_cache_notice), 30);
-				wp_safe_redirect(remove_query_arg(array('s2member_ppco_webhook','ppco_webhook_env','s2member_ppco_creds_test','ppco_creds_env','s2member_ppco_clear_cache','ppco_clear_env','_wpnonce')));
-				exit;
-			}
+			// No redirect; display notice inline.
 
 			echo '<div class="wrap ws-menu-page">'."\n";
 			echo $ppco_webhook_notice;
@@ -357,6 +325,31 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo 'window.s2mPpcoApplyEnvCues();'."\n";
 				echo '</script>'."\n";
 
+				$ppco_post_back_url = remove_query_arg(array('s2member_ppco_webhook', 'ppco_webhook_env', 's2member_ppco_creds_test', 'ppco_creds_env', 's2member_ppco_clear_cache', 'ppco_clear_env', '_wpnonce'));
+
+				$ppco_webhook_nonce     = wp_create_nonce('s2member_ppco_webhook');
+				$ppco_creds_test_nonce  = wp_create_nonce('s2member_ppco_creds_test');
+				$ppco_clear_cache_nonce = wp_create_nonce('s2member_ppco_clear_cache');
+
+				echo '<script type="text/javascript">'."\n";
+				echo 'window.s2mPpcoPostBackUrl='.wp_json_encode($ppco_post_back_url).';'."\n";
+				echo 'window.s2mPpcoPostAction=function(action,env,nonce){'."\n";
+				echo '  try{'."\n";
+				echo '    var f=document.createElement("form");'."\n";
+				echo '    f.method="post";'."\n";
+				echo '    f.action=window.s2mPpcoPostBackUrl||window.location.href;'."\n";
+				echo '    var add=function(n,v){var i=document.createElement("input");i.type="hidden";i.name=n;i.value=v;f.appendChild(i);};'."\n";
+				echo '    if(action==="webhook"){add("s2member_ppco_webhook","1");add("ppco_webhook_env",env);}'."\n";
+				echo '    else if(action==="creds_test"){add("s2member_ppco_creds_test","1");add("ppco_creds_env",env);}'."\n";
+				echo '    else if(action==="clear_cache"){add("s2member_ppco_clear_cache","1");add("ppco_clear_env",env);}'."\n";
+				echo '    add("_wpnonce",nonce);'."\n";
+				echo '    document.body.appendChild(f);'."\n";
+				echo '    f.submit();'."\n";
+				echo '  }catch(e){}'."\n";
+				echo '  return false;'."\n";
+				echo '};'."\n";
+				echo '</script>'."\n";
+
 				$ppco_webhook_live_url = add_query_arg(array(
 					's2member_ppco_webhook' => '1',
 					'ppco_webhook_env'      => 'live',
@@ -457,7 +450,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<tr>'."\n";
 				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
 				if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"])
-					echo '<a class="button" style="min-width:240px; text-align:center;" href="'.esc_attr($ppco_creds_test_live_url).'">'.esc_html__('Test Credentials', 's2member').'</a>'."\n";
+					echo '<a class="button" style="min-width:240px; text-align:center;" href="'.esc_attr($ppco_creds_test_live_url).'" onclick="return window.s2mPpcoPostAction(\'creds_test\',\'live\',\''.esc_attr($ppco_creds_test_nonce).'\');">'.esc_html__('Test Credentials', 's2member').'</a>'."\n";
 				else echo '<span class="button" style="min-width:240px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Live credentials first.', 's2member').'">'.esc_html__('Test Credentials', 's2member').'</span>'."\n";
 				echo '</th>'."\n";
 				echo '<td style="padding:0;">'."\n";
@@ -489,7 +482,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<tr>'."\n";
 				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
 				if($ppco_https_ready && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_client_secret"])
-					echo '<a class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important;" href="'.esc_attr($ppco_webhook_live_url).'">'.esc_html__('Create/Update Webhook', 's2member').'</a>'."\n";
+					echo '<a class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important;" href="'.esc_attr($ppco_webhook_live_url).'" onclick="return window.s2mPpcoPostAction(\'webhook\',\'live\',\''.esc_attr($ppco_webhook_nonce).'\');">'.esc_html__('Create/Update Webhook', 's2member').'</a>'."\n";
 				else if(!$ppco_https_ready)
 					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('HTTPS required.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
 				else
@@ -556,7 +549,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<tr>'."\n";
 				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
 				if((int)$ppco_plan_count_live || (int)$ppco_prod_count_live)
-					echo '<a class="button" style="min-width:250px; text-align:center;" href="'.esc_attr($ppco_clear_cache_live_url).'">'.esc_html__('Clear Plan/Product Cache', 's2member').'</a>'."\n";
+					echo '<a class="button" style="min-width:250px; text-align:center;" href="'.esc_attr($ppco_clear_cache_live_url).'" onclick="return window.s2mPpcoPostAction(\'clear_cache\',\'live\',\''.esc_attr($ppco_clear_cache_nonce).'\');">'.esc_html__('Clear Plan/Product Cache', 's2member').'</a>'."\n";
 				else echo '<span class="button disabled" style="min-width:250px; text-align:center;" title="'.esc_attr__('Cache is already empty.', 's2member').'">'.esc_html__('Clear Plan/Product Cache', 's2member').'</span>'."\n";
 				echo '</th>'."\n";
 				echo '<td style="padding:0;">'."\n";
@@ -615,7 +608,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<tr>'."\n";
 				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
 				if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"])
-					echo '<a class="button" style="min-width:240px; text-align:center;" href="'.esc_attr($ppco_creds_test_sandbox_url).'">'.esc_html__('Test Credentials', 's2member').'</a>'."\n";
+					echo '<a class="button" style="min-width:240px; text-align:center;" href="'.esc_attr($ppco_creds_test_sandbox_url).'" onclick="return window.s2mPpcoPostAction(\'creds_test\',\'sandbox\',\''.esc_attr($ppco_creds_test_nonce).'\');">'.esc_html__('Test Credentials', 's2member').'</a>'."\n";
 				else echo '<span class="button" style="min-width:240px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Sandbox credentials first.', 's2member').'">'.esc_html__('Test Credentials', 's2member').'</span>'."\n";
 				echo '</th>'."\n";
 				echo '<td style="padding:0;">'."\n";
@@ -647,7 +640,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<tr>'."\n";
 				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
 				if($ppco_https_ready && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_id"] && $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_client_secret"])
-					echo '<a class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important;" href="'.esc_attr($ppco_webhook_sandbox_url).'">'.esc_html__('Create/Update Webhook', 's2member').'</a>'."\n";
+					echo '<a class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important;" href="'.esc_attr($ppco_webhook_sandbox_url).'" onclick="return window.s2mPpcoPostAction(\'webhook\',\'sandbox\',\''.esc_attr($ppco_webhook_nonce).'\');">'.esc_html__('Create/Update Webhook', 's2member').'</a>'."\n";
 				else if(!$ppco_https_ready)
 					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('HTTPS required.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
 				else
@@ -696,7 +689,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<tr>'."\n";
 				echo '<th style="width:260px; padding:0 10px 0 0;">'."\n";
 				if((int)$ppco_plan_count_sandbox || (int)$ppco_prod_count_sandbox)
-					echo '<a class="button" style="min-width:250px; text-align:center;" href="'.esc_attr($ppco_clear_cache_sandbox_url).'">'.esc_html__('Clear Plan/Product Cache', 's2member').'</a>'."\n";
+					echo '<a class="button" style="min-width:250px; text-align:center;" href="'.esc_attr($ppco_clear_cache_sandbox_url).'" onclick="return window.s2mPpcoPostAction(\'clear_cache\',\'sandbox\',\''.esc_attr($ppco_clear_cache_nonce).'\');">'.esc_html__('Clear Plan/Product Cache', 's2member').'</a>'."\n";
 				else echo '<span class="button" style="min-width:250px; text-align:center; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Cache is already empty.', 's2member').'">'.esc_html__('Clear Plan/Product Cache', 's2member').'</span>'."\n";
 				echo '</th>'."\n";
 				echo '<td style="padding:0;">'."\n";
