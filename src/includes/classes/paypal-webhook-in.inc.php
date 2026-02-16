@@ -174,7 +174,31 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				if(!empty($resource['id']))
 					$subscr_id = (string)$resource['id'];
 
-				if($event_type === 'BILLING.SUBSCRIPTION.CANCELLED')
+				//260216 Handle additional subscription lifecycle events needed by s2Member features.
+				if($event_type === 'BILLING.SUBSCRIPTION.CREATED')
+				{
+					//260216 Created can occur before local provisioning completes; log only.
+					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+						'ppco'       => 'webhook',
+						'env_setting'=> $env_site,
+						'env_webhook'=> $env_webhook,
+						'event'      => 'subscription_created',
+						'event_id'   => $event_id,
+						'event_type' => $event_type,
+						'subscr_id'  => $subscr_id,
+					));
+					status_header(200);
+					exit();
+				}
+				else if($event_type === 'BILLING.SUBSCRIPTION.ACTIVATED' || $event_type === 'BILLING.SUBSCRIPTION.RE-ACTIVATED')
+				{
+					//260216 Proxy activation into legacy notify as a signup.
+					$paypal['txn_type']       = 'subscr_signup';
+					$paypal['payment_status'] = 'Completed';
+				}
+				else if($event_type === 'BILLING.SUBSCRIPTION.UPDATED')
+					$paypal['txn_type'] = 'subscr_modify';
+				else if($event_type === 'BILLING.SUBSCRIPTION.CANCELLED')
 					$paypal['txn_type'] = 'subscr_cancel';
 				else if($event_type === 'BILLING.SUBSCRIPTION.SUSPENDED')
 					$paypal['txn_type'] = 'recurring_payment_suspended_due_to_max_failed_payment';
@@ -184,7 +208,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					$paypal['txn_type'] = 'subscr_failed';
 				else
 				{
-					// Ignore other BILLING.SUBSCRIPTION.* events for MVP.
+					// Ignore other BILLING.SUBSCRIPTION.* events.
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'       => 'webhook',
 						'env_setting'=> $env_site,
@@ -211,7 +235,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				// Enrich lifecycle events with stored signup vars so legacy notify handlers can match and set EOT properly.
 				//!!! TO-DO: Deduplicate signup-vars enrichment logic (also used in PayPal Checkout proxy confirm flow).
 				if(!empty($paypal['txn_type']) && $subscr_id
-				   && in_array($paypal['txn_type'], array('subscr_cancel', 'subscr_eot', 'subscr_failed', 'recurring_payment_suspended_due_to_max_failed_payment'), true)
+				   && in_array($paypal['txn_type'], array('subscr_signup', 'subscr_modify', 'subscr_cancel', 'subscr_eot', 'subscr_failed', 'recurring_payment_suspended_due_to_max_failed_payment'), true)
 				   && ($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($subscr_id))
 				   && is_array($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id))
 				   && !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id
@@ -232,10 +256,24 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			}
 
 			// Recurring payment events (PayPal often emits PAYMENT.SALE.COMPLETED for subscription payments).
-			else if($event_type === 'PAYMENT.SALE.COMPLETED' || $event_type === 'PAYMENT.CAPTURE.COMPLETED')
+			//260216 Add refund/reversal webhook support so refunds can trigger immediate EOT/demotion.
+			else if(in_array($event_type, array(
+				'PAYMENT.SALE.COMPLETED',
+				'PAYMENT.CAPTURE.COMPLETED',
+				'PAYMENT.SALE.REFUNDED',
+				'PAYMENT.CAPTURE.REFUNDED',
+				'PAYMENT.SALE.REVERSED',
+				'PAYMENT.CAPTURE.REVERSED',
+			), true))
 			{
-				$paypal['txn_type']       = 'subscr_payment';
-				$paypal['payment_status'] = 'Completed';
+				$paypal['txn_type'] = 'subscr_payment';
+
+				if(strpos($event_type, '.REFUNDED') !== false)
+					$paypal['payment_status'] = 'Refunded';
+				else if(strpos($event_type, '.REVERSED') !== false)
+					$paypal['payment_status'] = 'Reversed';
+				else
+					$paypal['payment_status'] = 'Completed';
 
 				if(!empty($resource['billing_agreement_id']))
 					$subscr_id = (string)$resource['billing_agreement_id'];
@@ -247,7 +285,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					$subscr_id = (string)$resource['supplementary_data']['related_ids']['billing_agreement_id'];
 
 				if(!empty($resource['id']))
-					$txn_id = (string)$resource['id'];
+					$txn_id = (string)$resource['id']; // original capture/sale id
 
 				if(!empty($resource['amount']['total']))
 					$paypal['mc_gross'] = (string)$resource['amount']['total'];
@@ -265,11 +303,42 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					$paypal['payer_email'] = (string)$resource['payer']['email_address'];
 
 				$paypal['subscr_id'] = $subscr_id;
-				$paypal['txn_id']    = $txn_id ? $txn_id : $event_id;
 
-				// Help legacy notify logic resolve a user when signup vars are missing (migrations, etc.).
+				//260216 Emulate IPN semantics for refund/reversal: parent_txn_id=original, txn_id=event delivery.
+				if(!empty($paypal['payment_status']) && preg_match('/^(refunded|reversed|reversal)$/i', $paypal['payment_status']))
+				{
+					$paypal['parent_txn_id'] = $txn_id ? $txn_id : $event_id;
+					$paypal['txn_id']        = $event_id;
+				}
+				else
+					$paypal['txn_id'] = $txn_id ? $txn_id : $event_id;
+
 				$paypal['mp_id']                = $subscr_id;
 				$paypal['recurring_payment_id'] = $subscr_id;
+
+				//260216 Enrich refund/reversal from stored signup vars so legacy handlers can demote immediately.
+				if(!empty($paypal['payment_status']) && preg_match('/^(refunded|reversed|reversal)$/i', $paypal['payment_status'])
+				   && $subscr_id
+				   && ($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($subscr_id))
+				   && is_array($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id))
+				   && !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id
+				)
+				{
+					if(empty($paypal['item_number']) && !empty($ipn_signup_vars['item_number']))
+						$paypal['item_number'] = (string)$ipn_signup_vars['item_number'];
+
+					if(empty($paypal['item_name']) && !empty($ipn_signup_vars['item_name']))
+						$paypal['item_name'] = (string)$ipn_signup_vars['item_name'];
+
+					if(empty($paypal['period1']) && !empty($ipn_signup_vars['period1']))
+						$paypal['period1'] = (string)$ipn_signup_vars['period1'];
+
+					if(empty($paypal['period3']) && !empty($ipn_signup_vars['period3']))
+						$paypal['period3'] = (string)$ipn_signup_vars['period3'];
+
+					if(empty($paypal['payer_email']) && !empty($ipn_signup_vars['payer_email']))
+						$paypal['payer_email'] = (string)$ipn_signup_vars['payer_email'];
+				}
 			}
 			else
 			{
@@ -291,7 +360,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			if(!empty($paypal['txn_type']))
 			{
 				$txn_key = (string)$event_id;
-				if(!empty($paypal['txn_id']))
+
+				//260216 For refund/reversal, prefer idempotency on original payment id.
+				if(!empty($paypal['parent_txn_id']))
+					$txn_key = (string)$paypal['parent_txn_id'];
+				else if(!empty($paypal['txn_id']))
 					$txn_key = (string)$paypal['txn_id'];
 
 				$txn_transient = 's2m_ppco_txn_'.md5($paypal['txn_type'].'|'.$subscr_id.'|'.$txn_key);
