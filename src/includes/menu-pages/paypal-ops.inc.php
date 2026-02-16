@@ -64,25 +64,18 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 							$ppco_webhook_notice = '<div class="error"><p>'.esc_html__('Unable to create/update PayPal Checkout webhook. PayPal requires an HTTPS (SSL) webhook URL, but your site URL appears to be configured without HTTPS. Please enable SSL and update your WordPress Site URL/Home URL to use https://, then try again.', 's2member').'</p></div>'."\n";
 						else
 						{
-							$ppco_https_probe = wp_remote_head(home_url("/", 'https'), array('timeout' => 8, 'redirection' => 0));
-							$ppco_https_code  = !is_wp_error($ppco_https_probe) ? (int)wp_remote_retrieve_response_code($ppco_https_probe) : 0;
-							$ppco_https_loc   = !is_wp_error($ppco_https_probe) ? (string)wp_remote_retrieve_header($ppco_https_probe, 'location') : '';
+							//260216 IMPORTANT:
+							// Do not block webhook creation/update based on a server-side "loopback" probe.
+							// Many shared hosts/WAFs return false negatives for loopback requests (e.g., HEAD blocked,
+							// ModSecurity rules, disabled loopback/outbound HTTP). PayPal can still deliver webhooks
+							// successfully from the outside.
 
-							if(is_wp_error($ppco_https_probe))
-								$ppco_webhook_notice = '<div class="error"><p>'.esc_html__('Unable to create/update PayPal Checkout webhook because your HTTPS endpoint is not reachable from this server. Please configure SSL for this domain first.', 's2member').'</p><p><code>'.esc_html($ppco_https_probe->get_error_message()).'</code></p></div>'."\n";
-							else if($ppco_https_loc && stripos($ppco_https_loc, 'cgi-sys/defaultwebpage.cgi') !== false)
-								$ppco_webhook_notice = '<div class="error"><p>'.esc_html__('Unable to create/update PayPal Checkout webhook because your HTTPS endpoint appears to redirect to a hosting default page (/cgi-sys/defaultwebpage.cgi). Please correct SSL/virtual-host configuration first.', 's2member').'</p></div>'."\n";
-							else if($ppco_https_code && $ppco_https_code >= 400)
-								$ppco_webhook_notice = '<div class="error"><p>'.sprintf(esc_html__('Unable to create/update PayPal Checkout webhook because your HTTPS endpoint returned HTTP %1$s. Please correct SSL/virtual-host configuration first.', 's2member'), (int)$ppco_https_code).'</p></div>'."\n";
+							$r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_webhook_upsert($env);
+
+							if(!empty($r['id']))
+								$ppco_webhook_notice = '<div class="updated"><p>'.sprintf(esc_html__('PayPal Checkout %1$s webhook created/updated successfully.', 's2member'), $env_label).'</p></div>'."\n";
 							else
-							{
-								$r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_webhook_upsert($env);
-
-								if(!empty($r['id']))
-									$ppco_webhook_notice = '<div class="updated"><p>'.sprintf(esc_html__('PayPal Checkout %1$s webhook created/updated successfully.', 's2member'), $env_label).'</p></div>'."\n";
-								else
-									$ppco_webhook_notice = '<div class="error"><p>'.sprintf(esc_html__('Unable to create/update PayPal Checkout %1$s webhook. See the s2Member paypal-checkout.log for details.', 's2member'), $env_label).' <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">'.esc_html__('Log Viewer', 's2member').'</a></p></div>'."\n";
-							}
+								$ppco_webhook_notice = '<div class="error"><p>'.sprintf(esc_html__('Unable to create/update PayPal Checkout %1$s webhook. See the s2Member paypal-checkout.log for details.', 's2member'), $env_label).' <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">'.esc_html__('Log Viewer', 's2member').'</a></p></div>'."\n";
 						}
 					}
 					else
@@ -223,25 +216,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				}
 				else
 				{
-					$ppco_https_probe = wp_remote_head(home_url("/", 'https'), array('timeout' => 8, 'redirection' => 0));
-					$ppco_https_code  = !is_wp_error($ppco_https_probe) ? (int)wp_remote_retrieve_response_code($ppco_https_probe) : 0;
-					$ppco_https_loc   = !is_wp_error($ppco_https_probe) ? (string)wp_remote_retrieve_header($ppco_https_probe, 'location') : '';
-
-					if(is_wp_error($ppco_https_probe))
-					{
-						$ppco_https_ready  = false;
-						$ppco_https_reason = $ppco_https_probe->get_error_message();
-					}
-					else if($ppco_https_loc && stripos($ppco_https_loc, 'cgi-sys/defaultwebpage.cgi') !== false)
-					{
-						$ppco_https_ready  = false;
-						$ppco_https_reason = __('HTTPS endpoint redirects to /cgi-sys/defaultwebpage.cgi.', 's2member');
-					}
-					else if($ppco_https_code && $ppco_https_code >= 400)
-					{
-						$ppco_https_ready  = false;
-						$ppco_https_reason = sprintf(__('HTTPS endpoint returned HTTP %1$s.', 's2member'), (int)$ppco_https_code);
-					}
+					//260216 Note: Avoid gating configuration on a server-side HTTPS "loopback" probe.
+					// Many shared hosts/WAFs return false negatives for loopback requests (e.g., HEAD blocked,
+					// ModSecurity rules, disabled loopback/outbound HTTP). Reachability is verified separately
+					// via the "Test Webhook Endpoint" link and PayPal's webhook simulator.
 				}
 
 				if(!$ppco_https_ready)
@@ -532,10 +510,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					else if($ppco_https_loc && stripos($ppco_https_loc, 'cgi-sys/defaultwebpage.cgi') !== false)
 						echo '<br /><span class="ws-menu-page-error">'.esc_html__('Warning: Your HTTPS endpoint appears to redirect to a hosting default page (cgi-sys/defaultwebpage.cgi). This suggests SSL/virtual-host configuration issues; PayPal webhooks may not be delivered successfully.', 's2member').'</span>'."\n";
 					else if($ppco_https_code && $ppco_https_code >= 400)
-						echo '<br /><span class="ws-menu-page-error">'.sprintf(esc_html__('Warning: Your HTTPS endpoint returned HTTP %1$s. This suggests SSL/virtual-host configuration issues; PayPal webhooks may not be delivered successfully.', 's2member'), (int)$ppco_https_code).'</span>'."\n";
+						echo '<br /><span class="ws-menu-page-error">'.sprintf(esc_html__('Warning: Server-side probe to your HTTPS endpoint returned HTTP %1$s. This can be caused by SSL/virtual-host configuration issues, but it can also be a false negative due to security rules that block loopback requests. Use the “Test Webhook Endpoint” link and PayPal\'s webhook simulator to confirm external reachability.', 's2member'), (int)$ppco_https_code).'</span>'."\n";
 				}
 
-				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
+				//260216 Include additional events required for refunds/reversals and subscription lifecycle.
+				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>PAYMENT.SALE.REFUNDED</code> <code>PAYMENT.CAPTURE.REFUNDED</code> <code>PAYMENT.SALE.REVERSED</code> <code>PAYMENT.CAPTURE.REVERSED</code> <code>BILLING.SUBSCRIPTION.CREATED</code> <code>BILLING.SUBSCRIPTION.ACTIVATED</code> <code>BILLING.SUBSCRIPTION.RE-ACTIVATED</code> <code>BILLING.SUBSCRIPTION.UPDATED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
 
 				echo '<p style="margin:10px 0 0 0;"><em>'.esc_html__('Tip: Use PayPal\'s Webhooks Events dashboard to view and re-deliver webhook events while testing.', 's2member').' <a href="https://developer.paypal.com/api/rest/webhooks/events-dashboard/" target="_blank" rel="external">'.esc_html__('Open Events Dashboard', 's2member').'</a></em></p>'."\n";
 
@@ -675,7 +654,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<em>'.esc_html__('Webhook URL:', 's2member').'</em><br /><code>'.esc_html(add_query_arg("s2member_paypal_webhook", "1", home_url("/", 'https'))).'</code>'."\n";
 				echo '<br /><em class="ws-menu-page-hilite">'.esc_html__('Note: PayPal requires an HTTPS (SSL) webhook URL.', 's2member').'</em>'."\n";
 
-				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
+				//260216 Include additional events required for refunds/reversals and subscription lifecycle.
+				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>PAYMENT.SALE.REFUNDED</code> <code>PAYMENT.CAPTURE.REFUNDED</code> <code>PAYMENT.SALE.REVERSED</code> <code>PAYMENT.CAPTURE.REVERSED</code> <code>BILLING.SUBSCRIPTION.CREATED</code> <code>BILLING.SUBSCRIPTION.ACTIVATED</code> <code>BILLING.SUBSCRIPTION.RE-ACTIVATED</code> <code>BILLING.SUBSCRIPTION.UPDATED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
 
 				echo '<p style="margin:10px 0 0 0;"><em>'.esc_html__('Tip: Use PayPal\'s Webhooks Events dashboard to view and re-deliver webhook events while testing.', 's2member').' <a href="https://developer.paypal.com/api/rest/webhooks/events-dashboard/" target="_blank" rel="external">'.esc_html__('Open Events Dashboard', 's2member').'</a></em></p>'."\n";
 
