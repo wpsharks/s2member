@@ -36,6 +36,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 			$is_redirect_mode = in_array($op, array('redirect', 'return', 'cancel'), true);
 
+			$env_setting = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox() ? 'sandbox' : 'live';
+
 			if(!headers_sent())
 			{
 				nocache_headers();
@@ -47,6 +49,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 			c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'    => 'checkout',
+					'env_setting' => $env_setting,
 					'event'   => 'request',
 					'get'     => $_GET,
 					'post'    => $_POST,
@@ -96,6 +99,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 			{
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'  => 'checkout',
+						'env_setting' => $env_setting,
 						'event' => 'token_ip_mismatch',
 						'token' => $token,
 						'ip'    => c_ws_plugin__s2member_utils_ip::current(),
@@ -135,6 +139,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'   => 'checkout',
+							'env_setting' => $env_setting,
 							'event'  => 'redirect_order_create_response',
 							'order'  => $order,
 							'token'  => $token,
@@ -165,6 +170,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'         => 'checkout',
+							'env_setting' => $env_setting,
 							'event'        => 'redirect_subscription_create_response',
 							'subscription' => $subscription,
 							'token'        => $token,
@@ -202,6 +208,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					$cap0 = (!empty($capture['purchase_units'][0]['payments']['captures'][0]) && is_array($capture['purchase_units'][0]['payments']['captures'][0])) ? $capture['purchase_units'][0]['payments']['captures'][0] : array();
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'       => 'checkout',
+						'env_setting' => $env_setting,
 						'event'      => 'capture_response',
 						'order_id'   => $order_id,
 						'status'     => !empty($capture['status']) ? (string)$capture['status'] : '',
@@ -315,6 +322,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
+						'env_setting' => $env_setting,
 						'event'           => 'subscription_get_response',
 						'subscription_id' => $subscription_id,
 						'code'            => !empty($subscription_r['code']) ? (int)$subscription_r['code'] : 0,
@@ -443,6 +451,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'    => 'checkout',
+						'env_setting' => $env_setting,
 						'event'   => 'get_plan_id_response',
 						'plan_id' => $plan_id,
 						'token'   => $token,
@@ -476,6 +485,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
+						'env_setting' => $env_setting,
 						'event'           => 'subscription_get_response',
 						'subscription_id' => $subscription_id,
 						'subscription'    => $subscription_r,
@@ -496,6 +506,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
+						'env_setting' => $env_setting,
 						'event'           => 'subscription_get_failed',
 						'subscription_id' => $subscription_id,
 						'code'            => $subscription_code,
@@ -529,6 +540,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
+						'env_setting' => $env_setting,
 						'event'           => 'subscription_status_invalid',
 						'subscription_id' => $subscription_id,
 						'status'          => $status,
@@ -542,6 +554,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
+						'env_setting' => $env_setting,
 						'event'           => 'plan_mismatch',
 						'subscription_id' => $subscription_id,
 						'expected'        => $expected_plan_id,
@@ -555,6 +568,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
+						'env_setting' => $env_setting,
 						'event'           => 'subscription_custom_id_mismatch',
 						'subscription_id' => $subscription_id,
 						'expected'        => (string)$token['invoice'],
@@ -610,6 +624,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				if($ppco_dup_processed)
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
+						'env_setting' => $env_setting,
 						'event'           => 'duplicate_subscription_ignored',
 						'subscription_id' => $subscription_id,
 						'transient'       => $transient_ppco_subscr,
@@ -621,6 +636,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
+						'env_setting' => $env_setting,
 						'event'           => 'idempotency_subscription_set',
 						'subscription_id' => $subscription_id,
 						'transient'       => $transient_ppco_subscr,
@@ -645,6 +661,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					if($notify_code >= 200 && $notify_code <= 299)
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'            => 'checkout',
+							'env_setting' => $env_setting,
 							'event'           => 'notify_proxy_response',
 							'subscription_id' => $subscription_id,
 							'url'             => $notify_url,
@@ -656,6 +673,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					{
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'            => 'checkout',
+							'env_setting' => $env_setting,
 							'event'           => 'notify_proxy_failed',
 							'subscription_id' => $subscription_id,
 							'url'             => $notify_url,
@@ -690,6 +708,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'  => 'checkout',
+						'env_setting' => $env_setting,
 						'event' => 'cancel_subscription_not_logged_in',
 						'token' => $token,
 					));
@@ -704,6 +723,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'   => 'checkout',
+						'env_setting' => $env_setting,
 						'event'  => 'cancel_subscription_bad_nonce',
 						'user_id'=> $user_id,
 					));
@@ -719,6 +739,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'    => 'checkout',
+						'env_setting' => $env_setting,
 						'event'   => 'cancel_subscription_token_mismatch',
 						'user_id' => $user_id,
 						'token'   => $token,
@@ -733,6 +754,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'       => 'checkout',
+						'env_setting' => $env_setting,
 						'event'      => 'cancel_subscription_user_mismatch',
 						'user_id'    => $user_id,
 						'user_subscr'=> $subscr_id,
@@ -755,6 +777,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'     => 'checkout',
+					'env_setting' => $env_setting,
 					'event'    => 'cancel_subscription_response',
 					'user_id'  => $user_id,
 					'subscr_id'=> $subscr_id,
@@ -815,6 +838,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					{
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'        => 'checkout',
+							'env_setting' => $env_setting,
 							'event'       => 'cancel_subscription_notify_failed',
 							'user_id'     => $user_id,
 							'subscr_id'   => $subscr_id,
@@ -837,6 +861,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'  => 'checkout',
+						'env_setting' => $env_setting,
 						'event' => 'create_order_response',
 						'order' => $order,
 						'token' => $token,
@@ -846,6 +871,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'  => 'checkout',
+							'env_setting' => $env_setting,
 							'event' => 'order_create_failed',
 							'order' => $order,
 							'token' => $token,
@@ -871,6 +897,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				$cap0 = (!empty($capture['purchase_units'][0]['payments']['captures'][0]) && is_array($capture['purchase_units'][0]['payments']['captures'][0])) ? $capture['purchase_units'][0]['payments']['captures'][0] : array();
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'checkout',
+					'env_setting' => $env_setting,
 					'event'      => 'capture_response',
 					'order_id'   => $order_id,
 					'status'     => !empty($capture['status']) ? (string)$capture['status'] : '',
@@ -903,6 +930,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'     => 'checkout',
+							'env_setting' => $env_setting,
 							'event'    => 'capture_missing_fields',
 							'order_id' => $order_id,
 							'capture'  => $capture,
@@ -918,6 +946,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'     => 'checkout',
+						'env_setting' => $env_setting,
 						'event'    => 'amount_mismatch',
 						'order_id' => $order_id,
 						'token'    => $token,
@@ -930,6 +959,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'     => 'checkout',
+						'env_setting' => $env_setting,
 						'event'    => 'currency_mismatch',
 						'order_id' => $order_id,
 						'token'    => $token,
@@ -948,6 +978,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'     => 'checkout',
+						'env_setting' => $env_setting,
 						'event'    => 'invoice_mismatch',
 						'order_id' => $order_id,
 						'token'    => $token,
@@ -967,6 +998,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'     => 'checkout',
+						'env_setting' => $env_setting,
 						'event'    => 'custom_mismatch',
 						'order_id' => $order_id,
 						'token'    => $token,
@@ -1021,6 +1053,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'         => 'checkout',
+							'env_setting' => $env_setting,
 							'event'        => 'idempotency_capture_set',
 							'order_id'     => $order_id,
 							'txn_id'       => $pu_cap_id,
@@ -1031,6 +1064,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					else
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'     => 'checkout',
+							'env_setting' => $env_setting,
 							'event'    => 'duplicate_capture_ignored',
 							'order_id' => $order_id,
 							'txn_id'   => $pu_cap_id,
@@ -1058,6 +1092,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					if($notify_code >= 200 && $notify_code <= 299)
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'     => 'checkout',
+							'env_setting' => $env_setting,
 							'event'    => 'notify_proxy_response',
 							'order_id' => $order_id,
 							'txn_id'   => $pu_cap_id,
@@ -1070,6 +1105,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					{
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'     => 'checkout',
+							'env_setting' => $env_setting,
 							'event'    => 'notify_proxy_failed',
 							'order_id' => $order_id,
 							'txn_id'   => $pu_cap_id,
