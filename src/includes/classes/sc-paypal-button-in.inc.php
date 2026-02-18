@@ -88,7 +88,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$subscr_id = (string)get_user_option('s2member_subscr_id', $user_id);
 
 										$ppco_sandbox  = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox();
-										$pp_manage_url = ($ppco_sandbox) ? 'https://www.sandbox.paypal.com/myaccount/autopay/connect/' : 'https://www.paypal.com/myaccount/autopay/connect/';
+										$pp_manage_url = ($ppco_sandbox) ? 'https://www.sandbox.paypal.com/myaccount/autopay/connect/' : 'https://www.paypal.com/myaccount/autopay/'; //260218
 
 										// output="url|anchor": always link to PayPal subscription management UI.
 										if(in_array($attr["output"], array("url", "anchor"), true))
@@ -109,9 +109,22 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												else if($attr["output"] === "anchor")
 													{
 														$default_image = "https://www.paypal.com/" . (($attr["lang"]) ? $attr["lang"] : _x ("en_US", "s2member-front paypal-button-lang-code", "s2member")) . "/i/btn/btn_unsubscribe_LG.gif";
-														$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
 
-														$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+														if($attr["image"] && $attr["image"] !== "default")
+															{
+																$img_src = $attr["image"];
+																$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+															}
+														else
+															{
+																//260218 Match PayPal Checkout cancellation output="button" styling for output="anchor" (default image).
+																$ppco_cancel_label = esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member'));
+																$ppco_a_id = 's2member_ppco_cancel_anchor_'.md5($user_id.$subscr_id);
+
+																$code  = '<style type="text/css">#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none;}#'.esc_attr($ppco_a_id).':hover{filter:brightness(0.98);}</style>'."\n";
+																$code .= '<a id="'.esc_attr($ppco_a_id).'" href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener">'.$ppco_cancel_label.'</a>';
+																$_code = $code;
+															}
 
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action("ws_plugin__s2member_during_sc_paypal_cancellation_button", get_defined_vars ());
@@ -129,9 +142,22 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												if($attr["output"] === "button" && !preg_match('/^I-[A-Z0-9]+$/', $subscr_id))
 													{
 														$default_image = "https://www.paypal.com/" . (($attr["lang"]) ? $attr["lang"] : _x ("en_US", "s2member-front paypal-button-lang-code", "s2member")) . "/i/btn/btn_unsubscribe_LG.gif";
-														$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
 
-														$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+														if($attr["image"] && $attr["image"] !== "default")
+															{
+																$img_src = $attr["image"];
+																$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+															}
+														else
+															{
+																//260218 Match PayPal Checkout cancellation output="button" styling for fallback output="anchor" (default image).
+																$ppco_cancel_label = esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member'));
+																$ppco_a_id = 's2member_ppco_cancel_anchor_'.md5($user_id.$subscr_id);
+
+																$code  = '<style type="text/css">#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none;}#'.esc_attr($ppco_a_id).':hover{filter:brightness(0.98);}</style>'."\n";
+																$code .= '<a id="'.esc_attr($ppco_a_id).'" href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener">'.$ppco_cancel_label.'</a>';
+																$_code = $code;
+															}
 
 														foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 														do_action("ws_plugin__s2member_during_sc_paypal_cancellation_button", get_defined_vars ());
@@ -165,24 +191,26 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$ppco_msg_id = 's2member_ppco_cancel_msg_'.md5($user_id.$subscr_id);
 
 												$code  = '<style type="text/css">#'.esc_attr($ppco_btn_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;}#'.esc_attr($ppco_btn_id).':hover{filter:brightness(0.98);}#'.esc_attr($ppco_btn_id).':disabled{opacity:0.65;cursor:not-allowed;}</style>'."\n";
-												$code .= '<button type="button" id="'.esc_attr($ppco_btn_id).'">Unsubscribe</button>'."\n";
+												$code .= '<button type="button" id="'.esc_attr($ppco_btn_id).'">'.esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member')).'</button>'."\n"; //260218
 												$code .= '<div id="'.esc_attr($ppco_msg_id).'" style="display:none; margin-top:8px;"></div>'."\n";
 												$code .= '<script type="text/javascript">'."\n";
 												$code .= '(function(){'."\n";
 												$code .= 'var b=document.getElementById("'.esc_js($ppco_btn_id).'");'."\n";
 												$code .= 'var m=document.getElementById("'.esc_js($ppco_msg_id).'");'."\n";
+												$code .= 'var u="'.esc_js($pp_manage_url).'";'."\n";
+												$code .= 'function goManage(){try{var w=window.open(u,"_blank","noopener");if(!w){window.location.href=u;}}catch(e){window.location.href=u;}}'."\n";
 												$code .= 'function show(msg){try{if(m){m.style.display="block";m.innerHTML=msg;}}catch(e){}}'."\n";
 												$code .= 'function enc(o){var s=[];for(var k in o){if(!o.hasOwnProperty(k))continue;s.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return s.join("&");}'."\n";
 												$code .= 'if(!b){return;}'."\n";
 												$code .= 'b.addEventListener("click",function(e){'."\n";
 												$code .= 'e.preventDefault();'."\n";
 												$code .= 'if(b.disabled){return;}'."\n";
-												$code .= 'if(!window.confirm("Cancel your subscription now?")){return;}'."\n";
+												$code .= 'if(!window.confirm("'.esc_js(__('Cancel your subscription now?', 's2member')).'")){return;}'."\n"; //260218
 												$code .= 'b.disabled=true;'."\n";
 												$code .= 'fetch("'.esc_js($ppco_endpoint).'",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"cancel_subscription",s2member_paypal_checkout_t:"'.esc_js($ppco_token).'",s2member_paypal_checkout_nonce:"'.esc_js($ppco_nonce).'"} )})'."\n";
 												$code .= '.then(function(r){return r.json();})'."\n";
-												$code .= '.then(function(res){if(res&&res.ok){show("Subscription cancelled.");}else{show("Unable to cancel subscription. Please contact support."); b.disabled=false;}})'."\n";
-												$code .= '.catch(function(){show("Unable to cancel subscription. Please contact support."); b.disabled=false;});'."\n";
+												$code .= '.then(function(res){if(res&&res.ok){show("'.esc_js(__('Subscription cancelled.', 's2member')).'");}else{goManage(); b.disabled=false;}})'."\n"; //260218
+												$code .= '.catch(function(){goManage(); b.disabled=false;});'."\n";
 												$code .= '});'."\n";
 												$code .= '})();'."\n";
 												$code .= '</script>'."\n";
@@ -201,7 +229,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										// Guest user, or logged-in without a subscription id: show a disabled PayPal-styled button (no action).
 										$ppco_btn_id = 's2member_ppco_cancel_disabled_'.md5((string)microtime(true));
 										$code  = '<style type="text/css">#'.esc_attr($ppco_btn_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:not-allowed;box-sizing:border-box;opacity:0.55;white-space:nowrap;}</style>'."\n";
-										$code .= '<button type="button" id="'.esc_attr($ppco_btn_id).'" disabled="disabled">Unsubscribe</button>'."\n";
+										$code .= '<button type="button" id="'.esc_attr($ppco_btn_id).'" disabled="disabled">'.esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member')).'</button>'."\n"; //260218
 										$_code = $code;
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -222,7 +250,11 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled())
 									$endpoint_host = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_sandbox() ? "www.sandbox.paypal.com" : "www.paypal.com";
 
-								$code = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($endpoint_host)), $code);
+								$autopay_url = (strpos($endpoint_host, 'sandbox') !== false)
+									? "https://www.sandbox.paypal.com/myaccount/autopay/connect/"
+									: "https://www.paypal.com/myaccount/autopay/"; //260218
+
+								$code = preg_replace ("/%%autopay_url%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($autopay_url)), $code);
 								$code = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $code);
 								$code = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $code);
 
@@ -321,8 +353,17 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 											else // output="anchor"
 											{
-												$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
-												$code = $_code = '<a href="'.esc_attr($ppco_redirect_url).'"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+												if($attr["image"] && $attr["image"] !== "default")
+												{
+													$img_src = $attr["image"];
+													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+												}
+												else
+												{
+													//260218 Styled default anchor for cancellation/management (no legacy PayPal GIF).
+													$ppco_anchor_logo = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"].'/src/images/paypal-logo.png';
+													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;min-width:175px;height:40px;padding:0 14px;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;text-decoration:none;box-sizing:border-box;"><img src="'.esc_attr($ppco_anchor_logo).'" style="height:18px;width:auto;border:0;margin-right:8px;" alt="PayPal" />Manage subscription</a>';
+												}
 											}
 
 											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -532,8 +573,17 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 											else // output="anchor"
 											{
-												$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
-												$code = $_code = '<a href="'.esc_attr($ppco_redirect_url).'"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+												if($attr["image"] && $attr["image"] !== "default")
+												{
+													$img_src = $attr["image"];
+													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+												}
+												else
+												{
+													//260218 Styled default anchor for cancellation/management (no legacy PayPal GIF).
+													$ppco_anchor_logo = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"].'/src/images/paypal-logo.png';
+													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;min-width:175px;height:40px;padding:0 14px;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;text-decoration:none;box-sizing:border-box;"><img src="'.esc_attr($ppco_anchor_logo).'" style="height:18px;width:auto;border:0;margin-right:8px;" alt="PayPal" />Manage subscription</a>';
+												}
 											}
 
 											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -766,8 +816,17 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 											else // output="anchor"
 											{
-												$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
-												$code = $_code = '<a href="'.esc_attr($ppco_redirect_url).'"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+												if($attr["image"] && $attr["image"] !== "default")
+												{
+													$img_src = $attr["image"];
+													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
+												}
+												else
+												{
+													//260218 Styled default anchor for cancellation/management (no legacy PayPal GIF).
+													$ppco_anchor_logo = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"].'/src/images/paypal-logo.png';
+													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;min-width:175px;height:40px;padding:0 14px;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;text-decoration:none;box-sizing:border-box;"><img src="'.esc_attr($ppco_anchor_logo).'" style="height:18px;width:auto;border:0;margin-right:8px;" alt="PayPal" />Manage subscription</a>';
+												}
 											}
 
 											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
