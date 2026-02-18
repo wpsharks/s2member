@@ -121,7 +121,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 																$ppco_cancel_label = esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member'));
 																$ppco_a_id = 's2member_ppco_cancel_anchor_'.md5($user_id.$subscr_id);
 
-																$code  = '<style type="text/css">#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none;}#'.esc_attr($ppco_a_id).':hover{filter:brightness(0.98);}</style>'."\n";
+																$code  = '<style type="text/css">a#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;margin:1em 0 !important;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439 !important;color:#003087 !important;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':link,a#'.esc_attr($ppco_a_id).':visited,a#'.esc_attr($ppco_a_id).':active{color:#003087 !important;background:#ffc439 !important;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':hover{color:#003087 !important;text-decoration:none !important;filter:brightness(0.98);}</style>'."\n";
 																$code .= '<a id="'.esc_attr($ppco_a_id).'" href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener">'.$ppco_cancel_label.'</a>';
 																$_code = $code;
 															}
@@ -154,7 +154,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 																$ppco_cancel_label = esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member'));
 																$ppco_a_id = 's2member_ppco_cancel_anchor_'.md5($user_id.$subscr_id);
 
-																$code  = '<style type="text/css">#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none;}#'.esc_attr($ppco_a_id).':hover{filter:brightness(0.98);}</style>'."\n";
+																$code  = '<style type="text/css">a#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;margin:1em 0 !important;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439 !important;color:#003087 !important;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':link,a#'.esc_attr($ppco_a_id).':visited,a#'.esc_attr($ppco_a_id).':active{color:#003087 !important;background:#ffc439 !important;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':hover{color:#003087 !important;text-decoration:none !important;filter:brightness(0.98);}</style>'."\n";
 																$code .= '<a id="'.esc_attr($ppco_a_id).'" href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener">'.$ppco_cancel_label.'</a>';
 																$_code = $code;
 															}
