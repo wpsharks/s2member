@@ -29,7 +29,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			if(empty($_REQUEST['s2member_paypal_webhook']))
 				return;
 
-			if(!c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled())
+			//260218 Allow webhook processing even when Checkout buttons are disabled (if creds+webhook id exist).
+			if(!c_ws_plugin__s2member_paypal_utilities::paypal_checkout_webhook_processing_is_enabled())
 			{
 				status_header(404);
 				exit();
