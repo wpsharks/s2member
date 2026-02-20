@@ -205,7 +205,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $i => $option_line)
 													{
-														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1---'.($i).'"', $common);
+														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1-'.($i).'"', $common); //200226 Fix label for/id mismatch (checkbox options).
 
 														$option_value = $option_label = $option_default = "";
 														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
@@ -239,7 +239,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $i => $option_line)
 													{
-														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1---'.($i).'"', $common);
+														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1-'.($i).'"', $common); //200226 Fix label for/id mismatch (radio options).
 
 														$option_value = $option_label = $option_default = "";
 														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
