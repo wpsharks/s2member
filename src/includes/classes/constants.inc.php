@@ -291,7 +291,7 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			 * @see http://codex.wordpress.org/Function_Reference/wp_get_current_user wp_get_current_user()
 			 */
 			if(!defined('S2MEMBER_CURRENT_USER_ACCESS_LABEL'))
-				define ('S2MEMBER_CURRENT_USER_ACCESS_LABEL', ($c[] = (string)@$GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$level.'_label']));
+				define ('S2MEMBER_CURRENT_USER_ACCESS_LABEL', ($c[] = (($level >= 0 && isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$level.'_label'])) ? (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$level.'_label'] : '')));
 
 			/**
 			 * The current User's Paid Subscription ID (when applicable).
@@ -1670,7 +1670,7 @@ if(!class_exists('c_ws_plugin__s2member_constants'))
 			for($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++)
 			{
 				if(!defined(($S2MEMBER_LEVELn_LABEL = 'S2MEMBER_LEVEL'.$n.'_LABEL')))
-					define($S2MEMBER_LEVELn_LABEL, ($c[] = (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_label']));
+					define($S2MEMBER_LEVELn_LABEL, ($c[] = (isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_label']) ? (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_label'] : 'Level '.$n.' Member')));
 			}
 			/**
 			 * File Downloads allowed at each Membership Level; as configured by the site owner.
