@@ -1088,6 +1088,12 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											do_action('ws_plugin__s2member_during_configure_user_registration_admin_side', get_defined_vars());
 											unset($__refs, $__v);
 										}
+
+										//260223 Plaintext password should not remain available beyond account configuration.
+										// Blank it before notifications, return URL replacements, list-server processing, logs, and later hooks.
+										$pass = 'xxxxxxxx/pass';
+										$password = 'xxxxxxxx/pass';
+										
 										if($processed === 'yes') // If registration was processed by one of the routines above.
 										{
 											/**
@@ -1242,8 +1248,20 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											$reg_vars['_COOKIE'] = $_COOKIE; // Record cookies also.
 											// No need to include these in the logs. Unset before log entry.
 											unset($reg_vars['wpdb'], $reg_vars['current_site'], $reg_vars['current_blog']);
-											c_ws_plugin__s2member_utils_logs::log_entry('reg-handler', $reg_vars);
 
+											//260223 Do not log passwords or password-like fields (even generated ones).
+											unset($reg_vars['pass'], $reg_vars['password']);
+											if(!empty($reg_vars['_pmr']) && is_array($reg_vars['_pmr']))
+												foreach(array_keys($reg_vars['_pmr']) as $_k)
+													if(preg_match('/pass_?(?:word)?/i', $_k))
+														unset($reg_vars['_pmr'][$_k]);
+											if(!empty($reg_vars['fields']) && is_array($reg_vars['fields']))
+												foreach(array_keys($reg_vars['fields']) as $_k)
+													if(preg_match('/pass_?(?:word)?/i', $_k))
+														unset($reg_vars['fields'][$_k]);
+											unset($_k);
+
+											c_ws_plugin__s2member_utils_logs::log_entry('reg-handler', $reg_vars);
 											foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 											do_action('ws_plugin__s2member_during_configure_user_registration', get_defined_vars());
 											unset($__refs, $__v);
