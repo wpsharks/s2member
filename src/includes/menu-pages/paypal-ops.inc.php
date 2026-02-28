@@ -60,7 +60,19 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					{
 						$scheme = strtolower((string)wp_parse_url(home_url('/'), PHP_URL_SCHEME));
 
-						if($scheme !== 'https')
+						//260224 Reverse-proxy/Cloudflare fallback for admin-side HTTPS detection.
+						// This only affects the admin gating check here. It does NOT change the webhook URL itself.
+						$proxy_https = false;
+						if(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && stripos(strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']), 'https') !== false)
+							$proxy_https = true;
+						else if(!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_SSL']) === 'on')
+							$proxy_https = true;
+						else if(!empty($_SERVER['HTTPS']) && in_array(strtolower((string)$_SERVER['HTTPS']), array('on', '1'), true))
+							$proxy_https = true;
+						else if(!empty($_SERVER['HTTP_CF_VISITOR']) && stripos((string)$_SERVER['HTTP_CF_VISITOR'], '"scheme":"https"') !== false)
+							$proxy_https = true;
+
+						if($scheme !== 'https' && !$proxy_https)
 							$ppco_webhook_notice = '<div class="error"><p>'.esc_html__('Unable to create/update PayPal Checkout webhook. PayPal requires an HTTPS (SSL) webhook URL, but your site URL appears to be configured without HTTPS. Please enable SSL and update your WordPress Site URL/Home URL to use https://, then try again.', 's2member').'</p></div>'."\n";
 						else
 						{
@@ -209,7 +221,20 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				$ppco_https_scheme = strtolower((string)wp_parse_url(home_url('/'), PHP_URL_SCHEME));
 
-				if($ppco_https_scheme !== 'https')
+				//260224 Reverse-proxy/Cloudflare fallback for admin-side HTTPS detection.
+				// This keeps PayPal Checkout configuration available when WordPress is behind a proxy
+				// and the current admin request is clearly HTTPS at the edge.
+				$ppco_proxy_https = false;
+				if(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && stripos(strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']), 'https') !== false)
+					$ppco_proxy_https = true;
+				else if(!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_SSL']) === 'on')
+					$ppco_proxy_https = true;
+				else if(!empty($_SERVER['HTTPS']) && in_array(strtolower((string)$_SERVER['HTTPS']), array('on', '1'), true))
+					$ppco_proxy_https = true;
+				else if(!empty($_SERVER['HTTP_CF_VISITOR']) && stripos((string)$_SERVER['HTTP_CF_VISITOR'], '"scheme":"https"') !== false)
+					$ppco_proxy_https = true;
+
+				if($ppco_https_scheme !== 'https' && !$ppco_proxy_https)
 				{
 					$ppco_https_ready  = false;
 					$ppco_https_reason = __('Your WordPress Site URL/Home URL is currently not configured for HTTPS.', 's2member');
@@ -497,7 +522,18 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				$ppco_https_scheme = strtolower((string)wp_parse_url(home_url('/'), PHP_URL_SCHEME));
 
-				if($ppco_https_scheme !== 'https')
+				//260224 Reverse-proxy/Cloudflare fallback for admin-side HTTPS warning display.
+				$ppco_proxy_https = false;
+				if(!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && stripos(strtolower((string)$_SERVER['HTTP_X_FORWARDED_PROTO']), 'https') !== false)
+					$ppco_proxy_https = true;
+				else if(!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower((string)$_SERVER['HTTP_X_FORWARDED_SSL']) === 'on')
+					$ppco_proxy_https = true;
+				else if(!empty($_SERVER['HTTPS']) && in_array(strtolower((string)$_SERVER['HTTPS']), array('on', '1'), true))
+					$ppco_proxy_https = true;
+				else if(!empty($_SERVER['HTTP_CF_VISITOR']) && stripos((string)$_SERVER['HTTP_CF_VISITOR'], '"scheme":"https"') !== false)
+					$ppco_proxy_https = true;
+
+				if($ppco_https_scheme !== 'https' && !$ppco_proxy_https)
 					echo '<br /><span class="ws-menu-page-error">'.esc_html__('Warning: Your WordPress Site URL/Home URL is currently not configured for HTTPS. PayPal may reject webhook creation and delivery until your site supports SSL and your Site URL uses https://.', 's2member').'</span>'."\n";
 				else
 				{
