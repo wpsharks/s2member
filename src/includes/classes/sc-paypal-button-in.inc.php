@@ -121,7 +121,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 																$ppco_cancel_label = esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member'));
 																$ppco_a_id = 's2member_ppco_cancel_anchor_'.md5($user_id.$subscr_id);
 
-																$code  = '<style type="text/css">a#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;margin:1em 0 !important;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439 !important;color:#003087 !important;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':link,a#'.esc_attr($ppco_a_id).':visited,a#'.esc_attr($ppco_a_id).':active{color:#003087 !important;background:#ffc439 !important;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':hover{color:#003087 !important;text-decoration:none !important;filter:brightness(0.98);}</style>'."\n";
+																$code  = '<style type="text/css">a#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439 !important;color:#003087 !important;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':link,a#'.esc_attr($ppco_a_id).':visited,a#'.esc_attr($ppco_a_id).':active{color:#003087 !important;background:#ffc439 !important;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':hover{color:#003087 !important;text-decoration:none !important;filter:brightness(0.98);}</style>'."\n";
 																$code .= '<a id="'.esc_attr($ppco_a_id).'" href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener">'.$ppco_cancel_label.'</a>';
 																$_code = $code;
 															}
@@ -154,7 +154,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 																$ppco_cancel_label = esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member'));
 																$ppco_a_id = 's2member_ppco_cancel_anchor_'.md5($user_id.$subscr_id);
 
-																$code  = '<style type="text/css">a#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;margin:1em 0 !important;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439 !important;color:#003087 !important;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':link,a#'.esc_attr($ppco_a_id).':visited,a#'.esc_attr($ppco_a_id).':active{color:#003087 !important;background:#ffc439 !important;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':hover{color:#003087 !important;text-decoration:none !important;filter:brightness(0.98);}</style>'."\n";
+																$code  = '<style type="text/css">a#'.esc_attr($ppco_a_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439 !important;color:#003087 !important;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':link,a#'.esc_attr($ppco_a_id).':visited,a#'.esc_attr($ppco_a_id).':active{color:#003087 !important;background:#ffc439 !important;text-decoration:none !important;} a#'.esc_attr($ppco_a_id).':hover{color:#003087 !important;text-decoration:none !important;filter:brightness(0.98);}</style>'."\n";
 																$code .= '<a id="'.esc_attr($ppco_a_id).'" href="'.esc_attr($pp_manage_url).'" target="_blank" rel="nofollow noopener">'.$ppco_cancel_label.'</a>';
 																$_code = $code;
 															}
@@ -353,17 +353,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 											else // output="anchor"
 											{
-												if($attr["image"] && $attr["image"] !== "default")
-												{
-													$img_src = $attr["image"];
-													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
-												}
-												else
-												{
-													//260218 Styled default anchor for cancellation/management (no legacy PayPal GIF).
-													$ppco_anchor_logo = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"].'/src/images/paypal-logo.png';
-													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;min-width:175px;height:40px;padding:0 14px;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;text-decoration:none;box-sizing:border-box;"><img src="'.esc_attr($ppco_anchor_logo).'" style="height:18px;width:auto;border:0;margin-right:8px;" alt="PayPal" />Manage subscription</a>';
-												}
+												$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
+												$code = $_code = '<a class="ws-plugin--s2member-paypal-button ws-plugin--s2member-paypal-anchor" href="'.esc_attr($ppco_redirect_url).'"><img class="ws-plugin--s2member-paypal-button-img" src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0; margin:0;" alt="PayPal" /></a>';
 											}
 
 											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -399,8 +390,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										else
 											$ppco_sdk_src = $ppco_sdk_src.'?client-id='.rawurlencode($ppco_client_id).'&currency='.rawurlencode($ppco_cc).'&intent=capture&commit=true&disable-funding=card'.$ppco_buyer_country_q.$ppco_locale_q;
 
-										$code  = '<div id="'.esc_attr($ppco_div_id).'" style="max-width:145px; width:auto;"></div>'."\n";
-										$code .= '<div id="'.esc_attr($ppco_err_id).'" style="display:none;"></div>'."\n";
+										$code  = '<div id="'.esc_attr($ppco_div_id).'" class="ws-plugin--s2member-paypal-button ws-plugin--s2member-ppco-button" style="max-width:145px; width:auto; margin:0;"></div>'."\n";
+										$code .= '<div id="'.esc_attr($ppco_err_id).'" class="ws-plugin--s2member-ppco-error" style="display:none; margin:0;"></div>'."\n";
 
 										if($ppco_sdk_just_loaded)
 											{
@@ -573,17 +564,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 											else // output="anchor"
 											{
-												if($attr["image"] && $attr["image"] !== "default")
-												{
-													$img_src = $attr["image"];
-													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
-												}
-												else
-												{
-													//260218 Styled default anchor for cancellation/management (no legacy PayPal GIF).
-													$ppco_anchor_logo = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"].'/src/images/paypal-logo.png';
-													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;min-width:175px;height:40px;padding:0 14px;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;text-decoration:none;box-sizing:border-box;"><img src="'.esc_attr($ppco_anchor_logo).'" style="height:18px;width:auto;border:0;margin-right:8px;" alt="PayPal" />Manage subscription</a>';
-												}
+												$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
+												$code = $_code = '<a class="ws-plugin--s2member-paypal-button ws-plugin--s2member-paypal-anchor" href="'.esc_attr($ppco_redirect_url).'"><img class="ws-plugin--s2member-paypal-button-img" src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0; margin:0;" alt="PayPal" /></a>';
 											}
 
 											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -619,8 +601,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										else
 											$ppco_sdk_src = $ppco_sdk_src.'?client-id='.rawurlencode($ppco_client_id).'&currency='.rawurlencode($ppco_cc).'&intent=capture&commit=true&disable-funding=card'.$ppco_buyer_country_q.$ppco_locale_q;
 
-										$code  = '<div id="'.esc_attr($ppco_div_id).'" style="max-width:145px; width:auto;"></div>'."\n";
-										$code .= '<div id="'.esc_attr($ppco_err_id).'" style="display:none;"></div>'."\n";
+										$code  = '<div id="'.esc_attr($ppco_div_id).'" class="ws-plugin--s2member-paypal-button ws-plugin--s2member-ppco-button" style="max-width:145px; width:auto; margin:0;"></div>'."\n";
+										$code .= '<div id="'.esc_attr($ppco_err_id).'" class="ws-plugin--s2member-ppco-error" style="display:none; margin:0;"></div>'."\n";
 
 										if($ppco_sdk_just_loaded)
 											{
@@ -816,17 +798,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 											else // output="anchor"
 											{
-												if($attr["image"] && $attr["image"] !== "default")
-												{
-													$img_src = $attr["image"];
-													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener"><img src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0;" alt="PayPal" /></a>';
-												}
-												else
-												{
-													//260218 Styled default anchor for cancellation/management (no legacy PayPal GIF).
-													$ppco_anchor_logo = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"].'/src/images/paypal-logo.png';
-													$code = $_code = '<a href="'.esc_attr($pp_manage_url).'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;min-width:175px;height:40px;padding:0 14px;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;text-decoration:none;box-sizing:border-box;"><img src="'.esc_attr($ppco_anchor_logo).'" style="height:18px;width:auto;border:0;margin-right:8px;" alt="PayPal" />Manage subscription</a>';
-												}
+												$img_src = ($attr["image"] && $attr["image"] !== "default") ? $attr["image"] : $default_image;
+												$code = $_code = '<a class="ws-plugin--s2member-paypal-button ws-plugin--s2member-paypal-anchor" href="'.esc_attr($ppco_redirect_url).'"><img class="ws-plugin--s2member-paypal-button-img" src="'.esc_attr($img_src).'" style="width:auto; height:auto; border:0; margin:0;" alt="PayPal" /></a>';
 											}
 
 											foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -861,8 +834,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										else
 											$ppco_sdk_src = $ppco_sdk_src.'?client-id='.rawurlencode($ppco_client_id).'&currency='.rawurlencode($ppco_cc).'&intent=capture&commit=true&disable-funding=card'.$ppco_buyer_country_q.$ppco_locale_q;
 
-										$code  = '<div id="'.esc_attr($ppco_div_id).'" style="max-width:145px; width:auto;"></div>'."\n";
-										$code .= '<div id="'.esc_attr($ppco_err_id).'" style="display:none;"></div>'."\n";
+										$code  = '<div id="'.esc_attr($ppco_div_id).'" class="ws-plugin--s2member-paypal-button ws-plugin--s2member-ppco-button" style="max-width:145px; width:auto; margin:0;"></div>'."\n";
+										$code .= '<div id="'.esc_attr($ppco_err_id).'" class="ws-plugin--s2member-ppco-error" style="display:none; margin:0;"></div>'."\n";
 
 										if($ppco_sdk_just_loaded)
 											{
