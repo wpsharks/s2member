@@ -240,7 +240,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						exit();
 					}
 
-					if(!empty($token['amount']) && (string)$token['amount'] !== (string)$pu_amount)
+					//260228 Normalize amount strings before comparison (e.g. 20 vs 20.00).
+					if(!empty($token['amount']) && number_format((float)$token['amount'], 2, '.', '') !== number_format((float)$pu_amount, 2, '.', ''))
 					{
 						echo 'amount_mismatch';
 						exit();
@@ -942,7 +943,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				}
 
 				// Extra safety: enforce token matches amount/currency/invoice/custom if provided.
-				if(!empty($token['amount']) && (string)$token['amount'] !== (string)$pu_amount)
+				//260228 Normalize amount strings before comparison (e.g. 20 vs 20.00).
+				if(!empty($token['amount']) && number_format((float)$token['amount'], 2, '.', '') !== number_format((float)$pu_amount, 2, '.', ''))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'     => 'checkout',

@@ -65,6 +65,8 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 						$attr["rr"] = /* Lifetime Subscriptions require Buy Now. Only after running shortcode_atts(). */ ($attr["rt"] === "L") ? "BN" : $attr["rr"];
 						$attr["rr"] = /* Independent Ccaps require Buy Now. Only after running shortcode_atts(). */ ($attr["level"] === "*") ? "BN" : $attr["rr"];
 						$attr["ns"] = /* No shipping directive must be 1 for digital items. After shortcode_atts(). */ ($attr["dg"] === "1") ? "1" : $attr["ns"];
+						$attr["ta"] = /*260228 Normalize trial amount to canonical 2-decimal currency format. */ number_format((float)$attr["ta"], 2, '.', '');
+						$attr["ra"] = /*260228 Normalize recurring/regular amount to canonical 2-decimal currency format. */ number_format((float)$attr["ra"], 2, '.', '');
 
 						$force_notify_url_scheme = apply_filters("ws_plugin__s2member_during_sc_paypal_button_force_notify_url_scheme", null, get_defined_vars ());
 						$force_return_url_scheme = apply_filters("ws_plugin__s2member_during_sc_paypal_button_force_return_url_scheme", null, get_defined_vars ());

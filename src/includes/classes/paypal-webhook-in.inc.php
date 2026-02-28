@@ -258,6 +258,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 			// Recurring payment events (PayPal often emits PAYMENT.SALE.COMPLETED for subscription payments).
 			//260216 Add refund/reversal webhook support so refunds can trigger immediate EOT/demotion.
+			//260226 !!! TO-DO: Consider handling PayPal dispute/chargeback webhooks (e.g., CUSTOMER.DISPUTE.*), since not all chargebacks map to SALE/CAPTURE reversal events.
 			else if(in_array($event_type, array(
 				'PAYMENT.SALE.COMPLETED',
 				'PAYMENT.CAPTURE.COMPLETED',
@@ -267,15 +268,6 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				'PAYMENT.CAPTURE.REVERSED',
 			), true))
 			{
-				$paypal['txn_type'] = 'subscr_payment';
-
-				if(strpos($event_type, '.REFUNDED') !== false)
-					$paypal['payment_status'] = 'Refunded';
-				else if(strpos($event_type, '.REVERSED') !== false)
-					$paypal['payment_status'] = 'Reversed';
-				else
-					$paypal['payment_status'] = 'Completed';
-
 				if(!empty($resource['billing_agreement_id']))
 					$subscr_id = (string)$resource['billing_agreement_id'];
 				else if(!empty($resource['parent_payment']))
@@ -284,6 +276,31 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					$subscr_id = (string)$resource['subscription_id'];
 				else if(!empty($resource['supplementary_data']['related_ids']['billing_agreement_id']))
 					$subscr_id = (string)$resource['supplementary_data']['related_ids']['billing_agreement_id'];
+
+				//260228 Ignore one-time sale/capture webhooks that have no subscription reference.
+				if(!$subscr_id)
+				{
+					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+						'ppco'       => 'webhook',
+						'env_setting'=> $env_site,
+						'env_webhook'=> $env_webhook,
+						'event'      => 'ignored_non_subscription_payment',
+						'event_id'   => $event_id,
+						'event_type' => $event_type,
+						'resource'   => $resource,
+					));
+					status_header(200);
+					exit();
+				}
+
+				$paypal['txn_type'] = 'subscr_payment';
+
+				if(strpos($event_type, '.REFUNDED') !== false)
+					$paypal['payment_status'] = 'Refunded';
+				else if(strpos($event_type, '.REVERSED') !== false)
+					$paypal['payment_status'] = 'Reversed';
+				else
+					$paypal['payment_status'] = 'Completed';
 
 				if(!empty($resource['id']))
 					$txn_id = (string)$resource['id']; // original capture/sale id
