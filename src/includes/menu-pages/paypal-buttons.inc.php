@@ -126,9 +126,20 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 										$ws_plugin__s2member_temp_s = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($_SERVER["HTTP_HOST"])), $ws_plugin__s2member_temp_s);
 										echo '<input type="text" autocomplete="off" id="ws-plugin--s2member-level' . $n . '-shortcode" value="' . format_to_edit ($ws_plugin__s2member_temp_s) . '" onclick="this.select ();" />' . "\n";
 
-										echo '<div' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '><br />' . "\n";
-										echo '<strong>Legacy PayPal Button Code:</strong> (deprecated)<br />' . "\n";
-										echo '<em>Legacy PayPal HTML/PHP button code output has been removed from this generator. Please use the WordPress Shortcode above.</em>' . "\n";
+										echo '<div style="display:none;"><br />' . "\n"; //260217
+
+										//260217 Hidden legacy button template required by menu-pages-s.js generator.
+										$ws_plugin__s2member_temp_button = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-checkout-button.php")));
+										$ws_plugin__s2member_temp_button = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_button);
+										$ws_plugin__s2member_temp_button = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_button);
+										$ws_plugin__s2member_temp_button = preg_replace ("/%%notify_url%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ("/?s2member_paypal_notify=1"))), $ws_plugin__s2member_temp_button);
+										$ws_plugin__s2member_temp_button = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_button);
+										$ws_plugin__s2member_temp_button = preg_replace ("/%%return%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_button);
+										$ws_plugin__s2member_temp_button = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($_SERVER["HTTP_HOST"])), $ws_plugin__s2member_temp_button);
+										$ws_plugin__s2member_temp_button = preg_replace ("/%%level_label%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $n . "_label"])), $ws_plugin__s2member_temp_button);
+										$ws_plugin__s2member_temp_button = preg_replace ("/%%level%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($n)), $ws_plugin__s2member_temp_button);
+
+										echo '<textarea id="ws-plugin--s2member-level' . $n . '-button" style="display:none;">' . esc_textarea ($ws_plugin__s2member_temp_button) . '</textarea>' . "\n";
 										echo '</div>' . "\n";
 
 										echo '</form>' . "\n";
@@ -215,9 +226,18 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($_SERVER["HTTP_HOST"])), $ws_plugin__s2member_temp_s);
 								echo '<input type="text" autocomplete="off" id="ws-plugin--s2member-ccap-shortcode" value="' . format_to_edit ($ws_plugin__s2member_temp_s) . '" onclick="this.select ();" />' . "\n";
 
-								echo '<div' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '><br />' . "\n";
-								echo '<strong>Legacy PayPal Button Code:</strong> (deprecated)<br />' . "\n";
-								echo '<em>Legacy PayPal HTML/PHP button code output has been removed from this generator. Please use the WordPress Shortcode above.</em>' . "\n";
+								echo '<div style="display:none;"><br />' . "\n"; //260217
+
+								//260217 Hidden legacy button template required by menu-pages-s.js generator.
+								$ws_plugin__s2member_temp_button = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-ccaps-checkout-button.php")));
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%notify_url%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ("/?s2member_paypal_notify=1"))), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%return%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($_SERVER["HTTP_HOST"])), $ws_plugin__s2member_temp_button);
+
+								echo '<textarea id="ws-plugin--s2member-ccap-button" style="display:none;">' . esc_textarea ($ws_plugin__s2member_temp_button) . '</textarea>' . "\n";
 								echo '</div>' . "\n";
 
 								echo '</form>' . "\n";
@@ -257,7 +277,11 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								echo 'Button Code<br />For Cancellations:<br /><br />' . "\n";
 								echo '<div id="ws-plugin--s2member-cancellation-button-prev">' . "\n";
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-cancellation-button.php")));
-								$ws_plugin__s2member_temp_s = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_s);
+								$autopay_url = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"])
+									? "https://www.sandbox.paypal.com/myaccount/autopay/connect/"
+									: "https://www.paypal.com/myaccount/autopay/"; //260218
+
+								$ws_plugin__s2member_temp_s = preg_replace ("/%%autopay_url%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($autopay_url)), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%paypal_merchant_id%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_merchant_id"])), $ws_plugin__s2member_temp_s);
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%images%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"] . "/src/images")), $ws_plugin__s2member_temp_s);
@@ -283,7 +307,7 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/shortcodes/paypal-cancellation-button-shortcode.php")));
 								echo '<input type="text" autocomplete="off" id="ws-plugin--s2member-cancellation-shortcode" value="' . format_to_edit ($ws_plugin__s2member_temp_s) . '" onclick="this.select ();" />' . "\n";
 
-								echo '<div' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '><br />' . "\n";
+								echo '<div style="display:none;"><br />' . "\n"; //260217
 								echo '<strong>Legacy PayPal Button Code:</strong> (deprecated)<br />' . "\n";
 								echo '<em>Legacy PayPal HTML/PHP button code output has been removed from this generator. Please use the WordPress Shortcode above.</em>' . "\n";
 								echo '</div>' . "\n";
@@ -441,9 +465,18 @@ if (!class_exists ("c_ws_plugin__s2member_menu_page_paypal_buttons"))
 								$ws_plugin__s2member_temp_s = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($_SERVER["HTTP_HOST"])), $ws_plugin__s2member_temp_s);
 								echo '<input type="text" autocomplete="off" id="ws-plugin--s2member-sp-shortcode" value="' . format_to_edit ($ws_plugin__s2member_temp_s) . '" onclick="this.select ();" />' . "\n";
 
-								echo '<div' . ((is_multisite () && c_ws_plugin__s2member_utils_conds::is_multisite_farm () && !is_main_site ()) ? ' style="display:none;"' : '') . '><br />' . "\n";
-								echo '<strong>Legacy PayPal Button Code:</strong> (deprecated)<br />' . "\n";
-								echo '<em>Legacy PayPal HTML/PHP button code output has been removed from this generator. Please use the WordPress Shortcode above.</em>' . "\n";
+								echo '<div style="display:none;"><br />' . "\n"; //260217
+
+								//260217 Hidden legacy button template required by menu-pages-s.js generator.
+								$ws_plugin__s2member_temp_button = trim (c_ws_plugin__s2member_utilities::evl (file_get_contents (dirname (dirname (__FILE__)) . "/templates/buttons/paypal-sp-checkout-button.php")));
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%endpoint%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com")), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%paypal_business%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"])), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%notify_url%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ("/?s2member_paypal_notify=1"))), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%cancel_return%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%return%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr (home_url ("/"))), $ws_plugin__s2member_temp_button);
+								$ws_plugin__s2member_temp_button = preg_replace ("/%%custom%%/", c_ws_plugin__s2member_utils_strings::esc_refs (esc_attr ($_SERVER["HTTP_HOST"])), $ws_plugin__s2member_temp_button);
+
+								echo '<textarea id="ws-plugin--s2member-sp-button" style="display:none;">' . esc_textarea ($ws_plugin__s2member_temp_button) . '</textarea>' . "\n";
 								echo '</div>' . "\n";
 
 								echo '</form>' . "\n";

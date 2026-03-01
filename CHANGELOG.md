@@ -1,40 +1,72 @@
+= v260301 =
+
+- (Framework) **Bug Fix:** Fixed mismatched `<label for="">` and `<input id="">` attributes for checkbox/radio options in Custom Registration/Profile Fields; this also restores proper client-side validation for required checkbox/radio groups.
+
+- (Framework) **Fix:** Hardened the Edit User Profile screen on PHP 8+ to avoid errors if a user’s Auto-EOT time is stored as a date string (e.g. YYYY-MM-DD) rather than a Unix timestamp (as can happen after imports/migrations).
+
+- (Framework) **Fix:** Fixed PHP 8+ "Undefined array key" warnings related to membership level label constants (including guest/non-logged-in access label handling).
+
+- (Framework) **Fix:** Resolved an issue that prevented PayPal Buttons "Generate Button Code" from working in some installations.
+
+- (Framework) **Fix:** Some PayPal Checkout log entries were missing the environment (sandbox/live), and now include it to help with troubleshooting.
+
+- (Framework) **Fix:** PayPal Checkout webhooks can continue processing existing subscriptions even if new sales are switched back to PayPal Standard.
+
+- (Framework) **Fix:** PayPal Checkout webhooks now also handle refunds, reversals, and additional subscription lifecycle events, improving user EOT/access updates and subscription state handling.
+
+- (Framework) **Fix:** Improved PayPal Checkout amount decimal normalization to prevent one-time payment validation mismatches.
+
+- (Framework) **Fix:** Updated PayPal Checkout webhook handling to prevent one-time payment captures from being processed as recurring payments.
+
+- (Framework & Pro) **Fix:** Prevent PHP 8.1+ deprecation warnings in gateway Pro-Forms and related checkout processing (Stripe, PayPal Pro, Authorize.Net), and in custom registration fields, by ensuring optional form/template values are cast to strings before escaping/processing.
+
+- (Framework) **Security:** Improved debug log sanitization (passwords, API secrets, auth credentials) and reduced post-registration plaintext password exposure.
+
+- (Framework) **Improvement:** PayPal Standard and PayPal Checkout cancellation buttons now use PayPal’s subscription management page when needed.
+
+- (Framework) **Improvement:** Better HTTPS detection in s2Member’s PayPal Checkout setup for sites using Cloudflare (or other reverse proxies), reducing false setup failures when enabling or configuring PayPal Checkout.
+
+- (Pro) **Improvement:** Hardened the Advanced Importer to normalize Auto-EOT values given as date strings (e.g. YYYY-MM-DD) into Unix timestamps when a date is used instead of the expected timestamp format.
+
+- (Pro) **Improvement:** PayPal Checkout buttons now support `accept="card"` in Pro button attributes, enabling card funding/guest checkout where PayPal makes it available.
+
 = v260215 =
 
-(Framework) **Bug Fix:** Prevent PHP fatal error when multiple PayPal Checkout buttons appear on the same page (PHP 8+).  
+- (Framework) **Bug Fix:** Prevent PHP fatal error when multiple PayPal Checkout buttons appear on the same page (PHP 8+).
 
-(Framework) **Bug Fix:** PayPal Checkout admin actions (Test Credentials / Webhook / Clear Cache) now submit via POST instead of redirecting (avoids “headers already sent” warnings).  
+- (Framework) **Bug Fix:** PayPal Checkout admin actions (Test Credentials / Webhook / Clear Cache) now submit via POST instead of redirecting (avoids “headers already sent” warnings).
 
-(Framework) **Bug Fix:** PayPal cancellation notifications now backfill missing membership mapping fields (`item_number`, `item_name`, `period1`, `period3`) from stored IPN Signup Vars using the subscription ID ( `recurring_payment_id` / `subscr_id` ), so Auto-EOT is set correctly on cancel.
+- (Framework) **Bug Fix:** PayPal cancellation notifications now backfill missing membership mapping fields (`item_number`, `item_name`, `period1`, `period3`) from stored IPN Signup Vars using the subscription ID ( `recurring_payment_id` / `subscr_id` ), so Auto-EOT is set correctly on cancel.
 
-(Framework) **Bug Fix:** Auto-EOT PayPal status checks now query PayPal Checkout subscriptions via PayPal’s REST Subscriptions API (instead of PayPal's legacy “Recurring Payments” API), preventing “11592” errors and allowing Auto-EOT to detect inactive PayPal Checkout subscriptions.
+- (Framework) **Bug Fix:** Auto-EOT PayPal status checks now query PayPal Checkout subscriptions via PayPal’s REST Subscriptions API (instead of PayPal's legacy “Recurring Payments” API), preventing “11592” errors and allowing Auto-EOT to detect inactive PayPal Checkout subscriptions.
 
-(Framework) **Security:** PayPal Checkout webhook environment inference now validates the `paypal-cert-url` host before using it (hardens environment inference used during verification).  
+- (Framework) **Security:** PayPal Checkout webhook environment inference now validates the `paypal-cert-url` host before using it (hardens environment inference used during verification).
 
-(Framework) **Security:** PayPal Checkout cancel redirect now validates the destination URL and safely falls back to the site home URL.  
+- (Framework) **Security:** PayPal Checkout cancel redirect now validates the destination URL and safely falls back to the site home URL.
 
-(Framework) **Security:** PayPal Checkout tokens now use s2Member’s hardened unserialize routine.  
+- (Framework) **Security:** PayPal Checkout tokens now use s2Member’s hardened unserialize routine.
 
-(Framework) **Security:** Harden unserialization of stored custom capabilities metadata when loading user access rules.
+- (Framework) **Security:** Harden unserialization of stored custom capabilities metadata when loading user access rules.
 
-(Framework) **Security:** Harden the registration password handler.
+- (Framework) **Security:** Harden the registration password handler.
 
-(Framework) **Improvement:** Harden PayPal Checkout endpoint behavior on problematic hosts; return consistent JSON errors (HTTP 500) on notify-proxy failures.  
+- (Framework) **Improvement:** Harden PayPal Checkout endpoint behavior on problematic hosts; return consistent JSON errors (HTTP 500) on notify-proxy failures.
 
-(Framework) **Improvement:** Harden PayPal Checkout REST API/webhook handling for network failures and unexpected/non-JSON responses (avoids PHP 8+ warnings).  
+- (Framework) **Improvement:** Harden PayPal Checkout REST API/webhook handling for network failures and unexpected/non-JSON responses (avoids PHP 8+ warnings).
 
-(Framework) **Improvement:** PayPal Checkout webhook setup now treats "no change" updates and existing webhook URLs as success (adopts the existing webhook ID automatically).  
+- (Framework) **Improvement:** PayPal Checkout webhook setup now treats "no change" updates and existing webhook URLs as success (adopts the existing webhook ID automatically).
 
-(Framework) **Improvement:** PayPal Checkout webhook signature verification now auto-detects Sandbox vs Live from inbound headers (so webhooks validate correctly even if the site’s current environment setting differs).  
+- (Framework) **Improvement:** PayPal Checkout webhook signature verification now auto-detects Sandbox vs Live from inbound headers (so webhooks validate correctly even if the site’s current environment setting differs).
 
-(Framework) **Improvement:** PayPal Checkout logging now includes `env_setting` (site setting) and `env_webhook` (inferred from inbound webhook headers) for clearer Sandbox/Live environment troubleshooting.  
+- (Framework) **Improvement:** PayPal Checkout logging now includes `env_setting` (site setting) and `env_webhook` (inferred from inbound webhook headers) for clearer Sandbox/Live environment troubleshooting.
 
-(Framework) **Improvement:** PayPal Checkout webhook idempotency cache (event/txn transients) now retains entries for 1 year (reduces long-term option bloat while preserving replay protection).
+- (Framework) **Improvement:** PayPal Checkout webhook idempotency cache (event/txn transients) now retains entries for 1 year (reduces long-term option bloat while preserving replay protection).
 
-(Framework) **Improvement:** s2Member’s PayPal “Unsubscribe” button links to PayPal’s subscription management page, and with the new PayPal Checkout integration, when `output="button"` and a PayPal subscription ID is present, s2Member will attempt to cancel the subscription directly.
+- (Framework) **Improvement:** s2Member’s PayPal “Unsubscribe” button links to PayPal’s subscription management page, and with the new PayPal Checkout integration, when `output="button"` and a PayPal subscription ID is present, s2Member will attempt to cancel the subscription directly.
 
-(Framework) **UI:** Add a description for `paypal-checkout.log` in the Log Viewer dropdown (so it’s not “No description available”).
+- (Framework) **UI:** Add a description for `paypal-checkout.log` in the Log Viewer dropdown (so it’s not “No description available”).
 
-(Pro) **Improvement:** PayPal Checkout buttons now support `accept="card"` to enable guest debit/credit card payment in the PayPal-hosted checkout experience when available (availability depends on PayPal settings/eligibility and browser privacy protections).
+- (Pro) **Improvement:** PayPal Checkout buttons now support `accept="card"` to enable guest debit/credit card payment in the PayPal-hosted checkout experience when available (availability depends on PayPal settings/eligibility and browser privacy protections).
 
 = v260127 =
 

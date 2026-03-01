@@ -126,16 +126,26 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 			$log_entry = preg_replace('/\b([3456][0-9]{10,11})([0-9]{4})\b/', 'xxxxxxxxxxxx'.'$2', $log_entry);
 
 			$log_entry = preg_replace('/(\'.*pass_?(?:word)?(?:[0-9]+)?\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/pass'.'$3', $log_entry);
+			$log_entry = preg_replace('/(\[\s*[^\]\r\n]*pass_?(?:word)?(?:[0-9]+)?[^\]\r\n]*\]\s*\=\>\s*)([^\r\n]*)/i', '$1'.'xxxxxxxx/pass', $log_entry);
+			$log_entry = preg_replace('/(\".*pass_?(?:word)?(?:[0-9]+)?\"\s*\:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/pass'.'$3', $log_entry);
 			$log_entry = preg_replace('/([&?][^&]*pass_?(?:word)?(?:[0-9]+)?\=)([^&]+)/', '$1'.'xxxxxxxx/pass', $log_entry);
 
 			$log_entry = preg_replace('/(\'api_?(?:key|secret)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/api/key/sec'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&]api_?(?:key|secret)\=)([^&]+)/', '$1'.'xxxxxxxx/api/key/sec', $log_entry);
+			$log_entry = preg_replace('/(\[\s*[^\]\r\n]*api_?(?:key|secret)[^\]\r\n]*\]\s*\=\>\s*)([^\r\n]*)/i', '$1'.'xxxxxxxx/api/key/sec', $log_entry);
+			$log_entry = preg_replace('/(\"[^\"]*api_?(?:key|secret)[^\"]*\"\s*\:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/api/key/sec'.'$3', $log_entry);
+			$log_entry = preg_replace('/([&?][^&]*api_?(?:key|secret)\=)([^&]+)/i', '$1'.'xxxxxxxx/api/key/sec', $log_entry);
 
 			$log_entry = preg_replace('/(\'(?:PWD|SIGNATURE)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/PWD/SIG'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&](?:PWD|SIGNATURE)\=)([^&]+)/', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
+			$log_entry = preg_replace('/(\[\s*[^\]\r\n]*(?:PWD|SIGNATURE)[^\]\r\n]*\]\s*\=\>\s*)([^\r\n]*)/', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
+			$log_entry = preg_replace('/(\"(?:PWD|SIGNATURE)\"\s*\:\s*\")([^\"]+)(\")/', '$1'.'xxxxxxxx/PWD/SIG'.'$3', $log_entry);
+			$log_entry = preg_replace('/([&?][^&]*(?:PWD|SIGNATURE)\=)([^&]+)/', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
 
 			$log_entry = preg_replace('/(\'(?:x_login|x_tran_key)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/key/tran'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&](?:x_login|x_tran_key)\=)([^&]+)/', '$1'.'xxxxxxxx/key/tran', $log_entry);
+			$log_entry = preg_replace('/(\[\s*[^\]\r\n]*(?:x_login|x_tran_key)[^\]\r\n]*\]\s*\=\>\s*)([^\r\n]*)/i', '$1'.'xxxxxxxx/key/tran', $log_entry);
+			$log_entry = preg_replace('/(\"(?:x_login|x_tran_key)\"\s*\:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/key/tran'.'$3', $log_entry);
+			$log_entry = preg_replace('/([&?][^&]*(?:x_login|x_tran_key)\=)([^&]+)/i', '$1'.'xxxxxxxx/key/tran', $log_entry);
+
+			$log_entry = preg_replace('/(Authorization\s*:\s*Basic\s+)[A-Za-z0-9\/\+\=]+/i', '$1'.'xxxxxxxx/basic-auth', $log_entry);
 
 			return $log_entry; // With some private info concealed now.
 		}

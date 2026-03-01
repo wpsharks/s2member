@@ -755,6 +755,35 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
+				 * Returns true when PayPal Checkout webhook processing can operate.
+				 *
+				 * This is intentionally decoupled from `paypal_checkout_enable` so that:
+				 * - sites can switch new sales back to PayPal Standard
+				 * - while still processing webhooks for existing Checkout subscriptions
+				 *
+				 * @since 260218
+				 *
+				 * @return bool
+				 */
+				public static function paypal_checkout_webhook_processing_is_enabled()
+					{
+						// Full Checkout enabled? Then yes.
+						if(self::paypal_checkout_is_enabled())
+							return true;
+
+						// Otherwise: allow webhook processing when creds + webhook id exist (either env).
+						$live_ready = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_id'])
+							&& !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_secret'])
+							&& !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_webhook_id']));
+
+						$sandbox_ready = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_id'])
+							&& !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_secret'])
+							&& !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_webhook_id']));
+
+						return ($live_ready || $sandbox_ready);
+					}
+
+				/**
 				 * Returns true when PayPal Checkout is in sandbox mode.
 				 *
 				 * @since 260101

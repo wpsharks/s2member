@@ -205,7 +205,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $i => $option_line)
 													{
-														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1---'.($i).'"', $common);
+														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1-'.($i).'"', $common); //200226 Fix label for/id mismatch (checkbox options).
 
 														$option_value = $option_label = $option_default = "";
 														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
@@ -239,7 +239,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $i => $option_line)
 													{
-														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1---'.($i).'"', $common);
+														$common_i = preg_replace('/ id\="(.+?)"/', ' id="$1-'.($i).'"', $common); //200226 Fix label for/id mismatch (radio options).
 
 														$option_value = $option_label = $option_default = "";
 														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
@@ -337,7 +337,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 										unset($__refs, $__v);
 
 										echo '<label for="ws-plugin--s2member-custom-reg-field-first-name">'._x("First Name", "s2member-front", "s2member").' *</label>'."\n";
-										echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_first_name" id="ws-plugin--s2member-custom-reg-field-first-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr(@$_p["ws_plugin__s2member_custom_reg_field_first_name"]).'" />'."\n";
+										echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_first_name" id="ws-plugin--s2member-custom-reg-field-first-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr((string)(@$_p["ws_plugin__s2member_custom_reg_field_first_name"])).'" />'."\n";
 										echo '<br />'."\n";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -349,7 +349,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 										unset($__refs, $__v);
 
 										echo '<label for="ws-plugin--s2member-custom-reg-field-last-name">'._x("Last Name", "s2member-front", "s2member").' *</label>'."\n";
-										echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_last_name" id="ws-plugin--s2member-custom-reg-field-last-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr(@$_p["ws_plugin__s2member_custom_reg_field_last_name"]).'" />'."\n";
+										echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_last_name" id="ws-plugin--s2member-custom-reg-field-last-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr((string)(@$_p["ws_plugin__s2member_custom_reg_field_last_name"])).'" />'."\n";
 										echo '<br />'."\n";
 
 										foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
@@ -443,11 +443,11 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 
 								echo '<label for="ws-plugin--s2member-custom-reg-field-user-pass1" title="'.esc_attr(_x("Please type your Password twice to confirm.", "s2member-front", "s2member")).'">'."\n";
 								echo '<span>'._x("Password (please type it twice)", "s2member-front", "s2member").' *</span><br />'."\n";
-								echo '<input type="password" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_user_pass1" id="ws-plugin--s2member-custom-reg-field-user-pass1" class="ws-plugin--s2member-custom-reg-field form-control" value="'.format_to_edit(@$_p["ws_plugin__s2member_custom_reg_field_user_pass1"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+								echo '<input type="password" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_user_pass1" id="ws-plugin--s2member-custom-reg-field-user-pass1" class="ws-plugin--s2member-custom-reg-field form-control" value="'.format_to_edit((string)(@$_p["ws_plugin__s2member_custom_reg_field_user_pass1"])).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 								echo '</label>'."\n";
 
 								echo '<label for="ws-plugin--s2member-custom-reg-field-user-pass2" title="'.esc_attr(_x("Please type your Password twice to confirm.", "s2member-front", "s2member")).'">'."\n";
-								echo '<input type="password" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_user_pass2" id="ws-plugin--s2member-custom-reg-field-user-pass2" class="ws-plugin--s2member-custom-reg-field form-control" value="'.format_to_edit(@$_p["ws_plugin__s2member_custom_reg_field_user_pass2"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+								echo '<input type="password" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_user_pass2" id="ws-plugin--s2member-custom-reg-field-user-pass2" class="ws-plugin--s2member-custom-reg-field form-control" value="'.format_to_edit((string)(@$_p["ws_plugin__s2member_custom_reg_field_user_pass2"])).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 								echo '</label>'."\n";
 
 								echo '<div id="ws-plugin--s2member-custom-reg-field-user-pass-strength" class="ws-plugin--s2member-password-strength"><em>'._x("password strength indicator", "s2member-front", "s2member").'</em></div>'."\n";
@@ -469,7 +469,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 								echo '<p>'."\n";
 								echo '<label for="ws-plugin--s2member-custom-reg-field-first-name">'."\n";
 								echo '<span>'._x("First Name", "s2member-front", "s2member").' *</span><br />'."\n";
-								echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_first_name" id="ws-plugin--s2member-custom-reg-field-first-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr(@$_p["ws_plugin__s2member_custom_reg_field_first_name"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+								echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_first_name" id="ws-plugin--s2member-custom-reg-field-first-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr((string)(@$_p["ws_plugin__s2member_custom_reg_field_first_name"])).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 								echo '</label>'."\n";
 								echo '</p>'."\n";
 
@@ -484,7 +484,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 								echo '<p>'."\n";
 								echo '<label for="ws-plugin--s2member-custom-reg-field-last-name">'."\n";
 								echo '<span>'._x("Last Name", "s2member-front", "s2member").' *</span><br />'."\n";
-								echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_last_name" id="ws-plugin--s2member-custom-reg-field-last-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr(@$_p["ws_plugin__s2member_custom_reg_field_last_name"]).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
+								echo '<input type="text" aria-required="true" maxlength="100" autocomplete="off" name="ws_plugin__s2member_custom_reg_field_last_name" id="ws-plugin--s2member-custom-reg-field-last-name" class="ws-plugin--s2member-custom-reg-field form-control" value="'.esc_attr((string)(@$_p["ws_plugin__s2member_custom_reg_field_last_name"])).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
 								echo '</label>'."\n";
 								echo '</p>'."\n";
 
