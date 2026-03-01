@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  260215\n"
+"Project-Id-Version:  260301\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-02-15 02:54:57+00:00\n"
+"POT-Creation-Date: 2026-03-01 03:04:32+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -218,13 +218,13 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:163
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:278
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:430
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:570
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:781
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:569
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:779
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:168
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:283
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:436
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:576
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:789
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:575
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:787
 #: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:198
 #: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:283
 #: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:356
@@ -235,9 +235,9 @@ msgid "Security Verification"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:245
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:748
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:746
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:251
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:757
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:755
 #: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:256
 #: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:597
 msgctxt "s2member-front"
@@ -245,161 +245,161 @@ msgid "Additional Info"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:385
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:525
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:700
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:524
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:698
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:391
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:531
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:709
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:530
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:707
 msgctxt "s2member-front"
 msgid "Visa"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:385
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:525
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:700
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:524
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:698
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:391
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:531
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:709
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:530
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:707
 msgctxt "s2member-front"
 msgid "MasterCard"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:385
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:525
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:700
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:524
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:698
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:391
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:531
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:709
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:530
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:707
 msgctxt "s2member-front"
 msgid "Discover"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:385
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:525
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:700
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:524
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:698
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:391
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:531
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:709
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:530
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:707
 msgctxt "s2member-front"
 msgid "American Express"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "01 January"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "02 February"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "03 March"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "04 April"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "05 May"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "06 June"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "07 July"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "08 August"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "09 September"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "10 October"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "11 November"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:395
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:535
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:710
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:534
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:708
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:401
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:541
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:719
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:540
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:717
 msgctxt "s2member-front"
 msgid "12 December"
 msgstr ""
@@ -1362,27 +1362,27 @@ msgid "<strong>Sorry.</strong> Your account is pending other changes. Please try
 msgstr ""
 
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:391
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:531
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:709
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:530
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:707
 msgctxt "s2member-front"
 msgid "Maestro"
 msgstr ""
 
 #: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:391
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:531
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:709
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:530
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:707
 msgctxt "s2member-front"
 msgid "Solo"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:531
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:709
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:530
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:707
 msgctxt "s2member-front"
 msgid "PayPal"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:624
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:838
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:623
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:836
 msgctxt "s2member-front"
 msgid "We Accept PayPal"
 msgstr ""
@@ -1969,13 +1969,12 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:597
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
 #: src/includes/classes/sc-paypal-button-e.inc.php:83
-#: src/includes/classes/sc-paypal-button-in.inc.php:111
-#: src/includes/classes/sc-paypal-button-in.inc.php:131
-#: src/includes/classes/sc-paypal-button-in.inc.php:215
-#: src/includes/classes/sc-paypal-button-in.inc.php:243
-#: src/includes/classes/sc-paypal-button-in.inc.php:452
-#: src/includes/classes/sc-paypal-button-in.inc.php:663
-#: src/includes/templates/buttons/paypal-cancellation-button.php:8
+#: src/includes/classes/sc-paypal-button-in.inc.php:113
+#: src/includes/classes/sc-paypal-button-in.inc.php:146
+#: src/includes/classes/sc-paypal-button-in.inc.php:245
+#: src/includes/classes/sc-paypal-button-in.inc.php:277
+#: src/includes/classes/sc-paypal-button-in.inc.php:486
+#: src/includes/classes/sc-paypal-button-in.inc.php:697
 #: src/includes/templates/buttons/paypal-ccaps-checkout-button.php:35
 #: src/includes/templates/buttons/paypal-checkout-button.php:47
 #: src/includes/templates/buttons/paypal-sp-checkout-button.php:35
@@ -4620,6 +4619,22 @@ msgctxt "s2member-front"
 msgid "—"
 msgstr ""
 
+#: src/includes/classes/sc-paypal-button-in.inc.php:123
+#: src/includes/classes/sc-paypal-button-in.inc.php:156
+#: src/includes/classes/sc-paypal-button-in.inc.php:196
+#: src/includes/classes/sc-paypal-button-in.inc.php:234
+msgctxt "paypal cancellation button label"
+msgid "Unsubscribe"
+msgstr ""
+
+#: src/includes/classes/sc-paypal-button-in.inc.php:210
+msgid "Cancel your subscription now?"
+msgstr ""
+
+#: src/includes/classes/sc-paypal-button-in.inc.php:214
+msgid "Subscription cancelled."
+msgstr ""
+
 #: src/includes/classes/security-rest.inc.php:99
 #: src/includes/classes/security-rest.inc.php:108
 #: src/includes/classes/security-rest.inc.php:116
@@ -4763,12 +4778,12 @@ msgctxt "s2member-front"
 msgid "`strong` (i.e., use numbers, letters, mixed caSe, and punctuation)"
 msgstr ""
 
-#: src/includes/classes/users-list-in.inc.php:363
+#: src/includes/classes/users-list-in.inc.php:364
 msgctxt "s2member-front"
 msgid "Additional Profile Fields"
 msgstr ""
 
-#: src/includes/classes/users-list-in.inc.php:363
+#: src/includes/classes/users-list-in.inc.php:364
 msgctxt "s2member-front"
 msgid "(for this site)"
 msgstr ""
@@ -4980,309 +4995,289 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/includes/menu-pages/paypal-ops.inc.php:43
-#: src/includes/menu-pages/paypal-ops.inc.php:102
-#: src/includes/menu-pages/paypal-ops.inc.php:141
-#: src/includes/menu-pages/paypal-ops.inc.php:195
+#: src/includes/menu-pages/paypal-ops.inc.php:107
+#: src/includes/menu-pages/paypal-ops.inc.php:146
+#: src/includes/menu-pages/paypal-ops.inc.php:200
 msgid "Sandbox"
 msgstr ""
 
 #: src/includes/menu-pages/paypal-ops.inc.php:43
-#: src/includes/menu-pages/paypal-ops.inc.php:102
-#: src/includes/menu-pages/paypal-ops.inc.php:141
-#: src/includes/menu-pages/paypal-ops.inc.php:195
+#: src/includes/menu-pages/paypal-ops.inc.php:107
+#: src/includes/menu-pages/paypal-ops.inc.php:146
+#: src/includes/menu-pages/paypal-ops.inc.php:200
 msgid "Live"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:64
+#: src/includes/menu-pages/paypal-ops.inc.php:76
 msgid "Unable to create/update PayPal Checkout webhook. PayPal requires an HTTPS (SSL) webhook URL, but your site URL appears to be configured without HTTPS. Please enable SSL and update your WordPress Site URL/Home URL to use https://, then try again."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:72
-msgid "Unable to create/update PayPal Checkout webhook because your HTTPS endpoint is not reachable from this server. Please configure SSL for this domain first."
-msgstr ""
-
-#: src/includes/menu-pages/paypal-ops.inc.php:74
-msgid "Unable to create/update PayPal Checkout webhook because your HTTPS endpoint appears to redirect to a hosting default page (/cgi-sys/defaultwebpage.cgi). Please correct SSL/virtual-host configuration first."
-msgstr ""
-
-#: src/includes/menu-pages/paypal-ops.inc.php:76
-msgid "Unable to create/update PayPal Checkout webhook because your HTTPS endpoint returned HTTP %1$s. Please correct SSL/virtual-host configuration first."
-msgstr ""
-
-#: src/includes/menu-pages/paypal-ops.inc.php:82
+#: src/includes/menu-pages/paypal-ops.inc.php:88
 msgid "PayPal Checkout %1$s webhook created/updated successfully."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:84
+#: src/includes/menu-pages/paypal-ops.inc.php:90
 msgid "Unable to create/update PayPal Checkout %1$s webhook. See the s2Member paypal-checkout.log for details."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:84
-#: src/includes/menu-pages/paypal-ops.inc.php:125
+#: src/includes/menu-pages/paypal-ops.inc.php:90
+#: src/includes/menu-pages/paypal-ops.inc.php:130
 msgid "Log Viewer"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:89
-#: src/includes/menu-pages/paypal-ops.inc.php:128
+#: src/includes/menu-pages/paypal-ops.inc.php:94
+#: src/includes/menu-pages/paypal-ops.inc.php:133
 msgid "PayPal Checkout %1$s credentials are not configured."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:92
-#: src/includes/menu-pages/paypal-ops.inc.php:131
-#: src/includes/menu-pages/paypal-ops.inc.php:148
+#: src/includes/menu-pages/paypal-ops.inc.php:97
+#: src/includes/menu-pages/paypal-ops.inc.php:136
+#: src/includes/menu-pages/paypal-ops.inc.php:153
 msgid "Invalid request. Please try again."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:123
+#: src/includes/menu-pages/paypal-ops.inc.php:128
 msgid "PayPal Checkout %1$s credentials test OK."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:125
+#: src/includes/menu-pages/paypal-ops.inc.php:130
 msgid "PayPal Checkout %1$s credentials test failed. See the s2Member paypal-checkout.log for details."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:145
+#: src/includes/menu-pages/paypal-ops.inc.php:150
 msgid "PayPal Checkout cache cleared for %1$s."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:190
+#: src/includes/menu-pages/paypal-ops.inc.php:195
 msgid "When enabled, existing s2Member PayPal Button shortcodes are powered by PayPal Checkout without requiring shortcode edits. If disabled, s2Member continues using PayPal Standard."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:192
+#: src/includes/menu-pages/paypal-ops.inc.php:197
 msgid "Quick Setup (Live or Sandbox)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:194
+#: src/includes/menu-pages/paypal-ops.inc.php:199
 msgid "Enable PayPal Checkout below, choose the environment (Live or Sandbox)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:195
+#: src/includes/menu-pages/paypal-ops.inc.php:200
 msgid "Go to PayPal's “Apps & Credentials”, and click “Create App” for your site (s2Member)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:196
+#: src/includes/menu-pages/paypal-ops.inc.php:201
 msgid "Copy the app's Client ID and Secret (REST API, not NVP) and paste them below."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:197
+#: src/includes/menu-pages/paypal-ops.inc.php:202
 msgid "Click “Save All Changes”."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:198
+#: src/includes/menu-pages/paypal-ops.inc.php:203
 msgid "Click “Test Credentials” to verify the saved Client ID and Secret are correct."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:199
+#: src/includes/menu-pages/paypal-ops.inc.php:204
 msgid "Click “Create/Update Webhook” to register your webhook URL with PayPal and populate the Webhook ID field."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:200
+#: src/includes/menu-pages/paypal-ops.inc.php:205
 msgid "Click “Test Webhook Endpoint” to check it."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:203
+#: src/includes/menu-pages/paypal-ops.inc.php:208
 msgid "Useful PayPal links"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:205
+#: src/includes/menu-pages/paypal-ops.inc.php:210
 msgid "Webhooks overview (PayPal docs)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:206
+#: src/includes/menu-pages/paypal-ops.inc.php:211
 msgid "Webhooks simulator (connectivity testing)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:207
+#: src/includes/menu-pages/paypal-ops.inc.php:212
 msgid "Webhooks Events dashboard (view/re-deliver events)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:212
+#: src/includes/menu-pages/paypal-ops.inc.php:217
 msgid "Leave these fields blank to continue using PayPal Standard."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:222
+#: src/includes/menu-pages/paypal-ops.inc.php:240
 msgid "Your WordPress Site URL/Home URL is currently not configured for HTTPS."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:238
-msgid "HTTPS endpoint redirects to /cgi-sys/defaultwebpage.cgi."
-msgstr ""
-
-#: src/includes/menu-pages/paypal-ops.inc.php:243
-msgid "HTTPS endpoint returned HTTP %1$s."
-msgstr ""
-
-#: src/includes/menu-pages/paypal-ops.inc.php:250
+#: src/includes/menu-pages/paypal-ops.inc.php:253
 msgid "PayPal Checkout requires HTTPS (SSL)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:251
+#: src/includes/menu-pages/paypal-ops.inc.php:254
 msgid "This site does not currently have a working HTTPS endpoint for this domain. PayPal Checkout is disabled here because webhooks cannot be delivered without HTTPS."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:274
+#: src/includes/menu-pages/paypal-ops.inc.php:277
 msgid "Disabled: PayPal Checkout requires HTTPS (SSL) for webhooks. Fix HTTPS for this domain, then enable PayPal Checkout."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:453
-#: src/includes/menu-pages/paypal-ops.inc.php:454
-#: src/includes/menu-pages/paypal-ops.inc.php:611
-#: src/includes/menu-pages/paypal-ops.inc.php:612
+#: src/includes/menu-pages/paypal-ops.inc.php:456
+#: src/includes/menu-pages/paypal-ops.inc.php:457
+#: src/includes/menu-pages/paypal-ops.inc.php:626
+#: src/includes/menu-pages/paypal-ops.inc.php:627
 msgid "Test Credentials"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:454
-#: src/includes/menu-pages/paypal-ops.inc.php:489
-#: src/includes/menu-pages/paypal-ops.inc.php:503
+#: src/includes/menu-pages/paypal-ops.inc.php:457
+#: src/includes/menu-pages/paypal-ops.inc.php:492
+#: src/includes/menu-pages/paypal-ops.inc.php:506
 msgid "Save Live credentials first."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:457
+#: src/includes/menu-pages/paypal-ops.inc.php:460
 msgid "Verifies your Live Client ID/Secret by requesting an access token."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:477
+#: src/includes/menu-pages/paypal-ops.inc.php:480
 msgid "From your PayPal app webhook settings (Live)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:485
-#: src/includes/menu-pages/paypal-ops.inc.php:487
-#: src/includes/menu-pages/paypal-ops.inc.php:489
-#: src/includes/menu-pages/paypal-ops.inc.php:643
-#: src/includes/menu-pages/paypal-ops.inc.php:645
-#: src/includes/menu-pages/paypal-ops.inc.php:647
+#: src/includes/menu-pages/paypal-ops.inc.php:488
+#: src/includes/menu-pages/paypal-ops.inc.php:490
+#: src/includes/menu-pages/paypal-ops.inc.php:492
+#: src/includes/menu-pages/paypal-ops.inc.php:658
+#: src/includes/menu-pages/paypal-ops.inc.php:660
+#: src/includes/menu-pages/paypal-ops.inc.php:662
 msgid "Create/Update Webhook"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:487
-#: src/includes/menu-pages/paypal-ops.inc.php:501
-#: src/includes/menu-pages/paypal-ops.inc.php:645
-#: src/includes/menu-pages/paypal-ops.inc.php:659
+#: src/includes/menu-pages/paypal-ops.inc.php:490
+#: src/includes/menu-pages/paypal-ops.inc.php:504
+#: src/includes/menu-pages/paypal-ops.inc.php:660
+#: src/includes/menu-pages/paypal-ops.inc.php:674
 msgid "HTTPS required."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:492
-#: src/includes/menu-pages/paypal-ops.inc.php:650
+#: src/includes/menu-pages/paypal-ops.inc.php:495
+#: src/includes/menu-pages/paypal-ops.inc.php:665
 msgid "Registers your webhook URL with PayPal (HTTPS required)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:492
-#: src/includes/menu-pages/paypal-ops.inc.php:650
+#: src/includes/menu-pages/paypal-ops.inc.php:495
+#: src/includes/menu-pages/paypal-ops.inc.php:665
 msgid "If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:499
-#: src/includes/menu-pages/paypal-ops.inc.php:501
-#: src/includes/menu-pages/paypal-ops.inc.php:503
-#: src/includes/menu-pages/paypal-ops.inc.php:505
-#: src/includes/menu-pages/paypal-ops.inc.php:657
-#: src/includes/menu-pages/paypal-ops.inc.php:659
-#: src/includes/menu-pages/paypal-ops.inc.php:661
-#: src/includes/menu-pages/paypal-ops.inc.php:663
+#: src/includes/menu-pages/paypal-ops.inc.php:502
+#: src/includes/menu-pages/paypal-ops.inc.php:504
+#: src/includes/menu-pages/paypal-ops.inc.php:506
+#: src/includes/menu-pages/paypal-ops.inc.php:508
+#: src/includes/menu-pages/paypal-ops.inc.php:672
+#: src/includes/menu-pages/paypal-ops.inc.php:674
+#: src/includes/menu-pages/paypal-ops.inc.php:676
+#: src/includes/menu-pages/paypal-ops.inc.php:678
 msgid "Test Webhook Endpoint"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:505
+#: src/includes/menu-pages/paypal-ops.inc.php:508
 msgid "Set a Live Webhook ID first (or use Create/Update Webhook)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:508
-#: src/includes/menu-pages/paypal-ops.inc.php:666
+#: src/includes/menu-pages/paypal-ops.inc.php:511
+#: src/includes/menu-pages/paypal-ops.inc.php:681
 msgid "Reachability-only check. Use real webhooks for end-to-end verification."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:509
-#: src/includes/menu-pages/paypal-ops.inc.php:667
+#: src/includes/menu-pages/paypal-ops.inc.php:512
+#: src/includes/menu-pages/paypal-ops.inc.php:682
 msgid "Test URL: "
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:517
-#: src/includes/menu-pages/paypal-ops.inc.php:675
+#: src/includes/menu-pages/paypal-ops.inc.php:520
+#: src/includes/menu-pages/paypal-ops.inc.php:690
 msgid "Webhook URL:"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:518
-#: src/includes/menu-pages/paypal-ops.inc.php:676
+#: src/includes/menu-pages/paypal-ops.inc.php:521
+#: src/includes/menu-pages/paypal-ops.inc.php:691
 msgid "Note: PayPal requires an HTTPS (SSL) webhook URL."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:523
+#: src/includes/menu-pages/paypal-ops.inc.php:537
 msgid "Warning: Your WordPress Site URL/Home URL is currently not configured for HTTPS. PayPal may reject webhook creation and delivery until your site supports SSL and your Site URL uses https://."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:531
+#: src/includes/menu-pages/paypal-ops.inc.php:545
 msgid "Warning: Your HTTPS endpoint could not be reached from this server. This often indicates SSL/TLS or virtual-host configuration issues; PayPal webhooks may not be delivered successfully."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:533
+#: src/includes/menu-pages/paypal-ops.inc.php:547
 msgid "Warning: Your HTTPS endpoint appears to redirect to a hosting default page (cgi-sys/defaultwebpage.cgi). This suggests SSL/virtual-host configuration issues; PayPal webhooks may not be delivered successfully."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:535
-msgid "Warning: Your HTTPS endpoint returned HTTP %1$s. This suggests SSL/virtual-host configuration issues; PayPal webhooks may not be delivered successfully."
+#: src/includes/menu-pages/paypal-ops.inc.php:549
+msgid "Warning: Server-side probe to your HTTPS endpoint returned HTTP %1$s. This can be caused by SSL/virtual-host configuration issues, but it can also be a false negative due to security rules that block loopback requests. Use the “Test Webhook Endpoint” link and PayPal's webhook simulator to confirm external reachability."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:538
-#: src/includes/menu-pages/paypal-ops.inc.php:678
+#: src/includes/menu-pages/paypal-ops.inc.php:553
+#: src/includes/menu-pages/paypal-ops.inc.php:694
 msgid "Required Events:"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:540
-#: src/includes/menu-pages/paypal-ops.inc.php:680
+#: src/includes/menu-pages/paypal-ops.inc.php:555
+#: src/includes/menu-pages/paypal-ops.inc.php:696
 msgid "Tip: Use PayPal's Webhooks Events dashboard to view and re-deliver webhook events while testing."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:540
-#: src/includes/menu-pages/paypal-ops.inc.php:680
+#: src/includes/menu-pages/paypal-ops.inc.php:555
+#: src/includes/menu-pages/paypal-ops.inc.php:696
 msgid "Open Events Dashboard"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:543
-#: src/includes/menu-pages/paypal-ops.inc.php:683
+#: src/includes/menu-pages/paypal-ops.inc.php:558
+#: src/includes/menu-pages/paypal-ops.inc.php:699
 msgid "Disabled: PayPal webhooks require a working HTTPS (SSL) endpoint on this domain."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:545
+#: src/includes/menu-pages/paypal-ops.inc.php:560
 msgid "Plan/Product Cache (Live)"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:552
-#: src/includes/menu-pages/paypal-ops.inc.php:553
-#: src/includes/menu-pages/paypal-ops.inc.php:692
-#: src/includes/menu-pages/paypal-ops.inc.php:693
+#: src/includes/menu-pages/paypal-ops.inc.php:567
+#: src/includes/menu-pages/paypal-ops.inc.php:568
+#: src/includes/menu-pages/paypal-ops.inc.php:708
+#: src/includes/menu-pages/paypal-ops.inc.php:709
 msgid "Clear Plan/Product Cache"
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:553
-#: src/includes/menu-pages/paypal-ops.inc.php:693
+#: src/includes/menu-pages/paypal-ops.inc.php:568
+#: src/includes/menu-pages/paypal-ops.inc.php:709
 msgid "Cache is already empty."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:556
-#: src/includes/menu-pages/paypal-ops.inc.php:696
+#: src/includes/menu-pages/paypal-ops.inc.php:571
+#: src/includes/menu-pages/paypal-ops.inc.php:712
 msgid "Clears the local PayPal Checkout Product/Plan ID cache (used to avoid creating duplicates). Existing subscriptions are unaffected. Next checkout will create new Products/Plans as needed. Current cache: %1$s plan(s), %2$s product(s)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:612
-#: src/includes/menu-pages/paypal-ops.inc.php:647
-#: src/includes/menu-pages/paypal-ops.inc.php:661
+#: src/includes/menu-pages/paypal-ops.inc.php:627
+#: src/includes/menu-pages/paypal-ops.inc.php:662
+#: src/includes/menu-pages/paypal-ops.inc.php:676
 msgid "Save Sandbox credentials first."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:615
+#: src/includes/menu-pages/paypal-ops.inc.php:630
 msgid "Verifies your Sandbox Client ID/Secret by requesting an access token."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:635
+#: src/includes/menu-pages/paypal-ops.inc.php:650
 msgid "From your PayPal app webhook settings (Sandbox)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:663
+#: src/includes/menu-pages/paypal-ops.inc.php:678
 msgid "Set a Sandbox Webhook ID first (or use Create/Update Webhook)."
 msgstr ""
 
-#: src/includes/menu-pages/paypal-ops.inc.php:685
+#: src/includes/menu-pages/paypal-ops.inc.php:701
 msgid "Plan/Product Cache (Sandbox)"
 msgstr ""
 
