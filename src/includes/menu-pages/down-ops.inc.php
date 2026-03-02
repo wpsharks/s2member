@@ -98,7 +98,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 
 					echo '<td>'."\n";
 					echo '<input type="text" maxlength="9" autocomplete="off" name="ws_plugin__s2member_level'.$n.'_file_downloads_allowed" id="ws-plugin--s2member-level'.$n.'-file-downloads-allowed" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_file_downloads_allowed"]).'" style="width:200px;" /> every <input type="text" maxlength="3" autocomplete="off" name="ws_plugin__s2member_level'.$n.'_file_downloads_allowed_days" id="ws-plugin--s2member-level'.$n.'-file-downloads-allowed-days" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level".$n."_file_downloads_allowed_days"]).'" style="width:200px;" onkeyup="if(this.value > 365){ alert(\'(365 days is the maximum).\\nThis keeps the logs optimized.\'); this.value = 365; }" /> day(s).<br />'."\n";
-					echo 'Only this many unique downloads will be permitted every X day(s), at '.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'highest Level #'.$n : 'Level #'.$n.' or higher').'.<br />'."\n";
+					echo 'Only this many unique downloads are permitted in the last X day(s) (rolling window), at '.(($n === $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["levels"]) ? 'highest Level #'.$n : 'Level #'.$n.' or higher').'.<br />'."\n";
 					echo '<em>* To allow UNLIMITED downloads, use: <code>999999999</code> (i.e., <code>999999999</code> = unlimited).</em>'."\n";
 					echo '</td>'."\n";
 
