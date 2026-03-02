@@ -247,7 +247,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 			}
 			$last_user_id = $user_id; // Record this for internal optimizations.
 
-			return apply_filters("ws_plugin__s2member_users_list_display_cols", ((strlen($val)) ? $val : "—"), get_defined_vars());
+			return apply_filters("ws_plugin__s2member_users_list_display_cols", ((strlen((string) $val)) ? $val : "—"), get_defined_vars());
 		}
 
 		/**
