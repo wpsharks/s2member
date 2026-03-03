@@ -127,7 +127,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 						if($ok)
 							$ppco_creds_notice = '<div class="updated"><p>'.sprintf(esc_html__('PayPal Checkout %1$s credentials test OK.', 's2member'), $env_label).'</p></div>'."\n";
 						else
-							$ppco_creds_notice = '<div class="error"><p>'.sprintf(esc_html__('PayPal Checkout %1$s credentials test failed. See the s2Member paypal-checkout.log for details.', 's2member'), $env_label).' <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">'.esc_html__('Log Viewer', 's2member').'</a></p></div>'."\n";
+							$ppco_creds_notice = '<div class="error"><p>'.sprintf(esc_html__('PayPal Checkout %1$s credentials test failed. Please verify that the Client ID and Secret were copied from the same PayPal %1$s REST app, paste them again, save options, and test again. See the s2Member paypal-checkout.log for details.', 's2member'), $env_label).' <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">'.esc_html__('Log Viewer', 's2member').'</a></p></div>'."\n";
 					}
 					else
 						$ppco_creds_notice = '<div class="error"><p>'.sprintf(esc_html__('PayPal Checkout %1$s credentials are not configured.', 's2member'), $env_label).'</p></div>'."\n";
