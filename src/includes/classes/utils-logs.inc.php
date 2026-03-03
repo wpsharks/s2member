@@ -146,6 +146,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 			$log_entry = preg_replace('/([&?][^&]*(?:x_login|x_tran_key)\=)([^&]+)/i', '$1'.'xxxxxxxx/key/tran', $log_entry);
 
 			$log_entry = preg_replace('/(Authorization\s*:\s*Basic\s+)[A-Za-z0-9\/\+\=]+/i', '$1'.'xxxxxxxx/basic-auth', $log_entry);
+			$log_entry = preg_replace('/(\[\s*Authorization\s*\]\s*=\>\s*Basic\s+)[A-Za-z0-9\/\+\=]+/i', '$1'.'xxxxxxxx/basic-auth', $log_entry);
+			$log_entry = preg_replace('/(\"Authorization\"\s*:\s*\"Basic\s+)[A-Za-z0-9\/\+\=]+(\")/i', '$1'.'xxxxxxxx/basic-auth'.'$2', $log_entry);
+
+			//260303 Conceal OAuth access tokens in logged response bodies too.
+			$log_entry = preg_replace('/(\"access_token\"\s*:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/access-token'.'$3', $log_entry);
+			$log_entry = preg_replace('/(\[\s*access_token\s*\]\s*=\>\s*)([^\r\n]*)/i', '$1'.'xxxxxxxx/access-token', $log_entry);
 
 			return $log_entry; // With some private info concealed now.
 		}
