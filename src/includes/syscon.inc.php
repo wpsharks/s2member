@@ -132,6 +132,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['gateway_debug_logs_extensive'] = '0';
 
 		$default_options['lazy_load_css_js']             = '0';
+		$default_options['no_cache_headers_mode']        = 'always'; //260308 No-cache headers mode: `always`, `selective`, `evaluative`.
+		$default_options['no_cache_headers_debug']       = '0'; //260308 Adds Server-Timing no-cache debug header (support use only).
 		$default_options['sc_conds_allow_arbitrary_php'] = '0';
 		$default_options['sc_conds_whitelist'] = '';
 
@@ -407,6 +409,12 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 					$value = $default_options[$key];
 
 				else if($key === 'lazy_load_css_js' && (!is_string($value) || !is_numeric($value)))
+					$value = $default_options[$key];
+
+				else if($key === 'no_cache_headers_mode' && (!is_string($value) || !in_array($value, array('always', 'selective', 'evaluative'), TRUE)))
+					$value = $default_options[$key];
+
+				else if($key === 'no_cache_headers_debug' && (!is_string($value) || !is_numeric($value)))
 					$value = $default_options[$key];
 
 				else if($key === 'sc_conds_allow_arbitrary_php' && (!is_string($value) || !is_numeric($value)))

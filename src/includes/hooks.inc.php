@@ -29,7 +29,9 @@ add_action('set_current_user', 'c_ws_plugin__s2member_user_securities::set_curre
 add_action('init', 'c_ws_plugin__s2member_ssl::check_force_ssl', 3);
 add_action('init', 'c_ws_plugin__s2member_user_securities::initialize', 3);
 add_action('init', 'c_ws_plugin__s2member_database::wait_timeout', 3);
-add_action('init', 'c_ws_plugin__s2member_no_cache::no_cache', 3);
+
+//260307 No-cache headers behavior mode is selected at runtime (options load after this file is included).
+add_action('init', 'c_ws_plugin__s2member_no_cache::setup_no_cache_headers_mode', 3);
 
 add_action('init', 'c_ws_plugin__s2member_register::register', 4);
 add_action('init', 'c_ws_plugin__s2member_paypal_notify::paypal_notify', 4);
