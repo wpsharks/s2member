@@ -3,8 +3,8 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260301
-Stable tag: 260301
+Version: 260312
+Stable tag: 260312
 Tested up to: 7.0-alpha-61642
 Requires at least: 4.2
 Requires PHP: 5.6.2
@@ -176,11 +176,31 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260301 =
+= v260312 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v260312 =
+
+- (Framework) **Fix:** Prevent a PHP 8.1+ deprecation notice from appearing above the admin Users table in some cases.
+ 
+- (Framework) **Security:** Improved debug log sanitization.
+ 
+- (Framework) **Improvement:** PayPal Checkout credential test and OAuth failure log entries now include client_len_hash / secret_len_hash values (length_hash, e.g. 80_4d9a7c1b2e8f4a21) to help compare attempted credentials during troubleshooting without exposing raw values.
+ 
+- (Framework) **Enhancement:** Added a new _No-Cache Headers Behavior_ option under _General Options > Performance & Caching_, making no-cache behavior configurable from the admin UI. It includes:
+  - `Always` mode, the legacy safe default that prevents caching site-wide in case user-conditional output appears.
+  - `Selective` mode, which was previously available only through a filter and may improve caching for guests, but can miss some runtime no-cache triggers.
+  - The new `Evaluative` beta mode, which evaluates the page with more runtime information and may allow more pages to be cached safely for guests.
+  - An optional debug header to help troubleshoot no-cache behavior.
+ 
+- (Framework) **UI:** Clarified the Download Options text to explain that unique download limits are counted in the last X days (rolling window), reducing confusion about whether the limit resets on fixed calendar dates.
+ 
+- (Framework) **UI**: Improved the PayPal Checkout credentials test failure message.
+ 
+- (Framework) **UI:** Fixed the PayPal button encryption admin notice so that it shows only to administrators in the WP Admin area, not non-admin users.
 
 = v260301 =
 

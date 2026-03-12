@@ -39,6 +39,78 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 		public static $headers;
 
 		/**
+		 * Sets up no-cache header behavior mode.
+		 *
+		 * This runs on `init` so s2Member options are available (options are configured after hooks are included).
+		 *
+		 * @package s2Member\No_Cache
+		 * @since 260307
+		 *
+		 * @attaches-to ``add_action('init');``
+		 *
+		 * @return void
+		 */
+		public static function setup_no_cache_headers_mode()
+		{
+			static $once; // Run only once per request.
+
+			if($once)
+				return;
+
+			$once = TRUE;
+
+			$mode = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['no_cache_headers_mode']))
+				? (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['no_cache_headers_mode']
+				: 'always';
+
+			if($mode === 'evaluative' || !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['no_cache_headers_debug']))
+				add_filter('wp_headers', 'c_ws_plugin__s2member_no_cache::no_cache_wp_headers', 9999); //260309 Run last; also adds debug header in all modes when enabled.
+
+			if($mode === 'evaluative')
+			{
+				add_filter('ws_plugin__s2member_no_cache_headers_selective', '__return_true');
+				c_ws_plugin__s2member_no_cache::no_cache_constants(FALSE);
+
+				add_action('wp', 'c_ws_plugin__s2member_no_cache::evaluative_no_cache_scan', 3); //260308 Rename staged scan to evaluative scan.
+			}
+			else
+			{
+				if($mode === 'selective')
+					add_filter('ws_plugin__s2member_no_cache_headers_selective', '__return_true');
+
+				c_ws_plugin__s2member_no_cache::no_cache(FALSE);
+			}
+		}
+
+		/**
+		 * Evaluative mode: scans queried post content for s2Member shortcodes before headers are sent.
+		 *
+		 * Shortcodes execute after headers (during rendering), so evaluative mode must pre-detect likely s2Member
+		 * shortcodes to ensure no-cache headers are applied when needed.
+		 *
+		 * @package s2Member\No_Cache
+		 * @since 260307
+		 *
+		 * @attaches-to ``add_action('wp');``
+		 *
+		 * @return void
+		 */
+		public static function evaluative_no_cache_scan()
+		{
+			if(!is_singular())
+				return;
+
+			$post = get_queried_object();
+			if(!is_object($post) || empty($post->post_content) || !is_string($post->post_content))
+				return;
+
+			//260307 Conservative pre-detection of s2Member shortcodes in post content.
+			// This intentionally errs on the safe side (prevents caching) for any `[s2...` usage.
+			if(stripos($post->post_content, '[s2') !== FALSE)
+				c_ws_plugin__s2member_no_cache::no_cache_constants(true);
+		}
+
+		/**
 		 * Handles no-cache constants, and no-cache headers.
 		 *
 		 * @package s2Member\No_Cache
@@ -177,6 +249,85 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 			do_action('ws_plugin__s2member_after_no_cache_constants', get_defined_vars());
 
 			return TRUE; // Always return true.
+		}
+
+		/**
+		 * Filters HTTP headers (wp_headers) to apply no-cache headers when needed.
+		 *
+		 * This is used by the `evaluative` no-cache headers mode. It allows s2Member runtime checks/shortcodes
+		 * (e.g., `[s2If]`) to set no-cache constants/flags during rendering, while still applying no-cache
+		 * headers during WordPress's standard header-sending stage (wp_headers/send_headers).
+		 *
+		 * Obeys `?qcABC`, `?zcABC`, and `?ccABC` query string parameters, which explicitly allow caching.
+		 *
+		 * @package s2Member\No_Cache
+		 * @since 260307
+		 *
+		 * @param array $headers An associative array of HTTP headers.
+		 *
+		 * @return array Possibly modified headers.
+		 */
+		public static function no_cache_wp_headers($headers = array())
+		{
+			static $once; // We only need to filter these headers one time.
+
+			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+			do_action('ws_plugin__s2member_before_no_cache_headers', get_defined_vars());
+			unset($__refs, $__v); // Housekeeping.
+
+			$mode                     = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['no_cache_headers_mode']))
+				? (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['no_cache_headers_mode']
+				: 'always';
+			$no_cache                 = (bool)apply_filters('ws_plugin__s2member_no_cache', FALSE, get_defined_vars());
+			$using_selective_behavior = (bool)apply_filters('ws_plugin__s2member_no_cache_headers_selective', FALSE, get_defined_vars());
+
+			if($mode === 'evaluative' && !$no_cache && $using_selective_behavior && !c_ws_plugin__s2member_no_cache::$headers) //260309 Evaluative mode: pre-detect s2 shortcodes in queried content.
+			{
+				global $wp_query;
+
+				if(!empty($wp_query) && !empty($wp_query->post) && is_object($wp_query->post) && !empty($wp_query->post->post_content))
+					if(stripos((string)$wp_query->post->post_content, '[s2') !== FALSE)
+						c_ws_plugin__s2member_no_cache::$headers = TRUE;
+			}
+
+			//260308 Debug header (support use only).
+			if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['no_cache_headers_debug']))
+			{
+				$_st = 's2member;desc="mode='.$mode.';no_cache='.(int)$no_cache.';selective='.(int)$using_selective_behavior.';headers='.(int)c_ws_plugin__s2member_no_cache::$headers.'"';
+
+				if(!empty($headers['Server-Timing']))
+					$headers['Server-Timing'] .= ', '.$_st;
+				else
+					$headers['Server-Timing'] = $_st;
+
+				unset($_st); // Housekeeping.
+			}
+
+			if($mode === 'evaluative' && !$once
+			   && (empty($_GET['ccABC']) || !filter_var($_GET['ccABC'], FILTER_VALIDATE_BOOLEAN))
+			   && (empty($_GET['zcABC']) || !filter_var($_GET['zcABC'], FILTER_VALIDATE_BOOLEAN))
+			   && (empty($_GET['qcABC']) || !filter_var($_GET['qcABC'], FILTER_VALIDATE_BOOLEAN))
+			   && ($no_cache || !$using_selective_behavior || c_ws_plugin__s2member_no_cache::$headers)
+			)
+				if(!apply_filters('ws_plugin__s2member_disable_no_cache_headers', FALSE, get_defined_vars()))
+				{
+					$nocache_headers = wp_get_nocache_headers();
+
+					foreach(array('Expires', 'Cache-Control', 'Pragma') as $_k)
+						if(isset($headers[$_k])) unset($headers[$_k]);
+
+					foreach((array)$nocache_headers as $_k => $_v)
+						$headers[$_k] = $_v;
+
+					unset($_k, $_v); // Housekeeping.
+
+					$once = TRUE; // This is static var. Only apply once.
+
+					do_action('ws_plugin__s2member_during_no_cache_headers', get_defined_vars());
+				}
+			do_action('ws_plugin__s2member_after_no_cache_headers', get_defined_vars());
+
+			return $headers;
 		}
 
 		/**

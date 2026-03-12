@@ -20,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 260301
-Stable tag: 260301
+Version: 260312
+Stable tag: 260312
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -77,7 +77,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '260301'; //version//
+${__FILE__}['tmp'] = '260312'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**
@@ -189,17 +189,27 @@ unset(${__FILE__}); // Housekeeping.
 
 //2300808 PayPal button encryption notice if they're using it
 if (is_admin() && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_encryption"])) {
-	// Dismiss
+	// Dismiss.
 	add_action('admin_init', function(){
+		//260303 Show only to administrators.
+		if (!current_user_can('manage_options'))
+			return;
+
 		$user_id = get_current_user_id();
 		if (isset($_GET['s2-dismiss-2300808']))
 				add_user_meta($user_id, 's2_notice_dismissed_2300808', 'true', true);
 	});
-	// Notice
+
+	// Notice.
 	add_action('admin_notices', function(){
+		//260303 Show only to administrators.
+		if (!current_user_can('manage_options'))
+			return;
+
 		$user_id = get_current_user_id();
 		$logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
 		$dismiss_url = esc_url(add_query_arg('s2-dismiss-2300808', '', $_SERVER['REQUEST_URI']));
+
 		if (!get_user_meta($user_id, 's2_notice_dismissed_2300808')) {
 			echo '
 				<div class="notice notice-warning" style="position:relative; margin: 0 0 15px 2px !important; padding: 0 40px 0 0 !important">
@@ -210,5 +220,5 @@ if (is_admin() && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_btn_en
 					<a href="'.$dismiss_url.'" class="notice-dismiss" style="text-decoration:none;"><span class="screen-reader-text">Dismiss this notice.</span></a>
 				</div>';
 		}
-});
+	});
 }

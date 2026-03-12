@@ -873,9 +873,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(($cached = get_transient($transient)) && is_array($cached) && !empty($cached['access_token']))
 							return $cached['access_token'];
 
-						$creds     = self::paypal_checkout_creds();
-						$client_id = (string)$creds['client_id'];
-						$secret    = (string)$creds['secret'];
+						$creds            = self::paypal_checkout_creds();
+						$client_id        = (string)$creds['client_id'];
+						$secret           = (string)$creds['secret'];
+						$client_len_hash  = strlen($client_id).'_'.substr(hash('sha256', $client_id), 0, 16);
+						$secret_len_hash  = strlen($secret).'_'.substr(hash('sha256', $secret), 0, 16);
 
 						if(!$client_id || !$secret)
 							return '';
@@ -900,13 +902,15 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						if(!isset($r['code']) || (int)$r['code'] !== 200)
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-								'ppco'     => 'oauth',
-								'event'    => 'token_failed',
-								'env_setting' => self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live',
-								'url'      => $url,
-								'code'     => !empty($r['code']) ? (int)$r['code'] : 0,
-								'message'  => !empty($r['message']) ? (string)$r['message'] : '',
-								'body'     => !empty($r['body']) ? $r['body'] : '',
+								'ppco'            => 'oauth',
+								'event'           => 'token_failed',
+								'env_setting'     => self::paypal_checkout_is_sandbox() ? 'sandbox' : 'live',
+								'client_len_hash' => $client_len_hash,
+								'secret_len_hash' => $secret_len_hash,
+								'url'             => $url,
+								'code'            => !empty($r['code']) ? (int)$r['code'] : 0,
+								'message'         => !empty($r['message']) ? (string)$r['message'] : '',
+								'body'            => !empty($r['body']) ? $r['body'] : '',
 							));
 
 						$data = array();
@@ -949,10 +953,16 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$token = self::paypal_checkout_access_token();
 						$ok    = ($token) ? true : false;
 
+						$creds            = self::paypal_checkout_creds();
+						$client_len_hash  = strlen((string)$creds['client_id']).'_'.substr(hash('sha256', (string)$creds['client_id']), 0, 16);
+						$secret_len_hash  = strlen((string)$creds['secret']).'_'.substr(hash('sha256', (string)$creds['secret']), 0, 16);
+
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'     => 'checkout',
-							'event'    => $ok ? 'creds_test_ok' : 'creds_test_failed',
-							'env_setting' => $env,
+							'ppco'            => 'checkout',
+							'event'           => $ok ? 'creds_test_ok' : 'creds_test_failed',
+							'env_setting'     => $env,
+							'client_len_hash' => $client_len_hash,
+							'secret_len_hash' => $secret_len_hash,
 						));
 
 						$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';

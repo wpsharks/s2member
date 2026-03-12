@@ -164,7 +164,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 			{
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_before_lazy_load", get_defined_vars());
 
-				echo '<div class="ws-menu-page-group" title="CSS/JS Lazy Loading">'."\n";
+				echo '<div class="ws-menu-page-group" title="Performance &amp; Caching">'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-lazy-load-section">'."\n";
 				echo '<h3>CSS/JS Lazy Loading (Client-Side Libraries)</h3>'."\n";
@@ -190,6 +190,61 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["lazy_load_css_js"]) ? ' selected="selected"' : '').'>No (always load the CSS/JS libraries; i.e., on every page of the site)</option>'."\n";
 				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["lazy_load_css_js"]) ? ' selected="selected"' : '').'>Yes (lazy-load CSS/JS libraries; i.e., load only when absolutely necessary)</option>'."\n";
 				echo '</select>'."\n";
+				echo '</td>'."\n";
+
+				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+				echo '</div>'."\n";
+
+				echo '<div style="margin:1em 0;">'."\n";
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+				echo '</div>'."\n";
+
+				echo '<div class="ws-menu-page-section ws-plugin--s2member-no-cache-headers-section">'."\n";
+				echo '<h3>No-Cache Headers Behavior (beta)</h3>'."\n";
+				echo '<p>s2Member can render different output depending on logged-in state, access level, conditionals (e.g., <code>[s2If]</code>), and nonce-based forms. If a cache stores a page generated under one context and serves it to another, visitors may see incorrect content or stale nonces. These options control when s2Member sends HTTP no-cache headers (<code>Cache-Control: no-cache</code>) to reduce that risk while allowing caching where appropriate.</p>'."\n";
+				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_no_cache_headers", get_defined_vars());
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-no-cache-headers-mode">'."\n";
+				echo 'When should no-cache headers be sent?'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<td>'."\n";
+				echo '<select name="ws_plugin__s2member_no_cache_headers_mode" id="ws-plugin--s2member-no-cache-headers-mode">'."\n";
+				echo '<option value="always"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["no_cache_headers_mode"] === 'always') ? ' selected="selected"' : '').'>Always (disables guest caching site-wide)</option>'."\n";
+				echo '<option value="selective"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["no_cache_headers_mode"] === 'selective') ? ' selected="selected"' : '').'>Selective (may improve caching for guests)</option>'."\n";
+				echo '<option value="evaluative"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["no_cache_headers_mode"] === 'evaluative') ? ' selected="selected"' : '').'>Evaluative (better informed guest caching)</option>'."\n";
+				echo '</select><br />'."\n";
+				echo '<em>Choose when s2Member should send HTTP no-cache headers.</em>'."\n";
+				echo '<ul style="margin: .3em 0 0 1.1em; line-height: 1.5em;">'."\n";
+				echo '<li><strong>Always:</strong> <em>Sends no-cache headers very early on every page request. This is the safest behavior when member-conditional output could appear anywhere (content, widgets, theme templates, menus) and caching is not configured to vary correctly. It can reduce performance because it prevents caching for guests site-wide.</em></li>'."\n";
+				echo '<li><strong>Selective:</strong> <em>Enables selective behavior via the long-standing <code>ws_plugin__s2member_no_cache_headers_selective</code> filter used by customizations/plugins to change the default. Headers are still decided very early, actually too early to reliably reflect decisions made while a page renders (for example, when <code>[s2If]</code> or other shortcodes execute). This may improve caching for guests, but it can miss some runtime no-cache triggers in edge cases. Use this for backward compatibility if you already rely on it and understand the tradeoffs.</em></li>'."\n";
+				echo '<li><strong>Evaluative (beta):</strong> <em>Evaluates the page later, after s2Member shortcodes and other runtime checks have affected the page, resulting in better informed guest caching. No-cache headers are then sent at WordPress\' standard header-sending stage. Because this mode sends no-cache headers later than Always or Selective modes, it may expose “headers already sent” issues caused by another plugin or theme outputting content too early. Output added in widgets, menus, or theme templates may still require using Always or Selective mode.</em></li>'."\n";
+				echo '</ul>'."\n";
+
+				//260308 Sub-setting UI for no-cache debug header; label-based heading without extra divider.
+				echo '<p style="margin-top:25px; font-size: 115%;"><strong>Enable no-cache debug header?</strong></p>'."\n";
+				echo '<p>'."\n";
+				echo '<input type="radio" name="ws_plugin__s2member_no_cache_headers_debug" id="ws-plugin--s2member-no-cache-headers-debug-no" value="0"'.((empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["no_cache_headers_debug"])) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-no-cache-headers-debug-no">No</label> &nbsp;&nbsp;&nbsp;'."\n";
+				echo '<input type="radio" name="ws_plugin__s2member_no_cache_headers_debug" id="ws-plugin--s2member-no-cache-headers-debug-yes" value="1"'.((!empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["no_cache_headers_debug"])) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-no-cache-headers-debug-yes">Yes, add a debug header.</label><br />'."\n";
+				echo '<em>This adds a <code>Server-Timing</code> header to help troubleshoot why no-cache headers are being applied or not. This header includes the following variables:</em>'."\n";
+				echo '</p>'."\n";
+				echo '<ul style="margin: .3em 0 0 1.1em; line-height: 1.5em; font-style: italic;">'."\n";
+				echo '<li><code>mode</code> = Behavior mode in effect: <code>always</code>, <code>selective</code>, <code>evaluative</code>.</li>'."\n";
+				echo '<li><code>no_cache</code> = <code>1</code> means forced no-cache via filter; <code>0</code> means not forced.</li>'."\n";
+				echo '<li><code>selective</code> = <code>1</code> means selective behavior enabled; <code>0</code> means not enabled.</li>'."\n";
+				echo '<li><code>headers</code> = <code>1</code> means s2Member decided this request shouldn\'t be cached; <code>0</code> means it didn\'t.</li>'."\n";
+				echo '</ul>'."\n";
+
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
