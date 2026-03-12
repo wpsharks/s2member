@@ -1,3 +1,23 @@
+= v260312 =
+
+- (Framework) **Fix:** Prevent a PHP 8.1+ deprecation notice from appearing above the admin Users table in some cases.
+ 
+- (Framework) **Security:** Improved debug log sanitization.
+ 
+- (Framework) **Improvement:** PayPal Checkout credential test and OAuth failure log entries now include client_len_hash / secret_len_hash values (length_hash, e.g. 80_4d9a7c1b2e8f4a21) to help compare attempted credentials during troubleshooting without exposing raw values.
+ 
+- (Framework) **Enhancement:** Added a new _No-Cache Headers Behavior_ option under _General Options > Performance & Caching_, making no-cache behavior configurable from the admin UI. It includes:
+  - `Always` mode, the legacy safe default that prevents caching site-wide in case user-conditional output appears.
+  - `Selective` mode, which was previously available only through a filter and may improve caching for guests, but can miss some runtime no-cache triggers.
+  - The new `Evaluative` beta mode, which evaluates the page with more runtime information and may allow more pages to be cached safely for guests.
+  - An optional debug header to help troubleshoot no-cache behavior.
+ 
+- (Framework) **UI:** Clarified the Download Options text to explain that unique download limits are counted in the last X days (rolling window), reducing confusion about whether the limit resets on fixed calendar dates.
+ 
+- (Framework) **UI**: Improved the PayPal Checkout credentials test failure message.
+ 
+- (Framework) **UI:** Fixed the PayPal button encryption admin notice so that it shows only to administrators in the WP Admin area, not non-admin users.
+
 = v260301 =
 
 - (Framework) **Bug Fix:** Fixed mismatched `<label for="">` and `<input id="">` attributes for checkbox/radio options in Custom Registration/Profile Fields; this also restores proper client-side validation for required checkbox/radio groups.
