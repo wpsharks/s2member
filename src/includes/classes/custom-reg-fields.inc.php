@@ -727,6 +727,11 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a zipcode (either a US or Canadian zipcode).', 's2member-front', 's2member').'</em>';
 										break;
 
+									case 'ukpostcode':
+										if(!preg_match('/^(([a-zA-Z]{1,2}[0-9][a-zA-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][a-zA-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[a-zA-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$/', $input[$_field_var]))
+											$errors[$_field_var] = '<strong>'.$_field_label.'</strong><br />&nbsp;&nbsp;<em>'._x('Must be a UK postcode (5-8 characters w/ possible space).', 's2member-front', 's2member').'</em>';
+										break;
+
 									default: // Handle others dynamically here.
 
 										if(preg_match('/^alphanumerics\-spaces\-punctuation\-[0-9]+(?:\-e)?$/', $_field_expects) && !preg_match('/^[a-z 0-9\/\\\\,.?:;"\'{}[\]\^|+=_()*&%$#@!`~\-]+$/i', $input[$_field_var]))
