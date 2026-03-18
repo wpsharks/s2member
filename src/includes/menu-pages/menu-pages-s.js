@@ -586,7 +586,7 @@ jQuery(document).ready(function($)
 												form += '<option value="uszip"'+((field.expected === 'uszip') ? ' selected="selected"' : '')+'">US Zipcode (5-9 digits w/possible hyphen)</option>';
 												form += '<option value="cazip"'+((field.expected === 'cazip') ? ' selected="selected"' : '')+'">Canadian Zipcode (6 alpha-numerics w/possible space)</option>';
 												form += '<option value="uczip"'+((field.expected === 'uczip') ? ' selected="selected"' : '')+'">US/Canadian Zipcode (either a US or Canadian zipcode)</option>';
-												form += '<option value="ukpostcode"'+((field.expected === 'ukpostcode') ? ' selected="selected"' : '')+'">UK Postcode (5-8 characters w/ possible space)</option>';
+												form += '<option value="ukpostcode"'+((field.expected === 'ukpostcode') ? ' selected="selected"' : '')+'">UK Postcode</option>';
 												form += '</optgroup>';
 
 												form += '<option disabled="disabled"></option>';
