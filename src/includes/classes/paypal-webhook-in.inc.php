@@ -142,8 +142,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			$event_id   = (string)$event['id'];
 			$event_type = (string)$event['event_type'];
 
-			// Idempotency per webhook event id (only after successful proxy).
+			//260319 Idempotency per webhook event id: ignore processed events and atomically lock in-flight processing.
 			$event_id_transient = 's2m_ppco_wh_'.md5($event_id);
+			$event_id_lock      = 's2m_ppco_wh_lock_'.md5($event_id);
+			$event_id_lock_ttl  = 300;
+
 			if(get_transient($event_id_transient))
 			{
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
@@ -153,6 +156,26 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					'event'      => 'duplicate_event',
 					'action'     => 'ignored',
 					'note'       => 'Duplicate webhook delivery (event_id already processed).',
+					'event_id'   => $event_id,
+					'event_type' => $event_type,
+				));
+				status_header(200);
+				exit();
+			}
+
+			$event_id_lock_time = (int)get_option($event_id_lock, 0);
+			if($event_id_lock_time > 0 && (time() - $event_id_lock_time) >= $event_id_lock_ttl)
+				delete_option($event_id_lock);
+
+			if(!add_option($event_id_lock, (string)time(), '', 'no'))
+			{
+				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+					'ppco'       => 'webhook',
+					'env_setting'=> $env_site,
+					'env_webhook'=> $env_webhook,
+					'event'      => 'duplicate_event',
+					'action'     => 'ignored',
+					'note'       => 'Duplicate webhook delivery (event_id already processing).',
 					'event_id'   => $event_id,
 					'event_type' => $event_type,
 				));
@@ -188,6 +211,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						'event_type' => $event_type,
 						'subscr_id'  => $subscr_id,
 					));
+
+					//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
+					set_transient($event_id_transient, time(), 31556952);
+					delete_option($event_id_lock);
+
 					status_header(200);
 					exit();
 				}
@@ -218,6 +246,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						'event_id'   => $event_id,
 						'event_type' => $event_type,
 					));
+
+					//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
+					set_transient($event_id_transient, time(), 31556952);
+					delete_option($event_id_lock);
+
 					status_header(200);
 					exit();
 				}
@@ -289,6 +322,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						'event_type' => $event_type,
 						'resource'   => $resource,
 					));
+
+					//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
+					set_transient($event_id_transient, time(), 31556952);
+					delete_option($event_id_lock);
+
 					status_header(200);
 					exit();
 				}
@@ -369,6 +407,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					'event_id'   => $event_id,
 					'event_type' => $event_type,
 				));
+
+				//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
+				set_transient($event_id_transient, time(), 31556952);
+				delete_option($event_id_lock);
+
 				status_header(200);
 				exit();
 			}
@@ -402,6 +445,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						'txn_id'     => !empty($paypal['txn_id']) ? (string)$paypal['txn_id'] : '',
 						'transient'  => $txn_transient,
 					));
+
+					//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
+					set_transient($event_id_transient, time(), 31556952);
+					delete_option($event_id_lock);
+
 					status_header(200);
 					exit();
 				}
@@ -427,6 +475,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			if($code >= 200 && $code <= 299)
 			{
 				set_transient($event_id_transient, time(), 31556952);
+				delete_option($event_id_lock);
+
 				if($txn_transient)
 					set_transient($txn_transient, time(), 31556952);
 
@@ -445,6 +495,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				));
 			}
 			else
+			{
+				//260319 Release the in-flight webhook lock on failure so PayPal retries can proceed.
+				delete_option($event_id_lock);
+
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
 					'env_setting'=> $env_site,
@@ -458,6 +512,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					'code'       => $code,
 					'message'    => !empty($r['message']) ? (string)$r['message'] : '',
 				));
+			}
 
 			status_header(200);
 			exit();
