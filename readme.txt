@@ -3,8 +3,8 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260312
-Stable tag: 260312
+Version: 260324.0240
+Stable tag: 260324.0240
 Tested up to: 7.0-alpha-61642
 Requires at least: 4.2
 Requires PHP: 5.6.2
@@ -24,7 +24,7 @@ More Updates: https://s2member.com/category/news-updates/
 Newsletter: https://s2member.com/r/subscribe/
 PayPal Pro Integration: https://s2member.com/r/pp-account-types/
 Text Domain: s2member
-Domain Path: /src/includes/translations
+Domain Path: /languages
 
 ❤️ Excellent membership plugin! Easy, quick, flexible. Monetize your site with memberships and subscriptions. Protect content instantly and securely.
 

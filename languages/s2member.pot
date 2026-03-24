@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  260312\n"
+"Project-Id-Version:  260324.0240\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-03-12 03:35:48+00:00\n"
+"POT-Creation-Date: 2026-03-24 01:41:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: pro/src/includes/classes/coupons.inc.php:266
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:692
 #: pro/src/includes/classes/gateways/paypal/paypal-utilities.inc.php:312
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:997
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1109
 msgctxt "s2member-front percentage-symbol"
 msgid "%"
 msgstr ""
@@ -133,7 +133,7 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-update-in.inc.php:153
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:145
 #: pro/src/includes/classes/gateways/stripe/stripe-cancellation-in.inc.php:156
-#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:128
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:132
 msgctxt "s2member-front"
 msgid "You're <strong>NOT</strong> logged in."
 msgstr ""
@@ -158,8 +158,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:915
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:753
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1087
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:565
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:839
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:626
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:905
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">log in</a>."
 msgstr ""
@@ -184,8 +184,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1122
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:129
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:151
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:577
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:851
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:638
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:917
 #: pro/src/includes/classes/gateways/stripe/stripe-registration-in.inc.php:131
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> A slight problem. Please contact Support for assistance."
@@ -199,8 +199,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:941
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:779
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1113
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:566
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:840
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:627
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:906
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; You'll receive an email momentarily."
 msgstr ""
@@ -210,7 +210,7 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:961
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1133
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:136
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:855
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:921
 msgctxt "s2member-front"
 msgid "<strong>Unknown error.</strong> Please contact Support for assistance."
 msgstr ""
@@ -1274,7 +1274,7 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-update-in.inc.php:115
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:118
 #: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:80
-#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:112
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:114
 msgctxt "s2member-front"
 msgid "<strong>Confirmed.</strong> Your billing information has been updated."
 msgstr ""
@@ -1282,7 +1282,7 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-update-in.inc.php:122
 #: pro/src/includes/classes/gateways/paypal/paypal-update-in.inc.php:131
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:130
-#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:124
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:128
 msgctxt "s2member-front"
 msgid "<strong>Unable to update.</strong> You have NO recurring fees. Or, your billing profile is no longer active. Please contact Support if you need assistance."
 msgstr ""
@@ -1503,17 +1503,25 @@ msgctxt "s2member-front"
 msgid "API failure. Please contact Support for assistance."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:239
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:439
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:632
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:747
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:86
+#: pro/src/includes/classes/gateways/stripe/stripe-css-js.inc.php:84
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1527
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1720
+msgctxt "s2member-front"
+msgid "The payment failed, please try again with a different card."
+msgstr ""
+
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:273
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:500
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:693
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:813
 #: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:138
 msgctxt "s2member-front"
 msgid "Please submit a card."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:330
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:690
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:369
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:756
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been updated :-)"
 msgstr ""
@@ -1560,7 +1568,7 @@ msgctxt "s2member-front"
 msgid "We need a card to update your subscription. Please enter it below..."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:126
+#: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:130
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> No Customer|Subscr. ID. Please contact Support for assistance."
 msgstr ""
@@ -1570,50 +1578,45 @@ msgctxt "s2member-front"
 msgid "Error: <strong>prepaid</strong> cards not accepted at this time. Please use a different card and try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:770
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:882
 msgctxt "s2member-front"
 msgid "Error code: <code>%1$s</code>. %2$s."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:773
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:885
 msgctxt "s2member-front"
 msgid "Invalid parameters to Stripe; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:776
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:888
 msgctxt "s2member-front"
 msgid "Invalid Stripe API keys; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:779
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:891
 msgctxt "s2member-front"
 msgid "Network communication failure with Stripe; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:782
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:894
 msgctxt "s2member-front"
 msgid "Stripe API error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:784
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:896
 msgctxt "s2member-front"
 msgid "Stripe error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1406
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1455
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1658
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1715
 msgctxt "s2member-front"
 msgid "Action required: 3D Secure authorization."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1411
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1663
 msgctxt "s2member-front"
 msgid "Please try again with a different card."
-msgstr ""
-
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1460
-msgctxt "s2member-front"
-msgid "The payment failed, please try again with a different card."
 msgstr ""
 
 #: pro/src/includes/classes/login-widget.inc.php:131
@@ -1759,12 +1762,12 @@ msgstr ""
 #: pro/src/includes/separates/gateways/stripe/stripe.js:680
 #: pro/src/includes/separates/gateways/stripe/stripe.js:685
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
-#: src/includes/s2member.js:311 src/includes/s2member.js:316
-#: src/includes/s2member.js:321 src/includes/s2member.js:326
-#: src/includes/s2member.js:357 src/includes/s2member.js:412
-#: src/includes/s2member.js:417 src/includes/s2member.js:422
-#: src/includes/s2member.js:427 src/includes/s2member.js:456
-#: src/includes/s2member.js:485 src/includes/s2member.js:510
+#: src/includes/s2member.js:315 src/includes/s2member.js:320
+#: src/includes/s2member.js:325 src/includes/s2member.js:330
+#: src/includes/s2member.js:361 src/includes/s2member.js:416
+#: src/includes/s2member.js:421 src/includes/s2member.js:426
+#: src/includes/s2member.js:431 src/includes/s2member.js:460
+#: src/includes/s2member.js:489 src/includes/s2member.js:514
 #: src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "— Oops, you missed something: —"
@@ -1810,7 +1813,7 @@ msgstr ""
 #: pro/src/includes/separates/gateways/stripe/stripe.js:196
 #: pro/src/includes/separates/gateways/stripe/stripe.js:670
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
-#: src/includes/s2member.js:316 src/includes/s2member.js:417
+#: src/includes/s2member.js:320 src/includes/s2member.js:421
 #: src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Passwords do not match up. Please try again."
@@ -1825,7 +1828,7 @@ msgstr ""
 #: pro/src/includes/separates/gateways/stripe/stripe.js:201
 #: pro/src/includes/separates/gateways/stripe/stripe.js:675
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
-#: src/includes/s2member.js:321 src/includes/s2member.js:422
+#: src/includes/s2member.js:325 src/includes/s2member.js:426
 #: src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Password MUST be at least %s characters. Please try again."
@@ -1840,7 +1843,7 @@ msgstr ""
 #: pro/src/includes/separates/gateways/stripe/stripe.js:206
 #: pro/src/includes/separates/gateways/stripe/stripe.js:680
 #: pro/src/includes/separates/gateways/stripe/stripe.min.js:1
-#: src/includes/s2member.js:326 src/includes/s2member.js:427
+#: src/includes/s2member.js:330 src/includes/s2member.js:431
 #: src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Password strength MUST be %s. Please try again."
@@ -3811,79 +3814,85 @@ msgctxt "s2member-front"
 msgid "Must be a zipcode (either a US or Canadian zipcode)."
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:733
+#: src/includes/classes/custom-reg-fields.inc.php:732
+#: src/includes/s2member.js:202 src/includes/s2member.min.js:1
+msgctxt "s2member-front"
+msgid "Must be a valid UK postcode."
+msgstr ""
+
+#: src/includes/classes/custom-reg-fields.inc.php:738
 msgctxt "s2member-front"
 msgid "Please use alphanumerics, spaces &amp; punctuation only."
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:736
+#: src/includes/classes/custom-reg-fields.inc.php:741
 msgctxt "s2member-front"
 msgid "Please use alphanumerics &amp; spaces only."
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:739
+#: src/includes/classes/custom-reg-fields.inc.php:744
 msgctxt "s2member-front"
 msgid "Please use alphanumerics &amp; punctuation only (no spaces)."
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:742
-#: src/includes/s2member.js:214 src/includes/s2member.min.js:1
+#: src/includes/classes/custom-reg-fields.inc.php:747
+#: src/includes/s2member.js:218 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Please use alphanumerics only (no spaces/punctuation)."
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:745
-#: src/includes/s2member.js:218 src/includes/s2member.min.js:1
+#: src/includes/classes/custom-reg-fields.inc.php:750
+#: src/includes/s2member.js:222 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Please use alphabetics only (no digits/spaces/punctuation)."
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:748
-#: src/includes/s2member.js:222 src/includes/s2member.min.js:1
+#: src/includes/classes/custom-reg-fields.inc.php:753
+#: src/includes/s2member.js:226 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Please use numeric digits only."
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:761
-#: src/includes/classes/custom-reg-fields.inc.php:775
-#: src/includes/s2member.js:229 src/includes/s2member.js:232
+#: src/includes/classes/custom-reg-fields.inc.php:766
+#: src/includes/classes/custom-reg-fields.inc.php:780
+#: src/includes/s2member.js:233 src/includes/s2member.js:236
 #: src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "digit"
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:762
-#: src/includes/classes/custom-reg-fields.inc.php:776
-#: src/includes/s2member.js:229 src/includes/s2member.js:232
+#: src/includes/classes/custom-reg-fields.inc.php:767
+#: src/includes/classes/custom-reg-fields.inc.php:781
+#: src/includes/s2member.js:233 src/includes/s2member.js:236
 #: src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "digits"
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:765
-#: src/includes/classes/custom-reg-fields.inc.php:779
-#: src/includes/s2member.js:229 src/includes/s2member.js:232
+#: src/includes/classes/custom-reg-fields.inc.php:770
+#: src/includes/classes/custom-reg-fields.inc.php:784
+#: src/includes/s2member.js:233 src/includes/s2member.js:236
 #: src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "character"
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:766
-#: src/includes/classes/custom-reg-fields.inc.php:780
-#: src/includes/s2member.js:229 src/includes/s2member.js:232
+#: src/includes/classes/custom-reg-fields.inc.php:771
+#: src/includes/classes/custom-reg-fields.inc.php:785
+#: src/includes/s2member.js:233 src/includes/s2member.js:236
 #: src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "characters"
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:768
-#: src/includes/s2member.js:229 src/includes/s2member.min.js:1
+#: src/includes/classes/custom-reg-fields.inc.php:773
+#: src/includes/s2member.js:233 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Must be exactly %s %s."
 msgstr ""
 
-#: src/includes/classes/custom-reg-fields.inc.php:782
-#: src/includes/s2member.js:232 src/includes/s2member.min.js:1
+#: src/includes/classes/custom-reg-fields.inc.php:787
+#: src/includes/s2member.js:236 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Must be at least %s %s."
 msgstr ""
@@ -4699,37 +4708,37 @@ msgstr ""
 msgid "You do not have access to this content. [ruri level %d]"
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:83
+#: src/includes/classes/translations.inc.php:95
 msgctxt "s2member-front"
 msgid "Username:"
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:87
+#: src/includes/classes/translations.inc.php:99
 msgctxt "s2member-front"
 msgid "My Password:"
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:94
+#: src/includes/classes/translations.inc.php:106
 msgctxt "s2member-front"
 msgid "Username *"
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:98
+#: src/includes/classes/translations.inc.php:110
 msgctxt "s2member-front"
 msgid "Password *"
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:102
+#: src/includes/classes/translations.inc.php:114
 msgctxt "s2member-front"
 msgid "Email Address *"
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:109
+#: src/includes/classes/translations.inc.php:121
 msgctxt "s2member-front"
 msgid "Registration complete. Please log in."
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:116
+#: src/includes/classes/translations.inc.php:128
 msgctxt "s2member-front"
 msgid ""
 "You have been invited to join `%1$s` at\n"
@@ -4738,25 +4747,25 @@ msgid ""
 "%4$s\n"
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:123
+#: src/includes/classes/translations.inc.php:135
 msgctxt "s2member-front"
 msgid "Your account is now active. <a href=\"%1$s\">Visit site</a> or <a href=\"%2$s\">Log in</a>."
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:143
-#: src/includes/classes/translations.inc.php:164
+#: src/includes/classes/translations.inc.php:155
+#: src/includes/classes/translations.inc.php:176
 msgctxt "s2member-front"
 msgid "By filling out the form below, you can <strong>add a site to your account</strong>."
 msgstr ""
 
-#: src/includes/classes/translations.inc.php:143
+#: src/includes/classes/translations.inc.php:155
 msgctxt "s2member-front"
 msgid "You may create <strong>%s</strong> site."
 msgid_plural "You may create up to <strong>%s</strong> sites."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/includes/classes/translations.inc.php:164
+#: src/includes/classes/translations.inc.php:176
 msgctxt "s2member-front"
 msgid "You may create up to <strong>%s</strong> site."
 msgid_plural "You may create up to <strong>%s</strong> sites."
@@ -5333,77 +5342,77 @@ msgctxt "s2member-front"
 msgid "Must be a Canadian zipcode (6 alpha-numerics w/possible space)."
 msgstr ""
 
-#: src/includes/s2member.js:202 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:206 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Please use alphanumerics, spaces & punctuation only."
 msgstr ""
 
-#: src/includes/s2member.js:206 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:210 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Please use alphanumerics & spaces only."
 msgstr ""
 
-#: src/includes/s2member.js:210 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:214 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "Please use alphanumerics & punctuation only (no spaces)."
 msgstr ""
 
-#: src/includes/s2member.js:262 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:266 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "— Confirm File Download —"
 msgstr ""
 
-#: src/includes/s2member.js:263 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:267 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "You`ve downloaded %s protected %s in the last %s."
 msgstr ""
 
-#: src/includes/s2member.js:263 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:267 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "file"
 msgstr ""
 
-#: src/includes/s2member.js:263 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:267 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "files"
 msgstr ""
 
-#: src/includes/s2member.js:263 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:267 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "24 hours"
 msgstr ""
 
-#: src/includes/s2member.js:263 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:267 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "%s days"
 msgstr ""
 
-#: src/includes/s2member.js:264 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:268 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "You`re entitled to UNLIMITED downloads though (so, no worries)."
 msgstr ""
 
-#: src/includes/s2member.js:264 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:268 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "You`re entitled to %s unique %s %s."
 msgstr ""
 
-#: src/includes/s2member.js:264 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:268 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "download"
 msgstr ""
 
-#: src/includes/s2member.js:264 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:268 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "downloads"
 msgstr ""
 
-#: src/includes/s2member.js:264 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:268 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "each day"
 msgstr ""
 
-#: src/includes/s2member.js:264 src/includes/s2member.min.js:1
+#: src/includes/s2member.js:268 src/includes/s2member.min.js:1
 msgctxt "s2member-front"
 msgid "every %s-day period"
 msgstr ""

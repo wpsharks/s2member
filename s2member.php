@@ -20,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 260312
-Stable tag: 260312
+Version: 260324.0240
+Stable tag: 260324.0240
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -51,7 +51,7 @@ Author URI: http://s2member.com/
 Donate link: http://s2member.com/r/donate
 
 Text Domain: s2member
-Domain Path: /src/includes/translations
+Domain Path: /languages
 
 Plugin Name: s2Member Framework
 Forum URI: http://s2member.com/r/forum/
@@ -77,7 +77,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '260312'; //version//
+${__FILE__}['tmp'] = '260324.0240'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**
