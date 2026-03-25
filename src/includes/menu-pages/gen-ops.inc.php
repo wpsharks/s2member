@@ -1375,9 +1375,49 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_after_custom_reg_fields", get_defined_vars());
 			}
+			if(apply_filters("ws_plugin__s2member_during_gen_ops_page_during_left_sections_display_sc_s2get_shortcode", TRUE, get_defined_vars()))
+			{
+				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_before_sc_s2get_shortcode", get_defined_vars());
+
+				echo '<div class="ws-menu-page-group" title="s2Get Shortcode">'."\n";
+
+				echo '<div class="ws-menu-page-section ws-plugin--s2member-sc-get-shortcode-section">'."\n";
+				echo '<h3>s2Get Shortcode (optional)</h3>'."\n";
+				echo '<p>By default, the <code>[s2Get /]</code> shortcode shows <code>user_field=""</code> values for the current user viewing the page. If you\'d like to use the <code>user_id=""</code> attribute with certain fields too, enter those field names here as a comma-separated list.</p>'."\n";
+				echo '<p>This can be useful when you\'d like to show the same user\'s field value to everyone viewing a page, such as a particular <code>display_name</code> or <code>avatar</code>. See: <a href="https://s2member.com/kb-article/s2get-shortcode-documentation/" target="_blank" rel="noopener">s2Get Shortcode Documentation</a>.</p>'."\n";
+				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_sc_s2get_shortcode", get_defined_vars());
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<th>'."\n";
+				echo '<label for="ws-plugin--s2member-sc-s2get-userid-fields">'."\n";
+				echo 'Allow <code>user_id=""</code> for these fields:'."\n";
+				echo '</label>'."\n";
+				echo '</th>'."\n";
+
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+
+				echo '<td>'."\n";
+				echo '<input type="text" name="ws_plugin__s2member_sc_s2get_userid_whitelist" id="ws-plugin--s2member-sc-s2get-userid-fields" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sc_s2get_userid_whitelist"]).'" placeholder="" style="width:100%;" /><br />'."\n";
+				echo 'Leave this empty to keep <code>user_id=""</code> disabled. Ex: <code>display_name, avatar, first_name, last_name, full_name</code>'."\n";
+				echo '</td>'."\n";
+
+				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+				echo '</div>'."\n";
+
+				echo '</div>'."\n";
+
+				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_after_sc_s2get_shortcode", get_defined_vars());
+			}
 			if(apply_filters("ws_plugin__s2member_during_gen_ops_page_during_left_sections_display_login_welcome_page", TRUE, get_defined_vars()))
 			{
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_before_login_welcome_page", get_defined_vars());
+
 
 				echo '<div class="ws-menu-page-group" title="Login Welcome Page">'."\n";
 

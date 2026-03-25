@@ -136,6 +136,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['no_cache_headers_debug']       = '0'; //260308 Adds Server-Timing no-cache debug header (support use only).
 		$default_options['sc_conds_allow_arbitrary_php'] = '0';
 		$default_options['sc_conds_whitelist'] = '';
+		$default_options['sc_s2get_userid_whitelist'] = ''; //260322 Comma-delimited s2Get user_field values allowed to use user_id="".
 
 		$default_options['sec_encryption_key']         = '';
 		$default_options['sec_encryption_key_history'] = array();
@@ -418,6 +419,9 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 					$value = $default_options[$key];
 
 				else if($key === 'sc_conds_allow_arbitrary_php' && (!is_string($value) || !is_numeric($value)))
+					$value = $default_options[$key];
+
+				else if($key === 'sc_s2get_userid_whitelist' && !is_string($value)) //260324
 					$value = $default_options[$key];
 
 				else if($key === 'sec_encryption_key' && (!is_string($value) || !strlen($value)))

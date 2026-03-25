@@ -71,8 +71,12 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 			$valid_user_fields += get_s2member_custom_fields(); //250211
 			$valid_user_options = array_flip(array('s2member_custom', 's2member_subscr_id', 's2member_subscr_gateway', 's2member_registration_ip', 's2member_login_counter', 's2member_last_payment_time', 's2member_access_label', 's2member_ccaps'));
 			// Current user only
-			$attr['user_id_backup'] = $attr['user_id'];
+			$attr['user_id_backup'] = (int)$attr['user_id'];
 			$attr['user_id'] = 0;
+			//260322 Whitelist user_fields allowed user_id="" via General Options.
+			$sc_s2get_userid_whitelist = trim((string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['sc_s2get_userid_whitelist']);
+			$sc_s2get_userid_whitelist = ($sc_s2get_userid_whitelist !== '') ? preg_split('/\s*,\s*/', strtolower($sc_s2get_userid_whitelist), -1, PREG_SPLIT_NO_EMPTY) : array();
+			$sc_s2get_userid_whitelist = array_flip($sc_s2get_userid_whitelist);
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_sc_get_details_after_shortcode_atts', get_defined_vars());
@@ -85,7 +89,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 			else if($attr['user_field'] && isset($valid_user_fields[$attr['user_field']]))
 				{
 					$user_field_args = array('size' => $attr['size']);
-					$get = c_ws_plugin__s2member_utils_users::get_user_field($attr['user_field'], (int)$attr['user_id'], $user_field_args);
+					$user_field_user_id = (isset($sc_s2get_userid_whitelist[strtolower($attr['user_field'])]) && $attr['user_id_backup'] > 0) ? $attr['user_id_backup'] : 0;
+					$get = c_ws_plugin__s2member_utils_users::get_user_field($attr['user_field'], $user_field_user_id, $user_field_args);
 
 					if(preg_match('/time$/i', $attr['user_field']) && $attr['date_format'])
 						if((is_numeric($get) && strlen($get) === 10) || ($get = strtotime($get))) // Timestamp?
