@@ -47,8 +47,7 @@ if(!class_exists("c_ws_plugin__s2member_translations"))
 			$global_mofile = WP_LANG_DIR."/plugins/s2member-".$locale.".mo";
 			$legacy_mofile = WP_PLUGIN_DIR."/s2member-".$locale.".mo";
 
-			load_plugin_textdomain("s2member", FALSE, c_ws_plugin__s2member_utils_dirs::rel_path(WP_PLUGIN_DIR, dirname(dirname(__FILE__))."/translations"));
-			load_plugin_textdomain("s2member"); // Legacy support for `/wp-content/plugins/s2member-[locale].mo`.
+			load_plugin_textdomain("s2member", FALSE, dirname(plugin_basename($GLOBALS['WS_PLUGIN__']['s2member']['l']))."/languages"); //260325
 
 			if(is_readable($global_mofile))
 				load_textdomain("s2member", $global_mofile);
