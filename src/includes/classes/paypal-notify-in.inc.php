@@ -210,12 +210,28 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				do_action('ws_plugin__s2member_during_paypal_notify', get_defined_vars());
 				unset($__refs, $__v);
 				/*
+				260322 Log effective response state before/after forcing a 200.
 				Output response headers & content body.
 				*/
+				$paypal['s2member_log'][] = 'Pre-response `headers_sent`: '.((headers_sent($headers_sent_file, $headers_sent_line)) ? 'yes @ '.$headers_sent_file.':'.$headers_sent_line : 'no');
+				$paypal['s2member_log'][] = 'Pre-response `http_response_code()`: '.((function_exists('http_response_code')) ? (string)http_response_code() : 'n/a');
+				$paypal['s2member_log'][] = 'Pre-response headers: '.var_export(headers_list(), TRUE);
+
+				while(@ob_end_clean()); // Clean output buffers.
+
+				if(function_exists('http_response_code'))
+					http_response_code(200);
+
+				if(!empty($_SERVER['SERVER_PROTOCOL']))
+					header($_SERVER['SERVER_PROTOCOL'].' 200 OK', TRUE, 200);
+				else
+					header('HTTP/1.1 200 OK', TRUE, 200);
+
 				status_header(200); // OK status code.
 				header('Content-Type: text/plain; charset=UTF-8');
 
-				while(@ob_end_clean()); // Clean output buffers.
+				$paypal['s2member_log'][] = 'Post-response `http_response_code()`: '.((function_exists('http_response_code')) ? (string)http_response_code() : 'n/a');
+				$paypal['s2member_log'][] = 'Post-response headers: '.var_export(headers_list(), TRUE);
 
 				if (!empty($paypal['s2member_paypal_proxy_return_url'])) {
 					if(preg_match('/^https?%3A/ui', $paypal['s2member_paypal_proxy_return_url'])) {

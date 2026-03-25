@@ -40,8 +40,19 @@ if(!class_exists("c_ws_plugin__s2member_translations"))
 		 */
 		public static function load()
 		{
-			load_plugin_textdomain("s2member", FALSE, c_ws_plugin__s2member_utils_dirs::rel_path(WP_PLUGIN_DIR, dirname(dirname(__FILE__))."/translations"));
-			load_plugin_textdomain("s2member"); // Allows `.mo` file to be loaded from the `/wp-content/plugins/s2member-[locale].mo`.
+			//260320 Register custom paths and load known translation file locations explicitly for WP 6.7+ compatibility.
+			$locale = function_exists("determine_locale") ? determine_locale() : get_locale();
+			$locale = apply_filters("plugin_locale", $locale, "s2member");
+
+			$global_mofile = WP_LANG_DIR."/plugins/s2member-".$locale.".mo";
+			$legacy_mofile = WP_PLUGIN_DIR."/s2member-".$locale.".mo";
+
+			load_plugin_textdomain("s2member", FALSE, dirname(plugin_basename($GLOBALS['WS_PLUGIN__']['s2member']['l']))."/languages"); //260325
+
+			if(is_readable($global_mofile))
+				load_textdomain("s2member", $global_mofile);
+			else if(is_readable($legacy_mofile))
+				load_textdomain("s2member", $legacy_mofile);
 
 			do_action("ws_plugin__s2member_during_translations_load", get_defined_vars());
 

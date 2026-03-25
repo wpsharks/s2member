@@ -1,3 +1,41 @@
+= v260325 =
+
+- (Framework) **Fix:** Improved PayPal Checkout webhook idempotency to prevent duplicate processing during repeated/concurrent webhooks, while preserving normal behavior.
+
+- (Framework) **Fix:** Resolved a PayPal IPN issue where some `subscr_cancel` notifications were ignored because the cancellation handler failed before it had fully identified the recurring subscription.
+
+- (Framework) **Improvement:** Added IPN Signup Var lookups for missing PayPal cancellation IPN values like `period1`, `period3`, `item_number`, `item_name`, and `payer_email`, preventing valid `subscr_cancel` notifications from being ignored.
+
+- (Framework) **Improvement:** Moved s2Member's translation files to `/languages`, following the WordPress standard, and updated `.mo` loading to support that directory while continuing to support the standard and legacy WordPress locations.
+
+- (Framework) **Improvement:** Hardened PayPal Standard IPN endpoint response handling and added debug logging for hosts/security layers that incorrectly return HTTP 403 after successful processing.
+
+- (Framework) **Enhancement:** Added `ukpostcode` as an expected-value option for Custom Registration/Profile Fields, with matching server-side and client-side validation for UK postcode input. The validation is designed to be reasonably broad, including standard UK formats and related special cases. Thanks to Gerard Earley for contributing the patch. See [thread 12200](https://f.wpsharks.com/t/12200)
+
+- (Framework) **Enhancement:** Added a new __General Options > s2Get Shortcode__ setting to allow `user_id` for whitelisted user fields, defaulting to current-user. Also updated the s2Get KB article accordingly.
+
+- (Pro) **Fix:** Updated Stripe card charge and PaymentIntent requests to use `statement_descriptor_suffix` instead of `statement_descriptor`, fixing card-payment errors where Stripe no longer accepts `statement_descriptor` for card payments.
+
+- (Pro) **Fix:** Corrected Stripe subscription checkout so resumed PaymentIntent flows no longer go through the wrong intent-status handler.
+
+- (Pro) **Fix:** Stripe now stops cleanly after card declines, instead of continuing into secondary intent/payment-method errors.
+
+- (Pro) **Fix:** Improved Stripe recurring-payment setup to better support future-charge authorization requirements, fixing failures in countries with stricter payment rules, including India.
+
+- (Pro) **Fix:** Stripe now updates recurring default payment methods only after a successful intent result, instead of earlier in checkout.
+
+- (Pro) **Fix:** Billing-update SetupIntent creation failures in Stripe now return the proper error response.
+
+- (Pro) **Fix:** Prevent duplicate/retried Stripe webhook events from being processed more than once, including near-simultaneous retries of the same Stripe event ID
+
+- (Pro) **Fix:** prevent Stripe billing modification/replacement from triggering EOT behavior for the cancelled old subscription while s2Member is still updating the member account with the new subscription.
+
+- (Pro) **Fix:** Removed a trailing-comma syntax issue in Stripe subscription update code that could cause PHP compatibility errors on older supported PHP versions.
+
+- (Pro) **Fix:** s2Member now cleans up incomplete subscriptions left behind by failed 3D Secure authentication attempts during Stripe checkout, and gives the customer a more clear payment failure message.
+
+- (Pro) **Improvement:** Added dedicated s2 Stripe log entries for non-fatal failures while updating the default payment method after successful intent completion.
+
 = v260312 =
 
 - (Framework) **Fix:** Prevent a PHP 8.1+ deprecation notice from appearing above the admin Users table in some cases.

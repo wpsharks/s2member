@@ -22,7 +22,8 @@ Add the plugin Actions/Filters here.
 */
 
 //250506 Translations loaded at init to avoid PHP Notice since WP 6.7.
-add_action('init', 'c_ws_plugin__s2member_translations::load');
+//260320 Run at priority 0 so translations are available as early as possible on `init`.
+add_action('init', 'c_ws_plugin__s2member_translations::load', 0);
 
 add_action('set_current_user', 'c_ws_plugin__s2member_user_securities::set_current_user', 2);
 

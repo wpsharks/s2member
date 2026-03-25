@@ -2,4 +2,35 @@
 
 <project name="PHP PSR-4 Project" default="build">
   <import file="phings/src/psr4/targets.xml" />
+
+  <!-- 260316 Wrapper: full-build-all, then write a versioned copy of the ZIP in .~build/. -->
+  <target name="full-build-all-v"
+          description="Runs full-build-all with project_version=YYMMDD, then writes a versioned copy of the ZIP in .~build/.">
+
+    <phingCall target="full-build-all" />
+
+    <echo msg="Creating versioned ZIP: .~build/${project_slug}-v${project_version}.zip" />
+
+    <copy file=".~build/${project_slug}.zip"
+          tofile=".~build/${project_slug}-v${project_version}.zip"
+          overwrite="true" />
+
+  </target>
+
+  <!-- 260316 Wrapper: full-build-all to add time to version, then write a versioned copy of the ZIP in .~build/. -->
+  <target name="full-build-all-vt"
+          description="Runs full-build-all with project_version=YYMMDD.HHMM, then writes a versioned copy of the ZIP in .~build/.">
+
+    <property name="project_version" value="ymd.hm" override="true" />
+    <php expression="str_replace('ymd.hm', date('ymd.Hi'), '${project_version}')" returnProperty="project_version" level="verbose" />
+
+    <phingCall target="full-build-all" />
+
+    <echo msg="Creating versioned ZIP: .~build/${project_slug}-v${project_version}.zip" />
+
+    <copy file=".~build/${project_slug}.zip"
+          tofile=".~build/${project_slug}-v${project_version}.zip"
+          overwrite="true" />
+
+  </target>
 </project>

@@ -20,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 260312
-Stable tag: 260312
+Version: 260325
+Stable tag: 260325
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -36,7 +36,7 @@ PayPal Pro Compatible: yes w/s2Member Pro
 Authorize.Net Compatible: yes w/s2Member Pro
 ClickBank Compatible: yes w/s2Member Pro
 
-Tested up to: 7.0-alpha-61642
+Tested up to: 7.0-RC1-62112
 Requires at least: 4.2
 
 Requires PHP: 5.6.2
@@ -51,7 +51,7 @@ Author URI: http://s2member.com/
 Donate link: http://s2member.com/r/donate
 
 Text Domain: s2member
-Domain Path: /src/includes/translations
+Domain Path: /languages
 
 Plugin Name: s2Member Framework
 Forum URI: http://s2member.com/r/forum/
@@ -77,7 +77,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '260312'; //version//
+${__FILE__}['tmp'] = '260325'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**

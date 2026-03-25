@@ -197,6 +197,10 @@ jQuery(document)
 						       {
 							       return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq(_x("Must be a zipcode (either a US or Canadian zipcode).", "s2member-front", "s2member")); ?>';
 						       }
+						       else if(expected === 'ukpostcode' && !/^(([a-zA-Z]{1,2}[0-9][a-zA-Z0-9]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) ?[0-9][a-zA-Z]{2}|BFPO ?[0-9]{1,4}|(KY[0-9]|MSR|VG|AI)[ -]?[0-9]{4}|[a-zA-Z]{2} ?[0-9]{2}|GE ?CX|GIR ?0A{2}|SAN ?TA1)$/.test(value))
+						       {
+							       return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq(_x("Must be a valid UK postcode.", "s2member-front", "s2member")); ?>';
+						       }
 						       else if(/^alphanumerics\-spaces\-punctuation\-[0-9]+(?:\-e)?$/.test(expected) && !/^[a-z 0-9\/\\\\,.?:;"\'{}[\]\^|+=_()*&%$#@!`~\-]+$/i.test(value))
 						       {
 							       return label + '\n' + '<?php echo c_ws_plugin__s2member_utils_strings::esc_js_sq(_x("Please use alphanumerics, spaces & punctuation only.", "s2member-front", "s2member")); ?>';
