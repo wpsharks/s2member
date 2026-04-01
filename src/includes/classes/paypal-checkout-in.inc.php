@@ -394,7 +394,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					);
 
 					// Idempotency: avoid duplicate notify processing for the same subscription_id.
-					$transient_ppco_subscr = 's2m_ppco_subscr_'.md5($subscription_id);
+					$transient_ppco_subscr = 's2m_ppco_'.md5('s2member_transient_ppco_subscr_'.$subscription_id); //260401 Normalize the subscription-handled transient name used by PayPal Checkout.
 					if(!get_transient($transient_ppco_subscr))
 					{
 						set_transient($transient_ppco_subscr, 1, 31556926 * 10);

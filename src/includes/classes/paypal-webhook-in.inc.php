@@ -192,16 +192,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			$subscr_id = '';
 			$txn_id    = '';
 
+			$subscr_handled_transient  = '';
+			$subscr_handled_by_webhook = false;
+
 			// Subscription lifecycle events.
 			if(strpos($event_type, 'BILLING.SUBSCRIPTION.') === 0)
 			{
 				if(!empty($resource['id']))
 					$subscr_id = (string)$resource['id'];
 
-				//260216 Handle additional subscription lifecycle events needed by s2Member features.
+				if($subscr_id)
+					$subscr_handled_transient = 's2m_ppco_'.md5('s2member_transient_ppco_subscr_'.$subscr_id); //260401 Match the checkout subscription-handled transient so webhook activation is fallback-only.
+
+				//260401 Treat CREATED as informational only, and let ACTIVATED/RE-ACTIVATED act only as a fallback when checkout has not already handled this Subscription.
 				if($event_type === 'BILLING.SUBSCRIPTION.CREATED')
 				{
-					//260216 Created can occur before local provisioning completes; log only.
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'       => 'webhook',
 						'env_setting'=> $env_site,
@@ -221,9 +226,33 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				}
 				else if($event_type === 'BILLING.SUBSCRIPTION.ACTIVATED' || $event_type === 'BILLING.SUBSCRIPTION.RE-ACTIVATED')
 				{
-					//260216 Proxy activation into legacy notify as a signup.
-					$paypal['txn_type']       = 'subscr_signup';
+					//260401 Ignore webhook activation when checkout already handled this Subscription; otherwise allow webhook activation as a fallback.
+					if($subscr_handled_transient && get_transient($subscr_handled_transient))
+					{
+						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+							'ppco'       => 'webhook',
+							'env_setting'=> $env_site,
+							'env_webhook'=> $env_webhook,
+							'event'      => 'subscription_activation_ignored',
+							'note'       => 'Checkout already handled this Subscription; skipping webhook fallback activation.',
+							'event_id'   => $event_id,
+							'event_type' => $event_type,
+							'subscr_id'  => $subscr_id,
+							'transient'  => $subscr_handled_transient,
+						));
+
+						//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
+						set_transient($event_id_transient, time(), 31556952);
+						delete_option($event_id_lock);
+
+						status_header(200);
+						exit();
+					}
+
+					$paypal['txn_type']       = 'subscr_signup'; //260401 Keep webhook activation as a fallback to the legacy signup handler only when checkout did not already handle this Subscription.
 					$paypal['payment_status'] = 'Completed';
+
+					$subscr_handled_by_webhook = true;
 				}
 				else if($event_type === 'BILLING.SUBSCRIPTION.UPDATED')
 					$paypal['txn_type'] = 'subscr_modify';
@@ -479,6 +508,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 				if($txn_transient)
 					set_transient($txn_transient, time(), 31556952);
+
+				//260401 If webhook activation had to rescue this Subscription, mark it handled so later activation webhooks are ignored.
+				if($subscr_handled_by_webhook && $subscr_handled_transient)
+					set_transient($subscr_handled_transient, time(), 31556952);
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
