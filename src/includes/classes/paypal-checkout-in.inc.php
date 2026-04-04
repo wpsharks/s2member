@@ -397,7 +397,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					$transient_ppco_subscr = 's2m_ppco_'.md5('s2member_transient_ppco_subscr_'.$subscription_id); //260401 Normalize the subscription-handled transient name used by PayPal Checkout.
 					if(!get_transient($transient_ppco_subscr))
 					{
-						set_transient($transient_ppco_subscr, 1, 31556926 * 10);
+						//260404 Keep PayPal Checkout dedupe/fallback transients below 30 days for object-cache compatibility.
+						set_transient($transient_ppco_subscr, 1, DAY_IN_SECONDS);
 
 						$notify_url  = home_url('/?s2member_paypal_notify=1');
 						$notify_post = array_merge($paypal, array(
@@ -633,7 +634,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if(!$ppco_dup_processed)
 				{
-					set_transient($transient_ppco_subscr, time(), 31556926 * 10);
+					//260404 Keep PayPal Checkout dedupe/fallback transients below 30 days for object-cache compatibility.
+					set_transient($transient_ppco_subscr, time(), DAY_IN_SECONDS);
 
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
@@ -641,7 +643,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'event'           => 'idempotency_subscription_set',
 						'subscription_id' => $subscription_id,
 						'transient'       => $transient_ppco_subscr,
-						'expires_secs'    => 31556926 * 10,
+						'expires_secs'    => DAY_IN_SECONDS,
 					));
 
 					$notify_url  = home_url('/?s2member_paypal_notify=1');
@@ -1051,7 +1053,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 					if(!$ppco_dup_processed)
 					{
-						set_transient($transient_ppco_capture, time(), 31556926 * 10);
+						//260404 Keep PayPal Checkout dedupe/fallback transients below 30 days for object-cache compatibility.
+						set_transient($transient_ppco_capture, time(), DAY_IN_SECONDS);
 
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'         => 'checkout',
@@ -1060,7 +1063,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'order_id'     => $order_id,
 							'txn_id'       => $pu_cap_id,
 							'transient'    => $transient_ppco_capture,
-							'expires_secs' => 31556926 * 10,
+							'expires_secs' => DAY_IN_SECONDS,
 						));
 					}
 					else
