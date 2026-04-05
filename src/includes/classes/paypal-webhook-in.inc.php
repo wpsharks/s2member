@@ -147,12 +147,34 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			$event_id_lock      = 's2m_ppco_wh_lock_'.md5($event_id);
 			$event_id_lock_ttl  = 300;
 
-			//260404 Keep PayPal Checkout dedupe/fallback transients below 30 days for object-cache compatibility.
+			//260404 Keep PayPal Checkout dedupe/fallback markers for a short time window.
 			$event_id_ttl       = DAY_IN_SECONDS;
 			$txn_ttl            = DAY_IN_SECONDS;
 			$subscr_ttl         = DAY_IN_SECONDS;
 
-			if(get_transient($event_id_transient))
+			//260404 Use options for cross-request PayPal Checkout dedupe, because transients are not persisting reliably across requests on some sites.
+			$event_id_option      = 's2member_ppco_processed_wh_'.md5($event_id);
+			$event_id_option_time = (int)get_option($event_id_option, 0);
+
+			//260405 Occasionally clean up expired PayPal Checkout processed-marker options; the transient only throttles cleanup frequency.
+			if(!get_transient('s2member_ppco_processed_cleanup_throttle'))
+			{
+				global $wpdb;
+
+				$cutoff = (string)(time() - DAY_IN_SECONDS);
+
+				$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE 's2member_ppco_processed_%' AND CAST(`option_value` AS UNSIGNED) > 0 AND CAST(`option_value` AS UNSIGNED) < '".$cutoff."'");
+
+				set_transient('s2member_ppco_processed_cleanup_throttle', time(), 6 * HOUR_IN_SECONDS);
+			}
+
+			if($event_id_option_time > 0 && (time() - $event_id_option_time) >= $event_id_ttl)
+			{
+				delete_option($event_id_option);
+				$event_id_option_time = 0;
+			}
+
+			if($event_id_option_time > 0)
 			{
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
@@ -207,7 +229,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					$subscr_id = (string)$resource['id'];
 
 				if($subscr_id)
-					$subscr_handled_transient = 's2m_ppco_'.md5('s2member_transient_ppco_subscr_'.$subscr_id); //260401 Match the checkout subscription-handled transient so webhook activation is fallback-only.
+					$subscr_handled_option = 's2member_ppco_processed_subscr_'.md5($subscr_id); //260404 Match the checkout subscription-handled option so webhook ACTIVATED/RE-ACTIVATED is fallback-only.
 
 				//260401 Treat CREATED as informational only, and let ACTIVATED/RE-ACTIVATED act only as a fallback when checkout has not already handled this Subscription.
 				if($event_type === 'BILLING.SUBSCRIPTION.CREATED')
@@ -223,7 +245,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					));
 
 					//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
-					set_transient($event_id_transient, time(), $event_id_ttl);
+					if(!add_option($event_id_option, time(), '', 'no'))
+						update_option($event_id_option, time(), false);
 					delete_option($event_id_lock);
 
 					status_header(200);
@@ -231,8 +254,16 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				}
 				else if($event_type === 'BILLING.SUBSCRIPTION.ACTIVATED' || $event_type === 'BILLING.SUBSCRIPTION.RE-ACTIVATED')
 				{
+					$subscr_handled_option_time = ($subscr_handled_option) ? (int)get_option($subscr_handled_option, 0) : 0;
+
+					if($subscr_handled_option_time > 0 && (time() - $subscr_handled_option_time) >= $subscr_ttl)
+					{
+						delete_option($subscr_handled_option);
+						$subscr_handled_option_time = 0;
+					}
+
 					//260401 Ignore webhook activation when checkout already handled this Subscription; otherwise allow webhook activation as a fallback.
-					if($subscr_handled_transient && get_transient($subscr_handled_transient))
+					if($subscr_handled_option && $subscr_handled_option_time > 0)
 					{
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'       => 'webhook',
@@ -243,11 +274,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 							'event_id'   => $event_id,
 							'event_type' => $event_type,
 							'subscr_id'  => $subscr_id,
-							'transient'  => $subscr_handled_transient,
+							'option'     => $subscr_handled_option,
 						));
 
-						//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
-						set_transient($event_id_transient, time(), $event_id_ttl);
+						if(!add_option($event_id_option, time(), '', 'no'))
+							update_option($event_id_option, time(), false);
 						delete_option($event_id_lock);
 
 						status_header(200);
@@ -282,7 +313,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					));
 
 					//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
-					set_transient($event_id_transient, time(), $event_id_ttl);
+					if(!add_option($event_id_option, time(), '', 'no'))
+						update_option($event_id_option, time(), false);
 					delete_option($event_id_lock);
 
 					status_header(200);
@@ -358,7 +390,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					));
 
 					//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
-					set_transient($event_id_transient, time(), $event_id_ttl);
+					if(!add_option($event_id_option, time(), '', 'no'))
+						update_option($event_id_option, time(), false);
 					delete_option($event_id_lock);
 
 					status_header(200);
@@ -443,7 +476,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				));
 
 				//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
-				set_transient($event_id_transient, time(), $event_id_ttl);
+				if(!add_option($event_id_option, time(), '', 'no'))
+					update_option($event_id_option, time(), false);
 				delete_option($event_id_lock);
 
 				status_header(200);
@@ -462,30 +496,41 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				else if(!empty($paypal['txn_id']))
 					$txn_key = (string)$paypal['txn_id'];
 
-				$txn_transient = 's2m_ppco_txn_'.md5($paypal['txn_type'].'|'.$subscr_id.'|'.$txn_key);
+				$txn_option = 's2member_ppco_processed_txn_'.md5($paypal['txn_type'].'|'.$subscr_id.'|'.$txn_key);
 
-				if($txn_key && get_transient($txn_transient))
+				if($txn_key)
 				{
-					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-						'ppco'       => 'webhook',
-						'env_setting'=> $env_site,
-						'env_webhook'=> $env_webhook,
-						'event'      => 'duplicate_txn',
-						'action'     => 'ignored',
-						'note'       => 'Duplicate webhook delivery (txn_id already processed).',
-						'event_id'   => $event_id,
-						'event_type' => $event_type,
-						'subscr_id'  => $subscr_id,
-						'txn_id'     => !empty($paypal['txn_id']) ? (string)$paypal['txn_id'] : '',
-						'transient'  => $txn_transient,
-					));
+					$txn_option_time = (int)get_option($txn_option, 0);
 
-					//260319 Mark handled and release the in-flight webhook lock for valid terminal events.
-					set_transient($event_id_transient, time(), $event_id_ttl);
-					delete_option($event_id_lock);
+					if($txn_option_time > 0 && (time() - $txn_option_time) >= $txn_ttl)
+					{
+						delete_option($txn_option);
+						$txn_option_time = 0;
+					}
 
-					status_header(200);
-					exit();
+					if($txn_option_time > 0)
+					{
+						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+							'ppco'       => 'webhook',
+							'env_setting'=> $env_site,
+							'env_webhook'=> $env_webhook,
+							'event'      => 'duplicate_txn',
+							'action'     => 'ignored',
+							'note'       => 'Duplicate webhook delivery (txn_id already processed).',
+							'event_id'   => $event_id,
+							'event_type' => $event_type,
+							'subscr_id'  => $subscr_id,
+							'txn_id'     => !empty($paypal['txn_id']) ? (string)$paypal['txn_id'] : '',
+							'option'     => $txn_option,
+						));
+
+						if(!add_option($event_id_option, time(), '', 'no'))
+							update_option($event_id_option, time(), false);
+						delete_option($event_id_lock);
+
+						status_header(200);
+						exit();
+					}
 				}
 			}
 
@@ -508,15 +553,22 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 			if($code >= 200 && $code <= 299)
 			{
-				set_transient($event_id_transient, time(), $event_id_ttl);
+				if(!add_option($event_id_option, time(), '', 'no'))
+					update_option($event_id_option, time(), false);
 				delete_option($event_id_lock);
 
-				if($txn_transient)
-					set_transient($txn_transient, time(), $txn_ttl);
+				if(!empty($txn_option))
+				{
+					if(!add_option($txn_option, time(), '', 'no'))
+						update_option($txn_option, time(), false);
+				}
 
 				//260401 If webhook activation had to rescue this Subscription, mark it handled so later activation webhooks are ignored.
-				if($subscr_handled_by_webhook && $subscr_handled_transient)
-					set_transient($subscr_handled_transient, time(), $subscr_ttl);
+				if($subscr_handled_by_webhook && !empty($subscr_handled_option))
+				{
+					if(!add_option($subscr_handled_option, time(), '', 'no'))
+						update_option($subscr_handled_option, time(), false);
+				}
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',

@@ -393,12 +393,20 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'option_selection2' => (string)$token['os1'],
 					);
 
-					// Idempotency: avoid duplicate notify processing for the same subscription_id.
-					$transient_ppco_subscr = 's2m_ppco_'.md5('s2member_transient_ppco_subscr_'.$subscription_id); //260401 Normalize the subscription-handled transient name used by PayPal Checkout.
-					if(!get_transient($transient_ppco_subscr))
+					//260404 Use an option for the PayPal Checkout subscription-handled marker, because transients are not persisting reliably across requests on some sites.
+					$option_ppco_subscr = 's2member_ppco_processed_subscr_'.md5($subscription_id);
+					$option_ppco_subscr_time = (int)get_option($option_ppco_subscr, 0);
+
+					if($option_ppco_subscr_time > 0 && (time() - $option_ppco_subscr_time) >= DAY_IN_SECONDS)
 					{
-						//260404 Keep PayPal Checkout dedupe/fallback transients below 30 days for object-cache compatibility.
-						set_transient($transient_ppco_subscr, 1, DAY_IN_SECONDS);
+						delete_option($option_ppco_subscr);
+						$option_ppco_subscr_time = 0;
+					}
+
+					if(!$option_ppco_subscr_time)
+					{
+						if(!add_option($option_ppco_subscr, time(), '', 'no'))
+							update_option($option_ppco_subscr, time(), false);
 
 						$notify_url  = home_url('/?s2member_paypal_notify=1');
 						$notify_post = array_merge($paypal, array(
@@ -620,8 +628,16 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				);
 
 				$ppco_dup_processed = false;
-				$transient_ppco_subscr = 's2m_ppco_'.md5('s2member_transient_ppco_subscr_'.$subscription_id);
-				$ppco_dup_processed     = (bool)get_transient($transient_ppco_subscr);
+				$option_ppco_subscr = 's2member_ppco_processed_subscr_'.md5($subscription_id);
+				$option_ppco_subscr_time = (int)get_option($option_ppco_subscr, 0);
+
+				if($option_ppco_subscr_time > 0 && (time() - $option_ppco_subscr_time) >= DAY_IN_SECONDS)
+				{
+					delete_option($option_ppco_subscr);
+					$option_ppco_subscr_time = 0;
+				}
+
+				$ppco_dup_processed = ($option_ppco_subscr_time > 0);
 
 				if($ppco_dup_processed)
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
@@ -629,20 +645,20 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'env_setting' => $env_setting,
 						'event'           => 'duplicate_subscription_ignored',
 						'subscription_id' => $subscription_id,
-						'transient'       => $transient_ppco_subscr,
+						'option'          => $option_ppco_subscr,
 					));
 
 				if(!$ppco_dup_processed)
 				{
-					//260404 Keep PayPal Checkout dedupe/fallback transients below 30 days for object-cache compatibility.
-					set_transient($transient_ppco_subscr, time(), DAY_IN_SECONDS);
+					if(!add_option($option_ppco_subscr, time(), '', 'no'))
+						update_option($option_ppco_subscr, time(), false);
 
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
 						'env_setting' => $env_setting,
 						'event'           => 'idempotency_subscription_set',
 						'subscription_id' => $subscription_id,
-						'transient'       => $transient_ppco_subscr,
+						'option'          => $option_ppco_subscr,
 						'expires_secs'    => DAY_IN_SECONDS,
 					));
 
