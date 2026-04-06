@@ -166,6 +166,126 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return apply_filters("ws_plugin__s2member_paypal_proxy_key_gen", $key, get_defined_vars());
 					}
 				/**
+				* Acquires a short-lived dedupe lock.
+				*
+				* @package s2Member\PayPal
+				* @since 260406
+				*
+				* @param string  $lock_option  Dedupe lock option name.
+				* @param integer $lock_timeout Optional. Lock timeout in seconds.
+				*
+				* @return bool TRUE if lock acquired; else FALSE.
+				*/
+				public static function dedupe_lock_acquire($lock_option, $lock_timeout = 900)
+					{
+						if(!$lock_option || !is_string($lock_option))
+							return FALSE;
+
+						if(add_option($lock_option, time(), '', 'no'))
+							return TRUE;
+
+						$lock_time = (int)get_option($lock_option, 0);
+
+						if($lock_time > 0 && (time() - $lock_time) >= abs($lock_timeout))
+							{
+								delete_option($lock_option);
+
+								if(add_option($lock_option, time(), '', 'no'))
+									return TRUE;
+							}
+						return FALSE;
+					}
+				/**
+				* Releases a short-lived dedupe lock.
+				*
+				* @package s2Member\PayPal
+				* @since 260406
+				*
+				* @param string $lock_option Dedupe lock option name.
+				*
+				* @return void
+				*/
+				public static function dedupe_lock_release($lock_option)
+					{
+						if($lock_option && is_string($lock_option))
+							delete_option($lock_option);
+					}
+				/**
+				* Gets a dedupe done-marker time and expires it lazily when needed.
+				*
+				* @package s2Member\PayPal
+				* @since 260406
+				*
+				* @param string  $done_option Dedupe done-marker option name.
+				* @param integer $done_ttl    Optional. Marker TTL in seconds.
+				*
+				* @return integer UNIX timestamp if still valid; else 0.
+				*/
+				public static function dedupe_done_time_get($done_option, $done_ttl = 0)
+					{
+						if(!$done_option || !is_string($done_option))
+							return 0;
+
+						$done_time = (int)get_option($done_option, 0);
+
+						if($done_time > 0 && $done_ttl > 0 && (time() - $done_time) >= abs($done_ttl))
+							{
+								delete_option($done_option);
+								return 0;
+							}
+						return $done_time;
+					}
+				/**
+				* Marks a dedupe done-marker as done.
+				*
+				* @package s2Member\PayPal
+				* @since 260406
+				*
+				* @param string $done_option Dedupe done-marker option name.
+				*
+				* @return void
+				*/
+				public static function dedupe_done_mark($done_option)
+					{
+						if($done_option && is_string($done_option))
+							{
+								if(!add_option($done_option, time(), '', 'no'))
+									update_option($done_option, time(), false);
+							}
+					}
+				/**
+				* Occasionally cleans up expired dedupe markers.
+				*
+				* @package s2Member\PayPal
+				* @since 260406
+				*
+				* @param string  $cleanup_transient Cleanup throttle transient name.
+				* @param array   $markers           Array of arrays, each with `prefix` and `ttl` keys.
+				* @param integer $throttle_ttl      Optional. Cleanup throttle TTL in seconds.
+				*
+				* @return void
+				*/
+				public static function dedupe_markers_cleanup($cleanup_transient, $markers = array(), $throttle_ttl = 21600)
+					{
+						if(!$cleanup_transient || !is_string($cleanup_transient) || !is_array($markers) || empty($markers))
+							return;
+
+						if(get_transient($cleanup_transient))
+							return;
+
+						global $wpdb;
+
+						foreach($markers as $marker)
+							if(!empty($marker['prefix']) && isset($marker['ttl']) && is_string($marker['prefix']))
+								{
+									$cutoff = (string)(time() - abs((int)$marker['ttl']));
+
+									$wpdb->query("DELETE FROM `".$wpdb->options."` WHERE `option_name` LIKE '".esc_sql($marker['prefix'])."%' AND CAST(`option_value` AS UNSIGNED) > 0 AND CAST(`option_value` AS UNSIGNED) < '".$cutoff."'");
+								}
+
+						set_transient($cleanup_transient, time(), abs((int)$throttle_ttl));
+					}
+				/**
 				* Calls upon the PayPal API, and returns the response.
 				*
 				* @package s2Member\PayPal

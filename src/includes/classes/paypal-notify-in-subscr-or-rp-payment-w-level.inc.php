@@ -57,7 +57,31 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 				do_action('ws_plugin__s2member_during_paypal_notify_before_subscr_payment', get_defined_vars());
 				unset($__refs, $__v);
 
-				if(!get_transient($transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
+				//260406 Cross-channel payment dedupe for PayPal recurring/subscription payments; first arrival wins across webhook proxy and native IPN.
+				$txn_dedupe_key = md5(strtolower((string)$paypal['subscr_id']).'|'.strtolower((string)$paypal['txn_id']));
+				$txn_lock_option = 's2m_paypal_txn_lock_'.$txn_dedupe_key;
+				$txn_done_option = 's2m_paypal_txn_done_'.$txn_dedupe_key;
+				$txn_lock_ttl = 900;
+				$txn_done_ttl = DAY_IN_SECONDS;
+
+				c_ws_plugin__s2member_paypal_utilities::dedupe_markers_cleanup('s2m_paypal_txn_dedupe_cleanup_throttle', array(
+					array('prefix' => 's2m_paypal_txn_lock_', 'ttl' => $txn_lock_ttl),
+					array('prefix' => 's2m_paypal_txn_done_', 'ttl' => $txn_done_ttl),
+				), 6 * HOUR_IN_SECONDS);
+
+				if(c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($txn_done_option, $txn_done_ttl))
+				{
+					$paypal['s2member_log'][] = 'Not processing. Duplicate notification.';
+					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `subscr_payment|recurring_payment` ).';
+					$paypal['s2member_log'][] = 'Duplicate notification. This transaction was already processed via another PayPal notification path. This notification will be ignored.';
+				}
+				else if(!c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire($txn_lock_option, $txn_lock_ttl))
+				{
+					$paypal['s2member_log'][] = 'Not processing. Duplicate notification.';
+					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `subscr_payment|recurring_payment` ).';
+					$paypal['s2member_log'][] = 'Duplicate notification. Another PayPal notification path is already processing this transaction. This notification will be ignored.';
+				}
+				else if(!get_transient($transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
 				{
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `subscr_payment|recurring_payment` )').'.';
 
@@ -215,12 +239,19 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 
 						set_transient('s2m_'.md5('s2member_transient_ipn_subscr_payment_'.$paypal['subscr_id']), $ipn, 43200);
 					}
+
+					//260406 Mark this payment transaction done after the winning PayPal notification path has been accepted or queued.
+					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($txn_done_option);
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($txn_lock_option);
 				}
 				else // Else, this is a duplicate IPN. Must stop here.
 				{
 					$paypal['s2member_log'][] = 'Not processing. Duplicate IPN.';
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `subscr_payment|recurring_payment` ).';
 					$paypal['s2member_log'][] = 'Duplicate IPN. Already processed. This IPN will be ignored.';
+
+					//260406 Release the shared transaction lock when the older exact duplicate-IPN transient check blocks this request.
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($txn_lock_option);
 				}
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify_after_subscr_payment', get_defined_vars());

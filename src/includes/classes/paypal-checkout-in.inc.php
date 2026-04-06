@@ -393,8 +393,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'option_selection2' => (string)$token['os1'],
 					);
 
-					//260404 Use an option for the PayPal Checkout subscription-handled marker, because transients are not persisting reliably across requests on some sites.
-					$option_ppco_subscr = 's2member_ppco_processed_subscr_'.md5($subscription_id);
+					//260406 Use the shared PayPal Checkout subscription-done option so checkout and webhooks agree on fallback suppression.
+					$option_ppco_subscr = 's2m_ppco_subscr_done_'.md5($subscription_id);
 					$option_ppco_subscr_time = (int)get_option($option_ppco_subscr, 0);
 
 					if($option_ppco_subscr_time > 0 && (time() - $option_ppco_subscr_time) >= DAY_IN_SECONDS)
@@ -628,7 +628,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				);
 
 				$ppco_dup_processed = false;
-				$option_ppco_subscr = 's2member_ppco_processed_subscr_'.md5($subscription_id);
+				$option_ppco_subscr = 's2m_ppco_subscr_done_'.md5($subscription_id);
 				$option_ppco_subscr_time = (int)get_option($option_ppco_subscr, 0);
 
 				if($option_ppco_subscr_time > 0 && (time() - $option_ppco_subscr_time) >= DAY_IN_SECONDS)
