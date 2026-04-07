@@ -1336,6 +1336,38 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
+				 * Cancels a PayPal Standard/legacy recurring profile via the classic NVP API.
+				 *
+				 * This is used by cross-gateway replacement flows when the old subscription appears
+				 * to be a PayPal Standard recurring profile. //260407
+				 *
+				 * @since 260407
+				 *
+				 * @param string $profile_id PayPal recurring profile id.
+				 * @param string $action Optional status action. Defaults to `Cancel`.
+				 *
+				 * @return array API response array from paypal_api_response().
+				 */
+				public static function paypal_standard_subscription_cancel($profile_id = '', $action = 'Cancel')
+					{
+						$profile_id = trim((string)$profile_id);
+						$action     = trim((string)$action);
+
+						if(!$profile_id)
+							return array('__error' => 'missing_profile_id');
+
+						if(!$action)
+							$action = 'Cancel';
+
+						//260407 This still goes through the existing authenticated NVP helper, so current PayPal API credentials are required.
+						return self::paypal_api_response(array(
+							'METHOD'    => 'ManageRecurringPaymentsProfileStatus',
+							'ACTION'    => $action,
+							'PROFILEID' => $profile_id,
+						));
+					}
+
+				/**
 				 * Captures a PayPal Checkout order (server-side) after buyer approval.
 				 *
 				 * Used by the JS SDK onApprove callback (capture_order op) and by redirect-mode

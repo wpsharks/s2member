@@ -271,6 +271,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'last_name'      => $last_name,
 					);
 
+					$old__subscr_gateway = get_user_option('s2member_subscr_gateway');
+					$old__subscr_id = get_user_option('s2member_subscr_id');
+					$old__subscr_baid = get_user_option('s2member_subscr_baid');
+					$old__subscr_cid = get_user_option('s2member_subscr_cid');
+					$old__ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars();
+					$is_independent_ccaps_sale = (strpos((string)$token['item_number'], '*:') === 0);
+					$is_specific_post_page_sale = (strpos((string)$token['item_number'], 'sp:') === 0);
+					$can_cancel_old_subscr = (!$is_independent_ccaps_sale && !$is_specific_post_page_sale); //260407 Only membership replacement-style PPCO purchases should cancel an existing recurring subscription here.
+
 					$notify_url  = home_url('/?s2member_paypal_notify=1');
 					$notify_post = array_merge($paypal, array(
 						's2member_paypal_proxy'              => 'paypal',
@@ -292,6 +301,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						}
 						exit();
 					}
+
+					//260407 Framework PPCO replacements need the same old-subscription cancellation behavior without affecting independent CCAPS or specific post/page purchases.
+					if($can_cancel_old_subscr && $old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $pu_cap_id), get_defined_vars())) //260406
+						c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars); //260407
 
 					$return_url = (string)$token['return'];
 					$return_url = add_query_arg('s2member_paypal_proxy', 'paypal', $return_url);
@@ -405,6 +418,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 					if(!$option_ppco_subscr_time)
 					{
+						$old__subscr_gateway = get_user_option('s2member_subscr_gateway');
+						$old__subscr_id = get_user_option('s2member_subscr_id');
+						$old__subscr_baid = get_user_option('s2member_subscr_baid');
+						$old__subscr_cid = get_user_option('s2member_subscr_cid');
+						$old__ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars();
+
 						if(!add_option($option_ppco_subscr, time(), '', 'no'))
 							update_option($option_ppco_subscr, time(), false);
 
@@ -429,6 +448,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							}
 							exit();
 						}
+
+						//260407 Framework PPCO replacements can also replace subscriptions created by other gateways
+						if($old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $subscription_id), get_defined_vars())) //260406.
+							c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars); //260407
 					}
 
 					$return_url2 = (string)$token['return'];
@@ -650,6 +673,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if(!$ppco_dup_processed)
 				{
+					$old__subscr_gateway = get_user_option('s2member_subscr_gateway');
+					$old__subscr_id = get_user_option('s2member_subscr_id');
+					$old__subscr_baid = get_user_option('s2member_subscr_baid');
+					$old__subscr_cid = get_user_option('s2member_subscr_cid');
+					$old__ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars();
+
 					if(!add_option($option_ppco_subscr, time(), '', 'no'))
 						update_option($option_ppco_subscr, time(), false);
 
@@ -678,6 +707,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					$notify_body = !empty($notify_r['body']) ? $notify_r['body'] : '';
 
 					if($notify_code >= 200 && $notify_code <= 299)
+					{
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'            => 'checkout',
 							'env_setting' => $env_setting,
@@ -688,6 +718,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'message'         => $notify_msg,
 							'body'            => $notify_body,
 						));
+
+						//260407 Framework PPCO AJAX replacements need the same gateway-aware old-subscription cancellation behavior.
+						if($old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $subscription_id), get_defined_vars())) //260406
+							c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars); //260407
+					}
 					else
 					{
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
@@ -1094,6 +1129,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if(!$ppco_dup_processed)
 				{
+					$old__subscr_gateway = get_user_option('s2member_subscr_gateway');
+					$old__subscr_id = get_user_option('s2member_subscr_id');
+					$old__subscr_baid = get_user_option('s2member_subscr_baid');
+					$old__subscr_cid = get_user_option('s2member_subscr_cid');
+					$old__ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars();
+					$is_independent_ccaps_sale = (strpos((string)$token['item_number'], '*:') === 0);
+					$is_specific_post_page_sale = (strpos((string)$token['item_number'], 'sp:') === 0);
+					$can_cancel_old_subscr = (!$is_independent_ccaps_sale && !$is_specific_post_page_sale); //260407 Only membership replacement-style PPCO purchases should cancel an existing recurring subscription here.
+
 					// 1) Fire the existing IPN handler via proxy (provisions access, emails, logs, etc).
 					$notify_url  = home_url('/?s2member_paypal_notify=1');
 					$notify_post = array_merge($paypal, array(
@@ -1111,6 +1155,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					$notify_body = !empty($notify_r['body']) ? $notify_r['body'] : '';
 
 					if($notify_code >= 200 && $notify_code <= 299)
+					{
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 							'ppco'     => 'checkout',
 							'env_setting' => $env_setting,
@@ -1122,6 +1167,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'message'  => $notify_msg,
 							'body'     => $notify_body,
 						));
+
+						//260407 Framework PPCO AJAX replacements can also replace subscriptions created by other gateways without affecting independent CCAPS or specific post/page purchases.
+						if($can_cancel_old_subscr && $old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $pu_cap_id), get_defined_vars())) //260406
+							c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars); //260407
+					}
 					else
 					{
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(

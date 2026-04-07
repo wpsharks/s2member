@@ -351,5 +351,93 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 				echo '</div>';
 			}
 		}
+
+		/**
+		 * Cancels a subscription using a gateway-aware dispatch routine.
+		 *
+		 * This is designed for replacement/modification flows where the old subscription must be
+		 * canceled after a new checkout begins. Callers should pass the previously captured
+		 * subscription details from before proxy/IPN processing updates the user's current profile.
+		 *
+		 * For PayPal-family subscriptions, this uses captured signup/proxy vars first when available
+		 * as a product hint, and then falls back to trying other configured cancellation routines
+		 * that are still plausible for the captured subscription context. //260407
+		 *
+		 * Gateway/product handlers may no longer be configured or loaded by the current installation.
+		 * In those cases this routine fails safely and returns `FALSE` instead of calling unavailable code.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260407
+		 *
+		 * @param string|bool $subscr_gateway Previously captured `s2member_subscr_gateway`.
+		 * @param string|bool $subscr_id Previously captured `s2member_subscr_id`.
+		 * @param string|bool $subscr_baid Previously captured `s2member_subscr_baid`.
+		 * @param string|bool $subscr_cid Previously captured `s2member_subscr_cid`.
+		 * @param array $ipn_signup_vars Previously captured signup/proxy vars for product-specific routing.
+		 * @param bool $immediate Optional. If false, cancel at period end where supported.
+		 *
+		 * @return bool True if a cancellation request was accepted; else false.
+		 */
+		public static function cancel_gateway_subscription($subscr_gateway = FALSE, $subscr_id = FALSE, $subscr_baid = FALSE, $subscr_cid = FALSE, $ipn_signup_vars = array(), $immediate = TRUE)
+		{
+			$subscr_gateway = strtolower((string)$subscr_gateway);
+			$subscr_id = (string)$subscr_id;
+			$subscr_baid = (string)$subscr_baid;
+			$subscr_cid = (string)$subscr_cid;
+			$ipn_signup_vars = (is_array($ipn_signup_vars)) ? $ipn_signup_vars : array();
+
+			if(!$subscr_gateway || !$subscr_id)
+				return FALSE;
+
+			switch($subscr_gateway)
+			{
+				case 'stripe':
+					if(!$subscr_cid || !class_exists('c_ws_plugin__s2member_pro_stripe_utilities'))
+						return FALSE;
+
+					//260407 Stripe replacement flows need the guard around old-subscription cancellation.
+					c_ws_plugin__s2member_pro_stripe_utilities::set_replacement_cancellation_guard($subscr_id);
+
+					if(!is_object(c_ws_plugin__s2member_pro_stripe_utilities::cancel_customer_subscription($subscr_cid, $subscr_id, !$immediate)))
+					{
+						c_ws_plugin__s2member_pro_stripe_utilities::clear_replacement_cancellation_guard($subscr_id);
+						return FALSE;
+					}
+					return TRUE;
+
+				case 'authnet':
+					if(!class_exists('c_ws_plugin__s2member_pro_authnet_utilities'))
+						return FALSE;
+
+					return (($authnet = c_ws_plugin__s2member_pro_authnet_utilities::authnet_arb_response(array('x_method' => 'cancel', 'x_subscription_id' => $subscr_id))) && empty($authnet['__error'])) ? TRUE : FALSE;
+
+				case 'paypal':
+					if(!empty($ipn_signup_vars['s2member_paypal_proxy_use']) && $ipn_signup_vars['s2member_paypal_proxy_use'] === 'paypal_checkout')
+					{
+						$paypal_checkout_creds = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_creds();
+
+						if(!empty($paypal_checkout_creds['client_id']) && !empty($paypal_checkout_creds['secret'])
+						   && ($paypal_checkout = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_cancel($subscr_id, 'Cancelled by replacement checkout.'))
+						   && !empty($paypal_checkout['code']) && ($paypal_checkout['code'] === 204 || ($paypal_checkout['code'] >= 200 && $paypal_checkout['code'] <= 299)))
+							return TRUE;
+					}
+
+					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_username'])
+					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_password'])
+					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_signature'])
+					   && ($paypal_standard = c_ws_plugin__s2member_paypal_utilities::paypal_standard_subscription_cancel($subscr_id))
+					   && empty($paypal_standard['__error']))
+						return TRUE;
+
+					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_username'])
+					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_partner'])
+					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_vendor'])
+					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_password'])
+					   && class_exists('c_ws_plugin__s2member_pro_paypal_utilities')
+					   && c_ws_plugin__s2member_pro_paypal_utilities::payflow_cancel_profile($subscr_id, $subscr_baid))
+						return TRUE;
+			}
+			return FALSE;
+		}
 	}
 }
