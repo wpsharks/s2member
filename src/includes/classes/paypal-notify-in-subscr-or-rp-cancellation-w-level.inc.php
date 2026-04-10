@@ -43,15 +43,35 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 
 						if ((!empty($paypal["txn_type"]) && preg_match ("/^(subscr_cancel|recurring_payment_profile_cancel|mp_cancel)$/i", $paypal["txn_type"]))
 						&& !(preg_match ("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]) && !empty($paypal["initial_payment_status"]) && preg_match ("/^failed$/i", $paypal["initial_payment_status"]))
-						&& (!empty($paypal["subscr_id"]) || ($paypal["subscr_id"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id ($paypal)))
-						&& (!empty($paypal["period1"]) || ($paypal["period1"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_period1 ($paypal, FALSE)) || ($paypal["period1"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var ("period1", FALSE, $paypal["subscr_id"])) || ($paypal["period1"] = "0 D"))
-						&& (!empty($paypal["period3"]) || ($paypal["period3"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_period3 ($paypal, FALSE)) || ($paypal["period3"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var ("period3", FALSE, $paypal["subscr_id"])) || ($paypal["period3"] = "1 D"))
-						&& ((!empty($paypal["item_number"]) || ($paypal["item_number"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_number ($paypal)) || ($paypal["item_number"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var ("item_number", FALSE, $paypal["subscr_id"])) || ($paypal["item_number"] = "1")) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"]))
-						&& (!empty($paypal["item_name"]) || ($paypal["item_name"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_name ($paypal)) || ($paypal["item_name"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var ("item_name", FALSE, $paypal["subscr_id"])) || ($paypal["item_name"] = $_SERVER["HTTP_HOST"]))
-						&& (!empty($paypal["payer_email"]) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var ("payer_email", FALSE, $paypal["subscr_id"])) || ($paypal["payer_email"] = c_ws_plugin__s2member_utils_users::get_user_email_with ($paypal["subscr_id"])))
-						&& (!empty($paypal["subscr_baid"]) || ($paypal["subscr_baid"] = $paypal["subscr_id"]))
-						&& (!empty($paypal["subscr_cid"]) || ($paypal["subscr_cid"] = $paypal["subscr_id"])))
+						&& (!empty($paypal["subscr_id"]) || ($paypal["subscr_id"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id ($paypal))))
 							{
+								$ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars (FALSE, $paypal["subscr_id"]);
+								$ipn_signup_vars = (is_array ($ipn_signup_vars)) ? $ipn_signup_vars : array ();
+
+								$paypal["period1"] = (!empty($paypal["period1"])) ? $paypal["period1"] : c_ws_plugin__s2member_paypal_utilities::paypal_pro_period1 ($paypal, FALSE);
+								$paypal["period1"] = (!empty($paypal["period1"])) ? $paypal["period1"] : (isset ($ipn_signup_vars["period1"]) ? $ipn_signup_vars["period1"] : "");
+								$paypal["period1"] = (!empty($paypal["period1"])) ? $paypal["period1"] : "0 D";
+
+								$paypal["period3"] = (!empty($paypal["period3"])) ? $paypal["period3"] : c_ws_plugin__s2member_paypal_utilities::paypal_pro_period3 ($paypal, FALSE);
+								$paypal["period3"] = (!empty($paypal["period3"])) ? $paypal["period3"] : (isset ($ipn_signup_vars["period3"]) ? $ipn_signup_vars["period3"] : "");
+								$paypal["period3"] = (!empty($paypal["period3"])) ? $paypal["period3"] : "1 D";
+
+								$paypal["item_number"] = (!empty($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"])) ? $paypal["item_number"] : c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_number ($paypal);
+								$paypal["item_number"] = (!empty($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"])) ? $paypal["item_number"] : (isset ($ipn_signup_vars["item_number"]) ? $ipn_signup_vars["item_number"] : "");
+								//260327 !!! TO-DO Review whether defaulting to "1" is still appropriate here for cancellation IPNs when no valid membership item_number can be resolved.
+								$paypal["item_number"] = (!empty($paypal["item_number"]) && preg_match ($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["membership_item_number_w_level_regex"], $paypal["item_number"])) ? $paypal["item_number"] : "1";
+
+								$paypal["item_name"] = (!empty($paypal["item_name"])) ? $paypal["item_name"] : c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_name ($paypal);
+								$paypal["item_name"] = (!empty($paypal["item_name"])) ? $paypal["item_name"] : (isset ($ipn_signup_vars["item_name"]) ? $ipn_signup_vars["item_name"] : "");
+								$paypal["item_name"] = (string)$paypal["item_name"];
+
+								$paypal["payer_email"] = (!empty($paypal["payer_email"])) ? $paypal["payer_email"] : (isset ($ipn_signup_vars["payer_email"]) ? $ipn_signup_vars["payer_email"] : "");
+								$paypal["payer_email"] = (!empty($paypal["payer_email"])) ? $paypal["payer_email"] : c_ws_plugin__s2member_utils_users::get_user_email_with ($paypal["subscr_id"]);
+								$paypal["payer_email"] = (string)$paypal["payer_email"];
+
+								$paypal["subscr_baid"] = (!empty($paypal["subscr_baid"])) ? $paypal["subscr_baid"] : $paypal["subscr_id"];
+								$paypal["subscr_cid"] = (!empty($paypal["subscr_cid"])) ? $paypal["subscr_cid"] : $paypal["subscr_id"];
+
 								foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 								do_action("ws_plugin__s2member_during_paypal_notify_before_subscr_cancel", get_defined_vars ());
 								unset($__refs, $__v);
@@ -61,6 +81,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `subscr_cancel|recurring_payment_profile_cancel|mp_cancel` ).";
 
 										list ($paypal["level"], $paypal["ccaps"]) = preg_split ("/\:/", $paypal["item_number"], 3);
+
 
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
