@@ -782,6 +782,12 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 											'on1'         => $paypal_on1_input_value,
 											'os1'         => $paypal_os1_input_value,
 
+											'old__subscr_gateway'  => get_user_option('s2member_subscr_gateway'),
+											'old__subscr_id'       => get_user_option('s2member_subscr_id'),
+											'old__subscr_baid'     => get_user_option('s2member_subscr_baid'),
+											'old__subscr_cid'      => get_user_option('s2member_subscr_cid'),
+											'old__ipn_signup_vars' => c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars(), //260408 Capture the old context before PayPal/webhook processing can update the member's current profile.
+
 											'return'      => $success_return_url,
 											'cancel'      => $ppco_cancel,
 

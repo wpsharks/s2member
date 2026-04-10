@@ -109,6 +109,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				exit();
 			}
 
+			$old__subscr_gateway = !empty($token['old__subscr_gateway']) ? (string)$token['old__subscr_gateway'] : '';
+			$old__subscr_id = !empty($token['old__subscr_id']) ? (string)$token['old__subscr_id'] : '';
+			$old__subscr_baid = !empty($token['old__subscr_baid']) ? (string)$token['old__subscr_baid'] : '';
+			$old__subscr_cid = !empty($token['old__subscr_cid']) ? (string)$token['old__subscr_cid'] : '';
+			$old__ipn_signup_vars = (!empty($token['old__ipn_signup_vars']) && is_array($token['old__ipn_signup_vars'])) ? $token['old__ipn_signup_vars'] : array(); //260408 Use the old context captured before the buyer left for PayPal.
+
 			// output="anchor|url" support: redirect-mode endpoints (GET).
 			if($op === 'redirect' || $op === 'return' || $op === 'cancel')
 			{
@@ -271,17 +277,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'last_name'      => $last_name,
 					);
 
-					$old__subscr_gateway = get_user_option('s2member_subscr_gateway');
-					$old__subscr_id = get_user_option('s2member_subscr_id');
-					$old__subscr_baid = get_user_option('s2member_subscr_baid');
-					$old__subscr_cid = get_user_option('s2member_subscr_cid');
-					$old__ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars();
 					$is_independent_ccaps_sale = (strpos((string)$token['item_number'], '*:') === 0);
 					$is_specific_post_page_sale = (strpos((string)$token['item_number'], 'sp:') === 0);
 					$can_cancel_old_subscr = (!$is_independent_ccaps_sale && !$is_specific_post_page_sale); //260407 Only membership replacement-style PPCO purchases should cancel an existing recurring subscription here.
 
 					$notify_url  = home_url('/?s2member_paypal_notify=1');
-					$notify_post = array_merge($paypal, array(
+						$notify_post = array_merge($paypal, array(
 						's2member_paypal_proxy'              => 'paypal',
 						's2member_paypal_proxy_use'          => 'paypal_checkout',
 						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
@@ -418,12 +419,6 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 					if(!$option_ppco_subscr_time)
 					{
-						$old__subscr_gateway = get_user_option('s2member_subscr_gateway');
-						$old__subscr_id = get_user_option('s2member_subscr_id');
-						$old__subscr_baid = get_user_option('s2member_subscr_baid');
-						$old__subscr_cid = get_user_option('s2member_subscr_cid');
-						$old__ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars();
-
 						if(!add_option($option_ppco_subscr, time(), '', 'no'))
 							update_option($option_ppco_subscr, time(), false);
 
@@ -673,12 +668,6 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if(!$ppco_dup_processed)
 				{
-					$old__subscr_gateway = get_user_option('s2member_subscr_gateway');
-					$old__subscr_id = get_user_option('s2member_subscr_id');
-					$old__subscr_baid = get_user_option('s2member_subscr_baid');
-					$old__subscr_cid = get_user_option('s2member_subscr_cid');
-					$old__ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars();
-
 					if(!add_option($option_ppco_subscr, time(), '', 'no'))
 						update_option($option_ppco_subscr, time(), false);
 
@@ -1129,11 +1118,6 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				if(!$ppco_dup_processed)
 				{
-					$old__subscr_gateway = get_user_option('s2member_subscr_gateway');
-					$old__subscr_id = get_user_option('s2member_subscr_id');
-					$old__subscr_baid = get_user_option('s2member_subscr_baid');
-					$old__subscr_cid = get_user_option('s2member_subscr_cid');
-					$old__ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars();
 					$is_independent_ccaps_sale = (strpos((string)$token['item_number'], '*:') === 0);
 					$is_specific_post_page_sale = (strpos((string)$token['item_number'], 'sp:') === 0);
 					$can_cancel_old_subscr = (!$is_independent_ccaps_sale && !$is_specific_post_page_sale); //260407 Only membership replacement-style PPCO purchases should cancel an existing recurring subscription here.

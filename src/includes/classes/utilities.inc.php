@@ -412,30 +412,58 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 					return (($authnet = c_ws_plugin__s2member_pro_authnet_utilities::authnet_arb_response(array('x_method' => 'cancel', 'x_subscription_id' => $subscr_id))) && empty($authnet['__error'])) ? TRUE : FALSE;
 
 				case 'paypal':
-					if(!empty($ipn_signup_vars['s2member_paypal_proxy_use']) && $ipn_signup_vars['s2member_paypal_proxy_use'] === 'paypal_checkout')
+					$paypal_proxy_use = (!empty($ipn_signup_vars['s2member_paypal_proxy_use'])) ? (string)$ipn_signup_vars['s2member_paypal_proxy_use'] : '';
+					$try_ppco_first = ($paypal_proxy_use === 'paypal_checkout' || preg_match('/^I\-[A-Z0-9]+$/', $subscr_id));
+					$can_try_ppco = FALSE;
+					$can_try_standard = FALSE;
+					$can_try_payflow = FALSE;
+
+					$paypal_checkout_creds = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_creds();
+					$can_try_ppco = (!empty($paypal_checkout_creds['client_id']) && !empty($paypal_checkout_creds['secret']));
+
+					$can_try_standard = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_username'])
+					                     && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_password'])
+					                     && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_signature']));
+
+					$can_try_payflow = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_username'])
+					                    && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_partner'])
+					                    && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_vendor'])
+					                    && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_password'])
+					                    && class_exists('c_ws_plugin__s2member_pro_paypal_utilities'));
+
+					$paypal_routes = ($try_ppco_first) ? array('ppco', 'standard', 'payflow') : array('standard', 'ppco', 'payflow');
+
+					foreach($paypal_routes as $_paypal_route)
 					{
-						$paypal_checkout_creds = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_creds();
+						switch($_paypal_route)
+						{
+							case 'ppco':
+								if(!$can_try_ppco)
+									break;
 
-						if(!empty($paypal_checkout_creds['client_id']) && !empty($paypal_checkout_creds['secret'])
-						   && ($paypal_checkout = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_cancel($subscr_id, 'Cancelled by replacement checkout.'))
-						   && !empty($paypal_checkout['code']) && ($paypal_checkout['code'] === 204 || ($paypal_checkout['code'] >= 200 && $paypal_checkout['code'] <= 299)))
-							return TRUE;
+								if(($paypal_checkout = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_cancel($subscr_id, 'Cancelled by replacement checkout.'))
+								   && !empty($paypal_checkout['code']) && ($paypal_checkout['code'] === 204 || ($paypal_checkout['code'] >= 200 && $paypal_checkout['code'] <= 299)))
+									return TRUE;
+								break;
+
+							case 'standard':
+								if(!$can_try_standard)
+									break;
+
+								if(($paypal_standard = c_ws_plugin__s2member_paypal_utilities::paypal_standard_subscription_cancel($subscr_id))
+								   && empty($paypal_standard['__error']))
+									return TRUE;
+								break;
+
+							case 'payflow':
+								if(!$can_try_payflow)
+									break;
+
+								if(c_ws_plugin__s2member_pro_paypal_utilities::payflow_cancel_profile($subscr_id, $subscr_baid))
+									return TRUE;
+								break;
+						}
 					}
-
-					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_username'])
-					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_password'])
-					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_api_signature'])
-					   && ($paypal_standard = c_ws_plugin__s2member_paypal_utilities::paypal_standard_subscription_cancel($subscr_id))
-					   && empty($paypal_standard['__error']))
-						return TRUE;
-
-					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_username'])
-					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_partner'])
-					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_vendor'])
-					   && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_password'])
-					   && class_exists('c_ws_plugin__s2member_pro_paypal_utilities')
-					   && c_ws_plugin__s2member_pro_paypal_utilities::payflow_cancel_profile($subscr_id, $subscr_baid))
-						return TRUE;
 			}
 			return FALSE;
 		}
