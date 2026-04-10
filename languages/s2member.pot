@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  260325\n"
+"Project-Id-Version:  260410\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-03-25 13:56:00+00:00\n"
+"POT-Creation-Date: 2026-04-10 03:24:38+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: pro/src/includes/classes/coupons.inc.php:266
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:692
 #: pro/src/includes/classes/gateways/paypal/paypal-utilities.inc.php:312
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1109
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1122
 msgctxt "s2member-front percentage-symbol"
 msgid "%"
 msgstr ""
@@ -138,79 +138,79 @@ msgctxt "s2member-front"
 msgid "You're <strong>NOT</strong> logged in."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:290
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:643
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:293
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:649
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:346
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:680
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:411
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:760
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:413
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:764
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:481
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:929
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been updated."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:498
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:764
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:501
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:770
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:510
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:837
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:592
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:915
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:594
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:919
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:753
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1087
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:626
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:905
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:624
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:901
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">log in</a>."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:509
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:540
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:773
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:799
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:512
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:543
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:779
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:805
 #: pro/src/includes/classes/gateways/authnet/authnet-registration-in.inc.php:129
 #: pro/src/includes/classes/gateways/authnet/authnet-registration-in.inc.php:151
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:519
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:545
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:846
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:872
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:601
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:627
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:924
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:950
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:603
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:629
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:928
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:954
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:762
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:788
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1096
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1122
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:129
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:151
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:638
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:917
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:636
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:913
 #: pro/src/includes/classes/gateways/stripe/stripe-registration-in.inc.php:131
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> A slight problem. Please contact Support for assistance."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:529
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:790
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:532
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:796
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:536
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:863
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:618
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:941
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:620
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:945
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:779
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1113
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:627
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:906
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:625
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:902
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; You'll receive an email momentarily."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:810
+#: pro/src/includes/classes/gateways/authnet/authnet-checkout-in.inc.php:816
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-in.inc.php:883
-#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:961
+#: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:965
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1133
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:136
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:921
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:917
 msgctxt "s2member-front"
 msgid "<strong>Unknown error.</strong> Please contact Support for assistance."
 msgstr ""
@@ -1309,17 +1309,17 @@ msgstr ""
 #. with `ws_plugin__s2member_paypal_payflow_api_response`.
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:96
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:325
-#: src/includes/classes/paypal-utilities.inc.php:344
-#: src/includes/classes/paypal-utilities.inc.php:352
+#: src/includes/classes/paypal-utilities.inc.php:464
+#: src/includes/classes/paypal-utilities.inc.php:472
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:99
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:328
-#: src/includes/classes/paypal-utilities.inc.php:218
-#: src/includes/classes/paypal-utilities.inc.php:346
-#: src/includes/classes/paypal-utilities.inc.php:354
+#: src/includes/classes/paypal-utilities.inc.php:338
+#: src/includes/classes/paypal-utilities.inc.php:466
+#: src/includes/classes/paypal-utilities.inc.php:474
 msgctxt "s2member-front"
 msgid "Error. Please contact Support for assistance."
 msgstr ""
@@ -1505,23 +1505,23 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:86
 #: pro/src/includes/classes/gateways/stripe/stripe-css-js.inc.php:84
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1527
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1720
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1540
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1733
 msgctxt "s2member-front"
 msgid "The payment failed, please try again with a different card."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:273
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:500
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:693
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:813
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:498
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:691
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:809
 #: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:138
 msgctxt "s2member-front"
 msgid "Please submit a card."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:369
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:756
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:367
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:752
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been updated :-)"
 msgstr ""
@@ -1573,48 +1573,48 @@ msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> No Customer|Subscr. ID. Please contact Support for assistance."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:225
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:238
 msgctxt "s2member-front"
 msgid "Error: <strong>prepaid</strong> cards not accepted at this time. Please use a different card and try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:882
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:895
 msgctxt "s2member-front"
 msgid "Error code: <code>%1$s</code>. %2$s."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:885
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:898
 msgctxt "s2member-front"
 msgid "Invalid parameters to Stripe; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:888
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:901
 msgctxt "s2member-front"
 msgid "Invalid Stripe API keys; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:891
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:904
 msgctxt "s2member-front"
 msgid "Network communication failure with Stripe; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:894
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:907
 msgctxt "s2member-front"
 msgid "Stripe API error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:896
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:909
 msgctxt "s2member-front"
 msgid "Stripe error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1658
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1715
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1671
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1728
 msgctxt "s2member-front"
 msgid "Action required: 3D Secure authorization."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1663
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1676
 msgctxt "s2member-front"
 msgid "Please try again with a different card."
 msgstr ""
@@ -4501,23 +4501,23 @@ msgstr ""
 #. by PayPal. Replace `%2$s` and `%3$s` with: `Unable to process, please try
 #. again`, or something to that affect. Or, if you prefer, you could Filter
 #. ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`.
-#: src/includes/classes/paypal-utilities.inc.php:215
+#: src/includes/classes/paypal-utilities.inc.php:335
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s. %3$s."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:262
-#: src/includes/classes/paypal-utilities.inc.php:268
+#: src/includes/classes/paypal-utilities.inc.php:382
+#: src/includes/classes/paypal-utilities.inc.php:388
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Please use an alternate funding source."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:265
+#: src/includes/classes/paypal-utilities.inc.php:385
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Express Checkout was NOT confirmed."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:399
+#: src/includes/classes/paypal-utilities.inc.php:519
 msgctxt "s2member-front"
 msgid " Please contact PayPal Merchant Technical Support (www.paypal.com/mts) and request `Recurring Billing` service, and also ask to have `Reference Transactions` enabled for Recurring Billing via Express Checkout."
 msgstr ""

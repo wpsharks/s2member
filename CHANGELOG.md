@@ -1,3 +1,19 @@
+= v260410 =
+
+- (Framework) **Fix:** Reduced the upfront requirements for processing PayPal Standard `subscr_cancel` IPNs so valid cancellations are not ignored when supporting values are missing, stale, or non-membership-specific.
+
+- (Framework) **Fix:** Prevent incorrect s2Member notifications in some PayPal Checkout cases where several webhooks are received about the same subscription.
+
+- (Framework) **Fix:** Prevent duplicate processing and notifications when PayPal sends both a webhook and an IPN for the same PayPal Checkout subscription payment.
+
+- (Framework) **Fix:** Added subscription modification cancellation support to the Framework, which was previously only available in the Pro addon.
+
+- (Pro) **Fix:** Made subscription modification cancellation gateway-aware, preventing orphaned active subscriptions when a member starts a replacement subscription through a different gateway. 
+
+- (Pro) **Fix:** Prevented rare cases where subscription modification processing could cancel the newly created subscription by mistake.
+
+- (Pro) **Fix:** Improved Stripe customer lookup during checkout retries by falling back to email when the stored Stripe customer ID is missing, stale, or no longer retrievable.
+
 = v260325 =
 
 - (Framework) **Fix:** Improved PayPal Checkout webhook idempotency to prevent duplicate processing during repeated/concurrent webhooks, while preserving normal behavior.

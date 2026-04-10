@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260325
-Stable tag: 260325
-Tested up to: 7.0-RC1-62112
+Version: 260410
+Stable tag: 260410
+Tested up to: 7.0-RC2-62197
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.4
@@ -176,11 +176,27 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260325 =
+= v260410 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v260410 =
+
+- (Framework) **Fix:** Reduced the upfront requirements for processing PayPal Standard `subscr_cancel` IPNs so valid cancellations are not ignored when supporting values are missing, stale, or non-membership-specific.
+
+- (Framework) **Fix:** Prevent incorrect s2Member notifications in some PayPal Checkout cases where several webhooks are received about the same subscription.
+
+- (Framework) **Fix:** Prevent duplicate processing and notifications when PayPal sends both a webhook and an IPN for the same PayPal Checkout subscription payment.
+
+- (Framework) **Fix:** Added subscription modification cancellation support to the Framework, which was previously only available in the Pro addon.
+
+- (Pro) **Fix:** Made subscription modification cancellation gateway-aware, preventing orphaned active subscriptions when a member starts a replacement subscription through a different gateway. 
+
+- (Pro) **Fix:** Prevented rare cases where subscription modification processing could cancel the newly created subscription by mistake.
+
+- (Pro) **Fix:** Improved Stripe customer lookup during checkout retries by falling back to email when the stored Stripe customer ID is missing, stale, or no longer retrievable.
 
 = v260325 =
 
