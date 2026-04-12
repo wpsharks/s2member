@@ -395,9 +395,10 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$code  = '<div id="'.esc_attr($ppco_div_id).'" class="ws-plugin--s2member-paypal-button ws-plugin--s2member-ppco-button" style="max-width:145px; width:auto; margin:0;"></div>'."\n";
 										$code .= '<div id="'.esc_attr($ppco_err_id).'" class="ws-plugin--s2member-ppco-error" style="display:none; margin:0;"></div>'."\n";
 
+										$ppco_sdk_src = apply_filters('ws_plugin__s2member_ppco_sdk_src', $ppco_sdk_src, get_defined_vars());
+
 										if($ppco_sdk_just_loaded)
 											{
-												$ppco_sdk_src = apply_filters('ws_plugin__s2member_ppco_sdk_src', $ppco_sdk_src, get_defined_vars());
 												$code .= '<script id="'.esc_attr($ppco_sdk_id).'" data-namespace="'.esc_attr($ppco_sdk_ns).'" src="'.esc_attr($ppco_sdk_src).'"></script>'."\n";
 											}
 
@@ -408,10 +409,12 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$code .= 'var t="'.esc_js($ppco_token).'";'."\n";
 										$code .= 'var u="'.esc_js($ppco_endpoint).'";'."\n";
 										$code .= 'var ns="'.esc_js($ppco_sdk_ns).'";'."\n";
+										$code .= 'var s="'.esc_js($ppco_sdk_src).'";'."\n";
 										$code .= 'var cid="'.esc_js($paypal_invoice_input_value).'";'."\n";
 										$code .= 'function showErr(m){try{var el=document.getElementById(e);if(el){el.style.display="block";el.innerHTML=m;}}catch(x){}}'."\n";
 										$code .= 'function postTo(url, data){var f=document.createElement("form");f.method="post";f.action=url;for(var k in data){if(!data.hasOwnProperty(k))continue;var i=document.createElement("input");i.type="hidden";i.name=k;i.value=data[k];f.appendChild(i);}document.body.appendChild(f);f.submit();}'."\n";
-										$code .= 'function enc(o){var s=[];for(var k in o){if(!o.hasOwnProperty(k))continue;s.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return s.join("&");}'."\n";
+										$code .= 'function enc(o){var a=[];for(var k in o){if(!o.hasOwnProperty(k))continue;a.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return a.join("&");}'."\n";
+										$code .= 'function loadSdk(cb){var P=window[ns];if(P&&P.Buttons){cb(P);return;}var id=ns+"_sdk",tag=document.getElementById(id),done=false;function finish(){if(done)return;done=true;cb(window[ns]&&window[ns].Buttons?window[ns]:null);}function ok(){finish();}function fail(){finish();}if(tag){if(window[ns]&&window[ns].Buttons){finish();return;}if(tag.getAttribute("src")!==s){tag.setAttribute("src",s);}if(tag.readyState==="complete"||tag.readyState==="loaded"){setTimeout(finish,0);return;}tag.addEventListener("load",ok);tag.addEventListener("error",fail);setTimeout(finish,3500);return;}tag=document.createElement("script");tag.id=id;tag.setAttribute("data-namespace",ns);tag.src=s;tag.async=true;tag.onload=ok;tag.onerror=fail;(document.head||document.body||document.documentElement).appendChild(tag);setTimeout(finish,3500);}'."\n";
 										if($ppco_intent === 'subscription')
 											{
 												$code .= 'function getPlanId(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"get_plan_id",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.plan_id)return res.plan_id;throw(res&&res.error?res.error:"plan_get_failed");});}'."\n";
@@ -420,7 +423,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"confirm_subscription",s2member_paypal_checkout_t:t,subscription_id:(data&&data.subscriptionID?data.subscriptionID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"subscription_confirm_failed");}).catch(function(e){showErr("Subscription could not be completed. Please try again.");});}'."\n";
 												$code .= 'function onCancel(){showErr("Subscription cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
-												$code .= 'function init(){var P=window[ns];if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createSubscription:createSubscription,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}'."\n";
+												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createSubscription:createSubscription,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
 											}
 										else
 											{
@@ -428,7 +431,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"capture_order",s2member_paypal_checkout_t:t,order_id:(data&&data.orderID?data.orderID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"order_capture_failed");}).catch(function(e){showErr("Payment could not be completed. Please try again.");});}'."\n";
 												$code .= 'function onCancel(){showErr("Payment cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
-												$code .= 'function init(){var P=window[ns];if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createOrder:createOrder,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}'."\n";
+												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createOrder:createOrder,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
 											}
 										$code .= 'if(document.readyState==="complete"){init();}else{window.addEventListener("load",init);}'."\n";
 										$code .= '})();'."\n";
@@ -606,9 +609,10 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$code  = '<div id="'.esc_attr($ppco_div_id).'" class="ws-plugin--s2member-paypal-button ws-plugin--s2member-ppco-button" style="max-width:145px; width:auto; margin:0;"></div>'."\n";
 										$code .= '<div id="'.esc_attr($ppco_err_id).'" class="ws-plugin--s2member-ppco-error" style="display:none; margin:0;"></div>'."\n";
 
+										$ppco_sdk_src = apply_filters('ws_plugin__s2member_ppco_sdk_src', $ppco_sdk_src, get_defined_vars());
+
 										if($ppco_sdk_just_loaded)
 											{
-												$ppco_sdk_src = apply_filters('ws_plugin__s2member_ppco_sdk_src', $ppco_sdk_src, get_defined_vars());
 												$code .= '<script id="'.esc_attr($ppco_sdk_id).'" data-namespace="'.esc_attr($ppco_sdk_ns).'" src="'.esc_attr($ppco_sdk_src).'"></script>'."\n";
 											}
 
@@ -619,10 +623,12 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$code .= 'var t="'.esc_js($ppco_token).'";'."\n";
 										$code .= 'var u="'.esc_js($ppco_endpoint).'";'."\n";
 										$code .= 'var ns="'.esc_js($ppco_sdk_ns).'";'."\n";
+										$code .= 'var s="'.esc_js($ppco_sdk_src).'";'."\n";
 										$code .= 'var cid="'.esc_js($paypal_invoice_input_value).'";'."\n";
 										$code .= 'function showErr(m){try{var el=document.getElementById(e);if(el){el.style.display="block";el.innerHTML=m;}}catch(x){}}'."\n";
 										$code .= 'function postTo(url, data){var f=document.createElement("form");f.method="post";f.action=url;for(var k in data){if(!data.hasOwnProperty(k))continue;var i=document.createElement("input");i.type="hidden";i.name=k;i.value=data[k];f.appendChild(i);}document.body.appendChild(f);f.submit();}'."\n";
-										$code .= 'function enc(o){var s=[];for(var k in o){if(!o.hasOwnProperty(k))continue;s.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return s.join("&");}'."\n";
+										$code .= 'function enc(o){var a=[];for(var k in o){if(!o.hasOwnProperty(k))continue;a.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return a.join("&");}'."\n";
+										$code .= 'function loadSdk(cb){var P=window[ns];if(P&&P.Buttons){cb(P);return;}var id=ns+"_sdk",tag=document.getElementById(id),done=false;function finish(){if(done)return;done=true;cb(window[ns]&&window[ns].Buttons?window[ns]:null);}function ok(){finish();}function fail(){finish();}if(tag){if(window[ns]&&window[ns].Buttons){finish();return;}if(tag.getAttribute("src")!==s){tag.setAttribute("src",s);}if(tag.readyState==="complete"||tag.readyState==="loaded"){setTimeout(finish,0);return;}tag.addEventListener("load",ok);tag.addEventListener("error",fail);setTimeout(finish,3500);return;}tag=document.createElement("script");tag.id=id;tag.setAttribute("data-namespace",ns);tag.src=s;tag.async=true;tag.onload=ok;tag.onerror=fail;(document.head||document.body||document.documentElement).appendChild(tag);setTimeout(finish,3500);}'."\n";
 										if($ppco_intent === 'subscription')
 											{
 												$code .= 'function getPlanId(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"get_plan_id",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.plan_id)return res.plan_id;throw(res&&res.error?res.error:"plan_get_failed");});}'."\n";
@@ -631,7 +637,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"confirm_subscription",s2member_paypal_checkout_t:t,subscription_id:(data&&data.subscriptionID?data.subscriptionID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"subscription_confirm_failed");}).catch(function(e){showErr("Subscription could not be completed. Please try again.");});}'."\n";
 												$code .= 'function onCancel(){showErr("Subscription cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
-												$code .= 'function init(){var P=window[ns];if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createSubscription:createSubscription,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}'."\n";
+												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createSubscription:createSubscription,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
 											}
 										else
 											{
@@ -639,7 +645,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"capture_order",s2member_paypal_checkout_t:t,order_id:(data&&data.orderID?data.orderID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"order_capture_failed");}).catch(function(e){showErr("Payment could not be completed. Please try again.");});}'."\n";
 												$code .= 'function onCancel(){showErr("Payment cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
-												$code .= 'function init(){var P=window[ns];if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createOrder:createOrder,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}'."\n";
+												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createOrder:createOrder,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
 											}
 										$code .= 'if(document.readyState==="complete"){init();}else{window.addEventListener("load",init);}'."\n";
 										$code .= '})();'."\n";
@@ -845,9 +851,10 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$code  = '<div id="'.esc_attr($ppco_div_id).'" class="ws-plugin--s2member-paypal-button ws-plugin--s2member-ppco-button" style="max-width:145px; width:auto; margin:0;"></div>'."\n";
 										$code .= '<div id="'.esc_attr($ppco_err_id).'" class="ws-plugin--s2member-ppco-error" style="display:none; margin:0;"></div>'."\n";
 
+										$ppco_sdk_src = apply_filters('ws_plugin__s2member_ppco_sdk_src', $ppco_sdk_src, get_defined_vars());
+
 										if($ppco_sdk_just_loaded)
 											{
-												$ppco_sdk_src = apply_filters('ws_plugin__s2member_ppco_sdk_src', $ppco_sdk_src, get_defined_vars());
 												$code .= '<script id="'.esc_attr($ppco_sdk_id).'" data-namespace="'.esc_attr($ppco_sdk_ns).'" src="'.esc_attr($ppco_sdk_src).'"></script>'."\n";
 											}
 
@@ -858,10 +865,12 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$code .= 'var t="'.esc_js($ppco_token).'";'."\n";
 										$code .= 'var u="'.esc_js($ppco_endpoint).'";'."\n";
 										$code .= 'var ns="'.esc_js($ppco_sdk_ns).'";'."\n";
+										$code .= 'var s="'.esc_js($ppco_sdk_src).'";'."\n";
 										$code .= 'var cid="'.esc_js($paypal_invoice_input_value).'";'."\n";
 										$code .= 'function showErr(m){try{var el=document.getElementById(e);if(el){el.style.display="block";el.innerHTML=m;}}catch(x){}}'."\n";
 										$code .= 'function postTo(url, data){var f=document.createElement("form");f.method="post";f.action=url;for(var k in data){if(!data.hasOwnProperty(k))continue;var i=document.createElement("input");i.type="hidden";i.name=k;i.value=data[k];f.appendChild(i);}document.body.appendChild(f);f.submit();}'."\n";
-										$code .= 'function enc(o){var s=[];for(var k in o){if(!o.hasOwnProperty(k))continue;s.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return s.join("&");}'."\n";
+										$code .= 'function enc(o){var a=[];for(var k in o){if(!o.hasOwnProperty(k))continue;a.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return a.join("&");}'."\n";
+										$code .= 'function loadSdk(cb){var P=window[ns];if(P&&P.Buttons){cb(P);return;}var id=ns+"_sdk",tag=document.getElementById(id),done=false;function finish(){if(done)return;done=true;cb(window[ns]&&window[ns].Buttons?window[ns]:null);}function ok(){finish();}function fail(){finish();}if(tag){if(window[ns]&&window[ns].Buttons){finish();return;}if(tag.getAttribute("src")!==s){tag.setAttribute("src",s);}if(tag.readyState==="complete"||tag.readyState==="loaded"){setTimeout(finish,0);return;}tag.addEventListener("load",ok);tag.addEventListener("error",fail);setTimeout(finish,3500);return;}tag=document.createElement("script");tag.id=id;tag.setAttribute("data-namespace",ns);tag.src=s;tag.async=true;tag.onload=ok;tag.onerror=fail;(document.head||document.body||document.documentElement).appendChild(tag);setTimeout(finish,3500);}'."\n";
 										if($ppco_intent === 'subscription')
 											{
 												$code .= 'function getPlanId(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"get_plan_id",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.plan_id)return res.plan_id;throw(res&&res.error?res.error:"plan_get_failed");});}'."\n";
@@ -870,7 +879,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"confirm_subscription",s2member_paypal_checkout_t:t,subscription_id:(data&&data.subscriptionID?data.subscriptionID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"subscription_confirm_failed");}).catch(function(e){showErr("Subscription could not be completed. Please try again.");});}'."\n";
 												$code .= 'function onCancel(){showErr("Subscription cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
-												$code .= 'function init(){var P=window[ns];if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createSubscription:createSubscription,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}'."\n";
+												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createSubscription:createSubscription,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
 											}
 										else
 											{
@@ -878,7 +887,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"capture_order",s2member_paypal_checkout_t:t,order_id:(data&&data.orderID?data.orderID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"order_capture_failed");}).catch(function(e){showErr("Payment could not be completed. Please try again.");});}'."\n";
 												$code .= 'function onCancel(){showErr("Payment cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
-												$code .= 'function init(){var P=window[ns];if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createOrder:createOrder,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}'."\n";
+												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createOrder:createOrder,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
 											}
 										$code .= 'if(document.readyState==="complete"){init();}else{window.addEventListener("load",init);}'."\n";
 										$code .= '})();'."\n";
