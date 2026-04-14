@@ -97,6 +97,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 			if($token['ip'] !== c_ws_plugin__s2member_utils_ip::current())
 			{
+				//260414 PayPal Checkout browser returns can legitimately arrive with a different client IP; log it, but do not fail the token.
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'  => 'checkout',
 						'env_setting' => $env_setting,
@@ -104,9 +105,6 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'token' => $token,
 						'ip'    => c_ws_plugin__s2member_utils_ip::current(),
 					));
-
-				echo wp_json_encode(array('error' => 'token_ip_mismatch'));
-				exit();
 			}
 
 			$old__subscr_gateway = !empty($token['old__subscr_gateway']) ? (string)$token['old__subscr_gateway'] : '';
