@@ -118,18 +118,36 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			{
 				$per_process = apply_filters('ws_plugin__s2member_auto_eot_system_per_process', $per_process, get_defined_vars());
 
-				if(is_array($eots = $wpdb->get_results("SELECT `user_id` AS `ID` FROM `".$wpdb->usermeta."` WHERE `meta_key` = '".$wpdb->prefix."s2member_auto_eot_time' AND `meta_value` != '' AND `meta_value` <= '".esc_sql(strtotime("now"))."' LIMIT ".$per_process)))
+				//260414 Ignore zero/negative Auto-EOT values here. We had real PayPal Pro subscribers demoted
+				// because a stored `s2member_auto_eot_time` of `0` matched the old `<= now` query.
+				if(is_array($eots = $wpdb->get_results("SELECT `user_id` AS `ID` FROM `".$wpdb->usermeta."` WHERE `meta_key` = '".$wpdb->prefix."s2member_auto_eot_time' AND `meta_value` != '' AND `meta_value` > '0' AND `meta_value` <= '".esc_sql(strtotime("now"))."' LIMIT ".$per_process)))
 				{
 					foreach($eots as $eot) // Go through the array of EOTS. We need to (demote|delete) each of them.
 					{
 						if(($user_id = $eot->ID) && is_object($user = new WP_User ($user_id)) && $user->ID)
 						{
-							$auto_eot_time = get_user_option('s2member_auto_eot_time', $user_id);
-							delete_user_option($user_id, 's2member_last_auto_eot_time');
-							delete_user_option($user_id, 's2member_auto_eot_time');
+							$auto_eot_time = (integer)get_user_option('s2member_auto_eot_time', $user_id);
 
 							$log_entry = array('user' => (array)$user); // Intialize.
 							$log_entry['auto_eot_time'] = $auto_eot_time; // Record EOT time.
+
+							//260414 Keep a minimal pre-demotion subscription snapshot in the log so we can tell later
+							// whether this member still had subscription metadata before anything was cleared.
+							$log_entry['subscr_gateway'] = get_user_option('s2member_subscr_gateway', $user_id);
+							$log_entry['subscr_id'] = get_user_option('s2member_subscr_id', $user_id);
+							$log_entry['has_ipn_signup_vars'] = is_array(get_user_option('s2member_ipn_signup_vars', $user_id)) ? 'yes' : 'no';
+
+							//260414 Defense in depth. A bad stored value of `0` caused false demotions in the wild.
+							// If one still reaches this loop for any reason, log it and skip instead of clearing fields.
+							if($auto_eot_time <= 0)
+							{
+								$log_entry['auto_eot_skip_reason'] = 'Skipped. Stored `s2member_auto_eot_time` was <= 0.';
+								c_ws_plugin__s2member_utils_logs::log_entry('auto-eot-system', $log_entry);
+								continue;
+							}
+
+							delete_user_option($user_id, 's2member_last_auto_eot_time');
+							delete_user_option($user_id, 's2member_auto_eot_time');
 
 							if(!$user->has_cap('administrator') /* Do NOT process Administrator accounts. */)
 							{
