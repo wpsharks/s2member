@@ -33,4 +33,25 @@
           overwrite="true" />
 
   </target>
+  
+  <!-- 260419 Wrapper: full-build-all with time in version, then write a branch/versioned copy of the ZIP in .~build/. -->
+  <target name="full-build-all-vtb"
+          description="Runs full-build-all with project_version=YYMMDD.HHMM, then writes a branch/versioned copy of the ZIP in .~build/.">
+
+    <property name="project_version" value="ymd.hm" override="true" />
+    <php expression="str_replace('ymd.hm', date('ymd.Hi'), '${project_version}')" returnProperty="project_version" level="verbose" />
+
+    <phingCall target="full-build-all" />
+
+    <property name="_full_build_all_vtb_branch" value="${_starting_git_branch}" override="true" />
+    <php expression="preg_replace('/[^A-Za-z0-9._-]+/', '-', '${_full_build_all_vtb_branch}')" returnProperty="_full_build_all_vtb_branch" level="verbose" />
+    <php expression="trim('${_full_build_all_vtb_branch}', '-')" returnProperty="_full_build_all_vtb_branch" level="verbose" />
+
+    <echo msg="Creating branch/versioned ZIP: .~build/${project_slug}-${_full_build_all_vtb_branch}-v${project_version}.zip" />
+
+    <copy file=".~build/${project_slug}.zip"
+          tofile=".~build/${project_slug}-${_full_build_all_vtb_branch}-v${project_version}.zip"
+          overwrite="true" />
+
+  </target>
 </project>
