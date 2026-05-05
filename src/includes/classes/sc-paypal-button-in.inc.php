@@ -226,9 +226,9 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												return apply_filters("ws_plugin__s2member_sc_paypal_button", $code, get_defined_vars ());
 											}
 									}
-								else if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled() && in_array($attr["output"], array("button", "anchor"), true))
+								else if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled() && $attr["output"] === "button")
 									{
-										// Guest user, or logged-in without a subscription id: show a disabled PayPal-styled button (no action).
+										//260505 Guest output="button": show a disabled PayPal-styled button (no action). Guest output="anchor|url" falls through to the PayPal management link.
 										$ppco_btn_id = 's2member_ppco_cancel_disabled_'.md5((string)microtime(true));
 										$code  = '<style type="text/css">#'.esc_attr($ppco_btn_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:not-allowed;box-sizing:border-box;opacity:0.55;white-space:nowrap;}</style>'."\n";
 										$code .= '<button type="button" id="'.esc_attr($ppco_btn_id).'" disabled="disabled">'.esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member')).'</button>'."\n"; //260218
