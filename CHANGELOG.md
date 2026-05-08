@@ -1,3 +1,19 @@
+= v260508 =
+
+- (Framework) **Fix:** PayPal Checkout cancellation shortcodes now keep `output="anchor"` clickable for logged-out visitors. Only `output="button"` requires the member to be logged in. See [thread 13450](https://f.wpsharks.com/t/13450) 
+
+- (Framework) **Fix:** PayPal Checkout no longer aborts if the customer's IP address changes during checkout. IP mismatches are logged, but valid checkouts continue processing.
+
+- (Framework) **Fix:** Prevent false Auto-EOT demotions when a stored Auto-EOT time is `0`, and improve logging for invalid Auto-EOT values. See [thread 13412](https://f.wpsharks.com/t/13412) 
+
+- (Framework) **Fix:** Prevented a PHP 8.1+ deprecation notice while reading registration times when the stored value is missing or false.
+
+- (Framework) **Improvement:** Improved PayPal Checkout button loading with a client-side fallback when the PayPal SDK is missing from the final page output.
+
+- (Pro) **Fix:** Prevented deprecation notices on newer PHP versions, which could interfere with automatic login/redirects after Stripe checkout.
+
+- (Pro) **UI:** Improved cancellation pro-form submit button text. Cancellation forms now say “Cancel Subscription” instead of the generic “Submit Form”. See [thread 13438](https://f.wpsharks.com/t/13438) 
+
 = v260410 =
 
 - (Framework) **Fix:** Reduced the upfront requirements for processing PayPal Standard `subscr_cancel` IPNs so valid cancellations are not ignored when supporting values are missing, stale, or non-membership-specific.

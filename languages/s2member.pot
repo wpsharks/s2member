@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  260410\n"
+"Project-Id-Version:  260508\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-04-10 03:24:38+00:00\n"
+"POT-Creation-Date: 2026-05-08 00:18:23+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1949,17 +1949,14 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:596
 #: pro/src/includes/separates/gateways/paypal/paypal.js:597
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
-#: pro/src/includes/templates/forms/authnet-cancellation-form.php:37
 #: pro/src/includes/templates/forms/authnet-checkout-form.php:197
 #: pro/src/includes/templates/forms/authnet-registration-form.php:95
 #: pro/src/includes/templates/forms/authnet-sp-checkout-form.php:178
 #: pro/src/includes/templates/forms/authnet-update-form.php:119
-#: pro/src/includes/templates/forms/paypal-cancellation-form.php:37
 #: pro/src/includes/templates/forms/paypal-checkout-form.php:197
 #: pro/src/includes/templates/forms/paypal-registration-form.php:95
 #: pro/src/includes/templates/forms/paypal-sp-checkout-form.php:178
 #: pro/src/includes/templates/forms/paypal-update-form.php:119
-#: pro/src/includes/templates/forms/stripe-cancellation-form.php:37
 #: pro/src/includes/templates/forms/stripe-checkout-form.php:158
 #: pro/src/includes/templates/forms/stripe-registration-form.php:95
 #: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:139
@@ -1976,8 +1973,8 @@ msgstr ""
 #: src/includes/classes/sc-paypal-button-in.inc.php:146
 #: src/includes/classes/sc-paypal-button-in.inc.php:245
 #: src/includes/classes/sc-paypal-button-in.inc.php:277
-#: src/includes/classes/sc-paypal-button-in.inc.php:486
-#: src/includes/classes/sc-paypal-button-in.inc.php:697
+#: src/includes/classes/sc-paypal-button-in.inc.php:489
+#: src/includes/classes/sc-paypal-button-in.inc.php:703
 #: src/includes/templates/buttons/paypal-ccaps-checkout-button.php:35
 #: src/includes/templates/buttons/paypal-checkout-button.php:47
 #: src/includes/templates/buttons/paypal-sp-checkout-button.php:35
@@ -2071,6 +2068,13 @@ msgstr ""
 #: pro/src/includes/templates/forms/stripe-cancellation-form.php:33
 msgctxt "s2member-front"
 msgid "Confirm Cancellation"
+msgstr ""
+
+#: pro/src/includes/templates/forms/authnet-cancellation-form.php:37
+#: pro/src/includes/templates/forms/paypal-cancellation-form.php:37
+#: pro/src/includes/templates/forms/stripe-cancellation-form.php:37
+msgctxt "s2member-front"
+msgid "Cancel Subscription"
 msgstr ""
 
 #: pro/src/includes/templates/forms/authnet-checkout-form.php:22

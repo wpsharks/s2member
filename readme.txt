@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260410
-Stable tag: 260410
-Tested up to: 7.0-RC2-62197
+Version: 260508
+Stable tag: 260508
+Tested up to: 7.0-RC2-62327
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.4
@@ -176,11 +176,27 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260410 =
+= v260508 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v260508 =
+
+- (Framework) **Fix:** PayPal Checkout cancellation shortcodes now keep `output="anchor"` clickable for logged-out visitors. Only `output="button"` requires the member to be logged in. See [thread 13450](https://f.wpsharks.com/t/13450) 
+
+- (Framework) **Fix:** PayPal Checkout no longer aborts if the customer's IP address changes during checkout. IP mismatches are logged, but valid checkouts continue processing.
+
+- (Framework) **Fix:** Prevent false Auto-EOT demotions when a stored Auto-EOT time is `0`, and improve logging for invalid Auto-EOT values. See [thread 13412](https://f.wpsharks.com/t/13412) 
+
+- (Framework) **Fix:** Prevented a PHP 8.1+ deprecation notice while reading registration times when the stored value is missing or false.
+
+- (Framework) **Improvement:** Improved PayPal Checkout button loading with a client-side fallback when the PayPal SDK is missing from the final page output.
+
+- (Pro) **Fix:** Prevented deprecation notices on newer PHP versions, which could interfere with automatic login/redirects after Stripe checkout.
+
+- (Pro) **UI:** Improved cancellation pro-form submit button text. Cancellation forms now say “Cancel Subscription” instead of the generic “Submit Form”. See [thread 13438](https://f.wpsharks.com/t/13438) 
 
 = v260410 =
 
