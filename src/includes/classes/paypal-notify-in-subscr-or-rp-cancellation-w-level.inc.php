@@ -45,7 +45,29 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 						&& !(preg_match ("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]) && !empty($paypal["initial_payment_status"]) && preg_match ("/^failed$/i", $paypal["initial_payment_status"]))
 						&& (!empty($paypal["subscr_id"]) || ($paypal["subscr_id"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id ($paypal))))
 							{
-								$ipn_signup_vars = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars (FALSE, $paypal["subscr_id"]);
+								//260517 Validate trusted PPCO proxy user before fallback signup vars lookup.
+								$proxy_user_id = 0;
+								$proxy_next_billing_time = 0;
+								if(!empty($paypal["proxy_verified"]) && $paypal["proxy_verified"] === "paypal"
+								&& !empty($_REQUEST["s2member_paypal_proxy_use"]) && $_REQUEST["s2member_paypal_proxy_use"] === "paypal_checkout"
+								&& !empty($paypal["proxy_user_id"]))
+									{
+										$_proxy_user_id = (int)$paypal["proxy_user_id"];
+										if($_proxy_user_id && is_object($_proxy_user = new WP_User($_proxy_user_id)) && !empty($_proxy_user->ID)
+										&& (string)get_user_option("s2member_subscr_id", $_proxy_user_id) === (string)$paypal["subscr_id"])
+											{
+												$proxy_user_id = $_proxy_user_id;
+
+												if(!empty($paypal["proxy_next_billing_time"]) && ($_proxy_next_billing_time = strtotime($paypal["proxy_next_billing_time"])) && $_proxy_next_billing_time > time())
+													{
+														$proxy_eot_grace_time = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
+														$proxy_eot_grace_time = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $proxy_eot_grace_time);
+														$proxy_next_billing_time = $_proxy_next_billing_time + $proxy_eot_grace_time;
+													}
+											}
+									}
+
+								$ipn_signup_vars = ($proxy_user_id) ? c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars ($proxy_user_id, $paypal["subscr_id"]) : c_ws_plugin__s2member_utils_users::get_user_ipn_signup_vars (FALSE, $paypal["subscr_id"]);
 								$ipn_signup_vars = (is_array ($ipn_signup_vars)) ? $ipn_signup_vars : array ();
 
 								$paypal["period1"] = (!empty($paypal["period1"])) ? $paypal["period1"] : c_ws_plugin__s2member_paypal_utilities::paypal_pro_period1 ($paypal, FALSE);
@@ -86,7 +108,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];
 
-										if (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"])) && is_object ($user = new WP_User ($user_id)) && $user->ID)
+										if (($user_id = (($proxy_user_id) ? $proxy_user_id : c_ws_plugin__s2member_utils_users::get_user_id_with ($paypal["subscr_id"]))) && is_object ($user = new WP_User ($user_id)) && $user->ID)
 											{
 												if (!$user->has_cap ("administrator")) // Do NOT process this routine on Administrators.
 													{
@@ -98,7 +120,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 															{
 																$processing = $during = true; // Yes, we ARE processing this.
 
-																$auto_eot_time = c_ws_plugin__s2member_utils_time::auto_eot_time ($user_id, $paypal["period1"], $paypal["period3"]);
+																//260517 Use PayPal next billing time for verified PPCO proxy EOT.
+																$auto_eot_time = ($proxy_user_id && $proxy_next_billing_time)
+																	? $proxy_next_billing_time
+																	: c_ws_plugin__s2member_utils_time::auto_eot_time ($user_id, $paypal["period1"], $paypal["period3"]);
 
 																update_user_option ($user_id, "s2member_auto_eot_time", $auto_eot_time); // s2Member follows-up later.
 

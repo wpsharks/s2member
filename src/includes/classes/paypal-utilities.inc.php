@@ -1306,6 +1306,38 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
+				 * Retrieves PayPal Checkout subscription details via the Subscriptions REST API.
+				 *
+				 * @since 260517
+				 *
+				 * @param string $subscription_id PayPal subscription id (I-...).
+				 *
+				 * @return array Decoded subscription response, with __code/__body added; __error on failure.
+				 */
+				public static function paypal_checkout_subscription_details($subscription_id = '')
+					{
+						$subscription_id = trim((string)$subscription_id);
+
+						if(!$subscription_id)
+							return array('__error' => 'missing_subscription_id', '__code' => 0, '__body' => '');
+
+						$r = self::paypal_checkout_api_request('GET', '/v1/billing/subscriptions/'.rawurlencode($subscription_id));
+
+						$code = !empty($r['code']) ? (int)$r['code'] : 0;
+						$body = !empty($r['body']) ? (string)$r['body'] : '';
+						$data = ($body) ? json_decode($body, true) : array();
+						$data = is_array($data) ? $data : array();
+
+						$data['__code'] = $code;
+						$data['__body'] = $body;
+
+						if(!($code >= 200 && $code <= 299) || empty($data['id']))
+							$data['__error'] = 'subscription_details_failed';
+
+						return $data;
+					}
+
+				/**
 				 * Cancels a PayPal Checkout subscription via the Subscriptions REST API.
 				 *
 				 * Used by the optional on-site cancellation flow (logged-in users).
