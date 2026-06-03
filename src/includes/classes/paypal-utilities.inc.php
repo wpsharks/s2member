@@ -69,11 +69,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 													}
 												$postvars = self::paypal_postvars_back_compat($postvars); // From verified data.
 
-												if(!empty($postvars["charset"]) && function_exists("mb_convert_encoding"))
-													{
-														foreach($postvars as &$value) // Convert to UTF-8 encoding.
-															$value = @mb_convert_encoding($value, "UTF-8", (($postvars["charset"] === "gb2312") ? "GBK" : $postvars["charset"]));
-													}
+												$postvars = self::paypal_postvars_utf8($postvars);
 												return apply_filters("ws_plugin__s2member_paypal_postvars", $postvars, get_defined_vars());
 											}
 										else return false;
@@ -90,11 +86,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										$postvars = self::paypal_postvars_back_compat($postvars);
 										$postvars = c_ws_plugin__s2member_utils_strings::trim_deep($postvars);
 
-										if(!empty($postvars["charset"]) && function_exists("mb_convert_encoding"))
-											{
-												foreach($postvars as &$value) // Convert to UTF-8 encoding.
-													$value = @mb_convert_encoding($value, "UTF-8", (($postvars["charset"] === "gb2312") ? "GBK" : $postvars["charset"]));
-											}
+										$postvars = self::paypal_postvars_utf8($postvars);
 										$endpoint = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com";
 
 										if(!empty($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && $_REQUEST["s2member_paypal_proxy_verification"] === c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen())
@@ -116,6 +108,49 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$postvars = self::paypal_postvars_back_compat($postvars);
 								return apply_filters("ws_plugin__s2member_paypal_postvars", $postvars, get_defined_vars());
 							}
+					}
+				/**
+				 * Convert PayPal post vars to UTF-8 when PayPal reports a usable charset.
+				 *
+				 * @since 260603
+				 *
+				 * @return array PayPal post vars.
+				 */
+				public static function paypal_postvars_utf8($postvars)
+					{
+						$postvars = (array) $postvars;
+
+						if(empty($postvars["charset"]))
+							return $postvars;
+
+						$charset = trim((string) $postvars["charset"]);
+						$charset = (strtolower($charset) === "gb2312") ? "GBK" : $charset;
+
+						foreach($postvars as &$value)
+							if(is_string($value))
+								{
+									$converted = false;
+
+									if(function_exists("mb_convert_encoding"))
+										{
+											try
+												{
+													$converted = @mb_convert_encoding($value, "UTF-8", $charset);
+												}
+											catch(ValueError $exception)
+												{
+												}
+										}
+
+									if($converted === false && function_exists("iconv"))
+										$converted = @iconv($charset, "UTF-8//IGNORE", $value);
+
+									if($converted !== false)
+										$value = $converted;
+								}
+						unset($value);
+
+						return $postvars;
 					}
 				/**
 				 * Back compat. PayPal post vars.
