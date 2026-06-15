@@ -36,7 +36,7 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 				*
 				* @param string|int $sp_ids Comma-delimited list of Specific Post/Page IDs *(numerical)*.
 				* @param int|string $hours Optional. A numeric expiration time for this link, in hours. Defaults to `72`.
-				* @param bool $shrink Optional. Defaults to true. If false, the raw link will NOT be processed by the tinyURL API.
+				* @param bool $shrink Optional. Defaults to true. If false, the raw link will NOT be processed by s2Member's URL shortening system.
 				* @return str|bool A Specific Post/Page Access Link, or false on failure.
 				*/
 				public static function sp_access_link_gen ($sp_ids = FALSE, $hours = 72, $shrink = TRUE)
@@ -51,8 +51,13 @@ if (!class_exists ("c_ws_plugin__s2member_sp_access"))
 
 								$sp_access_link = add_query_arg ("s2member_sp_access", urlencode ($sp_access), get_permalink ($leading_id)); // Generate long URL/link.
 
-								if ($shrink && ($shorter_url = c_ws_plugin__s2member_utils_urls::shorten ($sp_access_link)))
-									$sp_access_link = $shorter_url . "#" . $_SERVER["HTTP_HOST"];
+								if ($shrink && ($shorter_url = c_ws_plugin__s2member_utils_urls::shorten ($sp_access_link, "", TRUE, ((int)$hours * HOUR_IN_SECONDS) + DAY_IN_SECONDS)))
+									{
+										$shorter_url_host = c_ws_plugin__s2member_utils_urls::parse_url($shorter_url, PHP_URL_HOST);
+										$home_url_host    = c_ws_plugin__s2member_utils_urls::parse_url(home_url('/'), PHP_URL_HOST);
+										$domain_tag       = ($shorter_url_host && $home_url_host && strcasecmp($shorter_url_host, $home_url_host) !== 0) ? "#" . $home_url_host : ""; //260612 Personalize external short links only.
+										$sp_access_link   = $shorter_url . $domain_tag;
+									}
 							}
 						return apply_filters("ws_plugin__s2member_sp_access_link_gen", ((!empty($sp_access_link)) ? $sp_access_link : false), get_defined_vars ());
 					}
