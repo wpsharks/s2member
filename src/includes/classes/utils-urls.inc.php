@@ -345,7 +345,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_urls'))
 
 						for($i = 0; $i < 10; $i++)
 							{
-								$code          = wp_generate_password(8, FALSE, FALSE);
+								$code          = wp_generate_password(10, FALSE, FALSE);
 								$transient_key = 's2member_link_'.$code;
 
 								if(get_transient($transient_key) === FALSE)
@@ -374,7 +374,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_urls'))
 
 						$code = trim(wp_unslash((string)$_GET['s2_link']));
 
-						if(!preg_match('/^[a-zA-Z0-9]{8}$/', $code))
+						if(!preg_match('/^[a-zA-Z0-9]{10}$/', $code))
 							return;
 
 						$url = get_transient('s2member_link_'.$code);
@@ -399,6 +399,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_urls'))
 						if(empty($vars['s2member_register']) && empty($vars['s2member_sp_access']))
 							return;
 
+						nocache_headers();
 						wp_safe_redirect($url, 302);
 						exit;
 					}
