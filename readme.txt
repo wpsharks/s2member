@@ -186,7 +186,7 @@ Please see: <http://s2member.com/r/translations/>
 
 - (Framework) **Improvement:** Replaced TinyURL-based shortening for generated Registration Access and Specific Post/Page Access URLs with new built-in s2Member short links, stored temporarily with WordPress transients. Existing TinyURL settings now use the built-in shortener automatically, avoiding TinyURL’s deprecated no-key API endpoint and extra third-party pages shown before the destination.
 
-- (Framework) **Improvement:** Better PayPal Checkout cancellation button handling when stored IPN Signup Vars are missing. s2Member now checks PayPal subscription details via API before cancellation, uses PayPal's next billing time plus the configured EOT grace period for the EOT time, and falls back to PayPal's subscription management page when a safe local cancellation cannot be completed. See [[thread 13462](https://f.wpsharks.com/t/13462)](https://f.wpsharks.com/t/13462).
+- (Framework) **Improvement:** Better PayPal Checkout cancellation button handling when stored IPN Signup Vars are missing. s2Member now checks PayPal subscription details via API before cancellation, uses PayPal's next billing time plus the configured EOT grace period for the EOT time, and falls back to PayPal's subscription management page when a safe local cancellation cannot be completed. See [thread 13462](https://f.wpsharks.com/t/13462).
 
 - (Framework) **Security:** Hardened the `[s2Stream]` shortcode against executable JavaScript injection by users with post-editing privileges. Attributes used to configure JW Player are sanitized and validated more strictly, and custom `player_path` values must now be explicitly whitelisted using the `ws_plugin__s2member_sc_get_stream_player_paths` filter.
 
