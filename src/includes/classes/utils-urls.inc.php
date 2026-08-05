@@ -250,19 +250,22 @@ if(!class_exists('c_ws_plugin__s2member_utils_urls'))
 				* @since 111002
 				*
 				* @param string $url A full/long URL to be shortened.
-				* @param string $api_sp Optional. A specific URL shortening API to use. Defaults to that which is configured in the s2Member Dashboard. Normally `tiny_url`, by default.
+				* @param string $api_sp Optional. A specific URL shortening API to use. Defaults to that which is configured in the s2Member Dashboard. Normally `s2member`, by default.
 				* @param bool $try_backups Defaults to true. If a failure occurs with the first API, we'll try others until we have success.
+				* @param int $expiration Optional. Transient expiration, in seconds, for built-in s2Member short links.
 				* @return str|bool The shortened URL on success, else false on failure.
 				*/
-				public static function shorten($url = '', $api_sp = '', $try_backups = TRUE)
+				public static function shorten($url = '', $api_sp = '', $try_backups = TRUE, $expiration = 0)
 					{
 						$url                              = $url && is_string($url) ? $url : FALSE;
-						$apis                             = array('tiny_url', 'bitly', 'goo_gl'); // Supported APIs.
+						$expiration                       = (int)$expiration;
+						$apis                             = array('s2member', 'bitly'); //260612 Supported APIs.
 						$api_sp                           = $api_sp && is_string($api_sp) ? strtolower($api_sp) : FALSE;
 						$default_url_shortener            = $GLOBALS['WS_PLUGIN__']['s2member']['o']['default_url_shortener'];
 						$default_url_shortener_key        = $GLOBALS['WS_PLUGIN__']['s2member']['o']['default_url_shortener_key'];
 						$default_custom_str_url_shortener = $GLOBALS['WS_PLUGIN__']['s2member']['o']['default_custom_str_url_shortener'];
 						$api                              = $api_sp ? $api_sp : $default_url_shortener;
+						$api                              = ($api === 'tiny_url') ? 's2member' : $api; //260612 TinyURL legacy API is deprecated; use built-in short links instead.
 
 						if($url && $api) // If specific, use it. Otherwise, try customs, else use the default shortening API.
 							{
@@ -279,11 +282,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_urls'))
 
 								else if($api === 'none') // Don't shorten.
 									return $url;
-									
-								else if($api === 'tiny_url' // Using the TinyURL API in this case?
-										&& ($tiny_url = trim(self::remote('http://tinyurl.com/api-create.php?url='.rawurlencode($url))))
-										&& stripos($tiny_url, 'http') === 0)
-									return ($shorter_url = $tiny_url);
+
+								else if($api === 's2member') //260612 Built-in short links.
+									return (($shorter_url = self::short_link($url, $expiration)) ? $shorter_url : $url);
 
 								else if($api === 'bitly' // Using the Bitly API in this case?
 										&& ($bitly_endpoint          = 'https://api-ssl.bitly.com/v3/shorten')
@@ -297,12 +298,110 @@ if(!class_exists('c_ws_plugin__s2member_utils_urls'))
 								else if($try_backups && count($apis) > 1) // Try backups?
 									{
 										foreach(array_diff($apis, array($api)) as $_backup_api)
-											if(($_backup_api_url = self::shorten($url, $_backup_api, FALSE)))
+											if(($_backup_api_url = self::shorten($url, $_backup_api, FALSE, $expiration)))
 												return ($shorter_url = $_backup_api_url);
 										unset($_backup_api, $_backup_api_url); // Housekeeping.
 									}
 							}
 						return FALSE; // Default return value.
+					}
+
+				/**
+				* Creates a built-in s2Member short link.
+				*
+				* @package s2Member\Utilities
+				* @since 260612
+				*
+				* @param string $url A full/long s2Member URL to be shortened.
+				* @param int $expiration Optional. Transient expiration, in seconds.
+				* @return str|bool The shortened URL on success, else false on failure.
+				*/
+				public static function short_link($url = '', $expiration = 0)
+					{
+						$url        = $url && is_string($url) ? trim($url) : FALSE;
+						$expiration = (int)$expiration;
+
+						if(!$url || stripos($url, 'http') !== 0)
+							return FALSE;
+
+						$url_scheme = self::parse_url($url, PHP_URL_SCHEME);
+
+						if(!in_array(strtolower($url_scheme), array('http', 'https'), TRUE))
+							return FALSE;
+
+						$query = trim(self::parse_url($url, PHP_URL_QUERY), '?&=');
+						wp_parse_str($query, $vars);
+
+						if(empty($vars['s2member_register']) && empty($vars['s2member_sp_access']))
+							return FALSE;
+
+						$url_host  = self::parse_url($url, PHP_URL_HOST);
+						$home_host = self::parse_url(home_url('/'), PHP_URL_HOST);
+
+						if(!$url_host || !$home_host || strcasecmp($url_host, $home_host) !== 0)
+							return FALSE;
+
+						$expiration = ($expiration > 0) ? $expiration : 7 * DAY_IN_SECONDS;
+
+						for($i = 0; $i < 10; $i++)
+							{
+								$code          = wp_generate_password(10, FALSE, FALSE);
+								$transient_key = 's2member_link_'.$code;
+
+								if(get_transient($transient_key) === FALSE)
+									{
+										if(set_transient($transient_key, $url, $expiration))
+											return add_query_arg('s2_link', rawurlencode($code), home_url('/'));
+									}
+							}
+						return FALSE; // Default return value.
+					}
+
+				/**
+				* Redirects built-in s2Member short links.
+				*
+				* @package s2Member\Utilities
+				* @since 260612
+				*
+				* @attaches-to ``add_action('init');``
+				*
+				* @return null Exits script execution after redirecting.
+				*/
+				public static function short_link_redirect()
+					{
+						if(empty($_GET['s2_link']) || !is_string($_GET['s2_link']))
+							return;
+
+						$code = trim(wp_unslash((string)$_GET['s2_link']));
+
+						if(!preg_match('/^[a-zA-Z0-9]{10}$/', $code))
+							return;
+
+						$url = get_transient('s2member_link_'.$code);
+
+						if(!$url || !is_string($url) || stripos($url, 'http') !== 0)
+							return;
+
+						$url_scheme = self::parse_url($url, PHP_URL_SCHEME);
+
+						if(!in_array(strtolower($url_scheme), array('http', 'https'), TRUE))
+							return;
+
+						$url_host  = self::parse_url($url, PHP_URL_HOST);
+						$home_host = self::parse_url(home_url('/'), PHP_URL_HOST);
+
+						if(!$url_host || !$home_host || strcasecmp($url_host, $home_host) !== 0)
+							return;
+
+						$query = trim(self::parse_url($url, PHP_URL_QUERY), '?&=');
+						wp_parse_str($query, $vars);
+
+						if(empty($vars['s2member_register']) && empty($vars['s2member_sp_access']))
+							return;
+
+						nocache_headers();
+						wp_safe_redirect($url, 302);
+						exit;
 					}
 				/**
 				* Removes all s2Member-generated signatures from a full URL, a partial URI, or just a query string.

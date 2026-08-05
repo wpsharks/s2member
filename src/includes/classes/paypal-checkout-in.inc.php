@@ -811,6 +811,29 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				if(!$reason)
 					$reason = 'Cancelled by subscriber.';
 
+				//260517 Get PayPal Checkout subscription details before cancelling locally.
+				$subscription = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_details($subscr_id);
+				$subscription_status = !empty($subscription['status']) ? strtoupper((string)$subscription['status']) : '';
+				$next_billing_time = !empty($subscription['billing_info']['next_billing_time']) ? (string)$subscription['billing_info']['next_billing_time'] : '';
+				$next_billing_ts = ($next_billing_time) ? strtotime($next_billing_time) : 0;
+
+				if(!empty($subscription['__error']) || empty($subscription['id']) || (string)$subscription['id'] !== (string)$subscr_id || $subscription_status !== 'ACTIVE' || !$next_billing_ts || $next_billing_ts <= time())
+				{
+					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+						'ppco'       => 'checkout',
+						'env_setting'=> $env_setting,
+						'event'      => 'cancel_subscription_details_unusable',
+						'user_id'    => $user_id,
+						'subscr_id'  => $subscr_id,
+						'status'     => $subscription_status,
+						'next'       => $next_billing_time,
+						'code'       => !empty($subscription['__code']) ? (int)$subscription['__code'] : 0,
+					));
+
+					echo wp_json_encode(array('error' => 'subscription_details_unusable'));
+					exit();
+				}
+
 				$r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_cancel($subscr_id, $reason);
 
 				$code = !empty($r['code']) ? (int)$r['code'] : 0;
@@ -836,23 +859,28 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 						'txn_id'    => $subscr_id,
 						'subscr_id' => $subscr_id,
+						'custom'    => (string)get_user_option('s2member_custom', $user_id),
 
 						// Help legacy notify logic resolve user in some fallback cases.
 						'mp_id'                => $subscr_id,
 						'recurring_payment_id' => $subscr_id,
 
+						//260517 Provide safe defaults when signup vars are missing.
+						'item_number' => (string)c_ws_plugin__s2member_user_access::user_access_level(wp_get_current_user()),
+						'item_name'   => 'PayPal Checkout Subscription',
+
 						// Best-effort payer email for logs/fallback logic.
 						'payer_email' => (string)wp_get_current_user()->user_email,
 					);
 
-					// Enrich with stored signup vars so legacy cancel handler can match and compute EOT.
+					//260517 Enrich with stored signup vars so legacy cancel handler can match and compute EOT.
 					if(($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id)) && is_array($ipn_signup_vars)
-					   && !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id)
+							&& !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id)
 					{
-						if(empty($paypal['item_number']) && !empty($ipn_signup_vars['item_number']))
+						if(!empty($ipn_signup_vars['item_number']))
 							$paypal['item_number'] = (string)$ipn_signup_vars['item_number'];
 
-						if(empty($paypal['item_name']) && !empty($ipn_signup_vars['item_name']))
+						if(!empty($ipn_signup_vars['item_name']))
 							$paypal['item_name'] = (string)$ipn_signup_vars['item_name'];
 
 						if(empty($paypal['period1']) && !empty($ipn_signup_vars['period1']))
@@ -864,6 +892,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 					$notify_url  = home_url('/?s2member_paypal_notify=1');
 					$notify_post = array_merge($paypal, array(
+						'proxy_user_id'                      => $user_id, //260517
+						'proxy_next_billing_time'            => $next_billing_time, //260517
 						's2member_paypal_proxy'              => 'paypal',
 						's2member_paypal_proxy_use'          => 'paypal_checkout',
 						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),

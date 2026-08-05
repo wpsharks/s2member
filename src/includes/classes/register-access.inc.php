@@ -38,7 +38,7 @@ if(!class_exists('c_ws_plugin__s2member_register_access'))
 		 * @param string     $subscr_id Unique Subscr. ID associated with Payment Gateway; associated with a Customer.
 		 * @param string     $custom Custom String value *(as supplied in Shortcode)*; must start with installation domain name.
 		 * @param int|string $item_number An s2Member-generated `item_number` *( i.e., `1` for Level 1, or `level|ccaps|fixed-term`, or `sp|ids|expiration` )*.
-		 * @param bool       $shrink Optional. Defaults to true. If false, the raw registration link will NOT be reduced in size through the tinyURL API.
+		 * @param bool       $shrink Optional. Defaults to true. If false, the raw registration link will NOT be reduced in size by s2Member's URL shortening system.
 		 *
 		 * @return string|bool A Registration Access Link on success, else false on failure.
 		 */
@@ -52,12 +52,18 @@ if(!class_exists('c_ws_plugin__s2member_register_access'))
 			{
 				$register = c_ws_plugin__s2member_utils_encryption::encrypt('subscr_gateway_subscr_id_custom_item_number_time:.:|:.:'.$subscr_gateway.':.:|:.:'.$subscr_id.':.:|:.:'.$custom.':.:|:.:'.$item_number.':.:|:.:'.strtotime('now'));
 
-				$register_link = home_url('/?s2member_register='.urlencode($register)); // Generate long URL/link.
+				$register_link            = home_url('/?s2member_register='.urlencode($register)); // Generate long URL/link.
+				$now                      = strtotime('now');
+				$register_link_exp_time    = apply_filters('ws_plugin__s2member_register_link_exp_time', '2 days', get_defined_vars());
+				$register_link_expiration  = strtotime('+'.$register_link_exp_time, $now);
+				$register_link_expiration  = ($register_link_expiration && $register_link_expiration > $now) ? max(7 * DAY_IN_SECONDS, ($register_link_expiration - $now) + DAY_IN_SECONDS) : 7 * DAY_IN_SECONDS; //260612 Allow for custom registration link expiration.
 
-				if($shrink && ($shorter_url = c_ws_plugin__s2member_utils_urls::shorten($register_link)))
+				if($shrink && ($shorter_url = c_ws_plugin__s2member_utils_urls::shorten($register_link, '', TRUE, $register_link_expiration)))
 				{
-					$domain_tag    = (strpos($shorter_url, $_SERVER['HTTP_HOST'])) ? '' : '#'.$_SERVER['HTTP_HOST']; // Personalize the link with the site's domain name if it's not already there.
-					$register_link = $shorter_url.$domain_tag;
+					$shorter_url_host = c_ws_plugin__s2member_utils_urls::parse_url($shorter_url, PHP_URL_HOST);
+					$home_url_host    = c_ws_plugin__s2member_utils_urls::parse_url(home_url('/'), PHP_URL_HOST);
+					$domain_tag       = ($shorter_url_host && $home_url_host && strcasecmp($shorter_url_host, $home_url_host) !== 0) ? '#'.$home_url_host : ''; //260612 Personalize external short links only.
+					$register_link    = $shorter_url.$domain_tag;
 				}
 			}
 			return apply_filters('ws_plugin__s2member_register_link_gen', ((!empty($register_link)) ? $register_link : FALSE), get_defined_vars());

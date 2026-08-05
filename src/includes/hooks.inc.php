@@ -206,6 +206,8 @@ add_action('wp_ajax_ws_plugin__s2member_delete_reset_specific_ip_restrictions_vi
 add_action('ws_plugin__s2member_during_collective_mods', 'c_ws_plugin__s2member_list_servers::auto_process_list_server_removals', 10, 7);
 add_action('ws_plugin__s2member_during_collective_eots', 'c_ws_plugin__s2member_list_servers::auto_process_list_server_removals', 10, 4);
 
+add_action('init', 'c_ws_plugin__s2member_utils_urls::short_link_redirect', 1); //260612
+
 add_filter('ws_plugin__s2member_content_redirect_status', 'c_ws_plugin__s2member_utils_urls::redirect_browsers_using_302_status');
 
 add_filter('bbp_get_caps_for_role', 'c_ws_plugin__s2member_roles_caps::bbp_dynamic_role_caps', 10, 2);

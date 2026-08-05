@@ -2540,9 +2540,8 @@ if(!function_exists("s2member_value_for_pp_inv"))
 *
 * ———— PHP Code Samples ————
 * ```
-* <!php echo s2member_shorten_url("http://www.example.com/a-long-url/"); !>
-* <!php echo s2member_shorten_url("http://www.example.com/a-long-url/", "tiny_url"); !>
-* <!php echo s2member_shorten_url("http://www.example.com/a-long-url/", "goo_gl"); !>
+* <!php echo s2member_shorten_url("https://www.example.com/?s2member_register=..."); !>
+* <!php echo s2member_shorten_url("https://www.example.com/a-long-url/", "bitly"); !>
 * ```
 * ———— Shortcode Equivalent ————
 * ```
@@ -2552,18 +2551,19 @@ if(!function_exists("s2member_value_for_pp_inv"))
 * @package s2Member\API_Functions
 * @since 111004
 *
-* @param string $url A full/long URL to be shortened.
-* @param string $api_sp Optional. A specific URL shortening API to use. Defaults to that which is configured in the s2Member Dashboard. Normally `tiny_url` by default.
+* @param string $url A full/long URL to be shortened. Built-in s2Member shortening supports `s2member_register` and `s2member_sp_access` URLs only.
+* @param string $api_sp Optional. A specific URL shortening API to use. Defaults to that which is configured in the s2Member Dashboard. Normally `s2member` by default.
 * @param bool $try_backups Defaults to true. If a failure occurs with the first API, we'll try others until we have success.
+* @param int $expiration Optional. Transient expiration, in seconds, for built-in s2Member short links.
 * @return str|bool The shortened URL on success, else false on failure.
 *
 * @todo Create a Shortcode equivalent for this function.
 */
 if(!function_exists("s2member_shorten_url"))
 	{
-		function s2member_shorten_url($url = FALSE, $api_sp = FALSE, $try_backups = TRUE)
+		function s2member_shorten_url($url = FALSE, $api_sp = FALSE, $try_backups = TRUE, $expiration = 0)
 			{
-				return c_ws_plugin__s2member_utils_urls::shorten($url, $api_sp, $try_backups);
+				return c_ws_plugin__s2member_utils_urls::shorten($url, $api_sp, $try_backups, $expiration);
 			}
 	}
 /**

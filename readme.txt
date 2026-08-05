@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260508
-Stable tag: 260508
-Tested up to: 7.0-RC2-62327
+Version: 260805
+Stable tag: 260805
+Tested up to: 7.1-RC1-63034
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.4
@@ -176,11 +176,27 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260508 =
+= v260805 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v260805 =
+
+- (Framework) **Improvement:** Replaced TinyURL-based shortening for generated Registration Access and Specific Post/Page Access URLs with new built-in s2Member short links, stored temporarily with WordPress transients. Existing TinyURL settings now use the built-in shortener automatically, avoiding TinyURL’s deprecated no-key API endpoint and extra third-party pages shown before the destination.
+
+- (Framework) **Improvement:** Better PayPal Checkout cancellation button handling when stored IPN Signup Vars are missing. s2Member now checks PayPal subscription details via API before cancellation, uses PayPal's next billing time plus the configured EOT grace period for the EOT time, and falls back to PayPal's subscription management page when a safe local cancellation cannot be completed. See [[thread 13462](https://f.wpsharks.com/t/13462)](https://f.wpsharks.com/t/13462).
+
+- (Framework) **Security:** Hardened the `[s2Stream]` shortcode against executable JavaScript injection by users with post-editing privileges. Attributes used to configure JW Player are sanitized and validated more strictly, and custom `player_path` values must now be explicitly whitelisted using the `ws_plugin__s2member_sc_get_stream_player_paths` filter.
+
+- (Framework) **Security:** Improved sanitization of sensitive data in s2Member debug logs.
+
+- (Framework) **Fix:** Prevented a PHP 8+ fatal error during PayPal Standard PDT/IPN return handling when PayPal reports an invalid or unexpected charset. PayPal return data is now converted to UTF-8 defensively, with fallback handling when the reported charset is not accepted by `mb_convert_encoding()`.
+
+- (Pro) **Improvement:** Added safer handling for rare Stripe Pro-Form subscription checkouts where the first payment or setup confirmation remains pending. s2Member now delays paid-access changes until Stripe confirms the subscription is ready, helping avoid premature access while reducing the chance of confirmed Stripe subscriptions not matching s2Member access.
+
+- (Pro) **Fix:** Fixed validation of zero-like trial period values such as `tp="0.00"`, so they are treated the same as `tp="0"` instead of being rejected as an invalid trial period.
 
 = v260508 =
 
