@@ -66,9 +66,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 			}
 			$raw = c_ws_plugin__s2member_utils_encryption::decrypt($t);
 
-			//260204 Use the plugin's hardened unserialize routine:
-			// - PHP 7+: allowed_classes => false
-			// - PHP <7: blocks object payloads before calling unserialize()
+			//260808 Safely unserialize the PayPal checkout token.
 			$token = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($raw);
 
 			if(!is_array($token))

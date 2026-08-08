@@ -230,10 +230,11 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 					}
 
 				/**
-				 * Like maybe_unserialize(), but skips objects.
+				 * Safely unserializes a value when appropriate.
 				 *
 				 * @package s2Member\Utilities
 				 * @since 250801
+				 * @since 260808 Added additional validation before unserializing.
 				 * 
 				 * @param mixed $value The value to be unserialized.
 				 * @return mixed The unserialized value, or original if not serialized or blocked.
@@ -245,16 +246,63 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 
 					$value = trim($value);
 
-					if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
-						return @unserialize($value, ['allowed_classes' => false]);
-					}
-
-					if (strpos($value, 'O:') !== false) {
+					//260808 Reject disallowed serialization types without matching harmless text inside serialized strings.
+					if (self::serialized_contains_disallowed_type($value)) {
 						do_action('ws_plugin__s2member_security_object_detected', $value);
 						return null;
 					}
 
+					if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+						return @unserialize($value, ['allowed_classes' => false]);
+					}
+
 					return @unserialize($value);
+				}
+
+				/**
+				 * Checks serialized data for disallowed serialization types.
+				 *
+				 * Serialized string payloads are skipped so object-like text inside a
+				 * normal string does not produce a false positive.
+				 *
+				 * @package s2Member\Utilities
+				 * @since 260808
+				 *
+				 * @param string $value Serialized value to inspect.
+				 * @return bool True if a disallowed serialization type is present.
+				 */
+				private static function serialized_contains_disallowed_type($value) {
+					$length = strlen($value);
+
+					for ($offset = 0; $offset < $length; ++$offset) {
+						$token = $value[$offset];
+
+						//260808 Skip complete serialized strings so harmless text such as "PROMO:" is not mistaken for an object token.
+						if ($token === 's' && isset($value[$offset + 1]) && $value[$offset + 1] === ':') {
+							if (!preg_match('/\Gs:([0-9]+):"/', $value, $match, 0, $offset)) {
+								continue;
+							}
+
+							$string_length = (int)$match[1];
+							$string_start  = $offset + strlen($match[0]);
+							$string_end    = $string_start + $string_length;
+
+							if ($string_end + 1 >= $length || substr($value, $string_end, 2) !== '";') {
+								return true;
+							}
+
+							$offset = $string_end + 1;
+							continue;
+						}
+
+						//260808 O=object, C=Serializable object, E=enum object, S=noncanonical string, R/r=references that can create cyclic structures.
+						if (($token === 'O' || $token === 'C' || $token === 'E' || $token === 'S' || $token === 'R' || $token === 'r')
+							&& isset($value[$offset + 1]) && $value[$offset + 1] === ':') {
+							return true;
+						}
+					}
+
+					return false;
 				}
 			}
 	}

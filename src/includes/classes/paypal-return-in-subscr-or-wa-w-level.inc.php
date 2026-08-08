@@ -64,8 +64,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level'))
 					$paypal['ip'] = (!$paypal['ip'] && preg_match('/^[a-z0-9]+~[0-9\.]+$/i', $paypal['invoice'])) ? preg_replace('/^[a-z0-9]+~/i', '', $paypal['invoice']) : $paypal['ip'];
 					$paypal['ip'] = (!$paypal['ip'] && c_ws_plugin__s2member_utils_ip::current()) ? c_ws_plugin__s2member_utils_ip::current() : $paypal['ip'];
 
+					//260808 Safely unserialize the PayPal return data.
 					if((preg_match('/^subscr_payment$/i', $paypal['txn_type']) && !empty($_GET['s2member_paypal_return_tra']))
-					   && (($tra = c_ws_plugin__s2member_utils_encryption::decrypt(trim(stripslashes($_GET['s2member_paypal_return_tra'])))) && is_array($tra = maybe_unserialize($tra)))
+					   && (($tra = c_ws_plugin__s2member_utils_encryption::decrypt(trim(stripslashes($_GET['s2member_paypal_return_tra'])))) && is_array($tra = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($tra)))
 					   && (count($tra) === 11 && isset($tra['ta'], $tra['tp'], $tra['tt'], $tra['ra'], $tra['rp'], $tra['rt'], $tra['rr'], $tra['rrt'], $tra['rra'], $tra['invoice'], $tra['checksum']))
 					   && ($tra['invoice'] === $paypal['invoice']) && ($tra['checksum'] === md5($paypal['invoice'].$paypal['ip'].$paypal['item_number']))
 					)

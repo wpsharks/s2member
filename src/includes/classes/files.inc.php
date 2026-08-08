@@ -258,7 +258,7 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 				if(is_array($results = $wpdb->get_results("SELECT `meta_key`, `meta_value` FROM `".$wpdb->usermeta."` WHERE ".((is_numeric($user_id)) ? "`user_id` = '".esc_sql($user_id)."' AND " : '')."(`meta_key` = '".$wpdb->prefix."s2member_file_download_access_log'".(($check_archives_too) ? " OR `meta_key` = '".$wpdb->prefix."s2member_file_download_access_arc'" : '').") AND `meta_value` REGEXP '.*\"file\";s:[0-9]+:\"".esc_sql($file)."\".*'")))
 				{
 					foreach($results as $r /* Go through the entire array of results found in the `REGEXP` database query above. */)
-						if(is_array($la_entries = maybe_unserialize($r->meta_value)) && !empty($la_entries) /* Unserialize the array. */)
+						if(is_array($la_entries = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($r->meta_value)) && !empty($la_entries)) //260808 Safely unserialize the file download log entries.
 
 							foreach($la_entries as $la_entry /* Go through all of the entries in each result ``$r``; collecting `counter` values. */)
 								if(!empty($la_entry['file']) && $la_entry['file'] === $file && (!empty($la_entry['counter']) || ($la_entry['counter'] = 1)))
@@ -297,7 +297,7 @@ if(!class_exists('c_ws_plugin__s2member_files'))
 				if(is_array($results = $wpdb->get_results("SELECT `meta_key`, `meta_value` FROM `".$wpdb->usermeta."` WHERE ".((is_numeric($user_id)) ? "`user_id` = '".esc_sql($user_id)."' AND " : '')."(`meta_key` = '".$wpdb->prefix."s2member_file_download_access_log'".(($check_archives_too) ? " OR `meta_key` = '".$wpdb->prefix."s2member_file_download_access_arc'" : '').") AND `meta_value` REGEXP '.*\"file\";s:[0-9]+:\"".esc_sql($file)."\".*'")))
 				{
 					foreach($results as $r /* Go through the entire array of results found in the `REGEXP` database query above. */)
-						if(is_array($la_entries = maybe_unserialize($r->meta_value)) && !empty($la_entries) /* Unserialize the array. */)
+						if(is_array($la_entries = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($r->meta_value)) && !empty($la_entries)) //260808 Safely unserialize the file download log entries.
 
 							foreach($la_entries as $la_entry /* Go through all of the entries in each result ``$r``; collecting `counter` values. */)
 								if(!empty($la_entry['file']) && $la_entry['file'] === $file && (!empty($la_entry['counter']) || ($la_entry['counter'] = 1)))

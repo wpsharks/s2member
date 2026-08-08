@@ -2430,7 +2430,8 @@ class Mailchimp_o {
         }
 
         $headers = $_response["headers"];
-        $body = $response = maybe_unserialize($_response["body"]);
+        //260808 Safely unserialize the Mailchimp API response.
+        $body = $response = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($_response["body"]);
 
         if (!empty($headers["x-mailchimp-api-error-code"])){
             $error = trim($headers["x-mailchimp-api-error-code"]);
