@@ -145,6 +145,11 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['def_combo_encryption_key_history'] = array();
 		$default_options['def_custom_combo_encryption_keys'] = array();
 
+		//260809 Store new Defuse key mappings by one-way hashes instead of raw secret keys.
+		$default_options['secret_key_to_defuse_key']         = array();
+		$default_options['secret_key_to_defuse_key_history'] = array();
+		$default_options['custom_secret_key_to_defuse_key']  = array();
+
 		$default_options['s_badge_status_enabled']     = '0';
 
 		$default_options['max_ip_restriction']              = '5';
@@ -439,6 +444,10 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 				else if($key === 'def_custom_combo_encryption_keys' && (!is_array($value) || empty($value)))
 					$value = $default_options[$key];
 
+				//260809 Validate the hashed Defuse key mappings independently of the legacy options.
+				else if(preg_match('/^(?:secret_key_to_defuse_key|secret_key_to_defuse_key_history|custom_secret_key_to_defuse_key)$/', $key) && (!is_array($value) || empty($value)))
+					$value = $default_options[$key];
+
 				else if($key === 's_badge_status_enabled' && (!is_string($value) || !is_numeric($value)))
 					$value = $default_options[$key];
 
@@ -665,6 +674,11 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 			if($options !== FALSE && is_string($options['def_combo_encryption_key']) && strlen($options['def_combo_encryption_key']) && !in_array($options['def_combo_encryption_key'], $GLOBALS['WS_PLUGIN__']['s2member']['o']['def_combo_encryption_key_history'])) {
 				array_unshift($GLOBALS['WS_PLUGIN__']['s2member']['o']['def_combo_encryption_key_history'], $options['def_combo_encryption_key']);
 				$GLOBALS['WS_PLUGIN__']['s2member']['o']['def_combo_encryption_key_history'] = array_slice($GLOBALS['WS_PLUGIN__']['s2member']['o']['def_combo_encryption_key_history'], 0, 10);
+			}
+			//260809 Keep a recovery-only history of default hashed Defuse key mappings.
+			if($options !== FALSE && is_array($options['secret_key_to_defuse_key']) && !empty($options['secret_key_to_defuse_key']) && !in_array($options['secret_key_to_defuse_key'], $GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key_history'], TRUE)) {
+				array_unshift($GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key_history'], $options['secret_key_to_defuse_key']);
+				$GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key_history'] = array_slice($GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key_history'], 0, 10);
 			}
 			$GLOBALS['WS_PLUGIN__']['s2member']['o'] = apply_filters_ref_array('ws_plugin__s2member_options_before_checksum', array(&$GLOBALS['WS_PLUGIN__']['s2member']['o']));
 

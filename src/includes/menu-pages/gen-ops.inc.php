@@ -102,9 +102,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-security-section">'."\n";
 				echo '<img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/src/images/large-icon.png" title="s2Member (a Membership management system for WordPress)" alt="" style="float:right; margin:0 0 0 25px; border:0;" />'."\n";
-				echo '<h3>Security Encryption Key (optional, for tighter security)</h3>'."\n";
-				echo '<p>Just like WordPress, s2Member is open-source software. Which is wonderful. However, this also makes it possible for anyone to grab a copy of the software, and try to learn their way around its security measures. In order to keep your installation of s2Member unique/secure, you should configure a Security Encryption Key. s2Member will use your Security Encryption Key to protect itself against hackers. It does this by encrypting all sensitive information with your Key. A Security Encryption Key is unique to your installation.</p>'."\n";
-				echo '<p>Once you configure this, you <em>do not</em> want to change it—ever! In fact, it is a <em>very</em> good idea to keep this backed up in a safe place, just in case you need to move your site, or re-install s2Member in the future. Some of the sensitive data that s2Member stores will be encrypted with this Key. If you change it, that data can no longer be read, even by s2Member itself. In other words, don\'t use s2Member for six months, then decide to change your Key. That would break your installation.</p>'."\n";
+				//260810 Clarify that s2Member always has an encryption secret and that this separate key is optional.
+				echo '<h3>Security Encryption Key (optional)</h3>'."\n";
+				echo '<p>s2Member uses an encryption secret to encrypt and validate certain sensitive values. If you leave this setting blank, s2Member automatically uses the WordPress salts via <code>wp_salt()</code>. You can instead configure a separate Security Encryption Key for s2Member, giving you independent control over this secret and making it easier to preserve across site moves or restores when you keep the same key.</p>'."\n";
+				echo '<p>Once a site is in use, avoid changing its effective encryption key unless you intend to invalidate or recover data encrypted with a previous key. Existing Specific Post/Page Access Links, Registration Access Links, registration/tracking cookies, pending transaction-return data, and values encrypted through s2Member\'s encryption API may depend on it. If you configure a key here, keep a secure backup of it.</p>'."\n";
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_security", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
@@ -113,7 +114,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-sec-encryption-key">'."\n";
-				echo 'Security Encryption Key (at least 60 chars)'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) ? ' <a href="#" onclick="ws_plugin__s2member_enableSecurityKey(); return false;" title="(not recommended)">edit key</a>' : ' <a href="#" onclick="ws_plugin__s2member_generateSecurityKey(); return false;" title="Insert an auto-generated Key. (recommended)">auto-generate</a>')."\n";
+				echo 'Security Encryption Key (optional; 60+ chars recommended)'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) ? ' <a href="#" onclick="ws_plugin__s2member_enableSecurityKey(); return false;" title="Changing the Key will invalidate existing data that was encrypted with the current effective key.">edit key</a>' : ' <a href="#" onclick="ws_plugin__s2member_generateSecurityKey(); return false;" title="Insert an auto-generated 64-character Key.">auto-generate</a>')."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -122,8 +123,9 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="text" maxlength="256" autocomplete="off" name="ws_plugin__s2member_sec_encryption_key" id="ws-plugin--s2member-sec-encryption-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]).'"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) ? ' disabled="disabled"' : '').' />'."\n";
-				echo (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) ? '<br />This may contain letters, numbers, spaces; even punctuation. Up to 256 characters.<br /><em>Ex: <code>'.esc_html(strtoupper(c_ws_plugin__s2member_utils_strings::random_str_gen(64))).'</code></em>'."\n" : '';
-				echo (count($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key_history"]) > 1) ? '<br /><a href="#" onclick="ws_plugin__s2member_securityKeyHistory(); return false;">Click here</a> for a history of your last 10 Encryption Keys.<div id="ws-plugin--s2member-sec-encryption-key-history" style="display:none;"><code>'.implode('</code><br /><code>', $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key_history"]).'</code></div>'."\n" : '';
+				//260810 Make the configured-key guidance explicit without implying that a separate key is required.
+				echo (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) ? '<br />If you configure a separate key, use at least 60 characters. It may contain letters, numbers, spaces, and punctuation; up to 256 characters.<br /><em>Ex: <code>'.esc_html(strtoupper(c_ws_plugin__s2member_utils_strings::random_str_gen(64))).'</code></em>'."\n" : '';
+				echo (count($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key_history"]) > 1) ? '<br /><a href="#" onclick="ws_plugin__s2member_securityKeyHistory(); return false;">Click here</a> for a history of your last 10 configured Security Encryption Keys.<div id="ws-plugin--s2member-sec-encryption-key-history" style="display:none;"><code>'.implode('</code><br /><code>', $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key_history"]).'</code></div>'."\n" : '';
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -132,9 +134,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-				echo '<h3>Additional Details Regarding this Key:</h3>'."\n";
-				echo '<p>Your Security Encryption Key is used throughout s2Member\'s source code for many different things. However, most (not all, but most) uses of this Key are related to transactional processing within a particular session; so changing the Key won\'t really impact these scenarios in any significant way. Your Security Encryption Key is simply there to enhance security of data that is being transmitted in these cases.</p>'."\n";
-				echo '<p>That said, there are a few scenarios where use of your Security Encryption Key is more long-term. These include: Specific Post/Page Access Links, Registration Access Links, and it can also have a long-term impact on IPN communication because some data analyzed by s2Member includes a checksum that depends on your Key. If the Key changes, it could cause future IPN data (i.e., data from your payment gateway) to fail validation.</p>'."\n";
+				//260810 Explain how the configured key fits into s2Member's normal key resolution and what key changes affect.
+				echo '<h3>How this Key is Used:</h3>'."\n";
+				echo '<p>For normal encryption/decryption, a custom key supplied by code takes precedence. Otherwise s2Member uses the Security Encryption Key configured above; if this setting is blank, it falls back to the WordPress salts via <code>wp_salt()</code>.</p>'."\n";
+				echo '<p>Many encrypted values are short-lived, but some can remain valid much longer. Changing the effective key will invalidate existing data that was encrypted with the previous key, which can include Specific Post/Page Access Links, Registration Access Links, registration and tracking cookies, pending transaction-return data, and values created through s2Member\'s encryption API. If this setting is blank, changing the WordPress salts will likewise invalidate data encrypted with the previous salts.</p>'."\n";
 
 				echo '</div>'."\n";
 

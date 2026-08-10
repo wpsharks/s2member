@@ -124,7 +124,8 @@ jQuery(document).ready(function($)
 			{
 				ws_plugin__s2member_enableSecurityKey = /* Allow Security Key editing?? */ function()
 					{
-						if(confirm('Edit Key? Are you sure?\nThis could break your installation!\n\n*Note* If you\'ve been testing s2Member, feel free to change this Key before you go live. Just don\'t go live, and then change it. You\'ll have unhappy Customers. Data corruption WILL occur! For your safety, s2Member keeps a history of the last 10 Keys that you\'ve used. If you get yourself into a real situation, s2Member will let you revert back to a previous Key.'))
+						//260810 Warn about the concrete effects of changing the configured encryption key.
+						if(confirm('Edit Security Encryption Key?\n\nChanging this key will invalidate existing data that was encrypted with the current effective key, which can include access links, registration/tracking cookies, pending transaction-return data, and values encrypted through s2Member\'s API.\n\nContinue only if you intend to change or recover the key. Keep the current key backed up; s2Member also retains a history of recent Security Encryption Keys configured in s2Member.'))
 							$('input#ws-plugin--s2member-sec-encryption-key').removeAttr('disabled');
 
 						return false;
