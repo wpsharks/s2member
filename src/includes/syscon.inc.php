@@ -136,7 +136,10 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['no_cache_headers_debug']       = '0'; //260308 Adds Server-Timing no-cache debug header (support use only).
 		$default_options['sc_conds_allow_arbitrary_php'] = '0';
 		$default_options['sc_conds_whitelist'] = '';
-		$default_options['sc_s2get_userid_whitelist'] = ''; //260322 Comma-delimited s2Get user_field values allowed to use user_id="".
+
+		//260812 New shared whitelist; keep the old s2Get option synchronized temporarily for rollback compatibility.
+		$default_options['sc_user_fields_whitelist'] = '';
+		$default_options['sc_s2get_userid_whitelist'] = '';
 
 		$default_options['sec_encryption_key']         = '';
 		$default_options['sec_encryption_key_history'] = array();
@@ -386,7 +389,19 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		/*
 		Here they are merged. User options will overwrite some or all default values.
 		*/
-		$GLOBALS['WS_PLUGIN__']['s2member']['o'] = array_merge($default_options, (($options !== FALSE) ? (array)$options : (array)get_option('ws_plugin__s2member_options')));
+		$_stored_options = (($options !== FALSE) ? (array)$options : (array)get_option('ws_plugin__s2member_options'));
+		$GLOBALS['WS_PLUGIN__']['s2member']['o'] = array_merge($default_options, $_stored_options);
+
+		//260812 Keep both whitelist option names synchronized, with the legacy value taking precedence after a rollback.
+		if(isset($_stored_options['sc_s2get_userid_whitelist']) && is_string($_stored_options['sc_s2get_userid_whitelist']))
+		{
+			if(!array_key_exists('sc_user_fields_whitelist', $_stored_options) || $GLOBALS['WS_PLUGIN__']['s2member']['o']['sc_user_fields_whitelist'] !== $_stored_options['sc_s2get_userid_whitelist'])
+				$GLOBALS['WS_PLUGIN__']['s2member']['o']['sc_user_fields_whitelist'] = $_stored_options['sc_s2get_userid_whitelist'];
+		}
+		else if(isset($_stored_options['sc_user_fields_whitelist']) && is_string($_stored_options['sc_user_fields_whitelist']))
+			$GLOBALS['WS_PLUGIN__']['s2member']['o']['sc_s2get_userid_whitelist'] = $_stored_options['sc_user_fields_whitelist'];
+		unset($_stored_options);
+
 		/*
 		 * Ditch this old option key; no longer in use.
 		 */
@@ -427,6 +442,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 					$value = $default_options[$key];
 
 				else if($key === 'sc_s2get_userid_whitelist' && !is_string($value)) //260324
+					$value = $default_options[$key];
+				else if($key === 'sc_user_fields_whitelist' && !is_string($value)) //260812
 					$value = $default_options[$key];
 
 				else if($key === 'sec_encryption_key' && (!is_string($value) || !strlen($value)))

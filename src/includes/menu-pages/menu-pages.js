@@ -79,6 +79,9 @@ jQuery(document).ready( // DOM ready handler.
 			             if($group.attr('default-state') === 'open')
 				             $header.trigger('click');
 		             });
+		//260813 Re-scroll to hash targets after accordion groups have opened.
+		if(location.hash && document.getElementById(location.hash.substring(1)))
+			window.setTimeout(function(){ document.getElementById(location.hash.substring(1)).scrollIntoView(); }, 0);
 		$rsToggler.click(function()
 		                 {
 			                 if($rs.hasClass('open'))
