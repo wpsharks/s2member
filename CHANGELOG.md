@@ -1,3 +1,25 @@
+= v260814 =
+
+- (Framework) **Improvement:** Better s2Member Security Encryption Key handling and related guidance in the admin panel.
+
+- (Framework) **Improvement:** Hardened input validation and sanitization for the `s2Key`, `s2File`, `s2Stream`, and `s2Member-PayPal-Button` shortcodes.
+
+- (Framework & Pro) **Improvement:** Renamed and expanded the `s2Get` shortcode's user-field whitelist into the shared _Shortcode User Fields Whitelist_ setting, now used for `s2Get`'s `user_id` attribute and `s2Member-List`'s `show_fields` attribute. Administrators are warned when either shortcode attempts to display an un-whitelisted field's value that doesn't belong to the current user viewing the page.
+
+- (Framework & Pro) **Security:** Improved validation and hardened handling of serialized data throughout s2Member.
+
+- (Pro) **Improvement:** Hardened input validation and sanitization for the `s2Member-Login`, `s2Member-Summary`, `s2Member-Gift-Codes`, `s2Member-List`, `s2Member-List-Search-Box`, and `s2Member-Pro-ClickBank-Button` shortcodes, as well as the Pro Login Widget.
+
+- (Pro) **Security:** Added stricter handling for `s2Member-List`'s `show_fields` attribute. s2Member will warn administrators about detected fields that still need review. Fields not whitelisted will not be displayed. Sites using `show_fields` should review _General Options > Shortcode User Fields Whitelist_ and allow the fields their Member Lists are intended to display.
+
+- (Pro) **Security:** Added safer handling and a whitelist for the `template` shortcode attribute, used by the `s2Member-List`, `s2Member-List-Search-Box`, and Stripe, PayPal, and Authorize.Net Pro-Forms shortcodes. s2Member will warn administrators about detected templates that still need review. Templates not whitelisted will not be used, and the standard template will be used instead. Sites using custom templates should review _General Options > Pro Shortcode Templates Whitelist_ and allow their custom template files.
+
+- (Pro) **Fix:** Prevented the Pro updater from offering or installing a Pro release newer than the installed s2Member Framework, avoiding compatibility issues until the Framework is updated first.
+
+- (Pro) **Fix:** Prevented Stripe payment processing from continuing after Pro-Form validation rejects a submission, avoiding misleading Stripe card-field errors when other required form fields are missing.
+
+- (Pro) **Fix:** Updated Stripe Pro-Forms to use the shortcode's `validate_zipcode` attribute correctly, so it can override the default setting to collect and validate the card's postal code.
+
 = v260805 =
 
 - (Framework) **Improvement:** Replaced TinyURL-based shortening for generated Registration Access and Specific Post/Page Access URLs with new built-in s2Member short links, stored temporarily with WordPress transients. Existing TinyURL settings now use the built-in shortener automatically, avoiding TinyURL’s deprecated no-key API endpoint and extra third-party pages shown before the destination.
