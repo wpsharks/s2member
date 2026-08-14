@@ -86,6 +86,12 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				do_action('ws_plugin__s2member_during_update_all_options', get_defined_vars());
 				unset($__refs, $__v); // Housekeeping.
 
+				//260812 Keep the old s2Get option synchronized for rollback compatibility, while accepting legacy updates during the transition.
+				if(isset($new_options['ws_plugin__s2member_sc_s2get_userid_whitelist']) && !isset($new_options['ws_plugin__s2member_sc_user_fields_whitelist']))
+					$options['sc_user_fields_whitelist'] = $options['sc_s2get_userid_whitelist'];
+				if(isset($options['sc_user_fields_whitelist']))
+					$options['sc_s2get_userid_whitelist'] = $options['sc_user_fields_whitelist'];
+
 				$options = ws_plugin__s2member_configure_options_and_their_defaults(($options = array_merge($options, array('options_version' => (string)($options['options_version'] + 0.001)))));
 				update_option('ws_plugin__s2member_options', $options).((is_multisite() && is_main_site()) ? update_site_option('ws_plugin__s2member_options', $options) : NULL).update_option('ws_plugin__s2member_cache', array());
 

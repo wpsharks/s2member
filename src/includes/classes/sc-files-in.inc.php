@@ -57,6 +57,10 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 			                             'count_against_user' => '', 'check_user' => '',
 			                             'get_streamer_json'  => '', 'get_streamer_array' => ''), $attr);
 
+			//260811 Validate download key.
+			if(!in_array($attr['download_key'], array('ip-forever', 'universal'), true))
+				$attr['download_key'] = filter_var($attr['download_key'], FILTER_VALIDATE_BOOLEAN) ? 'yes' : '';
+
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_sc_get_file_after_shortcode_atts', get_defined_vars());
 			unset($__refs, $__v); // Housekeeping.
@@ -136,6 +140,10 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 			                             'player_option_blocks' => ''), $attr);
 
 			$attr['download'] = (!empty($attr['file_download'])) ? $attr['file_download'] : $attr['download'];
+
+			//260811 Validate download key.
+			if(!in_array($attr['download_key'], array('ip-forever', 'universal'), true))
+				$attr['download_key'] = filter_var($attr['download_key'], FILTER_VALIDATE_BOOLEAN) ? 'yes' : '';
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_sc_get_stream_after_shortcode_atts', get_defined_vars());

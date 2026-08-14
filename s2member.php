@@ -20,8 +20,8 @@
  */
 /* -- This section for WordPress parsing. ------------------------------------------------------------------------------
 
-Version: 260805
-Stable tag: 260805
+Version: 260814
+Stable tag: 260814
 
 SSL Compatible: yes
 bbPress Compatible: yes
@@ -36,11 +36,11 @@ PayPal Pro Compatible: yes w/s2Member Pro
 Authorize.Net Compatible: yes w/s2Member Pro
 ClickBank Compatible: yes w/s2Member Pro
 
-Tested up to: 7.1-RC1-63034
+Tested up to: 7.1-RC3-63235
 Requires at least: 4.2
 
 Requires PHP: 5.6.2
-Tested up to PHP: 8.4
+Tested up to PHP: 8.4.23
 
 Copyright: © 2009 WP Sharks
 License: GNU General Public License
@@ -77,7 +77,7 @@ if(!defined('WPINC')) // MUST have WordPress.
  *
  * @var string
  */
-${__FILE__}['tmp'] = '260805'; //version//
+${__FILE__}['tmp'] = '260814'; //version//
 if(!defined('WS_PLUGIN__S2MEMBER_VERSION'))
 	define('WS_PLUGIN__S2MEMBER_VERSION', ${__FILE__}['tmp']);
 /**

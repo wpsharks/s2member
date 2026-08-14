@@ -70,6 +70,9 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 			(!is_array(get_option('ws_plugin__s2member_options'))) ? update_option('ws_plugin__s2member_options', array()) : NULL;
 			(!is_numeric(get_option('ws_plugin__s2member_configured'))) ? update_option('ws_plugin__s2member_configured', '0') : NULL;
 
+			//260809 Seed hashed Defuse key mappings on activation after installation or updates; migration is idempotent.
+			c_ws_plugin__s2member_utils_defuse::migrate_legacy_defuse_key_mappings();
+
 			if($GLOBALS['WS_PLUGIN__']['s2member']['c']['configured']) // If we are re-activating.
 			{
 				$v = get_option('ws_plugin__s2member_activated_version'); // Currently.

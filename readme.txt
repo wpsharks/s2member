@@ -3,12 +3,12 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260805
-Stable tag: 260805
-Tested up to: 7.1-RC1-63034
+Version: 260814
+Stable tag: 260814
+Tested up to: 7.1-RC3-63235
 Requires at least: 4.2
 Requires PHP: 5.6.2
-Tested up to PHP: 8.4
+Tested up to PHP: 8.4.23
 License: GNU General Public License v2 or later.
 Contributors: WebSharks, JasWSInc, raamdev, clavaque, eduan
 Author: s2Member
@@ -176,17 +176,39 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260805 =
+= v260814 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
 
+= v260814 =
+
+- (Framework) **Improvement:** Better s2Member Security Encryption Key handling and related guidance in the admin panel.
+
+- (Framework) **Improvement:** Hardened input validation and sanitization for the `s2Key`, `s2File`, `s2Stream`, and `s2Member-PayPal-Button` shortcodes.
+
+- (Framework & Pro) **Improvement:** Renamed and expanded the `s2Get` shortcode's user-field whitelist into the shared _Shortcode User Fields Whitelist_ setting, now used for `s2Get`'s `user_id` attribute and `s2Member-List`'s `show_fields` attribute. Administrators are warned when either shortcode attempts to display an un-whitelisted field's value that doesn't belong to the current user viewing the page.
+
+- (Framework & Pro) **Security:** Improved validation and hardened handling of serialized data throughout s2Member.
+
+- (Pro) **Improvement:** Hardened input validation and sanitization for the `s2Member-Login`, `s2Member-Summary`, `s2Member-Gift-Codes`, `s2Member-List`, `s2Member-List-Search-Box`, and `s2Member-Pro-ClickBank-Button` shortcodes, as well as the Pro Login Widget.
+
+- (Pro) **Security:** Added stricter handling for `s2Member-List`'s `show_fields` attribute. s2Member will warn administrators about detected fields that still need review. Fields not whitelisted will not be displayed. Sites using `show_fields` should review _General Options > Shortcode User Fields Whitelist_ and allow the fields their Member Lists are intended to display.
+
+- (Pro) **Security:** Added safer handling and a whitelist for the `template` shortcode attribute, used by the `s2Member-List`, `s2Member-List-Search-Box`, and Stripe, PayPal, and Authorize.Net Pro-Forms shortcodes. s2Member will warn administrators about detected templates that still need review. Templates not whitelisted will not be used, and the standard template will be used instead. Sites using custom templates should review _General Options > Pro Shortcode Templates Whitelist_ and allow their custom template files.
+
+- (Pro) **Fix:** Prevented the Pro updater from offering or installing a Pro release newer than the installed s2Member Framework, avoiding compatibility issues until the Framework is updated first.
+
+- (Pro) **Fix:** Prevented Stripe payment processing from continuing after Pro-Form validation rejects a submission, avoiding misleading Stripe card-field errors when other required form fields are missing.
+
+- (Pro) **Fix:** Updated Stripe Pro-Forms to use the shortcode's `validate_zipcode` attribute correctly, so it can override the default setting to collect and validate the card's postal code.
+
 = v260805 =
 
 - (Framework) **Improvement:** Replaced TinyURL-based shortening for generated Registration Access and Specific Post/Page Access URLs with new built-in s2Member short links, stored temporarily with WordPress transients. Existing TinyURL settings now use the built-in shortener automatically, avoiding TinyURL’s deprecated no-key API endpoint and extra third-party pages shown before the destination.
 
-- (Framework) **Improvement:** Better PayPal Checkout cancellation button handling when stored IPN Signup Vars are missing. s2Member now checks PayPal subscription details via API before cancellation, uses PayPal's next billing time plus the configured EOT grace period for the EOT time, and falls back to PayPal's subscription management page when a safe local cancellation cannot be completed. See [[thread 13462](https://f.wpsharks.com/t/13462)](https://f.wpsharks.com/t/13462).
+- (Framework) **Improvement:** Better PayPal Checkout cancellation button handling when stored IPN Signup Vars are missing. s2Member now checks PayPal subscription details via API before cancellation, uses PayPal's next billing time plus the configured EOT grace period for the EOT time, and falls back to PayPal's subscription management page when a safe local cancellation cannot be completed. See [thread 13462](https://f.wpsharks.com/t/13462).
 
 - (Framework) **Security:** Hardened the `[s2Stream]` shortcode against executable JavaScript injection by users with post-editing privileges. Attributes used to configure JW Player are sanitized and validated more strictly, and custom `player_path` values must now be explicitly whitelisted using the `ws_plugin__s2member_sc_get_stream_player_paths` filter.
 

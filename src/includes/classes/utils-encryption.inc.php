@@ -118,10 +118,11 @@ if (!class_exists('c_ws_plugin__s2member_utils_encryption')) {
          * Decrypt w/ best possible technique.
          *
          * @since 3.5 Nearly the first release.
+         * @since 260810 Allows Defuse decryption on PHP 5.6+.
          *
          * @param string    $base64       String to decrypt (base64).
          * @param string    $key          Optional custom decryption key.
-         * @param bool|null $allow_defuse Allow Defuse encryption as a better alternative?
+         * @param bool|null $allow_defuse Allow Defuse decryption as a better alternative?
          *
          * @return string Decrypted string, else empty string.
          */
@@ -134,10 +135,11 @@ if (!class_exists('c_ws_plugin__s2member_utils_encryption')) {
             $allow_defuse = isset($allow_defuse) ? $allow_defuse
                 : apply_filters('c_ws_plugin__s2member_allow_defuse', true);
 
-            if ($allow_defuse && version_compare(PHP_VERSION, '7.0.4', '>=')
-                   && ($_d = c_ws_plugin__s2member_utils_defuse::decrypt($base64, $key))) {
+            //260810 Allow PHP 5.6 to read Defuse ciphertext created on newer PHP versions; decryption was previously gated to PHP 7.0.4+.
+            // Defuse encryption remains gated separately so PHP 5.6 does not generate new Defuse ciphertext yet.
+            if ($allow_defuse && ($_d = c_ws_plugin__s2member_utils_defuse::decrypt($base64, $key))) {
                 return $string = $_d; // Defuse success.
-            } // This is a new/improved way of handling decryption.
+            }
 
             if (function_exists('mcrypt_decrypt')
                 && in_array('rijndael-256', @mcrypt_list_algorithms())

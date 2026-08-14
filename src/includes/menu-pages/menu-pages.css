@@ -238,6 +238,15 @@ div.ws-menu-page > :not(.notice):not(.updated):not(.error) .ws-menu-page-hilite
 	border-radius : 3px;
 	padding       : 0 0.2em;
 }
+div.ws-menu-page > :not(.notice):not(.updated):not(.error) .ws-menu-page-caution-hilite,
+div.ws-menu-page > :not(.notice):not(.updated):not(.error) .ws-menu-page-caution-hilite code
+{
+	font-size     : 102%;
+	background    : #FADDAB;
+
+	border-radius : 3px;
+	padding       : 0 0.2em;
+}
 div.ws-menu-page > :not(.notice):not(.updated):not(.error) .ws-menu-page-bright-hilite
 {
 	font-size     : 102%;

@@ -73,10 +73,10 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 			// Current user only
 			$attr['user_id_backup'] = (int)$attr['user_id'];
 			$attr['user_id'] = 0;
-			//260322 Whitelist user_fields allowed user_id="" via General Options.
-			$sc_s2get_userid_whitelist = trim((string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['sc_s2get_userid_whitelist']);
-			$sc_s2get_userid_whitelist = ($sc_s2get_userid_whitelist !== '') ? preg_split('/\s*,\s*/', strtolower($sc_s2get_userid_whitelist), -1, PREG_SPLIT_NO_EMPTY) : array();
-			$sc_s2get_userid_whitelist = array_flip($sc_s2get_userid_whitelist);
+			//260812 Load the shared user-fields whitelist for cross-user shortcode access.
+			$shortcode_user_fields_whitelist = trim((string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['sc_user_fields_whitelist']);
+			$shortcode_user_fields_whitelist = ($shortcode_user_fields_whitelist !== '') ? preg_split('/\s*,\s*/', strtolower($shortcode_user_fields_whitelist), -1, PREG_SPLIT_NO_EMPTY) : array();
+			$shortcode_user_fields_whitelist = array_flip($shortcode_user_fields_whitelist);
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_before_sc_get_details_after_shortcode_atts', get_defined_vars());
@@ -89,7 +89,10 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 			else if($attr['user_field'] && isset($valid_user_fields[$attr['user_field']]))
 				{
 					$user_field_args = array('size' => $attr['size']);
-					$user_field_user_id = (isset($sc_s2get_userid_whitelist[strtolower($attr['user_field'])]) && $attr['user_id_backup'] > 0) ? $attr['user_id_backup'] : 0;
+					//260813 Record blocked cross-user fields for the shared administrator warning.
+					if($attr['user_id_backup'] > 0 && $attr['user_id_backup'] !== get_current_user_id() && !isset($shortcode_user_fields_whitelist[strtolower($attr['user_field'])]))
+						c_ws_plugin__s2member_admin_notices::shortcode_user_field_unapproved($attr['user_field'], ($shortcode) ? $shortcode : 's2Get', get_the_ID());
+					$user_field_user_id = (isset($shortcode_user_fields_whitelist[strtolower($attr['user_field'])]) && $attr['user_id_backup'] > 0) ? $attr['user_id_backup'] : 0;
 					$get = c_ws_plugin__s2member_utils_users::get_user_field($attr['user_field'], $user_field_user_id, $user_field_args);
 
 					if(preg_match('/time$/i', $attr['user_field']) && $attr['date_format'])
