@@ -58,6 +58,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal'))
 				{
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback` ).';
 
+					//260814 Set optional gateway elements used below so sparse/null payload fields do not trigger PHP diagnostics.
+					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('option_name2', 'option_selection2', 'invoice', 'first_name', 'last_name'));
+
 					$paypal['ip'] = (preg_match('/ip address/i', $paypal['option_name2']) && $paypal['option_selection2']) ? $paypal['option_selection2'] : '';
 					$paypal['ip'] = (!$paypal['ip'] && preg_match('/^[a-z0-9]+~[0-9\.]+$/i', $paypal['invoice'])) ? preg_replace('/^[a-z0-9]+~/i', '', $paypal['invoice']) : $paypal['ip'];
 

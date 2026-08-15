@@ -648,7 +648,8 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											$processed = 'yes'; // Mark this as yes.
 
 											$current_role = c_ws_plugin__s2member_user_access::user_access_role($user);
-											@list ($level, $ccaps, $eotper) = preg_split('/\:/', $item_number, 3);
+											//260814 Parse and pad optional CCaps/EOT components instead of suppressing undefined list() offsets.
+											list ($level, $ccaps, $eotper) = array_pad(explode(':', $item_number, 3), 3, '');
 											$role = 's2member_level'.$level; // Membership Level.
 
 											$email       = $user->user_email;
