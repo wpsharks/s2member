@@ -439,15 +439,15 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 		 */
 		public static function get_user_eot($user_id = 0, $check_gateway = TRUE, $favor = 'fixed')
 		{
-			if(!($user_id = (integer)$user_id)) // Empty user ID in this call?
+			if(!($user_id = (int)$user_id)) // Empty user ID in this call?
 				$user_id = get_current_user_id(); // Assume current user.
 
 			if(!$favor || !in_array($favor, array('fixed', 'next'), TRUE))
 				$favor = 'fixed'; // Default behavior.
 
 			$now            = time(); // Current timestamp.
-			$grace_time     = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
-			$grace_time     = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $grace_time);
+			$grace_time     = (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
+			$grace_time     = (int)apply_filters('ws_plugin__s2member_eot_grace_time', $grace_time);
 			$demotion_role  = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber');
 			$empty_response = array('type' => '', 'time' => 0, 'tense' => '', 'debug' => '');
 
@@ -458,8 +458,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			$subscr_gateway      = (string)get_user_option('s2member_subscr_gateway', $user->ID);
 			$subscr_id           = (string)get_user_option('s2member_subscr_id', $user->ID);
 			$subscr_cid          = (string)get_user_option('s2member_subscr_cid', $user->ID);
-			$last_auto_eot_time  = (integer)get_user_option('s2member_last_auto_eot_time', $user->ID);
-			$auto_eot_time       = (integer)get_user_option('s2member_auto_eot_time', $user->ID);
+			$last_auto_eot_time  = (int)get_user_option('s2member_last_auto_eot_time', $user->ID);
+			$auto_eot_time       = (int)get_user_option('s2member_auto_eot_time', $user->ID);
 
 			if($auto_eot_time) // They have a hard-coded EOT time at present?
 				return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
@@ -625,7 +625,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					if(!is_object($stripe_subscription = c_ws_plugin__s2member_pro_stripe_utilities::get_customer_subscription($subscr_cid, $subscr_id)) || empty($stripe_subscription->id))
 						return array_merge($empty_response, array('debug' => 'No fixed EOT, and the Stripe API says there is no subscription for this user.'));
 
-					if((integer)$stripe_subscription->ended_at > 0) // Done?
+					if((int)$stripe_subscription->ended_at > 0) // Done?
 					{
 						$time = $stripe_subscription->ended_at + $grace_time;
 						return array('type' => 'fixed', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
@@ -640,7 +640,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					if(isset($stripe_subscription->plan->metadata->recurring, $stripe_subscription->plan->metadata->recurring_times)
 						&& !$stripe_subscription->plan->metadata->recurring) // Non-recurring subscription?
 					{
-						$time = (integer)$stripe_subscription->start;
+						$time = (int)$stripe_subscription->start;
 						$time += $stripe_subscription->plan->trial_period_days * DAY_IN_SECONDS;
 
 						switch($stripe_subscription->plan->interval)
@@ -689,7 +689,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					if(isset($stripe_subscription->plan->metadata->recurring, $stripe_subscription->plan->metadata->recurring_times)
 						&& $stripe_subscription->plan->metadata->recurring && $stripe_subscription->plan->metadata->recurring_times > 0)
 					{
-						$time = (integer)$stripe_subscription->start;
+						$time = (int)$stripe_subscription->start;
 						$time += $stripe_subscription->plan->trial_period_days * DAY_IN_SECONDS;
 
 						switch($stripe_subscription->plan->interval)

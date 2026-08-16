@@ -126,7 +126,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 					{
 						if(($user_id = $eot->ID) && is_object($user = new WP_User ($user_id)) && $user->ID)
 						{
-							$auto_eot_time = (integer)get_user_option('s2member_auto_eot_time', $user_id);
+							$auto_eot_time = (int)get_user_option('s2member_auto_eot_time', $user_id);
 
 							$log_entry = array('user' => (array)$user); // Intialize.
 							$log_entry['auto_eot_time'] = $auto_eot_time; // Record EOT time.

@@ -755,7 +755,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 										else if(preg_match('/^(?:any|alphanumerics\-spaces\-punctuation|alphanumerics\-spaces|alphanumerics\-punctuation|alphanumerics|alphabetics|numerics)\-[0-9]+(?:\-e)?$/', $_field_expects))
 										{
 											$_field_expects_split        = explode('-', $_field_expects);
-											$_field_expects_length       = (integer)$_field_expects_split[1];
+											$_field_expects_length       = (int)$_field_expects_split[1];
 											$_field_expects_exact_length = !empty($_field_expects_split[2]) && $_field_expects_split[2] === 'e';
 
 											if($_field_expects_exact_length && strlen($input[$_field_var]) !== $_field_expects_length)

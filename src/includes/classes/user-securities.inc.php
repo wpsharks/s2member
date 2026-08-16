@@ -171,8 +171,8 @@ if(!class_exists('c_ws_plugin__s2member_user_securities'))
 		 */
 		public static function min_password_length()
 		{
-			$min = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_password_min_length'];
-			return max(6, (integer)apply_filters('ws_plugin__s2member_min_password_length', $min > 0 ? $min : 0));
+			$min = (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_password_min_length'];
+			return max(6, (int)apply_filters('ws_plugin__s2member_min_password_length', $min > 0 ? $min : 0));
 		}
 
 		/**

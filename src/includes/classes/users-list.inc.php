@@ -213,7 +213,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 				$val = (!empty($ccaps)) ? implode("<br />", $ccaps) : "—";
 			}
 			else if($col === "s2member_auto_eot_time")
-				$val = ($v = get_user_option("s2member_auto_eot_time", $user_id)) ? date("D M jS, Y", (integer)$v)."<br /><small>@ precisely ".date("g:i a", (integer)$v)."</small>" : "—";
+				$val = ($v = get_user_option("s2member_auto_eot_time", $user_id)) ? date("D M jS, Y", (int)$v)."<br /><small>@ precisely ".date("g:i a", (int)$v)."</small>" : "—";
 
 			else if(preg_match("/^s2member_custom_field_/", $col))
 			{

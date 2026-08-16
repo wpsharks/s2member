@@ -60,8 +60,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 
 												if(!empty($paypal["proxy_next_billing_time"]) && ($_proxy_next_billing_time = strtotime($paypal["proxy_next_billing_time"])) && $_proxy_next_billing_time > time())
 													{
-														$proxy_eot_grace_time = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
-														$proxy_eot_grace_time = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $proxy_eot_grace_time);
+														$proxy_eot_grace_time = (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
+														$proxy_eot_grace_time = (int)apply_filters('ws_plugin__s2member_eot_grace_time', $proxy_eot_grace_time);
 														$proxy_next_billing_time = $_proxy_next_billing_time + $proxy_eot_grace_time;
 													}
 											}

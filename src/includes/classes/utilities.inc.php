@@ -152,7 +152,7 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 		{
 			if($v && file_exists(($template = dirname(dirname(__FILE__)).'/templates/badges/s-badge.php')))
 			{
-				switch((integer)$v) // Width/height based on variation.
+				switch((int)$v) // Width/height based on variation.
 				{
 					case 1: // Variation number 1.
 
@@ -183,7 +183,7 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 				}
 				$badge = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($template)));
 
-				$badge = preg_replace('/%%v%%/i', (string)(integer)$v, $badge);
+				$badge = preg_replace('/%%v%%/i', (string)(int)$v, $badge);
 				$badge = preg_replace('/%%site_url%%/i', urlencode(home_url()), $badge);
 				$badge = preg_replace('/%%no_cache%%/i', $no_cache ? '&amp;no_cache='.urlencode(mt_rand()) : '', $badge);
 				$badge = preg_replace('/%%display_on_failure%%/i', $display_on_failure ? '&amp;display_on_failure=1' : '', $badge);

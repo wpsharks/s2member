@@ -164,8 +164,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 		 */
 		public static function auto_eot_time($user_id = 0, $period1 = '', $period3 = '', $eotper = '', $lpt = 0, $ext = 0)
 		{
-			$eot_grace_time = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
-			$eot_grace_time = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $eot_grace_time);
+			$eot_grace_time = (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
+			$eot_grace_time = (int)apply_filters('ws_plugin__s2member_eot_grace_time', $eot_grace_time);
 			$p1_time = $p3_time = $eot_time = $auto_eot_time = 0; // Intialize.
 
 			if($user_id && ($user = new WP_User ($user_id)) && $user->ID)
@@ -179,7 +179,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_time'))
 				if(($access_cap_times = c_ws_plugin__s2member_access_cap_times::get_access_cap_times($user_id))) {
 					foreach(array_reverse($access_cap_times, TRUE) as $_time => $_cap) {
 						if(strpos($_cap, '-') !== 0 && $_cap !== 'level0') {
-							$last_paid_access_cap_time = (integer)$_time;
+							$last_paid_access_cap_time = (int)$_time;
 							break; // Got what we need; stop here.
 						}
 					} // unset($_time, $_cap); // Housekeeping.
