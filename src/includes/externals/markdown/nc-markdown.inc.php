@@ -1454,9 +1454,12 @@ class NC_Markdown_Parser {
 	# regular expression.
 	#
 		if (function_exists($this->utf8_strlen)) return;
-		$this->utf8_strlen = create_function('$text', 'return preg_match_all(
-			"/[\\\\x00-\\\\xBF]|[\\\\xC0-\\\\xFF][\\\\x80-\\\\xBF]*/",
-			$text, $m);');
+		//260816 create_function() was removed in PHP 8; use a PHP 5.3+ closure for this fallback.
+		$this->utf8_strlen = function($text) {
+			return preg_match_all(
+				"/[\\x00-\\xBF]|[\\xC0-\\xFF][\\x80-\\xBF]*/",
+				$text, $m);
+		};
 	}
 
 
