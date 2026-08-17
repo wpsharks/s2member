@@ -74,6 +74,38 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											}
 										else return false;
 									}
+								//260817 Allow signed Checkout data through Return or custom handlers, but never use a browser handoff to authenticate the PayPal Notify endpoint.
+								else if(empty($_GET["s2member_paypal_notify"]) && !empty($_GET["s2member_paypal_proxy"]) && $_GET["s2member_paypal_proxy"] === "paypal"
+								&& array_key_exists("s2member_paypal_checkout_handoff", $_POST) && is_array($postvars = stripslashes_deep($_POST)))
+									{
+										if(!is_string($postvars["s2member_paypal_checkout_handoff"]) || $postvars["s2member_paypal_checkout_handoff"] === '')
+											return false;
+
+										$handoff = $postvars["s2member_paypal_checkout_handoff"];
+										unset($postvars["s2member_paypal_checkout_handoff"]);
+
+										//260817 Verify the complete PayPal Checkout browser-return payload before trusting any transaction or proxy metadata.
+										if(!self::paypal_checkout_return_handoff_verify($handoff, $postvars))
+											return false;
+
+										if(empty($postvars["s2member_paypal_proxy"]) || $postvars["s2member_paypal_proxy"] !== "paypal"
+										|| (string)$_GET["s2member_paypal_proxy"] !== (string)$postvars["s2member_paypal_proxy"])
+											return false;
+
+										//260817 If proxy-use routing is supplied in the URL, it must be scalar and match the signed browser-return metadata.
+										if(!empty($_GET["s2member_paypal_proxy_use"]) && (!is_string($_GET["s2member_paypal_proxy_use"]) || empty($postvars["s2member_paypal_proxy_use"]) || $_GET["s2member_paypal_proxy_use"] !== (string)$postvars["s2member_paypal_proxy_use"]))
+											return false;
+
+										foreach($postvars as $key => $value)
+											if(preg_match("/^s2member_/", $key))
+												unset($postvars[$key]);
+
+										$postvars = self::paypal_postvars_back_compat($postvars);
+										$postvars = c_ws_plugin__s2member_utils_strings::trim_deep($postvars);
+										$postvars = self::paypal_postvars_utf8($postvars);
+
+										return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => "paypal")), get_defined_vars());
+									}
 								else if(!empty($_REQUEST) && is_array($postvars = stripslashes_deep($_REQUEST)))
 									{
 										foreach($postvars as $key => $value)
@@ -173,6 +205,104 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						} // unset($_key, $_old_key, $_value); // Housekeeping.
 
 						return $postvars; // w/ back. compat keys.
+					}
+				/**
+				 * Normalizes PayPal Checkout browser-return variables for handoff signing.
+				 *
+				 * @package s2Member\PayPal
+				 * @since 260817
+				 *
+				 * @param array $postvars Browser-return variables.
+				 *
+				 * @return string|bool Canonical payload string, else false.
+				 */
+				public static function paypal_checkout_return_handoff_payload($postvars)
+					{
+						if(!is_array($postvars) || !$postvars)
+							return false;
+
+						$normalized = array();
+						foreach($postvars as $key => $value)
+							{
+								$key = (string)$key;
+
+								if($key === 's2member_paypal_checkout_handoff')
+									continue;
+								if(!is_scalar($value) && $value !== null)
+									return false;
+
+								$key = preg_replace('/\r\n|\r|\n/', "\r\n", $key);
+								$value = preg_replace('/\r\n|\r|\n/', "\r\n", (string)$value);
+								$normalized[$key] = $value;
+							}
+						if(!$normalized)
+							return false;
+
+						ksort($normalized, SORT_STRING);
+						return http_build_query($normalized, '', '&', PHP_QUERY_RFC3986);
+					}
+				/**
+				 * Generates the private signing key for PayPal Checkout browser-return handoffs.
+				 *
+				 * @package s2Member\PayPal
+				 * @since 260817
+				 *
+				 * @return string Private signing key.
+				 */
+				public static function paypal_checkout_return_handoff_key()
+					{
+						return hash_hmac('sha256', 's2member_paypal_checkout_return_handoff|'.self::paypal_proxy_key_gen(), c_ws_plugin__s2member_utils_encryption::key());
+					}
+				/**
+				 * Creates a short-lived PayPal Checkout browser-return handoff.
+				 *
+				 * @package s2Member\PayPal
+				 * @since 260817
+				 *
+				 * @param array $postvars Verified browser-return variables.
+				 *
+				 * @return string Signed handoff token, else an empty string on failure.
+				 */
+				public static function paypal_checkout_return_handoff_create($postvars)
+					{
+						$payload = self::paypal_checkout_return_handoff_payload($postvars);
+
+						if($payload === false)
+							return '';
+
+						$expires = time() + HOUR_IN_SECONDS;
+						$signature = hash_hmac('sha256', $expires.'|'.$payload, self::paypal_checkout_return_handoff_key());
+
+						// The browser gets only a transaction-scoped signature; reusable server-side secrets remain private.
+						return $expires.'.'.$signature;
+					}
+				/**
+				 * Verifies a PayPal Checkout browser-return handoff.
+				 *
+				 * @package s2Member\PayPal
+				 * @since 260817
+				 *
+				 * @param string $handoff Signed handoff token.
+				 * @param array  $postvars Browser-return variables received by POST.
+				 *
+				 * @return bool TRUE if valid; else FALSE.
+				 */
+				public static function paypal_checkout_return_handoff_verify($handoff, $postvars)
+					{
+						$handoff = trim((string)$handoff);
+
+						if(!preg_match('/^([0-9]{10,12})\.([a-f0-9]{64})$/D', $handoff, $matches))
+							return false;
+
+						$expires = (int)$matches[1];
+						$signature = (string)$matches[2];
+						$payload = self::paypal_checkout_return_handoff_payload($postvars);
+
+						if($payload === false || time() > $expires)
+							return false;
+
+						$expected = hash_hmac('sha256', $expires.'|'.$payload, self::paypal_checkout_return_handoff_key());
+						return hash_equals($expected, $signature);
 					}
 				/**
 				* Generates a PayPal Proxy Key, for simulated IPN responses.

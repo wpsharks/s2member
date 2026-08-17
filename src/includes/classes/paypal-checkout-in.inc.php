@@ -307,14 +307,22 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					$return_url = add_query_arg('s2member_paypal_proxy', 'paypal', $return_url);
 
 					$return_post = array_merge($paypal, array(
-						's2member_paypal_proxy'              => 'paypal',
-						's2member_paypal_proxy_use'          => 'paypal_checkout',
-						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+						's2member_paypal_proxy'     => 'paypal',
+						's2member_paypal_proxy_use' => 'paypal_checkout',
 					));
+
+					//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
+					$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post);
+					if(!$return_handoff)
+					{
+						echo 'return_handoff_failed';
+						exit();
+					}
+					$return_post['s2member_paypal_checkout_handoff'] = $return_handoff;
 
 					// Auto-POST into s2Member's existing PayPal return handler.
 					echo '<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="robots" content="noindex,nofollow" /></head><body>';
-					echo '<form id="s2m_ppco_rtn" method="post" action="'.esc_attr($return_url).'">';
+					echo '<form id="s2m_ppco_rtn" method="post" accept-charset="UTF-8" action="'.esc_attr($return_url).'">'; //260817 Keep the signed browser-return payload encoding stable.
 					foreach($return_post as $k => $v)
 						echo '<input type="hidden" name="'.esc_attr($k).'" value="'.esc_attr((string)$v).'" />';
 					echo '</form><script type="text/javascript">document.getElementById("s2m_ppco_rtn").submit();</script></body></html>';
@@ -449,13 +457,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					$return_url2 = add_query_arg('s2member_paypal_proxy', 'paypal', $return_url2);
 
 					$return_post2 = array_merge($paypal, array(
-						's2member_paypal_proxy'              => 'paypal',
-						's2member_paypal_proxy_use'          => 'paypal_checkout',
-						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+						's2member_paypal_proxy'     => 'paypal',
+						's2member_paypal_proxy_use' => 'paypal_checkout',
 					));
 
+					//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
+					$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post2);
+					if(!$return_handoff)
+					{
+						echo 'return_handoff_failed';
+						exit();
+					}
+					$return_post2['s2member_paypal_checkout_handoff'] = $return_handoff;
+
 					echo '<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="robots" content="noindex,nofollow" /></head><body>';
-					echo '<form id="s2m_ppco_rtn" method="post" action="'.esc_attr($return_url2).'">';
+					echo '<form id="s2m_ppco_rtn" method="post" accept-charset="UTF-8" action="'.esc_attr($return_url2).'">'; //260817 Keep the signed browser-return payload encoding stable.
 					foreach($return_post2 as $k => $v)
 						echo '<input type="hidden" name="'.esc_attr($k).'" value="'.esc_attr((string)$v).'" />';
 					echo '</form><script type="text/javascript">document.getElementById("s2m_ppco_rtn").submit();</script></body></html>';
@@ -729,10 +745,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				$return_url = add_query_arg('s2member_paypal_proxy', 'paypal', $return_url);
 
 				$return_post = array_merge($paypal, array(
-					's2member_paypal_proxy'              => 'paypal',
-					's2member_paypal_proxy_use'          => 'paypal_checkout',
-					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+					's2member_paypal_proxy'     => 'paypal',
+					's2member_paypal_proxy_use' => 'paypal_checkout',
 				));
+
+				//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
+				$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post);
+				if(!$return_handoff)
+				{
+					if(!headers_sent())
+						status_header(500);
+
+					echo wp_json_encode(array('error' => 'return_handoff_failed'));
+					exit();
+				}
+				$return_post['s2member_paypal_checkout_handoff'] = $return_handoff;
 
 				echo wp_json_encode(array(
 					'rtn_url'  => $return_url,
@@ -1205,10 +1232,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				$return_url = add_query_arg('s2member_paypal_proxy', 'paypal', $return_url);
 
 				$return_post = array_merge($paypal, array(
-					's2member_paypal_proxy'              => 'paypal',
-					's2member_paypal_proxy_use'          => 'paypal_checkout',
-					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+					's2member_paypal_proxy'     => 'paypal',
+					's2member_paypal_proxy_use' => 'paypal_checkout',
 				));
+
+				//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
+				$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post);
+				if(!$return_handoff)
+				{
+					if(!headers_sent())
+						status_header(500);
+
+					echo wp_json_encode(array('error' => 'return_handoff_failed'));
+					exit();
+				}
+				$return_post['s2member_paypal_checkout_handoff'] = $return_handoff;
 
 				echo wp_json_encode(array(
 					'rtn_url'  => $return_url,
