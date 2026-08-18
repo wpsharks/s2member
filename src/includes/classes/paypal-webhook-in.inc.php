@@ -497,33 +497,45 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			}
 
 			// Proxy into existing s2Member PayPal notify handler to reuse all provisioning/eot logic.
-			$url  = add_query_arg('s2member_paypal_notify', '1', home_url('/'));
-			$post = array_merge($paypal, array(
-				's2member_paypal_proxy'              => 'paypal',
-				's2member_paypal_proxy_use'          => 'paypal_checkout_webhook',
-				's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
-			));
+			$url = add_query_arg('s2member_paypal_notify', '1', home_url('/'));
+			$notify_duplicate = false;
 
-			$r    = c_ws_plugin__s2member_utils_urls::remote($url, $post, array(
-				'timeout' => 20,
-			), true);
+			if($subscr_handled_by_webhook && !empty($subscr_done_option))
+			{
+				//260818.0603 Share the subscription Notify lock/done marker with browser confirmation so activation fallback cannot race it.
+				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $subscr_done_option, 'paypal_checkout_webhook');
+				$notify_ok = !empty($notify_result['ok']);
+				$notify_duplicate = !empty($notify_result['duplicate']);
+				$code = !empty($notify_result['code']) ? (int)$notify_result['code'] : 0;
+				$message = !empty($notify_result['message']) ? (string)$notify_result['message'] : (!empty($notify_result['error']) ? (string)$notify_result['error'] : '');
+			}
+			else
+			{
+				$post = array_merge($paypal, array(
+					's2member_paypal_proxy'              => 'paypal',
+					's2member_paypal_proxy_use'          => 'paypal_checkout_webhook',
+					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+				));
 
-			if(!is_array($r))
-				$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
+				$r = c_ws_plugin__s2member_utils_urls::remote($url, $post, array(
+					'timeout' => 20,
+				), true);
 
-			$code = !empty($r['code']) ? (int)$r['code'] : 0;
+				if(!is_array($r))
+					$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
 
-			if($code >= 200 && $code <= 299)
+				$code = !empty($r['code']) ? (int)$r['code'] : 0;
+				$message = !empty($r['message']) ? (string)$r['message'] : '';
+				$notify_ok = ($code >= 200 && $code <= 299);
+			}
+
+			if($notify_ok)
 			{
 				c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
 				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
 
 				if(!empty($txn_done_option))
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($txn_done_option);
-
-				//260401 If webhook activation had to rescue this Subscription, mark it done so later activation webhooks are ignored.
-				if($subscr_handled_by_webhook && !empty($subscr_done_option))
-					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($subscr_done_option);
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
@@ -536,7 +548,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					'txn_id'     => $txn_id ? $txn_id : $event_id,
 					'url'        => $url,
 					'code'       => $code,
-					'message'    => !empty($r['message']) ? (string)$r['message'] : '',
+					'message'    => $message,
+					'duplicate'  => $notify_duplicate,
 				));
 			}
 			else
@@ -555,8 +568,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					'txn_id'     => $txn_id ? $txn_id : $event_id,
 					'url'        => $url,
 					'code'       => $code,
-					'message'    => !empty($r['message']) ? (string)$r['message'] : '',
+					'message'    => $message,
 				));
+
+				//260818.0603 Activation fallback must remain retryable when shared fulfillment fails or is still in progress.
+				if($subscr_handled_by_webhook)
+				{
+					status_header(500);
+					exit();
+				}
 			}
 
 			status_header(200);

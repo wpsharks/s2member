@@ -1832,7 +1832,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
-				 * Sends one-time PayPal Checkout fulfillment through s2Member's existing PayPal Notify handler once.
+				 * Sends PayPal Checkout fulfillment through s2Member's existing PayPal Notify handler once.
 				 *
 				 * @since 260817
 				 *
@@ -1848,8 +1848,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(!is_array($paypal) || !$paypal || !$done_option || !is_string($done_option))
 							return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_invalid_args');
 
+						//260818.0603 This helper now coordinates one-time and subscription fulfillment markers.
 						self::dedupe_markers_cleanup('s2m_ppco_notify_cleanup_throttle', array(
 							array('prefix' => 's2m_ppco_capture_done_', 'ttl' => DAY_IN_SECONDS),
+							array('prefix' => 's2m_ppco_subscr_done_', 'ttl' => DAY_IN_SECONDS),
 							array('prefix' => 's2m_ppco_notify_lock_', 'ttl' => HOUR_IN_SECONDS),
 							array('prefix' => 's2m_ppco_capture_lock_', 'ttl' => HOUR_IN_SECONDS),
 						));
