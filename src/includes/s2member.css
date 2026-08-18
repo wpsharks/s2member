@@ -42,6 +42,31 @@ div.ws-plugin--s2member-s-badge
 }
 
 /*
+260819.0042 PayPal Checkout feedback uses one compact style across standalone buttons and Pro-Forms.
+These are basic CSS rules. You can override any of these
+through the `/style.css` file for your WordPress theme.
+*/
+span.ws-plugin--s2member-ppco-error,
+span.ws-plugin--s2member-ppco-info
+{
+	border-radius                : 2px;
+	-webkit-box-decoration-break : clone;
+	box-decoration-break         : clone;
+	color                        : #000000;
+	font-size                    : 14px;
+	line-height                  : 1.5;
+	padding                      : 2px 4px;
+}
+span.ws-plugin--s2member-ppco-error
+{
+	background : #FFD5D5;
+}
+span.ws-plugin--s2member-ppco-info
+{
+	background : #FFFFCC;
+}
+
+/*
 Button processing animation.
 These are basic CSS rules. You can override any of these
 through the `/style.css` file for your WordPress theme.
