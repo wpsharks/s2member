@@ -258,6 +258,34 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						exit();
 					}
 
+					//260818.0617 Recover the Checkout invoice from the verified PayPal event so Pro can restore prepared account state.
+					if(!empty($resource['custom_id']))
+						$paypal['invoice'] = (string)$resource['custom_id'];
+					else if($subscr_id)
+						{
+							$subscription_details = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_details($subscr_id);
+							if(empty($subscription_details['__error']) && !empty($subscription_details['custom_id']))
+								$paypal['invoice'] = (string)$subscription_details['custom_id'];
+						}
+
+					//260818.0617 Do not let incomplete activation fallback bypass invoice-keyed prepared state; PayPal can retry delivery.
+					if(empty($paypal['invoice']))
+						{
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'       => 'webhook',
+								'env_setting'=> $env_site,
+								'env_webhook'=> $env_webhook,
+								'event'      => 'subscription_activation_invoice_missing',
+								'event_id'   => $event_id,
+								'event_type' => $event_type,
+								'subscr_id'  => $subscr_id,
+							));
+
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							status_header(500);
+							exit();
+						}
+
 					$paypal['txn_type']       = 'subscr_signup'; //260401 Keep webhook activation as a fallback to the legacy signup handler only when checkout did not already handle this Subscription.
 					$paypal['payment_status'] = 'Completed';
 

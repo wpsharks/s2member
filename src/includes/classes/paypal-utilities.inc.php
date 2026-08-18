@@ -1883,10 +1883,27 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										return array_merge(array('ok' => true, 'processed' => false, 'duplicate' => true, 'error' => ''), is_array($cached_result) ? $cached_result : array());
 									}
 
+								//260818.0617 Allow Pro to prepare account-specific fulfillment inside the shared Notify lock and enrich fallback context.
+								$notify_context = apply_filters('ws_plugin__s2member_paypal_checkout_notify_context', array(
+									'paypal'    => $paypal,
+									'proxy_use' => (string)$proxy_use,
+									'extra'     => is_array($extra) ? $extra : array(),
+								), $done_option);
+
+								if(is_wp_error($notify_context))
+									return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_context_failed', 'context_error' => (string)$notify_context->get_error_code());
+
+								if(!is_array($notify_context) || empty($notify_context['paypal']) || !is_array($notify_context['paypal']))
+									return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_context_invalid');
+
+								$paypal    = $notify_context['paypal'];
+								$proxy_use = isset($notify_context['proxy_use']) ? (string)$notify_context['proxy_use'] : (string)$proxy_use;
+								$extra     = !empty($notify_context['extra']) && is_array($notify_context['extra']) ? $notify_context['extra'] : array();
+
 								$notify_url = home_url('/?s2member_paypal_notify=1');
-								$notify_post = array_merge($paypal, is_array($extra) ? $extra : array(), array(
+								$notify_post = array_merge($paypal, $extra, array(
 									's2member_paypal_proxy'              => 'paypal',
-									's2member_paypal_proxy_use'          => (string)$proxy_use,
+									's2member_paypal_proxy_use'          => $proxy_use,
 									's2member_paypal_proxy_verification' => self::paypal_proxy_key_gen(),
 								));
 								$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
