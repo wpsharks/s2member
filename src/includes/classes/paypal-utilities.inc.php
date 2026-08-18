@@ -1920,6 +1920,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										$result = array('code' => $code, 'message' => $message, 'body' => $body);
 										set_transient($result_transient, $result, DAY_IN_SECONDS); // Preserve the Notify result for safe duplicate/retry returns, including future Pro success URLs.
 										self::dedupe_done_mark($done_option);
+
+										//260818.1752 Run account-specific post-Notify work only after fulfillment is durably marked complete.
+										do_action('ws_plugin__s2member_paypal_checkout_notify_processed', $notify_context, $done_option, $result);
+
 										return array_merge(array('ok' => true, 'processed' => true, 'duplicate' => false, 'error' => ''), $result);
 									}
 
