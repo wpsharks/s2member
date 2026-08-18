@@ -192,7 +192,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<a href="https://s2member.com/r/paypal/" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/src/images/paypal-pp-logo-200px.png" class="ws-menu-page-right s2m-ppco-paypal-logo" style="width:250px; max-width:25%; height:auto; margin:0 20px 20px 0;" alt="PayPal" /></a>'."\n";
 
 				echo '<div class="ws-menu-page-notice ws-menu-page-notice-info">'."\n";
-				echo '<p>'.esc_html__('When enabled, existing s2Member PayPal Button shortcodes are powered by PayPal Checkout without requiring shortcode edits. If disabled, s2Member continues using PayPal Standard.', 's2member').'</p>'."\n";
+				//260818.2340 PayPal Checkout now powers both Framework buttons and the PayPal option in s2Member Pro-Forms without shortcode edits.
+				echo '<p>'.esc_html__('When enabled, existing s2Member PayPal Button shortcodes and s2Member Pro-Forms that offer PayPal are powered by PayPal Checkout without requiring shortcode edits. If disabled, they continue using their existing PayPal Standard or Express Checkout flow.', 's2member').'</p>'."\n";
 
 				echo '<p style="margin:0 0 6px 0;"><strong>'.esc_html__('Quick Setup (Live or Sandbox)', 's2member').'</strong></p>'."\n";
 				echo '<ol style="margin:0 0 0 20px;">'."\n";
@@ -214,7 +215,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '</div>'."\n";
 
-				echo '<p><em>'.esc_html__('Leave these fields blank to continue using PayPal Standard.', 's2member').'</em></p>'."\n";
+				echo '<p><em>'.esc_html__('Leave these fields blank to continue using your existing PayPal Standard and Express Checkout integrations.', 's2member').'</em></p>'."\n";
 
 				$ppco_https_ready  = true;
 				$ppco_https_reason = '';
@@ -271,7 +272,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-0" value="0" onclick="window.s2mPpcoApplyEnvCues&&window.s2mPpcoApplyEnvCues();"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-1" value="1" onclick="window.s2mPpcoApplyEnvCues&&window.s2mPpcoApplyEnvCues();"'.((!$ppco_https_ready) ? ' disabled="disabled"' : '').(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-1">Yes, enable PayPal Checkout.</label><br />'."\n";
-				echo '<em>Only enable this after you have configured PayPal Checkout credentials below. If disabled, s2Member continues using PayPal Standard.</em>'."\n";
+				echo '<em>Only enable this after you have configured PayPal Checkout credentials below. If disabled, s2Member continues using the existing PayPal Standard and Express Checkout integrations.</em>'."\n";
 
 				if(!$ppco_https_ready)
 					echo '<br /><span class="ws-menu-page-error">'.esc_html__('Disabled: PayPal Checkout requires HTTPS (SSL) for webhooks. Fix HTTPS for this domain, then enable PayPal Checkout.', 's2member').'</span>'."\n";
