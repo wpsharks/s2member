@@ -234,9 +234,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						exit();
 					}
 
-					$payer_email = !empty($capture['payer']['email_address']) ? (string)$capture['payer']['email_address'] : '';
-					$first_name  = !empty($capture['payer']['name']['given_name']) ? (string)$capture['payer']['name']['given_name'] : '';
-					$last_name   = !empty($capture['payer']['name']['surname']) ? (string)$capture['payer']['name']['surname'] : '';
+					//260818.0126 Keep submitted Pro-Form contact details for pro-emails; they may differ from the payer's PayPal profile.
+					$is_pro_form = (!empty($token['s2member_paypal_proxy_use']) && (string)$token['s2member_paypal_proxy_use'] === 'pro-emails');
+					$payer_email = ($is_pro_form && isset($token['payer_email'])) ? sanitize_email((string)$token['payer_email']) : (!empty($capture['payer']['email_address']) ? (string)$capture['payer']['email_address'] : '');
+					$first_name  = ($is_pro_form && isset($token['first_name'])) ? (string)$token['first_name'] : (!empty($capture['payer']['name']['given_name']) ? (string)$capture['payer']['name']['given_name'] : '');
+					$last_name   = ($is_pro_form && isset($token['last_name'])) ? (string)$token['last_name'] : (!empty($capture['payer']['name']['surname']) ? (string)$capture['payer']['name']['surname'] : '');
 
 					$pu_amount   = !empty($capture['purchase_units'][0]['payments']['captures'][0]['amount']['value']) ? (string)$capture['purchase_units'][0]['payments']['captures'][0]['amount']['value'] : '';
 					$pu_cc       = !empty($capture['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code']) ? (string)$capture['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'] : '';
@@ -279,12 +281,25 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'last_name'      => $last_name,
 					);
 
+					//260817.2119 Preserve Pro-Form tax in the simulated IPN so existing fulfillment and email logic receives the same calculated values as the legacy Pro flow.
+					if(isset($token['tax']))
+						$paypal['tax'] = (string)$token['tax'];
+
 					$is_independent_ccaps_sale = (strpos((string)$token['item_number'], '*:') === 0);
 					$is_specific_post_page_sale = (strpos((string)$token['item_number'], 'sp:') === 0);
 					$can_cancel_old_subscr = (!$is_independent_ccaps_sale && !$is_specific_post_page_sale); //260407 Only membership replacement-style PPCO purchases should cancel an existing recurring subscription here.
 
+					//260817.2119 Keep normal Checkout defaults while allowing an encrypted Pro-Form token to request its existing email, coupon, and success-URL handling during the internal Notify call.
+					$proxy_use = !empty($token['s2member_paypal_proxy_use']) ? (string)$token['s2member_paypal_proxy_use'] : 'paypal_checkout';
+					$notify_extra = array();
+
+					if(!empty($token['s2member_paypal_proxy_coupon']) && is_array($token['s2member_paypal_proxy_coupon']))
+						$notify_extra['s2member_paypal_proxy_coupon'] = $token['s2member_paypal_proxy_coupon'];
+					if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+						$notify_extra['s2member_paypal_proxy_return_url'] = (string)$token['s2member_paypal_proxy_return_url'];
+
 					$notify_done_option = 's2m_ppco_capture_done_'.md5($pu_cap_id);
-					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option);
+					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option, $proxy_use, $notify_extra);
 
 					if(empty($notify_result['ok']))
 					{
@@ -309,8 +324,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 					$return_post = array_merge($paypal, array(
 						's2member_paypal_proxy'     => 'paypal',
-						's2member_paypal_proxy_use' => 'paypal_checkout',
+						's2member_paypal_proxy_use' => $proxy_use,
 					));
+
+					//260817 Carry the already-resolved Pro-Form success URL inside the signed browser-return package.
+					if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+						$return_post['s2member_paypal_proxy_return_url'] = !empty($notify_result['body']) ? trim((string)$notify_result['body']) : '';
 
 					//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
 					$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post);

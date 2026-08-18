@@ -1519,6 +1519,16 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(strlen($item_sku) > 127)
 							$item_sku = substr($item_sku, 0, 127);
 
+						//260817.2119 Keep normal Checkout pricing unchanged; only split subtotal/tax when a Pro-Form token supplies a breakdown that reconciles exactly to the charged total.
+						$item_amount = $amount;
+						$tax_amount  = '';
+						if(isset($token['sub_total'], $token['tax']) && is_numeric($token['sub_total']) && is_numeric($token['tax'])
+						&& number_format((float)$token['sub_total'] + (float)$token['tax'], 2, '.', '') === number_format((float)$amount, 2, '.', ''))
+						{
+							$item_amount = (string)$token['sub_total'];
+							$tax_amount  = (string)$token['tax'];
+						}
+
 						$purchase_unit = array(
 							'invoice_id' => $invoice,
 							'amount'     => array(
@@ -1527,7 +1537,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								'breakdown'     => array(
 									'item_total' => array(
 										'currency_code' => $cc,
-										'value'         => $amount,
+										'value'         => $item_amount,
 									),
 								),
 							),
@@ -1538,11 +1548,23 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 									'quantity'    => '1',
 									'unit_amount' => array(
 										'currency_code' => $cc,
-										'value'         => $amount,
+										'value'         => $item_amount,
 									),
 								),
 							),
 						);
+
+						if($tax_amount !== '' && (float)$tax_amount > 0)
+						{
+							$purchase_unit['amount']['breakdown']['tax_total'] = array(
+								'currency_code' => $cc,
+								'value'         => $tax_amount,
+							);
+							$purchase_unit['items'][0]['tax'] = array(
+								'currency_code' => $cc,
+								'value'         => $tax_amount,
+							);
+						}
 
 						if($item_sku)
 							$purchase_unit['items'][0]['sku'] = $item_sku;
