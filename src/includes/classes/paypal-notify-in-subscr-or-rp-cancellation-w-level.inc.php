@@ -45,11 +45,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 						&& !(preg_match ("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]) && !empty($paypal["initial_payment_status"]) && preg_match ("/^failed$/i", $paypal["initial_payment_status"]))
 						&& (!empty($paypal["subscr_id"]) || ($paypal["subscr_id"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id ($paypal))))
 							{
-								//260517 Validate trusted PPCO proxy user before fallback signup vars lookup.
+								//260819.0417 Any verified local PayPal proxy may provide a bound user/next billing time; email routing remains independent.
 								$proxy_user_id = 0;
 								$proxy_next_billing_time = 0;
 								if(!empty($paypal["proxy_verified"]) && $paypal["proxy_verified"] === "paypal"
-								&& !empty($_REQUEST["s2member_paypal_proxy_use"]) && $_REQUEST["s2member_paypal_proxy_use"] === "paypal_checkout"
 								&& !empty($paypal["proxy_user_id"]))
 									{
 										$_proxy_user_id = (int)$paypal["proxy_user_id"];

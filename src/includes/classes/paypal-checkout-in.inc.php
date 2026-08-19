@@ -795,45 +795,35 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				if(!$reason)
 					$reason = 'Cancelled by subscriber.';
 
-				//260517 Get PayPal Checkout subscription details before cancelling locally.
-				$subscription = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_details($subscr_id);
-				$subscription_status = !empty($subscription['status']) ? strtoupper((string)$subscription['status']) : '';
-				$next_billing_time = !empty($subscription['billing_info']['next_billing_time']) ? (string)$subscription['billing_info']['next_billing_time'] : '';
-				$next_billing_ts = ($next_billing_time) ? strtotime($next_billing_time) : 0;
+				//260819.0417 Resolve the active subscription through whichever configured PayPal API family owns it.
+				$ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id);
+				$ipn_signup_vars = (is_array($ipn_signup_vars) && !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id) ? $ipn_signup_vars : array();
 
-				if(!empty($subscription['__error']) || empty($subscription['id']) || (string)$subscription['id'] !== (string)$subscr_id || $subscription_status !== 'ACTIVE' || !$next_billing_ts || $next_billing_ts <= time())
-				{
-					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-						'ppco'       => 'checkout',
-						'env_setting'=> $env_setting,
-						'event'      => 'cancel_subscription_details_unusable',
-						'user_id'    => $user_id,
-						'subscr_id'  => $subscr_id,
-						'status'     => $subscription_status,
-						'next'       => $next_billing_time,
-						'code'       => !empty($subscription['__code']) ? (int)$subscription['__code'] : 0,
-					));
+				$next_billing_time = '';
+				$eot = c_ws_plugin__s2member_utils_users::get_user_eot($user_id, TRUE, 'next');
+				if(is_array($eot) && !empty($eot['type']) && $eot['type'] === 'next' && !empty($eot['time']) && (int)$eot['time'] > time())
+					$next_billing_time = gmdate('Y-m-d\TH:i:s\Z', (int)$eot['time']);
 
-					echo wp_json_encode(array('error' => 'subscription_details_unusable'));
-					exit();
-				}
-
-				$r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_cancel($subscr_id, $reason);
-
-				$code = !empty($r['code']) ? (int)$r['code'] : 0;
-				$body = !empty($r['body']) ? (string)$r['body'] : '';
+				$cancelled = c_ws_plugin__s2member_utilities::cancel_gateway_subscription(
+					'paypal',
+					$subscr_id,
+					(string)get_user_option('s2member_subscr_baid', $user_id),
+					(string)get_user_option('s2member_subscr_cid', $user_id),
+					$ipn_signup_vars,
+					TRUE,
+					$reason
+				);
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-					'ppco'     => 'checkout',
+					'ppco'        => 'checkout',
 					'env_setting' => $env_setting,
-					'event'    => 'cancel_subscription_response',
-					'user_id'  => $user_id,
-					'subscr_id'=> $subscr_id,
-					'code'     => $code,
-					'body'     => $body,
+					'event'       => 'cancel_subscription_response',
+					'user_id'     => $user_id,
+					'subscr_id'   => $subscr_id,
+					'accepted'    => $cancelled ? 1 : 0,
 				));
 
-				if($code === 204 || ($code >= 200 && $code <= 299))
+				if($cancelled)
 				{
 					// Immediately feed s2Member's existing cancel handler (webhooks may be missing in MVP sites).
 					$paypal = array(
@@ -858,8 +848,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					);
 
 					//260517 Enrich with stored signup vars so legacy cancel handler can match and compute EOT.
-					if(($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id)) && is_array($ipn_signup_vars)
-							&& !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id)
+					if($ipn_signup_vars)
 					{
 						if(!empty($ipn_signup_vars['item_number']))
 							$paypal['item_number'] = (string)$ipn_signup_vars['item_number'];
