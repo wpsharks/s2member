@@ -612,8 +612,15 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 								continue;
 							}
 
+							//260821.0057 Carry EOT details forward only when they describe this exact timestamp; stale provenance from an older EOT must never affect a later expiration.
+							$auto_eot_details = get_user_option('s2member_auto_eot_details', $user_id);
+							if(!is_array($auto_eot_details) || empty($auto_eot_details['time']) || (int)$auto_eot_details['time'] !== $auto_eot_time)
+								$auto_eot_details = array();
+
 							delete_user_option($user_id, 's2member_last_auto_eot_time');
+							delete_user_option($user_id, 's2member_last_auto_eot_details');
 							delete_user_option($user_id, 's2member_auto_eot_time');
+							delete_user_option($user_id, 's2member_auto_eot_details');
 
 							if(!$user->has_cap('administrator') /* Do NOT process Administrator accounts. */)
 							{
@@ -661,12 +668,17 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									delete_user_option($user_id, 's2member_first_payment_txn_id');
 									delete_user_option($user_id, 's2member_last_payment_time');
 									delete_user_option($user_id, 's2member_last_auto_eot_time');
+									delete_user_option($user_id, 's2member_last_auto_eot_details');
 									delete_user_option($user_id, 's2member_auto_eot_time');
+									delete_user_option($user_id, 's2member_auto_eot_details');
 
 									delete_user_option($user_id, 's2member_file_download_access_log');
 									delete_user_option($user_id, 's2member_authnet_payment_failures');
 
 									update_user_option($user_id, 's2member_last_auto_eot_time', $auto_eot_time);
+									//260821.0057 Preserve only matching provenance (e.g., refund/reversal) alongside the archived EOT.
+									if($auto_eot_details)
+										update_user_option($user_id, 's2member_last_auto_eot_details', $auto_eot_details);
 
 									c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
 									if($subscr_gateway && $subscr_id) // Also note the Paid Subscr. Gateway/ID so there is a reference left behind here.

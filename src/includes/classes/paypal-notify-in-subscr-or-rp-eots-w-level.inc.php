@@ -145,12 +145,18 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										delete_user_option($user_id, 's2member_first_payment_txn_id');
 										delete_user_option($user_id, 's2member_last_payment_time');
 										delete_user_option($user_id, 's2member_last_auto_eot_time');
+										delete_user_option($user_id, 's2member_last_auto_eot_details');
 										delete_user_option($user_id, 's2member_auto_eot_time');
+										delete_user_option($user_id, 's2member_auto_eot_details');
 
 										delete_user_option($user_id, 's2member_file_download_access_log');
 										delete_user_option($user_id, 's2member_authnet_payment_failures');
 
-										update_user_option($user_id, 's2member_last_auto_eot_time', time());
+										$last_auto_eot_time = time();
+										update_user_option($user_id, 's2member_last_auto_eot_time', $last_auto_eot_time);
+										//260821.0057 Post-EOT renewal reminders must distinguish an ordinary expiration from access terminated immediately by a refund, reversal, or chargeback.
+										if($is_refund_or_reversal)
+											update_user_option($user_id, 's2member_last_auto_eot_details', array('time' => $last_auto_eot_time, 'source' => 'refund_reversal', 'updated_at' => $last_auto_eot_time));
 
 										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
 										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$paypal['subscr_gateway'].' → '.$paypal['subscr_id']);
@@ -276,6 +282,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 									$processing = $during = TRUE; // Yes, we ARE processing this.
 
 									update_user_option($user_id, 's2member_auto_eot_time', ($auto_eot_time = strtotime('now')));
+									delete_user_option($user_id, 's2member_auto_eot_details');
+									//260821.0057 Keep the refund/reversal reason attached to this exact pending EOT so it survives until Auto-EOT processing is re-enabled.
+									if($is_refund_or_reversal)
+										update_user_option($user_id, 's2member_auto_eot_details', array('time' => $auto_eot_time, 'source' => 'refund_reversal', 'updated_at' => time()));
 
 									$paypal['s2member_log'][] = 'Auto-EOT is currently disabled. Skipping EOT (demote|delete), for now.';
 									$paypal['s2member_log'][] = 'Recording the Auto-EOT Time for this Member\'s account: '.date('D M j, Y g:i a T', $auto_eot_time);
@@ -297,6 +307,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 								/* We assume the last payment was today, because this is how newer PayPal accounts function with respect to EOT handling.
 								Newer PayPal accounts ( i.e., Subscription IDs starting with `I-`, will have their EOT triggered upon the last payment. */
 								update_user_option($user_id, 's2member_auto_eot_time', $auto_eot_time); // s2Member will follow-up on this later.
+								delete_user_option($user_id, 's2member_auto_eot_details'); //260821.0057 A normal delayed expiration supersedes any stale provenance left by an older EOT.
 
 								$paypal['s2member_log'][] = 'Auto-EOT Time for this account (delayed), set to: '.date('D M j, Y g:i a T', $auto_eot_time);
 
