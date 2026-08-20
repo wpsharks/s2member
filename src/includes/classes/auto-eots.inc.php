@@ -46,14 +46,60 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			}
 			else if(function_exists('wp_cron') /* Otherwise, we can schedule? */)
 			{
-				wp_schedule_event(time(), 'every10m', 'ws_plugin__s2member_auto_eot_system__schedule');
+				//260819.0613 Return WordPress' real scheduling result so a rejected/failed cron event is not reported as successful.
+				$scheduled = wp_schedule_event(time(), 'every10m', 'ws_plugin__s2member_auto_eot_system__schedule');
 
-				return apply_filters('ws_plugin__s2member_add_auto_eot_system', TRUE, get_defined_vars());
+				return apply_filters('ws_plugin__s2member_add_auto_eot_system', (bool)$scheduled, get_defined_vars());
 			}
 			else // Otherwise, it would appear that WP-Cron is not available.
 			{
 				return apply_filters('ws_plugin__s2member_add_auto_eot_system', FALSE, get_defined_vars());
 			}
+		}
+
+		/**
+		 * Recreates a missing recurring Auto-EOT event while preserving any queued catch-up pass.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260819.0613
+		 *
+		 * @return bool True when no repair is needed or the recurring event exists after repair; otherwise false.
+		 */
+		public static function ensure_auto_eot_system()
+		{
+			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled']) || (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled'] !== '1')
+				return TRUE;
+
+			if(!function_exists('wp_cron'))
+				return FALSE;
+
+			if(wp_next_scheduled('ws_plugin__s2member_auto_eot_system__schedule'))
+				return TRUE;
+
+			//260820.0149 Preserve a pending catch-up pass because add_auto_eot_system() clears all Auto-EOT schedules before rebuilding the recurring one.
+			$continuation_at = wp_next_scheduled('ws_plugin__s2member_auto_eot_system__continuation');
+			$scheduled = c_ws_plugin__s2member_auto_eots::add_auto_eot_system();
+			if($scheduled && $continuation_at && !wp_next_scheduled('ws_plugin__s2member_auto_eot_system__continuation'))
+				wp_schedule_single_event(max(time() + 1, (int)$continuation_at), 'ws_plugin__s2member_auto_eot_system__continuation');
+
+			//260820.0149 Retain self-heal results for diagnostics, but throttle repeated failure writes on sites where WordPress rejects scheduling every request.
+			$state = get_option('ws_plugin__s2member_auto_eot_state');
+			$state = is_array($state) ? $state : array();
+			if($scheduled)
+			{
+				$state['last_schedule_repaired_at'] = time();
+				$state['schedule_failure_count'] = 0;
+				update_option('ws_plugin__s2member_auto_eot_state', $state, FALSE);
+			}
+			else if(empty($state['last_schedule_failure_at']) || time() - (int)$state['last_schedule_failure_at'] >= 300)
+			{
+				$state['last_schedule_failure_at'] = time();
+				$state['schedule_failure_count'] = !empty($state['schedule_failure_count']) ? (int)$state['schedule_failure_count'] + 1 : 1;
+				update_option('ws_plugin__s2member_auto_eot_state', $state, FALSE);
+			}
+			delete_transient('ws_plugin__s2member_auto_eot_health');
+
+			return $scheduled;
 		}
 
 		/**
@@ -71,6 +117,8 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			if(function_exists('wp_cron') /* Is `wp_cron()` even available? */)
 			{
 				wp_clear_scheduled_hook('ws_plugin__s2member_auto_eot_system__schedule' /* Since v3.0.3. */);
+				wp_clear_scheduled_hook('ws_plugin__s2member_auto_eot_system__continuation'); //260820.0056 Remove any pending catch-up pass when Auto-EOT scheduling is deleted.
+				delete_transient('ws_plugin__s2member_auto_eot_health'); //260820.0149 Invalidate schedule-dependent health data.
 
 				return apply_filters('ws_plugin__s2member_delete_auto_eot_system', TRUE, get_defined_vars());
 			}
@@ -81,25 +129,300 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 		}
 
 		/**
+		 * Determines a safe wall-clock budget for one Auto-EOT pass.
+		 *
+		 * Automatic mode leaves more headroom in shared WP-Cron than in a dedicated external-cron request.
+		 * Custom mode is still bounded below PHP's finite execution limit; the developer filter remains final.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260820.0056
+		 *
+		 * @param bool|null $is_external_cron Optional explicit execution context; null auto-detects the external-cron endpoint.
+		 *
+		 * @return float Runtime budget in seconds.
+		 */
+		public static function auto_eot_system_runtime_budget($is_external_cron = NULL)
+		{
+			$php_max_execution_time = (int)ini_get('max_execution_time');
+			if($is_external_cron === NULL)
+				$is_external_cron = !empty($_GET['s2member_auto_eot_system_via_cron']);
+			else
+				$is_external_cron = (bool)$is_external_cron;
+
+			$automatic_budget = $php_max_execution_time > 0 ? floor($php_max_execution_time * ($is_external_cron ? 0.80 : 0.60)) : ($is_external_cron ? 60 : 30);
+
+			//260820.0306 Custom runtime may raise/lower the automatic target, but keep 10% PHP headroom unless a developer deliberately overrides the final filter.
+			if((string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_runtime_mode'] === 'custom')
+			{
+				$runtime_budget = max(1, (float)$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_runtime_custom']);
+				if($php_max_execution_time > 0)
+					$runtime_budget = min($runtime_budget, max(1, floor($php_max_execution_time * 0.90)));
+			}
+			else
+				$runtime_budget = max(1, $automatic_budget);
+
+			$runtime_budget = (float)apply_filters('ws_plugin__s2member_auto_eot_system_runtime', $runtime_budget, get_defined_vars());
+
+			return max(1, $runtime_budget);
+		}
+
+		/**
+		 * Describes legacy Auto-EOT per-process filters for diagnostics.
+		 *
+		 * This never executes the legacy filter. It only reports hooked callbacks and any effective cap
+		 * recorded by the last Auto-EOT run, so an inherited customization is visible to site owners.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260820.0306
+		 *
+		 * @return array Legacy filter information.
+		 */
+		public static function auto_eot_system_legacy_cap_info()
+		{
+			global $wp_filter;
+
+			$hook = 'ws_plugin__s2member_auto_eot_system_per_process';
+			$state = get_option('ws_plugin__s2member_auto_eot_state');
+			$state = is_array($state) ? $state : array();
+			$info = array(
+				'detected'             => has_filter($hook) !== FALSE,
+				'sources'              => array(),
+				'last_hard_cap'        => isset($state['last_hard_cap']) && $state['last_hard_cap'] !== NULL ? (int)$state['last_hard_cap'] : NULL,
+				'last_hard_cap_source' => !empty($state['last_hard_cap_source']) ? (string)$state['last_hard_cap_source'] : '',
+				'estimated_additional' => !empty($state['legacy_cap_estimated_additional']) ? (int)$state['legacy_cap_estimated_additional'] : 0,
+				'last_stop_reason'     => !empty($state['last_stop_reason']) ? (string)$state['last_stop_reason'] : '',
+			);
+
+			if(!$info['detected'] || empty($wp_filter[$hook]) || !is_object($wp_filter[$hook]) || empty($wp_filter[$hook]->callbacks))
+				return $info;
+
+			//260820.0306 Reflection is best-effort diagnostics only; unusual callback forms still count as detected even when their source cannot be identified.
+			foreach($wp_filter[$hook]->callbacks as $priority => $callbacks)
+			{
+				foreach((array)$callbacks as $callback_data)
+				{
+					if(empty($callback_data['function']))
+						continue;
+
+					$callback = $callback_data['function'];
+					$label = '';
+					$reflection = NULL;
+
+					try
+					{
+						if(is_string($callback))
+						{
+							$label = $callback;
+							if(strpos($callback, '::') !== FALSE)
+							{
+								$_callback_parts = explode('::', $callback, 2);
+								$reflection = new ReflectionMethod($_callback_parts[0], $_callback_parts[1]);
+								unset($_callback_parts);
+							}
+							else
+								$reflection = new ReflectionFunction($callback);
+						}
+						else if(is_array($callback) && count($callback) === 2)
+						{
+							$label = (is_object($callback[0]) ? get_class($callback[0]) : (string)$callback[0]).'::'.$callback[1];
+							$reflection = new ReflectionMethod($callback[0], $callback[1]);
+						}
+						else if($callback instanceof Closure)
+						{
+							$label = 'Closure';
+							$reflection = new ReflectionFunction($callback);
+						}
+						else if(is_object($callback) && is_callable($callback))
+						{
+							$label = get_class($callback).'::__invoke';
+							$reflection = new ReflectionMethod($callback, '__invoke');
+						}
+					}
+					catch(ReflectionException $e)
+					{
+						$reflection = NULL;
+					}
+
+					$file = ($reflection && $reflection->getFileName()) ? wp_normalize_path($reflection->getFileName()) : '';
+					if($file && strpos($file, wp_normalize_path(ABSPATH)) === 0)
+						$file = ltrim(substr($file, strlen(wp_normalize_path(ABSPATH))), '/');
+
+					$info['sources'][] = array(
+						'priority' => (int)$priority,
+						'callback' => $label,
+						'file'     => $file,
+						'line'     => ($reflection && $reflection->getStartLine()) ? (int)$reflection->getStartLine() : 0,
+					);
+				}
+			}
+			return $info;
+		}
+
+		/**
+		 * Returns a cached health snapshot for the Auto-EOT system.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260820.0149
+		 *
+		 * @param bool $force_refresh Force a fresh usermeta/schedule check.
+		 *
+		 * @return array Auto-EOT health information for diagnostics and UI.
+		 */
+		public static function auto_eot_system_health($force_refresh = FALSE)
+		{
+			global $wpdb;
+			/** @var $wpdb \wpdb */
+
+			$cache_key = 'ws_plugin__s2member_auto_eot_health';
+			if(!$force_refresh && is_array($health = get_transient($cache_key)))
+				return $health;
+
+			$now = time();
+			$mode = (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled'];
+			$state = get_option('ws_plugin__s2member_auto_eot_state');
+			$state = is_array($state) ? $state : array();
+			$lock = get_option('ws_plugin__s2member_auto_eot_lock');
+			$lock = is_array($lock) ? $lock : array();
+			$meta_key = $wpdb->prefix.'s2member_auto_eot_time';
+
+			//260820.0149 One exact-meta-key aggregate supplies both pending volume and oldest overdue age without loading EOT rows into PHP.
+			$pending = $wpdb->get_row($wpdb->prepare("SELECT COUNT(*) AS `pending_count`, MIN(CAST(`meta_value` AS UNSIGNED)) AS `oldest_due_at` FROM `".$wpdb->usermeta."` WHERE `meta_key` = %s AND CAST(`meta_value` AS UNSIGNED) > 0 AND CAST(`meta_value` AS UNSIGNED) <= %d", $meta_key, $now));
+			$pending_count = ($pending && !empty($pending->pending_count)) ? (int)$pending->pending_count : 0;
+			$oldest_due_at = ($pending && !empty($pending->oldest_due_at)) ? (int)$pending->oldest_due_at : 0;
+			$oldest_overdue_seconds = $oldest_due_at ? max(0, $now - $oldest_due_at) : 0;
+
+			$recurring_at = ($mode === '1' && function_exists('wp_cron')) ? wp_next_scheduled('ws_plugin__s2member_auto_eot_system__schedule') : FALSE;
+			$continuation_at = ($mode === '1' && function_exists('wp_cron')) ? wp_next_scheduled('ws_plugin__s2member_auto_eot_system__continuation') : FALSE;
+			$issues = array();
+			$critical = FALSE;
+
+			//260820.0149 Escalate scheduler failures independently of pending EOTs so a broken cron can be noticed before months of expirations accumulate.
+			if($mode === '1')
+			{
+				if(!function_exists('wp_cron') || !$recurring_at)
+					$issues['cron_missing'] = $critical = TRUE;
+				else if((int)$recurring_at < $now - HOUR_IN_SECONDS)
+					$issues['cron_overdue'] = $critical = TRUE;
+			}
+			else if($mode === '2' && !empty($state['last_external_completed_at']) && $now - (int)$state['last_external_completed_at'] >= 2 * HOUR_IN_SECONDS)
+				$issues['external_cron_stale'] = $critical = TRUE;
+
+			if(($mode === '1' || $mode === '2') && $pending_count)
+			{
+				if($oldest_overdue_seconds >= 2 * HOUR_IN_SECONDS)
+					$issues['eot_overdue'] = $critical = TRUE;
+				else if($oldest_overdue_seconds >= 30 * MINUTE_IN_SECONDS)
+					$issues['eot_delayed'] = TRUE;
+			}
+
+			$consecutive_abandoned = !empty($state['consecutive_abandoned_runs']) ? (int)$state['consecutive_abandoned_runs'] : 0;
+			if(($mode === '1' || $mode === '2') && $consecutive_abandoned >= 2)
+				$issues['repeated_abandoned'] = $critical = TRUE;
+			else if(($mode === '1' || $mode === '2') && $consecutive_abandoned === 1)
+				$issues['abandoned'] = TRUE;
+
+			$health = array(
+				'generated_at'               => $now,
+				'mode'                       => $mode,
+				'status'                     => !$mode ? 'disabled' : ($critical ? 'error' : ($issues ? 'attention' : 'healthy')),
+				'needs_admin_notice'         => $critical ? 1 : 0,
+				'issues'                     => array_keys($issues),
+				'pending_count'              => $pending_count,
+				'oldest_due_at'              => $oldest_due_at,
+				'oldest_overdue_seconds'     => $oldest_overdue_seconds,
+				'recurring_at'               => $recurring_at ? (int)$recurring_at : 0,
+				'continuation_at'            => $continuation_at ? (int)$continuation_at : 0,
+				'is_running'                 => !empty($lock['heartbeat_at']) ? 1 : 0,
+				'last_started_at'            => !empty($state['last_started_at']) ? (int)$state['last_started_at'] : 0,
+				'last_completed_at'          => !empty($state['last_completed_at']) ? (int)$state['last_completed_at'] : 0,
+				'last_runtime'               => isset($state['last_runtime']) ? (float)$state['last_runtime'] : 0.0,
+				'last_processed'             => isset($state['last_processed']) ? (int)$state['last_processed'] : 0,
+				'last_stop_reason'           => !empty($state['last_stop_reason']) ? (string)$state['last_stop_reason'] : '',
+				'last_abandoned_at'          => !empty($state['last_abandoned_at']) ? (int)$state['last_abandoned_at'] : 0,
+				'consecutive_abandoned_runs' => $consecutive_abandoned,
+				'last_schedule_failure_at'   => !empty($state['last_schedule_failure_at']) ? (int)$state['last_schedule_failure_at'] : 0,
+				'schedule_failure_count'     => !empty($state['schedule_failure_count']) ? (int)$state['schedule_failure_count'] : 0,
+				'last_external_completed_at' => !empty($state['last_external_completed_at']) ? (int)$state['last_external_completed_at'] : 0,
+			);
+			$health = apply_filters('ws_plugin__s2member_auto_eot_system_health', $health, get_defined_vars());
+
+			//260820.0149 Cache the admin-facing aggregate briefly; processing itself never relies on this snapshot.
+			set_transient($cache_key, $health, 5 * MINUTE_IN_SECONDS);
+
+			return $health;
+		}
+
+		/**
+		 * Displays a site-wide administrative warning when Auto-EOT health becomes materially unsafe.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260820.0149
+		 *
+		 * @return null
+		 */
+		public static function auto_eot_system_admin_notice()
+		{
+			if(!is_admin() || !current_user_can('manage_options'))
+				return;
+
+			$health = self::auto_eot_system_health();
+			if(empty($health['needs_admin_notice']))
+				return;
+
+			$reasons = array();
+			if(in_array('cron_missing', $health['issues'], TRUE))
+				$reasons[] = 'The recurring WP-Cron event is missing and s2Member could not restore it.';
+			if(in_array('cron_overdue', $health['issues'], TRUE))
+				$reasons[] = 'The recurring WP-Cron event is more than an hour overdue.';
+			if(in_array('external_cron_stale', $health['issues'], TRUE))
+				$reasons[] = 'The configured external cron has not completed an Auto-EOT pass in more than two hours.';
+			if(in_array('eot_overdue', $health['issues'], TRUE))
+				$reasons[] = number_format_i18n($health['pending_count']).' EOT'.($health['pending_count'] === 1 ? ' is' : 's are').' pending; the oldest has been overdue for '.human_time_diff($health['oldest_due_at'], time()).'.';
+			if(in_array('repeated_abandoned', $health['issues'], TRUE))
+				$reasons[] = number_format_i18n($health['consecutive_abandoned_runs']).' consecutive Auto-EOT workers ended without reaching normal completion.';
+
+			$settings_url = admin_url('/admin.php?page=ws-plugin--s2member-paypal-ops').'#ws-plugin--s2member-auto-eot-system-enabled';
+			$notice = '<strong>s2Member Auto-EOT needs attention.</strong> '.esc_html(implode(' ', $reasons)).' <a href="'.esc_url($settings_url).'">Review Automatic EOT settings</a>.';
+			c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
+		}
+
+		/**
+		 * Runs an Auto-EOT catch-up continuation.
+		 *
+		 * Catch-up passes drain overdue EOTs promptly while remaining separate from the historical
+		 * collective after-hook, so Pro reminder/gateway polling is not multiplied during catch-up.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260820.0056
+		 *
+		 * @return null
+		 */
+		public static function auto_eot_system_continuation()
+		{
+			self::auto_eot_system(10, TRUE);
+		}
+
+
+		/**
 		 * Processed by WP_Cron; this handles Auto-EOTs *(EOT = End Of Term)*.
 		 *
-		 * If you have a HUGE userbase, increase the max EOTs per process.
-		 * But NOTE, this runs ``$per_process`` *(per Blog)* on a Multisite Network.
-		 * To increase, use: ``add_filter ('ws_plugin__s2member_auto_eot_system_per_process');``.
+		 * Normal processing is runtime-adaptive. The historical `$per_process` argument/filter remains
+		 * available as a legacy hard item cap when a caller supplies it explicitly or a filter is attached.
 		 *
 		 * This function makes an important Hook available: `ws_plugin__s2member_after_auto_eot_system`.
 		 * This Hook is used by some of s2Member Pro's Gateway integrations; allowing CRON processing
 		 * to run for important communications; which poll Payment Gateway APIs for possible EOTs.
+		 * Internal catch-up continuations intentionally do not fire that collective after-hook.
 		 *
 		 * @package s2Member\Auto_EOT_System
 		 * @since 3.5
 		 *
-		 * @param int $per_process Number of database records to process each time.
-		 *   Can also be Filtered with `ws_plugin__s2member_auto_eot_system_per_process`.
+		 * @param int  $per_process Legacy maximum database records to process in this pass when explicitly supplied or filtered.
+		 * @param bool $is_continuation Internal catch-up continuation; skips the collective after-hook.
 		 *
 		 * @return null
 		 */
-		public static function auto_eot_system($per_process = 6)
+		public static function auto_eot_system($per_process = 10, $is_continuation = FALSE)
 		{
 			global $wpdb;
 			/** @var $wpdb \wpdb */
@@ -107,7 +430,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 
 			include_once ABSPATH.'wp-admin/includes/admin.php';
 
-			@set_time_limit(0); // Make time for processing a larger userbase.
+			//260820.0056 Do not disable PHP's execution limit here; the adaptive engine deliberately works inside a measured wall-clock budget.
 			@ini_set('memory_limit', apply_filters('admin_memory_limit', WP_MAX_MEMORY_LIMIT));
 
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
@@ -116,18 +439,161 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled']  /* Enabled? */)
 			{
-				$per_process = apply_filters('ws_plugin__s2member_auto_eot_system_per_process', $per_process, get_defined_vars());
+				//260820.0056 Count the budget from the request start, not merely this callback, so WordPress bootstrap/earlier cron work consumes its share too.
+				$runtime_budget = self::auto_eot_system_runtime_budget();
+				$request_started = isset($_SERVER['REQUEST_TIME_FLOAT']) && is_numeric($_SERVER['REQUEST_TIME_FLOAT']) ? (float)$_SERVER['REQUEST_TIME_FLOAT'] : microtime(TRUE);
+				$run_started = microtime(TRUE);
+				$deadline = $request_started + $runtime_budget;
 
-				//260414 Ignore zero/negative Auto-EOT values here. We had real PayPal Pro subscribers demoted
-				// because a stored `s2member_auto_eot_time` of `0` matched the old `<= now` query.
-				if(is_array($eots = $wpdb->get_results("SELECT `user_id` AS `ID` FROM `".$wpdb->usermeta."` WHERE `meta_key` = '".$wpdb->prefix."s2member_auto_eot_time' AND `meta_value` != '' AND `meta_value` > '0' AND `meta_value` <= '".esc_sql(strtotime("now"))."' LIMIT ".$per_process)))
+				//260820.0056 Reserve padding beyond the predicted next user's cost; cap that reserve at 25% so short runtime budgets still retain useful processing time.
+				$safety_buffer = min($runtime_budget * 0.25, max(0.25, (float)apply_filters('ws_plugin__s2member_auto_eot_system_runtime_safety_buffer', 1.0, get_defined_vars())));
+
+				//260820.0056 A small non-autoloaded lock detects overlap and leaves evidence when a worker dies before reaching normal cleanup.
+				$run_token = function_exists('wp_generate_uuid4') ? wp_generate_uuid4() : uniqid('s2-eot-', TRUE);
+				$lock_option = 'ws_plugin__s2member_auto_eot_lock';
+				$state_option = 'ws_plugin__s2member_auto_eot_state';
+				$lock_stale_after = max(120, (int)ceil(($runtime_budget * 2) + 30));
+				$existing_lock = get_option($lock_option);
+
+				//260820.0149 Discard malformed leftover state before evaluating whether another worker is active.
+				if($existing_lock !== FALSE && (!is_array($existing_lock) || empty($existing_lock['heartbeat_at'])))
 				{
-					foreach($eots as $eot) // Go through the array of EOTS. We need to (demote|delete) each of them.
-					{
-						if(($user_id = $eot->ID) && is_object($user = new WP_User ($user_id)) && $user->ID)
-						{
-							$auto_eot_time = (int)get_user_option('s2member_auto_eot_time', $user_id);
+					delete_option($lock_option);
+					delete_transient('ws_plugin__s2member_auto_eot_health');
+					$existing_lock = FALSE;
+				}
 
+				//260820.0056 A stale marker means the previous process never reached cleanup; preserve the useful evidence without guessing whether it was timeout, OOM, fatal error, etc.
+				if(is_array($existing_lock) && !empty($existing_lock['heartbeat_at']) && time() - (int)$existing_lock['heartbeat_at'] > $lock_stale_after)
+				{
+					$state = get_option($state_option);
+					$state = is_array($state) ? $state : array();
+					$state['last_abandoned_at'] = time();
+					$state['last_abandoned_started_at'] = !empty($existing_lock['started_at']) ? (int)$existing_lock['started_at'] : 0;
+					$state['last_abandoned_heartbeat_at'] = !empty($existing_lock['heartbeat_at']) ? (int)$existing_lock['heartbeat_at'] : 0;
+					$state['last_abandoned_processed'] = !empty($existing_lock['processed']) ? (int)$existing_lock['processed'] : 0;
+					$state['last_abandoned_user_id'] = !empty($existing_lock['current_user_id']) ? (int)$existing_lock['current_user_id'] : 0;
+					$state['consecutive_abandoned_runs'] = !empty($state['consecutive_abandoned_runs']) ? (int)$state['consecutive_abandoned_runs'] + 1 : 1;
+					update_option($state_option, $state, FALSE);
+					delete_option($lock_option);
+					delete_transient('ws_plugin__s2member_auto_eot_health');
+					$existing_lock = FALSE;
+				}
+
+				//260820.0056 A fresh marker belongs to another worker that should still be alive; never process the same overdue population concurrently.
+				if(is_array($existing_lock) && !empty($existing_lock['heartbeat_at']))
+					return;
+
+				//260820.0056 Use add_option() for lock acquisition so two workers racing here cannot both believe they acquired it.
+				$lock = array('token' => $run_token, 'started_at' => time(), 'heartbeat_at' => time(), 'processed' => 0, 'current_user_id' => 0);
+				if(!add_option($lock_option, $lock, '', FALSE))
+					return; // Another worker acquired the lock between our read and add.
+
+				//260820.0056 Persist only operational health between runs; performance timing remains local to each pass so it adapts organically to current conditions.
+				$state = get_option($state_option);
+				$state = is_array($state) ? $state : array();
+				$state['last_started_at'] = time();
+				$state['active_run_token'] = $run_token;
+				update_option($state_option, $state, FALSE);
+				delete_transient('ws_plugin__s2member_auto_eot_health'); //260820.0149 Invalidate any cached pre-run status.
+
+				//260820.0056 The historical count becomes a hard cap only when code explicitly supplies/filters it; the untouched default no longer throttles normal installations.
+				$per_process_filter_attached = has_filter('ws_plugin__s2member_auto_eot_system_per_process') !== FALSE;
+				$per_process_was_explicit = func_num_args() > 0 && !$is_continuation;
+				$per_process = apply_filters('ws_plugin__s2member_auto_eot_system_per_process', $per_process, get_defined_vars());
+				$hard_cap = ($per_process_filter_attached || $per_process_was_explicit) ? max(0, (int)$per_process) : NULL;
+				$hard_cap_source = $per_process_filter_attached ? 'filter' : ($per_process_was_explicit ? 'explicit' : '');
+
+				//260820.0056 Fetch modest ordered chunks from MySQL; 100 is only a query-buffer size, never the normal processing throttle.
+				$chunk_size = 100;
+				$processed_count = 0;
+				$item_total_duration = 0.0;
+				$last_item_duration = 0.0;
+				$last_heartbeat = microtime(TRUE);
+				$cursor_time = 0;
+				$cursor_umeta_id = 0;
+				$stop_reason = 'queue_empty';
+				$meta_key = $wpdb->prefix.'s2member_auto_eot_time';
+
+				while(TRUE)
+				{
+					//260820.0056 Honor an intentional legacy ceiling before doing another query or user operation.
+					if($hard_cap !== NULL && $processed_count >= $hard_cap)
+					{
+						$stop_reason = 'legacy_item_cap';
+						break;
+					}
+
+					//260820.0056 Near the deadline, use only this run's last/average item times to decide whether another EOT is likely to fit safely.
+					$remaining_runtime = $deadline - microtime(TRUE);
+					$average_item_duration = $processed_count ? $item_total_duration / $processed_count : 0.0;
+					$estimated_next_duration = max($last_item_duration, $average_item_duration);
+					if($remaining_runtime <= $safety_buffer + $estimated_next_duration)
+					{
+						$stop_reason = 'runtime_budget';
+						break;
+					}
+
+					//260820.0056 A legacy hard cap may make the final SQL chunk smaller, but otherwise query size and processing capacity remain independent.
+					$query_limit = $chunk_size;
+					if($hard_cap !== NULL)
+						$query_limit = min($query_limit, max(0, $hard_cap - $processed_count));
+					if($query_limit < 1)
+					{
+						$stop_reason = 'legacy_item_cap';
+						break;
+					}
+
+					//260820.0056 Query only due EOT metadata, oldest timestamp first; `umeta_id` makes equal timestamps deterministic and provides cursor pagination without OFFSET.
+					$now = time();
+					$sql = "SELECT `umeta_id`, `user_id` AS `ID`, CAST(`meta_value` AS UNSIGNED) AS `auto_eot_time` FROM `".$wpdb->usermeta."` WHERE `meta_key` = %s AND CAST(`meta_value` AS UNSIGNED) > 0 AND CAST(`meta_value` AS UNSIGNED) <= %d";
+					$sql_args = array($meta_key, $now);
+
+					//260820.0056 Continue strictly after the previous timestamp/umeta_id pair, avoiding increasingly expensive SQL OFFSET pagination.
+					if($cursor_time || $cursor_umeta_id)
+					{
+						$sql .= " AND (CAST(`meta_value` AS UNSIGNED) > %d OR (CAST(`meta_value` AS UNSIGNED) = %d AND `umeta_id` > %d))";
+						$sql_args[] = $cursor_time;
+						$sql_args[] = $cursor_time;
+						$sql_args[] = $cursor_umeta_id;
+					}
+					$sql .= " ORDER BY CAST(`meta_value` AS UNSIGNED) ASC, `umeta_id` ASC LIMIT ".(int)$query_limit;
+					$eots = $wpdb->get_results($wpdb->prepare($sql, $sql_args));
+
+					if(!is_array($eots) || !$eots)
+						break;
+
+					foreach($eots as $eot) // Oldest overdue EOT first; equal timestamps are deterministic by `umeta_id`.
+					{
+						$cursor_time = (int)$eot->auto_eot_time;
+						$cursor_umeta_id = (int)$eot->umeta_id;
+
+						//260820.0056 Recheck both stopping conditions inside the chunk because each user's hooks/notifications can materially change elapsed time.
+						if($hard_cap !== NULL && $processed_count >= $hard_cap)
+						{
+							$stop_reason = 'legacy_item_cap';
+							break 2;
+						}
+						$remaining_runtime = $deadline - microtime(TRUE);
+						$average_item_duration = $processed_count ? $item_total_duration / $processed_count : 0.0;
+						$estimated_next_duration = max($last_item_duration, $average_item_duration);
+						if($remaining_runtime <= $safety_buffer + $estimated_next_duration)
+						{
+							$stop_reason = 'runtime_budget';
+							break 2;
+						}
+
+						//260820.0056 Re-read only the exact selected row immediately before destructive work; skip it if its EOT was changed/deleted after selection.
+						$current_eot = $wpdb->get_row($wpdb->prepare("SELECT `user_id`, `meta_key`, `meta_value` FROM `".$wpdb->usermeta."` WHERE `umeta_id` = %d LIMIT 1", $cursor_umeta_id));
+						if(!$current_eot || (int)$current_eot->user_id !== (int)$eot->ID || (string)$current_eot->meta_key !== $meta_key || (int)$current_eot->meta_value !== $cursor_time || (int)$current_eot->meta_value <= 0 || (int)$current_eot->meta_value > time())
+							continue;
+
+						//260820.0056 Time the complete per-user EOT operation, including hooks/notifications, because extension work may dominate the actual cost.
+						$item_started = microtime(TRUE);
+						$user_id = (int)$eot->ID;
+						$auto_eot_time = (int)$current_eot->meta_value;
+						if($user_id && is_object($user = new WP_User ($user_id)) && $user->ID)
+						{
 							$log_entry = array('user' => (array)$user); // Intialize.
 							$log_entry['auto_eot_time'] = $auto_eot_time; // Record EOT time.
 
@@ -318,14 +784,91 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 								c_ws_plugin__s2member_utils_logs::log_entry('auto-eot-system', $log_entry);
 							}
 						}
+
+						//260820.0056 Feed the completed item's wall-clock cost into this pass only; no timing average is persisted between runs.
+						$last_item_duration = max(0, microtime(TRUE) - $item_started);
+						$item_total_duration += $last_item_duration;
+						$processed_count++;
+
+						//260820.0056 Refresh the lock periodically rather than per user, preserving useful crash evidence without creating unnecessary option writes.
+						if($processed_count % 5 === 0 || microtime(TRUE) - $last_heartbeat >= 5)
+						{
+							$lock['heartbeat_at'] = time();
+							$lock['processed'] = $processed_count;
+							$lock['current_user_id'] = $user_id;
+							update_option($lock_option, $lock, FALSE);
+							$last_heartbeat = microtime(TRUE);
+						}
 					}
+
+					//260820.0056 A short chunk means the ordered query reached the end of the due rows visible during this pass; otherwise fetch the next cursor chunk.
+					if(count($eots) < $query_limit)
+						break;
 				}
+
+				//260820.0149 One aggregate gives both catch-up state and the pending/oldest values needed by diagnostics.
+				$run_runtime = max(0, microtime(TRUE) - $run_started);
+				$pending = $wpdb->get_row($wpdb->prepare("SELECT COUNT(*) AS `pending_count`, MIN(CAST(`meta_value` AS UNSIGNED)) AS `oldest_due_at` FROM `".$wpdb->usermeta."` WHERE `meta_key` = %s AND CAST(`meta_value` AS UNSIGNED) > 0 AND CAST(`meta_value` AS UNSIGNED) <= %d", $meta_key, time()));
+				$pending_count = ($pending && !empty($pending->pending_count)) ? (int)$pending->pending_count : 0;
+				$oldest_due_at = ($pending && !empty($pending->oldest_due_at)) ? (int)$pending->oldest_due_at : 0;
+				$more_due_work = $pending_count > 0;
+
+				//260820.0056 Preserve enough current-run timing information to explain when a legacy item cap, rather than runtime, unnecessarily constrained throughput.
+				$average_item_duration = $processed_count ? $item_total_duration / $processed_count : 0.0;
+				$estimated_next_duration = max($last_item_duration, $average_item_duration);
+				$remaining_safe_runtime = max(0, ($deadline - microtime(TRUE)) - $safety_buffer);
+				$legacy_cap_estimated_additional = ($stop_reason === 'legacy_item_cap' && $more_due_work && $estimated_next_duration > 0) ? (int)floor($remaining_safe_runtime / $estimated_next_duration) : 0;
+
+				//260820.0056 Save compact operational health for diagnostics/UI; these are run results, not persistent performance-learning values.
+				$state = get_option($state_option);
+				$state = is_array($state) ? $state : array();
+				$state['last_completed_at'] = time();
+				$state['last_runtime'] = $run_runtime;
+				$state['last_runtime_budget'] = $runtime_budget;
+				$state['last_processed'] = $processed_count;
+				$state['last_stop_reason'] = $stop_reason;
+				$state['last_hard_cap'] = $hard_cap;
+				$state['last_hard_cap_source'] = $hard_cap_source;
+				$state['last_more_due_work'] = $more_due_work ? 1 : 0;
+				$state['last_pending_count'] = $pending_count;
+				$state['last_oldest_due_at'] = $oldest_due_at;
+				$state['last_oldest_overdue_seconds'] = $oldest_due_at ? max(0, time() - $oldest_due_at) : 0;
+				$state['legacy_cap_estimated_additional'] = $legacy_cap_estimated_additional;
+				$state['last_invocation'] = $is_continuation ? 'continuation' : (!empty($_GET['s2member_auto_eot_system_via_cron']) ? 'external_cron' : ((defined('DOING_CRON') && DOING_CRON) ? 'wp_cron' : 'direct'));
+				if($state['last_invocation'] === 'external_cron')
+					$state['last_external_completed_at'] = time();
+				$state['consecutive_abandoned_runs'] = 0; //260820.0149 A clean completion breaks the abandoned-run sequence.
+				$state['active_run_token'] = '';
+				update_option($state_option, $state, FALSE);
+
+				//260820.0056 Delete the lock only after state is safely recorded; if PHP dies earlier, the surviving lock is what lets a future pass detect the abandoned run.
+				delete_option($lock_option);
+
+				//260820.0056 In WP-Cron mode, continue soon while overdue EOTs remain; external-cron installations already control their own invocation cadence.
+				if((string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled'] === '1' && $more_due_work && ($hard_cap === NULL || $hard_cap > 0))
+				{
+					if(!wp_next_scheduled('ws_plugin__s2member_auto_eot_system__continuation'))
+						wp_schedule_single_event(time() + 60, 'ws_plugin__s2member_auto_eot_system__continuation');
+				}
+				else if(!$more_due_work)
+					wp_clear_scheduled_hook('ws_plugin__s2member_auto_eot_system__continuation');
+
+				delete_transient('ws_plugin__s2member_auto_eot_health'); //260820.0149 Run completion changes the health snapshot.
 			}
 			c_ws_plugin__s2member_utils_logs::cleanup_expired_s2m_transients();
 
-			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-			do_action('ws_plugin__s2member_after_auto_eot_system', get_defined_vars());
-			unset($__refs, $__v); // Housekeeping.
+			//260820.0056 The historical collective after-hook runs only on normal passes; otherwise every one-minute catch-up pass would also multiply Pro reminders/gateway API polling.
+			if(!$is_continuation)
+			{
+				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
+				do_action('ws_plugin__s2member_after_auto_eot_system', get_defined_vars());
+				unset($__refs, $__v); // Housekeeping.
+			}
+			else
+			{
+				//260820.0056 Continuations still repair the recurring Auto-EOT event directly because they deliberately skip the collective after-hook that normally performs this check.
+				self::ensure_auto_eot_system();
+			}
 		}
 	}
 }

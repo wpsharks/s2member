@@ -1674,7 +1674,62 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<p><em>s2Member will not process an EOT until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system (based on your configuration). s2Member also calculates one extra day (24 hours) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_eot_behavior", get_defined_vars());
 
-				echo '<p id="ws-plugin--s2member-auto-eot-system-enabled-via-cron"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 2 && (!function_exists("wp_cron") || !wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) ? '' : ' style="display:none;"').'>If you\'d like to run s2Member\'s Auto-EOT System through a more traditional Cron Job; instead of through <code>WP-Cron</code>, you will need to configure a Cron Job through your server control panel; provided by your hosting company. Set the Cron Job to run <code>once about every 10 minutes to an hour</code>. You\'ll want to configure an HTTP Cron Job that loads this URL:<br /><code>'.esc_html(home_url("/?s2member_auto_eot_system_via_cron=1")).'</code></p>'."\n";
+				//260820.0306 Show current processing health where Auto-EOT is configured, so pending/stalled work is visible before it becomes a support issue.
+				$auto_eot_health = c_ws_plugin__s2member_auto_eots::auto_eot_system_health(TRUE);
+				$auto_eot_legacy_cap = c_ws_plugin__s2member_auto_eots::auto_eot_system_legacy_cap_info();
+				$auto_eot_mode = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"];
+				$auto_eot_runtime_target = c_ws_plugin__s2member_auto_eots::auto_eot_system_runtime_budget($auto_eot_mode === '2');
+				$php_execution_limit = (int)ini_get('max_execution_time');
+				$auto_eot_status_labels = array('healthy' => 'Healthy', 'attention' => 'Attention', 'error' => 'Needs attention', 'disabled' => 'Disabled');
+				$auto_eot_status_label = isset($auto_eot_status_labels[$auto_eot_health['status']]) ? $auto_eot_status_labels[$auto_eot_health['status']] : ucfirst($auto_eot_health['status']);
+
+				$auto_eot_next_run = 0;
+				if($auto_eot_mode === '1')
+				{
+					$_scheduled = array_filter(array((int)$auto_eot_health['recurring_at'], (int)$auto_eot_health['continuation_at']));
+					$auto_eot_next_run = $_scheduled ? min($_scheduled) : 0;
+					unset($_scheduled);
+				}
+
+				echo '<div class="ws-menu-page-notice ws-menu-page-notice-info">'."\n";
+				echo '<p><strong>Automatic EOT Status: '.esc_html($auto_eot_status_label).'</strong></p>'."\n";
+				echo '<ul style="margin-bottom:0;">'."\n";
+				echo '<li><strong>Pending overdue EOTs:</strong> '.number_format_i18n((int)$auto_eot_health['pending_count']).'</li>'."\n";
+				echo '<li><strong>Oldest overdue EOT:</strong> '.($auto_eot_health['oldest_due_at'] ? esc_html(human_time_diff((int)$auto_eot_health['oldest_due_at'], time()).' ago') : 'None').'</li>'."\n";
+				echo '<li><strong>Last completed run:</strong> '.($auto_eot_health['last_completed_at'] ? esc_html(human_time_diff((int)$auto_eot_health['last_completed_at'], time()).' ago') : 'Not recorded yet').'</li>'."\n";
+				echo '<li><strong>Last run:</strong> '.($auto_eot_health['last_completed_at'] ? number_format_i18n((int)$auto_eot_health['last_processed']).' EOT(s) in '.esc_html(number_format_i18n((float)$auto_eot_health['last_runtime'], 2)).' seconds' : 'Not recorded yet').'</li>'."\n";
+				echo '<li><strong>Next run:</strong> '.($auto_eot_mode === '1' ? ($auto_eot_next_run ? esc_html(($auto_eot_next_run <= time() ? human_time_diff($auto_eot_next_run, time()).' overdue' : 'in '.human_time_diff(time(), $auto_eot_next_run))) : 'Not scheduled') : ($auto_eot_mode === '2' ? 'Controlled by your external cron service' : 'Disabled')).'</li>'."\n";
+				echo '<li><strong>Current runtime target:</strong> ~'.esc_html(number_format_i18n($auto_eot_runtime_target, 1)).' seconds ('.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_mode"] === 'custom') ? 'Custom' : 'Automatic').'; PHP max execution time: '.($php_execution_limit > 0 ? esc_html($php_execution_limit.' seconds') : 'no finite PHP limit reported').')</li>'."\n";
+				echo '</ul>'."\n";
+				echo '</div>'."\n";
+
+				//260820.0306 Legacy filters remain authoritative for compatibility, but explain when an inherited fixed-batch limit can now reduce adaptive throughput.
+				if(!empty($auto_eot_legacy_cap['detected']))
+				{
+					echo '<div class="ws-menu-page-notice ws-menu-page-notice-info">'."\n";
+					echo '<p><strong>Legacy processing limit detected.</strong> A developer customization is using <code>ws_plugin__s2member_auto_eot_system_per_process</code>. This filter was useful with s2Member\'s older fixed-batch processor, but the new runtime-adaptive engine can usually process more efficiently without it. Unless it exists for a specific site reason, this legacy limit is probably unhelpful now.</p>'."\n";
+
+					if($auto_eot_legacy_cap['last_hard_cap_source'] === 'filter' && $auto_eot_legacy_cap['last_hard_cap'] !== NULL)
+						echo '<p>Last effective legacy limit: <strong>'.number_format_i18n((int)$auto_eot_legacy_cap['last_hard_cap']).' EOT(s) per pass</strong>.</p>'."\n";
+
+					if($auto_eot_legacy_cap['last_hard_cap_source'] === 'filter' && $auto_eot_legacy_cap['last_stop_reason'] === 'legacy_item_cap' && $auto_eot_legacy_cap['estimated_additional'] > 0)
+						echo '<p>On the last constrained run, s2Member estimates that approximately <strong>'.number_format_i18n((int)$auto_eot_legacy_cap['estimated_additional']).' additional EOT(s)</strong> could have fit within the remaining safe runtime without this hard limit.</p>'."\n";
+
+					if(!empty($auto_eot_legacy_cap['sources']))
+					{
+						echo '<p><strong>Detected source'.(count($auto_eot_legacy_cap['sources']) === 1 ? '' : 's').':</strong><br />'."\n";
+						foreach($auto_eot_legacy_cap['sources'] as $_source)
+						{
+							$_source_location = !empty($_source['file']) ? $_source['file'].(!empty($_source['line']) ? ':'.(int)$_source['line'] : '') : (!empty($_source['callback']) ? $_source['callback'] : 'Unknown callback');
+							echo '<code>'.esc_html($_source_location).'</code><br />'."\n";
+						}
+						echo '</p>'."\n";
+						unset($_source, $_source_location);
+					}
+					echo '</div>'."\n";
+				}
+
+				echo '<p id="ws-plugin--s2member-auto-eot-system-enabled-via-cron"'.(($auto_eot_mode === '2') ? '' : ' style="display:none;"').'>If you\'d like to run s2Member\'s Auto-EOT System through a traditional Cron Job instead of WP-Cron, configure an HTTP Cron Job through your hosting/server control panel. Running it every <code>1 to 10 minutes</code> works well; about every <code>5 minutes</code> is a good default. Load this URL:<br /><code>'.esc_html(home_url("/?s2member_auto_eot_system_via_cron=1")).'</code></p>'."\n";
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
@@ -1691,15 +1746,42 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_auto_eot_system_enabled" id="ws-plugin--s2member-auto-eot-system-enabled">'."\n";
-				// Very advanced conditionals here. If the Auto-EOT System is NOT running, or NOT fully configured, this will indicate that no option is set - as sort of a built-in acknowledgment/warning in the UI panel.
-				echo (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 1 && (!function_exists("wp_cron") || !wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) || ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 2 && (function_exists("wp_cron") && wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) || (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] && (function_exists("wp_cron") && wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule")))) ? '<option value=""></option>'."\n" : '';
-				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 1 && function_exists("wp_cron") && wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule")) ? ' selected="selected"' : '').'>Yes (enable the Auto-EOT System through WP-Cron)</option>'."\n";
-				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? '<option value="2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 2 && (!function_exists("wp_cron") || !wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) ? ' selected="selected"' : '').'>Yes (but, I\'ll run it with my own Cron Job)</option>'."\n" : '';
-				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] && (!function_exists("wp_cron") || !wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) ? ' selected="selected"' : '').'>No (disable the Auto-EOT System)</option>'."\n";
+				//260820.0306 Health warnings now report scheduler problems explicitly, so always show the saved mode instead of blanking this field when cron is unhealthy.
+				echo '<option value="1"'.(($auto_eot_mode === '1') ? ' selected="selected"' : '').'>Yes (enable the Auto-EOT System through WP-Cron)</option>'."\n";
+				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? '<option value="2"'.(($auto_eot_mode === '2') ? ' selected="selected"' : '').'>Yes (but, I\'ll run it with my own Cron Job)</option>'."\n" : '';
+				echo '<option value="0"'.(($auto_eot_mode === '0') ? ' selected="selected"' : '').'>No (disable the Auto-EOT System)</option>'."\n";
 				echo '</select><br />'."\n";
 				echo 'Recommended setting: (<code>Yes / enable via WP-Cron</code>)'."\n";
 				echo '</td>'."\n";
 
+				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr>'."\n";
+				echo '<th><label for="ws-plugin--s2member-auto-eot-system-runtime-mode">Auto-EOT Processing Runtime</label></th>'."\n";
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<select name="ws_plugin__s2member_auto_eot_system_runtime_mode" id="ws-plugin--s2member-auto-eot-system-runtime-mode">'."\n";
+				echo '<option value="auto"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_mode"] === 'auto') ? ' selected="selected"' : '').'>Automatic (recommended)</option>'."\n";
+				echo '<option value="custom"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_mode"] === 'custom') ? ' selected="selected"' : '').'>Custom maximum runtime</option>'."\n";
+				echo '</select><br />'."\n";
+				echo '<em>Automatic mode adapts the number of EOTs processed to the wall-clock time available in each run. The current target for this configuration is approximately <strong>'.esc_html(number_format_i18n($auto_eot_runtime_target, 1)).' seconds</strong>; it automatically leaves additional headroom below a finite PHP execution limit.</em>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+				echo '<th><label for="ws-plugin--s2member-auto-eot-system-runtime-custom">Custom Maximum Runtime (seconds)</label></th>'."\n";
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="number" min="1" max="3600" step="1" name="ws_plugin__s2member_auto_eot_system_runtime_custom" id="ws-plugin--s2member-auto-eot-system-runtime-custom" value="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_custom"]).'" /> seconds<br />'."\n";
+				echo '<em>Used only in Custom mode. If PHP reports a finite execution limit, s2Member keeps 10% of it in reserve even when this value is higher. Developers can still override the final runtime with <code>ws_plugin__s2member_auto_eot_system_runtime</code>.</em>'."\n";
+				echo '</td>'."\n";
 				echo '</tr>'."\n";
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";

@@ -173,6 +173,11 @@ add_action('admin_menu', 'c_ws_plugin__s2member_menu_pages::get_help_panel', 12)
 add_action('admin_init', 'c_ws_plugin__s2member_admin_notices::dismiss_shortcode_user_fields_notice');
 add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::shortcode_user_fields_notice', 11);
 
+//260820.0149 Escalate materially unhealthy Auto-EOT processing beyond its settings panel.
+add_action('admin_notices', 'c_ws_plugin__s2member_auto_eots::auto_eot_system_admin_notice', 12);
+add_action('user_admin_notices', 'c_ws_plugin__s2member_auto_eots::auto_eot_system_admin_notice', 12);
+add_action('network_admin_notices', 'c_ws_plugin__s2member_auto_eots::auto_eot_system_admin_notice', 12);
+
 add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_notices');
 add_action('user_admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_notices');
 add_action('network_admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_notices');
@@ -198,6 +203,11 @@ add_action('deleted_user_meta', 'c_ws_plugin__s2member_access_cap_times::log_acc
 
 add_filter('cron_schedules', 'c_ws_plugin__s2member_cron_jobs::extend_cron_schedules');
 add_action('ws_plugin__s2member_auto_eot_system__schedule', 'c_ws_plugin__s2member_auto_eots::auto_eot_system');
+//260820.0056 Keep catch-up work on a separate one-off hook so it can process only overdue EOTs without repeatedly invoking collective Pro cron consumers.
+add_action('ws_plugin__s2member_auto_eot_system__continuation', 'c_ws_plugin__s2member_auto_eots::auto_eot_system_continuation');
+//260819.0613 Repair a missing recurring Auto-EOT event during normal requests, and immediately after an EOT run if WordPress failed to reschedule it.
+add_action('init', 'c_ws_plugin__s2member_auto_eots::ensure_auto_eot_system', 3);
+add_action('ws_plugin__s2member_after_auto_eot_system', 'c_ws_plugin__s2member_auto_eots::ensure_auto_eot_system', 999);
 
 add_action('wp_ajax_ws_plugin__s2member_update_roles_via_ajax', 'c_ws_plugin__s2member_roles_caps::update_roles_via_ajax');
 
