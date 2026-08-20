@@ -2402,8 +2402,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 * Returns the PayPal Checkout webhook event names processed by s2Member.
 				 *
 				 * These events are used for:
-				 * - Recurring payment bookkeeping (completed payments).
-				 * - Subscription lifecycle changes (cancel/suspend/expire/payment failed).
+				 * - Subscription activation fallback and lifecycle changes.
+				 * - Recurring payment bookkeeping, refunds, and reversals.
 				 *
 				 * @since 260115
 				 *
@@ -2411,14 +2411,23 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 */
 				public static function paypal_checkout_webhook_event_names()
 					{
+						//260820.0218 Keep automatic webhook registration aligned with the events handled by s2Member and listed in PayPal Checkout setup help.
 						return array(
+							'PAYMENT.SALE.COMPLETED',
+							'PAYMENT.CAPTURE.COMPLETED',
+							'PAYMENT.SALE.REFUNDED',
+							'PAYMENT.CAPTURE.REFUNDED',
+							'PAYMENT.SALE.REVERSED',
+							'PAYMENT.CAPTURE.REVERSED',
+
+							'BILLING.SUBSCRIPTION.CREATED',
+							'BILLING.SUBSCRIPTION.ACTIVATED',
+							'BILLING.SUBSCRIPTION.RE-ACTIVATED',
+							'BILLING.SUBSCRIPTION.UPDATED',
 							'BILLING.SUBSCRIPTION.CANCELLED',
 							'BILLING.SUBSCRIPTION.SUSPENDED',
 							'BILLING.SUBSCRIPTION.EXPIRED',
 							'BILLING.SUBSCRIPTION.PAYMENT.FAILED',
-
-							'PAYMENT.SALE.COMPLETED',
-							'PAYMENT.CAPTURE.COMPLETED',
 						);
 					}
 
@@ -2430,15 +2439,16 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 *
 				 * @since 260115
 				 *
-				 * @param string $env 'live' or 'sandbox'. Defaults to 'live'.
+				 * @param string $env           'live' or 'sandbox'. Defaults to 'live'.
+				 * @param bool   $existing_only If true, update only a webhook whose ID is already stored; never create/adopt one.
 				 *
 				 * @return array Result array on success with keys:
 				 *               - id (string) webhook id
-				 *               - op (string) 'created'|'updated'
+				 *               - op (string) 'created'|'updated'|'adopted'
 				 *               - env (string) 'live'|'sandbox'
 				 *              Empty array on failure.
 				 */
-				public static function paypal_checkout_webhook_upsert($env = '')
+				public static function paypal_checkout_webhook_upsert($env = '', $existing_only = false)
 					{
 						$env = ($env === 'sandbox') ? 'sandbox' : 'live';
 
@@ -2514,6 +2524,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							));
 						}
 
+						//260820.0313 Upgrade reconciliation must never create or adopt a webhook the site owner did not already store.
+						if($existing_only)
+						{
+							$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
+							return array();
+						}
+
 						$body = array(
 							'url'         => $url,
 							'event_types' => $event_types,
@@ -2551,6 +2568,37 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											}
 									}
 								}
+							}
+						}
+
+						//260820.0313 A same-app webhook found by this exact s2Member URL is safe to adopt, but first reconcile its required events.
+						if($id && $adopted_existing)
+						{
+							$patch = array(
+								array('op' => 'replace', 'path' => '/url', 'value' => $url),
+								array('op' => 'replace', 'path' => '/event_types', 'value' => $event_types),
+							);
+							$ur = self::paypal_checkout_api_request('PATCH', '/v1/notifications/webhooks/'.rawurlencode($id), $patch);
+							$adopt_update_ok = (!empty($ur['code']) && (int)$ur['code'] === 200);
+
+							if(!$adopt_update_ok && !empty($ur['body']) && is_string($ur['body']))
+							{
+								$ud = json_decode($ur['body'], true);
+								$adopt_update_ok = !empty($ud['name']) && $ud['name'] === 'WEBHOOK_PATCH_REQUEST_NO_CHANGE';
+							}
+							if(!$adopt_update_ok)
+							{
+								c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+									'ppco'     => 'webhook',
+									'event'    => 'update_adopted_webhook_failed',
+									'env_setting' => $env,
+									'id'       => $id,
+									'url'      => $url,
+									'code'     => !empty($ur['code']) ? (int)$ur['code'] : 0,
+									'message'  => !empty($ur['message']) ? (string)$ur['message'] : '',
+									'body'     => !empty($ur['body']) ? (string)$ur['body'] : '',
+								));
+								$id = '';
 							}
 						}
 

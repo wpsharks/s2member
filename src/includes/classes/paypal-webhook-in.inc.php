@@ -493,7 +493,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				else if(!empty($paypal['txn_id']))
 					$txn_key = (string)$paypal['txn_id'];
 
-				$txn_done_option = 's2m_ppco_txn_done_'.md5($paypal['txn_type'].'|'.$subscr_id.'|'.$txn_key);
+				//260820.0218 A refund/reversal can share the completed payment's original transaction ID; give those later states their own dedupe identity.
+				$txn_dedupe_key = $txn_key;
+				if(!empty($paypal['payment_status']) && preg_match('/^(refunded|reversed|reversal)$/i', $paypal['payment_status']))
+					$txn_dedupe_key = strtolower((string)$paypal['payment_status']).'|'.$txn_key;
+
+				$txn_done_option = 's2m_ppco_txn_done_'.md5($paypal['txn_type'].'|'.$subscr_id.'|'.$txn_dedupe_key);
 
 				if($txn_key)
 				{

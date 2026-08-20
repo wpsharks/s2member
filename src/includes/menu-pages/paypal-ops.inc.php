@@ -493,7 +493,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Live credentials first.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
 				echo '</th>'."\n";
 				echo '<td style="padding:0;">'."\n";
-				echo '<em>'.esc_html__('Registers your webhook URL with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
+				echo '<em>'.esc_html__('Registers or updates your webhook URL and required events with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 
@@ -663,7 +663,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Sandbox credentials first.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
 				echo '</th>'."\n";
 				echo '<td style="padding:0;">'."\n";
-				echo '<em>'.esc_html__('Registers your webhook URL with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
+				echo '<em>'.esc_html__('Registers or updates your webhook URL and required events with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 

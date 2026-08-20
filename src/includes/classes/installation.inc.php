@@ -77,6 +77,31 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 			{
 				$v = get_option('ws_plugin__s2member_activated_version'); // Currently.
 
+				//260820.0313 Refresh already-configured Checkout webhooks once so older automatic setups gain the complete required event list.
+				if(!$v || version_compare($v, '260820.0313', '<'))
+				{
+					$ppco_webhook_envs = array(
+						'live' => array(
+							'client_id'  => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_id'],
+							'secret'     => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_secret'],
+							'webhook_id' => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_webhook_id'],
+						),
+						'sandbox' => array(
+							'client_id'  => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_id'],
+							'secret'     => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_secret'],
+							'webhook_id' => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_webhook_id'],
+						),
+					);
+					foreach($ppco_webhook_envs as $ppco_webhook_env => $ppco_webhook_config)
+						if($ppco_webhook_config['client_id'] && $ppco_webhook_config['secret'] && $ppco_webhook_config['webhook_id'])
+							if(!c_ws_plugin__s2member_paypal_utilities::paypal_checkout_webhook_upsert($ppco_webhook_env, TRUE))
+							{
+								$ppco_webhook_env_label = ($ppco_webhook_env === 'sandbox') ? 'Sandbox' : 'Live';
+								$notice = '<strong>s2Member PayPal Checkout:</strong> Your '.esc_html($ppco_webhook_env_label).' webhook could not be updated automatically with the latest required events. Please go to <a href="'.esc_url(admin_url('/admin.php?page=ws-plugin--s2member-paypal-ops')).'"><strong>s2Member → PayPal Options → PayPal Checkout</strong></a> and click <strong>Create/Update Webhook</strong> for '.esc_html($ppco_webhook_env_label).'.';
+								c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array(), TRUE, 0, TRUE);
+							}
+				}
+
 				if(!$v || !version_compare($v, '3.2', '>=')) // Needs to be upgraded?
 					// Version 3.2 is where `meta_key` names were changed. They're prefixed now.
 				{
