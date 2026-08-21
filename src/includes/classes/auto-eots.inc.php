@@ -414,6 +414,23 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 		 * to run for important communications; which poll Payment Gateway APIs for possible EOTs.
 		 * Internal catch-up continuations intentionally do not fire that collective after-hook.
 		 *
+		 * 260821.0626 `ws_plugin__s2member_auto_eot_lock` is a short-lived non-autoloaded option containing
+		 * `token`, `started_at`, `heartbeat_at`, `processed`, and `current_user_id`. Timestamps are Unix timestamps;
+		 * counters/IDs are integers. A surviving stale lock is evidence that a worker did not reach normal cleanup.
+		 *
+		 * `ws_plugin__s2member_auto_eot_state` is non-autoloaded operational state. Fields are added when relevant:
+		 * - Run: `last_started_at`, `active_run_token`, `last_completed_at`, `last_runtime`, `last_runtime_budget`,
+		 *   `last_processed`, `last_stop_reason`, `last_invocation`, `last_external_completed_at`.
+		 *   Stop reasons are `queue_empty`, `runtime_budget`, or `legacy_item_cap`; invocation is `continuation`,
+		 *   `external_cron`, `wp_cron`, or `direct`.
+		 * - Pending work: `last_more_due_work`, `last_pending_count`, `last_oldest_due_at`, `last_oldest_overdue_seconds`.
+		 * - Legacy cap: `last_hard_cap` (int|null), `last_hard_cap_source` (`filter` or `explicit`),
+		 *   `legacy_cap_estimated_additional`.
+		 * - Abandoned run: `last_abandoned_at`, `last_abandoned_started_at`, `last_abandoned_heartbeat_at`,
+		 *   `last_abandoned_processed`, `last_abandoned_user_id`, `consecutive_abandoned_runs`.
+		 * - Scheduler repair: `last_schedule_repaired_at`, `last_schedule_failure_at`, `schedule_failure_count`.
+		 * Performance timing is descriptive for the last pass only; it is never persistent runtime-learning input.
+		 *
 		 * @package s2Member\Auto_EOT_System
 		 * @since 3.5
 		 *
@@ -612,7 +629,10 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 								continue;
 							}
 
-							//260821.0057 Carry EOT details forward only when they describe this exact timestamp; stale provenance from an older EOT must never affect a later expiration.
+							//260821.0626 `s2member_auto_eot_details` and `s2member_last_auto_eot_details` share the provenance format
+							// `array('time' => EOT Unix timestamp, 'source' => string, 'updated_at' => Unix timestamp)`. `time` must
+							// exactly match the corresponding current/archived EOT; otherwise the details are stale and ignored.
+							// `source` currently uses `refund_reversal` for payment exceptions that must not be treated as renewal opportunities.
 							$auto_eot_details = get_user_option('s2member_auto_eot_details', $user_id);
 							if(!is_array($auto_eot_details) || empty($auto_eot_details['time']) || (int)$auto_eot_details['time'] !== $auto_eot_time)
 								$auto_eot_details = array();
