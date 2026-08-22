@@ -259,6 +259,198 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 		}
 
 		/**
+		 * Determines whether End-of-Term processing may irreversibly delete a WordPress user.
+		 *
+		 * The safe default is false: the stored `delete` behavior moves the account to Pending Deletion instead.
+		 * Developers that intentionally require automatic account deletion can opt in through this filter. Keeping
+		 * the decision centralized ensures scheduled Auto-EOT and immediate gateway-triggered EOTs use the same policy.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260822.0520
+		 *
+		 * @param int    $user_id WordPress user ID being processed.
+		 * @param string $eot_del_type Prospective irreversible-deletion event type.
+		 *
+		 * @return bool True only when a developer explicitly allows irreversible End-of-Term deletion.
+		 */
+		public static function allow_eot_user_deletion($user_id = 0, $eot_del_type = '')
+		{
+			return (bool)apply_filters('ws_plugin__s2member_allow_eot_user_deletion', FALSE, get_defined_vars());
+		}
+
+		/**
+		 * Applies the effective `delete` End-of-Term behavior.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260822.0535
+		 *
+		 * @param int    $user_id WordPress user ID being processed.
+		 * @param string $eot_del_type EOT/deletion event type.
+		 * @param int    $eot_time Unix timestamp that triggered this End-of-Term action.
+		 *
+		 * @return string `pending_deletion`, `deleted`, `removed`, or an empty string when no user was processed.
+		 */
+		public static function process_eot_deletion($user_id = 0, $eot_del_type = '', $eot_time = 0)
+		{
+			$user_id = (int)$user_id;
+			$eot_time = (int)$eot_time;
+			if(!$user_id || !is_object($user = new WP_User($user_id)) || !$user->ID)
+				return '';
+
+			if(self::allow_eot_user_deletion($user_id, $eot_del_type))
+			{
+				//260822.0535 True deletion is deliberately opt-in; preserve the historical deletion/removal path only after the developer filter explicitly allows it.
+				$GLOBALS['ws_plugin__s2member_eot_del_type'] = (string)$eot_del_type;
+				if(is_multisite())
+				{
+					$blog_id = get_current_blog_id();
+					remove_user_from_blog($user_id, $blog_id);
+					c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions($user_id, $blog_id, 's2says');
+					return 'removed';
+				}
+				include_once ABSPATH.'wp-admin/includes/admin.php';
+				wp_delete_user($user_id);
+				return 'deleted';
+			}
+
+			$pending_role = 's2member_pending_deletion';
+			$pending_meta = get_user_option('s2member_eot_pending_deletion', $user_id);
+			$already_pending = in_array($pending_role, (array)$user->roles, TRUE) && is_array($pending_meta) && isset($pending_meta['eot_time'], $pending_meta['processed_at'], $pending_meta['original_role']);
+			$original_role = $already_pending ? (string)$pending_meta['original_role'] : c_ws_plugin__s2member_user_access::user_access_role($user);
+			$processed_at = time();
+
+			//260822.0549 A surviving account can receive a replayed gateway event; preserve the first transition record and avoid duplicate EOT notifications when it is already safely pending.
+			if(!$already_pending)
+				update_user_option($user_id, 's2member_eot_pending_deletion', array(
+					'eot_time'      => $eot_time ?: $processed_at,
+					'processed_at'  => $processed_at,
+					'original_role' => $original_role,
+				));
+			delete_user_option($user_id, 's2member_auto_eot_time');
+			delete_user_option($user_id, 's2member_auto_eot_details');
+
+			//260822.0535 Activation normally creates this role; the fallback keeps an EOT safe if role configuration has not yet been refreshed after an in-place update.
+			if(!get_role($pending_role))
+				add_role($pending_role, 'Pending Deletion', array('read' => TRUE));
+			if(!in_array($pending_role, (array)$user->roles, TRUE))
+				$user->set_role($pending_role);
+
+			//260822.0535 Pending Deletion must never retain user-specific s2Member Level or Custom Capability grants after the role change.
+			foreach($user->allcaps as $cap => $cap_enabled)
+				if($cap_enabled && preg_match('/^access_s2member_(?:level[0-9]+|ccap_)/', $cap))
+					$user->remove_cap($cap);
+
+			//260822.0535 A preserved account never reaches WordPress' deletion hook, so send the configured EOT/Deletion notifications explicitly instead of silently dropping them.
+			if(!$already_pending)
+				self::pending_deletion_notifications($user_id, $eot_del_type);
+
+			return 'pending_deletion';
+		}
+
+		/**
+		 * Sends configured EOT/Deletion notifications for an account preserved in Pending Deletion.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260822.0535
+		 *
+		 * @param int    $user_id WordPress user ID being preserved.
+		 * @param string $eot_del_type EOT/deletion event type.
+		 *
+		 * @return null
+		 */
+		public static function pending_deletion_notifications($user_id = 0, $eot_del_type = '')
+		{
+			$user_id = (int)$user_id;
+			if(!$user_id || !is_object($user = new WP_User($user_id)) || !$user->ID)
+				return;
+
+			$custom      = get_user_option('s2member_custom', $user_id);
+			$subscr_id   = get_user_option('s2member_subscr_id', $user_id);
+			$subscr_baid = get_user_option('s2member_subscr_baid', $user_id);
+			$subscr_cid  = get_user_option('s2member_subscr_cid', $user_id);
+			$fields      = get_user_option('s2member_custom_fields', $user_id);
+			$user_reg_ip = get_user_option('s2member_registration_ip', $user_id);
+
+			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'])
+			{
+				foreach(preg_split("/[\r\n\t]+/", $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url)
+					if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
+						if(($url = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_baid)), $url)) && ($url = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_cid)), $url)))
+							if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
+								if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
+									if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_email)), $url)))
+										if(($url = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_login)), $url)))
+											if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_reg_ip)), $url)))
+												if(($url = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
+												{
+													if(is_array($fields) && !empty($fields))
+														foreach($fields as $var => $val)
+															if(!($url = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
+																break;
+
+													if(($url = trim(preg_replace('/%%(.+?)%%/i', '', $url))))
+														c_ws_plugin__s2member_utils_urls::remote($url);
+												}
+			}
+			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients'])
+			{
+				$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status();
+				c_ws_plugin__s2member_email_configs::email_config_release();
+
+				$msg = $sbj = '(s2Member / API Notification Email) - EOT/Deletion';
+				$msg .= "\n\n";
+
+				$msg .= 'eot_del_type: %%eot_del_type%%'."\n";
+				$msg .= 'subscr_id: %%subscr_id%%'."\n";
+				$msg .= 'subscr_baid: %%subscr_baid%%'."\n";
+				$msg .= 'subscr_cid: %%subscr_cid%%'."\n";
+				$msg .= 'user_first_name: %%user_first_name%%'."\n";
+				$msg .= 'user_last_name: %%user_last_name%%'."\n";
+				$msg .= 'user_full_name: %%user_full_name%%'."\n";
+				$msg .= 'user_email: %%user_email%%'."\n";
+				$msg .= 'user_login: %%user_login%%'."\n";
+				$msg .= 'user_ip: %%user_ip%%'."\n";
+				$msg .= 'user_id: %%user_id%%'."\n";
+
+				if(is_array($fields) && !empty($fields))
+					foreach($fields as $var => $val)
+						$msg .= $var.': %%'.$var.'%%'."\n";
+
+				$msg .= 'cv0: %%cv0%%'."\n";
+				$msg .= 'cv1: %%cv1%%'."\n";
+				$msg .= 'cv2: %%cv2%%'."\n";
+				$msg .= 'cv3: %%cv3%%'."\n";
+				$msg .= 'cv4: %%cv4%%'."\n";
+				$msg .= 'cv5: %%cv5%%'."\n";
+				$msg .= 'cv6: %%cv6%%'."\n";
+				$msg .= 'cv7: %%cv7%%'."\n";
+				$msg .= 'cv8: %%cv8%%'."\n";
+				$msg .= 'cv9: %%cv9%%';
+
+				if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)) && ($msg = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($eot_del_type), $msg)) && ($msg = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_id), $msg)))
+					if(($msg = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_baid), $msg)) && ($msg = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_cid), $msg)))
+						if(($msg = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->first_name), $msg)) && ($msg = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->last_name), $msg)))
+							if(($msg = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($user->first_name.' '.$user->last_name)), $msg)))
+								if(($msg = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_email), $msg)))
+									if(($msg = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_login), $msg)))
+										if(($msg = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $msg)))
+											if(($msg = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $msg)))
+											{
+												if(is_array($fields) && !empty($fields))
+													foreach($fields as $var => $val)
+														if(!($msg = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $msg)))
+															break;
+
+												if($sbj && ($msg = trim(preg_replace('/%%(.+?)%%/i', '', $msg))))
+													foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
+														wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
+											}
+				if($email_configs_were_on)
+					c_ws_plugin__s2member_email_configs::email_config();
+			}
+		}
+
+		/**
 		 * Returns a cached health snapshot for the Auto-EOT system.
 		 *
 		 * @package s2Member\Auto_EOT_System
@@ -295,6 +487,12 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			$continuation_at = ($mode === '1' && function_exists('wp_cron')) ? wp_next_scheduled('ws_plugin__s2member_auto_eot_system__continuation') : FALSE;
 			$issues = array();
 			$critical = FALSE;
+			$last_completed_at = !empty($state['last_completed_at']) ? (int)$state['last_completed_at'] : 0;
+			$last_processed = isset($state['last_processed']) ? (int)$state['last_processed'] : 0;
+			$last_more_due_work = !empty($state['last_more_due_work']);
+			$catchup_fresh_after = ($mode === '2') ? 2 * HOUR_IN_SECONDS : 30 * MINUTE_IN_SECONDS;
+			//260822.0614 Catch-up is ordinary queue progress, not a separate incident: report it only while a recent productive pass says more due work remains.
+			$catching_up = $pending_count && $last_more_due_work && $last_processed > 0 && $last_completed_at && $now - $last_completed_at < $catchup_fresh_after;
 
 			//260820.0149 Escalate scheduler failures independently of pending EOTs so a broken cron can be noticed before months of expirations accumulate.
 			if($mode === '1')
@@ -309,7 +507,9 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 
 			if(($mode === '1' || $mode === '2') && $pending_count)
 			{
-				if($oldest_overdue_seconds >= 2 * HOUR_IN_SECONDS)
+				if($catching_up)
+					$issues['catching_up'] = TRUE;
+				else if($oldest_overdue_seconds >= 2 * HOUR_IN_SECONDS)
 					$issues['eot_overdue'] = $critical = TRUE;
 				else if($oldest_overdue_seconds >= 30 * MINUTE_IN_SECONDS)
 					$issues['eot_delayed'] = TRUE;
@@ -324,7 +524,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			$health = array(
 				'generated_at'               => $now,
 				'mode'                       => $mode,
-				'status'                     => !$mode ? 'disabled' : ($critical ? 'error' : ($issues ? 'attention' : 'healthy')),
+				'status'                     => !$mode ? 'disabled' : ($critical ? 'error' : (isset($issues['catching_up']) && count($issues) === 1 ? 'catching_up' : ($issues ? 'attention' : 'healthy'))),
 				'needs_admin_notice'         => $critical ? 1 : 0,
 				'issues'                     => array_keys($issues),
 				'pending_count'              => $pending_count,
@@ -334,9 +534,10 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 				'continuation_at'            => $continuation_at ? (int)$continuation_at : 0,
 				'is_running'                 => !empty($lock['heartbeat_at']) ? 1 : 0,
 				'last_started_at'            => !empty($state['last_started_at']) ? (int)$state['last_started_at'] : 0,
-				'last_completed_at'          => !empty($state['last_completed_at']) ? (int)$state['last_completed_at'] : 0,
+				'last_completed_at'          => $last_completed_at,
 				'last_runtime'               => isset($state['last_runtime']) ? (float)$state['last_runtime'] : 0.0,
-				'last_processed'             => isset($state['last_processed']) ? (int)$state['last_processed'] : 0,
+				'last_processed'             => $last_processed,
+				'last_more_due_work'         => $last_more_due_work ? 1 : 0,
 				'last_stop_reason'           => !empty($state['last_stop_reason']) ? (string)$state['last_stop_reason'] : '',
 				'last_abandoned_at'          => !empty($state['last_abandoned_at']) ? (int)$state['last_abandoned_at'] : 0,
 				'consecutive_abandoned_runs' => $consecutive_abandoned,
@@ -377,12 +578,12 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			if(in_array('external_cron_stale', $health['issues'], TRUE))
 				$reasons[] = 'The configured external cron has not completed an Auto-EOT pass in more than two hours.';
 			if(in_array('eot_overdue', $health['issues'], TRUE))
-				$reasons[] = number_format_i18n($health['pending_count']).' EOT'.($health['pending_count'] === 1 ? ' is' : 's are').' pending; the oldest has been overdue for '.human_time_diff($health['oldest_due_at'], time()).'.';
+				$reasons[] = number_format_i18n($health['pending_count']).' End-of-Term action'.($health['pending_count'] === 1 ? ' is' : 's are').' pending; the oldest has been overdue for '.human_time_diff($health['oldest_due_at'], time()).'.';
 			if(in_array('repeated_abandoned', $health['issues'], TRUE))
-				$reasons[] = number_format_i18n($health['consecutive_abandoned_runs']).' consecutive Auto-EOT workers ended without reaching normal completion.';
+				$reasons[] = number_format_i18n($health['consecutive_abandoned_runs']).' consecutive Automatic End-of-Term workers ended without reaching normal completion.';
 
 			$settings_url = admin_url('/admin.php?page=ws-plugin--s2member-paypal-ops').'#ws-plugin--s2member-auto-eot-system-enabled';
-			$notice = '<strong>s2Member Auto-EOT needs attention.</strong> '.esc_html(implode(' ', $reasons)).' <a href="'.esc_url($settings_url).'">Review Automatic EOT settings</a>.';
+			$notice = '<strong>s2Member Automatic End-of-Term needs attention.</strong> '.esc_html(implode(' ', $reasons)).' <a href="'.esc_url($settings_url).'">Review Automatic End-of-Term settings</a>.';
 			c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
 		}
 
@@ -429,6 +630,8 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 		 * - Abandoned run: `last_abandoned_at`, `last_abandoned_started_at`, `last_abandoned_heartbeat_at`,
 		 *   `last_abandoned_processed`, `last_abandoned_user_id`, `consecutive_abandoned_runs`.
 		 * - Scheduler repair: `last_schedule_repaired_at`, `last_schedule_failure_at`, `schedule_failure_count`.
+		 * 260822.0614 Catch-up health is derived from ordinary pending/run state; there is no separate incident, cutoff,
+		 * backlog audit, or review-role state that can change how overdue users are processed.
 		 * Performance timing is descriptive for the last pass only; it is never persistent runtime-learning input.
 		 *
 		 * @package s2Member\Auto_EOT_System
@@ -787,23 +990,17 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 								}
 								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_eot_behavior'] === 'delete')
 								{
-									$eot_del_type = $GLOBALS['ws_plugin__s2member_eot_del_type'] = 'auto-eot-cancellation-expiration-deletion';
-									$log_entry['eot_del_type'] = $eot_del_type; // Deleting user in this case.
+									$eot_del_type = 'auto-eot-cancellation-expiration-deletion';
+									$log_entry['eot_del_type'] = $eot_del_type;
 
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_auto_eot_system_during_before_delete', get_defined_vars());
 									do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'removal-deletion');
 									unset($__refs, $__v); // Housekeeping.
 
-									if(is_multisite()/* Multisite does NOT actually delete; ONLY removes. */)
-									{
-										remove_user_from_blog($user_id, $current_blog->blog_id);
-										// This will automatically trigger `eot_del_notification_urls`.
-										c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions($user_id, $current_blog->blog_id, 's2says');
-									}
-									else // Otherwise, we can actually delete them.
-										// This will automatically trigger `eot_del_notification_urls`
-										wp_delete_user($user_id /* `c_ws_plugin__s2member_user_deletions::handle_user_deletions()` */);
+									//260822.0535 One operation now owns both safe Pending Deletion and the explicit developer opt-in for historical irreversible deletion.
+									$eot_delete_action = self::process_eot_deletion($user_id, $eot_del_type, $auto_eot_time);
+									$log_entry['eot_delete_action'] = $eot_delete_action;
 
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_auto_eot_system_during_delete', get_defined_vars());
@@ -815,6 +1012,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 
 								c_ws_plugin__s2member_utils_logs::log_entry('auto-eot-system', $log_entry);
 							}
+
 						}
 
 						//260820.0056 Feed the completed item's wall-clock cost into this pass only; no timing average is persisted between runs.
@@ -871,6 +1069,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 					$state['last_external_completed_at'] = time();
 				$state['consecutive_abandoned_runs'] = 0; //260820.0149 A clean completion breaks the abandoned-run sequence.
 				$state['active_run_token'] = '';
+
 				update_option($state_option, $state, FALSE);
 
 				//260820.0056 Delete the lock only after state is safely recorded; if PHP dies earlier, the surviving lock is what lets a future pass detect the abandoned run.

@@ -69,6 +69,19 @@ if(!class_exists('c_ws_plugin__s2member_roles_caps'))
 					foreach(array_keys($caps) as $cap)
 						$role->add_cap($cap);
 				}
+				//260822.0520 `delete` now expires membership access into a dedicated read-only Pending Deletion role by default; irreversible user deletion requires an explicit developer opt-in.
+				if(!($role = get_role('s2member_pending_deletion')))
+				{
+					add_role('s2member_pending_deletion', 'Pending Deletion', array('read' => TRUE));
+					$role = get_role('s2member_pending_deletion');
+				}
+				if($role)
+				{
+					$role->add_cap('read');
+					for($n = 0; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['max_levels']; $n++)
+						$role->remove_cap('access_s2member_level'.$n);
+				}
+
 				for($n = 1; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n++)
 				{
 					for($i = 0, $caps = array('read' => TRUE, 'level_0' => TRUE); $i <= $n; $i++)
@@ -147,6 +160,7 @@ if(!class_exists('c_ws_plugin__s2member_roles_caps'))
 
 				for($n = 1; $n <= $GLOBALS['WS_PLUGIN__']['s2member']['c']['max_levels']; $n++)
 					remove_role('s2member_level'.$n);
+				remove_role('s2member_pending_deletion'); //260822.0520 Recreated by config_roles(); removed cleanly with other s2Member-owned roles.
 
 				$full_access_roles = array('administrator', 'editor', 'author', 'contributor');
 

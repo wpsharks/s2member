@@ -247,27 +247,23 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 									{
 										$processing = $during = TRUE; // Yes, we ARE processing this.
 
-										$eot_del_type = $GLOBALS['ws_plugin__s2member_eot_del_type'] = // Configure EOT/Del type.
-											($is_refund_or_reversal) ? 'ipn-refund-reversal-deletion' : 'ipn-cancellation-expiration-deletion';
+										$eot_del_type = ($is_refund_or_reversal) ? // Configure EOT/Del type.
+											'ipn-refund-reversal-deletion' : 'ipn-cancellation-expiration-deletion';
 
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_before_delete', get_defined_vars());
 										do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'removal-deletion');
 										unset($__refs, $__v); // Housekeeping.
 
-										if(is_multisite()) // Multisite does NOT actually delete; ONLY removes.
+										//260822.0535 Immediate gateway EOTs use the same safe Delete policy as scheduled Auto-EOT processing.
+										$eot_delete_action = c_ws_plugin__s2member_auto_eots::process_eot_deletion($user_id, $eot_del_type, time());
+										if($eot_delete_action === 'pending_deletion')
+											$paypal['s2member_log'][] = 'Member access removed; account moved to Pending Deletion for administrator review.';
+										else
 										{
-											remove_user_from_blog($user_id, $current_blog->blog_id);
-											// This will automatically trigger `eot_del_notification_urls` as well.
-											c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions($user_id, $current_blog->blog_id, 's2says');
+											$paypal['s2member_log'][] = 'This Member\'s account has been '.(($eot_delete_action === 'removed') ? 'removed' : 'deleted').'.';
+											$paypal['s2member_log'][] = 'EOT/Deletion Notification URLs have been processed.';
 										}
-										else // Otherwise, we can actually delete them.
-											// This will automatically trigger `eot_del_notification_urls` as well.
-											wp_delete_user($user_id); // `c_ws_plugin__s2member_user_deletions::handle_user_deletions()`
-
-										$paypal['s2member_log'][] = 'This Member\'s account has been '.((is_multisite()) ? 'removed' : 'deleted').'.';
-
-										$paypal['s2member_log'][] = 'EOT/Deletion Notification URLs have been processed.';
 
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delete', get_defined_vars());
