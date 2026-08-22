@@ -135,6 +135,8 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 
 				delete_user_option($user_id, 's2member_last_auto_eot_time');
 				delete_user_option($user_id, 's2member_last_auto_eot_details');
+				delete_user_option($user_id, 's2member_last_auto_eot_processed_time');
+				delete_user_option($user_id, 's2member_eot_pending_deletion');
 				delete_user_option($user_id, 's2member_login_counter');
 				delete_user_option($user_id, 's2member_notes');
 

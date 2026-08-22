@@ -279,6 +279,104 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 		}
 
 		/**
+		 * Records when an End-of-Term action was processed and appends one compact history note.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260822.0653
+		 *
+		 * @param int   $user_id WordPress user ID that survived End-of-Term processing.
+		 * @param array $details Named End-of-Term history details.
+		 *
+		 * @return null
+		 */
+		public static function record_eot_history($user_id = 0, $details = array())
+		{
+			$user_id = (int)$user_id;
+			//260822.1458 Keep evolving EOT context named instead of positional so call sites cannot silently misorder history fields as this record grows.
+			$details = array_merge(array(
+				'eot_time'         => 0,
+				'processed_at'     => 0,
+				'original_role'    => '',
+				'destination_role' => '',
+				'removed_ccaps'    => array(),
+				'subscr_gateway'   => '',
+				'subscr_id'        => '',
+			), (array)$details);
+			$eot_time = (int)$details['eot_time'];
+			$processed_at = (int)$details['processed_at'];
+			$original_role = (string)$details['original_role'];
+			$destination_role = (string)$details['destination_role'];
+			$removed_ccaps = (array)$details['removed_ccaps'];
+			$subscr_gateway = (string)$details['subscr_gateway'];
+			$subscr_id = (string)$details['subscr_id'];
+			if(!$user_id || !$processed_at)
+				return;
+
+			try
+			{
+				//260822.0653 Prefer WordPress' timezone object when available so historical EOT and processing timestamps each get the correct DST abbreviation.
+				if(function_exists('wp_timezone'))
+					$timezone = wp_timezone();
+				else if(($timezone_string = (string)get_option('timezone_string')))
+					$timezone = new DateTimeZone($timezone_string);
+				else
+				{
+					$offset = (float)get_option('gmt_offset', 0);
+					$offset_abs = abs($offset);
+					$timezone = new DateTimeZone(sprintf('%s%02d:%02d', $offset < 0 ? '-' : '+', floor($offset_abs), round(($offset_abs - floor($offset_abs)) * 60)));
+				}
+				$processed_date = new DateTime('@'.$processed_at);
+				$processed_date->setTimezone($timezone);
+				$eot_date = new DateTime('@'.($eot_time ?: $processed_at));
+				$eot_date->setTimezone($timezone);
+				$processed_display = $processed_date->format('Y-m-d H:i T');
+				$eot_display = $eot_date->format('Y-m-d H:i T');
+			}
+			catch(Exception $exception)
+			{
+				//260822.0653 Invalid legacy timezone settings must not block EOT processing; UTC is the deterministic fallback for the audit note.
+				$processed_display = gmdate('Y-m-d H:i', $processed_at).' UTC';
+				$eot_display = gmdate('Y-m-d H:i', $eot_time ?: $processed_at).' UTC';
+			}
+
+			global $wp_roles;
+			if(!is_object($wp_roles))
+				$wp_roles = new WP_Roles();
+			$role_labels = array();
+			foreach(array($original_role, $destination_role) as $_role)
+			{
+				$_role = (string)$_role;
+				if(preg_match('/^s2member_level([0-9]+)$/', $_role, $_matches))
+					$role_labels[$_role] = 'Level '.(int)$_matches[1];
+				else if($_role === 's2member_pending_deletion')
+					$role_labels[$_role] = 'Pending Deletion';
+				else if($_role && isset($wp_roles->roles[$_role]['name']))
+					$role_labels[$_role] = translate_user_role($wp_roles->roles[$_role]['name']);
+				else
+					$role_labels[$_role] = $_role ? ucwords(str_replace(array('-', '_'), ' ', $_role)) : 'Unknown Role';
+			}
+			unset($_role, $_matches);
+
+			$gateway_labels = array('paypal' => 'PayPal', 'authnet' => 'Authorize.Net', 'clickbank' => 'ClickBank', 'ccbill' => 'ccBill', 'alipay' => 'AliPay', 'google' => 'Google Wallet', 'stripe' => 'Stripe');
+			$gateway_key = strtolower((string)$subscr_gateway);
+			$gateway_label = isset($gateway_labels[$gateway_key]) ? $gateway_labels[$gateway_key] : ucwords(str_replace(array('-', '_'), ' ', $gateway_key));
+			$removed_ccaps = array_values(array_unique(array_filter(array_map('strval', (array)$removed_ccaps), 'strlen')));
+			sort($removed_ccaps, SORT_STRING);
+
+			$note = $processed_display.' s2Member: Demoted from '.$role_labels[(string)$original_role].' to '.$role_labels[(string)$destination_role];
+			if($removed_ccaps)
+				$note .= ' (removed ccaps: '.implode(', ', $removed_ccaps).')';
+			$note .= '.';
+			if($subscr_gateway && $subscr_id)
+				$note .= ' '.$gateway_label.' '.$subscr_id.'.';
+			$note .= ' EOT '.$eot_display.'.';
+
+			//260822.0653 Keep the action timestamp independent from the triggering EOT timestamp; delayed processing can make these materially different.
+			update_user_option($user_id, 's2member_last_auto_eot_processed_time', $processed_at);
+			c_ws_plugin__s2member_user_notes::append_user_notes($user_id, $note);
+		}
+
+		/**
 		 * Applies the effective `delete` End-of-Term behavior.
 		 *
 		 * @package s2Member\Auto_EOT_System
@@ -318,8 +416,11 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			$already_pending = in_array($pending_role, (array)$user->roles, TRUE) && is_array($pending_meta) && isset($pending_meta['eot_time'], $pending_meta['processed_at'], $pending_meta['original_role']);
 			$original_role = $already_pending ? (string)$pending_meta['original_role'] : c_ws_plugin__s2member_user_access::user_access_role($user);
 			$processed_at = time();
+			$removed_ccaps = $already_pending ? array() : c_ws_plugin__s2member_user_access::user_access_ccaps($user);
+			$subscr_gateway = $already_pending ? '' : get_user_option('s2member_subscr_gateway', $user_id);
+			$subscr_id = $already_pending ? '' : get_user_option('s2member_subscr_id', $user_id);
 
-			//260822.0549 A surviving account can receive a replayed gateway event; preserve the first transition record and avoid duplicate EOT notifications when it is already safely pending.
+			//260822.0549 A surviving account can receive a replayed gateway event; preserve the first transition record and avoid duplicate EOT history/notifications when it is already safely pending.
 			if(!$already_pending)
 				update_user_option($user_id, 's2member_eot_pending_deletion', array(
 					'eot_time'      => $eot_time ?: $processed_at,
@@ -340,9 +441,22 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 				if($cap_enabled && preg_match('/^access_s2member_(?:level[0-9]+|ccap_)/', $cap))
 					$user->remove_cap($cap);
 
-			//260822.0535 A preserved account never reaches WordPress' deletion hook, so send the configured EOT/Deletion notifications explicitly instead of silently dropping them.
 			if(!$already_pending)
+			{
+				//260822.0653 Pending Deletion survives the EOT, so archive the triggering timestamp just like an ordinary demotion; this keeps Last EOT/reporting complete without clearing gateway metadata needed for review.
+				update_user_option($user_id, 's2member_last_auto_eot_time', $eot_time ?: $processed_at);
+				self::record_eot_history($user_id, array(
+					'eot_time'         => $eot_time ?: $processed_at,
+					'processed_at'     => $processed_at,
+					'original_role'    => $original_role,
+					'destination_role' => $pending_role,
+					'removed_ccaps'    => $removed_ccaps,
+					'subscr_gateway'   => $subscr_gateway,
+					'subscr_id'        => $subscr_id,
+				));
+				//260822.0535 A preserved account never reaches WordPress' deletion hook, so send the configured EOT/Deletion notifications explicitly instead of silently dropping them.
 				self::pending_deletion_notifications($user_id, $eot_del_type);
+			}
 
 			return 'pending_deletion';
 		}
@@ -863,6 +977,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 
 									$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber');
 									$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
+									$removed_ccaps = array();
 
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_auto_eot_system_during_before_demote', get_defined_vars());
@@ -876,7 +991,10 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									if(apply_filters('ws_plugin__s2member_remove_ccaps_during_eot_events', (bool)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eots_remove_ccaps'], get_defined_vars()))
 										foreach($user->allcaps as $cap => $cap_enabled)
 											if(preg_match('/^access_s2member_ccap_/', $cap))
+											{
+												$removed_ccaps[] = preg_replace('/^access_s2member_ccap_/', '', $cap);
 												$user->remove_cap($ccap = $cap);
+											}
 
 									delete_user_option($user_id, 's2member_subscr_gateway');
 									delete_user_option($user_id, 's2member_subscr_id');
@@ -898,14 +1016,22 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									delete_user_option($user_id, 's2member_file_download_access_log');
 									delete_user_option($user_id, 's2member_authnet_payment_failures');
 
+									$processed_at = time();
 									update_user_option($user_id, 's2member_last_auto_eot_time', $auto_eot_time);
 									//260821.0057 Preserve only matching provenance (e.g., refund/reversal) alongside the archived EOT.
 									if($auto_eot_details)
 										update_user_option($user_id, 's2member_last_auto_eot_details', $auto_eot_details);
 
-									c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
-									if($subscr_gateway && $subscr_id) // Also note the Paid Subscr. Gateway/ID so there is a reference left behind here.
-										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$subscr_gateway.' → '.$subscr_id);
+									//260822.0653 Record the triggering EOT separately from when this worker actually completed the demotion, using the pre-cleanup role/payment snapshot above.
+									self::record_eot_history($user_id, array(
+										'eot_time'         => $auto_eot_time,
+										'processed_at'     => $processed_at,
+										'original_role'    => $existing_role,
+										'destination_role' => $demotion_role,
+										'removed_ccaps'    => $removed_ccaps,
+										'subscr_gateway'   => $subscr_gateway,
+										'subscr_id'        => $subscr_id,
+									));
 
 									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'])
 									{

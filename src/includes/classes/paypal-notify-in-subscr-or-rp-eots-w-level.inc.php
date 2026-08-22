@@ -117,6 +117,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 										$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber');
 										$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
+										$removed_ccaps = array();
 
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_before_demote', get_defined_vars());
@@ -130,7 +131,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										if(apply_filters('ws_plugin__s2member_remove_ccaps_during_eot_events', (bool)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eots_remove_ccaps'] || $is_refund_or_reversal, get_defined_vars()))
 											foreach($user->allcaps as $cap => $cap_enabled)
 												if(preg_match('/^access_s2member_ccap_/', $cap))
+												{
+													$removed_ccaps[] = preg_replace('/^access_s2member_ccap_/', '', $cap);
 													$user->remove_cap($ccap = $cap);
+												}
 
 										delete_user_option($user_id, 's2member_subscr_gateway');
 										delete_user_option($user_id, 's2member_subscr_id');
@@ -152,14 +156,22 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										delete_user_option($user_id, 's2member_file_download_access_log');
 										delete_user_option($user_id, 's2member_authnet_payment_failures');
 
-										$last_auto_eot_time = time();
+										$processed_at = $last_auto_eot_time = time();
 										update_user_option($user_id, 's2member_last_auto_eot_time', $last_auto_eot_time);
 										//260821.0057 Post-EOT renewal reminders must distinguish an ordinary expiration from access terminated immediately by a refund, reversal, or chargeback.
 										if($is_refund_or_reversal)
 											update_user_option($user_id, 's2member_last_auto_eot_details', array('time' => $last_auto_eot_time, 'source' => 'refund_reversal', 'updated_at' => $last_auto_eot_time));
 
-										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
-										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$paypal['subscr_gateway'].' → '.$paypal['subscr_id']);
+										//260822.0653 Immediate gateway EOTs use the same processed-time/history record as scheduled demotions, with the gateway payload retained before usermeta cleanup.
+										c_ws_plugin__s2member_auto_eots::record_eot_history($user_id, array(
+											'eot_time'         => $last_auto_eot_time,
+											'processed_at'     => $processed_at,
+											'original_role'    => $existing_role,
+											'destination_role' => $demotion_role,
+											'removed_ccaps'    => $removed_ccaps,
+											'subscr_gateway'   => $paypal['subscr_gateway'],
+											'subscr_id'        => $paypal['subscr_id'],
+										));
 
 										$paypal['s2member_log'][] = 'Member Level/Capabilities demoted to: '.ucwords(preg_replace('/_/', ' ', $demotion_role)).'.';
 
@@ -255,7 +267,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'removal-deletion');
 										unset($__refs, $__v); // Housekeeping.
 
-										//260822.0535 Immediate gateway EOTs use the same safe Delete policy as scheduled Auto-EOT processing.
+										//260822.1458 Immediate gateway EOTs use the same safe "Delete" policy as scheduled Auto-EOT processing.
 										$eot_delete_action = c_ws_plugin__s2member_auto_eots::process_eot_deletion($user_id, $eot_del_type, time());
 										if($eot_delete_action === 'pending_deletion')
 											$paypal['s2member_log'][] = 'Member access removed; account moved to Pending Deletion for administrator review.';
