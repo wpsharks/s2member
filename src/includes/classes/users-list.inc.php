@@ -138,6 +138,9 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 				$cols["s2member_ccaps"] = "Custom Capabilities";
 
 			$cols["s2member_auto_eot_time"] = "EOT Time";
+			//260822.1509 Keep the triggering EOT and its actual processing time separate; both remain optional history columns on the normal Users screen.
+			$cols["s2member_last_auto_eot_time"] = "Last EOT";
+			$cols["s2member_last_auto_eot_processed_time"] = "EOT Demotion";
 
 			if($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"])
 				foreach(json_decode($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_fields"], TRUE) as $field)
@@ -157,6 +160,31 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 			unset($__refs, $__v);
 
 			return apply_filters("ws_plugin__s2member_users_list_cols", $cols, get_defined_vars());
+		}
+
+		/**
+		 * Hides optional s2Member history columns by default on the Users screen.
+		 *
+		 * @package s2Member\Users_List
+		 * @since 260822.1509
+		 *
+		 * @attaches-to ``add_filter("default_hidden_columns");``
+		 *
+		 * @param array     $hidden Default hidden column IDs.
+		 * @param WP_Screen $screen Current screen object.
+		 *
+		 * @return array Filtered hidden column IDs.
+		 */
+		public static function users_list_default_hidden_cols($hidden = array(), $screen = NULL)
+		{
+			if(is_object($screen) && !empty($screen->id) && $screen->id === 'users')
+			{
+				//260822.1509 Preserve the normal Users table's compact default while leaving both EOT history columns available through Screen Options.
+				$hidden[] = 's2member_last_auto_eot_time';
+				$hidden[] = 's2member_last_auto_eot_processed_time';
+				$hidden = array_values(array_unique($hidden));
+			}
+			return $hidden;
 		}
 
 		/**
@@ -215,6 +243,12 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 			else if($col === "s2member_auto_eot_time")
 				$val = ($v = get_user_option("s2member_auto_eot_time", $user_id)) ? date("D M jS, Y", (int)$v)."<br /><small>@ precisely ".date("g:i a", (int)$v)."</small>" : "—";
 
+			else if($col === "s2member_last_auto_eot_time" || $col === "s2member_last_auto_eot_processed_time")
+			{
+				//260822.1509 Match the existing EOT Time presentation so current, triggering, and processed timestamps compare directly in the same Users table.
+				$val = ($v = get_user_option($col, $user_id)) ? date("D M jS, Y", (int)$v)."<br /><small>@ precisely ".date("g:i a", (int)$v)."</small>" : "—";
+			}
+
 			else if(preg_match("/^s2member_custom_field_/", $col))
 			{
 				if(!$last_fields_id || $last_fields_id !== $user_id)
@@ -267,11 +301,13 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 			if(!empty($_REQUEST['s']))
 				return $columns;
 
-			$columns['s2member_registration_time'] = 's2member_registration_time';
-			$columns['s2member_subscr_id']         = 's2member_subscr_id';
-			$columns['s2member_auto_eot_time']     = 's2member_auto_eot_time';
-			$columns['s2member_login_counter']     = 's2member_login_counter';
-			$columns['s2member_last_login_time']   = 's2member_last_login_time';
+			$columns['s2member_registration_time']               = 's2member_registration_time';
+			$columns['s2member_subscr_id']                       = 's2member_subscr_id';
+			$columns['s2member_auto_eot_time']                   = 's2member_auto_eot_time';
+			$columns['s2member_last_auto_eot_time']              = 's2member_last_auto_eot_time';
+			$columns['s2member_last_auto_eot_processed_time']    = 's2member_last_auto_eot_processed_time';
+			$columns['s2member_login_counter']                   = 's2member_login_counter';
+			$columns['s2member_last_login_time']                 = 's2member_last_login_time';
 
 			return $columns;
 		}
@@ -311,6 +347,8 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 					break;
 
 				case 's2member_auto_eot_time':
+				case 's2member_last_auto_eot_time':
+				case 's2member_last_auto_eot_processed_time':
 				case 's2member_login_counter':
 				case 's2member_last_login_time':
 					$query->query_from .= " LEFT JOIN `".$wpdb->usermeta."` `___m` ON (`".$wpdb->users."`.`ID` = `___m`.`user_id` AND `___m`.`meta_key` = '".esc_sql($wpdb->prefix.$vars['orderby'])."')";
