@@ -1700,6 +1700,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<li><strong>Last run:</strong> '.($auto_eot_health['last_completed_at'] ? number_format_i18n((int)$auto_eot_health['last_processed']).' EOT(s) in '.esc_html(number_format_i18n((float)$auto_eot_health['last_runtime'], 2)).' seconds' : 'Not recorded yet').'</li>'."\n";
 				echo '<li><strong>Next run:</strong> '.($auto_eot_mode === '1' ? ($auto_eot_next_run ? esc_html(($auto_eot_next_run <= time() ? human_time_diff($auto_eot_next_run, time()).' overdue' : 'in '.human_time_diff(time(), $auto_eot_next_run))) : 'Not scheduled') : ($auto_eot_mode === '2' ? 'Controlled by your external cron service' : 'Disabled')).'</li>'."\n";
 				echo '<li><strong>Current runtime target:</strong> ~'.esc_html(number_format_i18n($auto_eot_runtime_target, 1)).' seconds ('.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_mode"] === 'custom') ? 'Custom' : 'Automatic').'; PHP max execution time: '.($php_execution_limit > 0 ? esc_html($php_execution_limit.' seconds') : 'no finite PHP limit reported').')</li>'."\n";
+				//260822.1519 Keep review work in WordPress' native Users table, where existing role filters, bulk actions, and Screen Options remain available.
+				echo '<li><strong>End-of-Term users:</strong> <a href="'.esc_url(admin_url('/users.php?s2member_view=eot')).'">Review current and previous End-of-Term users</a></li>'."\n";
 				echo '</ul>'."\n";
 				echo '</div>'."\n";
 
