@@ -112,9 +112,9 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 				//260822.1519 EXISTS keeps the native Users query free of duplicate rows when a user has both current and historical EOT metadata, including while s2Member's expanded Users search is active.
 				$query->query_where .= " AND (EXISTS (SELECT 1 FROM `".$wpdb->usermeta."` `___s2_eot_current` WHERE `___s2_eot_current`.`user_id` = `".$wpdb->users."`.`ID` AND `___s2_eot_current`.`meta_key` = '".$current_eot_key."' AND CAST(`___s2_eot_current`.`meta_value` AS UNSIGNED) > 0) OR EXISTS (SELECT 1 FROM `".$wpdb->usermeta."` `___s2_eot_last` WHERE `___s2_eot_last`.`user_id` = `".$wpdb->users."`.`ID` AND `___s2_eot_last`.`meta_key` = '".$last_eot_key."' AND CAST(`___s2_eot_last`.`meta_value` AS UNSIGNED) > 0))";
 
-				if(empty($_REQUEST['orderby']))
+				if(empty($_REQUEST['orderby']) && empty($_REQUEST['s']))
 				{
-					//260823.1507 Match the native sortable-column behavior exactly: the initial EOT report is a plain ascending EOT Time sort, including WordPress/MySQL's normal handling of empty values.
+					//260823.1829 Keep EOT Time as the report default only outside searches; s2Member deliberately leaves WordPress's native search sorting and header state untouched.
 					$query->query_from .= " LEFT JOIN `".$wpdb->usermeta."` `___s2_eot_order_current` ON (`".$wpdb->users."`.`ID` = `___s2_eot_order_current`.`user_id` AND `___s2_eot_order_current`.`meta_key` = '".$current_eot_key."')";
 					$query->query_orderby = "ORDER BY CAST(`___s2_eot_order_current`.`meta_value` AS UNSIGNED) ASC";
 				}

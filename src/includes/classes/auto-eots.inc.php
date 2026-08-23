@@ -46,10 +46,11 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			}
 			else if(function_exists('wp_cron') /* Otherwise, we can schedule? */)
 			{
-				//260819.0613 Return WordPress' real scheduling result so a rejected/failed cron event is not reported as successful.
-				$scheduled = wp_schedule_event(time(), 'every10m', 'ws_plugin__s2member_auto_eot_system__schedule');
+				//260823.1829 Verify the scheduled event itself because older WordPress versions supported by s2Member return no success value from wp_schedule_event().
+				wp_schedule_event(time(), 'every10m', 'ws_plugin__s2member_auto_eot_system__schedule');
+				$scheduled = (bool)wp_next_scheduled('ws_plugin__s2member_auto_eot_system__schedule') && wp_get_schedule('ws_plugin__s2member_auto_eot_system__schedule') === 'every10m';
 
-				return apply_filters('ws_plugin__s2member_add_auto_eot_system', (bool)$scheduled, get_defined_vars());
+				return apply_filters('ws_plugin__s2member_add_auto_eot_system', $scheduled, get_defined_vars());
 			}
 			else // Otherwise, it would appear that WP-Cron is not available.
 			{
