@@ -1680,7 +1680,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				$auto_eot_mode = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"];
 				$auto_eot_runtime_target = c_ws_plugin__s2member_auto_eots::auto_eot_system_runtime_budget($auto_eot_mode === '2');
 				$php_execution_limit = (int)ini_get('max_execution_time');
-				$auto_eot_status_labels = array('healthy' => 'Healthy', 'catching_up' => 'Catching up', 'attention' => 'Attention', 'error' => 'Needs attention', 'disabled' => 'Disabled');
+				$auto_eot_status_labels = array('healthy' => 'Healthy', 'processing' => 'Processing', 'catching_up' => 'Catching up', 'attention' => 'Attention', 'error' => 'Needs attention', 'disabled' => 'Disabled');
 				$auto_eot_status_label = isset($auto_eot_status_labels[$auto_eot_health['status']]) ? $auto_eot_status_labels[$auto_eot_health['status']] : ucfirst($auto_eot_health['status']);
 
 				$auto_eot_next_run = 0;
@@ -1691,19 +1691,19 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					unset($_scheduled);
 				}
 
-				echo '<div class="ws-menu-page-notice ws-menu-page-notice-info">'."\n";
-				echo '<p><strong>Automatic EOT Status: '.esc_html($auto_eot_status_label).'</strong></p>'."\n";
-				echo '<ul style="margin-bottom:0;">'."\n";
-				echo '<li><strong>Pending overdue EOTs:</strong> '.number_format_i18n((int)$auto_eot_health['pending_count']).'</li>'."\n";
-				echo '<li><strong>Oldest overdue EOT:</strong> '.($auto_eot_health['oldest_due_at'] ? esc_html(human_time_diff((int)$auto_eot_health['oldest_due_at'], time()).' ago') : 'None').'</li>'."\n";
-				echo '<li><strong>Last completed run:</strong> '.($auto_eot_health['last_completed_at'] ? esc_html(human_time_diff((int)$auto_eot_health['last_completed_at'], time()).' ago') : 'Not recorded yet').'</li>'."\n";
-				echo '<li><strong>Last run:</strong> '.($auto_eot_health['last_completed_at'] ? number_format_i18n((int)$auto_eot_health['last_processed']).' EOT(s) in '.esc_html(number_format_i18n((float)$auto_eot_health['last_runtime'], 2)).' seconds' : 'Not recorded yet').'</li>'."\n";
-				echo '<li><strong>Next run:</strong> '.($auto_eot_mode === '1' ? ($auto_eot_next_run ? esc_html(($auto_eot_next_run <= time() ? human_time_diff($auto_eot_next_run, time()).' overdue' : 'in '.human_time_diff(time(), $auto_eot_next_run))) : 'Not scheduled') : ($auto_eot_mode === '2' ? 'Controlled by your external cron service' : 'Disabled')).'</li>'."\n";
-				echo '<li><strong>Current runtime target:</strong> ~'.esc_html(number_format_i18n($auto_eot_runtime_target, 1)).' seconds ('.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_mode"] === 'custom') ? 'Custom' : 'Automatic').'; PHP max execution time: '.($php_execution_limit > 0 ? esc_html($php_execution_limit.' seconds') : 'no finite PHP limit reported').')</li>'."\n";
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+				echo '<h3>Automatic Behavior Status: <span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($auto_eot_health['status']).'" aria-hidden="true"></span>'.esc_html($auto_eot_status_label).'</h3>'."\n";
+				echo '<table class="ws-plugin--s2member-status-table"><tbody>'."\n";
+				echo '<tr><th scope="row">Pending overdue EOTs:</th><td>'.number_format_i18n((int)$auto_eot_health['pending_count']).'</td></tr>'."\n";
+				echo '<tr><th scope="row">Oldest overdue EOT:</th><td>'.($auto_eot_health['oldest_due_at'] ? esc_html(human_time_diff((int)$auto_eot_health['oldest_due_at'], time()).' ago') : 'None').'</td></tr>'."\n";
+				echo '<tr><th scope="row">Last completed run:</th><td>'.($auto_eot_health['last_completed_at'] ? esc_html(human_time_diff((int)$auto_eot_health['last_completed_at'], time()).' ago') : 'Not recorded yet').'</td></tr>'."\n";
+				echo '<tr><th scope="row">Last run:</th><td>'.($auto_eot_health['last_completed_at'] ? number_format_i18n((int)$auto_eot_health['last_processed']).' EOT(s) in '.esc_html(number_format_i18n((float)$auto_eot_health['last_runtime'], 2)).' seconds' : 'Not recorded yet').'</td></tr>'."\n";
+				echo '<tr><th scope="row">Next run:</th><td>'.($auto_eot_mode === '1' ? ($auto_eot_next_run ? esc_html(($auto_eot_next_run <= time() ? human_time_diff($auto_eot_next_run, time()).' overdue' : 'in '.human_time_diff(time(), $auto_eot_next_run))) : 'Not scheduled') : ($auto_eot_mode === '2' ? 'Controlled by your external cron service' : 'Disabled')).'</td></tr>'."\n";
+				echo '<tr><th scope="row">Current runtime target:</th><td>About '.esc_html(number_format_i18n($auto_eot_runtime_target, 0)).' seconds'.($php_execution_limit > 0 ? ' (PHP limit: '.esc_html($php_execution_limit).')' : ' (no set PHP limit)').'</td></tr>'."\n";
 				//260822.1519 Keep review work in WordPress' native Users table, where existing role filters, bulk actions, and Screen Options remain available.
-				echo '<li><strong>End-of-Term users:</strong> <a href="'.esc_url(admin_url('/users.php?s2member_view=eot')).'">Review current and previous End-of-Term users</a></li>'."\n";
-				echo '</ul>'."\n";
-				echo '</div>'."\n";
+				echo '<tr><th scope="row">End-of-Term times:</th><td><a href="'.esc_url(admin_url('/users.php?s2member_view=eot')).'">Review users</a></td></tr>'."\n";
+				echo '</tbody></table>'."\n";
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
 				//260820.0306 Legacy filters remain authoritative for compatibility, but explain when an inherited fixed-batch limit can now reduce adaptive throughput.
 				if(!empty($auto_eot_legacy_cap['detected']))
@@ -1754,6 +1754,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<option value="0"'.(($auto_eot_mode === '0') ? ' selected="selected"' : '').'>No (disable the Auto-EOT System)</option>'."\n";
 				echo '</select><br />'."\n";
 				echo 'Recommended setting: (<code>Yes / enable via WP-Cron</code>)'."\n";
+				echo '<br /><em>When disabled, automatic End-of-Term processing is paused. s2Member can still record End-of-Term dates, and s2Member Pro reminders based on stored End-of-Term dates can continue independently. Overdue End-of-Term actions remain pending and will be processed if the Auto-EOT System is enabled again.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -1781,8 +1782,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '</tr>'."\n";
 				echo '<tr>'."\n";
 				echo '<td>'."\n";
-				echo '<input type="number" min="1" max="3600" step="1" name="ws_plugin__s2member_auto_eot_system_runtime_custom" id="ws-plugin--s2member-auto-eot-system-runtime-custom" value="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_custom"]).'" /> seconds<br />'."\n";
-				echo '<em>Used only in Custom mode. If PHP reports a finite execution limit, s2Member keeps 10% of it in reserve even when this value is higher. Developers can still override the final runtime with <code>ws_plugin__s2member_auto_eot_system_runtime</code>.</em>'."\n";
+				echo '<input type="number" min="1" max="3600" step="1" name="ws_plugin__s2member_auto_eot_system_runtime_custom" id="ws-plugin--s2member-auto-eot-system-runtime-custom" value="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_custom"]).'" /><br />'."\n";
+				echo '<em>Used only in Custom mode. If PHP reports a finite execution limit, s2Member uses the lower of this value and 90% of PHP\'s limit. For example, if you enter 100 seconds and PHP\'s limit is 30 seconds, s2Member uses 27 seconds. Developers can still override the final runtime with <code>ws_plugin__s2member_auto_eot_system_runtime</code>.</em>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 				echo '</tbody>'."\n";
@@ -1806,7 +1807,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_membership_eot_behavior" id="ws-plugin--s2member-membership-eot-behavior">'."\n";
 				echo '<option value="demote"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "demote") ? ' selected="selected"' : '').'>Demote (convert them to a Free Subscriber)</option>'."\n";
-				echo '<option value="delete"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "delete") ? ' selected="selected"' : '').'>Delete</option>'."\n";
+				echo '<option value="delete"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "delete") ? ' selected="selected"' : '').'>Delete (move to Pending Deletion for review)</option>'."\n";
 				echo '</select><br />'."\n";
 				//260822.0614 Keep the stored `delete` value for compatibility; irreversible deletion is an explicit developer opt-in rather than the product default.
 				echo '<em>Delete removes s2Member membership access and moves the account to the <strong>Pending Deletion</strong> role for administrator review. To restore historical automatic irreversible deletion, a developer must explicitly allow it with the <code>ws_plugin__s2member_allow_eot_user_deletion</code> filter.</em>'."\n";

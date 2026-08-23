@@ -186,10 +186,11 @@ add_action('pre_user_query', 'c_ws_plugin__s2member_users_list::users_list_query
 add_filter('views_users', 'c_ws_plugin__s2member_users_list::users_list_views'); //260822.1519 Reuse WordPress' native Users views for the End-of-Term report.
 add_filter('manage_users_columns', 'c_ws_plugin__s2member_users_list::users_list_cols');
 add_filter('default_hidden_columns', 'c_ws_plugin__s2member_users_list::users_list_default_hidden_cols', 10, 2); //260822.1509 Keep optional EOT history columns available without widening the normal Users table by default.
-add_filter('hidden_columns', 'c_ws_plugin__s2member_users_list::users_list_hidden_cols', 10, 2); //260822.1519 Show EOT columns in the report without changing saved Screen Options.
+add_filter('hidden_columns', 'c_ws_plugin__s2member_users_list::users_list_hidden_cols', 10, 2); //260823.0116 Force EOT timestamps visible only in the EOT review views; all other Users views follow Screen Options unchanged.
 add_filter('manage_users_custom_column', 'c_ws_plugin__s2member_users_list::users_list_display_cols', 10, 3);
 add_filter('manage_users_sortable_columns', 'c_ws_plugin__s2member_users_list::users_list_add_sortable');
 add_filter('pre_user_query', 'c_ws_plugin__s2member_users_list::users_list_make_sortable');
+add_action('admin_notices', 'c_ws_plugin__s2member_users_list::users_list_eot_notice', 13); //260823.0302 Explain the native End-of-Term report directly on that Users view.
 add_action('admin_notices', 'c_ws_plugin__s2member_users_list::users_list_pending_deletion_notice', 13); //260822.1519 Explain the native Pending Deletion review queue directly on that role-filtered Users page.
 add_action('edit_user_profile', 'c_ws_plugin__s2member_users_list::users_list_edit_cols');
 add_action('show_user_profile', 'c_ws_plugin__s2member_users_list::users_list_edit_cols');
@@ -209,8 +210,10 @@ add_filter('cron_schedules', 'c_ws_plugin__s2member_cron_jobs::extend_cron_sched
 add_action('ws_plugin__s2member_auto_eot_system__schedule', 'c_ws_plugin__s2member_auto_eots::auto_eot_system');
 //260820.0056 Keep catch-up work on a separate one-off hook so it can process only overdue EOTs without repeatedly invoking collective Pro cron consumers.
 add_action('ws_plugin__s2member_auto_eot_system__continuation', 'c_ws_plugin__s2member_auto_eots::auto_eot_system_continuation');
+add_action('ws_plugin__s2member_eot_processed_time_backfill', 'c_ws_plugin__s2member_auto_eots::backfill_eot_processed_times'); //260822.2048 Recover historical EOT processing times from legacy Administrative Notes after upgrade.
 //260819.0613 Repair a missing recurring Auto-EOT event during normal requests, and immediately after an EOT run if WordPress failed to reschedule it.
 add_action('init', 'c_ws_plugin__s2member_auto_eots::ensure_auto_eot_system', 3);
+add_action('init', 'c_ws_plugin__s2member_auto_eots::ensure_eot_processed_time_backfill', 4); //260822.2048 Self-heal only while the temporary upgrade backfill cursor exists.
 add_action('ws_plugin__s2member_after_auto_eot_system', 'c_ws_plugin__s2member_auto_eots::ensure_auto_eot_system', 999);
 
 add_action('wp_ajax_ws_plugin__s2member_update_roles_via_ajax', 'c_ws_plugin__s2member_roles_caps::update_roles_via_ajax');

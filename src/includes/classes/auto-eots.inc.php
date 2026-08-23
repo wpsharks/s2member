@@ -377,6 +377,108 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 		}
 
 		/**
+		 * Starts a best-effort upgrade backfill of historical EOT processing times.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260822.2048
+		 *
+		 * @return null
+		 */
+		public static function start_eot_processed_time_backfill()
+		{
+			$state_option = 'ws_plugin__s2member_auto_eot_state';
+			$state = get_option($state_option);
+			$state = is_array($state) ? $state : array();
+
+			//260822.2048 Reuse Auto-EOT's operational state for this temporary migration cursor; no separate migration option or table is needed.
+			if(!array_key_exists('processed_time_backfill_cursor_umeta_id', $state))
+			{
+				$state['processed_time_backfill_cursor_umeta_id'] = 0;
+				update_option($state_option, $state, FALSE);
+			}
+			self::ensure_eot_processed_time_backfill();
+		}
+
+		/**
+		 * Ensures that an unfinished historical EOT processing-time backfill has a continuation event.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260822.2048
+		 *
+		 * @return null
+		 */
+		public static function ensure_eot_processed_time_backfill()
+		{
+			$state = get_option('ws_plugin__s2member_auto_eot_state');
+			$hook = 'ws_plugin__s2member_eot_processed_time_backfill';
+
+			if(is_array($state) && array_key_exists('processed_time_backfill_cursor_umeta_id', $state) && !wp_next_scheduled($hook))
+				wp_schedule_single_event(time() + 5, $hook);
+		}
+
+		/**
+		 * Backfills EOT processing times that can be recovered from legacy Administrative Notes.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260822.2048
+		 *
+		 * @return null
+		 */
+		public static function backfill_eot_processed_times()
+		{
+			global $wpdb;
+
+			$state_option = 'ws_plugin__s2member_auto_eot_state';
+			$state = get_option($state_option);
+			$state = is_array($state) ? $state : array();
+			if(!array_key_exists('processed_time_backfill_cursor_umeta_id', $state))
+				return;
+
+			$cursor_umeta_id = (int)$state['processed_time_backfill_cursor_umeta_id'];
+			$last_key = $wpdb->prefix.'s2member_last_auto_eot_time';
+			$processed_key = $wpdb->prefix.'s2member_last_auto_eot_processed_time';
+			$notes_key = $wpdb->prefix.'s2member_notes';
+			$rows = $wpdb->get_results($wpdb->prepare(
+				"SELECT `last`.`umeta_id`, `last`.`user_id`, CAST(`last`.`meta_value` AS UNSIGNED) AS `eot_time`, `notes`.`meta_value` AS `notes` FROM `".$wpdb->usermeta."` `last` INNER JOIN `".$wpdb->usermeta."` `notes` ON `notes`.`user_id` = `last`.`user_id` AND `notes`.`meta_key` = %s LEFT JOIN `".$wpdb->usermeta."` `processed` ON `processed`.`user_id` = `last`.`user_id` AND `processed`.`meta_key` = %s WHERE `last`.`meta_key` = %s AND `last`.`umeta_id` > %d AND CAST(`last`.`meta_value` AS UNSIGNED) > 0 AND `processed`.`umeta_id` IS NULL AND `notes`.`meta_value` LIKE %s ORDER BY `last`.`umeta_id` ASC LIMIT 100",
+				$notes_key, $processed_key, $last_key, $cursor_umeta_id, '%Demoted by s2Member:%'
+			));
+			$rows = is_array($rows) ? $rows : array();
+
+			foreach($rows as $row)
+			{
+				$cursor_umeta_id = (int)$row->umeta_id;
+				$lines = preg_split('/\r\n|\r|\n/', (string)$row->notes);
+				foreach(array_reverse((array)$lines) as $line)
+					if(preg_match('/^Demoted by s2Member:\s*(.+)$/', trim($line), $matches))
+					{
+						$processed_at = strtotime($matches[1]);
+						//260822.2048 Legacy notes have minute precision; accept up to 59 seconds before an immediate EOT timestamp, but never guess from an older unrelated demotion note.
+						if($processed_at && $processed_at + MINUTE_IN_SECONDS >= (int)$row->eot_time)
+						{
+							$current_last_eot = $wpdb->get_var($wpdb->prepare("SELECT CAST(`meta_value` AS UNSIGNED) FROM `".$wpdb->usermeta."` WHERE `umeta_id` = %d AND `user_id` = %d AND `meta_key` = %s LIMIT 1", (int)$row->umeta_id, (int)$row->user_id, $last_key));
+							$processed_exists = $wpdb->get_var($wpdb->prepare("SELECT 1 FROM `".$wpdb->usermeta."` WHERE `user_id` = %d AND `meta_key` = %s LIMIT 1", (int)$row->user_id, $processed_key));
+							//260822.2259 Revalidate before writing legacy history; a newly processed EOT always wins over this best-effort upgrade backfill.
+							if($current_last_eot !== NULL && (int)$current_last_eot === (int)$row->eot_time && !$processed_exists)
+								add_user_meta((int)$row->user_id, $processed_key, $processed_at, TRUE);
+							break;
+						}
+					}
+			}
+			unset($row, $lines, $line, $matches, $processed_at);
+
+			$state = get_option($state_option);
+			$state = is_array($state) ? $state : array();
+			if(count($rows) === 100)
+				$state['processed_time_backfill_cursor_umeta_id'] = $cursor_umeta_id;
+			else
+				unset($state['processed_time_backfill_cursor_umeta_id']);
+			update_option($state_option, $state, FALSE);
+
+			if(count($rows) === 100)
+				self::ensure_eot_processed_time_backfill();
+		}
+
+		/**
 		 * Applies the effective `delete` End-of-Term behavior.
 		 *
 		 * @package s2Member\Auto_EOT_System
@@ -604,6 +706,10 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			$last_completed_at = !empty($state['last_completed_at']) ? (int)$state['last_completed_at'] : 0;
 			$last_processed = isset($state['last_processed']) ? (int)$state['last_processed'] : 0;
 			$last_more_due_work = !empty($state['last_more_due_work']);
+			$runtime_budget = self::auto_eot_system_runtime_budget($mode === '2');
+			$lock_stale_after = max(120, (int)ceil(($runtime_budget * 2) + 30));
+			//260823.0021 A lock means active processing only while its heartbeat is inside the same stale window used by the worker; an abandoned lock must not mask health as current work.
+			$is_running = !empty($lock['heartbeat_at']) && $now - (int)$lock['heartbeat_at'] <= $lock_stale_after;
 			$catchup_fresh_after = ($mode === '2') ? 2 * HOUR_IN_SECONDS : 30 * MINUTE_IN_SECONDS;
 			//260822.0614 Catch-up is ordinary queue progress, not a separate incident: report it only while a recent productive pass says more due work remains.
 			$catching_up = $pending_count && $last_more_due_work && $last_processed > 0 && $last_completed_at && $now - $last_completed_at < $catchup_fresh_after;
@@ -638,7 +744,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			$health = array(
 				'generated_at'               => $now,
 				'mode'                       => $mode,
-				'status'                     => !$mode ? 'disabled' : ($critical ? 'error' : (isset($issues['catching_up']) && count($issues) === 1 ? 'catching_up' : ($issues ? 'attention' : 'healthy'))),
+				'status'                     => !$mode ? 'disabled' : ($critical ? 'error' : ($is_running ? 'processing' : (isset($issues['catching_up']) && count($issues) === 1 ? 'catching_up' : ($issues ? 'attention' : 'healthy')))),
 				'needs_admin_notice'         => $critical ? 1 : 0,
 				'issues'                     => array_keys($issues),
 				'pending_count'              => $pending_count,
@@ -646,7 +752,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 				'oldest_overdue_seconds'     => $oldest_overdue_seconds,
 				'recurring_at'               => $recurring_at ? (int)$recurring_at : 0,
 				'continuation_at'            => $continuation_at ? (int)$continuation_at : 0,
-				'is_running'                 => !empty($lock['heartbeat_at']) ? 1 : 0,
+				'is_running'                 => $is_running ? 1 : 0,
 				'last_started_at'            => !empty($state['last_started_at']) ? (int)$state['last_started_at'] : 0,
 				'last_completed_at'          => $last_completed_at,
 				'last_runtime'               => isset($state['last_runtime']) ? (float)$state['last_runtime'] : 0.0,
@@ -771,6 +877,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			do_action('ws_plugin__s2member_before_auto_eot_system', get_defined_vars());
 			unset($__refs, $__v); // Housekeeping.
 
+			//260823.0421 !!! TO-DO: Revisit disabled Auto-EOT lifecycle semantics. Consider archiving an elapsed current EOT as Last EOT with an explicit skip/no-change outcome while leaving membership access untouched, instead of keeping it pending for later demotion/deletion when processing is re-enabled. This requires a safe lifecycle trigger while the action worker is disabled and must preserve reminder/provenance history correctly.
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled']  /* Enabled? */)
 			{
 				//260820.0056 Count the budget from the request start, not merely this callback, so WordPress bootstrap/earlier cron work consumes its share too.

@@ -114,10 +114,9 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 
 				if(empty($_REQUEST['orderby']))
 				{
-					//260822.1519 Default report order: active/current EOTs first and earliest first; historical-only users follow with the most recent Last EOT first. Explicit table sorting remains authoritative.
-					$current_eot_sql = "(SELECT CAST(`___s2_eot_order_current`.`meta_value` AS UNSIGNED) FROM `".$wpdb->usermeta."` `___s2_eot_order_current` WHERE `___s2_eot_order_current`.`user_id` = `".$wpdb->users."`.`ID` AND `___s2_eot_order_current`.`meta_key` = '".$current_eot_key."' LIMIT 1)";
-					$last_eot_sql = "(SELECT CAST(`___s2_eot_order_last`.`meta_value` AS UNSIGNED) FROM `".$wpdb->usermeta."` `___s2_eot_order_last` WHERE `___s2_eot_order_last`.`user_id` = `".$wpdb->users."`.`ID` AND `___s2_eot_order_last`.`meta_key` = '".$last_eot_key."' LIMIT 1)";
-					$query->query_orderby = "ORDER BY CASE WHEN COALESCE(".$current_eot_sql.", 0) > 0 THEN 0 ELSE 1 END ASC, COALESCE(".$current_eot_sql.", 18446744073709551615) ASC, COALESCE(".$last_eot_sql.", 0) DESC, `".$wpdb->users."`.`ID` ASC";
+					//260823.1507 Match the native sortable-column behavior exactly: the initial EOT report is a plain ascending EOT Time sort, including WordPress/MySQL's normal handling of empty values.
+					$query->query_from .= " LEFT JOIN `".$wpdb->usermeta."` `___s2_eot_order_current` ON (`".$wpdb->users."`.`ID` = `___s2_eot_order_current`.`user_id` AND `___s2_eot_order_current`.`meta_key` = '".$current_eot_key."')";
+					$query->query_orderby = "ORDER BY CAST(`___s2_eot_order_current`.`meta_value` AS UNSIGNED) ASC";
 				}
 			}
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
@@ -204,7 +203,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 		}
 
 		/**
-		 * Exposes End-of-Term columns while the native End-of-Term Users view is active.
+		 * 260823.0108 Exposes End-of-Term columns in the End-of-Term and Pending Deletion review views.
 		 *
 		 * @package s2Member\Users_List
 		 * @since 260822.1519
@@ -218,11 +217,17 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 		 */
 		public static function users_list_hidden_cols($hidden = array(), $screen = NULL)
 		{
-			if(is_object($screen) && !empty($screen->id) && $screen->id === 'users' && !empty($_GET['s2member_view']) && $_GET['s2member_view'] === 'eot')
+			if(is_object($screen) && !empty($screen->id) && $screen->id === 'users')
 			{
-				//260822.1519 Expose the report's three relevant timestamps without changing the administrator's saved Screen Options for the normal Users view.
-				$hidden = array_diff($hidden, array('s2member_auto_eot_time', 's2member_last_auto_eot_time', 's2member_last_auto_eot_processed_time'));
-				$hidden = array_values($hidden);
+				$is_eot_view = !empty($_GET['s2member_view']) && $_GET['s2member_view'] === 'eot';
+				$is_pending_deletion_view = !empty($_GET['role']) && $_GET['role'] === 's2member_pending_deletion';
+
+				if($is_eot_view || $is_pending_deletion_view)
+				{
+					//260823.0116 End-of-Term and Pending Deletion are EOT review contexts; force their timestamps visible here while leaving every other Users view entirely to WordPress Screen Options.
+					$hidden = array_diff($hidden, array('s2member_auto_eot_time', 's2member_last_auto_eot_time', 's2member_last_auto_eot_processed_time'));
+					$hidden = array_values($hidden);
+				}
 			}
 			return $hidden;
 		}
@@ -241,17 +246,63 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 		 */
 		public static function users_list_views($views = array())
 		{
+			global $wpdb;
+
 			if(!is_admin() || is_network_admin() || empty($GLOBALS['pagenow']) || $GLOBALS['pagenow'] !== 'users.php')
 				return $views;
 
 			$is_eot_view = !empty($_GET['s2member_view']) && $_GET['s2member_view'] === 'eot';
+			$is_pending_deletion_view = !empty($_GET['role']) && $_GET['role'] === 's2member_pending_deletion';
+			$current_eot_key = $wpdb->prefix.'s2member_auto_eot_time';
+			$last_eot_key = $wpdb->prefix.'s2member_last_auto_eot_time';
+			$has_eot_users = $is_eot_view || (bool)$wpdb->get_var($wpdb->prepare("SELECT 1 FROM `".$wpdb->usermeta."` WHERE `meta_key` IN (%s, %s) AND CAST(`meta_value` AS UNSIGNED) > 0 LIMIT 1", $current_eot_key, $last_eot_key));
+
 			if($is_eot_view && isset($views['all']))
 				$views['all'] = str_replace(' class="current" aria-current="page"', '', $views['all']);
 
-			$url = add_query_arg('s2member_view', 'eot', admin_url('users.php'));
-			$views['s2member_eot'] = '<a href="'.esc_url($url).'"'.($is_eot_view ? ' class="current" aria-current="page"' : '').'>End-of-Term</a>';
+			//260823.0130 Keep the EOT report out of unused Users screens, but retain it permanently once current or historical EOT data exists; direct report URLs remain self-identifying even when empty.
+			if($has_eot_users)
+			{
+				$url = add_query_arg('s2member_view', 'eot', admin_url('users.php'));
+				$views['s2member_eot'] = '<a href="'.esc_url($url).'"'.($is_eot_view ? ' class="current" aria-current="page"' : '').'>End-of-Term</a>';
+			}
+
+			$pending_deletion_view = isset($views['s2member_pending_deletion']) ? $views['s2member_pending_deletion'] : '';
+			unset($views['s2member_pending_deletion']);
+			$delete_behavior = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_eot_behavior']) && $GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_eot_behavior'] === 'delete';
+			$has_pending_deletion_users = $is_pending_deletion_view || (!$delete_behavior && (bool)get_users(array('role' => 's2member_pending_deletion', 'number' => 1, 'fields' => 'ID')));
+
+			//260823.0130 Pending Deletion is useful navigation while "Delete" is configured or review work exists; hide the otherwise-empty role link without unregistering the role or affecting direct access.
+			if($delete_behavior || $has_pending_deletion_users)
+			{
+				if(!$pending_deletion_view)
+				{
+					$url = add_query_arg('role', 's2member_pending_deletion', admin_url('users.php'));
+					$pending_deletion_view = '<a href="'.esc_url($url).'"'.($is_pending_deletion_view ? ' class="current" aria-current="page"' : '').'>Pending Deletion <span class="count">(0)</span></a>';
+				}
+				$views['s2member_pending_deletion'] = $pending_deletion_view;
+			}
 
 			return $views;
+		}
+
+		/**
+		 * Explains the native End-of-Term Users view.
+		 *
+		 * @package s2Member\Users_List
+		 * @since 260823.0302
+		 *
+		 * @attaches-to ``add_action("admin_notices");``
+		 *
+		 * @return null
+		 */
+		public static function users_list_eot_notice()
+		{
+			if(!is_admin() || is_network_admin() || empty($GLOBALS['pagenow']) || $GLOBALS['pagenow'] !== 'users.php' || empty($_GET['s2member_view']) || $_GET['s2member_view'] !== 'eot')
+				return;
+
+			//260823.0302 The report combines pending and historical End-of-Term records, so explain its scope without turning it into a separate management screen.
+			c_ws_plugin__s2member_admin_notices::display_admin_notice('s2Member adds this view for users with a current or previous End-of-Term time.');
 		}
 
 		/**
@@ -270,7 +321,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 				return;
 
 			//260822.1519 Pending Deletion is deliberately a native role review queue; explain why these accounts survive instead of introducing a separate management screen.
-			c_ws_plugin__s2member_admin_notices::display_admin_notice('These users reached End-of-Term and had their s2Member membership access removed. Their accounts were preserved in <strong>Pending Deletion</strong> for administrator review instead of being irreversibly deleted. Use WordPress\'s normal bulk Delete action when you are ready to delete them.');
+			c_ws_plugin__s2member_admin_notices::display_admin_notice('s2Member adds this review view for accounts preserved in <strong>Pending Deletion</strong> after their membership access was removed at End-of-Term. Use WordPress\'s normal bulk Delete action when you are ready to delete them.');
 		}
 
 		/**
@@ -387,9 +438,18 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 			if(!empty($_REQUEST['s']))
 				return $columns;
 
+			$is_eot_view = !empty($_GET['s2member_view']) && $_GET['s2member_view'] === 'eot';
+			if($is_eot_view)
+			{
+				//260823.0716 WordPress normally marks Username as the initially sorted Users column; EOT Time is this report's default sort, so make that native sort state visible.
+				foreach($columns as $_column_key => $_column_data)
+					if(is_array($_column_data) && isset($_column_data[4]))
+						$columns[$_column_key][4] = false;
+			}
+
 			$columns['s2member_registration_time']               = 's2member_registration_time';
 			$columns['s2member_subscr_id']                       = 's2member_subscr_id';
-			$columns['s2member_auto_eot_time']                   = 's2member_auto_eot_time';
+			$columns['s2member_auto_eot_time']                   = $is_eot_view ? array('s2member_auto_eot_time', false, 'EOT Time', 'Table ordered by End-of-Term time.', 'asc') : 's2member_auto_eot_time';
 			$columns['s2member_last_auto_eot_time']              = 's2member_last_auto_eot_time';
 			$columns['s2member_last_auto_eot_processed_time']    = 's2member_last_auto_eot_processed_time';
 			$columns['s2member_login_counter']                   = 's2member_login_counter';

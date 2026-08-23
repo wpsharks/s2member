@@ -77,6 +77,10 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 			{
 				$v = get_option('ws_plugin__s2member_activated_version'); // Currently.
 
+				//260822.2048 Older EOT demotions recorded their processing time only in Administrative Notes; recover that history asynchronously where the legacy note is still available.
+				if(!$v || version_compare($v, '260822.2048', '<'))
+					c_ws_plugin__s2member_auto_eots::start_eot_processed_time_backfill();
+
 				//260820.0313 Refresh already-configured Checkout webhooks once so older automatic setups gain the complete required event list.
 				if(!$v || version_compare($v, '260820.0313', '<'))
 				{
