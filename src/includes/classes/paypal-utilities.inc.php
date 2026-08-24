@@ -2634,6 +2634,36 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
+				 * Clears a resolved PayPal Checkout webhook upgrade notice.
+				 *
+				 * @since 260824.0507
+				 *
+				 * @param string $env 'live' or 'sandbox'.
+				 *
+				 * @return void
+				 */
+				protected static function paypal_checkout_webhook_upgrade_notice_clear($env = '')
+					{
+						$env = ($env === 'sandbox') ? 'sandbox' : 'live';
+						$env_label = ($env === 'sandbox') ? 'Sandbox' : 'Live';
+						$marker = 's2member-ppco-webhook-upgrade-notice-'.$env;
+						$legacy_message = 'Your '.$env_label.' webhook could not be updated automatically with the latest required events.';
+
+						$notices = (array)get_option('ws_plugin__s2member_notices');
+						$changed = FALSE;
+
+						foreach($notices as $notice_key => $notice)
+							if(is_array($notice) && !empty($notice['notice']) && (strpos((string)$notice['notice'], $marker) !== FALSE || strpos((string)$notice['notice'], $legacy_message) !== FALSE))
+							{
+								unset($notices[$notice_key]);
+								$changed = TRUE;
+							}
+
+						if($changed)
+							update_option('ws_plugin__s2member_notices', array_values($notices));
+					}
+
+				/**
 				 * Stores a PayPal Checkout webhook id into ws_plugin__s2member_options for the current env.
 				 *
 				 * @since 260115
@@ -2644,11 +2674,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 */
 				protected static function paypal_checkout_webhook_store_id($webhook_id)
 					{
+						//260820.0427 Preserve the selected environment before option normalization resets the global Checkout environment.
+						$is_sandbox = self::paypal_checkout_is_sandbox();
+
 						$options = get_option('ws_plugin__s2member_options');
 						if(!is_array($options))
 							$options = array();
 
-						if(self::paypal_checkout_is_sandbox())
+						if($is_sandbox)
 							$options['paypal_checkout_sandbox_webhook_id'] = (string)$webhook_id;
 						else
 							$options['paypal_checkout_webhook_id'] = (string)$webhook_id;
@@ -2657,10 +2690,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						update_option('ws_plugin__s2member_options', $options).((is_multisite() && is_main_site()) ? update_site_option('ws_plugin__s2member_options', $options) : NULL);
 
-						if(self::paypal_checkout_is_sandbox())
+						if($is_sandbox)
 							$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_webhook_id"] = (string)$webhook_id;
 						else
 							$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_webhook_id"] = (string)$webhook_id;
+
+						//260824.0507 A successful create/update or no-change verification resolves any queued upgrade warning for this environment.
+						self::paypal_checkout_webhook_upgrade_notice_clear($is_sandbox ? 'sandbox' : 'live');
 					}
 			}
 	}

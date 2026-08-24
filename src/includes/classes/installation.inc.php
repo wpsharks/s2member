@@ -81,8 +81,8 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 				if(!$v || version_compare($v, '260822.2048', '<'))
 					c_ws_plugin__s2member_auto_eots::start_eot_processed_time_backfill();
 
-				//260820.0313 Refresh already-configured Checkout webhooks once so older automatic setups gain the complete required event list.
-				if(!$v || version_compare($v, '260820.0313', '<'))
+				//260824.0538 Re-run Checkout webhook reconciliation once after fixing same-request Live/Sandbox webhook state.
+				if(!$v || version_compare($v, '260824.0538', '<'))
 				{
 					$ppco_webhook_envs = array(
 						'live' => array(
@@ -101,7 +101,10 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 							if(!c_ws_plugin__s2member_paypal_utilities::paypal_checkout_webhook_upsert($ppco_webhook_env, TRUE))
 							{
 								$ppco_webhook_env_label = ($ppco_webhook_env === 'sandbox') ? 'Sandbox' : 'Live';
-								$notice = '<strong>s2Member PayPal Checkout:</strong> Your '.esc_html($ppco_webhook_env_label).' webhook could not be updated automatically with the latest required events. Please go to <a href="'.esc_url(admin_url('/admin.php?page=ws-plugin--s2member-paypal-ops')).'"><strong>s2Member → PayPal Options → PayPal Checkout</strong></a> and click <strong>Create/Update Webhook</strong> for '.esc_html($ppco_webhook_env_label).'.';
+								$ppco_webhook_settings_url = add_query_arg('s2member-open-panel', 'paypal-checkout', admin_url('/admin.php?page=ws-plugin--s2member-paypal-ops')).'#ws-plugin--s2member-paypal-checkout';
+
+								//260824.0507 Mark this persistent warning so a later successful reconciliation can remove it automatically.
+								$notice = '<span class="s2member-ppco-webhook-upgrade-notice-'.esc_attr($ppco_webhook_env).'"><strong>s2Member PayPal Checkout:</strong> Your '.esc_html($ppco_webhook_env_label).' webhook could not be updated automatically with the latest required events. Please go to <a href="'.esc_url($ppco_webhook_settings_url).'"><strong>s2Member → PayPal Options → PayPal Checkout</strong></a> and click <strong>Create/Update Webhook</strong> for '.esc_html($ppco_webhook_env_label).'.</span>';
 								c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array(), TRUE, 0, TRUE);
 							}
 				}

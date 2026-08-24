@@ -85,7 +85,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 							$r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_webhook_upsert($env);
 
 							if(!empty($r['id']))
+							{
 								$ppco_webhook_notice = '<div class="updated"><p>'.sprintf(esc_html__('PayPal Checkout %1$s webhook created/updated successfully.', 's2member'), $env_label).'</p></div>'."\n";
+
+								//260824.0507 The persistent warning was rendered before this page action ran; remove that now-resolved copy immediately.
+								$ppco_webhook_notice .= '<script>(function(){var e=document.querySelector(".s2member-ppco-webhook-upgrade-notice-'.esc_js($env).'");if(e&&e.closest){e=e.closest(".notice");if(e)e.remove();}})();</script>'."\n";
+							}
 							else
 								$ppco_webhook_notice = '<div class="error"><p>'.sprintf(esc_html__('Unable to create/update PayPal Checkout %1$s webhook. See the s2Member paypal-checkout.log for details.', 's2member'), $env_label).' <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">'.esc_html__('Log Viewer', 's2member').'</a></p></div>'."\n";
 						}
@@ -185,8 +190,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			{
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_paypal_account_details", get_defined_vars());
 
-				//260106
-				echo '<div class="ws-menu-page-group" title="PayPal Checkout (Beta)">'."\n";
+				//260106 New PayPal Checkout panel.
+				//260824.0507 Allow administrative notices to open and jump directly to the PayPal Checkout panel.
+				echo '<div id="ws-plugin--s2member-paypal-checkout"></div>'."\n";
+				echo '<div class="ws-menu-page-group" title="PayPal Checkout (Beta)"'.((!empty($_GET['s2member-open-panel']) && $_GET['s2member-open-panel'] === 'paypal-checkout') ? ' default-state="open"' : '').'>'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-checkout-account-details-section">'."\n";
 				echo '<a href="https://s2member.com/r/paypal/" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/src/images/paypal-pp-logo-200px.png" class="ws-menu-page-right s2m-ppco-paypal-logo" style="width:250px; max-width:25%; height:auto; margin:0 20px 20px 0;" alt="PayPal" /></a>'."\n";
