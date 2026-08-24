@@ -42,9 +42,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 		{
 			extract($vars, EXTR_OVERWRITE | EXTR_REFS); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
+			//260824.1957 Treat legacy PayPal Resolution Center disputes like chargebacks so they follow the same Reversals Immediate EOT policy as PayPal Checkout.
 			if(((!empty($paypal['txn_type']) && preg_match('/^(subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment)$/i', $paypal['txn_type']) && ($recurring = TRUE))
 			    || (!empty($paypal['txn_type']) && preg_match('/^recurring_payment_profile_cancel$/i', $paypal['txn_type']) && !empty($paypal['initial_payment_status']) && preg_match('/^failed$/i', $paypal['initial_payment_status']) && ($recurring = TRUE))
-			    || (!empty($paypal['txn_type']) && preg_match('/^new_case$/i', $paypal['txn_type']) && !empty($paypal['case_type']) && preg_match('/^chargeback$/i', $paypal['case_type']) && !($recurring = FALSE)) // Seeking this for future compatibility.
+			    || (!empty($paypal['txn_type']) && preg_match('/^new_case$/i', $paypal['txn_type']) && !empty($paypal['case_type']) && preg_match('/^(?:chargeback|dispute)$/i', $paypal['case_type']) && !($recurring = FALSE)) // Seeking this for future compatibility.
 			    || (!empty($paypal['payment_status']) && preg_match('/^(refunded|reversed|reversal)$/i', $paypal['payment_status']) && !($recurring = FALSE))) // The `txn_type` is irrelevant in all of these payment statuses: `refunded|reversed|reversal`.
 			   && (!empty($paypal['subscr_id']) || ($paypal['subscr_id'] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id($paypal)) || (!empty($paypal['parent_txn_id']) && ($paypal['subscr_id'] = $paypal['parent_txn_id']))) // Other MUST haves.
 			   && (!empty($paypal['period1']) || ($paypal['period1'] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_period1($paypal, FALSE)) || empty($recurring) || ($paypal['period1'] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var('period1', FALSE, $paypal['subscr_id'])) || ($paypal['period1'] = '0 D'))
@@ -62,9 +63,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 				if(!get_transient($transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
 				{
+					//260824.2010 Normalize sparse refund/reversal/dispute fields before direct reads; PayPal `new_case` IPNs do not require `payment_status`.
+					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('payment_status', 'txn_type', 'case_type', 'parent_txn_id'));
+
 					$is_refund             = (preg_match('/^refunded$/i', $paypal['payment_status']) && !empty($paypal['parent_txn_id']));
 					$is_reversal           = (preg_match('/^(reversed|reversal)$/i', $paypal['payment_status']) && !empty($paypal['parent_txn_id']));
-					$is_reversal           = (!$is_reversal) ? (preg_match('/^new_case$/i', $paypal['txn_type']) && preg_match('/^chargeback$/i', $paypal['case_type'])) : $is_reversal;
+					$is_reversal           = (!$is_reversal) ? (preg_match('/^new_case$/i', $paypal['txn_type']) && preg_match('/^(?:chargeback|dispute)$/i', $paypal['case_type'])) : $is_reversal;
 					$is_refund_or_reversal = ($is_refund || $is_reversal); // If either of the previous tests above evaluated to true; then it's obviously a Refund and/or a Reversal.
 					$is_partial_refund     = // Partial refund detection. All refunds processed against Subscriptions are considered partials. Full refunds occur only against Buy Now transactions.
 						(!$is_refund || (!empty($paypal['mc_gross']) && ($original_txn_type = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var('txn_type', FALSE, $paypal['subscr_id'])) === 'web_accept'
@@ -72,7 +76,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 					$is_delayed_eot        = (!$is_refund_or_reversal && preg_match('/^(subscr_eot|recurring_payment_expired)$/i', $paypal['txn_type']) && preg_match('/^I-/i', $paypal['subscr_id']));
 
 					if($is_refund_or_reversal)
-						$paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback` )').'.';
+						$paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback|dispute` )').'.';
 					else $paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment` ) - or - `recurring_payment_profile_cancel` w/ `initial_payment_status` ( `failed` )').'.';
 
 					if(empty($_REQUEST['s2member_paypal_proxy'])) // Only on true PayPal IPNs; e.g., we can bypass this on proxied IPNs.

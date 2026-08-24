@@ -2420,6 +2420,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							'PAYMENT.SALE.REVERSED',
 							'PAYMENT.CAPTURE.REVERSED',
 
+							//260824.1727 Treat a newly opened PayPal dispute as a chargeback/reversal through s2Member's existing EOT policy.
+							'CUSTOMER.DISPUTE.CREATED',
+
 							'BILLING.SUBSCRIPTION.CREATED',
 							'BILLING.SUBSCRIPTION.ACTIVATED',
 							'BILLING.SUBSCRIPTION.RE-ACTIVATED',

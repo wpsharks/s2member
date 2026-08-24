@@ -81,8 +81,8 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 				if(!$v || version_compare($v, '260822.2048', '<'))
 					c_ws_plugin__s2member_auto_eots::start_eot_processed_time_backfill();
 
-				//260824.0538 Re-run Checkout webhook reconciliation once after fixing same-request Live/Sandbox webhook state.
-				if(!$v || version_compare($v, '260824.0538', '<'))
+				//260824.1727 Refresh existing Checkout webhooks once more to add dispute-created notifications.
+				if(!$v || version_compare($v, '260824.1727', '<'))
 				{
 					$ppco_webhook_envs = array(
 						'live' => array(
