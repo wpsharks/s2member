@@ -178,6 +178,36 @@ if(!class_exists("c_ws_plugin__s2member_users_list"))
 		}
 
 		/**
+		 * Re-adds required EOT columns late on s2Member's review views after column-management plugins have filtered the Users table.
+		 *
+		 * @package s2Member\Users_List
+		 * @since 260826.0542
+		 *
+		 * @attaches-to ``add_filter("manage_users_columns");``
+		 *
+		 * @param array $cols User list columns after other plugins have filtered them.
+		 *
+		 * @return array User list columns with the required EOT review columns restored.
+		 */
+		public static function users_list_required_eot_cols($cols = array())
+		{
+			if(!is_admin() || empty($GLOBALS['pagenow']) || $GLOBALS['pagenow'] !== 'users.php')
+				return $cols;
+
+			$is_eot_view = !empty($_GET['s2member_view']) && $_GET['s2member_view'] === 'eot';
+			$is_pending_deletion_view = !empty($_GET['role']) && $_GET['role'] === 's2member_pending_deletion';
+
+			if($is_eot_view || $is_pending_deletion_view)
+			{
+				//260826.0542 These timestamps are part of the EOT review itself, so restore them if a Users-table customization plugin removed them from its saved column layout.
+				$cols['s2member_auto_eot_time'] = 'EOT Time';
+				$cols['s2member_last_auto_eot_time'] = 'Last EOT';
+				$cols['s2member_last_auto_eot_processed_time'] = 'EOT Demotion';
+			}
+			return $cols;
+		}
+
+		/**
 		 * Hides optional s2Member history columns by default on the Users screen.
 		 *
 		 * @package s2Member\Users_List

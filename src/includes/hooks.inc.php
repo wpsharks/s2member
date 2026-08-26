@@ -185,8 +185,9 @@ add_action('network_admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_
 add_action('pre_user_query', 'c_ws_plugin__s2member_users_list::users_list_query');
 add_filter('views_users', 'c_ws_plugin__s2member_users_list::users_list_views'); //260822.1519 Reuse WordPress' native Users views for the End-of-Term report.
 add_filter('manage_users_columns', 'c_ws_plugin__s2member_users_list::users_list_cols');
+add_filter('manage_users_columns', 'c_ws_plugin__s2member_users_list::users_list_required_eot_cols', PHP_INT_MAX); //260826.0542 Preserve the three required EOT review columns after Users-table customization plugins apply saved layouts.
 add_filter('default_hidden_columns', 'c_ws_plugin__s2member_users_list::users_list_default_hidden_cols', 10, 2); //260822.1509 Keep optional EOT history columns available without widening the normal Users table by default.
-add_filter('hidden_columns', 'c_ws_plugin__s2member_users_list::users_list_hidden_cols', 10, 2); //260823.0116 Force EOT timestamps visible only in the EOT review views; all other Users views follow Screen Options unchanged.
+add_filter('hidden_columns', 'c_ws_plugin__s2member_users_list::users_list_hidden_cols', PHP_INT_MAX, 2); //260826.0542 Enforce EOT review visibility after other plugins filter Screen Options; normal Users views remain untouched.
 add_filter('manage_users_custom_column', 'c_ws_plugin__s2member_users_list::users_list_display_cols', 10, 3);
 add_filter('manage_users_sortable_columns', 'c_ws_plugin__s2member_users_list::users_list_add_sortable');
 add_filter('pre_user_query', 'c_ws_plugin__s2member_users_list::users_list_make_sortable');
