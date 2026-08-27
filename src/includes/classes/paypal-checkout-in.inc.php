@@ -1091,12 +1091,24 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					'option_selection2' => (string)$token['os1'],
 				);
 
+				//260827.0051 Keep AJAX capture fulfillment aligned with the redirect capture path so Pro-Form tax, email/coupon routing, and resolved success URLs survive the shared Framework handler.
+				if(isset($token['tax']))
+					$paypal['tax'] = (string)$token['tax'];
+
 				$is_independent_ccaps_sale = (strpos((string)$token['item_number'], '*:') === 0);
 				$is_specific_post_page_sale = (strpos((string)$token['item_number'], 'sp:') === 0);
 				$can_cancel_old_subscr = (!$is_independent_ccaps_sale && !$is_specific_post_page_sale); //260407 Only membership replacement-style PPCO purchases should cancel an existing recurring subscription here.
 
+				$proxy_use = !empty($token['s2member_paypal_proxy_use']) ? (string)$token['s2member_paypal_proxy_use'] : 'paypal_checkout';
+				$notify_extra = array();
+
+				if(!empty($token['s2member_paypal_proxy_coupon']) && is_array($token['s2member_paypal_proxy_coupon']))
+					$notify_extra['s2member_paypal_proxy_coupon'] = $token['s2member_paypal_proxy_coupon'];
+				if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+					$notify_extra['s2member_paypal_proxy_return_url'] = (string)$token['s2member_paypal_proxy_return_url'];
+
 				$notify_done_option = 's2m_ppco_capture_done_'.md5($pu_cap_id);
-				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option);
+				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option, $proxy_use, $notify_extra);
 
 				if(empty($notify_result['ok']))
 					{
@@ -1138,8 +1150,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 
 				$return_post = array_merge($paypal, array(
 					's2member_paypal_proxy'     => 'paypal',
-					's2member_paypal_proxy_use' => 'paypal_checkout',
+					's2member_paypal_proxy_use' => $proxy_use,
 				));
+
+				//260827.0051 Carry the Pro-Form's resolved success URL inside the signed browser return; Specific Post/Page uses the Notify response body for its generated access URL.
+				if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+					$return_post['s2member_paypal_proxy_return_url'] = !empty($notify_result['body']) ? trim((string)$notify_result['body']) : '';
 
 				//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
 				$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post);
