@@ -637,7 +637,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 						do_action('ws_plugin__s2member_during_paypal_notify_after_subscr_signup_wo_update_vars', get_defined_vars());
 						unset($__refs, $__v);
 					}
-					if($processing && $_REQUEST['s2member_paypal_proxy'] && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
+					//260827.0637 Proxy return URLs are optional; avoid PHP warnings when a valid proxy request does not include one.
+					if($processing && !empty($_REQUEST['s2member_paypal_proxy']) && !empty($_REQUEST['s2member_paypal_proxy_return_url']) && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
 					{
 						if((!empty($user_id) && !empty($user) && is_object($user) && $user->ID) 
 							|| (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['subscr_id'], $paypal['option_selection1'])) && is_object($user = new WP_User ($user_id)) && $user->ID)

@@ -200,7 +200,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_wa_ccaps_wo_level'))
 																																																						$paypal['s2member_log'][] = 'Capability Confirmation Email sent to: '.$rec.'.';
 																																																					}
 																																																				}
-								if($processing && $_REQUEST['s2member_paypal_proxy'] && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
+								//260827.0637 Proxy return URLs are optional; avoid PHP warnings when a valid proxy request does not include one.
+								if($processing && !empty($_REQUEST['s2member_paypal_proxy']) && !empty($_REQUEST['s2member_paypal_proxy_return_url']) && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
 								{
 									if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_id'])), $url)))
 										if(($url = preg_replace('/%%(?:subscr|txn)_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_baid'])), $url)) && ($url = preg_replace('/%%(?:subscr|txn)_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['txn_cid'])), $url)))

@@ -2010,15 +2010,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$rp = !empty($token['rp']) ? (int)$token['rp'] : 0;
 						$rt = !empty($token['rt']) ? strtoupper(trim((string)$token['rt'])) : '';
 
+						$is_pro_form = !empty($token['s2member_paypal_proxy_use']) && strpos((string)$token['s2member_paypal_proxy_use'], 'pro-emails') !== false;
 						$rrt = !empty($token['rrt']) ? (int)$token['rrt'] : 0;
-						$rra = isset($token['rra']) ? (int)$token['rra'] : 1;
+						$rra = isset($token['rra']) ? (int)$token['rra'] : ($is_pro_form ? 2 : 1);
 
-						// rrt/rra are only meaningful when rr="1" (recurring).
+						//260827.1950 Pro-Forms define rra as the exact Max Failed Payments value for any recurring profile;
+						// Framework buttons retain their legacy PayPal Standard retry semantics. rrt remains rr="1" only.
 						if($rr !== '1')
-						{
 							$rrt = 0;
-							$rra = 0;
-						}
 
 						$ta = isset($token['ta']) ? (string)$token['ta'] : '';
 						$tp = !empty($token['tp']) ? (int)$token['tp'] : 0;
@@ -2042,6 +2041,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 							'rrt'         => (int)$rrt,
 							'rra'         => (int)$rra,
+							//260827.2129 !!! TO-DO: Standardize Pro-Form and Framework rrt/rra semantics in a future gateway abstraction; keep Plan caches separate until both contracts match.
+							'pro_form'    => (int)$is_pro_form,
 
 							'ta'          => (string)$ta,
 							'tp'          => (int)$tp,
@@ -2075,13 +2076,19 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						$regular_total_cycles = 0; // 0 = infinite.
 
-						// rrt = number of payments (limited recurring). Only applies to rr="1".
+						//260827.2129 Legacy Pro-Forms without an initial term charge once at checkout and define rrt as additional payments.
+						// PPCO regular cycles include the checkout payment, while Framework buttons retain total-installment rrt semantics.
 						if($rr === '1' && $rrt > 0)
-							$regular_total_cycles = min(999, max(1, (int)$rrt));
+						{
+							$regular_total_cycles = (int)$rrt + (($is_pro_form && $tp === 0) ? 1 : 0);
+							if($regular_total_cycles > 999) // PayPal cannot represent the legacy Pro-Form result; fail instead of silently reducing the number of charges.
+								return '';
+						}
 						else if($rr === '0')
 							$regular_total_cycles = 1;
 
-						$payment_failure_threshold = ($rr === '1' && $rra) ? 2 : 1;
+						//260827.1950 Preserve the Pro-Form's documented exact rra value; Framework buttons keep legacy Standard boolean retry behavior.
+						$payment_failure_threshold = $is_pro_form ? max(0, (int)$rra) : (($rr === '1' && $rra) ? 2 : 1);
 
 						$billing_cycles = array();
 						$seq = 1;
