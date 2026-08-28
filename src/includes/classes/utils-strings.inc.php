@@ -72,7 +72,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 			'&#[xX]0*201[cC];' => '&#x201C;',
 			'&rdquo;'          => '&rdquo;',
 			'&#0*8221;'        => '&#8221;',
-			'&#[xX]0*201[dD];' => '&#x201D;'
+			'&#[xX]0*201[dD];' => '&#x201D;',
+			//260829.0025 Literal smart quotes can reach shortcode attributes unchanged; normalize them like their HTML entity forms.
+			'‘'                => '‘',
+			'’'                => '’',
+			'“'                => '“',
+			'”'                => '”'
 		);
 
 		/**
