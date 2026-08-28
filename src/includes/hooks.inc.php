@@ -183,15 +183,15 @@ add_action('user_admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_not
 add_action('network_admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_notices');
 
 add_action('pre_user_query', 'c_ws_plugin__s2member_users_list::users_list_query');
-add_filter('views_users', 'c_ws_plugin__s2member_users_list::users_list_views'); //260822.1519 Reuse WordPress' native Users views for the End-of-Term report.
+add_filter('views_users', 'c_ws_plugin__s2member_users_list::users_list_views'); //260828.0231 Reuse WordPress' native Users views for separate Current and Previous End-of-Term reports.
 add_filter('manage_users_columns', 'c_ws_plugin__s2member_users_list::users_list_cols');
-add_filter('manage_users_columns', 'c_ws_plugin__s2member_users_list::users_list_required_eot_cols', PHP_INT_MAX); //260826.0542 Preserve the three required EOT review columns after Users-table customization plugins apply saved layouts.
+add_filter('manage_users_columns', 'c_ws_plugin__s2member_users_list::users_list_required_eot_cols', PHP_INT_MAX); //260828.0231 Preserve each EOT review view's required columns after Users-table customization plugins apply saved layouts.
 add_filter('default_hidden_columns', 'c_ws_plugin__s2member_users_list::users_list_default_hidden_cols', 10, 2); //260822.1509 Keep optional EOT history columns available without widening the normal Users table by default.
-add_filter('hidden_columns', 'c_ws_plugin__s2member_users_list::users_list_hidden_cols', PHP_INT_MAX, 2); //260826.0542 Enforce EOT review visibility after other plugins filter Screen Options; normal Users views remain untouched.
+add_filter('hidden_columns', 'c_ws_plugin__s2member_users_list::users_list_hidden_cols', PHP_INT_MAX, 2); //260828.0231 Enforce each EOT review view's primary timestamps after other plugins filter Screen Options; normal Users views remain untouched.
 add_filter('manage_users_custom_column', 'c_ws_plugin__s2member_users_list::users_list_display_cols', 10, 3);
 add_filter('manage_users_sortable_columns', 'c_ws_plugin__s2member_users_list::users_list_add_sortable');
 add_filter('pre_user_query', 'c_ws_plugin__s2member_users_list::users_list_make_sortable');
-add_action('admin_notices', 'c_ws_plugin__s2member_users_list::users_list_eot_notice', 13); //260823.0302 Explain the native End-of-Term report directly on that Users view.
+add_action('admin_notices', 'c_ws_plugin__s2member_users_list::users_list_eot_notice', 13); //260828.0231 Explain the Current and Previous End-of-Term reports directly on their Users views.
 add_action('admin_notices', 'c_ws_plugin__s2member_users_list::users_list_pending_deletion_notice', 13); //260822.1519 Explain the native Pending Deletion review queue directly on that role-filtered Users page.
 add_action('edit_user_profile', 'c_ws_plugin__s2member_users_list::users_list_edit_cols');
 add_action('show_user_profile', 'c_ws_plugin__s2member_users_list::users_list_edit_cols');
