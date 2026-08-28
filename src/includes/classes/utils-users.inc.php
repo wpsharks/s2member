@@ -480,6 +480,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			$auto_eot_time // Update this now; i.e., build a new EOT time based on IPN signup vars.
 				= c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3']);
 
+			//260828.0710 !!! TO-DO: Track a gateway-independent `s2member_access_through_time`, meaning the end of the latest confirmed entitlement period, before EOT grace.
+			// 1. On signup/received payment, save the provider's then-current next billing/period-end time as access-through. Failed payments never advance it. 2. Cancellation/EOT should use this value when available, even if already past.
+			// 3. For older users without it, estimate conservatively from provider billing schedule + signup vars/last successful payment when reliable; otherwise keep the existing estimated EOT fallback.
 			if($check_gateway) switch($subscr_gateway) // A bit different for each payment gateway.
 			{
 				case 'paypal': // PayPal (legacy Pro NVP/Payflow + PayPal Checkout REST).
