@@ -348,7 +348,14 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			{
 				$_role = (string)$_role;
 				if(preg_match('/^s2member_level([0-9]+)$/', $_role, $_matches))
-					$role_labels[$_role] = 'Level '.(int)$_matches[1];
+				{
+					//260829.0618 Keep EOT audit notes consistent with the administrator's forced s2Member labels, while retaining concise Level N names when label translation is disabled.
+					$_level = (int)$_matches[1];
+					$_label_key = 'level'.$_level.'_label';
+					$role_labels[$_role] = !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["apply_label_translations"]) && !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"][$_label_key])
+						? $GLOBALS["WS_PLUGIN__"]["s2member"]["o"][$_label_key]
+						: 'Level '.$_level;
+				}
 				else if($_role === 's2member_pending_deletion')
 					$role_labels[$_role] = 'Pending Deletion';
 				else if($_role && isset($wp_roles->roles[$_role]['name']))
@@ -356,7 +363,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 				else
 					$role_labels[$_role] = $_role ? ucwords(str_replace(array('-', '_'), ' ', $_role)) : 'Unknown Role';
 			}
-			unset($_role, $_matches);
+			unset($_role, $_matches, $_level, $_label_key);
 
 			$gateway_labels = array('paypal' => 'PayPal', 'authnet' => 'Authorize.Net', 'clickbank' => 'ClickBank', 'ccbill' => 'ccBill', 'alipay' => 'AliPay', 'google' => 'Google Wallet', 'stripe' => 'Stripe');
 			$gateway_key = strtolower((string)$subscr_gateway);
@@ -364,7 +371,11 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			$removed_ccaps = array_values(array_unique(array_filter(array_map('strval', (array)$removed_ccaps), 'strlen')));
 			sort($removed_ccaps, SORT_STRING);
 
-			$note = $processed_display.' s2Member: Demoted from '.$role_labels[(string)$original_role].' to '.$role_labels[(string)$destination_role];
+			//260829.0618 Avoid recording a misleading role transition when EOT processing finds the user already in the configured demotion role.
+			if($original_role === $destination_role)
+				$note = $processed_display.' s2Member: EOT processed, already '.$role_labels[(string)$original_role];
+			else
+				$note = $processed_display.' s2Member: Demoted from '.$role_labels[(string)$original_role].' to '.$role_labels[(string)$destination_role];
 			if($removed_ccaps)
 				$note .= ' (removed ccaps: '.implode(', ', $removed_ccaps).')';
 			$note .= '.';
