@@ -190,6 +190,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					if (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['ipn_signup_vars_fallback'])) {
 						$userdata = get_userdata((int)$user_id);
 						$ipn_signup_vars = array(
+							's2member_ipn_signup_vars_fallback' => '1', //260829.1709 Mark generated fallback vars explicitly so gateway-aware EOT logic can distinguish missing local signup metadata from malformed stored signup data.
 							'subscr_cid'        => !empty($_subscr_cid) ? $_subscr_cid : '',
 							'subscr_id'         => $_subscr_id,
 							'custom'            => esc_html($_SERVER["HTTP_HOST"]),
@@ -474,11 +475,17 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 			if(!$subscr_gateway || !$subscr_id || !is_array($ipn_signup_vars) || !$ipn_signup_vars)
 				return array_merge($empty_response, array('debug' => 'This user has no subscription; i.e., missing `subscr_id`, `subscr_gateway` or `ipn_signup_vars`.'));
 
-			if(empty($ipn_signup_vars['txn_type']) || $ipn_signup_vars['txn_type'] !== 'subscr_signup')
+			$ipn_signup_vars_fallback = !empty($ipn_signup_vars['s2member_ipn_signup_vars_fallback']);
+			//260829.1709 A PayPal fallback still has a bound local subscription ID, so allow the configured PayPal APIs to recover authoritative timing before rejecting it for missing legacy signup metadata.
+			$can_recover_paypal_fallback = ($check_gateway && $subscr_gateway === 'paypal' && $ipn_signup_vars_fallback);
+
+			if((empty($ipn_signup_vars['txn_type']) || $ipn_signup_vars['txn_type'] !== 'subscr_signup') && !$can_recover_paypal_fallback)
 				return array_merge($empty_response, array('debug' => 'This user has no subscription; i.e., `txn_type` != `subscr_signup`.'));
 
-			$auto_eot_time // Update this now; i.e., build a new EOT time based on IPN signup vars.
-				= c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3']);
+			//260829.1709 Never turn deliberately blank fallback billing terms into an estimated EOT of "now"; PayPal API recovery below must succeed or the existing empty/fallback behavior remains.
+			$auto_eot_time = ($ipn_signup_vars_fallback && empty($ipn_signup_vars['period3']))
+				? 0
+				: c_ws_plugin__s2member_utils_time::auto_eot_time($user->ID, $ipn_signup_vars['period1'], $ipn_signup_vars['period3']);
 
 			//260828.0710 !!! TO-DO: Track a gateway-independent `s2member_access_through_time`, meaning the end of the latest confirmed entitlement period, before EOT grace.
 			// 1. On signup/received payment, save the provider's then-current next billing/period-end time as access-through. Failed payments never advance it. 2. Cancellation/EOT should use this value when available, even if already past.
@@ -524,8 +531,13 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 										$next   = !empty($subscription['billing_info']['next_billing_time']) ? (string)$subscription['billing_info']['next_billing_time'] : '';
 
 										if($status && $status !== 'ACTIVE')
-											return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
-												'debug' => 'This is the estimated EOT time. PayPal Checkout says this subscription is no longer active, and thus, access should be terminated at this time.');
+											{
+												if($auto_eot_time)
+													return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+														'debug' => 'This is the estimated EOT time. PayPal Checkout says this subscription is no longer active, and thus, access should be terminated at this time.');
+
+												return array_merge($empty_response, array('debug' => 'PayPal Checkout says this subscription is no longer active, but local signup billing terms are unavailable; refusing to guess an EOT.'));
+											}
 
 										if($next && ($time = strtotime($next)) > $now)
 											return array('type' => 'next', 'time' => $time, 'tense' => $time <= $now ? 'past' : 'future',
@@ -546,12 +558,22 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 											return array_merge($empty_response, array('debug' => 'No fixed EOT, and the PayPal Pro API says the subscription for this user is currently pending changes. Unable to determine at this moment. Please try again in 15 minutes.'));
 
 										if(!preg_match('/^(?:Active|ActiveProfile)$/i', $api_response['STATUS']))
-											return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
-												'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription is no longer active, and thus, access should be terminated at this time.');
+											{
+												if($auto_eot_time)
+													return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+														'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription is no longer active, and thus, access should be terminated at this time.');
+
+												return array_merge($empty_response, array('debug' => 'The PayPal Pro API says this subscription is no longer active, but local signup billing terms are unavailable; refusing to guess an EOT.'));
+											}
 
 										if($api_response['TERM'] > 0 && $api_response['PAYMENTSLEFT'] <= 0)
-											return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
-												'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription has reached its last payment, and thus, access should be terminated at this time.');
+											{
+												if($auto_eot_time)
+													return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+														'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription has reached its last payment, and thus, access should be terminated at this time.');
+
+												return array_merge($empty_response, array('debug' => 'The PayPal Pro API says this subscription has reached its last payment, but local signup billing terms are unavailable; refusing to guess an EOT.'));
+											}
 
 										if($api_response['TERM'] <= 0 || $api_response['PAYMENTSLEFT'] > 0)
 											if($api_response['NEXTPAYMENT'] && strlen($api_response['NEXTPAYMENT']) === 8) // MMDDYYYY format is not `strtotime()` compatible.
@@ -576,12 +598,22 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 											return array_merge($empty_response, array('debug' => 'No fixed EOT, and the PayPal Pro API says the subscription for this user is currently pending changes. Unable to determine at this moment. Please try again in 15 minutes.'));
 
 										if(!preg_match('/^(?:Active|ActiveProfile)$/i', $api_response['STATUS']))
-											return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
-												'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription is no longer active, and thus, access should be terminated at this time.');
+											{
+												if($auto_eot_time)
+													return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+														'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription is no longer active, and thus, access should be terminated at this time.');
+
+												return array_merge($empty_response, array('debug' => 'The PayPal Pro API says this subscription is no longer active, but local signup billing terms are unavailable; refusing to guess an EOT.'));
+											}
 
 										if($api_response['TOTALBILLINGCYCLES'] > 0 && $api_response['NUMCYCLESREMAINING'] <= 0)
-											return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
-												'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription has reached its last payment, and thus, access should be terminated at this time.');
+											{
+												if($auto_eot_time)
+													return array('type' => 'fixed', 'time' => $auto_eot_time, 'tense' => $auto_eot_time <= $now ? 'past' : 'future',
+														'debug' => 'This is the estimated EOT time. The PayPal Pro API says this subscription has reached its last payment, and thus, access should be terminated at this time.');
+
+												return array_merge($empty_response, array('debug' => 'The PayPal Pro API says this subscription has reached its last payment, but local signup billing terms are unavailable; refusing to guess an EOT.'));
+											}
 
 										if($api_response['TOTALBILLINGCYCLES'] <= 0 || $api_response['NUMCYCLESREMAINING'] > 0)
 											if($api_response['NEXTBILLINGDATE'] && ($time = strtotime($api_response['NEXTBILLINGDATE'])) > $now)
