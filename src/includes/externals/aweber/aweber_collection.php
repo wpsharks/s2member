@@ -161,8 +161,12 @@ class AWeberCollection extends AWeberResponse implements ArrayAccess, Iterator, 
      * http://php.net/manual/en/class.arrayaccess.php
      */
 
+    //260816 Suppress PHP 8.1+ tentative ArrayAccess return-type deprecations while preserving PHP 5.6 compatibility.
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)  {}
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)        {}
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset) {
 
         if ($offset >=0 && $offset < $this->total_size) {
@@ -211,6 +215,7 @@ class AWeberCollection extends AWeberResponse implements ArrayAccess, Iterator, 
         }
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset) {
 
         if (!$this->offsetExists($offset)) {
@@ -237,22 +242,28 @@ class AWeberCollection extends AWeberResponse implements ArrayAccess, Iterator, 
      */
     protected $_iterationKey = 0;
 
+    //260816 Suppress PHP 8.1+ tentative Iterator return-type deprecations while preserving PHP 5.6 compatibility.
+    #[\ReturnTypeWillChange]
     public function current() {
         return $this->offsetGet($this->_iterationKey);
     }
 
+    #[\ReturnTypeWillChange]
     public function key() {
         return $this->_iterationKey;
     }
 
+    #[\ReturnTypeWillChange]
     public function next() {
         $this->_iterationKey++;
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind() {
         $this->_iterationKey = 0;
     }
 
+    #[\ReturnTypeWillChange]
     public function valid() {
         return $this->offsetExists($this->key());
     }
@@ -263,6 +274,8 @@ class AWeberCollection extends AWeberResponse implements ArrayAccess, Iterator, 
      * http://www.php.net/manual/en/class.countable.php
      */
 
+    //260816 Suppress PHP 8.1+ tentative Countable return-type deprecation while preserving PHP 5.6 compatibility.
+    #[\ReturnTypeWillChange]
     public function count() {
         return $this->total_size;
     }

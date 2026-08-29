@@ -222,15 +222,23 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'token'      => $token,
 					));
 
+					if(!empty($capture['__error']))
+					{
+						echo (string)$capture['__error'];
+						exit();
+					}
+
 					if(empty($capture['status']) || strtoupper($capture['status']) !== 'COMPLETED')
 					{
 						echo 'order_capture_failed';
 						exit();
 					}
 
-					$payer_email = !empty($capture['payer']['email_address']) ? (string)$capture['payer']['email_address'] : '';
-					$first_name  = !empty($capture['payer']['name']['given_name']) ? (string)$capture['payer']['name']['given_name'] : '';
-					$last_name   = !empty($capture['payer']['name']['surname']) ? (string)$capture['payer']['name']['surname'] : '';
+					//260818.0126 Keep submitted Pro-Form contact details for pro-emails; they may differ from the payer's PayPal profile.
+					$is_pro_form = (!empty($token['s2member_paypal_proxy_use']) && (string)$token['s2member_paypal_proxy_use'] === 'pro-emails');
+					$payer_email = ($is_pro_form && isset($token['payer_email'])) ? sanitize_email((string)$token['payer_email']) : (!empty($capture['payer']['email_address']) ? (string)$capture['payer']['email_address'] : '');
+					$first_name  = ($is_pro_form && isset($token['first_name'])) ? (string)$token['first_name'] : (!empty($capture['payer']['name']['given_name']) ? (string)$capture['payer']['name']['given_name'] : '');
+					$last_name   = ($is_pro_form && isset($token['last_name'])) ? (string)$token['last_name'] : (!empty($capture['payer']['name']['surname']) ? (string)$capture['payer']['name']['surname'] : '');
 
 					$pu_amount   = !empty($capture['purchase_units'][0]['payments']['captures'][0]['amount']['value']) ? (string)$capture['purchase_units'][0]['payments']['captures'][0]['amount']['value'] : '';
 					$pu_cc       = !empty($capture['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code']) ? (string)$capture['purchase_units'][0]['payments']['captures'][0]['amount']['currency_code'] : '';
@@ -273,48 +281,68 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'last_name'      => $last_name,
 					);
 
+					//260817.2119 Preserve Pro-Form tax in the simulated IPN so existing fulfillment and email logic receives the same calculated values as the legacy Pro flow.
+					if(isset($token['tax']))
+						$paypal['tax'] = (string)$token['tax'];
+
 					$is_independent_ccaps_sale = (strpos((string)$token['item_number'], '*:') === 0);
 					$is_specific_post_page_sale = (strpos((string)$token['item_number'], 'sp:') === 0);
 					$can_cancel_old_subscr = (!$is_independent_ccaps_sale && !$is_specific_post_page_sale); //260407 Only membership replacement-style PPCO purchases should cancel an existing recurring subscription here.
 
-					$notify_url  = home_url('/?s2member_paypal_notify=1');
-						$notify_post = array_merge($paypal, array(
-						's2member_paypal_proxy'              => 'paypal',
-						's2member_paypal_proxy_use'          => 'paypal_checkout',
-						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
-					));
-					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
+					//260817.2119 Keep normal Checkout defaults while allowing an encrypted Pro-Form token to request its existing email, coupon, and success-URL handling during the internal Notify call.
+					$proxy_use = !empty($token['s2member_paypal_proxy_use']) ? (string)$token['s2member_paypal_proxy_use'] : 'paypal_checkout';
+					$notify_extra = array();
 
-					if(!is_array($notify_r))
+					if(!empty($token['s2member_paypal_proxy_coupon']) && is_array($token['s2member_paypal_proxy_coupon']))
+						$notify_extra['s2member_paypal_proxy_coupon'] = $token['s2member_paypal_proxy_coupon'];
+					if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+						$notify_extra['s2member_paypal_proxy_return_url'] = (string)$token['s2member_paypal_proxy_return_url'];
+
+					$notify_done_option = 's2m_ppco_capture_done_'.md5($pu_cap_id);
+					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option, $proxy_use, $notify_extra);
+
+					if(empty($notify_result['ok']))
 					{
 						if($is_redirect_mode)
-							echo 'notify_proxy_failed';
+							echo !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed';
 						else
 						{
 							if(!headers_sent())
 								status_header(500);
 
-							echo wp_json_encode(array('error' => 'notify_proxy_failed'));
+							echo wp_json_encode(array('error' => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed'));
 						}
 						exit();
 					}
 
-					//260407 Framework PPCO replacements need the same old-subscription cancellation behavior without affecting independent CCAPS or specific post/page purchases.
-					if($can_cancel_old_subscr && $old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $pu_cap_id), get_defined_vars())) //260406
+					//260817 Only the request that actually performed fulfillment should trigger replacement-subscription cancellation.
+					if(!empty($notify_result['processed']) && $can_cancel_old_subscr && $old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $pu_cap_id), get_defined_vars())) //260406
 						c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars); //260407
 
 					$return_url = (string)$token['return'];
 					$return_url = add_query_arg('s2member_paypal_proxy', 'paypal', $return_url);
 
 					$return_post = array_merge($paypal, array(
-						's2member_paypal_proxy'              => 'paypal',
-						's2member_paypal_proxy_use'          => 'paypal_checkout',
-						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+						's2member_paypal_proxy'     => 'paypal',
+						's2member_paypal_proxy_use' => $proxy_use,
 					));
+
+					//260817 Carry the already-resolved Pro-Form success URL inside the signed browser-return package.
+					if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+						$return_post['s2member_paypal_proxy_return_url'] = !empty($notify_result['body']) ? trim((string)$notify_result['body']) : '';
+
+					//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
+					$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post);
+					if(!$return_handoff)
+					{
+						echo 'return_handoff_failed';
+						exit();
+					}
+					$return_post['s2member_paypal_checkout_handoff'] = $return_handoff;
 
 					// Auto-POST into s2Member's existing PayPal return handler.
 					echo '<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="robots" content="noindex,nofollow" /></head><body>';
-					echo '<form id="s2m_ppco_rtn" method="post" action="'.esc_attr($return_url).'">';
+					echo '<form id="s2m_ppco_rtn" method="post" accept-charset="UTF-8" action="'.esc_attr($return_url).'">'; //260817 Keep the signed browser-return payload encoding stable.
 					foreach($return_post as $k => $v)
 						echo '<input type="hidden" name="'.esc_attr($k).'" value="'.esc_attr((string)$v).'" />';
 					echo '</form><script type="text/javascript">document.getElementById("s2m_ppco_rtn").submit();</script></body></html>';
@@ -403,59 +431,40 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'option_selection2' => (string)$token['os1'],
 					);
 
-					//260406 Use the shared PayPal Checkout subscription-done option so checkout and webhooks agree on fallback suppression.
 					$option_ppco_subscr = 's2m_ppco_subscr_done_'.md5($subscription_id);
-					$option_ppco_subscr_time = (int)get_option($option_ppco_subscr, 0);
 
-					if($option_ppco_subscr_time > 0 && (time() - $option_ppco_subscr_time) >= DAY_IN_SECONDS)
+					//260818.0603 Share the success-only Notify lock/done marker with browser confirmation and webhook activation fallback.
+					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $option_ppco_subscr);
+
+					if(empty($notify_result['ok']))
 					{
-						delete_option($option_ppco_subscr);
-						$option_ppco_subscr_time = 0;
+						echo !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed';
+						exit();
 					}
 
-					if(!$option_ppco_subscr_time)
-					{
-						if(!add_option($option_ppco_subscr, time(), '', 'no'))
-							update_option($option_ppco_subscr, time(), false);
-
-						$notify_url  = home_url('/?s2member_paypal_notify=1');
-						$notify_post = array_merge($paypal, array(
-							's2member_paypal_proxy'              => 'paypal',
-							's2member_paypal_proxy_use'          => 'paypal_checkout',
-							's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
-						));
-						$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
-
-						if(!is_array($notify_r))
-						{
-							if($is_redirect_mode)
-								echo 'notify_proxy_failed';
-							else
-							{
-								if(!headers_sent())
-									status_header(500);
-
-								echo wp_json_encode(array('error' => 'notify_proxy_failed'));
-							}
-							exit();
-						}
-
-						//260407 Framework PPCO replacements can also replace subscriptions created by other gateways
-						if($old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $subscription_id), get_defined_vars())) //260406.
-							c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars); //260407
-					}
+					//260818.0603 Only the request that completed Notify should cancel a replaced subscription; duplicates are already fulfilled.
+					if(!empty($notify_result['processed']) && $old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $subscription_id), get_defined_vars()))
+						c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars);
 
 					$return_url2 = (string)$token['return'];
 					$return_url2 = add_query_arg('s2member_paypal_proxy', 'paypal', $return_url2);
 
 					$return_post2 = array_merge($paypal, array(
-						's2member_paypal_proxy'              => 'paypal',
-						's2member_paypal_proxy_use'          => 'paypal_checkout',
-						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+						's2member_paypal_proxy'     => 'paypal',
+						's2member_paypal_proxy_use' => 'paypal_checkout',
 					));
 
+					//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
+					$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post2);
+					if(!$return_handoff)
+					{
+						echo 'return_handoff_failed';
+						exit();
+					}
+					$return_post2['s2member_paypal_checkout_handoff'] = $return_handoff;
+
 					echo '<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="robots" content="noindex,nofollow" /></head><body>';
-					echo '<form id="s2m_ppco_rtn" method="post" action="'.esc_attr($return_url2).'">';
+					echo '<form id="s2m_ppco_rtn" method="post" accept-charset="UTF-8" action="'.esc_attr($return_url2).'">'; //260817 Keep the signed browser-return payload encoding stable.
 					foreach($return_post2 as $k => $v)
 						echo '<input type="hidden" name="'.esc_attr($k).'" value="'.esc_attr((string)$v).'" />';
 					echo '</form><script type="text/javascript">document.getElementById("s2m_ppco_rtn").submit();</script></body></html>';
@@ -641,98 +650,75 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					'option_selection2' => (string)$token['os1'],
 				);
 
-				$ppco_dup_processed = false;
 				$option_ppco_subscr = 's2m_ppco_subscr_done_'.md5($subscription_id);
-				$option_ppco_subscr_time = (int)get_option($option_ppco_subscr, 0);
 
-				if($option_ppco_subscr_time > 0 && (time() - $option_ppco_subscr_time) >= DAY_IN_SECONDS)
+				//260818.0603 Mark the Subscription done only after Notify succeeds, using the same lock as webhook activation fallback.
+				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $option_ppco_subscr);
+				$notify_code = !empty($notify_result['code']) ? (int)$notify_result['code'] : 0;
+				$notify_msg  = !empty($notify_result['message']) ? (string)$notify_result['message'] : '';
+				$notify_body = !empty($notify_result['body']) ? (string)$notify_result['body'] : '';
+
+				if(empty($notify_result['ok']))
 				{
-					delete_option($option_ppco_subscr);
-					$option_ppco_subscr_time = 0;
-				}
-
-				$ppco_dup_processed = ($option_ppco_subscr_time > 0);
-
-				if($ppco_dup_processed)
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
-						'env_setting' => $env_setting,
+						'env_setting'     => $env_setting,
+						'event'           => 'notify_proxy_failed',
+						'subscription_id' => $subscription_id,
+						'code'            => $notify_code,
+						'message'         => $notify_msg,
+						'body'            => $notify_body,
+						'error'           => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed',
+					));
+
+					echo wp_json_encode(array('error' => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed'));
+					exit();
+				}
+
+				if(!empty($notify_result['duplicate']))
+					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+						'ppco'            => 'checkout',
+						'env_setting'     => $env_setting,
 						'event'           => 'duplicate_subscription_ignored',
 						'subscription_id' => $subscription_id,
 						'option'          => $option_ppco_subscr,
 					));
-
-				if(!$ppco_dup_processed)
+				else
 				{
-					if(!add_option($option_ppco_subscr, time(), '', 'no'))
-						update_option($option_ppco_subscr, time(), false);
-
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
-						'env_setting' => $env_setting,
-						'event'           => 'idempotency_subscription_set',
+						'env_setting'     => $env_setting,
+						'event'           => 'notify_proxy_response',
 						'subscription_id' => $subscription_id,
-						'option'          => $option_ppco_subscr,
-						'expires_secs'    => DAY_IN_SECONDS,
+						'code'            => $notify_code,
+						'message'         => $notify_msg,
+						'body'            => $notify_body,
 					));
 
-					$notify_url  = home_url('/?s2member_paypal_notify=1');
-					$notify_post = array_merge($paypal, array(
-						's2member_paypal_proxy'              => 'paypal',
-						's2member_paypal_proxy_use'          => 'paypal_checkout',
-						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
-					));
-					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
-
-					if(!is_array($notify_r))
-						$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
-
-					$notify_code = !empty($notify_r['code']) ? (int)$notify_r['code'] : 0;
-					$notify_msg  = !empty($notify_r['message']) ? (string)$notify_r['message'] : '';
-					$notify_body = !empty($notify_r['body']) ? $notify_r['body'] : '';
-
-					if($notify_code >= 200 && $notify_code <= 299)
-					{
-						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'            => 'checkout',
-							'env_setting' => $env_setting,
-							'event'           => 'notify_proxy_response',
-							'subscription_id' => $subscription_id,
-							'url'             => $notify_url,
-							'code'            => $notify_code,
-							'message'         => $notify_msg,
-							'body'            => $notify_body,
-						));
-
-						//260407 Framework PPCO AJAX replacements need the same gateway-aware old-subscription cancellation behavior.
-						if($old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $subscription_id), get_defined_vars())) //260406
-							c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars); //260407
-					}
-					else
-					{
-						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'            => 'checkout',
-							'env_setting' => $env_setting,
-							'event'           => 'notify_proxy_failed',
-							'subscription_id' => $subscription_id,
-							'url'             => $notify_url,
-							'code'            => $notify_code,
-							'message'         => $notify_msg,
-							'body'            => $notify_body,
-						));
-						echo wp_json_encode(array('error' => 'notify_proxy_failed'));
-						exit();
-					}
+					//260818.0603 Only successful first-pass fulfillment should trigger replacement-subscription cancellation.
+					if(!empty($notify_result['processed']) && $old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $subscription_id), get_defined_vars()))
+						c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars);
 				}
 
 				$return_url = (string)$token['return'];
 				$return_url = add_query_arg('s2member_paypal_proxy', 'paypal', $return_url);
 
 				$return_post = array_merge($paypal, array(
-					's2member_paypal_proxy'              => 'paypal',
-					's2member_paypal_proxy_use'          => 'paypal_checkout',
-					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+					's2member_paypal_proxy'     => 'paypal',
+					's2member_paypal_proxy_use' => 'paypal_checkout',
 				));
+
+				//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
+				$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post);
+				if(!$return_handoff)
+				{
+					if(!headers_sent())
+						status_header(500);
+
+					echo wp_json_encode(array('error' => 'return_handoff_failed'));
+					exit();
+				}
+				$return_post['s2member_paypal_checkout_handoff'] = $return_handoff;
 
 				echo wp_json_encode(array(
 					'rtn_url'  => $return_url,
@@ -809,45 +795,35 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				if(!$reason)
 					$reason = 'Cancelled by subscriber.';
 
-				//260517 Get PayPal Checkout subscription details before cancelling locally.
-				$subscription = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_details($subscr_id);
-				$subscription_status = !empty($subscription['status']) ? strtoupper((string)$subscription['status']) : '';
-				$next_billing_time = !empty($subscription['billing_info']['next_billing_time']) ? (string)$subscription['billing_info']['next_billing_time'] : '';
-				$next_billing_ts = ($next_billing_time) ? strtotime($next_billing_time) : 0;
+				//260819.0417 Resolve the active subscription through whichever configured PayPal API family owns it.
+				$ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id);
+				$ipn_signup_vars = (is_array($ipn_signup_vars) && !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id) ? $ipn_signup_vars : array();
 
-				if(!empty($subscription['__error']) || empty($subscription['id']) || (string)$subscription['id'] !== (string)$subscr_id || $subscription_status !== 'ACTIVE' || !$next_billing_ts || $next_billing_ts <= time())
-				{
-					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-						'ppco'       => 'checkout',
-						'env_setting'=> $env_setting,
-						'event'      => 'cancel_subscription_details_unusable',
-						'user_id'    => $user_id,
-						'subscr_id'  => $subscr_id,
-						'status'     => $subscription_status,
-						'next'       => $next_billing_time,
-						'code'       => !empty($subscription['__code']) ? (int)$subscription['__code'] : 0,
-					));
+				$next_billing_time = '';
+				$eot = c_ws_plugin__s2member_utils_users::get_user_eot($user_id, TRUE, 'next');
+				if(is_array($eot) && !empty($eot['type']) && $eot['type'] === 'next' && !empty($eot['time']) && (int)$eot['time'] > time())
+					$next_billing_time = gmdate('Y-m-d\TH:i:s\Z', (int)$eot['time']);
 
-					echo wp_json_encode(array('error' => 'subscription_details_unusable'));
-					exit();
-				}
-
-				$r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_cancel($subscr_id, $reason);
-
-				$code = !empty($r['code']) ? (int)$r['code'] : 0;
-				$body = !empty($r['body']) ? (string)$r['body'] : '';
+				$cancelled = c_ws_plugin__s2member_utilities::cancel_gateway_subscription(
+					'paypal',
+					$subscr_id,
+					(string)get_user_option('s2member_subscr_baid', $user_id),
+					(string)get_user_option('s2member_subscr_cid', $user_id),
+					$ipn_signup_vars,
+					TRUE,
+					$reason
+				);
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-					'ppco'     => 'checkout',
+					'ppco'        => 'checkout',
 					'env_setting' => $env_setting,
-					'event'    => 'cancel_subscription_response',
-					'user_id'  => $user_id,
-					'subscr_id'=> $subscr_id,
-					'code'     => $code,
-					'body'     => $body,
+					'event'       => 'cancel_subscription_response',
+					'user_id'     => $user_id,
+					'subscr_id'   => $subscr_id,
+					'accepted'    => $cancelled ? 1 : 0,
 				));
 
-				if($code === 204 || ($code >= 200 && $code <= 299))
+				if($cancelled)
 				{
 					// Immediately feed s2Member's existing cancel handler (webhooks may be missing in MVP sites).
 					$paypal = array(
@@ -872,8 +848,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					);
 
 					//260517 Enrich with stored signup vars so legacy cancel handler can match and compute EOT.
-					if(($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id)) && is_array($ipn_signup_vars)
-							&& !empty($ipn_signup_vars['subscr_id']) && (string)$ipn_signup_vars['subscr_id'] === (string)$subscr_id)
+					if($ipn_signup_vars)
 					{
 						if(!empty($ipn_signup_vars['item_number']))
 							$paypal['item_number'] = (string)$ipn_signup_vars['item_number'];
@@ -977,6 +952,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					'capture'    => $capture,
 					'token'      => $token,
 				));
+
+				if(!empty($capture['__error']))
+				{
+					echo wp_json_encode(array('error' => (string)$capture['__error']));
+					exit();
+				}
 
 				if(empty($capture['status']) || strtoupper($capture['status']) !== 'COMPLETED')
 				{
@@ -1110,105 +1091,83 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					'option_selection2' => (string)$token['os1'],
 				);
 
-				// Idempotency: prevent double-processing of the same PayPal capture ID.
-				$ppco_dup_processed = false;
-				if($pu_cap_id)
-				{
-					$transient_ppco_capture = 's2m_ppco_'.md5('s2member_transient_ppco_capture_'.$pu_cap_id);
-					$ppco_dup_processed     = (bool)get_transient($transient_ppco_capture);
+				//260827.0051 Keep AJAX capture fulfillment aligned with the redirect capture path so Pro-Form tax, email/coupon routing, and resolved success URLs survive the shared Framework handler.
+				if(isset($token['tax']))
+					$paypal['tax'] = (string)$token['tax'];
 
-					if(!$ppco_dup_processed)
+				$is_independent_ccaps_sale = (strpos((string)$token['item_number'], '*:') === 0);
+				$is_specific_post_page_sale = (strpos((string)$token['item_number'], 'sp:') === 0);
+				$can_cancel_old_subscr = (!$is_independent_ccaps_sale && !$is_specific_post_page_sale); //260407 Only membership replacement-style PPCO purchases should cancel an existing recurring subscription here.
+
+				$proxy_use = !empty($token['s2member_paypal_proxy_use']) ? (string)$token['s2member_paypal_proxy_use'] : 'paypal_checkout';
+				$notify_extra = array();
+
+				if(!empty($token['s2member_paypal_proxy_coupon']) && is_array($token['s2member_paypal_proxy_coupon']))
+					$notify_extra['s2member_paypal_proxy_coupon'] = $token['s2member_paypal_proxy_coupon'];
+				if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+					$notify_extra['s2member_paypal_proxy_return_url'] = (string)$token['s2member_paypal_proxy_return_url'];
+
+				$notify_done_option = 's2m_ppco_capture_done_'.md5($pu_cap_id);
+				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option, $proxy_use, $notify_extra);
+
+				if(empty($notify_result['ok']))
 					{
-						//260404 Keep PayPal Checkout dedupe/fallback transients below 30 days for object-cache compatibility.
-						set_transient($transient_ppco_capture, time(), DAY_IN_SECONDS);
-
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'         => 'checkout',
+							'ppco'        => 'checkout',
 							'env_setting' => $env_setting,
-							'event'        => 'idempotency_capture_set',
-							'order_id'     => $order_id,
-							'txn_id'       => $pu_cap_id,
-							'transient'    => $transient_ppco_capture,
-							'expires_secs' => DAY_IN_SECONDS,
+							'event'       => 'notify_proxy_failed',
+							'order_id'    => $order_id,
+							'txn_id'      => $pu_cap_id,
+							'code'        => !empty($notify_result['code']) ? (int)$notify_result['code'] : 0,
+							'message'     => !empty($notify_result['message']) ? (string)$notify_result['message'] : '',
+							'body'        => !empty($notify_result['body']) ? (string)$notify_result['body'] : '',
 						));
+						echo wp_json_encode(array('error' => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed'));
+						exit();
 					}
-					else
-						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'     => 'checkout',
-							'env_setting' => $env_setting,
-							'event'    => 'duplicate_capture_ignored',
-							'order_id' => $order_id,
-							'txn_id'   => $pu_cap_id,
-						));
-				}
 
-				if(!$ppco_dup_processed)
-				{
-					$is_independent_ccaps_sale = (strpos((string)$token['item_number'], '*:') === 0);
-					$is_specific_post_page_sale = (strpos((string)$token['item_number'], 'sp:') === 0);
-					$can_cancel_old_subscr = (!$is_independent_ccaps_sale && !$is_specific_post_page_sale); //260407 Only membership replacement-style PPCO purchases should cancel an existing recurring subscription here.
-
-					// 1) Fire the existing IPN handler via proxy (provisions access, emails, logs, etc).
-					$notify_url  = home_url('/?s2member_paypal_notify=1');
-					$notify_post = array_merge($paypal, array(
-						's2member_paypal_proxy'              => 'paypal',
-						's2member_paypal_proxy_use'          => 'paypal_checkout',
-						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
-					));
-					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
-
-					if(!is_array($notify_r))
-						$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
-
-					$notify_code = !empty($notify_r['code']) ? (int)$notify_r['code'] : 0;
-					$notify_msg  = !empty($notify_r['message']) ? (string)$notify_r['message'] : '';
-					$notify_body = !empty($notify_r['body']) ? $notify_r['body'] : '';
-
-					if($notify_code >= 200 && $notify_code <= 299)
+				if(!empty($notify_result['processed']))
 					{
 						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'     => 'checkout',
+							'ppco'        => 'checkout',
 							'env_setting' => $env_setting,
-							'event'    => 'notify_proxy_response',
-							'order_id' => $order_id,
-							'txn_id'   => $pu_cap_id,
-							'url'      => $notify_url,
-							'code'     => $notify_code,
-							'message'  => $notify_msg,
-							'body'     => $notify_body,
+							'event'       => 'notify_proxy_response',
+							'order_id'    => $order_id,
+							'txn_id'      => $pu_cap_id,
+							'code'        => !empty($notify_result['code']) ? (int)$notify_result['code'] : 0,
+							'message'     => !empty($notify_result['message']) ? (string)$notify_result['message'] : '',
+							'body'        => !empty($notify_result['body']) ? (string)$notify_result['body'] : '',
 						));
 
 						//260407 Framework PPCO AJAX replacements can also replace subscriptions created by other gateways without affecting independent CCAPS or specific post/page purchases.
 						if($can_cancel_old_subscr && $old__subscr_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', ($old__subscr_id !== $pu_cap_id), get_defined_vars())) //260406
 							c_ws_plugin__s2member_utilities::cancel_gateway_subscription($old__subscr_gateway, $old__subscr_id, $old__subscr_baid, $old__subscr_cid, $old__ipn_signup_vars); //260407
 					}
-					else
-					{
-						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
-							'ppco'     => 'checkout',
-							'env_setting' => $env_setting,
-							'event'    => 'notify_proxy_failed',
-							'order_id' => $order_id,
-							'txn_id'   => $pu_cap_id,
-							'url'      => $notify_url,
-							'code'     => $notify_code,
-							'message'  => $notify_msg,
-							'body'     => $notify_body,
-						));
-						echo wp_json_encode(array('error' => 'notify_proxy_failed'));
-						exit();
-					}
-				}
 
 				// 2) Send the user through the existing Return handler via POST (sets cookies, thank-you UX, reg tokens, etc).
 				$return_url = (string)$token['return'];
 				$return_url = add_query_arg('s2member_paypal_proxy', 'paypal', $return_url);
 
 				$return_post = array_merge($paypal, array(
-					's2member_paypal_proxy'              => 'paypal',
-					's2member_paypal_proxy_use'          => 'paypal_checkout',
-					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+					's2member_paypal_proxy'     => 'paypal',
+					's2member_paypal_proxy_use' => $proxy_use,
 				));
+
+				//260827.0051 Carry the Pro-Form's resolved success URL inside the signed browser return; Specific Post/Page uses the Notify response body for its generated access URL.
+				if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+					$return_post['s2member_paypal_proxy_return_url'] = !empty($notify_result['body']) ? trim((string)$notify_result['body']) : '';
+
+				//260817 Sign the exact browser-return payload without exposing the reusable internal PayPal proxy key.
+				$return_handoff = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_return_handoff_create($return_post);
+				if(!$return_handoff)
+				{
+					if(!headers_sent())
+						status_header(500);
+
+					echo wp_json_encode(array('error' => 'return_handoff_failed'));
+					exit();
+				}
+				$return_post['s2member_paypal_checkout_handoff'] = $return_handoff;
 
 				echo wp_json_encode(array(
 					'rtn_url'  => $return_url,

@@ -55,6 +55,8 @@ interface OAuthServiceProvider {
  * @package
  * @version $id$
  */
+//260816 This legacy OAuth client intentionally uses dynamic state properties; opt in explicitly on PHP 8.2+.
+#[\AllowDynamicProperties]
 class OAuthApplication implements AWeberOAuthAdapter {
     public $debug = false;
 
@@ -311,7 +313,13 @@ class OAuthApplication implements AWeberOAuthAdapter {
      * @return void         Encoded data
      */
     protected function encode($data) {
-        return rawurlencode(utf8_encode($data));
+        //260816 Avoid utf8_encode() deprecations on PHP 8.2+ while preserving older fallbacks where possible.
+        if (function_exists('mb_convert_encoding')) {
+            $data = mb_convert_encoding($data, 'UTF-8', 'ISO-8859-1');
+        } elseif (function_exists('iconv')) {
+            $data = iconv('ISO-8859-1', 'UTF-8', $data);
+        }
+        return rawurlencode($data);
     }
 
     /**

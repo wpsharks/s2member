@@ -102,9 +102,9 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 									$get = (string)$get; // No change.
 
 								else if($attr['date_format'] === 'default')
-									$get = date(get_option('date_format'), (integer)$get);
+									$get = date(get_option('date_format'), (int)$get);
 
-								else $get = date($attr['date_format'], (integer)$get);
+								else $get = date($attr['date_format'], (int)$get);
 							}
 				}
 			else if($attr['user_option'] && isset($valid_user_options[$attr['user_option']]))
@@ -118,9 +118,9 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 									$get = (string)$get; // No change.
 
 								else if($attr['date_format'] === 'default')
-									$get = date(get_option('date_format'), (integer)$get);
+									$get = date(get_option('date_format'), (int)$get);
 
-								else $get = date($attr['date_format'], (integer)$get);
+								else $get = date($attr['date_format'], (int)$get);
 							}
 				}
 			if(isset($get) && (is_array($get) || is_object($get)))

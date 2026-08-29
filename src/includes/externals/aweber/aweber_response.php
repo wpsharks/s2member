@@ -12,6 +12,8 @@
  * @package
  * @version $id$
  */
+//260816 AWeber response objects intentionally expose dynamic API properties; opt in explicitly on PHP 8.2+.
+#[\AllowDynamicProperties]
 class AWeberResponse extends AWeberAPIBase {
 
     public $adapter = false;

@@ -59,6 +59,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 
 					list (, $paypal['sp_ids'], $paypal['hours']) = preg_split('/\:/', $paypal['item_number'], 3);
 
+					//260814 Set optional gateway elements used below so sparse/null payload fields do not trigger PHP diagnostics.
+					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('option_name1', 'option_selection1', 'option_name2', 'option_selection2', 'invoice', 'first_name', 'last_name'));
+
 					$paypal['ip'] = (preg_match('/ip address/i', $paypal['option_name2']) && $paypal['option_selection2']) ? $paypal['option_selection2'] : '';
 					$paypal['ip'] = (!$paypal['ip'] && preg_match('/^[a-z0-9]+~[0-9\.]+$/i', $paypal['invoice'])) ? preg_replace('/^[a-z0-9]+~/i', '', $paypal['invoice']) : $paypal['ip'];
 
@@ -228,7 +231,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 
 							$paypal['s2member_log'][] = 'Specific Post/Page ~ Sale Notification Emails have been processed.';
 						}
-						if($processing && $_REQUEST['s2member_paypal_proxy'] && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
+						//260827.0637 Proxy return URLs are optional; avoid PHP warnings when a valid proxy request does not include one.
+						if($processing && !empty($_REQUEST['s2member_paypal_proxy']) && !empty($_REQUEST['s2member_paypal_proxy_return_url']) && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
 						{
 							if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%sp_access_url%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(rawurlencode($sp_access_url)), $url)))
 								if(($url = preg_replace('/%%sp_access_exp%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(c_ws_plugin__s2member_utils_time::approx_time_difference(time(), strtotime('+'.$paypal['hours'].' hours')))), $url)))

@@ -42,9 +42,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 		{
 			extract($vars, EXTR_OVERWRITE | EXTR_REFS); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
+			//260824.1957 Treat legacy PayPal Resolution Center disputes like chargebacks so they follow the same Reversals Immediate EOT policy as PayPal Checkout.
 			if(((!empty($paypal['txn_type']) && preg_match('/^(subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment)$/i', $paypal['txn_type']) && ($recurring = TRUE))
 			    || (!empty($paypal['txn_type']) && preg_match('/^recurring_payment_profile_cancel$/i', $paypal['txn_type']) && !empty($paypal['initial_payment_status']) && preg_match('/^failed$/i', $paypal['initial_payment_status']) && ($recurring = TRUE))
-			    || (!empty($paypal['txn_type']) && preg_match('/^new_case$/i', $paypal['txn_type']) && !empty($paypal['case_type']) && preg_match('/^chargeback$/i', $paypal['case_type']) && !($recurring = FALSE)) // Seeking this for future compatibility.
+			    || (!empty($paypal['txn_type']) && preg_match('/^new_case$/i', $paypal['txn_type']) && !empty($paypal['case_type']) && preg_match('/^(?:chargeback|dispute)$/i', $paypal['case_type']) && !($recurring = FALSE)) // Seeking this for future compatibility.
 			    || (!empty($paypal['payment_status']) && preg_match('/^(refunded|reversed|reversal)$/i', $paypal['payment_status']) && !($recurring = FALSE))) // The `txn_type` is irrelevant in all of these payment statuses: `refunded|reversed|reversal`.
 			   && (!empty($paypal['subscr_id']) || ($paypal['subscr_id'] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id($paypal)) || (!empty($paypal['parent_txn_id']) && ($paypal['subscr_id'] = $paypal['parent_txn_id']))) // Other MUST haves.
 			   && (!empty($paypal['period1']) || ($paypal['period1'] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_period1($paypal, FALSE)) || empty($recurring) || ($paypal['period1'] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var('period1', FALSE, $paypal['subscr_id'])) || ($paypal['period1'] = '0 D'))
@@ -62,9 +63,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 				if(!get_transient($transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
 				{
+					//260824.2010 Normalize sparse refund/reversal/dispute fields before direct reads; PayPal `new_case` IPNs do not require `payment_status`.
+					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('payment_status', 'txn_type', 'case_type', 'parent_txn_id'));
+
 					$is_refund             = (preg_match('/^refunded$/i', $paypal['payment_status']) && !empty($paypal['parent_txn_id']));
 					$is_reversal           = (preg_match('/^(reversed|reversal)$/i', $paypal['payment_status']) && !empty($paypal['parent_txn_id']));
-					$is_reversal           = (!$is_reversal) ? (preg_match('/^new_case$/i', $paypal['txn_type']) && preg_match('/^chargeback$/i', $paypal['case_type'])) : $is_reversal;
+					$is_reversal           = (!$is_reversal) ? (preg_match('/^new_case$/i', $paypal['txn_type']) && preg_match('/^(?:chargeback|dispute)$/i', $paypal['case_type'])) : $is_reversal;
 					$is_refund_or_reversal = ($is_refund || $is_reversal); // If either of the previous tests above evaluated to true; then it's obviously a Refund and/or a Reversal.
 					$is_partial_refund     = // Partial refund detection. All refunds processed against Subscriptions are considered partials. Full refunds occur only against Buy Now transactions.
 						(!$is_refund || (!empty($paypal['mc_gross']) && ($original_txn_type = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var('txn_type', FALSE, $paypal['subscr_id'])) === 'web_accept'
@@ -72,7 +76,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 					$is_delayed_eot        = (!$is_refund_or_reversal && preg_match('/^(subscr_eot|recurring_payment_expired)$/i', $paypal['txn_type']) && preg_match('/^I-/i', $paypal['subscr_id']));
 
 					if($is_refund_or_reversal)
-						$paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback` )').'.';
+						$paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback|dispute` )').'.';
 					else $paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment` ) - or - `recurring_payment_profile_cancel` w/ `initial_payment_status` ( `failed` )').'.';
 
 					if(empty($_REQUEST['s2member_paypal_proxy'])) // Only on true PayPal IPNs; e.g., we can bypass this on proxied IPNs.
@@ -81,6 +85,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 						sleep(15); // Sleep here for a moment. PayPal sometimes sends a subscr_eot before the subscr_signup, subscr_modify.
 						$paypal['s2member_log'][] = 'Awake. It\'s '.date('D M j, Y g:i:s a T').'. s2Member `txn_type` identified as '.$identified_as.'.';
 					}
+					//260814 Set optional gateway elements used below so sparse/null payload fields do not trigger PHP diagnostics.
+					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('option_name2', 'option_selection2', 'invoice', 'first_name', 'last_name'));
+
 					$paypal['ip'] = (preg_match('/ip address/i', $paypal['option_name2']) && $paypal['option_selection2']) ? $paypal['option_selection2'] : '';
 					$paypal['ip'] = (!$paypal['ip'] && preg_match('/^[a-z0-9]+~[0-9\.]+$/i', $paypal['invoice'])) ? preg_replace('/^[a-z0-9]+~/i', '', $paypal['invoice']) : $paypal['ip'];
 
@@ -114,6 +121,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 										$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber');
 										$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
+										$removed_ccaps = array();
 
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_before_demote', get_defined_vars());
@@ -127,7 +135,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										if(apply_filters('ws_plugin__s2member_remove_ccaps_during_eot_events', (bool)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eots_remove_ccaps'] || $is_refund_or_reversal, get_defined_vars()))
 											foreach($user->allcaps as $cap => $cap_enabled)
 												if(preg_match('/^access_s2member_ccap_/', $cap))
+												{
+													$removed_ccaps[] = preg_replace('/^access_s2member_ccap_/', '', $cap);
 													$user->remove_cap($ccap = $cap);
+												}
 
 										delete_user_option($user_id, 's2member_subscr_gateway');
 										delete_user_option($user_id, 's2member_subscr_id');
@@ -142,15 +153,29 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										delete_user_option($user_id, 's2member_first_payment_txn_id');
 										delete_user_option($user_id, 's2member_last_payment_time');
 										delete_user_option($user_id, 's2member_last_auto_eot_time');
+										delete_user_option($user_id, 's2member_last_auto_eot_details');
 										delete_user_option($user_id, 's2member_auto_eot_time');
+										delete_user_option($user_id, 's2member_auto_eot_details');
 
 										delete_user_option($user_id, 's2member_file_download_access_log');
 										delete_user_option($user_id, 's2member_authnet_payment_failures');
 
-										update_user_option($user_id, 's2member_last_auto_eot_time', time());
+										$processed_at = $last_auto_eot_time = time();
+										update_user_option($user_id, 's2member_last_auto_eot_time', $last_auto_eot_time);
+										//260821.0057 Post-EOT renewal reminders must distinguish an ordinary expiration from access terminated immediately by a refund, reversal, or chargeback.
+										if($is_refund_or_reversal)
+											update_user_option($user_id, 's2member_last_auto_eot_details', array('time' => $last_auto_eot_time, 'source' => 'refund_reversal', 'updated_at' => $last_auto_eot_time));
 
-										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Demoted by s2Member: '.date('D M j, Y g:i a T'));
-										c_ws_plugin__s2member_user_notes::append_user_notes($user_id, 'Paid Subscr. ID @ time of demotion: '.$paypal['subscr_gateway'].' → '.$paypal['subscr_id']);
+										//260822.0653 Immediate gateway EOTs use the same processed-time/history record as scheduled demotions, with the gateway payload retained before usermeta cleanup.
+										c_ws_plugin__s2member_auto_eots::record_eot_history($user_id, array(
+											'eot_time'         => $last_auto_eot_time,
+											'processed_at'     => $processed_at,
+											'original_role'    => $existing_role,
+											'destination_role' => $demotion_role,
+											'removed_ccaps'    => $removed_ccaps,
+											'subscr_gateway'   => $paypal['subscr_gateway'],
+											'subscr_id'        => $paypal['subscr_id'],
+										));
 
 										$paypal['s2member_log'][] = 'Member Level/Capabilities demoted to: '.ucwords(preg_replace('/_/', ' ', $demotion_role)).'.';
 
@@ -238,27 +263,23 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 									{
 										$processing = $during = TRUE; // Yes, we ARE processing this.
 
-										$eot_del_type = $GLOBALS['ws_plugin__s2member_eot_del_type'] = // Configure EOT/Del type.
-											($is_refund_or_reversal) ? 'ipn-refund-reversal-deletion' : 'ipn-cancellation-expiration-deletion';
+										$eot_del_type = ($is_refund_or_reversal) ? // Configure EOT/Del type.
+											'ipn-refund-reversal-deletion' : 'ipn-cancellation-expiration-deletion';
 
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_before_delete', get_defined_vars());
 										do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'removal-deletion');
 										unset($__refs, $__v); // Housekeeping.
 
-										if(is_multisite()) // Multisite does NOT actually delete; ONLY removes.
+										//260822.1458 Immediate gateway EOTs use the same safe "Delete" policy as scheduled Auto-EOT processing.
+										$eot_delete_action = c_ws_plugin__s2member_auto_eots::process_eot_deletion($user_id, $eot_del_type, time());
+										if($eot_delete_action === 'pending_deletion')
+											$paypal['s2member_log'][] = 'Member access removed; account moved to Pending Deletion for administrator review.';
+										else
 										{
-											remove_user_from_blog($user_id, $current_blog->blog_id);
-											// This will automatically trigger `eot_del_notification_urls` as well.
-											c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions($user_id, $current_blog->blog_id, 's2says');
+											$paypal['s2member_log'][] = 'This Member\'s account has been '.(($eot_delete_action === 'removed') ? 'removed' : 'deleted').'.';
+											$paypal['s2member_log'][] = 'EOT/Deletion Notification URLs have been processed.';
 										}
-										else // Otherwise, we can actually delete them.
-											// This will automatically trigger `eot_del_notification_urls` as well.
-											wp_delete_user($user_id); // `c_ws_plugin__s2member_user_deletions::handle_user_deletions()`
-
-										$paypal['s2member_log'][] = 'This Member\'s account has been '.((is_multisite()) ? 'removed' : 'deleted').'.';
-
-										$paypal['s2member_log'][] = 'EOT/Deletion Notification URLs have been processed.';
 
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delete', get_defined_vars());
@@ -273,6 +294,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 									$processing = $during = TRUE; // Yes, we ARE processing this.
 
 									update_user_option($user_id, 's2member_auto_eot_time', ($auto_eot_time = strtotime('now')));
+									delete_user_option($user_id, 's2member_auto_eot_details');
+									//260821.0057 Keep the refund/reversal reason attached to this exact pending EOT so it survives until Auto-EOT processing is re-enabled.
+									if($is_refund_or_reversal)
+										update_user_option($user_id, 's2member_auto_eot_details', array('time' => $auto_eot_time, 'source' => 'refund_reversal', 'updated_at' => time()));
 
 									$paypal['s2member_log'][] = 'Auto-EOT is currently disabled. Skipping EOT (demote|delete), for now.';
 									$paypal['s2member_log'][] = 'Recording the Auto-EOT Time for this Member\'s account: '.date('D M j, Y g:i a T', $auto_eot_time);
@@ -294,6 +319,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 								/* We assume the last payment was today, because this is how newer PayPal accounts function with respect to EOT handling.
 								Newer PayPal accounts ( i.e., Subscription IDs starting with `I-`, will have their EOT triggered upon the last payment. */
 								update_user_option($user_id, 's2member_auto_eot_time', $auto_eot_time); // s2Member will follow-up on this later.
+								delete_user_option($user_id, 's2member_auto_eot_details'); //260821.0057 A normal delayed expiration supersedes any stale provenance left by an older EOT.
 
 								$paypal['s2member_log'][] = 'Auto-EOT Time for this account (delayed), set to: '.date('D M j, Y g:i a T', $auto_eot_time);
 

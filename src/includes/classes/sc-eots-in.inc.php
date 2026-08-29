@@ -56,9 +56,9 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 			if(!empty($attr['mode']) && in_array(strtolower($attr['mode']), array('fixed', 'next'), TRUE))
 				$mode = strtolower($attr['mode']); // A specific mode; i.e., `fixed`, `next`.
 
-			if(empty($attr['user_id']) || !(integer)$attr['user_id'])
+			if(empty($attr['user_id']) || !(int)$attr['user_id'])
 				$attr['user_id'] = $user_id = get_current_user_id();
-			else $user_id = (integer)$attr['user_id'];
+			else $user_id = (int)$attr['user_id'];
 
 			$subscr_gateway = get_user_option('s2member_subscr_gateway', $user_id);
 			$subscr_id      = get_user_option('s2member_subscr_id', $user_id);
@@ -106,8 +106,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_eots_in'))
 				$eot = c_ws_plugin__s2member_utils_users::get_user_eot($user_id, true, $mode);
 				set_transient($transient, $eot, DAY_IN_SECONDS / 2);
 			}
-			if($eot['time'] && (integer)$attr['offset'])
-				$eot['time'] = $eot['time'] + (integer)$attr['offset'];
+			if($eot['time'] && (int)$attr['offset'])
+				$eot['time'] = $eot['time'] + (int)$attr['offset'];
 
 			// Initialize EOT details/output format.
 

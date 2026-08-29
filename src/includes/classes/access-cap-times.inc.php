@@ -61,7 +61,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 			if(strpos($meta_key, 'capabilities') === FALSE || $meta_key !== $wpdb->get_blog_prefix().'capabilities')
 				return; // Not updating caps.
 
-			$user_id = (integer)$object_id;
+			$user_id = (int)$object_id;
 			$user    = new WP_User($user_id);
 			if(!$user->ID || !$user->exists())
 				return; // Not a valid user.
@@ -109,7 +109,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 			if(strpos($meta_key, 'capabilities') === FALSE || $meta_key !== $wpdb->get_blog_prefix().'capabilities')
 				return; // Not updating caps.
 
-			$user_id = (integer)$object_id;
+			$user_id = (int)$object_id;
 			$user    = new WP_User($user_id);
 			if(!$user->ID || !$user->exists())
 				return; // Not a valid user.
@@ -209,7 +209,7 @@ if(!class_exists('c_ws_plugin__s2member_access_cap_times'))
 		public static function get_access_cap_times($user_id, $access_caps = array())
 		{
 			$ac_times = array();
-			if(($user_id = (integer)$user_id))
+			if(($user_id = (int)$user_id))
 			{
 				$ac_times = get_user_option('s2member_access_cap_times', $user_id);
 				if(!is_array($ac_times)) $ac_times = array();

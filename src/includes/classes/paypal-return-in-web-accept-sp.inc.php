@@ -59,6 +59,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_web_accept_sp'))
 
 					list (, $paypal['sp_ids'], $paypal['hours']) = preg_split('/\:/', $paypal['item_number'], 3);
 
+					//260814 Set optional gateway elements used below so sparse/null payload fields do not trigger PHP diagnostics.
+					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('option_name2', 'option_selection2', 'invoice', 'first_name', 'last_name'));
+
 					$paypal['ip'] = (preg_match('/ip address/i', $paypal['option_name2']) && $paypal['option_selection2']) ? $paypal['option_selection2'] : '';
 					$paypal['ip'] = (!$paypal['ip'] && preg_match('/^[a-z0-9]+~[0-9\.]+$/i', $paypal['invoice'])) ? preg_replace('/^[a-z0-9]+~/i', '', $paypal['invoice']) : $paypal['ip'];
 					$paypal['ip'] = (!$paypal['ip'] && c_ws_plugin__s2member_utils_ip::current()) ? c_ws_plugin__s2member_utils_ip::current() : $paypal['ip'];

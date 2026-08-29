@@ -83,7 +83,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `web_accept|subscr_signup` ).';
 
-					@list ($paypal['level'], $paypal['ccaps'], $paypal['eotper']) = preg_split('/\:/', $paypal['item_number'], 3);
+					//260814 Parse and pad optional CCaps/EOT components instead of relying on undefined list() offsets.
+					list ($paypal['level'], $paypal['ccaps'], $paypal['eotper']) = array_pad(explode(':', $paypal['item_number'], 3), 3, '');
+					//260814 Set optional gateway elements used below so sparse/null payload fields do not trigger PHP diagnostics.
+					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('option_name1', 'option_selection1', 'option_name2', 'option_selection2', 'invoice', 'first_name', 'last_name'));
 
 					$paypal['ip'] = (preg_match('/ip address/i', $paypal['option_name2']) && $paypal['option_selection2']) ? $paypal['option_selection2'] : '';
 					$paypal['ip'] = (!$paypal['ip'] && preg_match('/^[a-z0-9]+~[0-9\.]+$/i', $paypal['invoice'])) ? preg_replace('/^[a-z0-9]+~/i', '', $paypal['invoice']) : $paypal['ip'];
@@ -634,7 +637,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 						do_action('ws_plugin__s2member_during_paypal_notify_after_subscr_signup_wo_update_vars', get_defined_vars());
 						unset($__refs, $__v);
 					}
-					if($processing && $_REQUEST['s2member_paypal_proxy'] && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
+					//260827.0637 Proxy return URLs are optional; avoid PHP warnings when a valid proxy request does not include one.
+					if($processing && !empty($_REQUEST['s2member_paypal_proxy']) && !empty($_REQUEST['s2member_paypal_proxy_return_url']) && ($url = $_REQUEST['s2member_paypal_proxy_return_url'])) // A Proxy is requesting a Return URL?
 					{
 						if((!empty($user_id) && !empty($user) && is_object($user) && $user->ID) 
 							|| (($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['subscr_id'], $paypal['option_selection1'])) && is_object($user = new WP_User ($user_id)) && $user->ID)

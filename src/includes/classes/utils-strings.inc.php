@@ -72,7 +72,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 			'&#[xX]0*201[cC];' => '&#x201C;',
 			'&rdquo;'          => '&rdquo;',
 			'&#0*8221;'        => '&#8221;',
-			'&#[xX]0*201[dD];' => '&#x201D;'
+			'&#[xX]0*201[dD];' => '&#x201D;',
+			//260829.0025 Literal smart quotes can reach shortcode attributes unchanged; normalize them like their HTML entity forms.
+			'‘'                => '‘',
+			'’'                => '’',
+			'“'                => '“',
+			'”'                => '”'
 		);
 
 		/**
@@ -575,13 +580,27 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 			if(empty($signature) && stripos(PHP_OS, 'win') === 0 && file_exists(($openssl = 'c:\\openssl-win64\\bin\\openssl.exe')))
 				$signature = c_ws_plugin__s2member_utils_strings::_rsa_sha1_shell_sign((string)$string, (string)$key, $openssl);
 
-			if(empty($signature) && function_exists('openssl_get_privatekey') && function_exists('openssl_sign') && is_resource($private_key = openssl_get_privatekey((string)$key)))
-				openssl_sign((string)$string, $signature, $private_key, OPENSSL_ALGO_SHA1).openssl_free_key($private_key);
+			//260816 PHP 8 returns OpenSSLAsymmetricKey objects instead of resources; false indicates key-loading failure on all supported PHP versions.
+			if(empty($signature) && function_exists('openssl_get_privatekey') && function_exists('openssl_sign') && ($private_key = openssl_get_privatekey((string)$key)) !== FALSE)
+			{
+				openssl_sign((string)$string, $signature, $private_key, OPENSSL_ALGO_SHA1);
+				//260816 openssl_free_key() is unnecessary on PHP 8+ and deprecated there; PHP 5-7 still use resource cleanup.
+				if(PHP_VERSION_ID < 80000 && is_resource($private_key))
+					openssl_free_key($private_key);
+			}
 
 			if(empty($signature)) // Now, if we're still empty, trigger an error here.
-				trigger_error('s2Member was unable to generate an RSA-SHA1 signature.'.
-				              ' Please make sure your installation of PHP is compiled with OpenSSL: `openssl_sign()`.'.
-				              ' See: http://php.net/manual/en/function.openssl-sign.php', E_USER_ERROR);
+			{
+				$error = 's2Member was unable to generate an RSA-SHA1 signature.'.
+				         ' Please make sure your installation of PHP is compiled with OpenSSL: `openssl_sign()`.'.
+				         ' See: http://php.net/manual/en/function.openssl-sign.php';
+
+				//260816 PHP 8.4 deprecates trigger_error(..., E_USER_ERROR); preserve the previous fatal-style path on older PHP.
+				if(PHP_VERSION_ID >= 80400)
+					throw new \RuntimeException($error);
+				else
+					trigger_error($error, E_USER_ERROR);
+			}
 
 			return (!empty($signature)) ? $signature : FALSE;
 		}

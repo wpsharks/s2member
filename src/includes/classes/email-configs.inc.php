@@ -194,7 +194,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 						do_action('ws_plugin__s2member_before_reset_pass_resend_new_user_notification', get_defined_vars ());
 						unset($__refs, $__v); // Housekeeping.
 
-						$user_id    = (integer)$user_id;
+						$user_id    = (int)$user_id;
 						$user_pass  = (string)$user_pass;
 						$notify     = (array)$notify;
 						$user_email = (string)$user_email;
@@ -228,7 +228,7 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 						do_action('ws_plugin__s2member_before_new_user_notification', get_defined_vars ());
 						unset($__refs, $__v); // Housekeeping.
 
-						$user_id    = (integer)$user_id;
+						$user_id    = (int)$user_id;
 						$user_pass  = (string)$user_pass;
 						$notify     = (array)$notify;
 						$user_email = (string)$user_email;

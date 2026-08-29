@@ -77,6 +77,38 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 			{
 				$v = get_option('ws_plugin__s2member_activated_version'); // Currently.
 
+				//260822.2048 Older EOT demotions recorded their processing time only in Administrative Notes; recover that history asynchronously where the legacy note is still available.
+				if(!$v || version_compare($v, '260822.2048', '<'))
+					c_ws_plugin__s2member_auto_eots::start_eot_processed_time_backfill();
+
+				//260824.1727 Refresh existing Checkout webhooks once more to add dispute-created notifications.
+				if(!$v || version_compare($v, '260824.1727', '<'))
+				{
+					$ppco_webhook_envs = array(
+						'live' => array(
+							'client_id'  => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_id'],
+							'secret'     => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_client_secret'],
+							'webhook_id' => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_webhook_id'],
+						),
+						'sandbox' => array(
+							'client_id'  => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_id'],
+							'secret'     => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_client_secret'],
+							'webhook_id' => (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox_webhook_id'],
+						),
+					);
+					foreach($ppco_webhook_envs as $ppco_webhook_env => $ppco_webhook_config)
+						if($ppco_webhook_config['client_id'] && $ppco_webhook_config['secret'] && $ppco_webhook_config['webhook_id'])
+							if(!c_ws_plugin__s2member_paypal_utilities::paypal_checkout_webhook_upsert($ppco_webhook_env, TRUE))
+							{
+								$ppco_webhook_env_label = ($ppco_webhook_env === 'sandbox') ? 'Sandbox' : 'Live';
+								$ppco_webhook_settings_url = add_query_arg('s2member-open-panel', 'paypal-checkout', admin_url('/admin.php?page=ws-plugin--s2member-paypal-ops')).'#ws-plugin--s2member-paypal-checkout';
+
+								//260824.0507 Mark this persistent warning so a later successful reconciliation can remove it automatically.
+								$notice = '<span class="s2member-ppco-webhook-upgrade-notice-'.esc_attr($ppco_webhook_env).'"><strong>s2Member PayPal Checkout:</strong> Your '.esc_html($ppco_webhook_env_label).' webhook could not be updated automatically with the latest required events. Please go to <a href="'.esc_url($ppco_webhook_settings_url).'"><strong>s2Member → PayPal Options → PayPal Checkout</strong></a> and click <strong>Create/Update Webhook</strong> for '.esc_html($ppco_webhook_env_label).'.</span>';
+								c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, array(), TRUE, 0, TRUE);
+							}
+				}
+
 				if(!$v || !version_compare($v, '3.2', '>=')) // Needs to be upgraded?
 					// Version 3.2 is where `meta_key` names were changed. They're prefixed now.
 				{

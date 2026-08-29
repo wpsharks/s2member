@@ -86,7 +86,7 @@ if(!class_exists('c_ws_plugin__s2member_list_server_base'))
 
 					case 'opt_in':
 					case 'double_opt_in':
-						$_value = (boolean)$_value;
+						$_value = (bool)$_value;
 						break;
 
 					case 'user': // A `WP_User` object instance.
@@ -94,7 +94,7 @@ if(!class_exists('c_ws_plugin__s2member_list_server_base'))
 						break;
 
 					case 'user_id': // User ID.
-						$_value = (integer)$_value;
+						$_value = (int)$_value;
 						break;
 				}
 			unset($_key, $_value); // Housekeeping.

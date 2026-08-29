@@ -74,6 +74,38 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											}
 										else return false;
 									}
+								//260817 Allow signed Checkout data through Return or custom handlers, but never use a browser handoff to authenticate the PayPal Notify endpoint.
+								else if(empty($_GET["s2member_paypal_notify"]) && !empty($_GET["s2member_paypal_proxy"]) && $_GET["s2member_paypal_proxy"] === "paypal"
+								&& array_key_exists("s2member_paypal_checkout_handoff", $_POST) && is_array($postvars = stripslashes_deep($_POST)))
+									{
+										if(!is_string($postvars["s2member_paypal_checkout_handoff"]) || $postvars["s2member_paypal_checkout_handoff"] === '')
+											return false;
+
+										$handoff = $postvars["s2member_paypal_checkout_handoff"];
+										unset($postvars["s2member_paypal_checkout_handoff"]);
+
+										//260817 Verify the complete PayPal Checkout browser-return payload before trusting any transaction or proxy metadata.
+										if(!self::paypal_checkout_return_handoff_verify($handoff, $postvars))
+											return false;
+
+										if(empty($postvars["s2member_paypal_proxy"]) || $postvars["s2member_paypal_proxy"] !== "paypal"
+										|| (string)$_GET["s2member_paypal_proxy"] !== (string)$postvars["s2member_paypal_proxy"])
+											return false;
+
+										//260817 If proxy-use routing is supplied in the URL, it must be scalar and match the signed browser-return metadata.
+										if(!empty($_GET["s2member_paypal_proxy_use"]) && (!is_string($_GET["s2member_paypal_proxy_use"]) || empty($postvars["s2member_paypal_proxy_use"]) || $_GET["s2member_paypal_proxy_use"] !== (string)$postvars["s2member_paypal_proxy_use"]))
+											return false;
+
+										foreach($postvars as $key => $value)
+											if(preg_match("/^s2member_/", $key))
+												unset($postvars[$key]);
+
+										$postvars = self::paypal_postvars_back_compat($postvars);
+										$postvars = c_ws_plugin__s2member_utils_strings::trim_deep($postvars);
+										$postvars = self::paypal_postvars_utf8($postvars);
+
+										return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => "paypal")), get_defined_vars());
+									}
 								else if(!empty($_REQUEST) && is_array($postvars = stripslashes_deep($_REQUEST)))
 									{
 										foreach($postvars as $key => $value)
@@ -173,6 +205,104 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						} // unset($_key, $_old_key, $_value); // Housekeeping.
 
 						return $postvars; // w/ back. compat keys.
+					}
+				/**
+				 * Normalizes PayPal Checkout browser-return variables for handoff signing.
+				 *
+				 * @package s2Member\PayPal
+				 * @since 260817
+				 *
+				 * @param array $postvars Browser-return variables.
+				 *
+				 * @return string|bool Canonical payload string, else false.
+				 */
+				public static function paypal_checkout_return_handoff_payload($postvars)
+					{
+						if(!is_array($postvars) || !$postvars)
+							return false;
+
+						$normalized = array();
+						foreach($postvars as $key => $value)
+							{
+								$key = (string)$key;
+
+								if($key === 's2member_paypal_checkout_handoff')
+									continue;
+								if(!is_scalar($value) && $value !== null)
+									return false;
+
+								$key = preg_replace('/\r\n|\r|\n/', "\r\n", $key);
+								$value = preg_replace('/\r\n|\r|\n/', "\r\n", (string)$value);
+								$normalized[$key] = $value;
+							}
+						if(!$normalized)
+							return false;
+
+						ksort($normalized, SORT_STRING);
+						return http_build_query($normalized, '', '&', PHP_QUERY_RFC3986);
+					}
+				/**
+				 * Generates the private signing key for PayPal Checkout browser-return handoffs.
+				 *
+				 * @package s2Member\PayPal
+				 * @since 260817
+				 *
+				 * @return string Private signing key.
+				 */
+				public static function paypal_checkout_return_handoff_key()
+					{
+						return hash_hmac('sha256', 's2member_paypal_checkout_return_handoff|'.self::paypal_proxy_key_gen(), c_ws_plugin__s2member_utils_encryption::key());
+					}
+				/**
+				 * Creates a short-lived PayPal Checkout browser-return handoff.
+				 *
+				 * @package s2Member\PayPal
+				 * @since 260817
+				 *
+				 * @param array $postvars Verified browser-return variables.
+				 *
+				 * @return string Signed handoff token, else an empty string on failure.
+				 */
+				public static function paypal_checkout_return_handoff_create($postvars)
+					{
+						$payload = self::paypal_checkout_return_handoff_payload($postvars);
+
+						if($payload === false)
+							return '';
+
+						$expires = time() + HOUR_IN_SECONDS;
+						$signature = hash_hmac('sha256', $expires.'|'.$payload, self::paypal_checkout_return_handoff_key());
+
+						// The browser gets only a transaction-scoped signature; reusable server-side secrets remain private.
+						return $expires.'.'.$signature;
+					}
+				/**
+				 * Verifies a PayPal Checkout browser-return handoff.
+				 *
+				 * @package s2Member\PayPal
+				 * @since 260817
+				 *
+				 * @param string $handoff Signed handoff token.
+				 * @param array  $postvars Browser-return variables received by POST.
+				 *
+				 * @return bool TRUE if valid; else FALSE.
+				 */
+				public static function paypal_checkout_return_handoff_verify($handoff, $postvars)
+					{
+						$handoff = trim((string)$handoff);
+
+						if(!preg_match('/^([0-9]{10,12})\.([a-f0-9]{64})$/D', $handoff, $matches))
+							return false;
+
+						$expires = (int)$matches[1];
+						$signature = (string)$matches[2];
+						$payload = self::paypal_checkout_return_handoff_payload($postvars);
+
+						if($payload === false || time() > $expires)
+							return false;
+
+						$expected = hash_hmac('sha256', $expires.'|'.$payload, self::paypal_checkout_return_handoff_key());
+						return hash_equals($expected, $signature);
 					}
 				/**
 				* Generates a PayPal Proxy Key, for simulated IPN responses.
@@ -1251,6 +1381,112 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
+				 * Retrieves a PayPal Checkout order for validation or capture recovery.
+				 *
+				 * @since 260817
+				 *
+				 * @param string $order_id PayPal Checkout order id.
+				 *
+				 * @return array Decoded order response, with __code/__body added; __error on failure.
+				 */
+				public static function paypal_checkout_order_details($order_id = '')
+					{
+						$order_id = trim((string)$order_id);
+
+						if(!$order_id)
+							return array('__error' => 'missing_order_id', '__code' => 0, '__body' => '');
+
+						$r = self::paypal_checkout_api_request('GET', '/v2/checkout/orders/'.rawurlencode($order_id));
+
+						$code = !empty($r['code']) ? (int)$r['code'] : 0;
+						$body = !empty($r['body']) ? (string)$r['body'] : '';
+						$data = ($body) ? json_decode($body, true) : array();
+						$data = is_array($data) ? $data : array();
+
+						$data['__code'] = $code;
+						$data['__body'] = $body;
+
+						if(!($code >= 200 && $code <= 299) || empty($data['id']))
+							$data['__error'] = 'order_details_failed';
+
+						return $data;
+					}
+				/**
+				 * Validates a PayPal Checkout order against the server-side purchase token.
+				 *
+				 * @since 260817
+				 *
+				 * @param array  $order    PayPal order representation.
+				 * @param string $order_id Expected PayPal order id.
+				 * @param array  $token    Signed/validated purchase token.
+				 *
+				 * @return string Empty string if valid; otherwise a stable error code.
+				 */
+				public static function paypal_checkout_order_validation_error($order = array(), $order_id = '', $token = array())
+					{
+						if(!is_array($order) || empty($order['id']))
+							return 'order_missing';
+						if($order_id && (string)$order['id'] !== (string)$order_id)
+							return 'order_id_mismatch';
+						if(empty($order['intent']) || strtoupper((string)$order['intent']) !== 'CAPTURE')
+							return 'order_intent_mismatch';
+						if(empty($order['purchase_units'][0]) || !is_array($order['purchase_units'][0]))
+							return 'order_purchase_unit_missing';
+
+						$pu = $order['purchase_units'][0];
+						$invoice = isset($pu['invoice_id']) ? (string)$pu['invoice_id'] : '';
+						$amount = isset($pu['amount']['value']) ? (string)$pu['amount']['value'] : '';
+						$cc = isset($pu['amount']['currency_code']) ? strtoupper((string)$pu['amount']['currency_code']) : '';
+
+						if(!empty($token['invoice']) && $invoice !== (string)$token['invoice'])
+							return 'order_invoice_mismatch';
+						if(!empty($token['amount']) && (!$amount || number_format((float)$amount, 2, '.', '') !== number_format((float)$token['amount'], 2, '.', '')))
+							return 'order_amount_mismatch';
+						if(!empty($token['cc']) && $cc !== strtoupper((string)$token['cc']))
+							return 'order_currency_mismatch';
+
+						$custom = !empty($token['custom']) ? (string)$token['custom'] : '';
+						if($custom && strlen($custom) <= 127 && (!isset($pu['custom_id']) || (string)$pu['custom_id'] !== $custom))
+							return 'order_custom_mismatch';
+
+						return '';
+					}
+				/**
+				 * Validates that a PayPal Checkout order contains a completed capture for the purchase token.
+				 *
+				 * @since 260817
+				 *
+				 * @param array  $order    PayPal order representation.
+				 * @param string $order_id Expected PayPal order id.
+				 * @param array  $token    Signed/validated purchase token.
+				 *
+				 * @return string Empty string if complete and valid; otherwise a stable error code.
+				 */
+				public static function paypal_checkout_order_completion_error($order = array(), $order_id = '', $token = array())
+					{
+						if(($error = self::paypal_checkout_order_validation_error($order, $order_id, $token)))
+							return $error;
+						if(empty($order['status']) || strtoupper((string)$order['status']) !== 'COMPLETED')
+							return 'order_not_completed';
+
+						$capture = (!empty($order['purchase_units'][0]['payments']['captures'][0]) && is_array($order['purchase_units'][0]['payments']['captures'][0])) ? $order['purchase_units'][0]['payments']['captures'][0] : array();
+						if(empty($capture['id']) || empty($capture['status']) || strtoupper((string)$capture['status']) !== 'COMPLETED')
+							return 'capture_missing_fields';
+
+						$amount = !empty($capture['amount']['value']) ? (string)$capture['amount']['value'] : '';
+						$cc = !empty($capture['amount']['currency_code']) ? strtoupper((string)$capture['amount']['currency_code']) : '';
+
+						if(!empty($token['amount']) && (!$amount || number_format((float)$amount, 2, '.', '') !== number_format((float)$token['amount'], 2, '.', '')))
+							return 'capture_amount_mismatch';
+						if(!empty($token['cc']) && $cc !== strtoupper((string)$token['cc']))
+							return 'capture_currency_mismatch';
+						if(empty($order['payer']['email_address']))
+							return 'capture_missing_fields';
+
+						return '';
+					}
+
+				/**
 				 * Creates a PayPal Checkout order for one-time (Buy Now) purchases.
 				 *
 				 * This must be server-side to prevent client-side manipulation of amount, item_number,
@@ -1283,6 +1519,16 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(strlen($item_sku) > 127)
 							$item_sku = substr($item_sku, 0, 127);
 
+						//260817.2119 Keep normal Checkout pricing unchanged; only split subtotal/tax when a Pro-Form token supplies a breakdown that reconciles exactly to the charged total.
+						$item_amount = $amount;
+						$tax_amount  = '';
+						if(isset($token['sub_total'], $token['tax']) && is_numeric($token['sub_total']) && is_numeric($token['tax'])
+						&& number_format((float)$token['sub_total'] + (float)$token['tax'], 2, '.', '') === number_format((float)$amount, 2, '.', ''))
+						{
+							$item_amount = (string)$token['sub_total'];
+							$tax_amount  = (string)$token['tax'];
+						}
+
 						$purchase_unit = array(
 							'invoice_id' => $invoice,
 							'amount'     => array(
@@ -1291,7 +1537,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								'breakdown'     => array(
 									'item_total' => array(
 										'currency_code' => $cc,
-										'value'         => $amount,
+										'value'         => $item_amount,
 									),
 								),
 							),
@@ -1302,11 +1548,23 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 									'quantity'    => '1',
 									'unit_amount' => array(
 										'currency_code' => $cc,
-										'value'         => $amount,
+										'value'         => $item_amount,
 									),
 								),
 							),
 						);
+
+						if($tax_amount !== '' && (float)$tax_amount > 0)
+						{
+							$purchase_unit['amount']['breakdown']['tax_total'] = array(
+								'currency_code' => $cc,
+								'value'         => $tax_amount,
+							);
+							$purchase_unit['items'][0]['tax'] = array(
+								'currency_code' => $cc,
+								'value'         => $tax_amount,
+							);
+						}
 
 						if($item_sku)
 							$purchase_unit['items'][0]['sku'] = $item_sku;
@@ -1331,13 +1589,36 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							'PayPal-Request-Id' => 's2m-ppco-order-'.md5($invoice),
 						);
 
-						$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders', $body, $headers);
-
 						$data = array();
-						if(!empty($r['body']) && is_string($r['body']))
-							$data = json_decode($r['body'], true);
+						for($attempt = 0; $attempt < 2; $attempt++)
+							{
+								$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders', $body, $headers);
+								$code = !empty($r['code']) ? (int)$r['code'] : 0;
+								$response_body = !empty($r['body']) ? (string)$r['body'] : '';
+								$data = ($response_body) ? json_decode($response_body, true) : array();
+								$data = is_array($data) ? $data : array();
 
-						return is_array($data) ? $data : array();
+								if($code >= 200 && $code <= 299 && !empty($data['id']))
+									break;
+
+								$ambiguous = ($code === 0 || $code === 408 || $code >= 500 || ($code >= 200 && $code <= 299));
+								if(!$ambiguous)
+									break;
+							}
+
+						if($code >= 200 && $code <= 299 && !empty($data['id']))
+							{
+								//260817 Bind the invoice and expected payment data to the PayPal order before the browser can request capture.
+								set_transient('s2m_ppco_order_bind_'.md5($invoice), array(
+									'order_id' => (string)$data['id'],
+									'invoice'  => $invoice,
+									'amount'   => $amount,
+									'cc'       => $cc,
+									'custom'   => $custom,
+								), 3 * HOUR_IN_SECONDS);
+							}
+
+						return $data;
 					}
 
 				/**
@@ -1452,20 +1733,206 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						$order_id = trim((string)$order_id);
 						if(!$order_id)
-							return array();
+							return array('__error' => 'missing_order_id');
 
-						// Idempotency: stable per order capture retries.
-						$headers = array(
-							'PayPal-Request-Id' => 's2m-ppco-cap-'.md5($order_id),
-						);
+						$invoice = !empty($token['invoice']) ? (string)$token['invoice'] : '';
+						$binding_name = $invoice ? 's2m_ppco_order_bind_'.md5($invoice) : '';
+						$binding = $binding_name ? get_transient($binding_name) : false;
 
-						$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders/'.$order_id.'/capture', (object)array(), $headers);
+						if(is_array($binding))
+							{
+								$binding_matches = (!empty($binding['order_id']) && (string)$binding['order_id'] === $order_id
+								&& isset($binding['invoice']) && (string)$binding['invoice'] === $invoice
+								&& isset($binding['amount']) && number_format((float)$binding['amount'], 2, '.', '') === number_format((float)$token['amount'], 2, '.', '')
+								&& isset($binding['cc']) && strtoupper((string)$binding['cc']) === strtoupper((string)$token['cc'])
+								&& isset($binding['custom']) && (string)$binding['custom'] === (string)$token['custom']);
 
-						$data = array();
-						if(!empty($r['body']) && is_string($r['body']))
-							$data = json_decode($r['body'], true);
+								if(!$binding_matches)
+									return array('__error' => 'order_binding_mismatch');
+							}
 
-						return is_array($data) ? $data : array();
+						$capture_lock = 's2m_ppco_capture_lock_'.md5($order_id);
+						if(!self::dedupe_lock_acquire($capture_lock, 300))
+							return array('__error' => 'capture_in_progress');
+
+						try
+							{
+								//260817 If the short-lived local binding is gone, verify PayPal's order before attempting capture.
+								if(!is_array($binding))
+									{
+										$details = self::paypal_checkout_order_details($order_id);
+										if(!empty($details['__error']))
+											return $details;
+
+										if(($validation_error = self::paypal_checkout_order_validation_error($details, $order_id, $token)))
+											return array('__error' => $validation_error);
+
+										if(!empty($details['status']) && strtoupper((string)$details['status']) === 'COMPLETED')
+											{
+												if(($completion_error = self::paypal_checkout_order_completion_error($details, $order_id, $token)))
+													return array('__error' => $completion_error);
+
+												return $details;
+											}
+										if(empty($details['status']) || strtoupper((string)$details['status']) !== 'APPROVED')
+											return array('__error' => 'order_not_approved');
+									}
+
+								// Idempotency: stable per order capture retries.
+								$headers = array(
+									'PayPal-Request-Id' => 's2m-ppco-cap-'.md5($order_id),
+									'Prefer'            => 'return=representation',
+								);
+
+								$r = array();
+								$data = array();
+								for($attempt = 0; $attempt < 2; $attempt++)
+									{
+										$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders/'.$order_id.'/capture', (object)array(), $headers);
+										$code = !empty($r['code']) ? (int)$r['code'] : 0;
+										$body = !empty($r['body']) ? (string)$r['body'] : '';
+										$data = ($body) ? json_decode($body, true) : array();
+										$data = is_array($data) ? $data : array();
+
+										if($code >= 200 && $code <= 299)
+											break;
+
+										$ambiguous = ($code === 0 || $code === 408 || $code >= 500);
+										if(!$ambiguous)
+											break;
+									}
+
+								$code = !empty($r['code']) ? (int)$r['code'] : 0;
+								if($code >= 200 && $code <= 299 && !($completion_error = self::paypal_checkout_order_completion_error($data, $order_id, $token)))
+									{
+										if($binding_name)
+											delete_transient($binding_name);
+										return $data;
+									}
+
+								//260817 Recover from an ambiguous or incomplete capture response by reading PayPal's final order state.
+								$details = self::paypal_checkout_order_details($order_id);
+								if(empty($details['__error']) && !($completion_error = self::paypal_checkout_order_completion_error($details, $order_id, $token)))
+									{
+										if($binding_name)
+											delete_transient($binding_name);
+										return $details;
+									}
+
+								if($code >= 200 && $code <= 299 && !empty($completion_error))
+									return array('__error' => $completion_error);
+								if(!empty($details['__error']))
+									return $details;
+								return array('__error' => 'order_capture_failed', '__code' => $code, '__body' => !empty($r['body']) ? (string)$r['body'] : '');
+							}
+						finally
+							{
+								self::dedupe_lock_release($capture_lock);
+							}
+					}
+
+				/**
+				 * Sends PayPal Checkout fulfillment through s2Member's existing PayPal Notify handler once.
+				 *
+				 * @since 260817
+				 *
+				 * @param array  $paypal      PayPal-style transaction variables.
+				 * @param string $done_option Local fulfillment done-marker option name.
+				 * @param string $proxy_use   Optional proxy-use routing value.
+				 * @param array  $extra       Optional additional server-side Notify variables.
+				 *
+				 * @return array Result with ok/processed/duplicate/error and response details.
+				 */
+				public static function paypal_checkout_notify_once($paypal = array(), $done_option = '', $proxy_use = 'paypal_checkout', $extra = array())
+					{
+						if(!is_array($paypal) || !$paypal || !$done_option || !is_string($done_option))
+							return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_invalid_args');
+
+						//260818.0603 This helper now coordinates one-time and subscription fulfillment markers.
+						self::dedupe_markers_cleanup('s2m_ppco_notify_cleanup_throttle', array(
+							array('prefix' => 's2m_ppco_capture_done_', 'ttl' => DAY_IN_SECONDS),
+							array('prefix' => 's2m_ppco_subscr_done_', 'ttl' => DAY_IN_SECONDS),
+							array('prefix' => 's2m_ppco_notify_lock_', 'ttl' => HOUR_IN_SECONDS),
+							array('prefix' => 's2m_ppco_capture_lock_', 'ttl' => HOUR_IN_SECONDS),
+						));
+
+						$result_transient = 's2m_ppco_notify_result_'.md5($done_option);
+						if(self::dedupe_done_time_get($done_option, DAY_IN_SECONDS))
+							{
+								$cached_result = get_transient($result_transient);
+								return array_merge(array('ok' => true, 'processed' => false, 'duplicate' => true, 'error' => ''), is_array($cached_result) ? $cached_result : array());
+							}
+
+						$lock_option = 's2m_ppco_notify_lock_'.md5($done_option);
+						if(!self::dedupe_lock_acquire($lock_option, 900))
+							{
+								if(self::dedupe_done_time_get($done_option, DAY_IN_SECONDS))
+									{
+										$cached_result = get_transient($result_transient);
+										return array_merge(array('ok' => true, 'processed' => false, 'duplicate' => true, 'error' => ''), is_array($cached_result) ? $cached_result : array());
+									}
+
+								return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_in_progress');
+							}
+
+						try
+							{
+								if(self::dedupe_done_time_get($done_option, DAY_IN_SECONDS))
+									{
+										$cached_result = get_transient($result_transient);
+										return array_merge(array('ok' => true, 'processed' => false, 'duplicate' => true, 'error' => ''), is_array($cached_result) ? $cached_result : array());
+									}
+
+								//260818.0617 Allow Pro to prepare account-specific fulfillment inside the shared Notify lock and enrich fallback context.
+								$notify_context = apply_filters('ws_plugin__s2member_paypal_checkout_notify_context', array(
+									'paypal'    => $paypal,
+									'proxy_use' => (string)$proxy_use,
+									'extra'     => is_array($extra) ? $extra : array(),
+								), $done_option);
+
+								if(is_wp_error($notify_context))
+									return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_context_failed', 'context_error' => (string)$notify_context->get_error_code());
+
+								if(!is_array($notify_context) || empty($notify_context['paypal']) || !is_array($notify_context['paypal']))
+									return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_context_invalid');
+
+								$paypal    = $notify_context['paypal'];
+								$proxy_use = isset($notify_context['proxy_use']) ? (string)$notify_context['proxy_use'] : (string)$proxy_use;
+								$extra     = !empty($notify_context['extra']) && is_array($notify_context['extra']) ? $notify_context['extra'] : array();
+
+								$notify_url = home_url('/?s2member_paypal_notify=1');
+								$notify_post = array_merge($paypal, $extra, array(
+									's2member_paypal_proxy'              => 'paypal',
+									's2member_paypal_proxy_use'          => $proxy_use,
+									's2member_paypal_proxy_verification' => self::paypal_proxy_key_gen(),
+								));
+								$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
+
+								if(!is_array($notify_r))
+									$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
+
+								$code = !empty($notify_r['code']) ? (int)$notify_r['code'] : 0;
+								$message = !empty($notify_r['message']) ? (string)$notify_r['message'] : '';
+								$body = !empty($notify_r['body']) ? (string)$notify_r['body'] : '';
+
+								if($code >= 200 && $code <= 299)
+									{
+										$result = array('code' => $code, 'message' => $message, 'body' => $body);
+										set_transient($result_transient, $result, DAY_IN_SECONDS); // Preserve the Notify result for safe duplicate/retry returns, including future Pro success URLs.
+										self::dedupe_done_mark($done_option);
+
+										//260818.1752 Run account-specific post-Notify work only after fulfillment is durably marked complete.
+										do_action('ws_plugin__s2member_paypal_checkout_notify_processed', $notify_context, $done_option, $result);
+
+										return array_merge(array('ok' => true, 'processed' => true, 'duplicate' => false, 'error' => ''), $result);
+									}
+
+								return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_proxy_failed', 'code' => $code, 'message' => $message, 'body' => $body);
+							}
+						finally
+							{
+								self::dedupe_lock_release($lock_option);
+							}
 					}
 
 				/**
@@ -1543,15 +2010,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$rp = !empty($token['rp']) ? (int)$token['rp'] : 0;
 						$rt = !empty($token['rt']) ? strtoupper(trim((string)$token['rt'])) : '';
 
+						$is_pro_form = !empty($token['s2member_paypal_proxy_use']) && strpos((string)$token['s2member_paypal_proxy_use'], 'pro-emails') !== false;
 						$rrt = !empty($token['rrt']) ? (int)$token['rrt'] : 0;
-						$rra = isset($token['rra']) ? (int)$token['rra'] : 1;
+						$rra = isset($token['rra']) ? (int)$token['rra'] : ($is_pro_form ? 2 : 1);
 
-						// rrt/rra are only meaningful when rr="1" (recurring).
+						//260827.1950 Pro-Forms define rra as the exact Max Failed Payments value for any recurring profile;
+						// Framework buttons retain their legacy PayPal Standard retry semantics. rrt remains rr="1" only.
 						if($rr !== '1')
-						{
 							$rrt = 0;
-							$rra = 0;
-						}
 
 						$ta = isset($token['ta']) ? (string)$token['ta'] : '';
 						$tp = !empty($token['tp']) ? (int)$token['tp'] : 0;
@@ -1575,6 +2041,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 							'rrt'         => (int)$rrt,
 							'rra'         => (int)$rra,
+							//260827.2129 !!! TO-DO: Standardize Pro-Form and Framework rrt/rra semantics in a future gateway abstraction; keep Plan caches separate until both contracts match.
+							'pro_form'    => (int)$is_pro_form,
 
 							'ta'          => (string)$ta,
 							'tp'          => (int)$tp,
@@ -1608,13 +2076,19 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						$regular_total_cycles = 0; // 0 = infinite.
 
-						// rrt = number of payments (limited recurring). Only applies to rr="1".
+						//260827.2129 Legacy Pro-Forms without an initial term charge once at checkout and define rrt as additional payments.
+						// PPCO regular cycles include the checkout payment, while Framework buttons retain total-installment rrt semantics.
 						if($rr === '1' && $rrt > 0)
-							$regular_total_cycles = min(999, max(1, (int)$rrt));
+						{
+							$regular_total_cycles = (int)$rrt + (($is_pro_form && $tp === 0) ? 1 : 0);
+							if($regular_total_cycles > 999) // PayPal cannot represent the legacy Pro-Form result; fail instead of silently reducing the number of charges.
+								return '';
+						}
 						else if($rr === '0')
 							$regular_total_cycles = 1;
 
-						$payment_failure_threshold = ($rr === '1' && $rra) ? 2 : 1;
+						//260827.1950 Preserve the Pro-Form's documented exact rra value; Framework buttons keep legacy Standard boolean retry behavior.
+						$payment_failure_threshold = $is_pro_form ? max(0, (int)$rra) : (($rr === '1' && $rra) ? 2 : 1);
 
 						$billing_cycles = array();
 						$seq = 1;
@@ -1935,8 +2409,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 * Returns the PayPal Checkout webhook event names processed by s2Member.
 				 *
 				 * These events are used for:
-				 * - Recurring payment bookkeeping (completed payments).
-				 * - Subscription lifecycle changes (cancel/suspend/expire/payment failed).
+				 * - Subscription activation fallback and lifecycle changes.
+				 * - Recurring payment bookkeeping, refunds, and reversals.
 				 *
 				 * @since 260115
 				 *
@@ -1944,14 +2418,26 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 */
 				public static function paypal_checkout_webhook_event_names()
 					{
+						//260820.0218 Keep automatic webhook registration aligned with the events handled by s2Member and listed in PayPal Checkout setup help.
 						return array(
+							'PAYMENT.SALE.COMPLETED',
+							'PAYMENT.CAPTURE.COMPLETED',
+							'PAYMENT.SALE.REFUNDED',
+							'PAYMENT.CAPTURE.REFUNDED',
+							'PAYMENT.SALE.REVERSED',
+							'PAYMENT.CAPTURE.REVERSED',
+
+							//260824.1727 Treat a newly opened PayPal dispute as a chargeback/reversal through s2Member's existing EOT policy.
+							'CUSTOMER.DISPUTE.CREATED',
+
+							'BILLING.SUBSCRIPTION.CREATED',
+							'BILLING.SUBSCRIPTION.ACTIVATED',
+							'BILLING.SUBSCRIPTION.RE-ACTIVATED',
+							'BILLING.SUBSCRIPTION.UPDATED',
 							'BILLING.SUBSCRIPTION.CANCELLED',
 							'BILLING.SUBSCRIPTION.SUSPENDED',
 							'BILLING.SUBSCRIPTION.EXPIRED',
 							'BILLING.SUBSCRIPTION.PAYMENT.FAILED',
-
-							'PAYMENT.SALE.COMPLETED',
-							'PAYMENT.CAPTURE.COMPLETED',
 						);
 					}
 
@@ -1963,15 +2449,16 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 *
 				 * @since 260115
 				 *
-				 * @param string $env 'live' or 'sandbox'. Defaults to 'live'.
+				 * @param string $env           'live' or 'sandbox'. Defaults to 'live'.
+				 * @param bool   $existing_only If true, update only a webhook whose ID is already stored; never create/adopt one.
 				 *
 				 * @return array Result array on success with keys:
 				 *               - id (string) webhook id
-				 *               - op (string) 'created'|'updated'
+				 *               - op (string) 'created'|'updated'|'adopted'
 				 *               - env (string) 'live'|'sandbox'
 				 *              Empty array on failure.
 				 */
-				public static function paypal_checkout_webhook_upsert($env = '')
+				public static function paypal_checkout_webhook_upsert($env = '', $existing_only = false)
 					{
 						$env = ($env === 'sandbox') ? 'sandbox' : 'live';
 
@@ -2047,6 +2534,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							));
 						}
 
+						//260820.0313 Upgrade reconciliation must never create or adopt a webhook the site owner did not already store.
+						if($existing_only)
+						{
+							$GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_checkout_sandbox'] = $orig_sandbox ? '1' : '0';
+							return array();
+						}
+
 						$body = array(
 							'url'         => $url,
 							'event_types' => $event_types,
@@ -2087,6 +2581,37 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 						}
 
+						//260820.0313 A same-app webhook found by this exact s2Member URL is safe to adopt, but first reconcile its required events.
+						if($id && $adopted_existing)
+						{
+							$patch = array(
+								array('op' => 'replace', 'path' => '/url', 'value' => $url),
+								array('op' => 'replace', 'path' => '/event_types', 'value' => $event_types),
+							);
+							$ur = self::paypal_checkout_api_request('PATCH', '/v1/notifications/webhooks/'.rawurlencode($id), $patch);
+							$adopt_update_ok = (!empty($ur['code']) && (int)$ur['code'] === 200);
+
+							if(!$adopt_update_ok && !empty($ur['body']) && is_string($ur['body']))
+							{
+								$ud = json_decode($ur['body'], true);
+								$adopt_update_ok = !empty($ud['name']) && $ud['name'] === 'WEBHOOK_PATCH_REQUEST_NO_CHANGE';
+							}
+							if(!$adopt_update_ok)
+							{
+								c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+									'ppco'     => 'webhook',
+									'event'    => 'update_adopted_webhook_failed',
+									'env_setting' => $env,
+									'id'       => $id,
+									'url'      => $url,
+									'code'     => !empty($ur['code']) ? (int)$ur['code'] : 0,
+									'message'  => !empty($ur['message']) ? (string)$ur['message'] : '',
+									'body'     => !empty($ur['body']) ? (string)$ur['body'] : '',
+								));
+								$id = '';
+							}
+						}
+
 						if($id)
 						{
 							self::paypal_checkout_webhook_store_id($id);
@@ -2119,6 +2644,36 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
+				 * Clears a resolved PayPal Checkout webhook upgrade notice.
+				 *
+				 * @since 260824.0507
+				 *
+				 * @param string $env 'live' or 'sandbox'.
+				 *
+				 * @return void
+				 */
+				protected static function paypal_checkout_webhook_upgrade_notice_clear($env = '')
+					{
+						$env = ($env === 'sandbox') ? 'sandbox' : 'live';
+						$env_label = ($env === 'sandbox') ? 'Sandbox' : 'Live';
+						$marker = 's2member-ppco-webhook-upgrade-notice-'.$env;
+						$legacy_message = 'Your '.$env_label.' webhook could not be updated automatically with the latest required events.';
+
+						$notices = (array)get_option('ws_plugin__s2member_notices');
+						$changed = FALSE;
+
+						foreach($notices as $notice_key => $notice)
+							if(is_array($notice) && !empty($notice['notice']) && (strpos((string)$notice['notice'], $marker) !== FALSE || strpos((string)$notice['notice'], $legacy_message) !== FALSE))
+							{
+								unset($notices[$notice_key]);
+								$changed = TRUE;
+							}
+
+						if($changed)
+							update_option('ws_plugin__s2member_notices', array_values($notices));
+					}
+
+				/**
 				 * Stores a PayPal Checkout webhook id into ws_plugin__s2member_options for the current env.
 				 *
 				 * @since 260115
@@ -2129,11 +2684,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 */
 				protected static function paypal_checkout_webhook_store_id($webhook_id)
 					{
+						//260820.0427 Preserve the selected environment before option normalization resets the global Checkout environment.
+						$is_sandbox = self::paypal_checkout_is_sandbox();
+
 						$options = get_option('ws_plugin__s2member_options');
 						if(!is_array($options))
 							$options = array();
 
-						if(self::paypal_checkout_is_sandbox())
+						if($is_sandbox)
 							$options['paypal_checkout_sandbox_webhook_id'] = (string)$webhook_id;
 						else
 							$options['paypal_checkout_webhook_id'] = (string)$webhook_id;
@@ -2142,10 +2700,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						update_option('ws_plugin__s2member_options', $options).((is_multisite() && is_main_site()) ? update_site_option('ws_plugin__s2member_options', $options) : NULL);
 
-						if(self::paypal_checkout_is_sandbox())
+						if($is_sandbox)
 							$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_sandbox_webhook_id"] = (string)$webhook_id;
 						else
 							$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_webhook_id"] = (string)$webhook_id;
+
+						//260824.0507 A successful create/update or no-change verification resolves any queued upgrade warning for this environment.
+						self::paypal_checkout_webhook_upgrade_notice_clear($is_sandbox ? 'sandbox' : 'live');
 					}
 			}
 	}

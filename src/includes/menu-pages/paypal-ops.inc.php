@@ -85,7 +85,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 							$r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_webhook_upsert($env);
 
 							if(!empty($r['id']))
+							{
 								$ppco_webhook_notice = '<div class="updated"><p>'.sprintf(esc_html__('PayPal Checkout %1$s webhook created/updated successfully.', 's2member'), $env_label).'</p></div>'."\n";
+
+								//260824.0507 The persistent warning was rendered before this page action ran; remove that now-resolved copy immediately.
+								$ppco_webhook_notice .= '<script>(function(){var e=document.querySelector(".s2member-ppco-webhook-upgrade-notice-'.esc_js($env).'");if(e&&e.closest){e=e.closest(".notice");if(e)e.remove();}})();</script>'."\n";
+							}
 							else
 								$ppco_webhook_notice = '<div class="error"><p>'.sprintf(esc_html__('Unable to create/update PayPal Checkout %1$s webhook. See the s2Member paypal-checkout.log for details.', 's2member'), $env_label).' <a href="'.esc_attr(admin_url("/admin.php?page=ws-plugin--s2member-logs")).'">'.esc_html__('Log Viewer', 's2member').'</a></p></div>'."\n";
 						}
@@ -185,14 +190,17 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			{
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_paypal_account_details", get_defined_vars());
 
-				//260106
-				echo '<div class="ws-menu-page-group" title="PayPal Checkout (Beta)">'."\n";
+				//260106 New PayPal Checkout panel.
+				//260824.0507 Allow administrative notices to open and jump directly to the PayPal Checkout panel.
+				echo '<div id="ws-plugin--s2member-paypal-checkout"></div>'."\n";
+				echo '<div class="ws-menu-page-group" title="PayPal Checkout (Beta)"'.((!empty($_GET['s2member-open-panel']) && $_GET['s2member-open-panel'] === 'paypal-checkout') ? ' default-state="open"' : '').'>'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-checkout-account-details-section">'."\n";
 				echo '<a href="https://s2member.com/r/paypal/" target="_blank"><img src="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]).'/src/images/paypal-pp-logo-200px.png" class="ws-menu-page-right s2m-ppco-paypal-logo" style="width:250px; max-width:25%; height:auto; margin:0 20px 20px 0;" alt="PayPal" /></a>'."\n";
 
 				echo '<div class="ws-menu-page-notice ws-menu-page-notice-info">'."\n";
-				echo '<p>'.esc_html__('When enabled, existing s2Member PayPal Button shortcodes are powered by PayPal Checkout without requiring shortcode edits. If disabled, s2Member continues using PayPal Standard.', 's2member').'</p>'."\n";
+				//260818.2340 PayPal Checkout now powers both Framework buttons and the PayPal option in s2Member Pro-Forms without shortcode edits.
+				echo '<p>'.esc_html__('When enabled, existing s2Member PayPal Button shortcodes and s2Member Pro-Forms that offer PayPal are powered by PayPal Checkout without requiring shortcode edits. If disabled, they continue using their existing PayPal Standard or Express Checkout flow.', 's2member').'</p>'."\n";
 
 				echo '<p style="margin:0 0 6px 0;"><strong>'.esc_html__('Quick Setup (Live or Sandbox)', 's2member').'</strong></p>'."\n";
 				echo '<ol style="margin:0 0 0 20px;">'."\n";
@@ -214,7 +222,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '</div>'."\n";
 
-				echo '<p><em>'.esc_html__('Leave these fields blank to continue using PayPal Standard.', 's2member').'</em></p>'."\n";
+				echo '<p><em>'.esc_html__('Leave these fields blank to continue using your existing PayPal Standard and Express Checkout integrations.', 's2member').'</em></p>'."\n";
 
 				$ppco_https_ready  = true;
 				$ppco_https_reason = '';
@@ -271,7 +279,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-0" value="0" onclick="window.s2mPpcoApplyEnvCues&&window.s2mPpcoApplyEnvCues();"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_paypal_checkout_enable" id="ws-plugin--s2member-paypal-checkout-enable-1" value="1" onclick="window.s2mPpcoApplyEnvCues&&window.s2mPpcoApplyEnvCues();"'.((!$ppco_https_ready) ? ' disabled="disabled"' : '').(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_checkout_enable"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-paypal-checkout-enable-1">Yes, enable PayPal Checkout.</label><br />'."\n";
-				echo '<em>Only enable this after you have configured PayPal Checkout credentials below. If disabled, s2Member continues using PayPal Standard.</em>'."\n";
+				echo '<em>Only enable this after you have configured PayPal Checkout credentials below. If disabled, s2Member continues using the existing PayPal Standard and Express Checkout integrations.</em>'."\n";
 
 				if(!$ppco_https_ready)
 					echo '<br /><span class="ws-menu-page-error">'.esc_html__('Disabled: PayPal Checkout requires HTTPS (SSL) for webhooks. Fix HTTPS for this domain, then enable PayPal Checkout.', 's2member').'</span>'."\n";
@@ -492,7 +500,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Live credentials first.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
 				echo '</th>'."\n";
 				echo '<td style="padding:0;">'."\n";
-				echo '<em>'.esc_html__('Registers your webhook URL with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
+				echo '<em>'.esc_html__('Registers or updates your webhook URL and required events with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 
@@ -549,8 +557,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 						echo '<br /><span class="ws-menu-page-error">'.sprintf(esc_html__('Warning: Server-side probe to your HTTPS endpoint returned HTTP %1$s. This can be caused by SSL/virtual-host configuration issues, but it can also be a false negative due to security rules that block loopback requests. Use the “Test Webhook Endpoint” link and PayPal\'s webhook simulator to confirm external reachability.', 's2member'), (int)$ppco_https_code).'</span>'."\n";
 				}
 
-				//260216 Include additional events required for refunds/reversals and subscription lifecycle.
-				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>PAYMENT.SALE.REFUNDED</code> <code>PAYMENT.CAPTURE.REFUNDED</code> <code>PAYMENT.SALE.REVERSED</code> <code>PAYMENT.CAPTURE.REVERSED</code> <code>BILLING.SUBSCRIPTION.CREATED</code> <code>BILLING.SUBSCRIPTION.ACTIVATED</code> <code>BILLING.SUBSCRIPTION.RE-ACTIVATED</code> <code>BILLING.SUBSCRIPTION.UPDATED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
+				//260824.1727 Include payment, dispute, and subscription lifecycle events required by Checkout processing.
+				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>PAYMENT.SALE.REFUNDED</code> <code>PAYMENT.CAPTURE.REFUNDED</code> <code>PAYMENT.SALE.REVERSED</code> <code>PAYMENT.CAPTURE.REVERSED</code> <code>CUSTOMER.DISPUTE.CREATED</code> <code>BILLING.SUBSCRIPTION.CREATED</code> <code>BILLING.SUBSCRIPTION.ACTIVATED</code> <code>BILLING.SUBSCRIPTION.RE-ACTIVATED</code> <code>BILLING.SUBSCRIPTION.UPDATED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
 
 				echo '<p style="margin:10px 0 0 0;"><em>'.esc_html__('Tip: Use PayPal\'s Webhooks Events dashboard to view and re-deliver webhook events while testing.', 's2member').' <a href="https://developer.paypal.com/api/rest/webhooks/events-dashboard/" target="_blank" rel="external">'.esc_html__('Open Events Dashboard', 's2member').'</a></em></p>'."\n";
 
@@ -662,7 +670,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					echo '<span class="button button-primary" style="min-width:250px; text-align:center; color:#fff !important; opacity:0.50; cursor:default; pointer-events:none;" title="'.esc_attr__('Save Sandbox credentials first.', 's2member').'">'.esc_html__('Create/Update Webhook', 's2member').'</span>'."\n";
 				echo '</th>'."\n";
 				echo '<td style="padding:0;">'."\n";
-				echo '<em>'.esc_html__('Registers your webhook URL with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
+				echo '<em>'.esc_html__('Registers or updates your webhook URL and required events with PayPal (HTTPS required).', 's2member').' '.esc_html__('If your site URL changes, re-run Create/Update Webhook to update the callback URL at PayPal.', 's2member').'</em>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 
@@ -690,8 +698,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<em>'.esc_html__('Webhook URL:', 's2member').'</em><br /><code>'.esc_html(add_query_arg("s2member_paypal_webhook", "1", home_url("/", 'https'))).'</code>'."\n";
 				echo '<br /><em class="ws-menu-page-hilite">'.esc_html__('Note: PayPal requires an HTTPS (SSL) webhook URL.', 's2member').'</em>'."\n";
 
-				//260216 Include additional events required for refunds/reversals and subscription lifecycle.
-				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>PAYMENT.SALE.REFUNDED</code> <code>PAYMENT.CAPTURE.REFUNDED</code> <code>PAYMENT.SALE.REVERSED</code> <code>PAYMENT.CAPTURE.REVERSED</code> <code>BILLING.SUBSCRIPTION.CREATED</code> <code>BILLING.SUBSCRIPTION.ACTIVATED</code> <code>BILLING.SUBSCRIPTION.RE-ACTIVATED</code> <code>BILLING.SUBSCRIPTION.UPDATED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
+				//260824.1727 Include payment, dispute, and subscription lifecycle events required by Checkout processing.
+				echo '<br /><br /><em>'.esc_html__('Required Events:', 's2member').'</em><br /><code>PAYMENT.SALE.COMPLETED</code> <code>PAYMENT.CAPTURE.COMPLETED</code> <code>PAYMENT.SALE.REFUNDED</code> <code>PAYMENT.CAPTURE.REFUNDED</code> <code>PAYMENT.SALE.REVERSED</code> <code>PAYMENT.CAPTURE.REVERSED</code> <code>CUSTOMER.DISPUTE.CREATED</code> <code>BILLING.SUBSCRIPTION.CREATED</code> <code>BILLING.SUBSCRIPTION.ACTIVATED</code> <code>BILLING.SUBSCRIPTION.RE-ACTIVATED</code> <code>BILLING.SUBSCRIPTION.UPDATED</code> <code>BILLING.SUBSCRIPTION.CANCELLED</code> <code>BILLING.SUBSCRIPTION.SUSPENDED</code> <code>BILLING.SUBSCRIPTION.EXPIRED</code> <code>BILLING.SUBSCRIPTION.PAYMENT.FAILED</code>'."\n";
 
 				echo '<p style="margin:10px 0 0 0;"><em>'.esc_html__('Tip: Use PayPal\'s Webhooks Events dashboard to view and re-deliver webhook events while testing.', 's2member').' <a href="https://developer.paypal.com/api/rest/webhooks/events-dashboard/" target="_blank" rel="external">'.esc_html__('Open Events Dashboard', 's2member').'</a></em></p>'."\n";
 
@@ -1091,7 +1099,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<p><em><strong>IPN History:</strong> Here\'s PayPal\'s <a href="https://s2member.com/r/paypal-ipn-history/" target="_blank" rel="external">Instant Payment Notification (IPN) History page</a>.</em></p>';
 				echo '<p><em><strong>Quick Tip:</strong> In addition to the <a href="http://s2member.com/r/paypal-com-ipn-configuration-page/" target="_blank" rel="external">default IPN settings inside your PayPal account</a>, the IPN URL is also set on a per-transaction basis by the special PayPal Button Code that s2Member provides you with. In other words, if you have multiple sites operating on one PayPal account, that\'s OK. s2Member dynamically sets the IPN URL for each transaction. The result is that the IPN URL configured from within your PayPal account, becomes the default, which is then overwritten on a per-transaction basis. In fact, PayPal recently updated their system to support IPN URL preservation. One PayPal account can handle multiple sites, all using different IPN URLs.</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn_after_quick_tip", get_defined_vars());
-				echo '<p><em><strong>IPN Communications:</strong> You\'ll be happy to know that s2Member handles cancellations, expirations, failed payments, terminations (e.g., refunds &amp; chargebacks) for you automatically. If you log into your PayPal account and cancel a Member\'s Subscription, or, if the Member logs into their PayPal account and cancels their own Subscription, s2Member will be notified of these important changes and react accordingly through the PayPal IPN service that runs silently behind-the-scene. The PayPal IPN service will notify s2Member whenever a Member\'s payments have been failing, and/or whenever a Member\'s Subscription has expired for any reason. Even refunds &amp; chargeback reversals are supported through the IPN service. If you issue a refund to an unhappy Customer through PayPal, s2Member will be notified, and the account for that Customer will either be demoted to a Free Subscriber, or deleted automatically (based on your configuration). The communication from PayPal → s2Member is seamless.</em></p>'."\n";
+				echo '<p><em><strong>IPN Communications:</strong> You\'ll be happy to know that s2Member handles cancellations, expirations, failed payments, terminations (e.g., refunds &amp; chargebacks) for you automatically. If you log into your PayPal account and cancel a Member\'s Subscription, or, if the Member logs into their PayPal account and cancels their own Subscription, s2Member will be notified of these important changes and react accordingly through the PayPal IPN service that runs silently behind-the-scene. The PayPal IPN service will notify s2Member whenever a Member\'s payments have been failing, and/or whenever a Member\'s Subscription has expired for any reason. Even refunds &amp; chargeback reversals are supported through the IPN service. If you issue a refund to an unhappy Customer through PayPal, s2Member will be notified, and the account for that Customer will either be demoted to a Free Subscriber, or have the configured Delete behavior applied automatically. The communication from PayPal → s2Member is seamless.</em></p>'."\n";
 				echo '</div>'."\n";
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
@@ -1663,17 +1671,74 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			{
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_eot_behavior", get_defined_vars());
 
-				echo '<div class="ws-menu-page-group" title="Automatic EOT Behavior">'."\n";
+				echo '<div class="ws-menu-page-group" title="Automatic End-of-Term Behavior">'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-eot-behavior-section">'."\n";
-				echo '<h3>PayPal EOT Behavior (required, please choose)</h3>'."\n";
-				echo '<p>EOT = End Of Term. By default, s2Member will demote a paid Member to a Free Subscriber whenever their Subscription term has ended (i.e., expired), been cancelled, refunded, charged back to you, etc. s2Member demotes them to a Free Subscriber, so they will no longer have Member Level Access to your site. However, in some cases, you may prefer to have Customer accounts deleted completely, instead of just being demoted. This is where you choose which method works best for your site. If you don\'t want s2Member to take ANY action at all, you can disable s2Member\'s EOT System temporarily, or even completely. There are also a few other configurable options here, so please read carefully. These options are all very important.</p>'."\n";
-				echo '<p><strong>PayPal IPNs:</strong> The PayPal IPN service will notify s2Member whenever a Member\'s payments have been failing, and/or whenever a Member\'s Subscription has expired for any reason. Even refunds &amp; chargeback reversals are supported through the IPN service. For example, if you issue a refund to an unhappy Customer through PayPal, s2Member will eventually be notified, and the account for that Customer will either be demoted to a Free Subscriber, or deleted automatically (based on your configuration). The communication from PayPal → s2Member is seamless.</p>'."\n";
+				echo '<h3>PayPal End-of-Term Behavior (required, please choose)</h3>'."\n";
+				echo '<p>EOT = End Of Term. By default, s2Member will demote a paid Member to a Free Subscriber whenever their Subscription term has ended (i.e., expired), been cancelled, refunded, charged back to you, etc. s2Member demotes them to a Free Subscriber, so they will no longer have Member Level Access to your site. However, in some cases, you may prefer to have Customer accounts moved to Pending Deletion for administrator review, instead of just being demoted. This is where you choose which method works best for your site. If you don\'t want s2Member to take ANY action at all, you can disable s2Member\'s EOT System temporarily, or even completely. There are also a few other configurable options here, so please read carefully. These options are all very important.</p>'."\n";
+				echo '<p><strong>PayPal IPNs:</strong> The PayPal IPN service will notify s2Member whenever a Member\'s payments have been failing, and/or whenever a Member\'s Subscription has expired for any reason. Even refunds &amp; chargeback reversals are supported through the IPN service. For example, if you issue a refund to an unhappy Customer through PayPal, s2Member will eventually be notified, and the account for that Customer will either be demoted to a Free Subscriber, or have the configured Delete behavior applied automatically. The communication from PayPal → s2Member is seamless.</p>'."\n";
 				echo '<p><em><strong>Some Hairy Details:</strong> There might be times whenever you notice that a Member\'s Subscription has been cancelled through PayPal... but, s2Member continues allowing the User  access to your site as a paid Member. Please don\'t be confused by this... in 99.9% of these cases, the reason for this is legitimate. s2Member will only remove the User\'s Membership privileges when an EOT (End Of Term) is processed, a refund occurs, a chargeback occurs, or when a cancellation occurs - which would later result in a delayed Auto-EOT by s2Member.</em></p>'."\n";
-				echo '<p><em>s2Member will not process an EOT until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or deleting their account from the system (based on your configuration). s2Member also calculates one extra day (24 hours) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>'."\n";
+				echo '<p><em>s2Member will not process an EOT until the User has completely used up the time they paid for. In other words, if a User signs up for a monthly Subscription on Jan 1st, and then cancels their Subscription on Jan 15th; technically, they should still be allowed to access the site for another 15 days, and then on Feb 1st, the time they paid for has completely elapsed. At that time, s2Member will remove their Membership privileges; by either demoting them to a Free Subscriber, or applying the configured Delete behavior. s2Member also calculates one extra day (24 hours) into its equation, just to make sure access is not removed sooner than a Customer might expect.</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_eot_behavior", get_defined_vars());
 
-				echo '<p id="ws-plugin--s2member-auto-eot-system-enabled-via-cron"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 2 && (!function_exists("wp_cron") || !wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) ? '' : ' style="display:none;"').'>If you\'d like to run s2Member\'s Auto-EOT System through a more traditional Cron Job; instead of through <code>WP-Cron</code>, you will need to configure a Cron Job through your server control panel; provided by your hosting company. Set the Cron Job to run <code>once about every 10 minutes to an hour</code>. You\'ll want to configure an HTTP Cron Job that loads this URL:<br /><code>'.esc_html(home_url("/?s2member_auto_eot_system_via_cron=1")).'</code></p>'."\n";
+				//260820.0306 Show current processing health where Auto-EOT is configured, so pending/stalled work is visible before it becomes a support issue.
+				$auto_eot_health = c_ws_plugin__s2member_auto_eots::auto_eot_system_health(TRUE);
+				$auto_eot_legacy_cap = c_ws_plugin__s2member_auto_eots::auto_eot_system_legacy_cap_info();
+				$auto_eot_mode = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"];
+				$auto_eot_runtime_target = c_ws_plugin__s2member_auto_eots::auto_eot_system_runtime_budget($auto_eot_mode === '2');
+				$php_execution_limit = (int)ini_get('max_execution_time');
+				$auto_eot_status_labels = array('healthy' => 'Healthy', 'processing' => 'Processing', 'catching_up' => 'Catching up', 'attention' => 'Attention', 'error' => 'Needs attention', 'disabled' => 'Disabled');
+				$auto_eot_status_label = isset($auto_eot_status_labels[$auto_eot_health['status']]) ? $auto_eot_status_labels[$auto_eot_health['status']] : ucfirst($auto_eot_health['status']);
+
+				$auto_eot_next_run = 0;
+				if($auto_eot_mode === '1')
+				{
+					$_scheduled = array_filter(array((int)$auto_eot_health['recurring_at'], (int)$auto_eot_health['continuation_at']));
+					$auto_eot_next_run = $_scheduled ? min($_scheduled) : 0;
+					unset($_scheduled);
+				}
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+				echo '<h3>Automatic Behavior Status: <span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($auto_eot_health['status']).'" aria-hidden="true"></span>'.esc_html($auto_eot_status_label).'</h3>'."\n";
+				echo '<table class="ws-plugin--s2member-status-table"><tbody>'."\n";
+				echo '<tr><th scope="row">Pending overdue EOTs:</th><td>'.number_format_i18n((int)$auto_eot_health['pending_count']).'</td></tr>'."\n";
+				echo '<tr><th scope="row">Oldest overdue EOT:</th><td>'.($auto_eot_health['oldest_due_at'] ? esc_html(human_time_diff((int)$auto_eot_health['oldest_due_at'], time()).' ago') : 'None').'</td></tr>'."\n";
+				echo '<tr><th scope="row">Last completed run:</th><td>'.($auto_eot_health['last_completed_at'] ? esc_html(human_time_diff((int)$auto_eot_health['last_completed_at'], time()).' ago') : 'Not recorded yet').'</td></tr>'."\n";
+				echo '<tr><th scope="row">Last run:</th><td>'.($auto_eot_health['last_completed_at'] ? number_format_i18n((int)$auto_eot_health['last_processed']).' EOT(s) in '.esc_html(number_format_i18n((float)$auto_eot_health['last_runtime'], 2)).' seconds' : 'Not recorded yet').'</td></tr>'."\n";
+				echo '<tr><th scope="row">Next run:</th><td>'.($auto_eot_mode === '1' ? ($auto_eot_next_run ? esc_html(($auto_eot_next_run <= time() ? human_time_diff($auto_eot_next_run, time()).' overdue' : 'in '.human_time_diff(time(), $auto_eot_next_run))) : 'Not scheduled') : ($auto_eot_mode === '2' ? 'Controlled by your external cron service' : 'Disabled')).'</td></tr>'."\n";
+				echo '<tr><th scope="row">Current runtime target:</th><td>About '.esc_html(number_format_i18n($auto_eot_runtime_target, 0)).' seconds'.($php_execution_limit > 0 ? ' (PHP limit: '.esc_html($php_execution_limit).')' : ' (no set PHP limit)').'</td></tr>'."\n";
+				//260828.0231 Keep current EOT work and previous EOT history separate while retaining WordPress' native Users table, filters, bulk actions, and Screen Options.
+				echo '<tr><th scope="row">End-of-Term users:</th><td><a href="'.esc_url(admin_url('/users.php?s2member_view=eot_current')).'">Current</a> | <a href="'.esc_url(admin_url('/users.php?s2member_view=eot_previous')).'">Previous</a></td></tr>'."\n";
+				echo '</tbody></table>'."\n";
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				//260820.0306 Legacy filters remain authoritative for compatibility, but explain when an inherited fixed-batch limit can now reduce adaptive throughput.
+				if(!empty($auto_eot_legacy_cap['detected']))
+				{
+					echo '<div class="ws-menu-page-notice ws-menu-page-notice-info">'."\n";
+					echo '<p><strong>Legacy processing limit detected.</strong> A developer customization is using <code>ws_plugin__s2member_auto_eot_system_per_process</code>. This filter was useful with s2Member\'s older fixed-batch processor, but the new runtime-adaptive engine can usually process more efficiently without it. Unless it exists for a specific site reason, this legacy limit is probably unhelpful now.</p>'."\n";
+
+					if($auto_eot_legacy_cap['last_hard_cap_source'] === 'filter' && $auto_eot_legacy_cap['last_hard_cap'] !== NULL)
+						echo '<p>Last effective legacy limit: <strong>'.number_format_i18n((int)$auto_eot_legacy_cap['last_hard_cap']).' EOT(s) per pass</strong>.</p>'."\n";
+
+					if($auto_eot_legacy_cap['last_hard_cap_source'] === 'filter' && $auto_eot_legacy_cap['last_stop_reason'] === 'legacy_item_cap' && $auto_eot_legacy_cap['estimated_additional'] > 0)
+						echo '<p>On the last constrained run, s2Member estimates that approximately <strong>'.number_format_i18n((int)$auto_eot_legacy_cap['estimated_additional']).' additional EOT(s)</strong> could have fit within the remaining safe runtime without this hard limit.</p>'."\n";
+
+					if(!empty($auto_eot_legacy_cap['sources']))
+					{
+						echo '<p><strong>Detected source'.(count($auto_eot_legacy_cap['sources']) === 1 ? '' : 's').':</strong><br />'."\n";
+						foreach($auto_eot_legacy_cap['sources'] as $_source)
+						{
+							$_source_location = !empty($_source['file']) ? $_source['file'].(!empty($_source['line']) ? ':'.(int)$_source['line'] : '') : (!empty($_source['callback']) ? $_source['callback'] : 'Unknown callback');
+							echo '<code>'.esc_html($_source_location).'</code><br />'."\n";
+						}
+						echo '</p>'."\n";
+						unset($_source, $_source_location);
+					}
+					echo '</div>'."\n";
+				}
+
+				echo '<p id="ws-plugin--s2member-auto-eot-system-enabled-via-cron"'.(($auto_eot_mode === '2') ? '' : ' style="display:none;"').'>If you\'d like to run s2Member\'s Auto-EOT System through a traditional Cron Job instead of WP-Cron, configure an HTTP Cron Job through your hosting/server control panel. Running it every <code>1 to 10 minutes</code> works well; about every <code>5 minutes</code> is a good default. Load this URL:<br /><code>'.esc_html(home_url("/?s2member_auto_eot_system_via_cron=1")).'</code></p>'."\n";
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
@@ -1690,15 +1755,43 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_auto_eot_system_enabled" id="ws-plugin--s2member-auto-eot-system-enabled">'."\n";
-				// Very advanced conditionals here. If the Auto-EOT System is NOT running, or NOT fully configured, this will indicate that no option is set - as sort of a built-in acknowledgment/warning in the UI panel.
-				echo (($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 1 && (!function_exists("wp_cron") || !wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) || ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 2 && (function_exists("wp_cron") && wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) || (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] && (function_exists("wp_cron") && wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule")))) ? '<option value=""></option>'."\n" : '';
-				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 1 && function_exists("wp_cron") && wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule")) ? ' selected="selected"' : '').'>Yes (enable the Auto-EOT System through WP-Cron)</option>'."\n";
-				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? '<option value="2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] == 2 && (!function_exists("wp_cron") || !wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) ? ' selected="selected"' : '').'>Yes (but, I\'ll run it with my own Cron Job)</option>'."\n" : '';
-				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"] && (!function_exists("wp_cron") || !wp_get_schedule("ws_plugin__s2member_auto_eot_system__schedule"))) ? ' selected="selected"' : '').'>No (disable the Auto-EOT System)</option>'."\n";
+				//260820.0306 Health warnings now report scheduler problems explicitly, so always show the saved mode instead of blanking this field when cron is unhealthy.
+				echo '<option value="1"'.(($auto_eot_mode === '1') ? ' selected="selected"' : '').'>Yes (enable the Auto-EOT System through WP-Cron)</option>'."\n";
+				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? '<option value="2"'.(($auto_eot_mode === '2') ? ' selected="selected"' : '').'>Yes (but, I\'ll run it with my own Cron Job)</option>'."\n" : '';
+				echo '<option value="0"'.(($auto_eot_mode === '0') ? ' selected="selected"' : '').'>No (disable the Auto-EOT System)</option>'."\n";
 				echo '</select><br />'."\n";
 				echo 'Recommended setting: (<code>Yes / enable via WP-Cron</code>)'."\n";
+				echo '<br /><em>When disabled, automatic End-of-Term processing is paused. s2Member can still record End-of-Term dates, and s2Member Pro reminders based on stored End-of-Term dates can continue independently. Overdue End-of-Term actions remain pending and will be processed if the Auto-EOT System is enabled again.</em>'."\n";
 				echo '</td>'."\n";
 
+				echo '</tr>'."\n";
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr>'."\n";
+				echo '<th><label for="ws-plugin--s2member-auto-eot-system-runtime-mode">Auto-EOT Processing Runtime</label></th>'."\n";
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<select name="ws_plugin__s2member_auto_eot_system_runtime_mode" id="ws-plugin--s2member-auto-eot-system-runtime-mode">'."\n";
+				echo '<option value="auto"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_mode"] === 'auto') ? ' selected="selected"' : '').'>Automatic (recommended)</option>'."\n";
+				echo '<option value="custom"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_mode"] === 'custom') ? ' selected="selected"' : '').'>Custom maximum runtime</option>'."\n";
+				echo '</select><br />'."\n";
+				echo '<em>Automatic mode adapts the number of EOTs processed to the wall-clock time available in each run. The current target for this configuration is approximately <strong>'.esc_html(number_format_i18n($auto_eot_runtime_target, 1)).' seconds</strong>; it automatically leaves additional headroom below a finite PHP execution limit.</em>'."\n";
+				echo '</td>'."\n";
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+				echo '<th><label for="ws-plugin--s2member-auto-eot-system-runtime-custom">Custom Maximum Runtime (seconds)</label></th>'."\n";
+				echo '</tr>'."\n";
+				echo '<tr>'."\n";
+				echo '<td>'."\n";
+				echo '<input type="number" min="1" max="3600" step="1" name="ws_plugin__s2member_auto_eot_system_runtime_custom" id="ws-plugin--s2member-auto-eot-system-runtime-custom" value="'.esc_attr($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_runtime_custom"]).'" /><br />'."\n";
+				echo '<em>Used only in Custom mode. If PHP reports a finite execution limit, s2Member uses the lower of this value and 90% of PHP\'s limit. For example, if you enter 100 seconds and PHP\'s limit is 30 seconds, s2Member uses 27 seconds. Developers can still override the final runtime with <code>ws_plugin__s2member_auto_eot_system_runtime</code>.</em>'."\n";
+				echo '</td>'."\n";
 				echo '</tr>'."\n";
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
@@ -1711,7 +1804,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-membership-eot-behavior">'."\n";
-				echo 'Membership EOT Behavior (Demote or Delete)?'."\n";
+				echo 'Membership End-of-Term Behavior (Demote or Delete)?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -1721,8 +1814,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_membership_eot_behavior" id="ws-plugin--s2member-membership-eot-behavior">'."\n";
 				echo '<option value="demote"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "demote") ? ' selected="selected"' : '').'>Demote (convert them to a Free Subscriber)</option>'."\n";
-				echo '<option value="delete"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "delete") ? ' selected="selected"' : '').'>Delete (erase their account completely)</option>'."\n";
-				echo '</select>'."\n";
+				echo '<option value="delete"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["membership_eot_behavior"] === "delete") ? ' selected="selected"' : '').'>Delete (move to Pending Deletion for review)</option>'."\n";
+				echo '</select><br />'."\n";
+				//260822.0614 Keep the stored `delete` value for compatibility; irreversible deletion is an explicit developer opt-in rather than the product default.
+				echo '<em>Delete removes s2Member membership access and moves the account to the <strong>Pending Deletion</strong> role for administrator review. To restore historical automatic irreversible deletion, a developer must explicitly allow it with the <code>ws_plugin__s2member_allow_eot_user_deletion</code> filter.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
@@ -1780,8 +1875,9 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<tr>'."\n";
 
 				echo '<th>'."\n";
+				//260824.1957 Clarify that disputes/chargebacks are normalized into the existing Reversals policy without changing stored option values.
 				echo '<label for="ws-plugin--s2member-triggers-immediate-eot">'."\n";
-				echo 'Refunds/Partial Refunds/Reversals (trigger Immediate EOT)?'."\n";
+				echo 'Refunds/Partial Refunds/Reversals/Disputes (trigger Immediate EOT)?'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -1792,11 +1888,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<select name="ws_plugin__s2member_triggers_immediate_eot" id="ws-plugin--s2member-triggers-immediate-eot">'."\n";
 				echo '<option value="none"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "none") ? ' selected="selected"' : '').'>None (I\'ll review these events manually)</option>'."\n";
 				echo '<option value="refunds"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds") ? ' selected="selected"' : '').'>Full Refunds (full refunds only; ALWAYS trigger an Immediate EOT action)</option>'."\n";
-				echo '<option value="reversals"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "reversals") ? ' selected="selected"' : '').'>Reversals (chargebacks only; ALWAYS trigger an Immediate EOT action)</option>'."\n";
-				echo '<option value="refunds,reversals"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,reversals") ? ' selected="selected"' : '').'>Full Refunds, Reversals (these ALWAYS trigger an Immediate EOT action)</option>'."\n";
-				echo '<option value="refunds,partial_refunds,reversals"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,partial_refunds,reversals") ? ' selected="selected"' : '').'>Full Refunds, Partial Refunds, Reversals (these ALWAYS trigger an Immediate EOT action)</option>'."\n";
+				echo '<option value="reversals"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "reversals") ? ' selected="selected"' : '').'>Reversals/Disputes (including chargebacks; ALWAYS trigger an Immediate EOT action)</option>'."\n";
+				echo '<option value="refunds,reversals"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,reversals") ? ' selected="selected"' : '').'>Full Refunds, Reversals/Disputes (these ALWAYS trigger an Immediate EOT action)</option>'."\n";
+				echo '<option value="refunds,partial_refunds,reversals"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["triggers_immediate_eot"] === "refunds,partial_refunds,reversals") ? ' selected="selected"' : '').'>Full Refunds, Partial Refunds, Reversals/Disputes (these ALWAYS trigger an Immediate EOT action)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo '<em><strong>Note:</strong> s2Member is not equipped to detect partial refunds against multi-payment Subscriptions reliably. Therefore, all refunds processed against Subscriptions (of any kind) are considered <strong>Partial</strong> Refunds. Full refunds (in the eyes of s2Member) occur only against Buy Now transactions where it is easy for s2Member to see that the refund amount is &gt;= the original Buy Now purchase price (i.e., a Full Refund). <strong>Also Note:</strong> This setting (no matter what you choose) will NOT impact s2Member\'s internal API Notifications for Refund/Reversal events. <a href="#" onclick="alert(\'A Full or Partial Refund; and/or a Reversal Notification will ALWAYS be processed internally by s2Member, even if no action is taken by s2Member in accordance with your configuration here.\\n\\nIn this way, you\\\'ll have the full ability to listen for these events on your own (via API Notifications); if you prefer (optional). For more information, check your Dashboard under: `s2Member → API Notifications → Refunds/Reversals`.\'); return false;">Click here for details</a>.</em>'."\n";
+				echo '<em><strong>Disputes/Chargebacks:</strong> When a supported gateway reports a dispute or chargeback, s2Member treats it as a Reversal for this setting. <strong>Note:</strong> s2Member is not equipped to detect partial refunds against multi-payment Subscriptions reliably. Therefore, all refunds processed against Subscriptions (of any kind) are considered <strong>Partial</strong> Refunds. Full refunds (in the eyes of s2Member) occur only against Buy Now transactions where it is easy for s2Member to see that the refund amount is &gt;= the original Buy Now purchase price (i.e., a Full Refund). <strong>Also Note:</strong> This setting (no matter what you choose) will NOT impact s2Member\'s internal API Notifications for Refund/Reversal events. <a href="#" onclick="alert(\'A Full or Partial Refund; and/or a Reversal Notification will ALWAYS be processed internally by s2Member, even if no action is taken by s2Member in accordance with your configuration here.\\n\\nIn this way, you\\\'ll have the full ability to listen for these events on your own (via API Notifications); if you prefer (optional). For more information, check your Dashboard under: `s2Member → API Notifications → Refunds/Reversals`.\'); return false;">Click here for details</a>.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";

@@ -418,8 +418,8 @@ if(!class_exists('c_ws_plugin__s2member_files_in'))
 								$byte_range_start = trim($byte_range_start);
 								$byte_range_stops = trim($byte_range_stops);
 
-								$byte_range_start = ($byte_range_start === '') ? NULL : (integer)$byte_range_start;
-								$byte_range_stops = ($byte_range_stops === '') ? NULL : (integer)$byte_range_stops;
+								$byte_range_start = ($byte_range_start === '') ? NULL : (int)$byte_range_start;
+								$byte_range_stops = ($byte_range_stops === '') ? NULL : (int)$byte_range_stops;
 
 								if(!isset($byte_range_start) && $byte_range_stops > 0 && $byte_range_stops <= $length)
 								{

@@ -262,8 +262,14 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 													}
 												else // Else, we should trigger an error in this case. It's NOT possible to generate this.
 													{
-														trigger_error ("Unable to generate a relative path across different Windows drives." .
-															" Please create a Directory Junction here: " . $_from_drive_jctn . ", pointing to: " . $_to_drive . ":/", E_USER_ERROR);
+														$error = "Unable to generate a relative path across different Windows drives." .
+															" Please create a Directory Junction here: " . $_from_drive_jctn . ", pointing to: " . $_to_drive . ":/";
+
+														//260816 PHP 8.4 deprecates trigger_error(..., E_USER_ERROR); preserve the previous fatal-style path on older PHP.
+														if(PHP_VERSION_ID >= 80400)
+															throw new \RuntimeException($error);
+														else
+															trigger_error($error, E_USER_ERROR);
 													}
 											}
 

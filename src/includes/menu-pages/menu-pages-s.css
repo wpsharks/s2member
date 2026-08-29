@@ -162,3 +162,65 @@ a.ws-plugin--s2member-custom-reg-field-configuration-delete
 .mce-i-resize::before { 
   display: none;
 }
+
+/*260823.0558 Operational status is label/value data; compact table rows keep values aligned while subtle separators make wrapped labels clearly part of one row. */
+table.ws-plugin--s2member-status-table
+{
+	width           : 100%;
+	border-collapse : collapse;
+	margin          : 0 0 15px 0;
+}
+table.ws-plugin--s2member-status-table th,
+table.ws-plugin--s2member-status-table td
+{
+	vertical-align : top;
+	padding        : 2px 0;
+}
+table.ws-plugin--s2member-status-table th
+{
+	width         : 13em;
+	padding-right : 0.75em;
+	text-align    : left;
+	font-weight   : 600;
+}
+table.ws-plugin--s2member-status-table tr + tr th,
+table.ws-plugin--s2member-status-table tr + tr td
+{
+	border-top : 1px solid #eeeeee;
+}
+/*260823.0558 Draw status indicators with CSS instead of font-dependent emoji; the adjacent text remains authoritative when colors are unavailable or overridden. */
+.ws-plugin--s2member-status-light
+{
+	display        : inline-block;
+	box-sizing     : border-box;
+	width          : 0.7em;
+	height         : 0.7em;
+	margin-left    : 0.35em;
+	margin-right   : 0.25em;
+	border         : 1px solid rgba(0, 0, 0, 0.2);
+	border-radius  : 50%;
+	background     : #8c8f94;
+}
+.ws-plugin--s2member-status-light-healthy,
+.ws-plugin--s2member-status-light-processing
+{
+	background : #46b450;
+}
+.ws-plugin--s2member-status-light-catching_up,
+.ws-plugin--s2member-status-light-delayed
+{
+	background : #dba617;
+}
+.ws-plugin--s2member-status-light-attention,
+.ws-plugin--s2member-status-light-retrying
+{
+	background : #d97706;
+}
+.ws-plugin--s2member-status-light-error
+{
+	background : #d63638;
+}
+.ws-plugin--s2member-status-light-disabled
+{
+	background : #8c8f94;
+}

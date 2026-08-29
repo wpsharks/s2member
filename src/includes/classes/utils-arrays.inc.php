@@ -161,6 +161,28 @@ if (!class_exists ("c_ws_plugin__s2member_utils_arrays"))
 						return $array;
 					}
 				/**
+				* Sets specified array elements to an empty string when they are not set according to ``isset()`` (missing or NULL).
+				*
+				* @package s2Member\Utilities
+				* @since 260814
+				*
+				* @param array $array An input array.
+				* @param array $keys Array keys whose unset elements should be set.
+				* @return array Returns the ``$array`` after setting unset elements to empty strings.
+				*/
+				public static function set_unset_elements ($array = FALSE, $keys = FALSE)
+					{
+						$array = (array)$array;
+						$keys = (array)$keys;
+
+						//260814 isset() treats both missing keys and null values as unset; initialize either case to an empty string.
+						foreach ($keys as $key)
+							if (!isset($array[$key]))
+								$array[$key] = '';
+
+						return $array;
+					}
+				/**
 				* Forces string values on each array value *(also supports multi-dimensional arrays)*.
 				*
 				* @package s2Member\Utilities

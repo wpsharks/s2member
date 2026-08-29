@@ -3,12 +3,12 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260814
-Stable tag: 260814
-Tested up to: 7.1-RC3-63235
+Version: 260829
+Stable tag: 260829
+Tested up to: 7.2-alpha-63379
 Requires at least: 4.2
 Requires PHP: 5.6.2
-Tested up to PHP: 8.4.23
+Tested up to PHP: 8.5.9
 License: GNU General Public License v2 or later.
 Contributors: WebSharks, JasWSInc, raamdev, clavaque, eduan
 Author: s2Member
@@ -176,11 +176,70 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260814 =
+= v260829 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v260829 =
+
+- (Framework) **Major Improvement:** Rebuilt the Automatic End-of-Term processing engine so membership expirations are handled more reliably and promptly when due, even on busy sites or after delays, while making the system safer to administer and easier to review and troubleshoot.
+	- **Faster, adaptive processing:** Instead of stopping after 6 users, the new engine uses the safe processing time available in each run and adapts to current speed, allowing it to handle hundreds of users in one pass.
+	- **Rapid queue catch-up:** s2Member processes each member as promptly as practical after their actual EOT time is reached. If work remains, it continues about a minute later instead of waiting for the next regular 10-minute check. In our stress testing, a 1,000-user queue was processed in under 2 minutes, while the old 6-user limit would take almost 28 hours.
+	- **More resilient processing:** Overlapping runs are prevented, interrupted or stale runs recover cleanly, and unfinished work remains available for the next pass instead of being lost or unnecessarily delayed.
+	- **Safer "Delete" behavior and review:** Automatic Delete now removes membership access and moves the user account to Pending Deletion instead of permanently deleting it, preserving useful payment/subscription details for review before single/bulk deletion. Irreversible automatic deletion can still be enabled with the `ws_plugin__s2member_allow_eot_user_deletion` filter. _WP Admin > Users > Pending Deletion_
+	- **New End-of-Term user lists:** Added separate Current and Previous lists with EOT Time, Last EOT, and EOT Demotion columns. Current shows users with an EOT, earliest first; Previous shows prior EOTs, most recent demotion first. Older demotion times are recovered from Administrative Notes where possible. _WP Admin > Users > End-of-Term Current / End-of-Term Previous_
+	- **Better demotion history:** EOT actions, including moves to Pending Deletion, now leave more useful Administrative Notes with the role change, removed Custom Capabilities, subscription details, and the EOT that triggered the action. For example: _2026-08-31 00:03 EDT s2Member: Demoted from Level 1 to Subscriber (removed ccaps: courses). PayPal I-ABC123. EOT 2026-08-31 00:01 EDT._
+	- **Visible health and automatic recovery:** A new Automatic Behavior Status shows pending and overdue EOTs, recent processing activity, the next scheduled run, and the current processing runtime, making delays and other problems visible instead of silent. s2Member repairs a missing WP-Cron schedule automatically when possible, and alerts administrators when a problem persists and needs attention.
+
+- (Pro) **Major Improvement:** Rebuilt the End-of-Term Reminder Email processing engine so renewal notices have a better chance of going out promptly on their intended day, even after WP-Cron delays or temporary email sending problems that could previously prevent them from being sent.
+	- **Fast, adaptive processing:** The new engine replaces the old 6-member limit with safe runtime-based processing, prevents overlapping runs, recovers interrupted ones, and continues about a minute later when more work remains. On our test server, 1,000 reminders were handed off through WordPress's mail system in about 42 minutes, while the old engine would need almost 28 hours.
+	- **Independent reminder engine:** Reminders based on stored End-of-Term dates now have their own schedule and processing engine, so they no longer depend on membership-expiration processing completing first and aren't held up by a large or stalled End-of-Term queue.
+	- **Forgiving timing and smart retries:** Reminder eligibility now uses calendar days, giving s2Member opportunities throughout the intended send day plus an extra recovery day in case of delays. Failed sends are retried after about 10 minutes, 30 minutes, 1 hour, and then every 3 hours while still eligible, with each recipient tracked independently to avoid duplicate resends.
+	- **Visible health and automatic recovery:** A new End-of-Term Reminder Status shows scheduling activity, recent successful delivery, and recipients currently being retried, with additional failure and recovery details when something goes wrong. s2Member repairs a missing reminder schedule when possible, retries failed recipients automatically, and alerts administrators when problems persist and need attention.
+
+- (Framework & Pro) **Fix:** Fixed the long-standing issue where the Automatic End-of-Term setting could appear blank when its WP-Cron event was missing. The saved setting now remains visible while s2Member reports and repairs the scheduling problem separately.
+
+- (Pro) **Fix:** End-of-Term renewal reminders are no longer sent when membership access ended because of a refund, payment reversal, or chargeback. These payment exceptions are now distinguished from normal membership expirations so they don't trigger inappropriate renewal notices.
+
+- (Pro) **Enhancement:** Modernized s2Member Pro-Forms with PayPal Checkout, using PayPal's current REST APIs and Smart Payment Buttons for off-site payments. When PayPal Checkout is enabled in s2Member, it replaces the legacy PayPal Express Checkout integration for payments completed on PayPal's site. Existing Pro-Form shortcodes work as-is (no edits required). Enable it under _WP Admin > s2Member > PayPal Options > PayPal Checkout (Beta)_.
+
+- (Framework) **Improvement:** Strengthened PayPal Checkout REST order validation, capture reliability, retry handling, and payment processing safeguards.
+
+- (Framework) **Improvement:** Better PayPal Checkout button feedback with clearer, more visible error and status messages below the button.
+
+- (Framework) **Improvement:** Better compatibility for sites using PayPal Checkout while older PayPal subscriptions remain active. Since PayPal subscriptions generally need the integration that created them, s2Member now uses the appropriate one for next payment dates, reminder emails, `[s2EOT]`, and cancellations.
+
+- (Framework) **Security:** Strengthened PayPal Checkout return validation and payment-flow integrity.
+
+- (Framework) **Fix:** Improved PayPal Checkout subscription fulfillment retry handling, preventing failed payment notifications from being incorrectly marked complete and allowing browser or webhook recovery to retry safely.
+
+- (Framework) **Fix:** PayPal Checkout now registers all required webhook events. Existing configured webhooks are updated automatically after upgrading, adding notifications for subscription activation/updates, payment refunds/reversals, and disputes/chargebacks.
+
+- (Pro) **Fix:** Strengthened Stripe Pro-Forms against duplicate charges from concurrent or repeated submissions of the same rendered checkout. Stripe requests now use a stable per-checkout idempotency ID, simultaneous submissions are blocked while payment processing is in progress, and a failed update to an existing PaymentIntent no longer falls through to creating another one. Thanks to DrCheap for the detailed report and investigation. See [thread 13589](https://f.wpsharks.com/t/13589).
+
+- (Pro) **Fix:** Fixed a Stripe compatibility issue that could cause `[s2Member-Profile /]` and Stripe billing-update forms to crash when retrieving an existing subscription with newer Stripe API responses/SDK behavior. Thanks to Tim Hibberd for reporting it and providing a patch. See [thread 13575](https://f.wpsharks.com/t/13575).
+
+- (Pro) **UI:** Updated Stripe Webhook/IPN setup guidance to list all seven events s2Member handles. Sites with an existing Stripe webhook configured for selected events should make sure all seven are selected, including `charge.dispute.created`, so disputes/chargebacks can follow the configured Reversals/Disputes EOT behavior.
+
+- (Pro) **Improvement:** Added an optional `placeholder` attribute for Authorize.Net, PayPal, and Stripe Pro-Form Checkout Options. This allows a Pro-Form to start with a non-payable prompt instead of automatically selecting the first Checkout Option, requiring the customer to choose a real option before the full checkout form is shown.
+
+- (Framework & Pro) **Fix:** Improved shortcode attribute handling when editors replace straight quotes with smart/curly quotes. s2Member now also normalizes literal smart quotes so values such as `attribute=“0”` are interpreted correctly. Thanks to Vincent for reporting it. See [thread 13572](https://f.wpsharks.com/t/13572).
+
+- (Framework) **Enhancement:** Added a hook after profile modifications are saved and s2Member refreshes the user data, allowing integrations to read freshly updated user and custom profile fields. Thanks to Craig for bringing attention to this use case. See [thread 13515](https://f.wpsharks.com/t/13515).
+
+- (Framework & Pro) **Improvement:** Bumped PHP version compatibility up to PHP 8.5.9 after addressing the remaining deprecation notices and related compatibility issues, while maintaining support for older PHP versions.
+
+- (Framework) **Fix:** Hardened PayPal recurring-payment handling for missing optional IPN fields and memberships without Custom Capabilities, preventing PHP warnings and deprecation notices.
+
+- (Framework) **Fix:** Hardened gateway notification and return handlers against missing or null optional transaction fields, preventing PHP warnings and deprecation notices.
+
+- (Framework) **Fix:** Prevented PHP warnings during registrations or membership updates when optional details (like Custom Capabilities or EOT) weren't used.
+
+- (Framework) **Fix:** Corrected an edge case in subscription modifications where an optional EOT component could end up in the Custom Capabilities value.
+
+- (Framework) **Fix:** Fixed PHP 8 compatibility issues in legacy OpenSSL/RSA signing and the Markdown fallback that could fail in some cases.
 
 = v260814 =
 

@@ -24,6 +24,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 {
 	class c_ws_plugin__s2member_paypal_webhook_in
 	{
+		//260824.1833 Keep dispute transaction extraction directly testable while accepting PayPal's documented nested payload and a tolerated direct fallback.
+		public static function paypal_checkout_dispute_seller_transaction_id($resource = array())
+		{
+			if(empty($resource['disputed_transactions']) || !is_array($resource['disputed_transactions']))
+				return '';
+
+			foreach($resource['disputed_transactions'] as $_disputed_transaction)
+				if(is_array($_disputed_transaction) && !empty($_disputed_transaction['transaction_info']['seller_transaction_id']))
+					return (string)$_disputed_transaction['transaction_info']['seller_transaction_id'];
+				else if(is_array($_disputed_transaction) && !empty($_disputed_transaction['seller_transaction_id']))
+					return (string)$_disputed_transaction['seller_transaction_id'];
+
+			return '';
+		}
+
 		public static function paypal_webhook()
 		{
 			if(empty($_REQUEST['s2member_paypal_webhook']))
@@ -258,6 +273,34 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						exit();
 					}
 
+					//260818.0617 Recover the Checkout invoice from the verified PayPal event so Pro can restore prepared account state.
+					if(!empty($resource['custom_id']))
+						$paypal['invoice'] = (string)$resource['custom_id'];
+					else if($subscr_id)
+						{
+							$subscription_details = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_details($subscr_id);
+							if(empty($subscription_details['__error']) && !empty($subscription_details['custom_id']))
+								$paypal['invoice'] = (string)$subscription_details['custom_id'];
+						}
+
+					//260818.0617 Do not let incomplete activation fallback bypass invoice-keyed prepared state; PayPal can retry delivery.
+					if(empty($paypal['invoice']))
+						{
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'       => 'webhook',
+								'env_setting'=> $env_site,
+								'env_webhook'=> $env_webhook,
+								'event'      => 'subscription_activation_invoice_missing',
+								'event_id'   => $event_id,
+								'event_type' => $event_type,
+								'subscr_id'  => $subscr_id,
+							));
+
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							status_header(500);
+							exit();
+						}
+
 					$paypal['txn_type']       = 'subscr_signup'; //260401 Keep webhook activation as a fallback to the legacy signup handler only when checkout did not already handle this Subscription.
 					$paypal['payment_status'] = 'Completed';
 
@@ -327,9 +370,100 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				}
 			}
 
+			//260824.1727 A newly opened dispute follows s2Member's established PayPal `new_case`/chargeback path.
+			else if($event_type === 'CUSTOMER.DISPUTE.CREATED')
+			{
+				//260824.1833 Use the shared extractor so documented dispute payloads are covered by direct runtime QA.
+				$seller_txn_id = self::paypal_checkout_dispute_seller_transaction_id($resource);
+
+				if(!$seller_txn_id)
+				{
+					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+						'ppco'       => 'webhook',
+						'env_setting'=> $env_site,
+						'env_webhook'=> $env_webhook,
+						'event'      => 'dispute_transaction_missing',
+						'event_id'   => $event_id,
+						'event_type' => $event_type,
+						'dispute_id' => !empty($resource['dispute_id']) ? (string)$resource['dispute_id'] : (!empty($resource['id']) ? (string)$resource['id'] : ''),
+					));
+
+					// A verified but incomplete dispute should be retried; do not mark it complete.
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+					status_header(500);
+					exit();
+				}
+
+				$subscr_id = $seller_txn_id;
+
+				// A first payment/one-time transaction may already identify the member directly.
+				if(($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($seller_txn_id)))
+				{
+					if(($user_subscr_id = get_user_option('s2member_subscr_id', $user_id)))
+						$subscr_id = (string)$user_subscr_id;
+				}
+				else
+				{
+					// Later Subscription payments identify the sale, not the Subscription; recover its billing agreement when available.
+					$sale = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_api_request('GET', '/v1/payments/sale/'.rawurlencode($seller_txn_id));
+
+					if(!empty($sale['code']) && (int)$sale['code'] === 200 && !empty($sale['body']) && is_string($sale['body']))
+					{
+						$sale_details = json_decode($sale['body'], true);
+
+						if(is_array($sale_details) && !empty($sale_details['billing_agreement_id']))
+							$subscr_id = (string)$sale_details['billing_agreement_id'];
+					}
+				}
+
+				$paypal['txn_type']      = 'new_case';
+				$paypal['case_type']     = 'chargeback';
+				$paypal['txn_id']        = $event_id;
+				$paypal['parent_txn_id'] = $seller_txn_id;
+				$paypal['subscr_id']     = $subscr_id;
+
+				$paypal['mp_id']                = $subscr_id;
+				$paypal['recurring_payment_id'] = $subscr_id;
+
+				if(!empty($resource['dispute_amount']['value']))
+					$paypal['mc_gross'] = (string)$resource['dispute_amount']['value'];
+				else
+					$paypal['mc_gross'] = '0';
+
+				if(!empty($resource['dispute_amount']['currency_code']))
+					$paypal['mc_currency'] = (string)$resource['dispute_amount']['currency_code'];
+				else
+					$paypal['mc_currency'] = $GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_default_currency'];
+
+				if(!empty($resource['buyer']['email_address']))
+					$paypal['payer_email'] = (string)$resource['buyer']['email_address'];
+
+				// Recover the original signup context so the established chargeback handler can identify the membership.
+				if($subscr_id
+				   && ($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($subscr_id))
+				   && is_array($ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id))
+				)
+				{
+					foreach(array('item_number', 'item_name', 'period1', 'period3', 'payer_email') as $_signup_var)
+						if(empty($paypal[$_signup_var]) && !empty($ipn_signup_vars[$_signup_var]))
+							$paypal[$_signup_var] = (string)$ipn_signup_vars[$_signup_var];
+				}
+
+				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+					'ppco'         => 'webhook',
+					'env_setting'  => $env_site,
+					'env_webhook'  => $env_webhook,
+					'event'        => 'dispute_created',
+					'event_id'     => $event_id,
+					'event_type'   => $event_type,
+					'dispute_id'   => !empty($resource['dispute_id']) ? (string)$resource['dispute_id'] : (!empty($resource['id']) ? (string)$resource['id'] : ''),
+					'parent_txn_id'=> $seller_txn_id,
+					'subscr_id'    => $subscr_id,
+				));
+			}
+
 			// Recurring payment events (PayPal often emits PAYMENT.SALE.COMPLETED for subscription payments).
 			//260216 Add refund/reversal webhook support so refunds can trigger immediate EOT/demotion.
-			//260226 !!! TO-DO: Consider handling PayPal dispute/chargeback webhooks (e.g., CUSTOMER.DISPUTE.*), since not all chargebacks map to SALE/CAPTURE reversal events.
 			else if(in_array($event_type, array(
 				'PAYMENT.SALE.COMPLETED',
 				'PAYMENT.CAPTURE.COMPLETED',
@@ -465,7 +599,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				else if(!empty($paypal['txn_id']))
 					$txn_key = (string)$paypal['txn_id'];
 
-				$txn_done_option = 's2m_ppco_txn_done_'.md5($paypal['txn_type'].'|'.$subscr_id.'|'.$txn_key);
+				//260824.1727 Refunds, reversals, and disputes can share the original payment ID; keep each later state independently idempotent.
+				$txn_dedupe_key = $txn_key;
+				if(!empty($paypal['payment_status']) && preg_match('/^(refunded|reversed|reversal)$/i', $paypal['payment_status']))
+					$txn_dedupe_key = strtolower((string)$paypal['payment_status']).'|'.$txn_key;
+				else if(!empty($paypal['txn_type']) && $paypal['txn_type'] === 'new_case' && !empty($paypal['case_type']) && $paypal['case_type'] === 'chargeback')
+					$txn_dedupe_key = 'chargeback|'.$txn_key;
+
+				$txn_done_option = 's2m_ppco_txn_done_'.md5($paypal['txn_type'].'|'.$subscr_id.'|'.$txn_dedupe_key);
 
 				if($txn_key)
 				{
@@ -497,33 +638,45 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			}
 
 			// Proxy into existing s2Member PayPal notify handler to reuse all provisioning/eot logic.
-			$url  = add_query_arg('s2member_paypal_notify', '1', home_url('/'));
-			$post = array_merge($paypal, array(
-				's2member_paypal_proxy'              => 'paypal',
-				's2member_paypal_proxy_use'          => 'paypal_checkout_webhook',
-				's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
-			));
+			$url = add_query_arg('s2member_paypal_notify', '1', home_url('/'));
+			$notify_duplicate = false;
 
-			$r    = c_ws_plugin__s2member_utils_urls::remote($url, $post, array(
-				'timeout' => 20,
-			), true);
+			if($subscr_handled_by_webhook && !empty($subscr_done_option))
+			{
+				//260818.0603 Share the subscription Notify lock/done marker with browser confirmation so activation fallback cannot race it.
+				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $subscr_done_option, 'paypal_checkout_webhook');
+				$notify_ok = !empty($notify_result['ok']);
+				$notify_duplicate = !empty($notify_result['duplicate']);
+				$code = !empty($notify_result['code']) ? (int)$notify_result['code'] : 0;
+				$message = !empty($notify_result['message']) ? (string)$notify_result['message'] : (!empty($notify_result['error']) ? (string)$notify_result['error'] : '');
+			}
+			else
+			{
+				$post = array_merge($paypal, array(
+					's2member_paypal_proxy'              => 'paypal',
+					's2member_paypal_proxy_use'          => 'paypal_checkout_webhook',
+					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+				));
 
-			if(!is_array($r))
-				$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
+				$r = c_ws_plugin__s2member_utils_urls::remote($url, $post, array(
+					'timeout' => 20,
+				), true);
 
-			$code = !empty($r['code']) ? (int)$r['code'] : 0;
+				if(!is_array($r))
+					$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
 
-			if($code >= 200 && $code <= 299)
+				$code = !empty($r['code']) ? (int)$r['code'] : 0;
+				$message = !empty($r['message']) ? (string)$r['message'] : '';
+				$notify_ok = ($code >= 200 && $code <= 299);
+			}
+
+			if($notify_ok)
 			{
 				c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
 				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
 
 				if(!empty($txn_done_option))
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($txn_done_option);
-
-				//260401 If webhook activation had to rescue this Subscription, mark it done so later activation webhooks are ignored.
-				if($subscr_handled_by_webhook && !empty($subscr_done_option))
-					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($subscr_done_option);
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
@@ -536,7 +689,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					'txn_id'     => $txn_id ? $txn_id : $event_id,
 					'url'        => $url,
 					'code'       => $code,
-					'message'    => !empty($r['message']) ? (string)$r['message'] : '',
+					'message'    => $message,
+					'duplicate'  => $notify_duplicate,
 				));
 			}
 			else
@@ -555,8 +709,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					'txn_id'     => $txn_id ? $txn_id : $event_id,
 					'url'        => $url,
 					'code'       => $code,
-					'message'    => !empty($r['message']) ? (string)$r['message'] : '',
+					'message'    => $message,
 				));
+
+				//260818.0603 Activation fallback must remain retryable when shared fulfillment fails or is still in progress.
+				if($subscr_handled_by_webhook)
+				{
+					status_header(500);
+					exit();
+				}
 			}
 
 			status_header(200);

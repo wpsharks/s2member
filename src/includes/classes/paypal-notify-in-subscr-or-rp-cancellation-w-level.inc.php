@@ -45,11 +45,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 						&& !(preg_match ("/^recurring_payment_profile_cancel$/i", $paypal["txn_type"]) && !empty($paypal["initial_payment_status"]) && preg_match ("/^failed$/i", $paypal["initial_payment_status"]))
 						&& (!empty($paypal["subscr_id"]) || ($paypal["subscr_id"] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id ($paypal))))
 							{
-								//260517 Validate trusted PPCO proxy user before fallback signup vars lookup.
+								//260819.0417 Any verified local PayPal proxy may provide a bound user/next billing time; email routing remains independent.
 								$proxy_user_id = 0;
 								$proxy_next_billing_time = 0;
 								if(!empty($paypal["proxy_verified"]) && $paypal["proxy_verified"] === "paypal"
-								&& !empty($_REQUEST["s2member_paypal_proxy_use"]) && $_REQUEST["s2member_paypal_proxy_use"] === "paypal_checkout"
 								&& !empty($paypal["proxy_user_id"]))
 									{
 										$_proxy_user_id = (int)$paypal["proxy_user_id"];
@@ -60,8 +59,8 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 
 												if(!empty($paypal["proxy_next_billing_time"]) && ($_proxy_next_billing_time = strtotime($paypal["proxy_next_billing_time"])) && $_proxy_next_billing_time > time())
 													{
-														$proxy_eot_grace_time = (integer)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
-														$proxy_eot_grace_time = (integer)apply_filters('ws_plugin__s2member_eot_grace_time', $proxy_eot_grace_time);
+														$proxy_eot_grace_time = (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_grace_time'];
+														$proxy_eot_grace_time = (int)apply_filters('ws_plugin__s2member_eot_grace_time', $proxy_eot_grace_time);
 														$proxy_next_billing_time = $_proxy_next_billing_time + $proxy_eot_grace_time;
 													}
 											}
@@ -102,8 +101,10 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_cancella
 									{
 										$paypal["s2member_log"][] = "s2Member `txn_type` identified as ( `subscr_cancel|recurring_payment_profile_cancel|mp_cancel` ).";
 
-										list ($paypal["level"], $paypal["ccaps"]) = preg_split ("/\:/", $paypal["item_number"], 3);
-
+										//260814 Split against the full three-part membership grammar; cancellation recovery may provide only a bare level.
+										list ($paypal["level"], $paypal["ccaps"]) = array_pad (explode (":", $paypal["item_number"], 3), 2, "");
+										//260814 Set optional gateway elements used below so sparse/null payload fields do not trigger PHP diagnostics.
+										$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements ($paypal, array ("option_name2", "option_selection2", "invoice"));
 
 										$paypal["ip"] = (preg_match ("/ip address/i", $paypal["option_name2"]) && $paypal["option_selection2"]) ? $paypal["option_selection2"] : "";
 										$paypal["ip"] = (!$paypal["ip"] && preg_match ("/^[a-z0-9]+~[0-9\.]+$/i", $paypal["invoice"])) ? preg_replace ("/^[a-z0-9]+~/i", "", $paypal["invoice"]) : $paypal["ip"];

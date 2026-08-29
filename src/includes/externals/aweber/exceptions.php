@@ -1,6 +1,8 @@
 <?php
 // @codingStandardsIgnoreFile
 
+//260816 Legacy AWeber exception subclasses attach context dynamically; opt in explicitly on PHP 8.2+.
+#[\AllowDynamicProperties]
 class AWeberException extends Exception { }
 
 /**

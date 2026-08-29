@@ -76,7 +76,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 								if (is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars ()) && ($_paypal = $paypal) && ($_paypal_s = serialize ($_paypal)))
 									{
 										$paypal["s2member_log"][] = "Return-Data received on: " . date ("D M j, Y g:i:s a T");
-										$paypal["s2member_log"][] = "s2Member POST vars verified " . ((!empty($paypal["proxy_verified"])) ? "with a Proxy Key" : "through a POST back to PayPal.");
+										$paypal["s2member_log"][] = "s2Member POST vars verified " . ((!empty($paypal["proxy_verified"])) ? "through a trusted proxy verification method." : "through a POST back to PayPal.");
 
 										$paypal["subscr_gateway"] = (!empty($_GET["s2member_paypal_proxy"])) ? esc_html (trim (stripslashes ($_GET["s2member_paypal_proxy"]))) : "paypal";
 

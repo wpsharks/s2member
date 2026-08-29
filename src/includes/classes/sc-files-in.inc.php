@@ -175,7 +175,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 				$attr['player_width'] = '480';
 			if(!preg_match('/^(?:[0-9]+|[0-9]+(?:\.[0-9]+)?%)$/D', (string)$attr['player_height']))
 				$attr['player_height'] = '270';
-			if($attr['player_aspectratio'] && (!preg_match('/^([0-9]+):([0-9]+)$/D', (string)$attr['player_aspectratio'], $_player_aspectratio) || !(integer)$_player_aspectratio[1] || !(integer)$_player_aspectratio[2]))
+			if($attr['player_aspectratio'] && (!preg_match('/^([0-9]+):([0-9]+)$/D', (string)$attr['player_aspectratio'], $_player_aspectratio) || !(int)$_player_aspectratio[1] || !(int)$_player_aspectratio[2]))
 				$attr['player_aspectratio'] = '';
 			unset($_player_aspectratio); //260805 Housekeeping.
 
@@ -259,8 +259,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 						$player_resolution_aspect_ratio_h = 9; // Default aspect ratio in height.
 						if($attr['player_aspectratio'] && preg_match('/^[0-9]+\:[0-9]+$/', $attr['player_aspectratio']))
 							list($player_resolution_aspect_ratio_w, $player_resolution_aspect_ratio_h) = explode(':', $attr['player_aspectratio']);
-						$player_resolution_aspect_ratio_w = (integer)$player_resolution_aspect_ratio_w; // Force integer value.
-						$player_resolution_aspect_ratio_h = (integer)$player_resolution_aspect_ratio_h; // Force integer value.
+						$player_resolution_aspect_ratio_w = (int)$player_resolution_aspect_ratio_w; // Force integer value.
+						$player_resolution_aspect_ratio_h = (int)$player_resolution_aspect_ratio_h; // Force integer value.
 
 						// See: <http://wsharks.com/1yzjAl6> and <http://wsharks.com/1yzkhea> regarging the SMIL bitrate hints given here.
 						$player_resolution_bitrates = array(2160 => '35000000', 1440 => '10000000', 1080 => '8000000', 720 => '5000000', 640 => '2500001', 480 => '2500000', 360 => '1000000', 320 => '999999', 240 => '500000', 180 => '300000');
@@ -304,7 +304,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 											if($_is_first_file_download_url) $_player_source['default'] = 'true';
 											$player_sources[] = $_player_source;
 										}
-										$_file_download_url['smil']['height'] = (integer)$_file_download_url_label; // e.g., `720p-HD` becomes `720`.
+										$_file_download_url['smil']['height'] = (int)$_file_download_url_label; // e.g., `720p-HD` becomes `720`.
 										if(!$_file_download_url['smil']['height']) $_file_download_url['smil']['height'] = 720; // Use a default height if invalid.
 										$_file_download_url['smil']['width'] = ceil(($_file_download_url['smil']['height'] / $player_resolution_aspect_ratio_h) * $player_resolution_aspect_ratio_w);
 
@@ -363,8 +363,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 						//260805 Parse flexible attributes as data and substitute only values encoded for their exact output contexts.
 						$_player_tracks        = self::sc_get_stream_json_data($attr['player_tracks'], 'array');
 						$_player_option_blocks = self::sc_get_stream_json_data($attr['player_option_blocks'], 'object-properties');
-						$_player_width        = (strpos($attr['player_width'], '%') !== FALSE) ? wp_json_encode((string)$attr['player_width']) : (string)(integer)$attr['player_width'];
-						$_player_height       = $attr['player_aspectratio'] ? '""' : ((strpos($attr['player_height'], '%') !== FALSE) ? wp_json_encode((string)$attr['player_height']) : (string)(integer)$attr['player_height']);
+						$_player_width        = (strpos($attr['player_width'], '%') !== FALSE) ? wp_json_encode((string)$attr['player_width']) : (string)(int)$attr['player_width'];
+						$_player_height       = $attr['player_aspectratio'] ? '""' : ((strpos($attr['player_height'], '%') !== FALSE) ? wp_json_encode((string)$attr['player_height']) : (string)(int)$attr['player_height']);
 						if(!is_string($_player_width)) $_player_width = '480';
 						if(!is_string($_player_height)) $_player_height = '270';
 
@@ -409,8 +409,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 						$player_resolution_aspect_ratio_h = 9; // Default aspect ratio in height.
 						if($attr['player_aspectratio'] && preg_match('/^[0-9]+\:[0-9]+$/', $attr['player_aspectratio']))
 							list($player_resolution_aspect_ratio_w, $player_resolution_aspect_ratio_h) = explode(':', $attr['player_aspectratio']);
-						$player_resolution_aspect_ratio_w = (integer)$player_resolution_aspect_ratio_w; // Force integer value.
-						$player_resolution_aspect_ratio_h = (integer)$player_resolution_aspect_ratio_h; // Force integer value.
+						$player_resolution_aspect_ratio_w = (int)$player_resolution_aspect_ratio_w; // Force integer value.
+						$player_resolution_aspect_ratio_h = (int)$player_resolution_aspect_ratio_h; // Force integer value.
 
 						// See: <http://wsharks.com/1yzjAl6> and <http://wsharks.com/1yzkhea> regarging the SMIL bitrate hints given here.
 						$player_resolution_bitrates = array(2160 => '35000000', 1440 => '10000000', 1080 => '8000000', 720 => '5000000', 640 => '2500001', 480 => '2500000', 360 => '1000000', 320 => '999999', 240 => '500000', 180 => '300000');
@@ -454,7 +454,7 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 											if($_is_first_file_download_url) $_player_source['default'] = 'true';
 											$player_sources[] = $_player_source;
 										}
-										$_file_download_url['smil']['height'] = (integer)$_file_download_url_label; // e.g., `720p-HD` becomes `720`.
+										$_file_download_url['smil']['height'] = (int)$_file_download_url_label; // e.g., `720p-HD` becomes `720`.
 										if(!$_file_download_url['smil']['height']) $_file_download_url['smil']['height'] = 720; // Use a default height if invalid.
 										$_file_download_url['smil']['width'] = ceil(($_file_download_url['smil']['height'] / $player_resolution_aspect_ratio_h) * $player_resolution_aspect_ratio_w);
 
@@ -513,8 +513,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 						//260805 Parse flexible attributes as data and substitute only values encoded for their exact output contexts.
 						$_player_captions      = self::sc_get_stream_json_data($attr['player_captions'], 'array');
 						$_player_option_blocks = self::sc_get_stream_json_data($attr['player_option_blocks'], 'object-properties');
-						$_player_width        = (strpos($attr['player_width'], '%') !== FALSE) ? wp_json_encode((string)$attr['player_width']) : (string)(integer)$attr['player_width'];
-						$_player_height       = $attr['player_aspectratio'] ? '""' : ((strpos($attr['player_height'], '%') !== FALSE) ? wp_json_encode((string)$attr['player_height']) : (string)(integer)$attr['player_height']);
+						$_player_width        = (strpos($attr['player_width'], '%') !== FALSE) ? wp_json_encode((string)$attr['player_width']) : (string)(int)$attr['player_width'];
+						$_player_height       = $attr['player_aspectratio'] ? '""' : ((strpos($attr['player_height'], '%') !== FALSE) ? wp_json_encode((string)$attr['player_height']) : (string)(int)$attr['player_height']);
 						if(!is_string($_player_width)) $_player_width = '480';
 						if(!is_string($_player_height)) $_player_height = '270';
 

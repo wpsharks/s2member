@@ -152,7 +152,7 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 		{
 			if($v && file_exists(($template = dirname(dirname(__FILE__)).'/templates/badges/s-badge.php')))
 			{
-				switch((integer)$v) // Width/height based on variation.
+				switch((int)$v) // Width/height based on variation.
 				{
 					case 1: // Variation number 1.
 
@@ -183,7 +183,7 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 				}
 				$badge = trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($template)));
 
-				$badge = preg_replace('/%%v%%/i', (string)(integer)$v, $badge);
+				$badge = preg_replace('/%%v%%/i', (string)(int)$v, $badge);
 				$badge = preg_replace('/%%site_url%%/i', urlencode(home_url()), $badge);
 				$badge = preg_replace('/%%no_cache%%/i', $no_cache ? '&amp;no_cache='.urlencode(mt_rand()) : '', $badge);
 				$badge = preg_replace('/%%display_on_failure%%/i', $display_on_failure ? '&amp;display_on_failure=1' : '', $badge);
@@ -375,10 +375,11 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 		 * @param string|bool $subscr_cid Previously captured `s2member_subscr_cid`.
 		 * @param array $ipn_signup_vars Previously captured signup/proxy vars for product-specific routing.
 		 * @param bool $immediate Optional. If false, cancel at period end where supported.
+		 * @param string $reason Optional human-readable cancellation reason for APIs that accept one.
 		 *
 		 * @return bool True if a cancellation request was accepted; else false.
 		 */
-		public static function cancel_gateway_subscription($subscr_gateway = FALSE, $subscr_id = FALSE, $subscr_baid = FALSE, $subscr_cid = FALSE, $ipn_signup_vars = array(), $immediate = TRUE)
+		public static function cancel_gateway_subscription($subscr_gateway = FALSE, $subscr_id = FALSE, $subscr_baid = FALSE, $subscr_cid = FALSE, $ipn_signup_vars = array(), $immediate = TRUE, $reason = '')
 		{
 			$subscr_gateway = strtolower((string)$subscr_gateway);
 			$subscr_id = (string)$subscr_id;
@@ -413,7 +414,8 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 
 				case 'paypal':
 					$paypal_proxy_use = (!empty($ipn_signup_vars['s2member_paypal_proxy_use'])) ? (string)$ipn_signup_vars['s2member_paypal_proxy_use'] : '';
-					$try_ppco_first = ($paypal_proxy_use === 'paypal_checkout' || preg_match('/^I\-[A-Z0-9]+$/', $subscr_id));
+					$paypal_invoice = (!empty($ipn_signup_vars['invoice'])) ? (string)$ipn_signup_vars['invoice'] : '';
+					$ppco_hint = ($paypal_proxy_use === 'paypal_checkout' || strpos($paypal_invoice, 's2mpf-') === 0);
 					$can_try_ppco = FALSE;
 					$can_try_standard = FALSE;
 					$can_try_payflow = FALSE;
@@ -431,7 +433,18 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 					                    && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_payflow_api_password'])
 					                    && class_exists('c_ws_plugin__s2member_pro_paypal_utilities'));
 
-					$paypal_routes = ($try_ppco_first) ? array('ppco', 'standard', 'payflow') : array('standard', 'ppco', 'payflow');
+					//260819.0543 Use positive product provenance where available; I-* is ambiguous, while Payflow profile IDs use RP/RT prefixes.
+					$payflow_hint = (bool)preg_match('/^R[PT]/i', $subscr_id);
+					if($ppco_hint)
+						$paypal_routes = array('ppco', 'standard', 'payflow');
+					else if($payflow_hint)
+						$paypal_routes = array('payflow', 'standard', 'ppco');
+					else
+						$paypal_routes = array('standard', 'ppco', 'payflow');
+
+					$reason = trim((string)$reason);
+					if(!$reason)
+						$reason = 'Cancelled by replacement checkout.';
 
 					foreach($paypal_routes as $_paypal_route)
 					{
@@ -441,7 +454,7 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 								if(!$can_try_ppco)
 									break;
 
-								if(($paypal_checkout = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_cancel($subscr_id, 'Cancelled by replacement checkout.'))
+								if(($paypal_checkout = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_cancel($subscr_id, $reason))
 								   && !empty($paypal_checkout['code']) && ($paypal_checkout['code'] === 204 || ($paypal_checkout['code'] >= 200 && $paypal_checkout['code'] <= 299)))
 									return TRUE;
 								break;
