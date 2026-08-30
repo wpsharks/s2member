@@ -185,7 +185,8 @@ if (!class_exists('c_ws_plugin__s2member_utils_encryption')) {
             for ($i = 1, $e = ''; $i <= strlen($string); ++$i) {
                 $char    = substr($string, $i - 1, 1);
                 $keychar = substr($key, ($i % strlen($key)) - 1, 1);
-                $e .= chr(ord($char) + ord($keychar));
+                //260830.2134 PHP 8.5 deprecates chr() values outside 0..255; mask explicitly to preserve chr()'s historical byte-wrap behavior.
+                $e .= chr((ord($char) + ord($keychar)) & 0xFF);
             }
             $e             = isset($e[0]) ? '~xe'.($w_md5_cs ? ':'.md5($e) : '').'|'.$e : '';
             return $base64 = isset($e[0]) ? ($base64 = c_ws_plugin__s2member_utils_strings::base64_url_safe_encode($e)) : '';
@@ -216,7 +217,8 @@ if (!class_exists('c_ws_plugin__s2member_utils_encryption')) {
                     for ($i = 1, $d = ''; $i <= strlen($md5_e[2]); ++$i) {
                         $char    = substr($md5_e[2], $i - 1, 1);
                         $keychar = substr($key, ($i % strlen($key)) - 1, 1);
-                        $d .= chr(ord($char) - ord($keychar));
+                        //260830.2134 PHP 8.5 deprecates chr() values outside 0..255; mask explicitly to preserve chr()'s historical byte-wrap behavior.
+                        $d .= chr((ord($char) - ord($keychar)) & 0xFF);
                     } // Reverse XOR encryption.
                 } // Else the checksum was not a match.
 
