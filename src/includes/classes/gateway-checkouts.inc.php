@@ -271,6 +271,8 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 */
 		public static function processing_lock($gateway_checkout_id = '', $timeout = 300)
 		{
+			global $wpdb;
+
 			if(!self::valid_id($gateway_checkout_id) || !self::get($gateway_checkout_id))
 				return FALSE;
 
@@ -285,10 +287,14 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			$existing = get_option($option_name, FALSE);
 			if(!is_array($existing) || empty($existing['time']) || time() - (int)$existing['time'] >= $timeout)
 			{
-				//260830.0408 Replace malformed/stale locks atomically; only one racing request can win the new add_option().
-				delete_option($option_name);
-				if(add_option($option_name, $lock, '', 'no'))
-					return $token;
+				//260830.1504 Delete only the stale lock version we inspected; another request may replace it between get_option() and this delete.
+				$deleted = $wpdb->delete($wpdb->options, array('option_name' => $option_name, 'option_value' => maybe_serialize($existing)), array('%s', '%s'));
+				if($deleted)
+				{
+					wp_cache_delete($option_name, 'options');
+					if(add_option($option_name, $lock, '', 'no'))
+						return $token;
+				}
 			}
 			return FALSE;
 		}
@@ -306,6 +312,8 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 */
 		public static function processing_unlock($gateway_checkout_id = '', $token = '')
 		{
+			global $wpdb;
+
 			if(!self::valid_id($gateway_checkout_id) || !self::valid_id($token))
 				return FALSE;
 
@@ -314,7 +322,12 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			if(!is_array($existing) || empty($existing['token']) || !hash_equals((string)$existing['token'], (string)$token))
 				return FALSE;
 
-			return delete_option($option_name);
+			//260830.1504 Release only the lock version owned by this token; a stale owner must never delete a newer replacement lock.
+			$deleted = $wpdb->delete($wpdb->options, array('option_name' => $option_name, 'option_value' => maybe_serialize($existing)), array('%s', '%s'));
+			if($deleted)
+				wp_cache_delete($option_name, 'options');
+
+			return (bool)$deleted;
 		}
 
 		/**
@@ -521,9 +534,9 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			if(!add_option($option_name, $state, '', 'no'))
 				return FALSE;
 
-			//260830.0135 Opportunistically prune a bounded batch so expired Gateway Checkouts do not accumulate on sites without adding another scheduled task.
-			if(wp_rand(1, 100) === 1)
-				self::cleanup_expired(50);
+			//260830.1504 Keep opportunistic cleanup ahead of steady-state creation; a 1-in-50 run can remove up to 100 expired states, providing cleanup headroom without another scheduled task.
+			if(wp_rand(1, 50) === 1)
+				self::cleanup_expired(100);
 
 			return $state;
 		}
