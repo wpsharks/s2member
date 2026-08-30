@@ -97,36 +97,103 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			if(!$gateway || !$operation || !$ttl)
 				return FALSE;
 
-			$now = time();
-
 			//260829.2325 Use add_option() so an extremely unlikely ID collision cannot overwrite another in-progress checkout.
 			for($attempt = 0; $attempt < 3; $attempt++)
 			{
-				$gateway_checkout_id = self::generate_id();
-				$option_name = self::option_name($gateway_checkout_id);
-				if(!$option_name)
-					continue;
-
-				$state = array(
-					'version'              => 1,
-					'id'                   => $gateway_checkout_id,
-					'gateway'              => $gateway,
-					'operation'            => $operation,
-					'purchase_fingerprint' => (string)$purchase_fingerprint,
-					'user_id'              => $user_id,
-					'gateway_ids'          => array(),
-					'gateway_status'       => '',
-					'context'              => array(),
-					'fulfillment_status'   => 'pending',
-					'created_at'           => $now,
-					'updated_at'           => $now,
-					'expires_at'           => $now + $ttl,
-				);
-
-				if(add_option($option_name, $state, '', 'no'))
+				$state = self::create_with_id(self::generate_id(), $gateway, $operation, $purchase_fingerprint, $user_id, $ttl);
+				if($state)
 					return $state;
 			}
 			return FALSE;
+		}
+
+		/**
+		 * Resumes a signed browser Gateway Checkout, or creates its durable state on first use.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260830.0059
+		 *
+		 * @param string  $gateway              Gateway identifier.
+		 * @param string  $operation            Gateway operation identifier.
+		 * @param string  $gateway_checkout_id  Browser Gateway Checkout ID, if any.
+		 * @param string  $browser_token        Signed browser token, if any.
+		 * @param string  $purchase_fingerprint Finalized purchase fingerprint, if known.
+		 * @param integer $user_id              Current WordPress user ID, if any.
+		 * @param integer $ttl                  Optional state TTL in seconds when a replacement identity is needed.
+		 *
+		 * @return array|bool Gateway Checkout state, else FALSE.
+		 */
+		public static function create_or_resume($gateway = '', $operation = '', $gateway_checkout_id = '', $browser_token = '', $purchase_fingerprint = '', $user_id = 0, $ttl = 0)
+		{
+			$gateway              = sanitize_key((string)$gateway);
+			$operation            = sanitize_key((string)$operation);
+			$purchase_fingerprint = (string)$purchase_fingerprint;
+			$user_id              = abs((int)$user_id);
+
+			if(!$gateway || !$operation)
+				return FALSE;
+
+			if($gateway_checkout_id && $browser_token && self::browser_token_verify($gateway_checkout_id, $browser_token))
+			{
+				$browser_expires_at = self::browser_token_expires_at($browser_token);
+				$state = self::get($gateway_checkout_id);
+
+				if(!$state && $browser_expires_at > time())
+				{
+					//260830.0059 Form renders use a signed provisional identity without writing to the database; persist it only when checkout processing actually begins.
+					$state = self::create_with_id($gateway_checkout_id, $gateway, $operation, $purchase_fingerprint, $user_id, 0, $browser_expires_at);
+					if(!$state)
+						$state = self::get($gateway_checkout_id); // Another concurrent request may have created the same signed checkout first.
+				}
+				if($state && (string)$state['gateway'] === $gateway && (string)$state['operation'] === $operation
+				   && (empty($state['user_id']) || ($user_id && (int)$state['user_id'] === $user_id)))
+				{
+					if($purchase_fingerprint)
+					{
+						//260830.0308 Once bound, a checkout cannot be reassigned to different purchase terms or a different known WordPress user.
+						if(!empty($state['purchase_fingerprint']) && !hash_equals((string)$state['purchase_fingerprint'], $purchase_fingerprint))
+							return FALSE;
+
+						$state['purchase_fingerprint'] = $purchase_fingerprint;
+						if(!$state['user_id'] && $user_id)
+							$state['user_id'] = $user_id;
+						$state['updated_at'] = time();
+
+						if(!update_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, $state, FALSE))
+						{
+							$persisted_state = self::get($gateway_checkout_id);
+							if($persisted_state !== $state)
+								return FALSE;
+						}
+					}
+					return $state;
+				}
+			}
+			return self::create($gateway, $operation, $purchase_fingerprint, $user_id, $ttl);
+		}
+
+		/**
+		 * Creates or preserves a signed provisional browser identity without durable state.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260830.0059
+		 *
+		 * @param string  $gateway_checkout_id Existing browser Gateway Checkout ID, if any.
+		 * @param string  $browser_token       Existing signed browser token, if any.
+		 * @param integer $ttl                 Optional token TTL in seconds.
+		 *
+		 * @return array Browser identity containing `id`, `token`, and `expires_at`.
+		 */
+		public static function browser_identity($gateway_checkout_id = '', $browser_token = '', $ttl = 0)
+		{
+			if($gateway_checkout_id && $browser_token && self::browser_token_verify($gateway_checkout_id, $browser_token))
+				return array('id' => (string)$gateway_checkout_id, 'token' => (string)$browser_token, 'expires_at' => self::browser_token_expires_at($browser_token));
+
+			$gateway_checkout_id = self::generate_id();
+			$expires_at = time() + self::ttl($ttl);
+			$browser_token = self::browser_token($gateway_checkout_id, $expires_at);
+
+			return array('id' => $gateway_checkout_id, 'token' => $browser_token, 'expires_at' => $expires_at);
 		}
 
 		/**
@@ -142,10 +209,10 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 */
 		public static function get($gateway_checkout_id = '', $allow_expired = FALSE)
 		{
-			$option_name = self::option_name($gateway_checkout_id);
-			if(!$option_name)
+			if(!self::valid_id($gateway_checkout_id))
 				return FALSE;
 
+			$option_name = 'ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id;
 			$state = get_option($option_name, FALSE);
 			if(!is_array($state) || empty($state['id']) || !hash_equals((string)$gateway_checkout_id, (string)$state['id']) || empty($state['expires_at']))
 				return FALSE;
@@ -155,47 +222,6 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 				//260829.2325 Expired checkout state is unusable for recovery; remove it lazily when encountered.
 				self::delete($gateway_checkout_id);
 				return FALSE;
-			}
-			return $state;
-		}
-
-		/**
-		 * Binds finalized purchase identity to a Gateway Checkout.
-		 *
-		 * @package s2Member\Gateway_Checkouts
-		 * @since 260829.2325
-		 *
-		 * @param string  $gateway_checkout_id  Gateway Checkout ID.
-		 * @param string  $purchase_fingerprint Finalized purchase fingerprint.
-		 * @param integer $user_id              WordPress user ID, if known.
-		 *
-		 * @return array|bool Bound state, else FALSE on an identity mismatch.
-		 */
-		public static function bind_purchase($gateway_checkout_id = '', $purchase_fingerprint = '', $user_id = 0)
-		{
-			$state = self::get($gateway_checkout_id);
-			$purchase_fingerprint = (string)$purchase_fingerprint;
-			$user_id = abs((int)$user_id);
-
-			if(!$state || !$purchase_fingerprint)
-				return FALSE;
-
-			//260829.2325 Once bound, a checkout cannot be reassigned to different purchase terms or a different known WordPress user.
-			if(!empty($state['purchase_fingerprint']) && !hash_equals((string)$state['purchase_fingerprint'], $purchase_fingerprint))
-				return FALSE;
-			if(!empty($state['user_id']) && $user_id && (int)$state['user_id'] !== $user_id)
-				return FALSE;
-
-			$state['purchase_fingerprint'] = $purchase_fingerprint;
-			if(!$state['user_id'] && $user_id)
-				$state['user_id'] = $user_id;
-			$state['updated_at'] = time();
-
-			if(!update_option(self::option_name($gateway_checkout_id), $state, FALSE))
-			{
-				$persisted_state = self::get($gateway_checkout_id);
-				if($persisted_state !== $state)
-					return FALSE;
 			}
 			return $state;
 		}
@@ -217,12 +243,12 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			if(!$state || !is_array($updates))
 				return FALSE;
 
-			//260829.2325 Only operational fields are mutable here; gateway/purchase/user identity is changed exclusively through create() and bind_purchase().
+			//260830.0408 Only operational fields are mutable here; gateway, purchase, and user identity are established when the checkout is created/resumed.
 			$updates = array_intersect_key($updates, array('gateway_ids' => TRUE, 'gateway_status' => TRUE, 'fulfillment_status' => TRUE, 'context' => TRUE));
 			$state = array_merge($state, $updates);
 			$state['updated_at'] = time();
 
-			if(!update_option(self::option_name($gateway_checkout_id), $state, FALSE))
+			if(!update_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, $state, FALSE))
 			{
 				//260829.2325 WordPress returns FALSE when an update makes no database change; return the persisted state if it already matches.
 				$persisted_state = self::get($gateway_checkout_id);
@@ -233,7 +259,66 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		}
 
 		/**
-		 * Deletes durable Gateway Checkout state and any associated lock.
+		 * Acquires an atomic processing lock for a Gateway Checkout.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260830.0408
+		 *
+		 * @param string  $gateway_checkout_id Gateway Checkout ID.
+		 * @param integer $timeout             Optional stale-lock timeout in seconds.
+		 *
+		 * @return string|bool Lock token if acquired; else FALSE.
+		 */
+		public static function processing_lock($gateway_checkout_id = '', $timeout = 300)
+		{
+			if(!self::valid_id($gateway_checkout_id) || !self::get($gateway_checkout_id))
+				return FALSE;
+
+			$option_name = 's2m_gateway_checkout_lock_'.$gateway_checkout_id;
+			$timeout = max(30, abs((int)$timeout));
+			$token = self::generate_id();
+			$lock = array('token' => $token, 'time' => time());
+
+			if(add_option($option_name, $lock, '', 'no'))
+				return $token;
+
+			$existing = get_option($option_name, FALSE);
+			if(!is_array($existing) || empty($existing['time']) || time() - (int)$existing['time'] >= $timeout)
+			{
+				//260830.0408 Replace malformed/stale locks atomically; only one racing request can win the new add_option().
+				delete_option($option_name);
+				if(add_option($option_name, $lock, '', 'no'))
+					return $token;
+			}
+			return FALSE;
+		}
+
+		/**
+		 * Releases a Gateway Checkout processing lock owned by the supplied token.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260830.0408
+		 *
+		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 * @param string $token               Lock token returned by processing_lock().
+		 *
+		 * @return bool TRUE if released; else FALSE.
+		 */
+		public static function processing_unlock($gateway_checkout_id = '', $token = '')
+		{
+			if(!self::valid_id($gateway_checkout_id) || !self::valid_id($token))
+				return FALSE;
+
+			$option_name = 's2m_gateway_checkout_lock_'.$gateway_checkout_id;
+			$existing = get_option($option_name, FALSE);
+			if(!is_array($existing) || empty($existing['token']) || !hash_equals((string)$existing['token'], (string)$token))
+				return FALSE;
+
+			return delete_option($option_name);
+		}
+
+		/**
+		 * Deletes durable Gateway Checkout state.
 		 *
 		 * @package s2Member\Gateway_Checkouts
 		 * @since 260829.2325
@@ -244,37 +329,46 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 */
 		public static function delete($gateway_checkout_id = '')
 		{
-			$option_name = self::option_name($gateway_checkout_id);
-			if(!$option_name)
+			if(!self::valid_id($gateway_checkout_id))
 				return FALSE;
 
-			delete_option(self::lock_option_name($gateway_checkout_id));
+			delete_option('s2m_gateway_checkout_lock_'.$gateway_checkout_id);
 
-			return delete_option($option_name);
+			return delete_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id);
 		}
 
 		/**
-		 * Creates a signed browser token for a Gateway Checkout.
+		 * Creates a signed browser token for a Gateway Checkout identity.
 		 *
 		 * @package s2Member\Gateway_Checkouts
 		 * @since 260829.2325
 		 *
-		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 * @param string  $gateway_checkout_id Gateway Checkout ID.
+		 * @param integer $expires_at          Optional absolute expiration time for a provisional identity.
 		 *
 		 * @return string Signed browser token, else an empty string.
 		 */
-		public static function browser_token($gateway_checkout_id = '')
+		public static function browser_token($gateway_checkout_id = '', $expires_at = 0)
 		{
-			$state = self::get($gateway_checkout_id);
-			if(!$state)
+			if(!self::valid_id($gateway_checkout_id))
 				return '';
 
-			$expires = (int)$state['expires_at'];
-			$payload = (string)$gateway_checkout_id.'|'.$expires;
+			if(!$expires_at)
+			{
+				$state = self::get($gateway_checkout_id);
+				if(!$state)
+					return '';
+
+				$expires_at = (int)$state['expires_at'];
+			}
+			if((int)$expires_at <= time())
+				return '';
+
+			$payload = (string)$gateway_checkout_id.'|'.(int)$expires_at;
 			$key = hash_hmac('sha256', 's2member:gateway-checkout:browser-token', c_ws_plugin__s2member_utils_encryption::key());
 			$signature = hash_hmac('sha256', $payload, $key);
 
-			return $expires.'.'.$signature;
+			return (int)$expires_at.'.'.$signature;
 		}
 
 		/**
@@ -290,78 +384,37 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 */
 		public static function browser_token_verify($gateway_checkout_id = '', $browser_token = '')
 		{
-			$state = self::get($gateway_checkout_id);
-			if(!$state || !is_string($browser_token) || !preg_match('/^([0-9]+)\.([a-f0-9]{64})$/i', $browser_token, $matches))
+			if(!self::valid_id($gateway_checkout_id) || !is_string($browser_token) || !preg_match('/^([0-9]+)\.([a-f0-9]{64})$/i', $browser_token, $matches))
 				return FALSE;
 
-			$expires = (int)$matches[1];
-			if($expires <= time() || $expires !== (int)$state['expires_at'])
+			$expires_at = (int)$matches[1];
+			if($expires_at <= time())
 				return FALSE;
 
-			$payload = (string)$gateway_checkout_id.'|'.$expires;
+			$payload = (string)$gateway_checkout_id.'|'.$expires_at;
 			$key = hash_hmac('sha256', 's2member:gateway-checkout:browser-token', c_ws_plugin__s2member_utils_encryption::key());
 			$expected = hash_hmac('sha256', $payload, $key);
+			if(!hash_equals($expected, strtolower($matches[2])))
+				return FALSE;
 
-			return hash_equals($expected, strtolower($matches[2]));
+			$state = self::get($gateway_checkout_id);
+			//260830.0059 A provisional browser identity has no state yet; once state exists, its expiration must remain bound to the signed token.
+			return !$state || $expires_at === (int)$state['expires_at'];
 		}
 
 		/**
-		 * Acquires an atomic short-lived lock for a Gateway Checkout.
+		 * Gets the expiration time encoded in a syntactically valid browser token.
 		 *
 		 * @package s2Member\Gateway_Checkouts
-		 * @since 260829.2325
+		 * @since 260830.0059
 		 *
-		 * @param string  $gateway_checkout_id Gateway Checkout ID.
-		 * @param integer $lock_timeout        Optional. Stale lock timeout in seconds.
+		 * @param string $browser_token Signed browser token.
 		 *
-		 * @return string|bool Lock token if acquired; else FALSE.
+		 * @return integer Absolute expiration time, else 0.
 		 */
-		public static function lock_acquire($gateway_checkout_id = '', $lock_timeout = 120)
+		protected static function browser_token_expires_at($browser_token = '')
 		{
-			$lock_option = self::lock_option_name($gateway_checkout_id);
-			if(!$lock_option || !self::get($gateway_checkout_id))
-				return FALSE;
-
-			$lock_timeout = max(5, abs((int)$lock_timeout));
-			$lock_token = self::generate_id();
-			$lock = array('token' => $lock_token, 'acquired_at' => time());
-
-			if(add_option($lock_option, $lock, '', 'no'))
-				return $lock_token;
-
-			$existing_lock = get_option($lock_option, FALSE);
-			if(!is_array($existing_lock) || empty($existing_lock['token']) || empty($existing_lock['acquired_at']) || time() - (int)$existing_lock['acquired_at'] >= $lock_timeout)
-			{
-				//260829.2325 Delete malformed/stale locks, then rely on atomic add_option() so only one racing request can acquire the replacement.
-				delete_option($lock_option);
-				if(add_option($lock_option, $lock, '', 'no'))
-					return $lock_token;
-			}
-			return FALSE;
-		}
-
-		/**
-		 * Releases a Gateway Checkout lock owned by the supplied token.
-		 *
-		 * @package s2Member\Gateway_Checkouts
-		 * @since 260829.2325
-		 *
-		 * @param string $gateway_checkout_id Gateway Checkout ID.
-		 * @param string $lock_token          Lock token returned by lock_acquire().
-		 *
-		 * @return bool TRUE if released; else FALSE.
-		 */
-		public static function lock_release($gateway_checkout_id = '', $lock_token = '')
-		{
-			$lock_option = self::lock_option_name($gateway_checkout_id);
-			if(!$lock_option || !$lock_token)
-				return FALSE;
-
-			$existing_lock = get_option($lock_option, FALSE);
-			if(!is_array($existing_lock) || empty($existing_lock['token']) || !hash_equals((string)$existing_lock['token'], (string)$lock_token))
-				return FALSE;
-
-			return delete_option($lock_option);
+			return is_string($browser_token) && preg_match('/^([0-9]+)\.[a-f0-9]{64}$/i', $browser_token, $matches) ? (int)$matches[1] : 0;
 		}
 
 		/**
@@ -379,7 +432,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			global $wpdb;
 
 			$limit = min(500, max(1, abs((int)$limit)));
-			$option_prefix = self::option_prefix();
+			$option_prefix = 'ws_plugin__s2member_gateway_checkout_';
 			$option_names = $wpdb->get_col($wpdb->prepare("SELECT `option_name` FROM `{$wpdb->options}` WHERE `option_name` LIKE %s ORDER BY `option_id` ASC LIMIT %d", $wpdb->esc_like($option_prefix).'%', $limit));
 			$removed = 0;
 
@@ -419,46 +472,60 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		}
 
 		/**
-		 * Builds the option name for Gateway Checkout state.
+		 * Creates durable Gateway Checkout state with a specific signed identity.
 		 *
 		 * @package s2Member\Gateway_Checkouts
-		 * @since 260829.2325
+		 * @since 260830.0059
 		 *
-		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 * @param string  $gateway_checkout_id  Gateway Checkout ID.
+		 * @param string  $gateway              Gateway identifier.
+		 * @param string  $operation            Gateway operation identifier.
+		 * @param string  $purchase_fingerprint Purchase fingerprint, if already known.
+		 * @param integer $user_id              WordPress user ID, if already known.
+		 * @param integer $ttl                  State TTL in seconds.
+		 * @param integer $expires_at           Optional absolute expiration time; used by signed provisional browser identities.
 		 *
-		 * @return string Option name, else an empty string.
+		 * @return array|bool Gateway Checkout state, else FALSE.
 		 */
-		public static function option_name($gateway_checkout_id = '')
+		protected static function create_with_id($gateway_checkout_id = '', $gateway = '', $operation = '', $purchase_fingerprint = '', $user_id = 0, $ttl = 0, $expires_at = 0)
 		{
-			return self::valid_id($gateway_checkout_id) ? self::option_prefix().$gateway_checkout_id : '';
-		}
+			$gateway     = sanitize_key((string)$gateway);
+			$operation   = sanitize_key((string)$operation);
+			$user_id     = abs((int)$user_id);
+			$expires_at  = abs((int)$expires_at);
+			$ttl         = $expires_at ? 0 : self::ttl($ttl);
 
-		/**
-		 * Builds the option name for a Gateway Checkout lock.
-		 *
-		 * @package s2Member\Gateway_Checkouts
-		 * @since 260829.2325
-		 *
-		 * @param string $gateway_checkout_id Gateway Checkout ID.
-		 *
-		 * @return string Option name, else an empty string.
-		 */
-		public static function lock_option_name($gateway_checkout_id = '')
-		{
-			return self::valid_id($gateway_checkout_id) ? 'ws_plugin__s2member_gateway_checkout_lock_'.$gateway_checkout_id : '';
-		}
+			if(!self::valid_id($gateway_checkout_id) || !$gateway || !$operation || (!$ttl && $expires_at <= time()))
+				return FALSE;
 
-		/**
-		 * Gets the Gateway Checkout state option prefix.
-		 *
-		 * @package s2Member\Gateway_Checkouts
-		 * @since 260829.2325
-		 *
-		 * @return string Option prefix.
-		 */
-		protected static function option_prefix()
-		{
-			return 'ws_plugin__s2member_gateway_checkout_';
+			$option_name = 'ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id;
+
+			$now = time();
+			$expires_at = $expires_at ?: $now + $ttl;
+			$state = array(
+				'version'              => 1,
+				'id'                   => (string)$gateway_checkout_id,
+				'gateway'              => $gateway,
+				'operation'            => $operation,
+				'purchase_fingerprint' => (string)$purchase_fingerprint,
+				'user_id'              => $user_id,
+				'gateway_ids'          => array(),
+				'gateway_status'       => '',
+				'context'              => array(),
+				'fulfillment_status'   => 'pending',
+				'created_at'           => $now,
+				'updated_at'           => $now,
+				'expires_at'           => $expires_at,
+			);
+
+			if(!add_option($option_name, $state, '', 'no'))
+				return FALSE;
+
+			//260830.0135 Opportunistically prune a bounded batch so expired Gateway Checkouts do not accumulate on sites without adding another scheduled task.
+			if(wp_rand(1, 100) === 1)
+				self::cleanup_expired(50);
+
+			return $state;
 		}
 	}
 }
