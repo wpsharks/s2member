@@ -480,8 +480,8 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			if((int)$ttl > 0)
 				return abs((int)$ttl);
 
-			//260829.2325 Keep recovery state longer than a typical 24-hour gateway idempotency window; sites can tune this without changing the storage contract.
-			return max(HOUR_IN_SECONDS, abs((int)apply_filters('ws_plugin__s2member_gateway_checkout_ttl', 2 * DAY_IN_SECONDS)));
+			//260831.0626 Keep checkout recovery state beyond supported gateway idempotency windows and long enough for delayed browser/webhook recovery; sites can tune this without changing the storage contract.
+			return max(HOUR_IN_SECONDS, abs((int)apply_filters('ws_plugin__s2member_gateway_checkout_ttl', 7 * DAY_IN_SECONDS)));
 		}
 
 		/**
