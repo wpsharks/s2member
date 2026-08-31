@@ -52,6 +52,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 
 			do_action('ws_plugin__s2member_before_paypal_notify', get_defined_vars());
 
+			//260831.0135 Normalize optional s2Member proxy fields once; direct PayPal IPNs omit them, while proxied gateway integrations provide strings.
+			if(!isset($_REQUEST['s2member_paypal_proxy']) || !is_string($_REQUEST['s2member_paypal_proxy']))
+				$_REQUEST['s2member_paypal_proxy'] = '';
+			if(!isset($_REQUEST['s2member_paypal_proxy_use']) || !is_string($_REQUEST['s2member_paypal_proxy_use']))
+				$_REQUEST['s2member_paypal_proxy_use'] = '';
+
 			if(!empty($_GET['s2member_paypal_notify']) && ($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business'] || !empty($_REQUEST['s2member_paypal_proxy'])))
 			{
 				@ignore_user_abort(TRUE); // Important. Continue processing even if/when the connection is broken by the sending party.
