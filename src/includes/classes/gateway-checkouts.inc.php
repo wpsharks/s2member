@@ -259,6 +259,89 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		}
 
 		/**
+		 * Stores private encrypted recovery context for a Gateway Checkout.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260831.0723
+		 *
+		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 * @param array  $context             Private recovery context; passwords/credentials are not allowed.
+		 *
+		 * @return bool TRUE if stored or cleared; else FALSE.
+		 */
+		public static function private_context_set($gateway_checkout_id = '', $context = array())
+		{
+			$state = self::get($gateway_checkout_id);
+			if(!$state || !is_array($context) || !self::private_context_is_safe($context))
+				return FALSE;
+
+			$encrypted = '';
+			if($context)
+			{
+				//260831.0723 Bind ciphertext to this checkout ID so copied/tampered private state cannot be accepted by another checkout.
+				$payload = array('version' => 1, 'gateway_checkout_id' => (string)$gateway_checkout_id, 'context' => $context);
+				$encrypted = c_ws_plugin__s2member_utils_encryption::encrypt(serialize($payload));
+				if(!$encrypted)
+					return FALSE;
+			}
+
+			$state['private_context'] = $encrypted;
+			$state['updated_at'] = time();
+
+			if(!update_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, $state, FALSE))
+			{
+				$persisted_state = self::get($gateway_checkout_id);
+				if($persisted_state !== $state)
+					return FALSE;
+			}
+			return TRUE;
+		}
+
+		/**
+		 * Gets private encrypted recovery context for a Gateway Checkout.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260831.0723
+		 *
+		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 *
+		 * @return array|bool Private recovery context, an empty array when none exists, else FALSE on invalid/corrupt state.
+		 */
+		public static function private_context_get($gateway_checkout_id = '')
+		{
+			$state = self::get($gateway_checkout_id);
+			if(!$state)
+				return FALSE;
+			if(empty($state['private_context']))
+				return array();
+			if(!is_string($state['private_context']))
+				return FALSE;
+
+			$payload = c_ws_plugin__s2member_utils_arrays::maybe_unserialize(c_ws_plugin__s2member_utils_encryption::decrypt($state['private_context']));
+			if(!is_array($payload) || empty($payload['version']) || (int)$payload['version'] !== 1
+			|| empty($payload['gateway_checkout_id']) || !hash_equals((string)$gateway_checkout_id, (string)$payload['gateway_checkout_id'])
+			|| !isset($payload['context']) || !is_array($payload['context']) || !self::private_context_is_safe($payload['context']))
+				return FALSE;
+
+			return $payload['context'];
+		}
+
+		/**
+		 * Clears private encrypted recovery context for a Gateway Checkout.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260831.0723
+		 *
+		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 *
+		 * @return bool TRUE if cleared; else FALSE.
+		 */
+		public static function private_context_delete($gateway_checkout_id = '')
+		{
+			return self::private_context_set($gateway_checkout_id, array());
+		}
+
+		/**
 		 * Acquires an atomic processing lock for a Gateway Checkout.
 		 *
 		 * @package s2Member\Gateway_Checkouts
@@ -485,6 +568,35 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		}
 
 		/**
+		 * Validates private recovery context before encryption/persistence.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260831.0723
+		 *
+		 * @param array $context Private recovery context.
+		 *
+		 * @return bool TRUE if safe to persist; else FALSE.
+		 */
+		protected static function private_context_is_safe($context = array())
+		{
+			foreach((array)$context as $key => $value)
+			{
+				$normalized_key = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '_', (string)$key), '_'));
+				//260831.0723 Never turn Gateway Checkout recovery into a credential vault; password metadata belongs in ordinary context if needed, not alongside a recoverable password value.
+				if($normalized_key !== 'password_generated' && preg_match('/(?:^|_)(?:password|pass|passwd|pwd)(?:[0-9]+|_[a-z0-9]+)?$/', $normalized_key))
+					return FALSE;
+				if(is_array($value))
+				{
+					if(!self::private_context_is_safe($value))
+						return FALSE;
+				}
+				else if(is_object($value) || is_resource($value))
+					return FALSE;
+			}
+			return TRUE;
+		}
+
+		/**
 		 * Creates durable Gateway Checkout state with a specific signed identity.
 		 *
 		 * @package s2Member\Gateway_Checkouts
@@ -525,6 +637,8 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 				'gateway_ids'          => array(),
 				'gateway_status'       => '',
 				'context'              => array(),
+				//260831.0723 Keep private recovery data encrypted inside the same non-autoloaded checkout option so it shares the checkout lifecycle without exposing plaintext in normal state reads.
+				'private_context'      => '',
 				'fulfillment_status'   => 'pending',
 				'created_at'           => $now,
 				'updated_at'           => $now,
