@@ -80,9 +80,8 @@ if(!class_exists('c_ws_plugin__s2member_user_securities'))
 		 */
 		public static function user_capabilities($capabilities, $caps_map, $args)
 		{
-			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-			do_action('ws_plugin__s2member_before_user_capabilities', get_defined_vars());
-			unset($__refs, $__v);
+			$_hook = 'ws_plugin__s2member_before_user_capabilities'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+				{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
 
 			if(!empty($capabilities['access_s2member_ccap_all_ccaps']) && !empty($args[0]) && preg_match('/^access_s2member_ccap_/i', $args[0]) && apply_filters('ws_plugin__s2member_all_ccaps_enable', TRUE, get_defined_vars()))
 				$capabilities = array_merge((array)$capabilities, array($args[0] => 1));
@@ -94,7 +93,9 @@ if(!class_exists('c_ws_plugin__s2member_user_securities'))
 				if($args[0] === 'edit_users' || ($args[0] === 'edit_user' && !empty($args[2]) && ((!empty($args[1]) && (int)$args[1] === (int)$args[2]) || is_user_member_of_blog($args[2]))))
 					$capabilities = array_merge((array)$capabilities, array('edit_users' => 1));
 
-			return apply_filters('ws_plugin__s2member_user_capabilities', $capabilities, get_defined_vars());
+			$_hook = 'ws_plugin__s2member_user_capabilities'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+				$capabilities = apply_filters($_hook, $capabilities, get_defined_vars()); unset($_hook); //260901 Defined vars.
+			return $capabilities;
 		}
 
 		/**

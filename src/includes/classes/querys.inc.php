@@ -53,15 +53,13 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 		 */
 		public static function force_query_level_access($wp_query = NULL)
 		{
-			$_hook = 'ws_plugin__s2member_before_force_query_level_access';
-			if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all'])) { foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-				do_action($_hook, get_defined_vars()); } else do_action($_hook); unset($_hook, $__refs, $__v); //260901.0001 Optimized vars by reference.
+			$_hook = 'ws_plugin__s2member_before_force_query_level_access'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+				{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
 
 			c_ws_plugin__s2member_querys::query_level_access($wp_query, TRUE);
 
-			$_hook = 'ws_plugin__s2member_after_force_query_level_access';
-			if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all'])) { foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-				do_action($_hook, get_defined_vars()); } else do_action($_hook); unset($_hook, $__refs, $__v); //260901.0001 Optimized vars by reference.
+			$_hook = 'ws_plugin__s2member_after_force_query_level_access'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+				{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
 		}
 
 		/**
@@ -93,9 +91,8 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 
 			c_ws_plugin__s2member_querys::$current_wp_query = &$wp_query;
 
-			$_hook = 'ws_plugin__s2member_before_query_level_access';
-			if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all'])) { foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-				do_action($_hook, get_defined_vars()); } else do_action($_hook); unset($_hook, $__refs, $__v); //260901.0001 Optimized vars by reference.
+			$_hook = 'ws_plugin__s2member_before_query_level_access'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+				{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
 
 			if(is_object($wp_query) && !$wp_query->get('___s2_is_bbp_has_replies'))
 				// Workaround for bbPress and the `s` key. See: <http://bit.ly/1obLpv4>
@@ -243,15 +240,13 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 							}
 							unset($_pages); // A little housekeeping here. Ditch these temporary variables.
 						}
-						$_hook = 'ws_plugin__s2member_during_query_level_access';
-						if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all'])) { foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-							do_action($_hook, get_defined_vars()); } else do_action($_hook); unset($_hook, $__refs, $__v); //260901.0001 Optimized vars by reference.
+						$_hook = 'ws_plugin__s2member_during_query_level_access'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+							{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
 					}
 				}
 			}
-			$_hook = 'ws_plugin__s2member_after_query_level_access';
-			if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all'])) { foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-				do_action($_hook, get_defined_vars()); } else do_action($_hook); unset($_hook, $__refs, $__v); //260901.0001 Optimized vars by reference.
+			$_hook = 'ws_plugin__s2member_after_query_level_access'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+				{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
 		}
 
 		/**
@@ -269,9 +264,8 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 		{
 			global $wpdb; // Global DB object reference.
 
-			$_hook = '_ws_plugin__s2member_before_query_level_access_sys';
-			if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all'])) { foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-				do_action($_hook, get_defined_vars()); } else do_action($_hook); unset($_hook, $__refs, $__v); //260901.0001 Optimized vars by reference.
+			$_hook = '_ws_plugin__s2member_before_query_level_access_sys'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+				{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
 
 			if(is_object($wpdb) && is_object($wp_query) && !($suppressing_filters = $wp_query->get('suppress_filters')))
 				if((!is_admin() && ($wp_query->is_search() || $wp_query->is_feed())) || c_ws_plugin__s2member_querys::_is_admin_ajax_search($wp_query))
@@ -282,13 +276,11 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 					$wp_query->set('post__not_in', array_unique(array_merge(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__not_in')), $s)));
 					$wp_query->set('post__in', array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__in')), $s)));
 
-					$_hook = '_ws_plugin__s2member_during_query_level_access_sys';
-					if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all'])) { foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-						do_action($_hook, get_defined_vars()); } else do_action($_hook); unset($_hook, $__refs, $__v); //260901.0001 Optimized vars by reference.
+					$_hook = '_ws_plugin__s2member_during_query_level_access_sys'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+						{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
 				}
-			$_hook = '_ws_plugin__s2member_after_query_level_access_sys';
-			if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all'])) { foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
-				do_action($_hook, get_defined_vars()); } else do_action($_hook); unset($_hook, $__refs, $__v); //260901.0001 Optimized vars by reference.
+			$_hook = '_ws_plugin__s2member_after_query_level_access_sys'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
+				{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
 		}
 
 		/**
