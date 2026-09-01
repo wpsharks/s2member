@@ -1936,10 +1936,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
-				 * Creates a PayPal Checkout subscription (server-side) when using redirect-mode approval.
+				 * Creates a PayPal Checkout subscription server-side.
 				 *
-				 * In JS SDK button mode, subscriptions are created client-side using plan_id and
-				 * then confirmed server-side. Redirect-mode requires server-side creation.
+				 * Redirect-mode and coordinator-backed JS flows create here; legacy JS buttons may
+				 * still create client-side using plan_id and then confirm server-side.
 				 *
 				 * @since 260114
 				 *
@@ -1953,38 +1953,128 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							return array();
 
 						$invoice = (string)$token['invoice'];
+						$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
+						$gateway_checkout_lock = '';
 
-						$plan_id = self::paypal_checkout_plan_get_id($token);
-						if(!$plan_id)
-							return array();
+						if($gateway_checkout_id)
+						{
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
+								return array('__error' => 'gateway_checkout_invalid');
 
-						$brand_name = get_bloginfo('name');
-						$brand_name = substr(preg_replace('/\s+/', ' ', trim(strip_tags($brand_name))), 0, 127);
+							//260901.2145 Return a previously persisted PayPal subscription before making another create request; this also recovers a browser reload after server-side creation succeeded.
+							if(!empty($gateway_checkout['gateway_ids']['subscription_id']))
+								return array('id' => (string)$gateway_checkout['gateway_ids']['subscription_id'], 'status' => !empty($gateway_checkout['gateway_status']) ? (string)$gateway_checkout['gateway_status'] : '');
 
-						$body = array(
-							'plan_id'              => $plan_id,
-							'custom_id'            => $invoice,
-							'application_context'  => array(
-								'brand_name'          => $brand_name,
-								'return_url'          => (string)$token['return'],
-								'cancel_url'          => (string)$token['cancel'],
-								'user_action'         => 'SUBSCRIBE_NOW',
-								'shipping_preference' => 'NO_SHIPPING',
-							),
-						);
+							$gateway_checkout_lock = c_ws_plugin__s2member_gateway_checkouts::processing_lock($gateway_checkout_id);
+							if(!$gateway_checkout_lock)
+								return array('__error' => 'gateway_checkout_busy');
 
-						// Idempotency: stable per invoice for create-subscription retries.
-						$headers = array(
-							'PayPal-Request-Id' => 's2m-ppco-sub-'.md5($invoice),
-						);
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
+							{
+								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
+								return array('__error' => 'gateway_checkout_invalid');
+							}
+							if(!empty($gateway_checkout['gateway_ids']['subscription_id']))
+							{
+								$subscription_id = (string)$gateway_checkout['gateway_ids']['subscription_id'];
+								$status = !empty($gateway_checkout['gateway_status']) ? (string)$gateway_checkout['gateway_status'] : '';
+								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
+								return array('id' => $subscription_id, 'status' => $status);
+							}
+						}
 
-						$r = self::paypal_checkout_api_request('POST', '/v1/billing/subscriptions', $body, $headers);
+						try
+						{
+							$plan_id = self::paypal_checkout_plan_get_id($token);
+							if(!$plan_id)
+								return array('__error' => 'plan_create_failed');
 
-						$data = array();
-						if(!empty($r['body']) && is_string($r['body']))
-							$data = json_decode($r['body'], true);
+							$brand_name = get_bloginfo('name');
+							$brand_name = substr(preg_replace('/\s+/', ' ', trim(strip_tags($brand_name))), 0, 127);
 
-						return is_array($data) ? $data : array();
+							$body = array(
+								'plan_id'              => $plan_id,
+								'custom_id'            => $invoice,
+								'application_context'  => array(
+									'brand_name'          => $brand_name,
+									'return_url'          => (string)$token['return'],
+									'cancel_url'          => (string)$token['cancel'],
+									'user_action'         => 'SUBSCRIBE_NOW',
+									'shipping_preference' => 'NO_SHIPPING',
+								),
+							);
+
+							//260901.2145 Coordinator-backed Pro-Forms use the logical checkout ID as PayPal's stable idempotency anchor; legacy callers retain the established invoice-derived key.
+							$request_id = $gateway_checkout_id ? 's2m-ppco-sub-'.str_replace('-', '', $gateway_checkout_id) : 's2m-ppco-sub-'.md5($invoice);
+							$headers = array('PayPal-Request-Id' => $request_id);
+
+							if($gateway_checkout_id)
+							{
+								$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
+								$create_started_at = !empty($context['paypal_subscription_create_started_at']) ? (int)$context['paypal_subscription_create_started_at'] : 0;
+
+								//260901.2145 PayPal retains create-subscription request IDs for 72 hours; after an unresolved attempt exceeds that window, fail closed instead of risking a second subscription.
+								if($create_started_at && $create_started_at <= time() - (3 * DAY_IN_SECONDS))
+									return array('__error' => 'gateway_checkout_recovery_window_expired');
+
+								if(!$create_started_at)
+								{
+									$context['paypal_subscription_create_started_at'] = time();
+									$context['paypal_subscription_request_id'] = $request_id;
+									//260901.2145 Record an in-flight create before contacting PayPal so changed purchase terms cannot silently abandon an ambiguous subscription attempt.
+									$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => 'CREATE_PENDING', 'context' => $context));
+									if(!$gateway_checkout)
+										return array('__error' => 'gateway_checkout_save_failed');
+								}
+							}
+
+							$data = array();
+							$code = 0;
+							$ambiguous = FALSE;
+							for($attempt = 0; $attempt < 2; $attempt++)
+							{
+								$r = self::paypal_checkout_api_request('POST', '/v1/billing/subscriptions', $body, $headers);
+								$code = !empty($r['code']) ? (int)$r['code'] : 0;
+								$response_body = !empty($r['body']) ? (string)$r['body'] : '';
+								$data = $response_body ? json_decode($response_body, true) : array();
+								$data = is_array($data) ? $data : array();
+								$ambiguous = ($code === 0 || $code === 408 || $code >= 500 || ($code >= 200 && $code <= 299));
+
+								if($code >= 200 && $code <= 299 && !empty($data['id']))
+									break;
+								if(!$ambiguous)
+									break;
+							}
+
+							if($gateway_checkout_id && $code >= 200 && $code <= 299 && !empty($data['id']))
+							{
+								$gateway_ids = !empty($gateway_checkout['gateway_ids']) && is_array($gateway_checkout['gateway_ids']) ? $gateway_checkout['gateway_ids'] : array();
+								$gateway_ids['subscription_id'] = (string)$data['id'];
+								$status = !empty($data['status']) ? strtoupper((string)$data['status']) : 'APPROVAL_PENDING';
+								$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
+								unset($context['paypal_subscription_create_started_at'], $context['paypal_subscription_request_id']);
+
+								//260901.2145 Persist the PayPal subscription ID before returning it to the browser; if persistence fails, retrying within PayPal's idempotency window recovers the same resource.
+								if(!c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_ids' => $gateway_ids, 'gateway_status' => $status, 'context' => $context)))
+									return array('__error' => 'gateway_checkout_save_failed');
+							}
+							else if($gateway_checkout_id && !$ambiguous)
+							{
+								//260901.2145 A deterministic rejection did not create a subscription; clear the in-flight marker so a corrected attempt is not treated as an unresolved provider result.
+								$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
+								unset($context['paypal_subscription_create_started_at'], $context['paypal_subscription_request_id']);
+								c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => '', 'context' => $context));
+							}
+
+							return $data;
+						}
+						finally
+						{
+							if($gateway_checkout_id && $gateway_checkout_lock)
+								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
+						}
 					}
 
 				/**

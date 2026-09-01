@@ -5,7 +5,7 @@
  *
  * Server-side entrypoint for PayPal Checkout operations used by s2Member shortcodes:
  * - Buy Now: create_order + capture_order (one-time payments).
- * - Subscriptions (membership level): get_plan_id + confirm_subscription.
+ * - Subscriptions (membership level): create_subscription/get_plan_id + confirm_subscription.
  * - output="url|anchor": redirect/return flow (does not create orders on page load).
  * - Optional: cancel_subscription (on-site cancel for logged-in users).
  *
@@ -472,6 +472,36 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				}
 			}
 
+			if($op === 'create_subscription')
+			{
+				if((!isset($token['rr']) || (string)$token['rr'] === '') || strtoupper((string)$token['rr']) === 'BN')
+				{
+					echo wp_json_encode(array('error' => 'not_subscription'));
+					exit();
+				}
+
+				$subscription = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_create($token);
+
+				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+					'ppco'         => 'checkout',
+					'env_setting'  => $env_setting,
+					'event'        => 'create_subscription_response',
+					'subscription' => $subscription,
+					'token'        => $token,
+				));
+
+				if(empty($subscription['id']))
+				{
+					$error = !empty($subscription['__error']) ? (string)$subscription['__error'] : 'subscription_create_failed';
+					echo wp_json_encode(array('error' => $error));
+					exit();
+				}
+
+				//260901.2145 The browser receives only the already-persisted PayPal subscription ID; PayPal's JS SDK handles buyer approval from that server-created resource.
+				echo wp_json_encode(array('subscription_id' => (string)$subscription['id']));
+				exit();
+			}
+
 			if($op === 'get_plan_id')
 			{
 				if((!isset($token['rr']) || (string)$token['rr'] === '') || strtoupper((string)$token['rr']) === 'BN')
@@ -514,6 +544,20 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					echo wp_json_encode(array('error' => 'missing_subscription_id'));
 					exit();
 				}
+
+				$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
+				if($gateway_checkout_id)
+				{
+					$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+					$expected_subscription_id = $gateway_checkout && !empty($gateway_checkout['gateway_ids']['subscription_id']) ? (string)$gateway_checkout['gateway_ids']['subscription_id'] : '';
+					//260901.2145 A coordinator-backed browser may confirm only the PayPal subscription that s2Member created and persisted for this logical checkout.
+					if(!$expected_subscription_id || !hash_equals($expected_subscription_id, $subscription_id))
+					{
+						echo wp_json_encode(array('error' => 'gateway_checkout_subscription_mismatch'));
+						exit();
+					}
+				}
+
 				$subscription_r = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_api_request('GET', '/v1/billing/subscriptions/'.rawurlencode($subscription_id));
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
