@@ -582,8 +582,9 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			foreach((array)$context as $key => $value)
 			{
 				$normalized_key = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '_', (string)$key), '_'));
-				//260831.0723 Never turn Gateway Checkout recovery into a credential vault; password metadata belongs in ordinary context if needed, not alongside a recoverable password value.
-				if($normalized_key !== 'password_generated' && preg_match('/(?:^|_)(?:password|pass|passwd|pwd)(?:[0-9]+|_[a-z0-9]+)?$/', $normalized_key))
+				//260901.0722 Never persist actual login credentials, while allowing unrelated site-defined profile fields such as `password_hint` in otherwise valid private recovery context.
+				$credential_keys = array('pass', 'pass1', 'pass2', 'passwd', 'password', 'password1', 'password2', 'pwd', 'user_pass', 'user_password', 'current_password', 'new_password', 'old_password', 'confirm_password', 'password_confirmation');
+				if(in_array($normalized_key, $credential_keys, TRUE))
 					return FALSE;
 				if(is_array($value))
 				{
