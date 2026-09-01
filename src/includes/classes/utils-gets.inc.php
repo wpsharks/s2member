@@ -220,9 +220,19 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			if(is_array($results = $wpdb->get_results("SELECT `".$wpdb->postmeta."`.`post_id`, `".$wpdb->postmeta."`.`meta_value`, `".$wpdb->posts."`.`post_type`".
-			                                          " FROM `".$wpdb->posts."`, `".$wpdb->postmeta."` WHERE `".$wpdb->posts."`.`ID` = `".$wpdb->postmeta."`.`post_id`".
-			                                          " AND `".$wpdb->postmeta."`.`meta_key` = 's2member_ccaps_req' AND `".$wpdb->postmeta."`.`meta_value` != ''")))
+			static $_results = array(), $_meta_changes = array();
+			$_cache_key = $wpdb->posts.'|'.$wpdb->postmeta;
+			$_changes = did_action('added_post_meta') + did_action('updated_post_meta') + did_action('deleted_post_meta');
+			if(!isset($_results[$_cache_key]) || !isset($_meta_changes[$_cache_key]) || $_meta_changes[$_cache_key] !== $_changes)
+			{
+				$_results[$_cache_key] = $wpdb->get_results("SELECT `".$wpdb->postmeta."`.`post_id`, `".$wpdb->postmeta."`.`meta_value`, `".$wpdb->posts."`.`post_type`".
+				                                              " FROM `".$wpdb->posts."`, `".$wpdb->postmeta."` WHERE `".$wpdb->posts."`.`ID` = `".$wpdb->postmeta."`.`post_id`".
+				                                              " AND `".$wpdb->postmeta."`.`meta_key` = 's2member_ccaps_req' AND `".$wpdb->postmeta."`.`meta_value` != ''");
+				$_meta_changes[$_cache_key] = $_changes;
+			}
+			$results = $_results[$_cache_key]; unset($_cache_key, $_changes); //260901 Request-local SQL cache.
+
+			if(is_array($results))
 			{
 				$bbpress_restrictions_enable = apply_filters('ws_plugin__s2member_bbpress_restrictions_enable', TRUE);
 				$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
