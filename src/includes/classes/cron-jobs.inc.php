@@ -46,6 +46,35 @@ if(!class_exists("c_ws_plugin__s2member_cron_jobs"))
 		}
 
 		/**
+		 * Conditionally schedules a single WP-Cron event.
+		 *
+		 * @package s2Member\Cron_Jobs
+		 * @since 260902
+		 *
+		 * @param string $hook WP-Cron hook name.
+		 * @param int $timestamp Unix timestamp. Defaults to now.
+		 * @param array $args Optional event arguments.
+		 *
+		 * @return bool True if the event already exists or was scheduled successfully.
+		 */
+		public static function maybe_schedule_single_event($hook, $timestamp = 0, $args = array())
+		{
+			$hook = (string)$hook;
+			$args = (array)$args;
+			$timestamp = (int)$timestamp;
+
+			if(!$hook)
+				return FALSE;
+
+			if(wp_next_scheduled($hook, $args))
+				return TRUE;
+
+			wp_schedule_single_event($timestamp > 0 ? $timestamp : time(), $hook, $args);
+
+			return (bool)wp_next_scheduled($hook, $args); //260902 Verify for older supported WordPress versions.
+		}
+
+		/**
 		 * Allows the Auto-EOT Sytem to be processed through a server-side Cron Job.
 		 *
 		 * @package s2Member\Cron_Jobs
