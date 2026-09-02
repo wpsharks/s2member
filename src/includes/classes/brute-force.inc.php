@@ -94,7 +94,8 @@ if(!class_exists('c_ws_plugin__s2member_brute_force'))
 				   && c_ws_plugin__s2member_pro_remote_ops::is_remote_op('auth_check_user')
 				) $ip = $GLOBALS['s2member_pro_remote_op_auth_check_user_ip'];
 
-				if((int)get_transient('s2m_ipr_'.md5('s2member_transient_failed_login_attempts_'.$ip)) > $max)
+				//260902.0444 The transient counts failures already completed; reaching the configured allowance means the next authentication must be blocked.
+				if((int)get_transient('s2m_ipr_'.md5('s2member_transient_failed_login_attempts_'.$ip)) >= $max)
 				{
 					$exp_secs = strtotime('+'.apply_filters('ws_plugin__s2member_track_failed_logins__exp_time', '30 minutes', get_defined_vars())) - time();
 					// If you add Filters to this value, you should use a string that is compatible with PHP's strtotime() function.
