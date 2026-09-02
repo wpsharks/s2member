@@ -70,6 +70,21 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 			(!is_array(get_option('ws_plugin__s2member_options'))) ? update_option('ws_plugin__s2member_options', array()) : NULL;
 			(!is_numeric(get_option('ws_plugin__s2member_configured'))) ? update_option('ws_plugin__s2member_configured', '0') : NULL;
 
+			//260902.0420 A Framework activation/update invalidates cached Pro update availability; the next admin request will refresh it in the background.
+			if($reactivation_reason === '' || $reactivation_reason === 'version')
+			{
+				$options = (array)get_option('ws_plugin__s2member_options');
+				if(isset($options['pro_latest_version']))
+				{
+					unset($options['pro_latest_version']);
+					$options = ws_plugin__s2member_configure_options_and_their_defaults($options);
+					update_option('ws_plugin__s2member_options', $options);
+					if(is_multisite() && is_main_site())
+						update_site_option('ws_plugin__s2member_options', $options);
+				}
+				unset($options);
+			}
+
 			//260809 Seed hashed Defuse key mappings on activation after installation or updates; migration is idempotent.
 			c_ws_plugin__s2member_utils_defuse::migrate_legacy_defuse_key_mappings();
 
