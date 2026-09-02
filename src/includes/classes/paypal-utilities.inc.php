@@ -1936,6 +1936,72 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
+				 * Recovers a coordinator-backed PayPal subscription ID/status from a verified webhook resource.
+				 *
+				 * @since 260902.0200
+				 *
+				 * @param string $invoice         PayPal custom_id/invoice carrying the Gateway Checkout ID.
+				 * @param string $subscription_id PayPal subscription ID.
+				 * @param string $status          PayPal subscription status, if known.
+				 *
+				 * @return array Recovery result with handled/ok/recovered/error details.
+				 */
+				public static function paypal_checkout_subscription_gateway_checkout_recover($invoice = '', $subscription_id = '', $status = '')
+					{
+						$invoice = trim((string)$invoice);
+						$subscription_id = trim((string)$subscription_id);
+						$status = strtoupper(trim((string)$status));
+						$gateway_checkout_id = (strpos($invoice, 's2mpf-') === 0) ? substr($invoice, strlen('s2mpf-')) : '';
+
+						if(!$subscription_id || !c_ws_plugin__s2member_gateway_checkouts::valid_id($gateway_checkout_id))
+							return array('handled' => false, 'ok' => false, 'recovered' => false, 'error' => 'not_coordinator_checkout');
+
+						$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+						if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
+							return array('handled' => false, 'ok' => false, 'recovered' => false, 'error' => 'not_coordinator_checkout');
+
+						$lock = c_ws_plugin__s2member_gateway_checkouts::processing_lock($gateway_checkout_id, 60);
+						if(!$lock)
+							return array('handled' => true, 'ok' => false, 'recovered' => false, 'error' => 'gateway_checkout_busy', 'gateway_checkout_id' => $gateway_checkout_id);
+
+						try
+						{
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
+								return array('handled' => true, 'ok' => false, 'recovered' => false, 'error' => 'gateway_checkout_invalid', 'gateway_checkout_id' => $gateway_checkout_id);
+
+							$existing_subscription_id = !empty($gateway_checkout['gateway_ids']['subscription_id']) ? (string)$gateway_checkout['gateway_ids']['subscription_id'] : '';
+							if($existing_subscription_id && !hash_equals($existing_subscription_id, $subscription_id))
+								return array('handled' => true, 'ok' => false, 'recovered' => false, 'error' => 'gateway_checkout_subscription_conflict', 'gateway_checkout_id' => $gateway_checkout_id, 'subscription_id' => $existing_subscription_id);
+
+							$gateway_ids = !empty($gateway_checkout['gateway_ids']) && is_array($gateway_checkout['gateway_ids']) ? $gateway_checkout['gateway_ids'] : array();
+							$gateway_ids['subscription_id'] = $subscription_id;
+							$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
+							unset($context['paypal_subscription_create_started_at'], $context['paypal_subscription_request_id']);
+
+							if(!$existing_subscription_id)
+							{
+								//260902.0200 Record webhook repair for future diagnostics without treating CREATED as payment/fulfillment.
+								$context['paypal_subscription_recovered_at'] = time();
+								$context['paypal_subscription_recovered_via'] = 'webhook';
+							}
+
+							$gateway_status = !empty($gateway_checkout['gateway_status']) ? strtoupper((string)$gateway_checkout['gateway_status']) : '';
+							if($status === 'ACTIVE' || ($status === 'APPROVED' && $gateway_status === 'APPROVAL_PENDING') || !$gateway_status || $gateway_status === 'CREATE_PENDING')
+								$gateway_status = $status ? $status : 'APPROVAL_PENDING';
+
+							if(!c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_ids' => $gateway_ids, 'gateway_status' => $gateway_status, 'context' => $context)))
+								return array('handled' => true, 'ok' => false, 'recovered' => false, 'error' => 'gateway_checkout_save_failed', 'gateway_checkout_id' => $gateway_checkout_id);
+
+							return array('handled' => true, 'ok' => true, 'recovered' => !$existing_subscription_id, 'error' => '', 'gateway_checkout_id' => $gateway_checkout_id, 'subscription_id' => $subscription_id, 'status' => $gateway_status);
+						}
+						finally
+						{
+							c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $lock);
+						}
+					}
+
+				/**
 				 * Creates a PayPal Checkout subscription server-side.
 				 *
 				 * Redirect-mode and coordinator-backed JS flows create here; legacy JS buttons may
@@ -2015,9 +2081,15 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
 								$create_started_at = !empty($context['paypal_subscription_create_started_at']) ? (int)$context['paypal_subscription_create_started_at'] : 0;
 
-								//260901.2145 PayPal retains create-subscription request IDs for 72 hours; after an unresolved attempt exceeds that window, fail closed instead of risking a second subscription.
 								if($create_started_at && $create_started_at <= time() - (3 * DAY_IN_SECONDS))
-									return array('__error' => 'gateway_checkout_recovery_window_expired');
+								{
+									//260902.0200 An unresolved server-created subscription could never reach buyer approval without its ID reaching the browser; after PayPal's 72-hour idempotency window, start a fresh approval-pending create instead of permanently blocking the checkout.
+									unset($context['paypal_subscription_create_started_at'], $context['paypal_subscription_request_id']);
+									$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => '', 'context' => $context));
+									if(!$gateway_checkout)
+										return array('__error' => 'gateway_checkout_save_failed');
+									$create_started_at = 0;
+								}
 
 								if(!$create_started_at)
 								{
@@ -2067,6 +2139,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								unset($context['paypal_subscription_create_started_at'], $context['paypal_subscription_request_id']);
 								c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => '', 'context' => $context));
 							}
+
+							//260902.0200 Preserve an ambiguous create as recoverable state so the browser can briefly wait for the independent CREATED webhook instead of repeatedly calling PayPal.
+							if($gateway_checkout_id && $ambiguous && !($code >= 200 && $code <= 299 && !empty($data['id'])))
+								return array('__error' => 'subscription_create_unresolved');
 
 							return $data;
 						}

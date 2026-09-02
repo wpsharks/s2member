@@ -227,9 +227,68 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				if($subscr_id)
 					$subscr_done_option = 's2m_ppco_subscr_done_'.md5($subscr_id); //260406 Match the checkout subscription-done option so webhook ACTIVATED/RE-ACTIVATED stays fallback-only.
 
-				//260401 Treat CREATED as informational only, and let ACTIVATED/RE-ACTIVATED act only as a fallback when checkout has not already handled this Subscription.
 				if($event_type === 'BILLING.SUBSCRIPTION.CREATED')
 				{
+					$invoice = !empty($resource['custom_id']) ? (string)$resource['custom_id'] : '';
+					if(!$invoice && $subscr_id)
+					{
+						$subscription_details = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_details($subscr_id);
+						if(!empty($subscription_details['__error']))
+						{
+							//260902.0224 A temporary details lookup failure must not consume CREATED; ask PayPal to retry so an ambiguous browser create can still be repaired off-session.
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'       => 'webhook',
+								'env_setting'=> $env_site,
+								'env_webhook'=> $env_webhook,
+								'event'      => 'subscription_created_details_failed',
+								'event_id'   => $event_id,
+								'subscr_id'  => $subscr_id,
+								'details'    => $subscription_details,
+							));
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							status_header(500);
+							exit();
+						}
+						if(!empty($subscription_details['custom_id']))
+							$invoice = (string)$subscription_details['custom_id'];
+					}
+
+					$status = !empty($resource['status']) ? strtoupper((string)$resource['status']) : 'APPROVAL_PENDING';
+					$recovery = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_gateway_checkout_recover($invoice, $subscr_id, $status);
+					if(!empty($recovery['handled']) && empty($recovery['ok']))
+					{
+						if(!empty($recovery['error']) && (string)$recovery['error'] === 'gateway_checkout_subscription_conflict')
+						{
+							//260902.0200 Never overwrite an already-authoritative subscription ID; a conflicting late CREATED event is diagnostic only and must not trigger fulfillment.
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'       => 'webhook',
+								'env_setting'=> $env_site,
+								'env_webhook'=> $env_webhook,
+								'event'      => 'subscription_created_conflict_ignored',
+								'event_id'   => $event_id,
+								'subscr_id'  => $subscr_id,
+								'invoice'    => $invoice,
+								'recovery'   => $recovery,
+							));
+						}
+						else
+						{
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'       => 'webhook',
+								'env_setting'=> $env_site,
+								'env_webhook'=> $env_webhook,
+								'event'      => 'subscription_created_recovery_failed',
+								'event_id'   => $event_id,
+								'subscr_id'  => $subscr_id,
+								'invoice'    => $invoice,
+								'recovery'   => $recovery,
+							));
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							status_header(500);
+							exit();
+						}
+					}
+
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'       => 'webhook',
 						'env_setting'=> $env_site,
@@ -238,9 +297,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						'event_id'   => $event_id,
 						'event_type' => $event_type,
 						'subscr_id'  => $subscr_id,
+						'invoice'    => $invoice,
+						'recovery'   => $recovery,
 					));
 
-					//260406 Mark the webhook event done and release its lock for valid terminal events.
+					//260902.0200 CREATED repairs coordinator identity only; it remains unpaid/unfulfilled until PayPal activates the subscription.
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
 					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
 
@@ -300,6 +361,33 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 							status_header(500);
 							exit();
 						}
+
+					$activation_recovery = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_gateway_checkout_recover((string)$paypal['invoice'], $subscr_id, 'ACTIVE');
+					if(!empty($activation_recovery['handled']) && empty($activation_recovery['ok']))
+					{
+						if(!empty($activation_recovery['error']) && (string)$activation_recovery['error'] === 'gateway_checkout_subscription_conflict')
+						{
+							//260902.0200 A conflicting coordinator subscription must never be fulfilled as the expected checkout; leave the authoritative ID untouched for administrator diagnostics.
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+								'ppco'       => 'webhook',
+								'env_setting'=> $env_site,
+								'env_webhook'=> $env_webhook,
+								'event'      => 'subscription_activation_conflict_ignored',
+								'event_id'   => $event_id,
+								'subscr_id'  => $subscr_id,
+								'invoice'    => (string)$paypal['invoice'],
+								'recovery'   => $activation_recovery,
+							));
+							c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							status_header(200);
+							exit();
+						}
+
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						status_header(500);
+						exit();
+					}
 
 					$paypal['txn_type']       = 'subscr_signup'; //260401 Keep webhook activation as a fallback to the legacy signup handler only when checkout did not already handle this Subscription.
 					$paypal['payment_status'] = 'Completed';

@@ -493,12 +493,40 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				if(empty($subscription['id']))
 				{
 					$error = !empty($subscription['__error']) ? (string)$subscription['__error'] : 'subscription_create_failed';
-					echo wp_json_encode(array('error' => $error));
+					$recoverable = in_array($error, array('subscription_create_unresolved', 'gateway_checkout_busy'), TRUE);
+					//260902.0200 Let coordinator-backed browser flows briefly wait for webhook repair only when creation is genuinely unresolved/in progress; deterministic failures remain immediate errors.
+					echo wp_json_encode(array('error' => $error, 'recoverable' => $recoverable));
 					exit();
 				}
 
 				//260901.2145 The browser receives only the already-persisted PayPal subscription ID; PayPal's JS SDK handles buyer approval from that server-created resource.
 				echo wp_json_encode(array('subscription_id' => (string)$subscription['id']));
+				exit();
+			}
+
+			if($op === 'get_subscription_id')
+			{
+				if((!isset($token['rr']) || (string)$token['rr'] === '') || strtoupper((string)$token['rr']) === 'BN')
+				{
+					echo wp_json_encode(array('error' => 'not_subscription'));
+					exit();
+				}
+
+				$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
+				$gateway_checkout = $gateway_checkout_id ? c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id) : FALSE;
+				if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
+				{
+					echo wp_json_encode(array('error' => 'gateway_checkout_invalid'));
+					exit();
+				}
+
+				$subscription_id = !empty($gateway_checkout['gateway_ids']['subscription_id']) ? (string)$gateway_checkout['gateway_ids']['subscription_id'] : '';
+				//260902.0200 This poll reads only local coordinator state; PayPal is not called repeatedly while a CREATED webhook has a chance to repair an ambiguous create response.
+				echo wp_json_encode(array(
+					'subscription_id' => $subscription_id,
+					'pending'         => !$subscription_id,
+					'status'          => !empty($gateway_checkout['gateway_status']) ? (string)$gateway_checkout['gateway_status'] : '',
+				));
 				exit();
 			}
 
@@ -613,11 +641,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						$allow_expired_single_cycle = true;
 				}
 
-				if($status && !in_array($status, array('ACTIVE', 'APPROVED', 'APPROVAL_PENDING'), true) && !$allow_expired_single_cycle)
+				if(!$status)
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
-						'env_setting' => $env_setting,
+						'env_setting'     => $env_setting,
 						'event'           => 'subscription_status_invalid',
 						'subscription_id' => $subscription_id,
 						'status'          => $status,
@@ -652,6 +680,45 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'actual'          => $custom_id,
 					));
 					echo wp_json_encode(array('error' => 'subscription_custom_id_mismatch'));
+					exit();
+				}
+
+				if($gateway_checkout_id)
+				{
+					if(in_array($status, array('APPROVAL_PENDING', 'APPROVED'), TRUE))
+					{
+						//260902.0200 Coordinator-backed Pro-Forms do not treat PayPal creation/approval-pending states as paid entitlement; the browser waits briefly for ACTIVE and the activation webhook remains an off-session fallback.
+						c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => $status));
+						echo wp_json_encode(array('pending_activation' => TRUE, 'subscription_id' => $subscription_id, 'status' => $status));
+						exit();
+					}
+					if($status !== 'ACTIVE' && !$allow_expired_single_cycle)
+					{
+						c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+							'ppco'            => 'checkout',
+							'env_setting'     => $env_setting,
+							'event'           => 'subscription_status_invalid',
+							'subscription_id' => $subscription_id,
+							'status'          => $status,
+						));
+
+						echo wp_json_encode(array('error' => 'subscription_status_invalid'));
+						exit();
+					}
+					c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => $status));
+				}
+				else if(!in_array($status, array('ACTIVE', 'APPROVED', 'APPROVAL_PENDING'), TRUE) && !$allow_expired_single_cycle)
+				{
+					//260902.0200 Preserve existing non-coordinator PayPal Checkout button behavior until those flows migrate onto Gateway Checkout and gain the same activation polling.
+					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
+						'ppco'            => 'checkout',
+						'env_setting'     => $env_setting,
+						'event'           => 'subscription_status_invalid',
+						'subscription_id' => $subscription_id,
+						'status'          => $status,
+					));
+
+					echo wp_json_encode(array('error' => 'subscription_status_invalid'));
 					exit();
 				}
 
