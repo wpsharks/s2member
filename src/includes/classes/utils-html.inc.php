@@ -45,6 +45,8 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 				public static function doctype_html_head ($doctype_html_head_title = FALSE, $doctype_html_head_action = FALSE)
 					{
 						$s2o = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["s2o_url"]; // Loads s2Member only.
+						$static_css = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css'])) ? c_ws_plugin__s2member_utils_assets::ensure_static_asset('css') : array();
+						$static_js = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && function_exists('wp_add_inline_script')) ? c_ws_plugin__s2member_utils_assets::ensure_static_asset('js') : array();
 
 						ob_start (); // Start output buffering here so we can "return" the output from this utility.
 
@@ -55,10 +57,21 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 
 						echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' . "\n";
 
-						echo '<link href="' . esc_attr ($s2o . "?ws_plugin__s2member_css=1&amp;qcABC=1&amp;ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ())) . '" type="text/css" rel="stylesheet" media="all" />' . "\n";
+						if(!empty($static_css['ok']) && !empty($static_css['url']))
+							echo '<link href="'.esc_attr($static_css['url']).'" type="text/css" rel="stylesheet" media="all" />'."\n";
+						else
+							echo '<link href="' . esc_attr ($s2o . "?ws_plugin__s2member_css=1&amp;qcABC=1&amp;ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ())) . '" type="text/css" rel="stylesheet" media="all" />' . "\n";
 
 						echo '<script type="text/javascript" src="' . esc_attr (site_url ("/wp-includes/js/jquery/jquery.js?ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ()))) . '"></script>' . "\n";
-						echo '<script type="text/javascript" src="' . esc_attr ($s2o . "?ws_plugin__s2member_js_w_globals=" . urlencode (WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5) . "&amp;qcABC=1&amp;ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ())) . '"></script>' . "\n";
+
+						if(!empty($static_js['ok']) && !empty($static_js['url']))
+						{
+							//260903.0453 This standalone frontend document cannot use WordPress's enqueue printer; emit the same current-user-only globals immediately before the generated script.
+							echo '<script type="text/javascript">'.c_ws_plugin__s2member_css_js_in::current_user_js_globals(TRUE).'</script>'."\n";
+							echo '<script type="text/javascript" src="'.esc_attr($static_js['url']).'"></script>'."\n";
+						}
+						else
+							echo '<script type="text/javascript" src="' . esc_attr ($s2o . "?ws_plugin__s2member_js_w_globals=" . urlencode (WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5) . "&amp;qcABC=1&amp;ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ())) . '"></script>' . "\n";
 
 						if ($doctype_html_head_title) // Add <title></title> tag?
 							echo '<title>' . $doctype_html_head_title . '</title>' . "\n";

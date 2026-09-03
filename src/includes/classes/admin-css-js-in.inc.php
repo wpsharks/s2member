@@ -57,7 +57,7 @@ if(!class_exists("c_ws_plugin__s2member_admin_css_js_in"))
 				$u = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"];
 				$i = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/src/images";
 
-				ob_start("c_ws_plugin__s2member_utils_css::compress_css");
+				ob_start("c_ws_plugin__s2member_utils_assets::compress_css");
 
 				include_once dirname(dirname(__FILE__))."/menu-pages/menu-pages.css";
 
