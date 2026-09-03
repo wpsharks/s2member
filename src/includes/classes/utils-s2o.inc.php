@@ -74,19 +74,23 @@ if(!class_exists('c_ws_plugin__s2member_utils_s2o'))
 				{
 					if(($_wp_settings = str_replace('__FILE__', "'".str_replace("'", "'", $wp_settings)."'", $_wp_settings))) // Eval compatible. Hard-code the ``__FILE__`` location here.
 					{
-						$mu_plugins_section = '/['."\r\n\t".'\s]+foreach\s*\(\s*wp_get_mu_plugins\s*\(\s*\)\s*as\s*\$mu_plugin\s*\)['."\r\n\t".'\s]*\{?['."\r\n\t".'\s]*include_once\s*\(\s*\$mu_plugin\s*\)\s*;['."\r\n\t".'\s]*\}?['."\r\n\t".'\s]*unset\s*\(\s*\$mu_plugin\s*\)\s*;/';
+						//260903.2216 Match stable loader boundaries instead of exact loop bodies; WordPress 5.1+ adds per-plugin hooks and later releases add more statements inside these loops.
+						$mu_plugins_section = '/\s+foreach\s*\(\s*wp_get_mu_plugins\s*\(\s*\)\s*as\s*\$mu_plugin\s*\)\s*\{.*?\}\s*unset\s*\(\s*\$mu_plugin(?:\s*,[^)]*)?\s*\)\s*;/s';
 						$mu_plugins_replace = "\n\n".c_ws_plugin__s2member_utils_s2o::esc_ds(trim(c_ws_plugin__s2member_utils_s2o::evl(file_get_contents(dirname(dirname(__FILE__)).'/templates/cfg-files/s2o-mu-plugins.php'))))."\n";
 						if(($_wp_settings = preg_replace($mu_plugins_section, $mu_plugins_replace, $_wp_settings, 1, $mu_plugins_replaced)) && $mu_plugins_replaced)
 						{
-							$nw_plugins_section = '/['."\r\n\t".'\s]+foreach\s*\(\s*wp_get_active_network_plugins\s*\(\s*\)\s*as\s*\$network_plugin\s*\)['."\r\n\t".'\s]*\{?['."\r\n\t".'\s]*wp_register_plugin_realpath\s*\(\s*\$network_plugin\s*\)\s*;['."\r\n\t".'\s]*include_once\s*\(\s*\$network_plugin\s*\)\s*;['."\r\n\t".'\s]*\}?['."\r\n\t".'\s]*unset\s*\(\s*\$network_plugin\s*\)\s*;/';
+							//260903.2216 Keep the network-plugin replacement tolerant of WordPress statements added between the loader's stable foreach/unset boundaries.
+							$nw_plugins_section = '/\s+foreach\s*\(\s*wp_get_active_network_plugins\s*\(\s*\)\s*as\s*\$network_plugin\s*\)\s*\{.*?\}\s*unset\s*\(\s*\$network_plugin(?:\s*,[^)]*)?\s*\)\s*;/s';
 							$nw_plugins_replace = "\n\n".c_ws_plugin__s2member_utils_s2o::esc_ds(trim(c_ws_plugin__s2member_utils_s2o::evl(file_get_contents(dirname(dirname(__FILE__)).'/templates/cfg-files/s2o-nw-plugins.php'))))."\n";
 							if(($_wp_settings = preg_replace($nw_plugins_section, $nw_plugins_replace, $_wp_settings, 1, $nw_plugins_replaced)) && $nw_plugins_replaced)
 							{
-								$st_plugins_section = '/['."\r\n\t".'\s]+foreach\s*\(\s*wp_get_active_and_valid_plugins\s*\(\s*\)\s*as\s*\$plugin\s*\)['."\r\n\t".'\s]*\{?['."\r\n\t".'\s]*wp_register_plugin_realpath\s*\(\s*\$plugin\s*\)\s*;['."\r\n\t".'\s]*include_once\s*\(\s*\$plugin\s*\)\s*;['."\r\n\t".'\s]*\}?['."\r\n\t".'\s ]*unset\s*\(\s*\$plugin\s*\)\s*;/';
+								//260903.2216 Keep the active-plugin replacement tolerant of metadata, translation, and plugin-loaded bookkeeping added by newer WordPress releases.
+								$st_plugins_section = '/\s+foreach\s*\(\s*wp_get_active_and_valid_plugins\s*\(\s*\)\s*as\s*\$plugin\s*\)\s*\{.*?\}\s*unset\s*\(\s*\$plugin(?:\s*,[^)]*)?\s*\)\s*;/s';
 								$st_plugins_replace = "\n\n".c_ws_plugin__s2member_utils_s2o::esc_ds(trim(c_ws_plugin__s2member_utils_s2o::evl(file_get_contents(dirname(dirname(__FILE__)).'/templates/cfg-files/s2o-st-plugins.php'))))."\n";
 								if(($_wp_settings = preg_replace($st_plugins_section, $st_plugins_replace, $_wp_settings, 1, $st_plugins_replaced)) && $st_plugins_replaced)
 								{
-									$th_funcs_section = '/['."\r\n\t".'\s]+if\s*\(\s*\!\s*defined\s*\(\s*[\'"]WP_INSTALLING[\'"]\s*\)\s*\|\|\s*[\'"]wp\-activate\.php[\'"]\s*\=\=\=\s*\$pagenow\s*\)['."\r\n\t".'\s]*\{['."\r\n\t".'\s]*if\s*\(\s*TEMPLATEPATH\s*\!\=\=\s*STYLESHEETPATH\s*&&\s*file_exists\s*\(\s*STYLESHEETPATH\s*\.\s*[\'"]\/functions\.php[\'"]\s*\)\s*\)['."\r\n\t".'\s]*\{?['."\r\n\t".'\s]*include\s*\(\s*STYLESHEETPATH\s*\.\s*[\'"]\/functions\.php[\'"]\s*\);['."\r\n\t".'\s]*\}?['."\r\n\t".'\s]*if\s*\(\s*file_exists\s*\(\s*TEMPLATEPATH\s*\.\s*[\'"]\/functions\.php[\'"]\s*\)\s*\)['."\r\n\t".'\s]*\{?['."\r\n\t".'\s]*include\s*\(\s*TEMPLATEPATH\s*\.\s*[\'"]\/functions\.php[\'"]\s*\);['."\r\n\t".'\s]*\}?['."\r\n\t".'\s]*\}/';
+									//260903.2302 Support all declared WordPress 4.2+ theme-loader forms: WP_INSTALLING through 4.3, wp_installing() in 4.4–5.0, and wp_get_active_and_valid_themes() from 5.1 onward.
+									$th_funcs_section = '/(?:\s+if\s*\(\s*!\s*(?:defined\s*\(\s*[\'"]WP_INSTALLING[\'"]\s*\)|wp_installing\s*\(\s*\))\s*\|\|\s*[\'"]wp\-activate\.php[\'"]\s*\=\=\=\s*\$pagenow\s*\)\s*\{.*?\}\s*(?=\/\*\*)|\s+foreach\s*\(\s*wp_get_active_and_valid_themes\s*\(\s*\)\s*as\s*\$theme\s*\)\s*\{.*?\}\s*unset\s*\(\s*\$theme(?:\s*,[^)]*)?\s*\)\s*;)/s';
 									$th_funcs_replace = "\n\n".c_ws_plugin__s2member_utils_s2o::esc_ds(trim(c_ws_plugin__s2member_utils_s2o::evl(file_get_contents(dirname(dirname(__FILE__)).'/templates/cfg-files/s2o-th-funcs.php'))))."\n";
 									if(($_wp_settings = preg_replace($th_funcs_section, $th_funcs_replace, $_wp_settings, 1, $th_funcs_replaced)) && $th_funcs_replaced)
 									{
