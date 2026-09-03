@@ -102,69 +102,140 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
-		 * Returns the signed build timestamp for one generated frontend asset type.
+		 * Returns active generated frontend asset IDs for one type/component.
 		 *
-		 * Positive values are current. Negative values preserve the previous timestamp while marking that asset type stale.
-		 * CSS and JS intentionally have independent generations so a JS-only change does not invalidate browser-cached CSS, and vice versa.
+		 * Framework and Pro files stay separate by default. Combined mode reuses the Framework ID because that file becomes the combined representation.
 		 *
 		 * @package s2Member\Utilities
-		 * @since 260903.0525
+		 * @since 260903.1918
 		 *
-		 * @param string $type `css` or `js`.
-		 * @return int Signed build timestamp.
+		 * @param string $type      `css` or `js`.
+		 * @param string $component `all`, `framework`, or `pro`.
+		 * @return array Logical generated filenames.
 		 */
-		public static function static_asset_build($type = '')
+		public static function static_asset_ids($type = '', $component = 'all')
 		{
 			$type = strtolower((string)$type);
-			$builds = get_option('ws_plugin__s2member_static_asset_builds', array());
-			return (in_array($type, array('css', 'js'), TRUE) && is_array($builds) && isset($builds[$type])) ? (int)$builds[$type] : 0;
+			$component = strtolower((string)$component);
+			if(!in_array($type, array('css', 'js'), TRUE) || !in_array($component, array('all', 'framework', 'pro'), TRUE))
+				return array();
+
+			$framework = 's2member.'.$type;
+			$pro = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_assets_combine'])) ? $framework : 's2member-pro.'.$type;
+			if($component === 'framework')
+				return array($framework);
+			if($component === 'pro')
+				return array($pro);
+
+			$ids = array($framework);
+			if((defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') || isset($GLOBALS['WS_PLUGIN__']['s2member_pro'])) && $pro !== $framework)
+				$ids[] = $pro;
+			return $ids;
 		}
 
 		/**
-		 * Updates the signed build timestamp for one generated frontend asset type.
+		 * Returns the signed build timestamp for one generated frontend asset file.
+		 *
+		 * Positive values are current. Negative values preserve the previous timestamp while marking that exact file stale.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260903.0525
 		 *
-		 * @param string $type  `css` or `js`.
+		 * @param string $id Logical generated filename, e.g. `s2member.js` or `s2member-pro.css`.
+		 * @return int Signed build timestamp.
+		 */
+		public static function static_asset_build($id = '')
+		{
+			$id = strtolower((string)$id);
+			if(in_array($id, array('css', 'js'), TRUE))
+				$id = 's2member.'.$id;
+			$builds = get_option('ws_plugin__s2member_static_asset_builds', array());
+			return (in_array($id, array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js'), TRUE) && is_array($builds) && isset($builds[$id])) ? (int)$builds[$id] : 0;
+		}
+
+		/**
+		 * Updates the signed build timestamp for one generated frontend asset file.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260903.0525
+		 *
+		 * @param string $id    Logical generated filename.
 		 * @param int    $build Signed build timestamp.
 		 * @return null
 		 */
-		protected static function set_static_asset_build($type = '', $build = 0)
+		protected static function set_static_asset_build($id = '', $build = 0)
 		{
+			$id = strtolower((string)$id);
+			if(!in_array($id, array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js'), TRUE))
+				return;
 			$builds = get_option('ws_plugin__s2member_static_asset_builds', array());
 			$builds = is_array($builds) ? $builds : array();
-			$builds[(string)$type] = (int)$build;
+			//260903.1918 Build state is keyed by the actual logical generated filename; old type-only beta keys are discarded on the next successful state write.
+			$builds = array_intersect_key($builds, array_flip(array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js')));
+			$builds[$id] = (int)$build;
 			update_option('ws_plugin__s2member_static_asset_builds', $builds);
-			unset(self::$static_asset_cache[(string)$type]);
+			unset(self::$static_asset_cache[$id]);
 			self::$static_assets_health_cache = NULL;
 			delete_option('ws_plugin__s2member_static_asset_health');
 			return;
 		}
 
 		/**
-		 * Invalidates selected generated frontend asset types.
+		 * Clears generated frontend asset build state when the active file representation changes.
 		 *
-		 * Existing files remain available for already-cached HTML. Current pages stop referencing the stale generation until a replacement build succeeds.
+		 * Existing timestamped files remain on disk for already-cached HTML; fresh requests generate only the newly active representation.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260903.1918
+		 *
+		 * @return null
+		 */
+		protected static function reset_static_asset_builds()
+		{
+			delete_option('ws_plugin__s2member_static_asset_builds');
+			delete_option('ws_plugin__s2member_static_asset_health');
+			self::$static_asset_cache = array();
+			self::$static_assets_health_cache = NULL;
+			foreach(array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js') as $id)
+				delete_transient('ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id));
+			return;
+		}
+
+		/**
+		 * Invalidates selected generated frontend assets.
+		 *
+		 * Selectors may be `css`, `js`, `framework_css`, `framework_js`, `pro_css`, `pro_js`, or exact logical generated filenames.
+		 * Existing files remain available for already-cached HTML. Current pages stop referencing a stale generation until its replacement succeeds.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260903.0437
 		 *
-		 * @param array|string $types `css`, `js`, or an array containing either/both.
+		 * @param array|string $assets Asset selectors.
 		 * @return null
 		 */
-		public static function invalidate_static_assets($types = array('css', 'js'))
+		public static function invalidate_static_assets($assets = array('css', 'js'))
 		{
-			$types = is_array($types) ? $types : array($types);
-			foreach(array_unique($types) as $type)
+			$assets = is_array($assets) ? $assets : array($assets);
+			$ids = array();
+			foreach($assets as $asset)
 			{
-				$type = strtolower((string)$type);
-				if(!in_array($type, array('css', 'js'), TRUE))
-					continue;
-				$build = self::static_asset_build($type);
-				//260903.0525 Preserve the previous timestamp while marking only the affected asset type stale; the replacement always receives a newer URL.
-				self::set_static_asset_build($type, ($build) ? -abs($build) : -time());
-				delete_transient('ws_plugin__s2member_static_asset_failure_'.$type);
+				$asset = strtolower((string)$asset);
+				if(in_array($asset, array('css', 'js'), TRUE))
+					$ids = array_merge($ids, self::static_asset_ids($asset, 'all'));
+				else if(preg_match('/^(framework|pro)_(css|js)$/', $asset, $match))
+					$ids = array_merge($ids, self::static_asset_ids($match[2], $match[1]));
+				else if(in_array($asset, array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js'), TRUE))
+					$ids[] = $asset;
+			}
+			foreach(array_unique($ids) as $id)
+			{
+				$build = self::static_asset_build($id);
+				//260903.1918 Preserve an existing file's timestamp while marking only that file stale; never create build-state entries for files that have not yet been generated.
+				if($build)
+					self::set_static_asset_build($id, -abs($build));
+				else
+					unset(self::$static_asset_cache[$id]);
+				delete_transient('ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id));
 			}
 			return;
 		}
@@ -189,29 +260,34 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			{
 				if(!is_array($old_value) || !is_array($value))
 					return;
-
 				$old = (array)$old_value;
 				$new = (array)$value;
+				if((string)(isset($old['static_assets_combine']) ? $old['static_assets_combine'] : '0') !== (string)(isset($new['static_assets_combine']) ? $new['static_assets_combine'] : '0'))
+				{
+					//260903.1918 A combine-mode change changes what the s2member.* filenames represent; discard all build state so the new 2-file/4-file representation starts with fresh timestamps.
+					self::reset_static_asset_builds();
+					return;
+				}
+
 				$keys = array(
-					'css' => array('static_css', 'static_css_minify', 'pro_gateways_enabled'),
-					'js'  => array(
-						'static_js', 'static_js_minify', 'custom_reg_force_personal_emails', 'custom_reg_password_min_length', 'custom_reg_password_min_strength',
+					'css' => array('static_css', 'static_css_minify'),
+					'js' => array('static_js', 'static_js_minify'),
+					'framework_js' => array('custom_reg_force_personal_emails', 'custom_reg_password_min_length', 'custom_reg_password_min_strength'),
+					'pro_css' => array('pro_gateways_enabled'),
+					'pro_js' => array(
 						'pro_gateways_enabled', 'pro_stripe_api_publishable_key', 'pro_stripe_api_image', 'pro_stripe_api_allow_remember_me',
 						'paypal_checkout_enable', 'paypal_checkout_sandbox', 'paypal_checkout_client_id', 'paypal_checkout_sandbox_client_id', 'sec_encryption_key',
 					),
 				);
 				$keys = (array)apply_filters('ws_plugin__s2member_static_asset_option_keys', $keys, get_defined_vars());
 				$invalidate = array();
-
-				foreach(array('css', 'js') as $type)
-					foreach((array)(isset($keys[$type]) ? $keys[$type] : array()) as $key)
+				foreach($keys as $selector => $option_keys)
+					foreach((array)$option_keys as $key)
 						if((isset($old[$key]) || isset($new[$key])) && serialize(isset($old[$key]) ? $old[$key] : NULL) !== serialize(isset($new[$key]) ? $new[$key] : NULL))
 						{
-							$invalidate[] = $type;
+							$invalidate[] = $selector;
 							break;
 						}
-
-				//260903.1431 WordPress supplies the exact persisted old/new option arrays here, avoiding dependence on request-local s2Member globals during the menu-page save lifecycle.
 				if($invalidate)
 					self::invalidate_static_assets($invalidate);
 				return;
@@ -235,9 +311,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		{
 			$plugin = (string)$plugin;
 			if($plugin === 's2member-pro/s2member-pro.php')
-				self::invalidate_static_assets(array('css', 'js'));
+				self::reset_static_asset_builds();
 			else if($plugin === 'buddypress/bp-loader.php')
-				self::invalidate_static_assets('js');
+				self::invalidate_static_assets('framework_js');
 			return;
 		}
 
@@ -270,13 +346,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$plugins = array_merge($plugins, $options['plugins']);
 			foreach(array_unique($plugins) as $plugin)
 			{
-				if($plugin === 's2member/s2member.php' || $plugin === 's2member-pro/s2member-pro.php')
-				{
-					self::invalidate_static_assets(array('css', 'js'));
-					return;
-				}
-				if($plugin === 'buddypress/bp-loader.php')
-					self::invalidate_static_assets('js');
+				if($plugin === 's2member/s2member.php')
+					self::invalidate_static_assets(array('framework_css', 'framework_js'));
+				else if($plugin === 's2member-pro/s2member-pro.php')
+					self::invalidate_static_assets(array('pro_css', 'pro_js'));
+				else if($plugin === 'buddypress/bp-loader.php')
+					self::invalidate_static_assets('framework_js');
 			}
 			return;
 		}
@@ -289,36 +364,43 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 * @package s2Member\Utilities
 		 * @since 260903.0525
 		 *
-		 * @param string $type `css` or `js`.
+		 * @param string $id    Logical generated filename.
 		 * @param bool   $force Force a new build timestamp immediately.
 		 * @return array Result with `ok`, `url`, `build`, and `error` keys.
 		 */
-		public static function ensure_static_asset($type = '', $force = FALSE)
+		public static function ensure_static_asset($id = '', $force = FALSE)
 		{
-			$type = strtolower((string)$type);
-			if(!in_array($type, array('css', 'js'), TRUE))
-				return array('ok' => FALSE, 'url' => '', 'build' => 0, 'error' => 'Invalid static asset type');
-			if(!$force && isset(self::$static_asset_cache[$type]))
-				return self::$static_asset_cache[$type];
+			$id = strtolower((string)$id);
+			if(in_array($id, array('css', 'js'), TRUE))
+				$id = 's2member.'.$id;
+			if(!in_array($id, array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js'), TRUE))
+				return array('ok' => FALSE, 'url' => '', 'build' => 0, 'error' => 'Invalid static asset ID');
+			$type = substr(strrchr($id, '.'), 1);
+			if(!in_array($id, self::static_asset_ids($type, 'all'), TRUE))
+				return array('ok' => FALSE, 'url' => '', 'build' => 0, 'error' => 'Static asset is not active in the current delivery mode');
+			if(!$force && isset(self::$static_asset_cache[$id]))
+				return self::$static_asset_cache[$id];
 
 			//260903.0544 Normal requests only check whether current hooks/configuration permit static delivery; source assembly and filesystem work wait until a build is actually needed.
-			$compatibility = self::static_asset_definition($type, FALSE);
+			$compatibility = self::static_asset_definition($id, FALSE);
 			if(empty($compatibility['ok']))
-				return self::$static_asset_cache[$type] = array('ok' => FALSE, 'url' => '', 'build' => abs(self::static_asset_build($type)), 'error' => (string)$compatibility['error']);
+				return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => abs(self::static_asset_build($id)), 'error' => (string)$compatibility['error']);
 
-			$state = self::static_asset_build($type);
+			$state = self::static_asset_build($id);
 			$dirty = $state < 0;
 			$active_build = abs($state);
+			$base = substr($id, 0, -strlen('.'.$type));
 			if(!$force && !$dirty && $active_build)
 			{
 				$location = self::static_assets_location(FALSE);
 				if(empty($location['ok']))
-					return self::$static_asset_cache[$type] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => $location['error']);
-				return self::$static_asset_cache[$type] = array('ok' => TRUE, 'url' => $location['url'].'/s2member-'.$active_build.'.'.$type, 'build' => $active_build, 'error' => '');
+					return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => $location['error']);
+				return self::$static_asset_cache[$id] = array('ok' => TRUE, 'url' => $location['url'].'/'.$base.'-'.$active_build.'.'.$type, 'build' => $active_build, 'error' => '');
 			}
 
-			if(!$force && $dirty && ($failure = get_transient('ws_plugin__s2member_static_asset_failure_'.$type)))
-				return self::$static_asset_cache[$type] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$failure);
+			$failure_key = 'ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id);
+			if(!$force && $dirty && ($failure = get_transient($failure_key)))
+				return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$failure);
 
 			$switched_locale = FALSE;
 			if($type === 'js' && function_exists('switch_to_locale'))
@@ -326,32 +408,63 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$site_locale = (string)get_option('WPLANG');
 				$switched_locale = switch_to_locale(($site_locale) ? $site_locale : 'en_US');
 			}
-			$definition = self::static_asset_definition($type, TRUE);
+			$definition = self::static_asset_definition($id, TRUE);
 			if(empty($definition['ok']))
 			{
 				if($switched_locale && function_exists('restore_previous_locale'))
 					restore_previous_locale();
-				return self::$static_asset_cache[$type] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$definition['error']);
+				return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$definition['error']);
 			}
 
 			$build = max(time(), $active_build + 1);
-			$result = self::build_static_asset('s2member', $build, $type, $definition['sources'], !empty($definition['minify']));
+			$result = self::build_static_asset($base, $build, $type, $definition['sources'], !empty($definition['minify']));
 			if($switched_locale && function_exists('restore_previous_locale'))
 				restore_previous_locale();
 			if(!empty($result['ok']))
 			{
-				self::set_static_asset_build($type, $build);
-				delete_transient('ws_plugin__s2member_static_asset_failure_'.$type);
-				return self::$static_asset_cache[$type] = array('ok' => TRUE, 'url' => $result['url'], 'build' => $build, 'error' => '');
+				self::set_static_asset_build($id, $build);
+				delete_transient($failure_key);
+				return self::$static_asset_cache[$id] = array('ok' => TRUE, 'url' => $result['url'], 'build' => $build, 'error' => '');
 			}
-			set_transient('ws_plugin__s2member_static_asset_failure_'.$type, (string)$result['error'], 5 * MINUTE_IN_SECONDS);
-			return self::$static_asset_cache[$type] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => $result['error']);
+			set_transient($failure_key, (string)$result['error'], 5 * MINUTE_IN_SECONDS);
+			return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => $result['error']);
+		}
+
+		/**
+		 * Returns all active generated frontend assets for one type.
+		 *
+		 * If any active file cannot be generated safely, callers fall back to the legacy dynamic asset for the entire type rather than mixing static and dynamic representations.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260903.1918
+		 *
+		 * @param string $type  `css` or `js`.
+		 * @param bool   $force Force fresh timestamps for every active file of this type.
+		 * @return array Aggregate result with individual assets keyed by logical filename.
+		 */
+		public static function ensure_static_assets($type = '', $force = FALSE)
+		{
+			$type = strtolower((string)$type);
+			if(!in_array($type, array('css', 'js'), TRUE))
+				return array('ok' => FALSE, 'assets' => array(), 'error' => 'Invalid static asset type');
+			$option = 'static_'.$type;
+			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]))
+				return array('ok' => FALSE, 'assets' => array(), 'error' => 'Static '.strtoupper($type).' Delivery is disabled');
+
+			$assets = array();
+			foreach(self::static_asset_ids($type, 'all') as $id)
+			{
+				$assets[$id] = self::ensure_static_asset($id, $force);
+				if(empty($assets[$id]['ok']))
+					return array('ok' => FALSE, 'assets' => $assets, 'error' => (string)$assets[$id]['error']);
+			}
+			return array('ok' => (bool)$assets, 'assets' => $assets, 'error' => '');
 		}
 
 		/**
 		 * Refreshes all currently enabled static frontend asset types immediately.
 		 *
-		 * CSS and JS are independent generations. A failure in one type does not invalidate or unnecessarily refresh the other type.
+		 * CSS and JS remain independent; within each type only files active in the current separate/combined representation are rebuilt.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260903.0525
@@ -364,9 +477,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			foreach(array('css' => 'static_css', 'js' => 'static_js') as $type => $option)
 				if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]))
 				{
-					unset(self::$static_asset_cache[$type]);
-					delete_transient('ws_plugin__s2member_static_asset_failure_'.$type);
-					$results[$type] = self::ensure_static_asset($type, TRUE);
+					foreach(self::static_asset_ids($type, 'all') as $id)
+					{
+						unset(self::$static_asset_cache[$id]);
+						delete_transient('ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id));
+					}
+					$results[$type] = self::ensure_static_assets($type, TRUE);
 				}
 			return $results;
 		}
@@ -398,7 +514,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 
 			if(!$errors)
 				wp_send_json_success(array('message' => 'Static assets refreshed successfully ('.implode(' + ', $success).'). New timestamped files are active now.'));
-			$message = (($success) ? 'Refreshed '.implode(' + ', $success).'. ' : '').'Could not refresh '.implode('; ', $errors).'. Failed types continue with their previous valid file when still current, or legacy dynamic assets when stale.';
+			$message = (($success) ? 'Refreshed '.implode(' + ', $success).'. ' : '').'Could not refresh '.implode('; ', $errors).'. Failed types continue with their previous valid files when still current, or legacy dynamic assets when stale.';
 			wp_send_json_error(array('message' => $message), 500);
 		}
 
@@ -410,7 +526,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 * @package s2Member\Utilities
 		 * @since 260903.0525
 		 *
-		 * @return array Missing active asset types keyed by type.
+		 * @return array Missing active asset files keyed by logical filename.
 		 */
 		public static function static_assets_health($force = FALSE)
 		{
@@ -419,7 +535,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) && empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']))
 				return self::$static_assets_health_cache = array();
 
-			$builds = array('css' => self::static_asset_build('css'), 'js' => self::static_asset_build('js'));
+			$builds = array();
+			foreach(array('css' => 'static_css', 'js' => 'static_js') as $type => $option)
+				if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]))
+					foreach(self::static_asset_ids($type, 'all') as $id)
+						$builds[$id] = self::static_asset_build($id);
 			$stored = get_option('ws_plugin__s2member_static_asset_health', array());
 			if(!$force && is_array($stored) && !empty($stored['checked']) && (int)$stored['checked'] >= time() - DAY_IN_SECONDS
 			   && isset($stored['builds'], $stored['missing']) && $stored['builds'] === $builds && is_array($stored['missing']))
@@ -430,11 +550,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			if(empty($location['ok']))
 				$missing['location'] = $location['error'];
 			else
-				foreach(array('css' => 'static_css', 'js' => 'static_js') as $type => $option)
+				foreach($builds as $id => $build)
 				{
-					$build = $builds[$type];
-					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]) && $build > 0 && !is_file($location['dir'].'/s2member-'.$build.'.'.$type))
-						$missing[$type] = 'Expected static '.strtoupper($type).' file is missing.';
+					$type = substr(strrchr($id, '.'), 1);
+					$base = substr($id, 0, -strlen('.'.$type));
+					if($build > 0 && !is_file($location['dir'].'/'.$base.'-'.$build.'.'.$type))
+						$missing[$id] = 'Expected static asset '.$id.' is missing.';
 				}
 
 			//260903.0623 Cache the admin-only health result for one day; this detects out-of-band deletion without adding cron or repeated wp-admin filesystem stats.
@@ -471,20 +592,28 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
-		 * Returns the source definition for one currently enabled/compatible generated frontend asset.
+		 * Returns the source definition for one currently enabled/compatible generated frontend asset file.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260903.0525
 		 *
-		 * @param string $type            `css` or `js`.
+		 * @param string $id              Logical generated filename.
 		 * @param bool   $include_sources Build ordered source definitions only when an asset actually needs generation.
 		 * @return array Definition result.
 		 */
-		protected static function static_asset_definition($type = '', $include_sources = TRUE)
+		protected static function static_asset_definition($id = '', $include_sources = TRUE)
 		{
-			$type = strtolower((string)$type);
+			$id = strtolower((string)$id);
+			if(!in_array($id, array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js'), TRUE))
+				return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Invalid static asset ID');
+			$type = substr(strrchr($id, '.'), 1);
+			$pro_file = strpos($id, 's2member-pro.') === 0;
+			$combine = !$pro_file && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_assets_combine']);
 			$o = $GLOBALS['WS_PLUGIN__']['s2member']['o'];
 			$c = $GLOBALS['WS_PLUGIN__']['s2member']['c'];
+			if($pro_file && !in_array($id, self::static_asset_ids($type, 'all'), TRUE))
+				return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Separate Pro static asset is not active');
+
 			if($type === 'css')
 			{
 				if(empty($o['static_css']))
@@ -494,14 +623,19 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$framework_dynamic = has_action('ws_plugin__s2member_before_css') || isset($GLOBALS['wp_filter']['all']);
 				$hook_dynamic = has_action('ws_plugin__s2member_during_css');
 				$hook_dynamic = (bool)apply_filters('ws_plugin__s2member_dynamic_css_required', $hook_dynamic, get_defined_vars());
-				$dynamic = $framework_dynamic || $hook_dynamic;
 
-				if($dynamic)
+				if($framework_dynamic || $hook_dynamic)
 					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Current CSS hooks require legacy dynamic assets');
 				if(!$include_sources)
 					return array('ok' => TRUE, 'sources' => array(), 'minify' => !empty($o['static_css_minify']), 'error' => '');
-				$sources = array(array('file' => $c['dir'].'/src/includes/s2member.css', 'preserve_header' => TRUE));
-				$sources = (array)apply_filters('ws_plugin__s2member_static_css_sources', $sources, get_defined_vars());
+
+				$sources = ($pro_file) ? array() : array(array('file' => $c['dir'].'/src/includes/s2member.css', 'preserve_header' => TRUE));
+				if(!$pro_file)
+					$sources = (array)apply_filters('ws_plugin__s2member_static_css_sources', $sources, get_defined_vars());
+				if($pro_file || $combine)
+					$sources = (array)apply_filters('ws_plugin__s2member_static_pro_css_sources', $sources, get_defined_vars());
+				if(!$sources)
+					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'No static CSS sources are available for '.$id);
 				return array('ok' => TRUE, 'sources' => $sources, 'minify' => !empty($o['static_css_minify']), 'error' => '');
 			}
 			if($type === 'js')
@@ -523,17 +657,22 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					|| isset($GLOBALS['wp_filter']['all']);
 				$hook_dynamic = has_action('ws_plugin__s2member_during_js_w_globals');
 				$hook_dynamic = (bool)apply_filters('ws_plugin__s2member_dynamic_js_required', $hook_dynamic, get_defined_vars());
-				$dynamic = $framework_dynamic || $hook_dynamic;
 
-				if($dynamic)
+				if($framework_dynamic || $hook_dynamic)
 					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Current JavaScript hooks/configuration require legacy dynamic assets');
 				if(!$include_sources)
 					return array('ok' => TRUE, 'sources' => array(), 'minify' => !empty($o['static_js_minify']), 'error' => '');
-				$sources = array(
+
+				$sources = ($pro_file) ? array() : array(
 					array('file' => $c['dir'].'/src/includes/jquery/jquery.sprintf/jquery.sprintf.js', 'preserve_header' => TRUE),
 					array('file' => $c['dir'].'/src/includes/s2member.js', 'render' => TRUE),
 				);
-				$sources = (array)apply_filters('ws_plugin__s2member_static_js_sources', $sources, get_defined_vars());
+				if(!$pro_file)
+					$sources = (array)apply_filters('ws_plugin__s2member_static_js_sources', $sources, get_defined_vars());
+				if($pro_file || $combine)
+					$sources = (array)apply_filters('ws_plugin__s2member_static_pro_js_sources', $sources, get_defined_vars());
+				if(!$sources)
+					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'No static JavaScript sources are available for '.$id);
 				return array('ok' => TRUE, 'sources' => $sources, 'minify' => !empty($o['static_js_minify']), 'error' => '');
 			}
 			return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Invalid static asset type');

@@ -207,7 +207,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				//260903.0525 Keep static CSS/JS delivery and minification independently opt-in while beta; dependent minify controls enable immediately in the UI.
 				echo '<div id="ws-plugin--s2member-static-assets" class="ws-menu-page-section ws-plugin--s2member-static-assets-section">'."\n";
 				echo '<h3>Frontend CSS/JS Optimization (beta)</h3>'."\n";
-				echo '<p>These beta options can replace s2Member\'s legacy dynamic frontend assets with timestamped static CSS/JS files under the WordPress uploads directory. Each generated file mirrors the combined Framework/Pro frontend asset that s2Member already serves dynamically. Static JavaScript is generated from readable source files; only current-user values remain inline in each page.</p>'."\n";
+				echo '<p>These beta options can replace s2Member\'s legacy dynamic frontend assets with timestamped static CSS/JS files under the WordPress uploads directory. Framework and Pro generated files remain separate by default; an optional combine setting can reduce requests further. Static JavaScript is generated from readable source files; only current-user values remain inline in each page.</p>'."\n";
 				echo '<p><em>After enabling these options, test your membership, registration, profile, and payment pages. Disable the corresponding Static Delivery option to return immediately to the legacy dynamic asset for that type.</em></p>'."\n";
 
 				echo '<table class="form-table">'."\n";
@@ -218,7 +218,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<option value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) ? ' selected="selected"' : '').'>No (use legacy dynamic CSS)</option>'."\n";
 				echo '<option value="1"'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) ? ' selected="selected"' : '').'>Yes (beta; generate and serve static CSS)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo '<em>One timestamped CSS file contains the Framework plus enabled Pro/gateway styles. Generation failures or incompatible custom CSS hooks use legacy dynamic CSS.</em>'."\n";
+				echo '<em>Generates timestamped Framework CSS and, when Pro is active, a separate Pro/gateway stylesheet by default. Generation failures or incompatible custom CSS hooks use legacy dynamic CSS.</em>'."\n";
 				echo '</td></tr>'."\n";
 
 				echo '<tr><th><label for="ws-plugin--s2member-static-css-minify">Minify Static CSS?</label></th></tr>'."\n";
@@ -236,7 +236,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<option value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) ? ' selected="selected"' : '').'>No (use legacy dynamic JavaScript)</option>'."\n";
 				echo '<option value="1"'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) ? ' selected="selected"' : '').'>Yes (beta; generate and serve static JavaScript)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo '<em>One timestamped JavaScript file contains site-wide Framework/Pro logic and configuration. Current-user values remain inline. WordPress 4.2–4.4 automatically keep legacy dynamic JavaScript.</em>'."\n";
+				echo '<em>Generates timestamped Framework JavaScript and, when Pro is active, a separate Pro/gateway script by default. Current-user values remain inline. WordPress 4.2–4.4 automatically keep legacy dynamic JavaScript.</em>'."\n";
 				echo '</td></tr>'."\n";
 
 				echo '<tr><th><label for="ws-plugin--s2member-static-js-minify">Minify Static JS?</label></th></tr>'."\n";
@@ -248,11 +248,20 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<em>Used only with Static JS Delivery. s2Member generates from readable JavaScript sources; developers do not maintain parallel minified files.</em>'."\n";
 				echo '</td></tr>'."\n";
 
+				echo '<tr><th><label for="ws-plugin--s2member-static-assets-combine">Combine Framework + Pro Static Assets?</label></th></tr>'."\n";
+				echo '<tr><td>'."\n";
+				echo '<select name="ws_plugin__s2member_static_assets_combine" id="ws-plugin--s2member-static-assets-combine">'."\n";
+				echo '<option value="0"'.((empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_assets_combine'])) ? ' selected="selected"' : '').'>No (keep Framework and Pro files separate)</option>'."\n";
+				echo '<option value="1"'.((!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_assets_combine'])) ? ' selected="selected"' : '').'>Yes (combine each enabled type to reduce requests)</option>'."\n";
+				echo '</select><br />'."\n";
+				echo '<em>Applies when s2Member Pro is active. Separate delivery is the default; combining is an optional optimization that serves one generated CSS file and/or one generated JavaScript file instead of separate Framework and Pro files.</em>'."\n";
+				echo '</td></tr>'."\n";
+
 				$static_asset_health = c_ws_plugin__s2member_utils_assets::static_assets_health(TRUE);
 				echo '<tr><th>Static Asset Files</th></tr>'."\n";
 				echo '<tr><td>'."\n";
 				echo '<button type="button" class="button" id="ws-plugin--s2member-refresh-static-assets">Refresh Static Assets</button> <span id="ws-plugin--s2member-refresh-static-assets-status" aria-live="polite"></span><br />'."\n";
-				echo '<em>Creates new timestamped files immediately for the enabled static asset types. CSS and JS have independent timestamps, so changing one type does not unnecessarily invalidate the other type\'s browser cache. Save option changes before using this button.</em>'."\n";
+				echo '<em>Creates new timestamps immediately for every active generated file. Separate Framework/Pro files keep independent build timestamps, while combined mode uses one timestamp per enabled asset type. Save option changes before using this button.</em>'."\n";
 				if($static_asset_health)
 					echo '<p class="ws-menu-page-error" style="margin:.75em 0 0;"><em><strong>Static asset health:</strong> '.esc_html(implode(' ', $static_asset_health)).' Use Refresh Static Assets to recreate missing files.</em></p>'."\n";
 				echo '</td></tr>'."\n";

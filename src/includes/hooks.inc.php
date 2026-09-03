@@ -82,7 +82,7 @@ add_action('wp_print_styles', 'c_ws_plugin__s2member_css_js_themes::add_css');
 add_action('wp_print_scripts', 'c_ws_plugin__s2member_css_js_themes::add_js_w_globals');
 add_filter('script_loader_tag', 'c_ws_plugin__s2member_css_js_themes::script_loader_tag', 10, 2);
 
-//260903.1431 Generated frontend assets use independent CSS/JS generations: invalidate only affected types from exact WordPress option changes, and expose an authenticated immediate refresh.
+//260903.1918 Generated frontend assets use per-file generations: invalidate only affected files from exact WordPress option changes, and expose an authenticated immediate refresh.
 add_action('updated_option', 'c_ws_plugin__s2member_utils_assets::maybe_invalidate_after_wp_option_update', 10, 3);
 add_action('activated_plugin', 'c_ws_plugin__s2member_utils_assets::invalidate_after_plugin_change');
 add_action('deactivated_plugin', 'c_ws_plugin__s2member_utils_assets::invalidate_after_plugin_change');

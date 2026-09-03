@@ -85,19 +85,27 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 
 			if(!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js())
 			{
-				$static = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css'])) ? c_ws_plugin__s2member_utils_assets::ensure_static_asset('css') : array();
-				$static_css = !empty($static['ok']) && !empty($static['url']);
+				$static = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css'])) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('css') : array();
+				$static_css = !empty($static['ok']) && !empty($static['assets']);
 				$dynamic_css = !$static_css;
 
 				if($static_css)
-					wp_enqueue_style('ws-plugin--s2member', $static['url'], array(), NULL, 'all');
+				{
+					$dependency = array();
+					foreach($static['assets'] as $id => $asset)
+					{
+						$handle = ($id === 's2member-pro.css') ? 'ws-plugin--s2member-pro' : 'ws-plugin--s2member';
+						wp_enqueue_style($handle, $asset['url'], $dependency, NULL, 'all');
+						$dependency = array($handle);
+					}
+				}
 				else
 				{
 					$s2o = $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'];
 					wp_enqueue_style('ws-plugin--s2member', $s2o.'?ws_plugin__s2member_css=1&qcABC=1', array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
 				}
 
-				//260903.0525 Static CSS mirrors the established combined Framework/Pro response in one cacheable file; incompatible hooks or build failures retain legacy dynamic CSS.
+				//260903.1918 Static CSS keeps Framework/Pro files separate by default, with optional combining; any incompatible hook/build failure retains the single legacy dynamic response.
 				do_action('ws_plugin__s2member_during_add_css', get_defined_vars());
 			}
 			do_action('ws_plugin__s2member_after_add_css', get_defined_vars());
@@ -124,15 +132,21 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 			if((!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js()) || (is_user_admin() && $pagenow === 'profile.php' && !current_user_can('edit_users')))
 			{
 				$s2o = $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'];
-				$static = (!is_admin() && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && function_exists('wp_add_inline_script')) ? c_ws_plugin__s2member_utils_assets::ensure_static_asset('js') : array();
-				$static_js = !empty($static['ok']) && !empty($static['url']);
+				$static = (!is_admin() && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && function_exists('wp_add_inline_script')) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('js') : array();
+				$static_js = !empty($static['ok']) && !empty($static['assets']);
 				$dynamic_js = !$static_js;
 
 				if($static_js)
 				{
-					wp_enqueue_script('ws-plugin--s2member', $static['url'], array('jquery'), NULL, TRUE);
-					//260903.0437 Only current-user values vary per request; WordPress prints them immediately before the cacheable site-wide frontend script.
-					wp_add_inline_script('ws-plugin--s2member', c_ws_plugin__s2member_css_js_in::current_user_js_globals(TRUE), 'before');
+					$dependency = array('jquery');
+					foreach($static['assets'] as $id => $asset)
+					{
+						$handle = ($id === 's2member-pro.js') ? 'ws-plugin--s2member-pro' : 'ws-plugin--s2member';
+						wp_enqueue_script($handle, $asset['url'], $dependency, NULL, TRUE);
+						if($handle === 'ws-plugin--s2member')
+							wp_add_inline_script($handle, c_ws_plugin__s2member_css_js_in::current_user_js_globals(TRUE), 'before');
+						$dependency = array($handle);
+					}
 				}
 				else if(is_user_logged_in())
 				{
@@ -162,7 +176,7 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 		 */
 		public static function script_loader_tag($tag = '', $handle = '')
 		{
-			if ($handle === 'ws-plugin--s2member') {
+			if (in_array($handle, array('ws-plugin--s2member', 'ws-plugin--s2member-pro'), TRUE)) {
 				$tag = str_replace(' src=', ' data-cfasync="false" src=', $tag);
 			}
 			return $tag; // Prevent RocketLoader from loading async.

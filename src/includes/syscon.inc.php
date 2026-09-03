@@ -136,6 +136,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['static_css_minify']            = '0'; //260902.2107 Static CSS minification is independently opt-in while generated asset delivery is beta.
 		$default_options['static_js']                    = '0'; //260903.0437 Static frontend JavaScript delivery remains opt-in while generated assets are beta.
 		$default_options['static_js_minify']             = '0'; //260903.0437 Static JavaScript minification is independently opt-in and uses readable source files.
+		$default_options['static_assets_combine']        = '0'; //260903.1918 Keep Framework/Pro generated files separate by default; combining is an explicit request-reduction optimization.
 		$default_options['no_cache_headers_mode']        = 'always'; //260308 No-cache headers mode: `always`, `selective`, `evaluative`.
 		$default_options['no_cache_headers_debug']       = '0'; //260308 Adds Server-Timing no-cache debug header (support use only).
 		$default_options['sc_conds_allow_arbitrary_php'] = '0';
