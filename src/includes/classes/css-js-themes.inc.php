@@ -101,8 +101,8 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 				}
 				else
 				{
-					$s2o = $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'];
-					wp_enqueue_style('ws-plugin--s2member', $s2o.'?ws_plugin__s2member_css=1&qcABC=1', array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
+					//260904.0221 Use the centralized WordPress front-controller URL so custom index filenames are respected; keep s2member-o.php available for legacy/direct URLs.
+					wp_enqueue_style('ws-plugin--s2member', c_ws_plugin__s2member_utils_assets::dynamic_asset_url().'?ws_plugin__s2member_css=1&qcABC=1', array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
 				}
 
 				//260903.1918 Static CSS keeps Framework/Pro files separate by default, with optional combining; any incompatible hook/build failure retains the single legacy dynamic response.
@@ -131,7 +131,7 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 
 			if((!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js()) || (is_user_admin() && $pagenow === 'profile.php' && !current_user_can('edit_users')))
 			{
-				$s2o = $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'];
+				$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(); //260904.0221 Centralize front-controller discovery so custom WordPress index filenames are respected.
 				$static = (!is_admin() && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && function_exists('wp_add_inline_script')) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('js') : array();
 				$static_js = !empty($static['ok']) && !empty($static['assets']);
 				$dynamic_js = !$static_js;
@@ -151,10 +151,10 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 				else if(is_user_logged_in())
 				{
 					$md5 = WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5;
-					wp_enqueue_script('ws-plugin--s2member', $s2o.'?ws_plugin__s2member_js_w_globals='.urlencode($md5).'&qcABC=1', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
+					wp_enqueue_script('ws-plugin--s2member', $dynamic_asset_url.'?ws_plugin__s2member_js_w_globals='.urlencode($md5).'&qcABC=1', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
 				}
 				else
-					wp_enqueue_script('ws-plugin--s2member', $s2o.'?ws_plugin__s2member_js_w_globals=1&qcABC=1', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
+					wp_enqueue_script('ws-plugin--s2member', $dynamic_asset_url.'?ws_plugin__s2member_js_w_globals=1&qcABC=1', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
 
 				do_action('ws_plugin__s2member_during_add_js_w_globals', get_defined_vars());
 			}

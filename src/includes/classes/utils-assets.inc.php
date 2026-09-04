@@ -102,6 +102,30 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
+		 * Returns the normal WordPress front-controller URL used for dynamic frontend asset fallback.
+		 *
+		 * WordPress exposes its front-controller filename through WP_Rewrite::$index. Use that instead of hard-coding index.php so properly customized setups remain supported.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.0221
+		 *
+		 * @return string Dynamic frontend asset endpoint URL without query arguments.
+		 */
+		public static function dynamic_asset_url()
+		{
+			global $wp_rewrite;
+
+			$index = (is_object($wp_rewrite) && !empty($wp_rewrite->index)) ? ltrim((string)$wp_rewrite->index, '/') : '';
+			if($index === '')
+				$index = 'index.php';
+
+			//260904.0221 TO-DO: Reassess whether checking the legacy s2member-o.php endpoint is still useful after static assets and normal WordPress dynamic fallback have been deployed.
+			// If useful, probe it infrequently with an asynchronous same-origin browser request from wp-admin, cache the HTTP status/content type and a short sanitized failure detail, and avoid frontend-visitor probes or PHP loopback requests.
+			// On failure, link to Frontend CSS/JS Optimization and the ModSecurity/security troubleshooting KB because cached, customized, or direct legacy URLs may still use s2member-o.php.
+			return home_url('/'.$index);
+		}
+
+		/**
 		 * Returns active generated frontend asset IDs for one type/component.
 		 *
 		 * Framework and Pro files stay separate by default. Combined mode reuses the Framework ID because that file becomes the combined representation.
