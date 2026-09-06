@@ -31,6 +31,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		protected static $static_asset_cache = array();
 		protected static $static_assets_location_cache = array();
 		protected static $static_assets_health_cache;
+		protected static $asset_http_health_cache;
+		protected static $page_asset_expectations = array();
 
 		/**
 		 * Handles CSS compression.
@@ -102,27 +104,455 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
-		 * Returns the normal WordPress front-controller URL used for dynamic frontend asset fallback.
+		 * Returns the selected URL used whenever frontend CSS/JavaScript needs dynamic generation.
 		 *
-		 * WordPress exposes its front-controller filename through WP_Rewrite::$index. Use that instead of hard-coding index.php so properly customized setups remain supported.
+		 * The s2Member Dynamic Loader remains the default. If its file is missing or a trusted browser probe has confirmed that it is unreachable, the normal WordPress loader is used temporarily without changing the saved preference.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260904.0221
 		 *
-		 * @return string Dynamic frontend asset endpoint URL without query arguments.
+		 * @return string Dynamic frontend asset URL without query arguments.
 		 */
 		public static function dynamic_asset_url()
+		{
+			if((empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader']) || $GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader'] !== 'wordpress')
+			   && is_file(self::s2o_file_path()) && !self::asset_http_target_failed('s2o', $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url']))
+				return $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'];
+
+			return self::wordpress_dynamic_asset_url();
+		}
+
+		/**
+		 * Returns the normal WordPress front-controller URL for dynamic frontend assets.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2110
+		 *
+		 * @return string WordPress dynamic frontend asset URL without query arguments.
+		 */
+		protected static function wordpress_dynamic_asset_url()
 		{
 			global $wp_rewrite;
 
 			$index = (is_object($wp_rewrite) && !empty($wp_rewrite->index)) ? ltrim((string)$wp_rewrite->index, '/') : '';
 			if($index === '')
 				$index = 'index.php';
-
-			//260904.0221 TO-DO: Reassess whether checking the legacy s2member-o.php endpoint is still useful after static assets and normal WordPress dynamic fallback have been deployed.
-			// If useful, probe it infrequently with an asynchronous same-origin browser request from wp-admin, cache the HTTP status/content type and a short sanitized failure detail, and avoid frontend-visitor probes or PHP loopback requests.
-			// On failure, link to Frontend CSS/JS Optimization and the ModSecurity/security troubleshooting KB because cached, customized, or direct legacy URLs may still use s2member-o.php.
 			return home_url('/'.$index);
+		}
+
+		/**
+		 * Returns the local s2member-o.php path.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2110
+		 *
+		 * @return string Local filesystem path.
+		 */
+		protected static function s2o_file_path()
+		{
+			return $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir'].'/'.preg_replace('/\.php$/', '-o.php', basename($GLOBALS['WS_PLUGIN__']['s2member']['l']));
+		}
+
+		/**
+		 * Returns true when a trusted browser probe has confirmed that one current asset URL is unreachable.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2110
+		 *
+		 * @param string $id Logical health target ID.
+		 * @param string $url Current public asset URL.
+		 * @return bool True when the exact current URL has a recorded failure.
+		 */
+		protected static function asset_http_target_failed($id = '', $url = '')
+		{
+			$health = self::asset_http_health_state();
+			return !empty($health['failures'][$id]['url']) && (string)$health['failures'][$id]['url'] === (string)$url;
+		}
+
+		/**
+		 * Returns the browser-reported frontend asset health state once per PHP request.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2110
+		 *
+		 * @return array Stored HTTP health state.
+		 */
+		protected static function asset_http_health_state()
+		{
+			if(!isset(self::$asset_http_health_cache))
+			{
+				$health = get_option('ws_plugin__s2member_asset_http_health', array());
+				self::$asset_http_health_cache = (is_array($health)) ? $health : array();
+			}
+			return self::$asset_http_health_cache;
+		}
+
+		/**
+		 * Returns recent low-trust runtime suspicions reported by real frontend pages.
+		 *
+		 * Reports are only hints. They never change delivery by themselves. A trusted administrator-browser probe must confirm the exact URL/marker before persistent fallback or a confirmed notice is used.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2255
+		 *
+		 * @return array Current runtime suspicions.
+		 */
+		protected static function asset_runtime_suspicions()
+		{
+			$suspicions = get_option('ws_plugin__s2member_asset_runtime_suspicions', array());
+			$suspicions = (is_array($suspicions)) ? $suspicions : array();
+			foreach($suspicions as $key => $suspicion)
+				if(empty($suspicion['reported']) || (int)$suspicion['reported'] < time() - HOUR_IN_SECONDS)
+					unset($suspicions[$key]);
+			return $suspicions;
+		}
+
+		/**
+		 * Returns the current public asset URLs that an administrator's browser should probe.
+		 *
+		 * Normal checks are deliberately cheap. Static files use HEAD and s2member-o.php has a special early health response that exits before loading WordPress. A real-page suspicion adds a one-time full marker check for the exact asset that page expected.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2110
+		 *
+		 * @return array Health targets keyed by logical target ID.
+		 */
+		protected static function asset_http_health_targets()
+		{
+			$targets = array();
+			if((empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader']) || $GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader'] !== 'wordpress') && is_file(self::s2o_file_path()))
+				$targets['s2o'] = array(
+					'id' => 's2o',
+					'url' => $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'],
+					'probe_url' => add_query_arg('s2member_health_check', '1', $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url']),
+					'type' => 'health',
+					'mode' => 's2o-health',
+					'label' => 's2Member Dynamic Loader',
+					'failure_id' => 's2o',
+					'failure_url' => $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'],
+				);
+
+			$location = self::static_assets_location(FALSE);
+			if(!empty($location['ok']))
+				foreach(array('css' => 'static_css', 'js' => 'static_js') as $type => $option)
+					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]))
+						foreach(self::static_asset_ids($type, 'all') as $id)
+						{
+							$build = self::static_asset_build($id);
+							if($build <= 0)
+								continue;
+							$base = substr($id, 0, -strlen('.'.$type));
+							$url = $location['url'].'/'.$base.'-'.$build.'.'.$type;
+							if(is_file($location['dir'].'/'.$base.'-'.$build.'.'.$type))
+								$targets['static:'.$id] = array(
+									'id' => 'static:'.$id,
+									'url' => $url,
+									'probe_url' => $url,
+									'type' => $type,
+									'mode' => 'head',
+									'label' => $id,
+									'failure_id' => 'static:'.$id,
+									'failure_url' => $url,
+								);
+						}
+
+			foreach(self::asset_runtime_suspicions() as $key => $suspicion)
+			{
+				if(!self::asset_runtime_expectation_is_current($suspicion))
+					continue;
+				$id = 'runtime:'.$key;
+				$failure_id = '';
+				$failure_url = (string)$suspicion['url'];
+				if($suspicion['delivery'] === 'dynamic-lightweight')
+				{
+					$failure_id = 's2o';
+					$failure_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'];
+				}
+				else if($suspicion['delivery'] === 'static' && !empty($suspicion['asset_id']))
+					$failure_id = 'static:'.$suspicion['asset_id'];
+				else
+					$failure_id = $id;
+
+				$targets[$id] = array(
+					'id' => $id,
+					'url' => (string)$suspicion['url'],
+					'probe_url' => (string)$suspicion['url'],
+					'type' => (string)$suspicion['type'],
+					'mode' => 'marker',
+					'label' => (string)$suspicion['id'],
+					'markers' => array((string)$suspicion['marker']),
+					'failure_id' => $failure_id,
+					'failure_url' => $failure_url,
+					'suspicion_key' => $key,
+					'suspicion' => $suspicion,
+				);
+			}
+			return $targets;
+		}
+
+		/**
+		 * Returns a stable hash for the current browser health targets.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2110
+		 *
+		 * @param array $targets Current health targets.
+		 * @return string Target hash.
+		 */
+		protected static function asset_http_health_target_hash($targets = array())
+		{
+			$hash = array();
+			foreach((array)$targets as $id => $target)
+				$hash[$id] = array((string)$target['url'], (string)$target['type'], (string)$target['mode'], (!empty($target['markers'])) ? array_values((array)$target['markers']) : array());
+			return md5(serialize($hash));
+		}
+
+		/**
+		 * Returns marker output appended to a generated static asset.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2255
+		 *
+		 * @param string $id Stable generated asset identifier without extension.
+		 * @param string $type `css` or `js`.
+		 * @param int $build Generated build timestamp.
+		 * @return string Marker output.
+		 */
+		protected static function static_asset_marker_output($id = '', $type = '', $build = 0)
+		{
+			$components = array();
+			if($id === 's2member-pro')
+				$components[] = 'pro';
+			else
+			{
+				$components[] = 'framework';
+				if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_assets_combine']) && (defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') || isset($GLOBALS['WS_PLUGIN__']['s2member_pro'])))
+					$components[] = 'pro';
+			}
+			$token = 'static-'.(int)$build;
+			if($type === 'css')
+			{
+				$markers = array();
+				foreach($components as $component)
+					$markers[] = '#ws-plugin--s2member-'.$component.'-css-health{z-index:'.(($component === 'framework') ? '2147483641' : '2147483642').'!important}';
+				return implode('', $markers);
+			}
+			$markers = ';window.ws_plugin__s2member_asset_health=window.ws_plugin__s2member_asset_health||{};';
+			foreach($components as $component)
+				$markers .= 'window.ws_plugin__s2member_asset_health["'.$component.'_js"]="'.$token.'";';
+			return $markers;
+		}
+
+		/**
+		 * Returns marker output appended to dynamically generated CSS or JavaScript.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2255
+		 *
+		 * @param string $type `css` or `js`.
+		 * @return string Marker output.
+		 */
+		public static function dynamic_asset_marker_output($type = '')
+		{
+			$type = strtolower((string)$type);
+			if(!in_array($type, array('css', 'js'), TRUE))
+				return '';
+			$token = (defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? 'dynamic-lightweight' : 'dynamic-wordpress';
+			$components = array('framework');
+			if(defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') || isset($GLOBALS['WS_PLUGIN__']['s2member_pro']))
+				$components[] = 'pro';
+			if($type === 'css')
+			{
+				$markers = array();
+				foreach($components as $component)
+					$markers[] = '#ws-plugin--s2member-'.$component.'-css-health{z-index:'.(($component === 'framework') ? '2147483641' : '2147483642').'!important}';
+				return "\n".implode('', $markers)."\n";
+			}
+			$markers = "\n;window.ws_plugin__s2member_asset_health=window.ws_plugin__s2member_asset_health||{};";
+			foreach($components as $component)
+				$markers .= 'window.ws_plugin__s2member_asset_health["'.$component.'_js"]="'.$token.'";';
+			return $markers."\n";
+		}
+
+		/**
+		 * Registers the exact CSS/JavaScript markers expected on the current frontend page.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2255
+		 *
+		 * @param string $asset_id Logical static asset ID, or an empty string for dynamic delivery.
+		 * @param string $type `css` or `js`.
+		 * @param string $url Public URL emitted on this page.
+		 * @param string $delivery `static`, `dynamic-lightweight`, or `dynamic-wordpress`.
+		 * @param int $build Static build timestamp, or zero for dynamic delivery.
+		 * @return null
+		 */
+		public static function register_page_asset_expectations($asset_id = '', $type = '', $url = '', $delivery = '', $build = 0)
+		{
+			$type = strtolower((string)$type);
+			$url = (string)$url;
+			if(!in_array($type, array('css', 'js'), TRUE) || !$url)
+				return;
+			$components = array();
+			if($delivery === 'static')
+			{
+				if(strpos((string)$asset_id, 's2member-pro.') === 0)
+					$components[] = 'pro';
+				else
+				{
+					$components[] = 'framework';
+					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_assets_combine']) && (defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') || isset($GLOBALS['WS_PLUGIN__']['s2member_pro'])))
+						$components[] = 'pro';
+				}
+				$token = 'static-'.(int)$build;
+			}
+			else
+			{
+				$components[] = 'framework';
+				if(defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') || isset($GLOBALS['WS_PLUGIN__']['s2member_pro']))
+					$components[] = 'pro';
+				$token = ($delivery === 'dynamic-lightweight') ? 'dynamic-lightweight' : 'dynamic-wordpress';
+			}
+			$recovery_url = '';
+			if($delivery !== 'dynamic-wordpress')
+			{
+				if($type === 'css')
+					$recovery_url = add_query_arg(array('ws_plugin__s2member_css' => '1', 'qcABC' => '1'), self::wordpress_dynamic_asset_url());
+				else
+				{
+					$js_value = (is_user_logged_in() && defined('WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5')) ? WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5 : '1';
+					$recovery_url = add_query_arg(array('ws_plugin__s2member_js_w_globals' => $js_value, 'qcABC' => '1'), self::wordpress_dynamic_asset_url());
+				}
+			}
+			foreach($components as $component)
+			{
+				$id = $component.'_'.$type;
+				if($type === 'css')
+				{
+					$token = ($component === 'framework') ? '2147483641' : '2147483642';
+					$marker = '#ws-plugin--s2member-'.$component.'-css-health{z-index:'.$token.'!important}';
+				}
+				else
+					$marker = 'ws_plugin__s2member_asset_health["'.$component.'_js"]="'.$token.'"';
+				$expectation = array(
+					'id' => $id,
+					'asset_id' => (string)$asset_id,
+					'type' => $type,
+					'component' => $component,
+					'url' => $url,
+					'delivery' => $delivery,
+					'token' => $token,
+					'marker' => $marker,
+					'recovery_url' => $recovery_url,
+				);
+				$expectation['signature'] = self::asset_runtime_expectation_signature($expectation);
+				self::$page_asset_expectations[$id] = $expectation;
+			}
+			return;
+		}
+
+		/**
+		 * Expands one compact browser runtime expectation into the full signed structure.
+		 *
+		 * Frontend pages only need a few fields to check markers and recover. Reconstruct the
+		 * descriptive fields here when a miss is actually reported, keeping healthy page source small.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260905.0106
+		 *
+		 * @param array $compact Compact expectation fields.
+		 * @return array Full expectation, or an empty array when invalid.
+		 */
+		protected static function expand_asset_runtime_expectation($compact = array())
+		{
+			if(!is_array($compact) || count($compact) < 6)
+				return array();
+			$id = isset($compact[0]) ? (string)$compact[0] : '';
+			$asset_id = isset($compact[1]) ? (string)$compact[1] : '';
+			$url = isset($compact[2]) ? (string)$compact[2] : '';
+			$delivery = isset($compact[3]) ? (string)$compact[3] : '';
+			$token = isset($compact[4]) ? (string)$compact[4] : '';
+			$signature = isset($compact[5]) ? (string)$compact[5] : '';
+			if(!preg_match('/\A(framework|pro)_(css|js)\z/', $id, $match))
+				return array();
+			$component = $match[1];
+			$type = $match[2];
+			if($type === 'css')
+				$marker = '#ws-plugin--s2member-'.$component.'-css-health{z-index:'.$token.'!important}';
+			else
+				$marker = 'ws_plugin__s2member_asset_health["'.$component.'_js"]="'.$token.'"';
+
+			$recovery_url = '';
+			if($delivery !== 'dynamic-wordpress')
+			{
+				if($type === 'css')
+					$recovery_url = add_query_arg(array('ws_plugin__s2member_css' => '1', 'qcABC' => '1'), self::wordpress_dynamic_asset_url());
+				else
+				{
+					$js_value = (is_user_logged_in() && defined('WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5')) ? WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5 : '1';
+					$recovery_url = add_query_arg(array('ws_plugin__s2member_js_w_globals' => $js_value, 'qcABC' => '1'), self::wordpress_dynamic_asset_url());
+				}
+			}
+			return array(
+				'id' => $id,
+				'asset_id' => $asset_id,
+				'type' => $type,
+				'component' => $component,
+				'url' => $url,
+				'delivery' => $delivery,
+				'token' => $token,
+				'marker' => $marker,
+				'recovery_url' => $recovery_url,
+				'signature' => $signature,
+			);
+		}
+
+		/**
+		 * Returns a signature for one low-trust runtime expectation report.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2255
+		 *
+		 * @param array $expectation Runtime expectation fields.
+		 * @return string Signature.
+		 */
+		protected static function asset_runtime_expectation_signature($expectation = array())
+		{
+			$parts = array();
+			foreach(array('id', 'asset_id', 'type', 'component', 'url', 'delivery', 'token', 'marker', 'recovery_url') as $key)
+				$parts[$key] = isset($expectation[$key]) ? (string)$expectation[$key] : '';
+			return hash_hmac('sha256', serialize($parts), wp_salt('nonce'));
+		}
+
+		/**
+		 * Returns true when a reported expectation still describes the site's current delivery state.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2255
+		 *
+		 * @param array $expectation Runtime expectation.
+		 * @return bool True when current.
+		 */
+		protected static function asset_runtime_expectation_is_current($expectation = array())
+		{
+			if(empty($expectation['url']) || empty($expectation['delivery']) || empty($expectation['type']))
+				return FALSE;
+			if($expectation['delivery'] === 'static')
+			{
+				$id = (string)$expectation['asset_id'];
+				$type = (string)$expectation['type'];
+				if(!in_array($id, self::static_asset_ids($type, 'all'), TRUE))
+					return FALSE;
+				$build = self::static_asset_build($id);
+				$location = self::static_assets_location(FALSE);
+				$base = substr($id, 0, -strlen('.'.$type));
+				return !empty($location['ok']) && $build > 0 && (string)$expectation['url'] === $location['url'].'/'.$base.'-'.$build.'.'.$type;
+			}
+			if($expectation['delivery'] === 'dynamic-lightweight')
+				return (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader']) || $GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader'] !== 'wordpress') && strpos((string)$expectation['url'], $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0;
+			if($expectation['delivery'] === 'dynamic-wordpress')
+				return strpos((string)$expectation['url'], self::wordpress_dynamic_asset_url().'?') === 0;
+			return FALSE;
 		}
 
 		/**
@@ -383,7 +813,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		/**
 		 * Returns one current generated frontend asset URL, building it when stale/uninitialized.
 		 *
-		 * Normal requests trust an already-active timestamp instead of performing filesystem stat calls. External deletion is checked on the admin optimization panel and repaired by the Refresh button.
+		 * Active timestamped files are existence-checked before their URLs are emitted. A missing or
+		 * trusted-browser-confirmed unreachable file returns a failure so callers can use dynamic delivery immediately.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260903.0525
@@ -419,7 +850,14 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$location = self::static_assets_location(FALSE);
 				if(empty($location['ok']))
 					return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => $location['error']);
-				return self::$static_asset_cache[$id] = array('ok' => TRUE, 'url' => $location['url'].'/'.$base.'-'.$active_build.'.'.$type, 'build' => $active_build, 'error' => '');
+				$url = $location['url'].'/'.$base.'-'.$active_build.'.'.$type;
+				$path = $location['dir'].'/'.$base.'-'.$active_build.'.'.$type;
+				//260904.2110 A few local file checks are cheaper than sending a broken static URL. Missing or browser-confirmed unreachable files fall back to dynamic delivery immediately.
+				if(!is_file($path))
+					return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => 'Expected static asset '.$id.' is missing.');
+				if(self::asset_http_target_failed('static:'.$id, $url))
+					return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => 'Static asset '.$id.' could not be loaded from its public URL.');
+				return self::$static_asset_cache[$id] = array('ok' => TRUE, 'url' => $url, 'build' => $active_build, 'error' => '');
 			}
 
 			$failure_key = 'ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id);
@@ -447,6 +885,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			if(!empty($result['ok']))
 			{
 				self::set_static_asset_build($id, $build);
+				//260905.0106 Prune only after the new timestamp is current so the previous generation is treated as stale instead of protected.
+				self::prune_static_asset_generations(dirname($result['path']), $result['path']);
 				delete_transient($failure_key);
 				return self::$static_asset_cache[$id] = array('ok' => TRUE, 'url' => $result['url'], 'build' => $build, 'error' => '');
 			}
@@ -537,19 +977,20 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					$errors[] = strtoupper($type).': '.((!empty($result['error'])) ? $result['error'] : 'unknown build error');
 
 			if(!$errors)
-				wp_send_json_success(array('message' => 'Static assets refreshed successfully ('.implode(' + ', $success).'). New timestamped files are active now.'));
-			$message = (($success) ? 'Refreshed '.implode(' + ', $success).'. ' : '').'Could not refresh '.implode('; ', $errors).'. Failed types continue with their previous valid files when still current, or legacy dynamic assets when stale.';
+				wp_send_json_success(array('message' => 'Static '.implode(' + ', $success).' refreshed. New timestamped files are active.'));
+			$message = (($success) ? 'Refreshed '.implode(' + ', $success).'. ' : '').'Could not refresh '.implode('; ', $errors).'. Failed types continue with their previous valid files when still current, or dynamic delivery when stale.';
 			wp_send_json_error(array('message' => $message), 500);
 		}
 
 		/**
-		 * Checks generated asset files for the admin optimization panel only.
+		 * Checks the few currently active generated files for local filesystem availability.
 		 *
-		 * This deliberately avoids permanent frontend filesystem stat calls for an unusual out-of-band deletion case.
+		 * This runs on administrator requests and is also mirrored by the per-file check immediately before a static frontend URL is used. With at most four active generated files, direct existence checks avoid stale health results with a small, bounded cost.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260903.0525
 		 *
+		 * @param bool $force Recheck even if this request already has a cached result.
 		 * @return array Missing active asset files keyed by logical filename.
 		 */
 		public static function static_assets_health($force = FALSE)
@@ -559,38 +1000,25 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) && empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']))
 				return self::$static_assets_health_cache = array();
 
-			$builds = array();
-			foreach(array('css' => 'static_css', 'js' => 'static_js') as $type => $option)
-				if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]))
-					foreach(self::static_asset_ids($type, 'all') as $id)
-						$builds[$id] = self::static_asset_build($id);
-			$stored = get_option('ws_plugin__s2member_static_asset_health', array());
-			if(!$force && is_array($stored) && !empty($stored['checked']) && (int)$stored['checked'] >= time() - DAY_IN_SECONDS
-			   && isset($stored['builds'], $stored['missing']) && $stored['builds'] === $builds && is_array($stored['missing']))
-				return self::$static_assets_health_cache = $stored['missing'];
-
 			$missing = array();
 			$location = self::static_assets_location(FALSE);
 			if(empty($location['ok']))
 				$missing['location'] = $location['error'];
 			else
-				foreach($builds as $id => $build)
-				{
-					$type = substr(strrchr($id, '.'), 1);
-					$base = substr($id, 0, -strlen('.'.$type));
-					if($build > 0 && !is_file($location['dir'].'/'.$base.'-'.$build.'.'.$type))
-						$missing[$id] = 'Expected static asset '.$id.' is missing.';
-				}
-
-			//260903.0623 Cache the admin-only health result for one day; this detects out-of-band deletion without adding cron or repeated wp-admin filesystem stats.
-			update_option('ws_plugin__s2member_static_asset_health', array('checked' => time(), 'builds' => $builds, 'missing' => $missing));
+				foreach(array('css' => 'static_css', 'js' => 'static_js') as $type => $option)
+					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]))
+						foreach(self::static_asset_ids($type, 'all') as $id)
+						{
+							$build = self::static_asset_build($id);
+							$base = substr($id, 0, -strlen('.'.$type));
+							if($build > 0 && !is_file($location['dir'].'/'.$base.'-'.$build.'.'.$type))
+								$missing[$id] = 'Expected static asset '.$id.' is missing.';
+						}
 			return self::$static_assets_health_cache = $missing;
 		}
 
 		/**
-		 * Displays an admin warning when an active generated frontend asset file is missing.
-		 *
-		 * Filesystem checks are deliberately limited to administrator requests; normal frontend requests never stat generated asset files.
+		 * Displays a branded admin warning for missing or browser-confirmed unreachable frontend assets.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260903.0612
@@ -602,17 +1030,269 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		{
 			if(!current_user_can('create_users') || (defined('DOING_AJAX') && DOING_AJAX))
 				return;
+
+			$messages = array();
+			$static_settings_url = add_query_arg('s2member-open-panel', 'frontend-static-assets', admin_url('/admin.php?page=ws-plugin--s2member-gen-ops')).'#ws-plugin--s2member-static-assets';
+			$dynamic_settings_url = add_query_arg('s2member-open-panel', 'dynamic-asset-loader', admin_url('/admin.php?page=ws-plugin--s2member-gen-ops')).'#ws-plugin--s2member-dynamic-asset-loader-section';
 			$health = self::static_assets_health();
-			if(!$health)
+			if($health)
+				$messages[] = esc_html(implode(' ', $health)).' Pages that need the missing file are using dynamic delivery instead. <a href="'.esc_url($static_settings_url).'">Open Static CSS/JS Optimization and refresh the static assets.</a>';
+
+			$using_s2o = empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader']) || $GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader'] !== 'wordpress';
+			$s2o_missing = $using_s2o && !is_file(self::s2o_file_path());
+			if($s2o_missing)
+				$messages[] = 'The selected s2Member Dynamic Loader file <code>s2member-o.php</code> is missing. s2Member is using the WordPress Dynamic Loader instead. Restore the file or <a href="'.esc_url($dynamic_settings_url).'">choose the WordPress Dynamic Loader</a>.';
+
+			$http_health = self::asset_http_health_state();
+			$has_confirmed_failure = (bool)($health || $s2o_missing);
+			if(is_array($http_health) && !empty($http_health['runtime_warnings']) && is_array($http_health['runtime_warnings']))
+				foreach($http_health['runtime_warnings'] as $warning)
+					if(!empty($warning['reported']) && (int)$warning['reported'] >= time() - HOUR_IN_SECONDS)
+						$messages[] = 'A real frontend page reported that <code>'.esc_html((string)$warning['id']).'</code> did not become active, even though a follow-up browser check could load the expected file and marker. This can indicate script/style optimization, execution order, a browser extension, or another runtime conflict. Delivery has not been changed automatically.';
+			if(is_array($http_health) && !empty($http_health['failures']) && is_array($http_health['failures']))
+				foreach($http_health['failures'] as $id => $failure)
+				{
+					$status = (!empty($failure['status'])) ? ' HTTP '.(int)$failure['status'].'.' : '';
+					if($id === 's2o' && $using_s2o && !$s2o_missing && !empty($failure['url']) && (string)$failure['url'] === (string)$GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'])
+					{
+						$has_confirmed_failure = TRUE;
+						$messages[] = 'The selected s2Member Dynamic Loader could not be reached.'.$status.' s2Member is using the WordPress Dynamic Loader instead. <a href="'.esc_url($dynamic_settings_url).'">Review Dynamic CSS/JS Loader</a> or see <a href="https://s2member.com/kb-article/mod-security-odd-403-503-500-errors/">Mod Security (Odd 403, 503, 500 Errors)</a>.';
+					}
+					else if(strpos((string)$id, 'static:') === 0 && !empty($failure['url']) && self::asset_http_target_failed($id, (string)$failure['url']))
+					{
+						$has_confirmed_failure = TRUE;
+						$messages[] = 'A generated static file could not be loaded from its public URL.'.$status.' Pages that need it are using dynamic delivery instead. <a href="'.esc_url($static_settings_url).'">Open Static CSS/JS Optimization</a>.';
+					}
+					else if(strpos((string)$id, 'runtime:') === 0 && !empty($http_health['checked']) && (int)$http_health['checked'] >= time() - HOUR_IN_SECONDS)
+					{
+						$has_confirmed_failure = TRUE;
+						$messages[] = 'A dynamically generated frontend asset could not be loaded or did not contain its expected completion marker.'.$status.' Review the browser console and your CSS/JavaScript optimization or security settings.';
+					}
+				}
+
+			if($messages)
+				c_ws_plugin__s2member_admin_notices::display_branded_notice('s2Member Frontend Asset Notice', implode('<br /><br />', $messages), $has_confirmed_failure);
+			return;
+		}
+
+		/**
+		 * Prints an infrequent trusted browser-side reachability probe for active frontend assets.
+		 *
+		 * Healthy static files use HEAD. The lightweight loader uses its tiny pre-WordPress health mode.
+		 * A frontend runtime suspicion forces one full cache-busted marker check for that exact URL.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2110
+		 *
+		 * @attaches-to ``add_action('admin_footer');``
+		 * @attaches-to ``add_action('wp_footer');``
+		 * @return null
+		 */
+		public static function asset_http_health_probe()
+		{
+			if(!current_user_can('create_users') || (defined('DOING_AJAX') && DOING_AJAX))
+				return;
+			$targets = self::asset_http_health_targets();
+			if(!$targets)
 				return;
 
-			$settings_url = add_query_arg('s2member-open-panel', 'frontend-static-assets', admin_url('/admin.php?page=ws-plugin--s2member-gen-ops')).'#ws-plugin--s2member-static-assets';
-			$details = esc_html(implode(' ', $health));
-			$message = '<strong>s2Member static frontend asset warning:</strong> '.$details.' <a href="'.esc_url($settings_url).'">Open Frontend CSS/JS Optimization and refresh the static assets.</a>';
+			$target_hash = self::asset_http_health_target_hash($targets);
+			$health = self::asset_http_health_state();
+			$has_failures = is_array($health) && !empty($health['failures']);
+			$has_suspicions = (bool)self::asset_runtime_suspicions();
+			$interval = ($has_failures || $has_suspicions) ? MINUTE_IN_SECONDS : 10 * MINUTE_IN_SECONDS;
+			if(!$has_suspicions && is_array($health) && !empty($health['checked']) && !empty($health['target_hash']) && (string)$health['target_hash'] === $target_hash && (int)$health['checked'] >= time() - $interval)
+				return;
 
-			//260903.0612 Surface out-of-band asset deletion anywhere in wp-admin without adding filesystem checks to frontend requests.
-			c_ws_plugin__s2member_admin_notices::display_admin_notice($message, TRUE);
+			$config = array(
+				'targets' => array_values($targets),
+				'target_hash' => $target_hash,
+				'ajax_url' => admin_url('admin-ajax.php'),
+				'nonce' => wp_create_nonce('ws-plugin--s2member-asset-http-health'),
+				'reload_on_change' => is_admin(),
+			);
+			echo '<script type="text/javascript">(function(c){if(!window.fetch||!window.URL||!window.Promise)return;function u(t,i){var x=new URL(t.probe_url,window.location.href),n=Date.now().toString(36)+"-"+i+"-"+Math.random().toString(36).slice(2);x.searchParams.set("s2member_asset_health",n);if(t.mode==="s2o-health")x.searchParams.set("s2member_health_token",n);return{x:x.toString(),n:n}}function ct(r,t){var v=(r.headers.get("content-type")||"").toLowerCase();if(t.type==="css")return v.indexOf("text/css")!==-1;if(t.type==="js")return /(javascript|ecmascript)/.test(v);return v.indexOf("text/plain")!==-1}function f(t,m,i,body){var z=u(t,i);return fetch(z.x,{method:m,cache:"no-store",credentials:"same-origin",headers:{"Cache-Control":"no-cache, no-store, max-age=0","Pragma":"no-cache"}}).then(function(r){var h=r.headers.get("x-s2member-health-token")||"",tm=r.headers.get("x-s2member-health-time")||"";if(!body)return{ok:r.ok&&ct(r,t),status:r.status,content_type:r.headers.get("content-type")||"",text:"",token:z.n,health_token:h,health_time:tm};return r.text().then(function(x){return{ok:r.ok&&ct(r,t),status:r.status,content_type:r.headers.get("content-type")||"",text:x,token:z.n,health_token:h,health_time:tm}})}).catch(function(){return{ok:false,status:0,content_type:"",text:"",token:z.n,health_token:"",health_time:""}})}function p(t,i){if(t.mode==="s2o-health")return f(t,"GET",i,true).then(function(r){r.ok=r.ok&&r.health_token===r.token&&r.health_time!==""&&r.text.indexOf("s2member-o-health:"+r.token+":"+r.health_time)===0;return{id:t.id,ok:r.ok,status:r.status,content_type:r.content_type,detail:r.ok?"":"Health marker mismatch"}});if(t.mode==="marker")return f(t,"GET",i,true).then(function(r){if(r.ok&&t.markers)for(var j=0;j<t.markers.length;j++)if(r.text.indexOf(t.markers[j])===-1){r.ok=false;break}return{id:t.id,ok:r.ok,status:r.status,content_type:r.content_type,detail:r.ok?"":"Expected marker missing"}});return f(t,"HEAD",i,false).then(function(r){if(r.ok)return{id:t.id,ok:true,status:r.status,content_type:r.content_type,detail:""};return f(t,"GET",i+"g",false).then(function(g){return{id:t.id,ok:g.ok,status:g.status,content_type:g.content_type,detail:g.ok?"":"Public URL check failed"}})})}Promise.all(c.targets.map(p)).then(function(results){var body="action="+encodeURIComponent("ws_plugin__s2member_asset_http_health")+"&_ajax_nonce="+encodeURIComponent(c.nonce)+"&target_hash="+encodeURIComponent(c.target_hash)+"&results="+encodeURIComponent(JSON.stringify(results));return fetch(c.ajax_url,{method:"POST",cache:"no-store",credentials:"same-origin",headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8","Cache-Control":"no-cache, no-store, max-age=0","Pragma":"no-cache"},body:body})}).then(function(r){return r.json()}).then(function(j){if(c.reload_on_change&&j&&j.success&&j.data&&j.data.reload)window.location.reload()}).catch(function(){})})('.wp_json_encode($config).');</script>' . "\n";
 			return;
+		}
+
+		/**
+		 * Stores trusted administrator-browser asset probe results.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2110
+		 *
+		 * @return null Exits through WordPress JSON helpers.
+		 */
+		public static function ajax_asset_http_health_report()
+		{
+			check_ajax_referer('ws-plugin--s2member-asset-http-health');
+			if(!current_user_can('create_users'))
+				wp_send_json_error(array('message' => 'You do not have permission to report s2Member asset health.'), 403);
+
+			$targets = self::asset_http_health_targets();
+			$target_hash = self::asset_http_health_target_hash($targets);
+			if(empty($_POST['target_hash']) || (string)wp_unslash($_POST['target_hash']) !== $target_hash)
+				wp_send_json_success(array('stale' => TRUE, 'reload' => FALSE));
+
+			$results = (!empty($_POST['results'])) ? json_decode(wp_unslash($_POST['results']), TRUE) : array();
+			$by_id = array();
+			if(is_array($results))
+				foreach($results as $result)
+					if(is_array($result) && !empty($result['id']))
+						$by_id[(string)$result['id']] = $result;
+
+			$old = self::asset_http_health_state();
+			$old_failures = (is_array($old) && !empty($old['failures']) && is_array($old['failures'])) ? $old['failures'] : array();
+			$runtime_warnings = (is_array($old) && !empty($old['runtime_warnings']) && is_array($old['runtime_warnings'])) ? $old['runtime_warnings'] : array();
+			foreach($runtime_warnings as $key => $warning)
+				if(empty($warning['reported']) || (int)$warning['reported'] < time() - HOUR_IN_SECONDS)
+					unset($runtime_warnings[$key]);
+			$failures = array();
+			$suspicions = self::asset_runtime_suspicions();
+
+			foreach($targets as $id => $target)
+			{
+				$result = (isset($by_id[$id]) && is_array($by_id[$id])) ? $by_id[$id] : array();
+				if(empty($result['ok']))
+				{
+					$failure_id = (!empty($target['failure_id'])) ? (string)$target['failure_id'] : $id;
+					$failures[$failure_id] = array(
+						'url' => (!empty($target['failure_url'])) ? (string)$target['failure_url'] : (string)$target['url'],
+						'label' => (string)$target['label'],
+						'status' => (!empty($result['status'])) ? (int)$result['status'] : 0,
+						'content_type' => (!empty($result['content_type'])) ? substr(sanitize_text_field((string)$result['content_type']), 0, 100) : '',
+						'detail' => (!empty($result['detail'])) ? substr(sanitize_text_field((string)$result['detail']), 0, 160) : '',
+					);
+				}
+				else if(!empty($target['suspicion_key']) && !empty($target['suspicion']))
+				{
+					$key = (string)$target['suspicion_key'];
+					$runtime_warnings[$key] = array(
+						'id' => (string)$target['suspicion']['id'],
+						'url' => (string)$target['suspicion']['url'],
+						'delivery' => (string)$target['suspicion']['delivery'],
+						'reported' => time(),
+					);
+				}
+				if(!empty($target['suspicion_key']))
+					unset($suspicions[(string)$target['suspicion_key']]);
+			}
+
+			update_option('ws_plugin__s2member_asset_runtime_suspicions', $suspicions, FALSE);
+			$new_health = array('checked' => time(), 'target_hash' => $target_hash, 'failures' => $failures, 'runtime_warnings' => $runtime_warnings);
+			update_option('ws_plugin__s2member_asset_http_health', $new_health, FALSE);
+			self::$asset_http_health_cache = $new_health;
+			wp_send_json_success(array('failures' => count($failures), 'runtime_warnings' => count($runtime_warnings), 'reload' => serialize($old_failures) !== serialize($failures)));
+		}
+
+		/**
+		 * Prints the late real-page asset marker monitor.
+		 *
+		 * A normal browser has already finished loading ordinary CSS/JavaScript by window.load, so a short extra grace period is enough to avoid racing normal delivery. Healthy pages make no request. A recoverable miss uses one WordPress fallback request that also carries compact signed diagnostic details.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2255
+		 *
+		 * @attaches-to ``add_action('wp_footer');``
+		 * @return null
+		 */
+		public static function page_asset_runtime_monitor()
+		{
+			if(is_admin() || !self::$page_asset_expectations)
+				return;
+
+			$expectations = array();
+			$recovery = array('css' => '', 'js' => '');
+			foreach(self::$page_asset_expectations as $expectation)
+			{
+				$expectations[] = array(
+					(string)$expectation['id'],
+					(string)$expectation['asset_id'],
+					(string)$expectation['url'],
+					(string)$expectation['delivery'],
+					(string)$expectation['token'],
+					(string)$expectation['signature'],
+				);
+				if(!empty($expectation['recovery_url']) && empty($recovery[(string)$expectation['type']]))
+					$recovery[(string)$expectation['type']] = (string)$expectation['recovery_url'];
+			}
+			$config = array('a' => admin_url('admin-ajax.php'), 'e' => $expectations, 'r' => $recovery, 'd' => 1000);
+			echo '<script type="text/javascript" id="ws-plugin--s2member-asset-runtime-monitor">(function(c){function t(e){return /_js$/.test(e[0])?"js":"css"}function p(e){return /^pro_/.test(e[0])?"pro":"framework"}function n(e){var i="ws-plugin--s2member-"+p(e)+"-css-health",o=document.getElementById(i);if(!o){o=document.createElement("span");o.id=i;o.style.cssText="position:absolute;left:-99999px;top:-99999px;width:1px;height:1px;visibility:hidden";(document.body||document.documentElement).appendChild(o)}return o}function ok(e){if(t(e)==="js")return !!(window.ws_plugin__s2member_asset_health&&window.ws_plugin__s2member_asset_health[p(e)+"_js"]===e[4]);return !window.getComputedStyle||String(getComputedStyle(n(e)).zIndex)===e[4]}function u(x,m){var q=Date.now().toString(36)+"-"+Math.random().toString(36).slice(2),j=JSON.stringify(m);if(!window.URL)return x+(x.indexOf("?")<0?"?":"&")+"s2member_asset_recovery="+encodeURIComponent(q)+"&s2member_asset_runtime_suspect="+encodeURIComponent(j);var o=new URL(x,location.href);o.searchParams.set("s2member_asset_recovery",q);o.searchParams.set("s2member_asset_runtime_suspect",j);return o.toString()}function report(m){if(!window.fetch||!m.length)return;fetch(c.a,{method:"POST",cache:"no-store",credentials:"same-origin",keepalive:true,headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body:"action=ws_plugin__s2member_asset_runtime_suspect&missing="+encodeURIComponent(JSON.stringify(m))}).catch(function(){})}function recover(m){var ro=[],cm=m.filter(function(e){return t(e)==="css"}),ja=c.e.filter(function(e){return t(e)==="js"}),jm=m.filter(function(e){return t(e)==="js"});if(cm.length){if(c.r.css){var l=document.createElement("link");l.rel="stylesheet";l.href=u(c.r.css,cm);l.onerror=function(){report(cm)};document.head.appendChild(l)}else ro=ro.concat(cm)}if(jm.length){if(ja.length&&jm.length===ja.length&&c.r.js){var s=document.createElement("script");s.src=u(c.r.js,jm);s.async=false;s.onerror=function(){report(jm)};(document.body||document.documentElement).appendChild(s)}else ro=ro.concat(jm)}if(ro.length)report(ro)}function check(){var m=c.e.filter(function(e){return !ok(e)});if(m.length)recover(m)}c.e.filter(function(e){return t(e)==="css"}).forEach(n);function go(){setTimeout(check,c.d)}document.readyState==="complete"?go():addEventListener("load",go,false)})('.wp_json_encode($config).');</script>' . "\n";
+			return;
+		}
+
+		/**
+		 * Records signed low-trust frontend runtime suspicions without changing delivery state.
+		 *
+		 * Reports are rate-limited and only force a later trusted administrator-browser confirmation. A recovery request and the standalone AJAX reporter share this validator so successful page-local fallback normally needs no separate reporting request.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260905.0009
+		 *
+		 * @param array $missing Missing runtime expectations.
+		 * @return int Number of newly recorded suspicions.
+		 */
+		protected static function record_asset_runtime_suspicions($missing = array())
+		{
+			if(!is_array($missing) || !$missing)
+				return 0;
+			$missing = array_slice($missing, 0, 4);
+			$suspicions = self::asset_runtime_suspicions();
+			$recorded = 0;
+			foreach($missing as $expectation)
+			{
+				if(is_array($expectation) && isset($expectation[0]) && !isset($expectation['id']))
+					$expectation = self::expand_asset_runtime_expectation($expectation);
+				if(!is_array($expectation) || empty($expectation['signature']))
+					continue;
+				$signature = (string)$expectation['signature'];
+				unset($expectation['signature']);
+				if(!hash_equals(self::asset_runtime_expectation_signature($expectation), $signature) || !self::asset_runtime_expectation_is_current($expectation))
+					continue;
+				$key = md5((string)$expectation['id']."\0".(string)$expectation['url']."\0".(string)$expectation['marker']);
+				if(get_transient('ws_plugin__s2member_asset_runtime_suspect_'.$key))
+					continue;
+				set_transient('ws_plugin__s2member_asset_runtime_suspect_'.$key, 1, MINUTE_IN_SECONDS);
+				$expectation['reported'] = time();
+				$expectation['signature'] = $signature;
+				$suspicions[$key] = $expectation;
+				$recorded++;
+			}
+			if($recorded)
+				update_option('ws_plugin__s2member_asset_runtime_suspicions', $suspicions, FALSE);
+			return $recorded;
+		}
+
+		/**
+		 * Records signed runtime suspicions carried by a page-local WordPress recovery request.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260905.0009
+		 *
+		 * @return int Number of newly recorded suspicions.
+		 */
+		public static function record_asset_runtime_recovery_suspicion()
+		{
+			if(empty($_GET['s2member_asset_runtime_suspect']))
+				return 0;
+			$missing = json_decode(wp_unslash($_GET['s2member_asset_runtime_suspect']), TRUE);
+			return self::record_asset_runtime_suspicions($missing);
+		}
+
+		/**
+		 * Records a low-trust frontend runtime suspicion without changing delivery state.
+		 *
+		 * This endpoint remains available for misses where loading a full fallback could duplicate JavaScript that already ran.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260904.2255
+		 *
+		 * @return null Exits through WordPress JSON helpers.
+		 */
+		public static function ajax_asset_runtime_suspicion()
+		{
+			$missing = (!empty($_POST['missing'])) ? json_decode(wp_unslash($_POST['missing']), TRUE) : array();
+			wp_send_json_success(array('recorded' => self::record_asset_runtime_suspicions($missing)));
 		}
 
 		/**
@@ -703,6 +1383,81 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
+		 * Formats one preserved source notice compactly without turning it into an unreadable single line.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260905.0106
+		 *
+		 * @param string $comment Original leading source docblock.
+		 * @return string Compact readable preserved notice.
+		 */
+		protected static function preserved_asset_header($comment = '')
+		{
+			$header = trim((string)$comment);
+			$header = preg_replace('/\A\/\*\*|\*\/\z/', '', $header);
+			$header = preg_replace('/^\s*\*\s?/m', '', $header);
+			$header = preg_replace('/\s+/', ' ', trim($header));
+			$header = str_replace(array('Â©', '©'), '(c)', $header);
+			return "/*!\n * ".wordwrap($header, 140, "\n * ", FALSE)."\n */";
+		}
+
+		/**
+		 * Prunes stale generated generations after a successful build.
+		 *
+		 * Keep current build files protected, retain up to ten older generations for cached HTML,
+		 * and remove anything older than 30 days. This bounds normal disk use without deleting the
+		 * previous timestamp immediately after a refresh.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260905.0106
+		 *
+		 * @param string $dir Current generated-asset directory.
+		 * @param string $new_path Newly generated file path that must be preserved.
+		 * @return null
+		 */
+		protected static function prune_static_asset_generations($dir = '', $new_path = '')
+		{
+			$dir = rtrim((string)$dir, '/\\');
+			if(!$dir || !is_dir($dir))
+				return;
+			$protected = array();
+			$builds = get_option('ws_plugin__s2member_static_asset_builds', array());
+			if(is_array($builds))
+				foreach($builds as $id => $build)
+				if(in_array($id, array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js'), TRUE) && ($build = abs((int)$build)))
+				{
+					$type = substr(strrchr($id, '.'), 1);
+					$base = substr($id, 0, -strlen('.'.$type));
+					$protected[$dir.'/'.$base.'-'.$build.'.'.$type] = TRUE;
+				}
+			if($new_path)
+				$protected[(string)$new_path] = TRUE;
+
+			$groups = array();
+			foreach(array('css', 'js') as $type)
+				foreach((array)glob($dir.'/s2member*.'.$type) as $path)
+					if(preg_match('/\/(s2member(?:-pro)?)-\d+\.(css|js)\z/', str_replace('\\', '/', $path), $match))
+						$groups[$match[1].'.'.$match[2]][] = $path;
+
+			foreach($groups as $paths)
+			{
+				usort($paths, function($a, $b) {
+					return (int)@filemtime($b) - (int)@filemtime($a);
+				});
+				$stale_kept = 0;
+				foreach($paths as $old_path)
+				{
+					if(isset($protected[$old_path]))
+						continue;
+					$stale_kept++;
+					if((int)@filemtime($old_path) < time() - 30 * DAY_IN_SECONDS || $stale_kept > 10)
+						@unlink($old_path);
+				}
+			}
+			return;
+		}
+
+		/**
 		 * Builds one timestamped CSS/JS file in the WordPress uploads tree.
 		 *
 		 * @package s2Member\Utilities
@@ -751,7 +1506,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				{
 					if(!empty($source['preserve_header']))
 					{
-						$header = '/*!'.substr(trim($match[1]), 3);
+						//260905.0106 Preserve the complete notice in a compact wrapped block instead of a huge original banner or an unreadable single line.
+						$header = self::preserved_asset_header($match[1]);
 						if(!in_array($header, $headers, TRUE))
 							$headers[] = $header;
 					}
@@ -770,7 +1526,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			{
 				return array('ok' => FALSE, 'url' => '', 'path' => '', 'error' => 'JavaScript minification failed: '.$e->getMessage());
 			}
-			$output = (($headers) ? implode("\n", $headers)."\n" : '').$body."\n";
+			$marker = self::static_asset_marker_output($id, $type, $build);
+			$output = (($headers) ? implode("\n", $headers)."\n" : '').$body."\n".$marker."\n";
 			$tmp = $path.'.tmp-'.uniqid('', TRUE);
 			if(file_put_contents($tmp, $output, LOCK_EX) === FALSE || (!@rename($tmp, $path) && !is_file($path)))
 			{
@@ -779,10 +1536,6 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			}
 			@unlink($tmp);
 
-			//260903.0525 Keep old timestamped files long enough for cached HTML, pruning only generations older than 30 days after a successful replacement build.
-			foreach((array)glob($location['dir'].'/'.$id.'-*.'.$type) as $old_path)
-				if($old_path !== $path && @filemtime($old_path) < time() - 30 * DAY_IN_SECONDS)
-					@unlink($old_path);
 			return array('ok' => TRUE, 'url' => $url, 'path' => $path, 'error' => '');
 		}
 
@@ -814,6 +1567,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					return self::$static_assets_location_cache[$key] = array('ok' => FALSE, 'dir' => $dir, 'url' => $url, 'error' => 'Could not create static-assets directory: '.$dir);
 				if(!is_writable($dir))
 					return self::$static_assets_location_cache[$key] = array('ok' => FALSE, 'dir' => $dir, 'url' => $url, 'error' => 'Static-assets directory is not writable: '.$dir);
+
+				//260905.0158 Discourage casual directory listing without adding executable PHP to the public uploads directory.
+				$index_file = $dir.'/index.html';
+				if(!is_file($index_file))
+					@file_put_contents($index_file, '<!-- Silence is golden. -->'."\n", LOCK_EX);
 			}
 			return self::$static_assets_location_cache[$key] = array('ok' => TRUE, 'dir' => $dir, 'url' => $url, 'error' => '');
 		}
@@ -834,11 +1592,19 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			return $m[0];
 		}
 
-		/*
-		 * JShrink 1.8.1 adaptation.
+		/**
+		 * JShrink 1.8.1 adaptation used for generated JavaScript minification.
 		 *
-		 *260903.0437 The upstream parser is kept intentionally isolated behind `jshrink_*` names. The only
-		 * PHP 5.6 compatibility change is avoiding PHP 7.1+ negative string offsets when tracking the last character.
+		 * JShrink is Copyright (c) Robert Hafner and licensed under BSD-3-Clause.
+		 * See `/src/licensing/jshrink.txt` for the complete license and attribution.
+		 * @see https://github.com/tedious/JShrink
+		 *
+		 * The upstream parser is kept intentionally isolated behind `jshrink_*` names.
+		 * The only PHP 5.6 compatibility change avoids PHP 7.1+ negative string offsets
+		 * when tracking the last character.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260903.0437
 		 */
 		protected $jshrink_input;
 		protected $jshrink_len = 0;

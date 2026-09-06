@@ -44,7 +44,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 				*/
 				public static function doctype_html_head ($doctype_html_head_title = FALSE, $doctype_html_head_action = FALSE)
 					{
-						$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(); //260904.0221 Standalone frontend documents share the centralized WordPress front-controller URL.
+						$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(); //260904.1923 Standalone frontend documents use the same selected dynamic loader as theme integration.
 						$static_css = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css'])) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('css') : array();
 						$static_js = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && function_exists('wp_add_inline_script')) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('js') : array();
 

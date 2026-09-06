@@ -96,13 +96,17 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 					{
 						$handle = ($id === 's2member-pro.css') ? 'ws-plugin--s2member-pro' : 'ws-plugin--s2member';
 						wp_enqueue_style($handle, $asset['url'], $dependency, NULL, 'all');
+						c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($id, 'css', $asset['url'], 'static', $asset['build']);
 						$dependency = array($handle);
 					}
 				}
 				else
 				{
-					//260904.0221 Use the centralized WordPress front-controller URL so custom index filenames are respected; keep s2member-o.php available for legacy/direct URLs.
-					wp_enqueue_style('ws-plugin--s2member', c_ws_plugin__s2member_utils_assets::dynamic_asset_url().'?ws_plugin__s2member_css=1&qcABC=1', array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
+					//260904.2255 Use the selected dynamic loader and register the exact response markers this page should receive.
+					$dynamic_css_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url().'?ws_plugin__s2member_css=1&qcABC=1';
+					$dynamic_css_delivery = (strpos($dynamic_css_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-lightweight' : 'dynamic-wordpress';
+					wp_enqueue_style('ws-plugin--s2member', $dynamic_css_url, array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
+					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations('', 'css', $dynamic_css_url, $dynamic_css_delivery);
 				}
 
 				//260903.1918 Static CSS keeps Framework/Pro files separate by default, with optional combining; any incompatible hook/build failure retains the single legacy dynamic response.
@@ -131,7 +135,7 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 
 			if((!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js()) || (is_user_admin() && $pagenow === 'profile.php' && !current_user_can('edit_users')))
 			{
-				$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(); //260904.0221 Centralize front-controller discovery so custom WordPress index filenames are respected.
+				$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(); //260904.1923 Centralize the selected dynamic loader for ordinary delivery and static fallback.
 				$static = (!is_admin() && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && function_exists('wp_add_inline_script')) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('js') : array();
 				$static_js = !empty($static['ok']) && !empty($static['assets']);
 				$dynamic_js = !$static_js;
@@ -145,16 +149,18 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 						wp_enqueue_script($handle, $asset['url'], $dependency, NULL, TRUE);
 						if($handle === 'ws-plugin--s2member')
 							wp_add_inline_script($handle, c_ws_plugin__s2member_css_js_in::current_user_js_globals(TRUE), 'before');
+						c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($id, 'js', $asset['url'], 'static', $asset['build']);
 						$dependency = array($handle);
 					}
 				}
-				else if(is_user_logged_in())
-				{
-					$md5 = WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5;
-					wp_enqueue_script('ws-plugin--s2member', $dynamic_asset_url.'?ws_plugin__s2member_js_w_globals='.urlencode($md5).'&qcABC=1', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
-				}
 				else
-					wp_enqueue_script('ws-plugin--s2member', $dynamic_asset_url.'?ws_plugin__s2member_js_w_globals=1&qcABC=1', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
+				{
+					$dynamic_js_value = (is_user_logged_in()) ? WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5 : '1';
+					$dynamic_js_url = $dynamic_asset_url.'?ws_plugin__s2member_js_w_globals='.urlencode($dynamic_js_value).'&qcABC=1';
+					$dynamic_js_delivery = (strpos($dynamic_js_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-lightweight' : 'dynamic-wordpress';
+					wp_enqueue_script('ws-plugin--s2member', $dynamic_js_url, array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
+					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations('', 'js', $dynamic_js_url, $dynamic_js_delivery);
+				}
 
 				do_action('ws_plugin__s2member_during_add_js_w_globals', get_defined_vars());
 			}

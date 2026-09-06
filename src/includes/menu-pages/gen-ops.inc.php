@@ -167,7 +167,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 			{
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_before_lazy_load", get_defined_vars());
 
-				echo '<div class="ws-menu-page-group" title="Performance &amp; Caching"'.((!empty($_GET['s2member-open-panel']) && $_GET['s2member-open-panel'] === 'frontend-static-assets') ? ' default-state="open"' : '').'>'."\n";
+				$open_performance_panel = !empty($_GET['s2member-open-panel']) && in_array((string)$_GET['s2member-open-panel'], array('frontend-static-assets', 'dynamic-asset-loader'), TRUE);
+				echo '<div class="ws-menu-page-group" title="Performance &amp; Caching"'.(($open_performance_panel) ? ' default-state="open"' : '').'>'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-lazy-load-section">'."\n";
 				echo '<h3>CSS/JS Lazy Loading (Client-Side Libraries)</h3>'."\n";
@@ -204,18 +205,43 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 				echo '</div>'."\n";
 
-				//260903.0525 Keep static CSS/JS delivery and minification independently opt-in while beta; dependent minify controls enable immediately in the UI.
+				//260904.2014 Dynamic delivery applies independently of static delivery, so give its loader choice a separate section.
+				echo '<div id="ws-plugin--s2member-dynamic-asset-loader-section" class="ws-menu-page-section ws-plugin--s2member-dynamic-asset-loader-section">'."\n";
+				echo '<h3>Dynamic CSS/JS Loader</h3>'."\n";
+				echo '<p>When s2Member needs to generate CSS or JavaScript dynamically, this controls how that request is loaded.</p>'."\n";
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+
+				$dynamic_asset_loader = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader']) && $GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader'] === 'wordpress') ? 'wordpress' : 's2o';
+				echo '<tr><th><label for="ws-plugin--s2member-dynamic-asset-loader">Dynamic CSS/JS Loader</label></th></tr>'."\n";
+				echo '<tr><td>'."\n";
+				echo '<select name="ws_plugin__s2member_dynamic_asset_loader" id="ws-plugin--s2member-dynamic-asset-loader">'."\n";
+				echo '<option value="s2o"'.(($dynamic_asset_loader === 's2o') ? ' selected="selected"' : '').'>s2Member Dynamic Loader (recommended)</option>'."\n";
+				echo '<option value="wordpress"'.(($dynamic_asset_loader === 'wordpress') ? ' selected="selected"' : '').'>WordPress Dynamic Loader (compatibility)</option>'."\n";
+				echo '</select><br />'."\n";
+				echo '<em>The s2Member Dynamic Loader uses a lighter WordPress load for better performance. The WordPress Dynamic Loader uses the site\'s normal WordPress request and can help when a server or security tool blocks direct <code>s2member-o.php</code> requests. See <a href="https://s2member.com/kb-article/mod-security-odd-403-503-500-errors/">Mod Security (Odd 403, 503, 500 Errors)</a>.</em>'."\n";
+				echo '</td></tr>'."\n";
+
+				echo '</tbody>'."\n";
+				echo '</table>'."\n";
+				echo '</div>'."\n";
+
+				echo '<div style="margin:1em 0;">'."\n";
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+				echo '</div>'."\n";
+
+				//260904.2014 Keep static CSS/JS delivery and its related optimizations together in a clearly named section.
 				echo '<div id="ws-plugin--s2member-static-assets" class="ws-menu-page-section ws-plugin--s2member-static-assets-section">'."\n";
-				echo '<h3>Frontend CSS/JS Optimization (beta)</h3>'."\n";
-				echo '<p>These beta options can replace s2Member\'s legacy dynamic frontend assets with timestamped static CSS/JS files under the WordPress uploads directory. Framework and Pro generated files remain separate by default; an optional combine setting can reduce requests further. Static JavaScript is generated from readable source files; only current-user values remain inline in each page.</p>'."\n";
-				echo '<p><em>After enabling these options, test your membership, registration, profile, and payment pages. Disable the corresponding Static Delivery option to return immediately to the legacy dynamic asset for that type.</em></p>'."\n";
+				echo '<h3>Static CSS/JS Optimization (beta)</h3>'."\n";
+				echo '<p>These beta options build CSS and JavaScript files ahead of time under the WordPress uploads directory, so the web server can serve them directly without starting PHP and WordPress for each request. Framework and Pro files remain separate by default, with optional combining and minification for further optimization.</p>'."\n";
+				echo '<p><em>After enabling these options, test your membership, registration, profile, and payment pages. If a static file cannot be used, s2Member automatically uses the selected Dynamic CSS/JS Loader instead.</em></p>'."\n";
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
 				echo '<tr><th><label for="ws-plugin--s2member-static-css">Static CSS Delivery?</label></th></tr>'."\n";
 				echo '<tr><td>'."\n";
 				echo '<select name="ws_plugin__s2member_static_css" id="ws-plugin--s2member-static-css" onchange="jQuery(\'#ws-plugin--s2member-static-css-minify\').prop(\'disabled\', this.value !== \'1\');">'."\n";
-				echo '<option value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) ? ' selected="selected"' : '').'>No (use legacy dynamic CSS)</option>'."\n";
+				echo '<option value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) ? ' selected="selected"' : '').'>No (use dynamic CSS)</option>'."\n";
 				echo '<option value="1"'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) ? ' selected="selected"' : '').'>Yes (beta; generate and serve static CSS)</option>'."\n";
 				echo '</select><br />'."\n";
 				echo '<em>Generates timestamped Framework CSS and, when Pro is active, a separate Pro/gateway stylesheet by default. Generation failures or incompatible custom CSS hooks use legacy dynamic CSS.</em>'."\n";
@@ -233,7 +259,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<tr><th><label for="ws-plugin--s2member-static-js">Static JS Delivery?</label></th></tr>'."\n";
 				echo '<tr><td>'."\n";
 				echo '<select name="ws_plugin__s2member_static_js" id="ws-plugin--s2member-static-js" onchange="jQuery(\'#ws-plugin--s2member-static-js-minify\').prop(\'disabled\', this.value !== \'1\');">'."\n";
-				echo '<option value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) ? ' selected="selected"' : '').'>No (use legacy dynamic JavaScript)</option>'."\n";
+				echo '<option value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) ? ' selected="selected"' : '').'>No (use dynamic JavaScript)</option>'."\n";
 				echo '<option value="1"'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) ? ' selected="selected"' : '').'>Yes (beta; generate and serve static JavaScript)</option>'."\n";
 				echo '</select><br />'."\n";
 				echo '<em>Generates timestamped Framework JavaScript and, when Pro is active, a separate Pro/gateway script by default. Current-user values remain inline. WordPress 4.2–4.4 automatically keep legacy dynamic JavaScript.</em>'."\n";
@@ -257,17 +283,19 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<em>Applies when s2Member Pro is active. Separate delivery is the default; combining is an optional optimization that serves one generated CSS file and/or one generated JavaScript file instead of separate Framework and Pro files.</em>'."\n";
 				echo '</td></tr>'."\n";
 
-				$static_asset_health = c_ws_plugin__s2member_utils_assets::static_assets_health(TRUE);
+				$static_assets_enabled = !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) || !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']);
+				$static_asset_health = ($static_assets_enabled) ? c_ws_plugin__s2member_utils_assets::static_assets_health(TRUE) : array();
 				echo '<tr><th>Static Asset Files</th></tr>'."\n";
 				echo '<tr><td>'."\n";
-				echo '<button type="button" class="button" id="ws-plugin--s2member-refresh-static-assets">Refresh Static Assets</button> <span id="ws-plugin--s2member-refresh-static-assets-status" aria-live="polite"></span><br />'."\n";
-				echo '<em>Creates new timestamps immediately for every active generated file. Separate Framework/Pro files keep independent build timestamps, while combined mode uses one timestamp per enabled asset type. Save option changes before using this button.</em>'."\n";
+				echo '<span id="ws-plugin--s2member-refresh-static-assets-feedback" style="display:flex; align-items:center; gap:.5em; max-width:100%;"><button type="button" class="button" id="ws-plugin--s2member-refresh-static-assets" style="flex:0 0 auto;"'.((!$static_assets_enabled) ? ' disabled="disabled"' : '').'>Refresh Static Assets</button><span id="ws-plugin--s2member-refresh-static-assets-status" aria-live="polite" style="display:block; flex:1 1 auto; min-width:0;"></span></span><br />'."\n";
+				echo '<em>'.(($static_assets_enabled) ? 'Creates new timestamps immediately for every active generated file. Separate Framework/Pro files keep independent build timestamps, while combined mode uses one timestamp per enabled asset type. Save option changes before using this button.' : 'Enable Static CSS Delivery or Static JS Delivery and save the options before using this button.').'</em>'."\n";
 				if($static_asset_health)
 					echo '<p class="ws-menu-page-error" style="margin:.75em 0 0;"><em><strong>Static asset health:</strong> '.esc_html(implode(' ', $static_asset_health)).' Use Refresh Static Assets to recreate missing files.</em></p>'."\n";
 				echo '</td></tr>'."\n";
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
-				echo '<script type="text/javascript">jQuery(function($){$("#ws-plugin--s2member-refresh-static-assets").on("click",function(){var $b=$(this),$s=$("#ws-plugin--s2member-refresh-static-assets-status");$b.prop("disabled",true);$s.text("Refreshing…");$.post(ajaxurl,{action:"ws_plugin__s2member_refresh_static_assets",_ajax_nonce:"'.esc_js(wp_create_nonce('ws-plugin--s2member-refresh-static-assets')).'"}).done(function(r){$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets refreshed.");}).fail(function(xhr){var r=xhr.responseJSON;$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets could not be refreshed.");}).always(function(){$b.prop("disabled",false);});});});</script>'."\n";
+				//260904.0649 Keep Refresh tied to saved settings: disable it when no static type is active and while related controls have unsaved changes.
+				echo '<script type="text/javascript">jQuery(function($){var $b=$("#ws-plugin--s2member-refresh-static-assets"),$s=$("#ws-plugin--s2member-refresh-static-assets-status"),$controls=$("#ws-plugin--s2member-static-css,#ws-plugin--s2member-static-css-minify,#ws-plugin--s2member-static-js,#ws-plugin--s2member-static-js-minify,#ws-plugin--s2member-static-assets-combine"),savedEnabled='.($static_assets_enabled ? 'true' : 'false').',dirtyMessage="Save option changes before refreshing.";function values(){return $controls.map(function(){return this.value;}).get().join("|");}var initial=values();function sync(){var changed=values()!==initial;$b.prop("disabled",!savedEnabled||changed);if(changed)$s.text(dirtyMessage);else if($s.text()===dirtyMessage)$s.text("");}$controls.on("change",sync);$b.on("click",function(){$b.prop("disabled",true);$s.text("Refreshing…");$.post(ajaxurl,{action:"ws_plugin__s2member_refresh_static_assets",_ajax_nonce:"'.esc_js(wp_create_nonce('ws-plugin--s2member-refresh-static-assets')).'"}).done(function(r){$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets refreshed.");}).fail(function(xhr){var r=xhr.responseJSON;$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets could not be refreshed.");}).always(function(){sync();});});sync();});</script>'."\n";
 				echo '</div>'."\n";
 
 				echo '<div style="margin:1em 0;">'."\n";
