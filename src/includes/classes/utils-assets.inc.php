@@ -31,6 +31,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		protected static $static_asset_cache = array();
 		protected static $static_assets_location_cache = array();
 		protected static $static_assets_health_cache;
+		protected static $static_js_data_map_cache = array(); //260906.1530 Parsed shipped static JavaScript data maps, keyed by path.
 		protected static $asset_http_health_cache;
 		protected static $page_asset_expectations = array();
 
@@ -111,11 +112,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 * @package s2Member\Utilities
 		 * @since 260904.0221
 		 *
+		 * @param bool $force_wordpress Force the full WordPress route for a compatibility fallback.
 		 * @return string Dynamic frontend asset URL without query arguments.
 		 */
-		public static function dynamic_asset_url()
+		public static function dynamic_asset_url($force_wordpress = FALSE)
 		{
-			if((empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader']) || $GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader'] !== 'wordpress')
+			if(!$force_wordpress && (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader']) || $GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader'] !== 'wordpress')
 			   && is_file(self::s2o_file_path()) && !self::asset_http_target_failed('s2o', $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url']))
 				return $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'];
 
@@ -588,6 +590,211 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
+		 * Returns how s2Member text used by static JavaScript should be delivered.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.2049
+		 *
+		 * @return string `static` to include text in generated JavaScript, or `page` to load it with each WordPress page.
+		 */
+		public static function static_js_text_delivery()
+		{
+			return (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js_text']) && $GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js_text'] === 'page') ? 'page' : 'static';
+		}
+
+		/**
+		 * Determines whether page-loaded JavaScript text is supported by the active Framework/Pro combination.
+		 *
+		 * Framework can always load its own text with the page. Pro explicitly advertises support because
+		 * older Pro releases predate the shipped static-JS data map needed for this delivery mode.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.2049
+		 *
+		 * @return bool True if page-loaded JavaScript text is available.
+		 */
+		public static function static_js_page_text_supported()
+		{
+			if(!c_ws_plugin__s2member_utils_conds::pro_is_installed())
+				return TRUE;
+			return (bool)apply_filters('ws_plugin__s2member_static_js_page_text_supported', FALSE);
+		}
+
+		/**
+		 * Determines whether the active Pro JavaScript hook contains only built-in callbacks safe to cache in a static file.
+		 *
+		 * This lets a newer Framework retain static-file delivery with older Pro releases that predate
+		 * the static-source filters. Unknown, reordered, or deprecated gateway callbacks remain dynamic.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.2049
+		 *
+		 * @return bool True if the active Pro hook can be captured safely.
+		 */
+		protected static function static_js_builtin_pro_callbacks_supported()
+		{
+			if(!c_ws_plugin__s2member_utils_conds::pro_is_installed() || has_filter('ws_plugin__s2member_pro_available_gateways'))
+				return FALSE;
+			$built_ins = array(
+				'c_ws_plugin__s2member_pro_css_js::js_w_globals',
+				'c_ws_plugin__s2member_pro_paypal_css_js::paypal_js_w_globals',
+				'c_ws_plugin__s2member_pro_stripe_css_js::stripe_js_w_globals',
+				'c_ws_plugin__s2member_pro_authnet_css_js::authnet_js_w_globals',
+				'c_ws_plugin__s2member_pro_clickbank_css_js::clickbank_js_w_globals',
+			);
+			$callbacks = isset($GLOBALS['wp_filter']['ws_plugin__s2member_during_js_w_globals']) ? $GLOBALS['wp_filter']['ws_plugin__s2member_during_js_w_globals'] : array();
+			if(is_object($callbacks) && isset($callbacks->callbacks))
+				$callbacks = $callbacks->callbacks;
+			$found = FALSE;
+			foreach((array)$callbacks as $priority => $priority_callbacks)
+				foreach((array)$priority_callbacks as $callback)
+				{
+					if((int)$priority !== 10 || !is_array($callback) || !isset($callback['function'], $callback['accepted_args']) || !in_array($callback['function'], $built_ins, TRUE) || (int)$callback['accepted_args'] !== 1)
+						return FALSE;
+					$found = TRUE;
+				}
+			return $found;
+		}
+
+		/**
+		 * Captures built-in Pro JavaScript from an older Pro release for static-file text delivery.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.2049
+		 *
+		 * @return string Captured Pro JavaScript, or an empty string if the hook is not safely cacheable.
+		 */
+		protected static function static_js_builtin_pro_output()
+		{
+			if(!self::static_js_builtin_pro_callbacks_supported())
+				return '';
+			//260906.2256 Match the template variables passed by the normal dynamic loader when capturing older Pro callbacks.
+			$u = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'];
+			$i = $u.'/src/images';
+			ob_start();
+			do_action('ws_plugin__s2member_during_js_w_globals', get_defined_vars());
+			return (string)ob_get_clean();
+		}
+
+		/**
+		 * Returns shipped static JavaScript data maps used by one generated static JavaScript file.
+		 *
+		 * Framework owns its data map. Pro appends its independent data map through a filter so the two
+		 * release packages never need cross-repo slot coordination.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.0738
+		 *
+		 * @param string $id Logical generated JavaScript filename.
+		 * @return array Data-map paths keyed by the compact browser-data namespace.
+		 */
+		protected static function static_js_data_map_paths($id = '')
+		{
+			if(self::static_js_text_delivery() !== 'page')
+				return array();
+			$id = strtolower((string)$id);
+			$paths = array();
+			if($id === 's2member.js')
+				$paths['f'] = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir'].'/src/includes/s2member.js.php';
+			$paths = (array)apply_filters('ws_plugin__s2member_static_js_data_map_paths', $paths, $id, get_defined_vars());
+			foreach($paths as $key => $path)
+				if(!preg_match('/^[a-z][a-z0-9_]*$/i', (string)$key) || !(string)$path)
+					unset($paths[$key]);
+			return $paths;
+		}
+
+		/**
+		 * Parses one shipped static JavaScript data map into an exact expression-to-slot lookup.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.0738
+		 *
+		 * @param string $path Data-map path.
+		 * @return array Parse result.
+		 */
+		protected static function static_js_data_map($path = '')
+		{
+			$path = (string)$path;
+			if(isset(self::$static_js_data_map_cache[$path]))
+				return self::$static_js_data_map_cache[$path];
+			if(!$path || !is_readable($path) || ($source = file_get_contents($path)) === FALSE)
+				return self::$static_js_data_map_cache[$path] = array('ok' => FALSE, 'slots' => array(), 'hash' => '', 'error' => 'Static JavaScript data map is not readable: '.$path);
+
+			$slots = array();
+			if(!preg_match_all('/\\$data\\[(\\d+)\\]\\s*=\\s*\\/\\*d\\*\\/(.*?)\\/\\*b\\*\\/;/s', $source, $matches, PREG_SET_ORDER))
+				return self::$static_js_data_map_cache[$path] = array('ok' => FALSE, 'slots' => array(), 'hash' => '', 'error' => 'Static JavaScript data map contains no marked entries: '.$path);
+			foreach($matches as $index => $match)
+			{
+				$slot = (int)$match[1];
+				$expression = trim((string)$match[2]);
+				if($slot !== $index || !$expression || isset($slots[$expression]))
+					return self::$static_js_data_map_cache[$path] = array('ok' => FALSE, 'slots' => array(), 'hash' => '', 'error' => 'Static JavaScript data-map slots are invalid or duplicated: '.$path);
+				$slots[$expression] = $slot;
+			}
+			return self::$static_js_data_map_cache[$path] = array('ok' => TRUE, 'slots' => $slots, 'hash' => hash('sha256', $source), 'error' => '');
+		}
+
+		/**
+		 * Returns the current shipped data-map signature for one static JavaScript representation.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.0738
+		 *
+		 * @param string $id Logical generated JavaScript filename.
+		 * @return array Signature result.
+		 */
+		protected static function static_js_data_map_signature($id = '')
+		{
+			$hashes = array();
+			foreach(self::static_js_data_map_paths($id) as $key => $path)
+			{
+				$data_map = self::static_js_data_map($path);
+				if(empty($data_map['ok']))
+					return array('ok' => FALSE, 'signature' => '', 'error' => (string)$data_map['error']);
+				$hashes[(string)$key] = (string)$data_map['hash'];
+			}
+			if(!$hashes)
+				return array('ok' => FALSE, 'signature' => '', 'error' => 'No static JavaScript data map is available for '.$id);
+			return array('ok' => TRUE, 'signature' => hash('sha256', wp_json_encode($hashes)), 'error' => '');
+		}
+
+		/**
+		 * Returns the data-map signature saved with the active generated JavaScript file.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.0738
+		 *
+		 * @param string $id Logical generated JavaScript filename.
+		 * @return string Saved signature.
+		 */
+		protected static function static_asset_data_map_signature($id = '')
+		{
+			$signatures = get_option('ws_plugin__s2member_static_asset_data_map_signatures', array());
+			return (is_array($signatures) && isset($signatures[$id])) ? (string)$signatures[$id] : '';
+		}
+
+		/**
+		 * Saves the data-map signature paired with one generated JavaScript file.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.0738
+		 *
+		 * @param string $id        Logical generated JavaScript filename.
+		 * @param string $signature Current data-map signature.
+		 * @return null
+		 */
+		protected static function set_static_asset_data_map_signature($id = '', $signature = '')
+		{
+			if(!in_array($id, array('s2member.js', 's2member-pro.js'), TRUE))
+				return;
+			$signatures = get_option('ws_plugin__s2member_static_asset_data_map_signatures', array());
+			$signatures = is_array($signatures) ? $signatures : array();
+			$signatures[$id] = (string)$signature;
+			update_option('ws_plugin__s2member_static_asset_data_map_signatures', $signatures);
+			return;
+		}
+
+		/**
 		 * Returns the signed build timestamp for one generated frontend asset file.
 		 *
 		 * Positive values are current. Negative values preserve the previous timestamp while marking that exact file stale.
@@ -647,8 +854,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		protected static function reset_static_asset_builds()
 		{
 			delete_option('ws_plugin__s2member_static_asset_builds');
+			delete_option('ws_plugin__s2member_static_asset_data_map_signatures'); //260906.1530 Static JavaScript and its data-map slot layout must stay synchronized.
 			delete_option('ws_plugin__s2member_static_asset_health');
 			self::$static_asset_cache = array();
+			self::$static_js_data_map_cache = array();
 			self::$static_assets_health_cache = NULL;
 			foreach(array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js') as $id)
 				delete_transient('ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id));
@@ -725,7 +934,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 
 				$keys = array(
 					'css' => array('static_css', 'static_css_minify'),
-					'js' => array('static_js', 'static_js_minify'),
+					'js' => array('static_js', 'static_js_text', 'static_js_minify'),
 					'framework_js' => array('custom_reg_force_personal_emails', 'custom_reg_password_min_length', 'custom_reg_password_min_strength'),
 					'pro_css' => array('pro_gateways_enabled'),
 					'pro_js' => array(
@@ -748,7 +957,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			}
 			if(in_array((string)$option, array('siteurl', 'home'), TRUE))
 				self::invalidate_static_assets(array('css', 'js'));
-			else if((string)$option === 'WPLANG')
+			else if((string)$option === 'WPLANG' && self::static_js_text_delivery() !== 'page')
 				self::invalidate_static_assets('js');
 			return;
 		}
@@ -787,7 +996,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				return;
 			if($options['type'] === 'translation')
 			{
-				self::invalidate_static_assets('js');
+				if(self::static_js_text_delivery() !== 'page')
+					self::invalidate_static_assets('js'); //260906.2049 Page-loaded JavaScript text follows the current translation without rebuilding the external static file.
 				return;
 			}
 			if($options['type'] !== 'plugin')
@@ -845,6 +1055,21 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$dirty = $state < 0;
 			$active_build = abs($state);
 			$base = substr($id, 0, -strlen('.'.$type));
+			$data_map_signature = array('ok' => TRUE, 'signature' => '', 'error' => '');
+			$uses_data_map = $type === 'js' && self::static_js_text_delivery() === 'page';
+			if($uses_data_map)
+			{
+				$data_map_signature = self::static_js_data_map_signature($id);
+				if(empty($data_map_signature['ok']))
+					return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$data_map_signature['error']);
+				//260906.1530 Regenerate static JavaScript when its shipped data-map layout changes so slot numbers stay synchronized.
+				if($active_build && self::static_asset_data_map_signature($id) !== (string)$data_map_signature['signature'])
+				{
+					$dirty = TRUE;
+					$state = -$active_build;
+					self::set_static_asset_build($id, $state);
+				}
+			}
 			if(!$force && !$dirty && $active_build)
 			{
 				$location = self::static_assets_location(FALSE);
@@ -864,26 +1089,16 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			if(!$force && $dirty && ($failure = get_transient($failure_key)))
 				return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$failure);
 
-			$switched_locale = FALSE;
-			if($type === 'js' && function_exists('switch_to_locale'))
-			{
-				$site_locale = (string)get_option('WPLANG');
-				$switched_locale = switch_to_locale(($site_locale) ? $site_locale : 'en_US');
-			}
 			$definition = self::static_asset_definition($id, TRUE);
 			if(empty($definition['ok']))
-			{
-				if($switched_locale && function_exists('restore_previous_locale'))
-					restore_previous_locale();
 				return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$definition['error']);
-			}
 
 			$build = max(time(), $active_build + 1);
 			$result = self::build_static_asset($base, $build, $type, $definition['sources'], !empty($definition['minify']));
-			if($switched_locale && function_exists('restore_previous_locale'))
-				restore_previous_locale();
 			if(!empty($result['ok']))
 			{
+				if($uses_data_map)
+					self::set_static_asset_data_map_signature($id, (string)$data_map_signature['signature']);
 				self::set_static_asset_build($id, $build);
 				//260905.0106 Prune only after the new timestamp is current so the previous generation is treated as stale instead of protected.
 				self::prune_static_asset_generations(dirname($result['path']), $result['path']);
@@ -1348,38 +1563,173 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Static JS Delivery is disabled');
 				if(!function_exists('wp_add_inline_script'))
 					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Static JS requires WordPress 4.5+');
-				$site_locale = (string)get_option('WPLANG');
-				if(!$site_locale && defined('WPLANG'))
-					$site_locale = (string)WPLANG;
-				$site_locale = ($site_locale) ? $site_locale : 'en_US';
-				$current_locale = (function_exists('determine_locale')) ? (string)determine_locale() : (string)get_locale();
 
-				//260903.0729 Framework-level dynamic requirements are authoritative; Pro may narrow only the generic during-JS hook requirement when all callbacks are known static-compatible built-ins.
-				$framework_dynamic = apply_filters('ws_plugin__s2member_js_api_constants_enable', FALSE)
-					|| has_action('ws_plugin__s2member_before_js_w_globals') || $current_locale !== $site_locale || has_filter('ws_plugin__s2member_files_dir')
-					|| has_filter('ws_plugin__s2member_min_password_length') || has_filter('ws_plugin__s2member_min_password_strength_code') || has_filter('ws_plugin__s2member_min_password_strength_score')
-					|| isset($GLOBALS['wp_filter']['all']);
+				$page_text = self::static_js_text_delivery() === 'page';
+				if($page_text && !self::static_js_page_text_supported())
+					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Loading JavaScript text with each WordPress page requires a current s2Member Pro version');
+
+				if($page_text)
+				{
+					//260906.2049 Text and other page-specific values resolve in the normal HTML request, so they do not make the external JavaScript dynamic.
+					$framework_dynamic = apply_filters('ws_plugin__s2member_js_api_constants_enable', FALSE)
+						|| has_action('ws_plugin__s2member_before_js_w_globals') || isset($GLOBALS['wp_filter']['all']);
+				}
+				else
+				{
+					$site_locale = (string)get_option('WPLANG');
+					if(!$site_locale && defined('WPLANG'))
+						$site_locale = (string)WPLANG;
+					$site_locale = ($site_locale) ? $site_locale : 'en_US';
+					$current_locale = (function_exists('determine_locale')) ? (string)determine_locale() : (string)get_locale();
+					$framework_dynamic = apply_filters('ws_plugin__s2member_js_api_constants_enable', FALSE)
+						|| has_action('ws_plugin__s2member_before_js_w_globals') || $current_locale !== $site_locale || has_filter('ws_plugin__s2member_files_dir')
+						|| has_filter('ws_plugin__s2member_min_password_length') || has_filter('ws_plugin__s2member_min_password_strength_code') || has_filter('ws_plugin__s2member_min_password_strength_score')
+						|| isset($GLOBALS['wp_filter']['all']);
+				}
+
 				$hook_dynamic = has_action('ws_plugin__s2member_during_js_w_globals');
 				$hook_dynamic = (bool)apply_filters('ws_plugin__s2member_dynamic_js_required', $hook_dynamic, get_defined_vars());
+				if($hook_dynamic && !$page_text && self::static_js_builtin_pro_callbacks_supported())
+					$hook_dynamic = FALSE; //260906.2049 Older Pro releases can still use static-file text when their JavaScript hook contains only known built-ins.
 
 				if($framework_dynamic || $hook_dynamic)
-					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Current JavaScript hooks/configuration require legacy dynamic assets');
+					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Current JavaScript hooks/configuration require dynamic assets');
+				if($page_text)
+				{
+					$data_map_signature = self::static_js_data_map_signature($id);
+					if(empty($data_map_signature['ok']))
+						return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => (string)$data_map_signature['error']);
+				}
 				if(!$include_sources)
 					return array('ok' => TRUE, 'sources' => array(), 'minify' => !empty($o['static_js_minify']), 'error' => '');
 
 				$sources = ($pro_file) ? array() : array(
 					array('file' => $c['dir'].'/src/includes/jquery/jquery.sprintf/jquery.sprintf.js', 'preserve_header' => TRUE),
-					array('file' => $c['dir'].'/src/includes/s2member.js', 'render' => TRUE),
+					($page_text)
+						? array('file' => $c['dir'].'/src/includes/s2member.js', 'data_map' => $c['dir'].'/src/includes/s2member.js.php', 'data_key' => 'f')
+						: array('file' => $c['dir'].'/src/includes/s2member.js', 'render' => TRUE),
 				);
 				if(!$pro_file)
 					$sources = (array)apply_filters('ws_plugin__s2member_static_js_sources', $sources, get_defined_vars());
 				if($pro_file || $combine)
+				{
+					$source_count = count($sources);
 					$sources = (array)apply_filters('ws_plugin__s2member_static_pro_js_sources', $sources, get_defined_vars());
+					if(!$page_text && c_ws_plugin__s2member_utils_conds::pro_is_installed() && count($sources) === $source_count)
+					{
+						$pro_output = self::static_js_builtin_pro_output();
+						if($pro_output === '')
+							return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'No compatible static JavaScript source is available from the installed s2Member Pro version');
+						$sources[] = array('contents' => $pro_output);
+					}
+				}
 				if(!$sources)
 					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'No static JavaScript sources are available for '.$id);
 				return array('ok' => TRUE, 'sources' => $sources, 'minify' => !empty($o['static_js_minify']), 'error' => '');
 			}
 			return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Invalid static asset type');
+		}
+
+		/**
+		 * Replaces marked PHP interpolations in a canonical JavaScript source with compact data-map slots.
+		 *
+		 * The current canonical sources place every marked interpolation inside a single-quoted JavaScript
+		 * string. Replacing only the PHP block with `'+d[n]+'` preserves that historical string coercion.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.0738
+		 *
+		 * @param string $source       Canonical mixed JS/PHP source.
+		 * @param string $data_map_path Shipped data-map path.
+		 * @param string $data_key     Browser namespace key (`f` or `p`).
+		 * @return array Transform result.
+		 */
+		protected static function static_js_data_source($source = '', $data_map_path = '', $data_key = '')
+		{
+			$data_map = self::static_js_data_map($data_map_path);
+			if(empty($data_map['ok']))
+				return array('ok' => FALSE, 'source' => '', 'error' => (string)$data_map['error']);
+			if(!preg_match('/^[a-z][a-z0-9_]*$/i', (string)$data_key))
+				return array('ok' => FALSE, 'source' => '', 'error' => 'Invalid JavaScript data namespace key');
+			$slots = $data_map['slots'];
+			$errors = array();
+			$source = preg_replace_callback('/<\\?php.*?\\?>/s', function($match) use ($slots, &$errors) {
+				if(!preg_match('/\\/\\*d\\*\\/(.*?)\\/\\*b\\*\\//s', $match[0], $data_match))
+				{
+					$errors[] = 'An unmarked PHP interpolation remains in a static JavaScript data source';
+					return $match[0];
+				}
+				$expression = trim((string)$data_match[1]);
+				if(!isset($slots[$expression]))
+				{
+					$errors[] = 'A marked JavaScript expression is missing from its shipped data map';
+					return $match[0];
+				}
+				return "'+d[".(int)$slots[$expression]."]+'";
+			}, (string)$source);
+			if($errors || strpos($source, '<?php') !== FALSE || strpos($source, '?>') !== FALSE)
+				return array('ok' => FALSE, 'source' => '', 'error' => ($errors) ? implode('; ', array_unique($errors)) : 'PHP remained after static JavaScript data transformation');
+			//260906.0738 Keep the short alias lexical to this source so Framework and Pro slots cannot overwrite one another in separate or combined files.
+			return array('ok' => TRUE, 'source' => "(function(d){\n".$source."\n})(window.s2_data.".$data_key.");", 'error' => '');
+		}
+
+		/**
+		 * Includes one trusted shipped static JavaScript data map in normal WordPress page context.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.0738
+		 *
+		 * @param string $path Data-map path.
+		 * @param array|null $keys Optional stable slot IDs; NULL evaluates every value in the data map.
+		 * @return array|false Data-map values, or FALSE on failure.
+		 */
+		protected static function load_static_js_data_map($path = '', $keys = NULL)
+		{
+			if(!$path || !is_readable($path))
+				return FALSE;
+			$s2_data_keys = (is_array($keys)) ? array_fill_keys(array_map('intval', $keys), TRUE) : NULL;
+			$data = include $path;
+			return (is_array($data)) ? $data : FALSE;
+		}
+
+		/**
+		 * Returns page-local JavaScript data for the active generated static files.
+		 *
+		 * Complete data maps are emitted for now. TO-DO: pass page-specific sparse slot sets once feature requirements can be determined safely.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260906.0738
+		 *
+		 * @param array $assets Active generated JavaScript assets keyed by logical filename.
+		 * @return string Inline JavaScript, or an empty string when data-map loading fails.
+		 */
+		public static function static_js_inline_data($assets = array())
+		{
+			if(self::static_js_text_delivery() !== 'page')
+				return '';
+			$paths = array();
+			foreach(array_keys((array)$assets) as $id)
+				foreach(self::static_js_data_map_paths($id) as $key => $path)
+					$paths[$key] = $path;
+			if(!$paths)
+				return '';
+
+			$data = array();
+			foreach($paths as $key => $path)
+			{
+				$data_map = self::load_static_js_data_map($path);
+				if($data_map === FALSE)
+					return '';
+				$data[$key] = $data_map;
+			}
+			$json = wp_json_encode($data);
+			if(!is_string($json) || $json === '')
+				return '';
+			//260906.0738 wp_add_inline_script() prints this in HTML; neutralize user-translatable closing-script sequences just like existing inline current-user globals.
+			$inline = 'window.s2_data='.str_ireplace('</', '<\\/', $json).';';
+			$extra = (string)apply_filters('ws_plugin__s2member_static_js_inline_globals', '', $assets, get_defined_vars());
+			$extra = str_ireplace('</', '<\\/', $extra); //260906.0738 Pro gateway globals may contain translated text too, so apply the same closing-script protection.
+			return $inline.(($extra !== '') ? "\n".$extra : '');
 		}
 
 		/**
@@ -1488,10 +1838,20 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			foreach($sources as $source)
 			{
 				$source = is_array($source) ? $source : array('file' => $source);
-				if(empty($source['file']) || !is_readable($source['file']))
+				if(array_key_exists('contents', $source))
+					$chunk = (string)$source['contents'];
+				else if(empty($source['file']) || !is_readable($source['file']))
 					return array('ok' => FALSE, 'url' => '', 'path' => '', 'error' => 'Source file is not readable: '.((!empty($source['file'])) ? $source['file'] : '(missing path)'));
-
-				if(!empty($source['render']))
+				else if(!empty($source['data_map']))
+				{
+					if(($chunk = file_get_contents($source['file'])) === FALSE)
+						return array('ok' => FALSE, 'url' => '', 'path' => '', 'error' => 'Could not read source file: '.$source['file']);
+					$transformed = self::static_js_data_source($chunk, (string)$source['data_map'], (!empty($source['data_key'])) ? (string)$source['data_key'] : '');
+					if(empty($transformed['ok']))
+						return array('ok' => FALSE, 'url' => '', 'path' => '', 'error' => (string)$transformed['error'].' in '.$source['file']);
+					$chunk = $transformed['source'];
+				}
+				else if(!empty($source['render']))
 				{
 					$template_vars = (!empty($source['vars']) && is_array($source['vars'])) ? $source['vars'] : array();
 					extract($template_vars, EXTR_SKIP);
@@ -1517,6 +1877,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					$chunk = str_replace(array_keys($source['replacements']), array_values($source['replacements']), $chunk);
 				$body .= "\n".((!empty($source['prefix'])) ? $source['prefix']."\n" : '').$chunk.((!empty($source['suffix'])) ? "\n".$source['suffix'] : '');
 			}
+
+			//260906.2219 Personal/member globals are page-specific by design and must never be written into a publicly cacheable static JavaScript file.
+			if($type === 'js' && preg_match('/\bS2MEMBER_CURRENT_USER_[A-Z0-9_]+\s*=(?!=)/', $body))
+				return array('ok' => FALSE, 'url' => '', 'path' => '', 'error' => 'Page-specific member globals cannot be stored in static JavaScript');
 
 			try
 			{

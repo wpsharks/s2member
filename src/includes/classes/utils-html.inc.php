@@ -44,9 +44,14 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 				*/
 				public static function doctype_html_head ($doctype_html_head_title = FALSE, $doctype_html_head_action = FALSE)
 					{
-						$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(); //260904.1923 Standalone frontend documents use the same selected dynamic loader as theme integration.
 						$static_css = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css'])) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('css') : array();
 						$static_js = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && function_exists('wp_add_inline_script')) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('js') : array();
+						$static_inline_js = (!empty($static_js['ok']) && !empty($static_js['assets']) && c_ws_plugin__s2member_utils_assets::static_js_text_delivery() === 'page') ? c_ws_plugin__s2member_utils_assets::static_js_inline_data($static_js['assets']) : '';
+						if(!empty($static_js['ok']) && !empty($static_js['assets']) && c_ws_plugin__s2member_utils_assets::static_js_text_delivery() === 'page' && $static_inline_js === '')
+							$static_js = array(); //260906.2049 Do not emit slot-based static JavaScript in standalone documents without its page-loaded text values.
+						//260906.2219 Static disabled keeps the selected lightweight loader; requested static delivery that fails uses full WordPress so compatibility hooks are not skipped.
+						$dynamic_css_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) && (empty($static_css['ok']) || empty($static_css['assets'])));
+						$dynamic_js_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && (empty($static_js['ok']) || empty($static_js['assets'])));
 
 						ob_start (); // Start output buffering here so we can "return" the output from this utility.
 
@@ -63,19 +68,19 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 								echo '<link href="'.esc_attr($asset['url']).'" type="text/css" rel="stylesheet" media="all" />'."\n";
 						}
 						else
-							echo '<link href="' . esc_attr ($dynamic_asset_url . "?ws_plugin__s2member_css=1&amp;qcABC=1&amp;ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ())) . '" type="text/css" rel="stylesheet" media="all" />' . "\n";
+							echo '<link href="' . esc_attr ($dynamic_css_url . "?ws_plugin__s2member_css=1&amp;qcABC=1&amp;ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ())) . '" type="text/css" rel="stylesheet" media="all" />' . "\n";
 
 						echo '<script type="text/javascript" src="' . esc_attr (site_url ("/wp-includes/js/jquery/jquery.js?ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ()))) . '"></script>' . "\n";
 
 						if(!empty($static_js['ok']) && !empty($static_js['assets']))
 						{
-							//260903.0453 This standalone frontend document cannot use WordPress's enqueue printer; emit the same current-user-only globals immediately before the generated scripts.
-							echo '<script type="text/javascript">'.c_ws_plugin__s2member_css_js_in::current_user_js_globals(TRUE).'</script>'."\n";
+							//260903.0453 This standalone frontend document cannot use WordPress's enqueue printer; emit the same page-specific globals immediately before the generated scripts.
+							echo '<script type="text/javascript">'.c_ws_plugin__s2member_css_js_in::current_user_js_globals(TRUE).(($static_inline_js !== '') ? "\n".$static_inline_js : '').'</script>'."\n";
 							foreach($static_js['assets'] as $asset)
 								echo '<script type="text/javascript" src="'.esc_attr($asset['url']).'"></script>'."\n";
 						}
 						else
-							echo '<script type="text/javascript" src="' . esc_attr ($dynamic_asset_url . "?ws_plugin__s2member_js_w_globals=" . urlencode (WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5) . "&amp;qcABC=1&amp;ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ())) . '"></script>' . "\n";
+							echo '<script type="text/javascript" src="' . esc_attr ($dynamic_js_url . "?ws_plugin__s2member_js_w_globals=" . urlencode (WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5) . "&amp;qcABC=1&amp;ver=" . urlencode (c_ws_plugin__s2member_utilities::ver_checksum ())) . '"></script>' . "\n";
 
 						if ($doctype_html_head_title) // Add <title></title> tag?
 							echo '<title>' . $doctype_html_head_title . '</title>' . "\n";

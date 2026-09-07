@@ -262,7 +262,21 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<option value="0"'.((!$GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) ? ' selected="selected"' : '').'>No (use dynamic JavaScript)</option>'."\n";
 				echo '<option value="1"'.(($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) ? ' selected="selected"' : '').'>Yes (beta; generate and serve static JavaScript)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo '<em>Generates timestamped Framework JavaScript and, when Pro is active, a separate Pro/gateway script by default. Current-user values remain inline. WordPress 4.2–4.4 automatically keep legacy dynamic JavaScript.</em>'."\n";
+				echo '<em>Generates timestamped Framework JavaScript and, when Pro is active, a separate Pro/gateway script by default. Personal/member details always remain page-specific and are never stored in static files. WordPress 4.2–4.4 automatically keep dynamic JavaScript.</em>'."\n";
+				echo '</td></tr>'."\n";
+
+				$static_js_text = (isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js_text']) && $GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js_text'] === 'page') ? 'page' : 'static';
+				$static_js_page_text_supported = c_ws_plugin__s2member_utils_assets::static_js_page_text_supported();
+				echo '<tr><th><label for="ws-plugin--s2member-static-js-text">JavaScript Text Delivery</label></th></tr>'."\n";
+				echo '<tr><td>'."\n";
+				echo '<p style="margin-top:0;"><em>Some s2Member messages and labels are shown or updated by JavaScript—for example, form validation and password feedback—so JavaScript needs access to that text too.</em></p>'."\n";
+				echo '<select name="ws_plugin__s2member_static_js_text" id="ws-plugin--s2member-static-js-text">'."\n";
+				echo '<option value="static"'.(($static_js_text === 'static') ? ' selected="selected"' : '').'>Load JavaScript text with the static files</option>'."\n";
+				echo '<option value="page"'.(($static_js_text === 'page') ? ' selected="selected"' : '').((!$static_js_page_text_supported) ? ' disabled="disabled"' : '').'>Load JavaScript text with each WordPress page</option>'."\n";
+				echo '</select><br />'."\n";
+				echo '<em><strong>Static files:</strong> best for sites that use one language throughout; the text is cached with the generated JavaScript and does not add the larger text block to every page. <strong>WordPress page:</strong> use this for multilingual sites where the language can change between pages or visitors; the same external JavaScript can then be reused across languages. Personal/member details are always loaded with the page and are never stored in static files.</em>'."\n";
+				if(!$static_js_page_text_supported)
+					echo '<p class="ws-menu-page-error" style="margin:.75em 0 0;"><em><strong>Load with each WordPress page is unavailable:</strong> update s2Member Pro to a version that supports page-loaded JavaScript text. If your site needs different JavaScript text between languages before updating Pro, set Static JS Delivery to No so WordPress generates the JavaScript dynamically.</em></p>'."\n";
 				echo '</td></tr>'."\n";
 
 				echo '<tr><th><label for="ws-plugin--s2member-static-js-minify">Minify Static JS?</label></th></tr>'."\n";
@@ -295,7 +309,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 				//260904.0649 Keep Refresh tied to saved settings: disable it when no static type is active and while related controls have unsaved changes.
-				echo '<script type="text/javascript">jQuery(function($){var $b=$("#ws-plugin--s2member-refresh-static-assets"),$s=$("#ws-plugin--s2member-refresh-static-assets-status"),$controls=$("#ws-plugin--s2member-static-css,#ws-plugin--s2member-static-css-minify,#ws-plugin--s2member-static-js,#ws-plugin--s2member-static-js-minify,#ws-plugin--s2member-static-assets-combine"),savedEnabled='.($static_assets_enabled ? 'true' : 'false').',dirtyMessage="Save option changes before refreshing.";function values(){return $controls.map(function(){return this.value;}).get().join("|");}var initial=values();function sync(){var changed=values()!==initial;$b.prop("disabled",!savedEnabled||changed);if(changed)$s.text(dirtyMessage);else if($s.text()===dirtyMessage)$s.text("");}$controls.on("change",sync);$b.on("click",function(){$b.prop("disabled",true);$s.text("Refreshing…");$.post(ajaxurl,{action:"ws_plugin__s2member_refresh_static_assets",_ajax_nonce:"'.esc_js(wp_create_nonce('ws-plugin--s2member-refresh-static-assets')).'"}).done(function(r){$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets refreshed.");}).fail(function(xhr){var r=xhr.responseJSON;$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets could not be refreshed.");}).always(function(){sync();});});sync();});</script>'."\n";
+				echo '<script type="text/javascript">jQuery(function($){var $b=$("#ws-plugin--s2member-refresh-static-assets"),$s=$("#ws-plugin--s2member-refresh-static-assets-status"),$controls=$("#ws-plugin--s2member-static-css,#ws-plugin--s2member-static-css-minify,#ws-plugin--s2member-static-js,#ws-plugin--s2member-static-js-text,#ws-plugin--s2member-static-js-minify,#ws-plugin--s2member-static-assets-combine"),savedEnabled='.($static_assets_enabled ? 'true' : 'false').',dirtyMessage="Save option changes before refreshing.";function values(){return $controls.map(function(){return this.value;}).get().join("|");}var initial=values();function sync(){var changed=values()!==initial;$b.prop("disabled",!savedEnabled||changed);if(changed)$s.text(dirtyMessage);else if($s.text()===dirtyMessage)$s.text("");}$controls.on("change",sync);$b.on("click",function(){$b.prop("disabled",true);$s.text("Refreshing…");$.post(ajaxurl,{action:"ws_plugin__s2member_refresh_static_assets",_ajax_nonce:"'.esc_js(wp_create_nonce('ws-plugin--s2member-refresh-static-assets')).'"}).done(function(r){$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets refreshed.");}).fail(function(xhr){var r=xhr.responseJSON;$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets could not be refreshed.");}).always(function(){sync();});});sync();});</script>'."\n";
 				echo '</div>'."\n";
 
 				echo '<div style="margin:1em 0;">'."\n";

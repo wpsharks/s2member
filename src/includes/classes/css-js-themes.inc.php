@@ -102,8 +102,8 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 				}
 				else
 				{
-					//260904.2255 Use the selected dynamic loader and register the exact response markers this page should receive.
-					$dynamic_css_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url().'?ws_plugin__s2member_css=1&qcABC=1';
+					//260906.0738 If requested static delivery cannot be used, prefer full WordPress so normal-plugin hooks/customizations that caused the fallback are preserved.
+					$dynamic_css_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css'])).'?ws_plugin__s2member_css=1&qcABC=1';
 					$dynamic_css_delivery = (strpos($dynamic_css_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-lightweight' : 'dynamic-wordpress';
 					wp_enqueue_style('ws-plugin--s2member', $dynamic_css_url, array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
 					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations('', 'css', $dynamic_css_url, $dynamic_css_delivery);
@@ -135,9 +135,12 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 
 			if((!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js()) || (is_user_admin() && $pagenow === 'profile.php' && !current_user_can('edit_users')))
 			{
-				$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(); //260904.1923 Centralize the selected dynamic loader for ordinary delivery and static fallback.
 				$static = (!is_admin() && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && function_exists('wp_add_inline_script')) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('js') : array();
 				$static_js = !empty($static['ok']) && !empty($static['assets']);
+				$page_text = c_ws_plugin__s2member_utils_assets::static_js_text_delivery() === 'page';
+				$static_inline_js = ($static_js && $page_text) ? c_ws_plugin__s2member_utils_assets::static_js_inline_data($static['assets']) : '';
+				if($static_js && $page_text && $static_inline_js === '')
+					$static_js = FALSE; //260906.2049 Page-loaded JavaScript text requires the matching shipped data map before slot-based static JavaScript can be used.
 				$dynamic_js = !$static_js;
 
 				if($static_js)
@@ -148,13 +151,15 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 						$handle = ($id === 's2member-pro.js') ? 'ws-plugin--s2member-pro' : 'ws-plugin--s2member';
 						wp_enqueue_script($handle, $asset['url'], $dependency, NULL, TRUE);
 						if($handle === 'ws-plugin--s2member')
-							wp_add_inline_script($handle, c_ws_plugin__s2member_css_js_in::current_user_js_globals(TRUE), 'before');
+							wp_add_inline_script($handle, c_ws_plugin__s2member_css_js_in::current_user_js_globals(TRUE).(($static_inline_js !== '') ? "\n".$static_inline_js : ''), 'before');
 						c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($id, 'js', $asset['url'], 'static', $asset['build']);
 						$dependency = array($handle);
 					}
 				}
 				else
 				{
+					//260906.0738 A static-JS compatibility fallback uses full WordPress so runtime gettext/plugin customizations remain available; static-disabled sites retain their selected dynamic loader.
+					$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']));
 					$dynamic_js_value = (is_user_logged_in()) ? WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5 : '1';
 					$dynamic_js_url = $dynamic_asset_url.'?ws_plugin__s2member_js_w_globals='.urlencode($dynamic_js_value).'&qcABC=1';
 					$dynamic_js_delivery = (strpos($dynamic_js_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-lightweight' : 'dynamic-wordpress';
