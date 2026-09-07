@@ -28,6 +28,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 	 */
 	class c_ws_plugin__s2member_paypal_notify_in
 	{
+		//260902.0635 TO-DO: Before final PayPal Standard deprecation, review IPN/return replay protection against Gateway Checkout fulfillment invariants; hosted button creation itself does not need coordinator orchestration.
 		/**
 		 * Handles PayPal IPN processing.
 		 *

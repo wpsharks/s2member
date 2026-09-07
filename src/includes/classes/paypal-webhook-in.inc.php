@@ -554,7 +554,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			//260216 Add refund/reversal webhook support so refunds can trigger immediate EOT/demotion.
 			else if(in_array($event_type, array(
 				'PAYMENT.SALE.COMPLETED',
+				'PAYMENT.CAPTURE.PENDING',
 				'PAYMENT.CAPTURE.COMPLETED',
+				'PAYMENT.CAPTURE.DENIED',
 				'PAYMENT.SALE.REFUNDED',
 				'PAYMENT.CAPTURE.REFUNDED',
 				'PAYMENT.SALE.REVERSED',
@@ -570,7 +572,79 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				else if(!empty($resource['supplementary_data']['related_ids']['billing_agreement_id']))
 					$subscr_id = (string)$resource['supplementary_data']['related_ids']['billing_agreement_id'];
 
-				//260228 Ignore one-time sale/capture webhooks that have no subscription reference.
+				//260907.1820 One-time PayPal Checkout captures intentionally have no subscription reference; resolve order -> invoice -> Gateway Checkout here before the legacy no-subscription ignore path below.
+				if(!$subscr_id && in_array($event_type, array('PAYMENT.CAPTURE.PENDING', 'PAYMENT.CAPTURE.COMPLETED', 'PAYMENT.CAPTURE.DENIED'), TRUE))
+				{
+					$order_id = !empty($resource['supplementary_data']['related_ids']['order_id']) ? (string)$resource['supplementary_data']['related_ids']['order_id'] : '';
+					if($order_id)
+					{
+						$order = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_details($order_id);
+						if(!empty($order['__error']))
+						{
+							//260902.0635 Do not consume a coordinator capture webhook when its authoritative order lookup temporarily fails; PayPal can redeliver it.
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							status_header(500);
+							exit();
+						}
+
+						$invoice = !empty($order['purchase_units'][0]['invoice_id']) ? (string)$order['purchase_units'][0]['invoice_id'] : '';
+						$gateway_checkout_id = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_gateway_checkout_id_from_invoice($invoice);
+						if($gateway_checkout_id)
+						{
+							$capture_id = !empty($resource['id']) ? (string)$resource['id'] : '';
+							$capture_status = ($event_type === 'PAYMENT.CAPTURE.COMPLETED') ? 'COMPLETED' : (($event_type === 'PAYMENT.CAPTURE.DENIED') ? 'DENIED' : 'PENDING');
+							$recovery = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_gateway_checkout_recover($invoice, $order_id, $capture_id, $capture_status, 'webhook');
+							if(!empty($recovery['handled']) && empty($recovery['ok']))
+							{
+								if(!empty($recovery['error']) && in_array((string)$recovery['error'], array('gateway_checkout_order_conflict', 'gateway_checkout_capture_conflict'), TRUE))
+								{
+									//260902.0646 A conflicting late webhook is diagnostic only; never let it replace or fulfill against the checkout's authoritative provider identity.
+									c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'capture_recovery_conflict_ignored', 'event_id' => $event_id, 'event_type' => $event_type, 'recovery' => $recovery));
+									c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									status_header(200);
+									exit();
+								}
+								else
+								{
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									status_header(500);
+									exit();
+								}
+							}
+
+							//260907.1820 PENDING and DENIED events only reconcile state; COMPLETED is the sole capture event allowed to cross the entitlement boundary into shared fulfillment.
+							if($capture_status === 'COMPLETED')
+							{
+								//260907.1820 Off-session fulfillment must use the encrypted server-validated purchase token; never reconstruct trusted price/access terms from the webhook payload itself.
+								$private_context = c_ws_plugin__s2member_gateway_checkouts::private_context_get($gateway_checkout_id);
+								$token = is_array($private_context) && !empty($private_context['paypal_checkout']['token']) && is_array($private_context['paypal_checkout']['token']) ? $private_context['paypal_checkout']['token'] : array();
+								if(!$token || ($validation_error = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_completion_error($order, $order_id, $token)))
+								{
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									status_header(500);
+									exit();
+								}
+
+								$fulfillment = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_fulfill($order, $token);
+								if(empty($fulfillment['ok']))
+								{
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									status_header(500);
+									exit();
+								}
+							}
+
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'one_time_capture_recovered', 'event_id' => $event_id, 'event_type' => $event_type, 'order_id' => $order_id, 'capture_id' => $capture_id, 'invoice' => $invoice));
+							c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							status_header(200);
+							exit();
+						}
+					}
+				}
+
+				//260228 Ignore legacy/non-coordinator one-time sale/capture webhooks that have no subscription reference.
 				if(!$subscr_id)
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(

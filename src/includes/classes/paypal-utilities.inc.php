@@ -1487,6 +1487,47 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					}
 
 				/**
+				 * Returns the first PayPal capture ID/status from an order representation.
+				 *
+				 * @since 260902.0635
+				 *
+				 * @param array $order PayPal order representation.
+				 *
+				 * @return array Capture snapshot with id/status.
+				 */
+				public static function paypal_checkout_order_capture_snapshot($order = array())
+					{
+						$capture = (!empty($order['purchase_units'][0]['payments']['captures'][0]) && is_array($order['purchase_units'][0]['payments']['captures'][0])) ? $order['purchase_units'][0]['payments']['captures'][0] : array();
+
+						return array(
+							'id'     => !empty($capture['id']) ? (string)$capture['id'] : '',
+							'status' => !empty($capture['status']) ? strtoupper((string)$capture['status']) : '',
+						);
+					}
+
+				/**
+				 * Extracts a Gateway Checkout ID from a modern PayPal Checkout Pro-Form invoice.
+				 *
+				 * @since 260902.0635
+				 *
+				 * @param string $invoice Membership (`s2mpf-`) or Specific Post/Page (`s2msp-`) invoice.
+				 *
+				 * @return string Gateway Checkout ID, else an empty string.
+				 */
+				public static function paypal_checkout_gateway_checkout_id_from_invoice($invoice = '')
+					{
+						$invoice = (string)$invoice;
+						$gateway_checkout_id = '';
+
+						if(strpos($invoice, 's2mpf-') === 0)
+							$gateway_checkout_id = substr($invoice, strlen('s2mpf-'));
+						else if(strpos($invoice, 's2msp-') === 0)
+							$gateway_checkout_id = substr($invoice, strlen('s2msp-'));
+
+						return c_ws_plugin__s2member_gateway_checkouts::valid_id($gateway_checkout_id) ? $gateway_checkout_id : '';
+					}
+
+				/**
 				 * Creates a PayPal Checkout order for one-time (Buy Now) purchases.
 				 *
 				 * This must be server-side to prevent client-side manipulation of amount, item_number,
@@ -1501,124 +1542,190 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 */
 				public static function paypal_checkout_order_create($token = array())
 					{
+						if(!is_array($token))
+							return array('__error' => 'invalid_token');
+
 						// token: invoice, custom, item_name, item_number, amount, cc, ns, return, cancel.
-						$invoice = (string)$token['invoice'];
-						$custom  = (string)$token['custom'];
-						$amount  = (string)$token['amount'];
-						$cc      = strtoupper((string)$token['cc']);
+						$invoice = !empty($token['invoice']) ? (string)$token['invoice'] : '';
+						$custom  = isset($token['custom']) ? (string)$token['custom'] : '';
+						$amount  = isset($token['amount']) ? (string)$token['amount'] : '';
+						$cc      = !empty($token['cc']) ? strtoupper((string)$token['cc']) : '';
+						$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
+						$gateway_checkout_lock = '';
 
-						$item_name = trim((string)$token['item_name']);
-						if(!$item_name)
-							$item_name = 's2Member Purchase';
-
-						// PayPal limits various fields; keep item name within common limits.
-						if(strlen($item_name) > 127)
-							$item_name = substr($item_name, 0, 127);
-
-						$item_sku = trim((string)$token['item_number']);
-						if(strlen($item_sku) > 127)
-							$item_sku = substr($item_sku, 0, 127);
-
-						//260817.2119 Keep normal Checkout pricing unchanged; only split subtotal/tax when a Pro-Form token supplies a breakdown that reconciles exactly to the charged total.
-						$item_amount = $amount;
-						$tax_amount  = '';
-						if(isset($token['sub_total'], $token['tax']) && is_numeric($token['sub_total']) && is_numeric($token['tax'])
-						&& number_format((float)$token['sub_total'] + (float)$token['tax'], 2, '.', '') === number_format((float)$amount, 2, '.', ''))
+						if($gateway_checkout_id)
 						{
-							$item_amount = (string)$token['sub_total'];
-							$tax_amount  = (string)$token['tax'];
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
+								return array('__error' => 'gateway_checkout_invalid');
+
+							//260902.0635 Return an already-persisted PayPal order before another provider create; a lost browser response can therefore resume the same logical purchase.
+							if(!empty($gateway_checkout['gateway_ids']['order_id']))
+								return array('id' => (string)$gateway_checkout['gateway_ids']['order_id'], 'status' => !empty($gateway_checkout['gateway_status']) ? (string)$gateway_checkout['gateway_status'] : '');
+
+							//260907.1820 Lock the logical checkout and then re-read it; concurrent browser requests can both arrive before either has observed the PayPal order ID persisted by the other.
+							$gateway_checkout_lock = c_ws_plugin__s2member_gateway_checkouts::processing_lock($gateway_checkout_id);
+							if(!$gateway_checkout_lock)
+								return array('__error' => 'gateway_checkout_busy');
+
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
+							{
+								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
+								return array('__error' => 'gateway_checkout_invalid');
+							}
+							if(!empty($gateway_checkout['gateway_ids']['order_id']))
+							{
+								$order_id = (string)$gateway_checkout['gateway_ids']['order_id'];
+								$status = !empty($gateway_checkout['gateway_status']) ? (string)$gateway_checkout['gateway_status'] : '';
+								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
+								return array('id' => $order_id, 'status' => $status);
+							}
 						}
 
-						$purchase_unit = array(
-							'invoice_id' => $invoice,
-							'amount'     => array(
-								'currency_code' => $cc,
-								'value'         => $amount,
-								'breakdown'     => array(
-									'item_total' => array(
-										'currency_code' => $cc,
-										'value'         => $item_amount,
-									),
-								),
-							),
-							'description' => $item_name,
-							'items'       => array(
-								array(
-									'name'        => $item_name,
-									'quantity'    => '1',
-									'unit_amount' => array(
-										'currency_code' => $cc,
-										'value'         => $item_amount,
-									),
-								),
-							),
-						);
-
-						if($tax_amount !== '' && (float)$tax_amount > 0)
+						try
 						{
-							$purchase_unit['amount']['breakdown']['tax_total'] = array(
-								'currency_code' => $cc,
-								'value'         => $tax_amount,
+							$item_name = !empty($token['item_name']) ? trim((string)$token['item_name']) : '';
+							if(!$item_name)
+								$item_name = 's2Member Purchase';
+							if(strlen($item_name) > 127)
+								$item_name = substr($item_name, 0, 127);
+
+							$item_sku = !empty($token['item_number']) ? trim((string)$token['item_number']) : '';
+							if(strlen($item_sku) > 127)
+								$item_sku = substr($item_sku, 0, 127);
+
+							//260817.2119 Keep normal Checkout pricing unchanged; only split subtotal/tax when a Pro-Form token supplies a breakdown that reconciles exactly to the charged total.
+							$item_amount = $amount;
+							$tax_amount  = '';
+							if(isset($token['sub_total'], $token['tax']) && is_numeric($token['sub_total']) && is_numeric($token['tax'])
+							&& number_format((float)$token['sub_total'] + (float)$token['tax'], 2, '.', '') === number_format((float)$amount, 2, '.', ''))
+							{
+								$item_amount = (string)$token['sub_total'];
+								$tax_amount  = (string)$token['tax'];
+							}
+
+							$purchase_unit = array(
+								'invoice_id' => $invoice,
+								'amount'     => array(
+									'currency_code' => $cc,
+									'value'         => $amount,
+									'breakdown'     => array('item_total' => array('currency_code' => $cc, 'value' => $item_amount)),
+								),
+								'description' => $item_name,
+								'items'       => array(array('name' => $item_name, 'quantity' => '1', 'unit_amount' => array('currency_code' => $cc, 'value' => $item_amount))),
 							);
-							$purchase_unit['items'][0]['tax'] = array(
-								'currency_code' => $cc,
-								'value'         => $tax_amount,
+							if($tax_amount !== '' && (float)$tax_amount > 0)
+							{
+								$purchase_unit['amount']['breakdown']['tax_total'] = array('currency_code' => $cc, 'value' => $tax_amount);
+								$purchase_unit['items'][0]['tax'] = array('currency_code' => $cc, 'value' => $tax_amount);
+							}
+							if($item_sku)
+								$purchase_unit['items'][0]['sku'] = $item_sku;
+							if($custom && strlen($custom) <= 127)
+								$purchase_unit['custom_id'] = $custom;
+
+							$body = array(
+								'intent' => 'CAPTURE',
+								'purchase_units' => array($purchase_unit),
+								'application_context' => array(
+									'user_action' => 'PAY_NOW',
+									'shipping_preference' => (!empty($token['ns']) && (string)$token['ns'] === '1') ? 'NO_SHIPPING' : 'GET_FROM_FILE',
+									'return_url' => !empty($token['return']) ? (string)$token['return'] : '',
+									'cancel_url' => !empty($token['cancel']) ? (string)$token['cancel'] : '',
+								),
 							);
-						}
 
-						if($item_sku)
-							$purchase_unit['items'][0]['sku'] = $item_sku;
+							//260907.1820 Derive PayPal-Request-Id from durable logical-checkout identity, not a browser request, so reloads and immediate ambiguous retries address the same provider create operation.
+							$request_id = $gateway_checkout_id ? 's2m-ppco-order-'.str_replace('-', '', $gateway_checkout_id) : 's2m-ppco-order-'.md5($invoice);
+							$headers = array('PayPal-Request-Id' => $request_id);
 
-						// PayPal limits custom_id length; keep it short/consistent.
-						if($custom && strlen($custom) <= 127)
-							$purchase_unit['custom_id'] = $custom;
+							if($gateway_checkout_id)
+							{
+								$private_context = c_ws_plugin__s2member_gateway_checkouts::private_context_get($gateway_checkout_id);
+								if($private_context === FALSE)
+									return array('__error' => 'gateway_checkout_private_context_failed');
+								$private_context = (array)$private_context;
+								$private_context['paypal_checkout'] = !empty($private_context['paypal_checkout']) && is_array($private_context['paypal_checkout']) ? $private_context['paypal_checkout'] : array();
+								//260902.0635 Save the validated token before contacting PayPal so a later capture webhook has enough trusted server-side context to finish an interrupted browser checkout.
+								$private_context['paypal_checkout']['token'] = $token;
+								if(!c_ws_plugin__s2member_gateway_checkouts::private_context_set($gateway_checkout_id, $private_context))
+									return array('__error' => 'gateway_checkout_private_context_failed');
 
-						$body = array(
-							'intent'         => 'CAPTURE',
-							'purchase_units' => array($purchase_unit),
-							'application_context' => array(
-								'user_action'          => 'PAY_NOW',
-								'shipping_preference'  => (!empty($token['ns']) && (string)$token['ns'] === '1') ? 'NO_SHIPPING' : 'GET_FROM_FILE',
-								'return_url'           => (string)$token['return'],
-								'cancel_url'           => (string)$token['cancel'],
-							),
-						);
+								$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
+								$create_started_at = !empty($context['paypal_order_create_started_at']) ? (int)$context['paypal_order_create_started_at'] : 0;
+								//260902.0635 PayPal normally retains Orders request IDs for six hours; if no order ID ever came back, the unknown order never reached browser approval and a fresh create is safe after that window.
+								if($create_started_at && $create_started_at <= time() - (6 * HOUR_IN_SECONDS))
+								{
+									unset($context['paypal_order_create_started_at'], $context['paypal_order_request_id']);
+									$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => '', 'context' => $context));
+									if(!$gateway_checkout)
+										return array('__error' => 'gateway_checkout_save_failed');
+									$create_started_at = 0;
+								}
+								if(!$create_started_at)
+								{
+									$context['paypal_order_create_started_at'] = time();
+									$context['paypal_order_request_id'] = $request_id;
+									$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => 'CREATE_PENDING', 'context' => $context));
+									if(!$gateway_checkout)
+										return array('__error' => 'gateway_checkout_save_failed');
+								}
+							}
 
-						// Idempotency: stable per invoice for create-order retries.
-						$headers = array(
-							'PayPal-Request-Id' => 's2m-ppco-order-'.md5($invoice),
-						);
-
-						$data = array();
-						for($attempt = 0; $attempt < 2; $attempt++)
+							$data = array();
+							$code = 0;
+							$ambiguous = FALSE;
+							//260907.1820 Retry only an ambiguous transport/provider result, always with the same PayPal-Request-Id; deterministic rejection must not be treated as a possibly-created order.
+							for($attempt = 0; $attempt < 2; $attempt++)
 							{
 								$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders', $body, $headers);
 								$code = !empty($r['code']) ? (int)$r['code'] : 0;
 								$response_body = !empty($r['body']) ? (string)$r['body'] : '';
-								$data = ($response_body) ? json_decode($response_body, true) : array();
+								$data = $response_body ? json_decode($response_body, true) : array();
 								$data = is_array($data) ? $data : array();
+								$ambiguous = ($code === 0 || $code === 408 || $code >= 500 || ($code >= 200 && $code <= 299));
 
 								if($code >= 200 && $code <= 299 && !empty($data['id']))
 									break;
-
-								$ambiguous = ($code === 0 || $code === 408 || $code >= 500 || ($code >= 200 && $code <= 299));
 								if(!$ambiguous)
 									break;
 							}
 
-						if($code >= 200 && $code <= 299 && !empty($data['id']))
+							if($code >= 200 && $code <= 299 && !empty($data['id']))
 							{
-								//260817 Bind the invoice and expected payment data to the PayPal order before the browser can request capture.
-								set_transient('s2m_ppco_order_bind_'.md5($invoice), array(
-									'order_id' => (string)$data['id'],
-									'invoice'  => $invoice,
-									'amount'   => $amount,
-									'cc'       => $cc,
-									'custom'   => $custom,
-								), 3 * HOUR_IN_SECONDS);
+								set_transient('s2m_ppco_order_bind_'.md5($invoice), array('order_id' => (string)$data['id'], 'invoice' => $invoice, 'amount' => $amount, 'cc' => $cc, 'custom' => $custom), 3 * HOUR_IN_SECONDS);
+
+								if($gateway_checkout_id)
+								{
+									$gateway_ids = !empty($gateway_checkout['gateway_ids']) && is_array($gateway_checkout['gateway_ids']) ? $gateway_checkout['gateway_ids'] : array();
+									$gateway_ids['order_id'] = (string)$data['id'];
+									$status = !empty($data['status']) ? 'ORDER_'.strtoupper((string)$data['status']) : 'ORDER_CREATED';
+									$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
+									unset($context['paypal_order_create_started_at'], $context['paypal_order_request_id']);
+									//260902.0635 Persist the PayPal order ID before returning it to the browser; a reload can then reuse it without a second provider create.
+									if(!c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_ids' => $gateway_ids, 'gateway_status' => $status, 'context' => $context)))
+										return array('__error' => 'gateway_checkout_save_failed');
+								}
+							}
+							else if($gateway_checkout_id && !$ambiguous)
+							{
+								//260907.1820 A deterministic create failure proves no unknown-success recovery is needed; clear CREATE_PENDING breadcrumbs so a later validated attempt is not stranded behind stale ambiguity state.
+								$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
+								unset($context['paypal_order_create_started_at'], $context['paypal_order_request_id']);
+								c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => '', 'context' => $context));
 							}
 
-						return $data;
+							if($gateway_checkout_id && $ambiguous && !($code >= 200 && $code <= 299 && !empty($data['id'])))
+								return array('__error' => 'order_create_unresolved');
+
+							return $data;
+						}
+						finally
+						{
+							if($gateway_checkout_id && $gateway_checkout_lock)
+								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
+						}
 					}
 
 				/**
@@ -1736,99 +1843,319 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							return array('__error' => 'missing_order_id');
 
 						$invoice = !empty($token['invoice']) ? (string)$token['invoice'] : '';
+						$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
 						$binding_name = $invoice ? 's2m_ppco_order_bind_'.md5($invoice) : '';
 						$binding = $binding_name ? get_transient($binding_name) : false;
+						$gateway_checkout_lock = '';
 
-						if(is_array($binding))
-							{
-								$binding_matches = (!empty($binding['order_id']) && (string)$binding['order_id'] === $order_id
-								&& isset($binding['invoice']) && (string)$binding['invoice'] === $invoice
-								&& isset($binding['amount']) && number_format((float)$binding['amount'], 2, '.', '') === number_format((float)$token['amount'], 2, '.', '')
-								&& isset($binding['cc']) && strtoupper((string)$binding['cc']) === strtoupper((string)$token['cc'])
-								&& isset($binding['custom']) && (string)$binding['custom'] === (string)$token['custom']);
+						if($gateway_checkout_id)
+						{
+							//260907.1820 For coordinator-backed captures, the order ID already persisted server-side is authoritative; never let a browser-supplied order ID rebind this logical checkout to another PayPal resource.
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							$expected_order_id = $gateway_checkout && !empty($gateway_checkout['gateway_ids']['order_id']) ? (string)$gateway_checkout['gateway_ids']['order_id'] : '';
+							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment' || !$expected_order_id || !hash_equals($expected_order_id, $order_id))
+								return array('__error' => 'gateway_checkout_order_mismatch');
 
-								if(!$binding_matches)
-									return array('__error' => 'order_binding_mismatch');
-							}
+							$gateway_checkout_lock = c_ws_plugin__s2member_gateway_checkouts::processing_lock($gateway_checkout_id);
+							if(!$gateway_checkout_lock)
+								return array('__error' => 'gateway_checkout_busy');
+						}
+						else if(is_array($binding))
+						{
+							$binding_matches = (!empty($binding['order_id']) && (string)$binding['order_id'] === $order_id
+							&& isset($binding['invoice']) && (string)$binding['invoice'] === $invoice
+							&& isset($binding['amount']) && number_format((float)$binding['amount'], 2, '.', '') === number_format((float)$token['amount'], 2, '.', '')
+							&& isset($binding['cc']) && strtoupper((string)$binding['cc']) === strtoupper((string)$token['cc'])
+							&& isset($binding['custom']) && (string)$binding['custom'] === (string)$token['custom']);
+							if(!$binding_matches)
+								return array('__error' => 'order_binding_mismatch');
+						}
 
-						$capture_lock = 's2m_ppco_capture_lock_'.md5($order_id);
-						if(!self::dedupe_lock_acquire($capture_lock, 300))
+						$capture_lock = $gateway_checkout_id ? '' : 's2m_ppco_capture_lock_'.md5($order_id);
+						if(!$gateway_checkout_id && !self::dedupe_lock_acquire($capture_lock, 300))
 							return array('__error' => 'capture_in_progress');
 
 						try
+						{
+							if($gateway_checkout_id)
 							{
-								//260817 If the short-lived local binding is gone, verify PayPal's order before attempting capture.
-								if(!is_array($binding))
-									{
-										$details = self::paypal_checkout_order_details($order_id);
-										if(!empty($details['__error']))
-											return $details;
+								$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+								if(!$gateway_checkout || empty($gateway_checkout['gateway_ids']['order_id']) || !hash_equals((string)$gateway_checkout['gateway_ids']['order_id'], $order_id))
+									return array('__error' => 'gateway_checkout_order_mismatch');
 
-										if(($validation_error = self::paypal_checkout_order_validation_error($details, $order_id, $token)))
-											return array('__error' => $validation_error);
+								$gateway_status = !empty($gateway_checkout['gateway_status']) ? strtoupper((string)$gateway_checkout['gateway_status']) : '';
+								//260907.1820 Terminal capture failure is sticky for this logical checkout; recovery must start a fresh validated checkout instead of attempting another capture against the failed order.
+								if(in_array($gateway_status, array('CAPTURE_DENIED', 'CAPTURE_FAILED', 'CAPTURE_DECLINED'), TRUE))
+									return array('__error' => strtolower($gateway_status));
+							}
 
-										if(!empty($details['status']) && strtoupper((string)$details['status']) === 'COMPLETED')
-											{
-												if(($completion_error = self::paypal_checkout_order_completion_error($details, $order_id, $token)))
-													return array('__error' => $completion_error);
-
-												return $details;
-											}
-										if(empty($details['status']) || strtoupper((string)$details['status']) !== 'APPROVED')
-											return array('__error' => 'order_not_approved');
-									}
-
-								// Idempotency: stable per order capture retries.
-								$headers = array(
-									'PayPal-Request-Id' => 's2m-ppco-cap-'.md5($order_id),
-									'Prefer'            => 'return=representation',
-								);
-
-								$r = array();
-								$data = array();
-								for($attempt = 0; $attempt < 2; $attempt++)
-									{
-										$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders/'.$order_id.'/capture', (object)array(), $headers);
-										$code = !empty($r['code']) ? (int)$r['code'] : 0;
-										$body = !empty($r['body']) ? (string)$r['body'] : '';
-										$data = ($body) ? json_decode($body, true) : array();
-										$data = is_array($data) ? $data : array();
-
-										if($code >= 200 && $code <= 299)
-											break;
-
-										$ambiguous = ($code === 0 || $code === 408 || $code >= 500);
-										if(!$ambiguous)
-											break;
-									}
-
-								$code = !empty($r['code']) ? (int)$r['code'] : 0;
-								if($code >= 200 && $code <= 299 && !($completion_error = self::paypal_checkout_order_completion_error($data, $order_id, $token)))
-									{
-										if($binding_name)
-											delete_transient($binding_name);
-										return $data;
-									}
-
-								//260817 Recover from an ambiguous or incomplete capture response by reading PayPal's final order state.
+							//260902.0635 Once a capture is pending, do not POST another capture; read PayPal's current order state and let webhooks/browser recovery converge on the same capture.
+							$read_only = ($gateway_checkout_id && !empty($gateway_checkout['gateway_status']) && strtoupper((string)$gateway_checkout['gateway_status']) === 'CAPTURE_PENDING');
+							if(!is_array($binding) || $gateway_checkout_id || $read_only)
+							{
 								$details = self::paypal_checkout_order_details($order_id);
-								if(empty($details['__error']) && !($completion_error = self::paypal_checkout_order_completion_error($details, $order_id, $token)))
-									{
-										if($binding_name)
-											delete_transient($binding_name);
-										return $details;
-									}
-
-								if($code >= 200 && $code <= 299 && !empty($completion_error))
-									return array('__error' => $completion_error);
 								if(!empty($details['__error']))
 									return $details;
-								return array('__error' => 'order_capture_failed', '__code' => $code, '__body' => !empty($r['body']) ? (string)$r['body'] : '');
+								if(($validation_error = self::paypal_checkout_order_validation_error($details, $order_id, $token)))
+									return array('__error' => $validation_error);
+
+								$snapshot = self::paypal_checkout_order_capture_snapshot($details);
+								if($snapshot['id'] && $snapshot['status'])
+								{
+									if($gateway_checkout_id)
+										self::paypal_checkout_order_gateway_checkout_recover($invoice, $order_id, $snapshot['id'], $snapshot['status'], 'browser', $gateway_checkout_lock);
+									if($snapshot['status'] === 'COMPLETED' && !self::paypal_checkout_order_completion_error($details, $order_id, $token))
+										return $details;
+									if($snapshot['status'] === 'PENDING')
+										return array_merge($details, array('__error' => 'capture_pending'));
+									if(in_array($snapshot['status'], array('DENIED', 'FAILED', 'DECLINED'), TRUE))
+										return array_merge($details, array('__error' => 'capture_'.strtolower($snapshot['status'])));
+								}
+
+								if($read_only)
+									return array_merge($details, array('__error' => 'capture_pending'));
+								if(!empty($details['status']) && strtoupper((string)$details['status']) === 'COMPLETED')
+									return array('__error' => self::paypal_checkout_order_completion_error($details, $order_id, $token));
+								if(empty($details['status']) || strtoupper((string)$details['status']) !== 'APPROVED')
+									return array('__error' => 'order_not_approved');
 							}
-						finally
+
+							if($gateway_checkout_id)
 							{
-								self::dedupe_lock_release($capture_lock);
+								//260907.1820 Persist CAPTURE_PENDING before the provider POST; if PHP dies after PayPal receives the capture, the next request will recover/read the existing attempt instead of issuing a second capture.
+								$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
+								$context['paypal_capture_started_at'] = !empty($context['paypal_capture_started_at']) ? (int)$context['paypal_capture_started_at'] : time();
+								$context['paypal_capture_request_id'] = 's2m-ppco-cap-'.md5($order_id);
+								$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_status' => 'CAPTURE_PENDING', 'context' => $context));
+								if(!$gateway_checkout)
+									return array('__error' => 'gateway_checkout_save_failed');
 							}
+
+							//260907.1820 Immediate ambiguous capture retries reuse this same request ID; once a real PENDING capture is observed, later browser requests are read-only and do not POST capture again.
+							$headers = array('PayPal-Request-Id' => 's2m-ppco-cap-'.md5($order_id), 'Prefer' => 'return=representation');
+							$r = array();
+							$data = array();
+							$ambiguous = FALSE;
+							for($attempt = 0; $attempt < 2; $attempt++)
+							{
+								$r = self::paypal_checkout_api_request('POST', '/v2/checkout/orders/'.$order_id.'/capture', (object)array(), $headers);
+								$code = !empty($r['code']) ? (int)$r['code'] : 0;
+								$body = !empty($r['body']) ? (string)$r['body'] : '';
+								$data = $body ? json_decode($body, true) : array();
+								$data = is_array($data) ? $data : array();
+								$ambiguous = ($code === 0 || $code === 408 || $code >= 500);
+								if($code >= 200 && $code <= 299)
+									break;
+								if(!$ambiguous)
+									break;
+							}
+
+							if($code >= 200 && $code <= 299)
+							{
+								$snapshot = self::paypal_checkout_order_capture_snapshot($data);
+								if($snapshot['id'] && $snapshot['status'])
+								{
+									if($gateway_checkout_id)
+										self::paypal_checkout_order_gateway_checkout_recover($invoice, $order_id, $snapshot['id'], $snapshot['status'], 'browser', $gateway_checkout_lock);
+									if($snapshot['status'] === 'COMPLETED' && !self::paypal_checkout_order_completion_error($data, $order_id, $token))
+									{
+										if($binding_name) delete_transient($binding_name);
+										return $data;
+									}
+									if($snapshot['status'] === 'PENDING')
+										return array_merge($data, array('__error' => 'capture_pending'));
+									if(in_array($snapshot['status'], array('DENIED', 'FAILED', 'DECLINED'), TRUE))
+										return array_merge($data, array('__error' => 'capture_'.strtolower($snapshot['status'])));
+								}
+							}
+
+							//260902.0635 Resolve ambiguous/incomplete capture responses by reading PayPal's current order state; never issue a second capture after a known PENDING capture exists.
+							$details = self::paypal_checkout_order_details($order_id);
+							if(empty($details['__error']) && !($validation_error = self::paypal_checkout_order_validation_error($details, $order_id, $token)))
+							{
+								$snapshot = self::paypal_checkout_order_capture_snapshot($details);
+								if($snapshot['id'] && $snapshot['status'])
+								{
+									if($gateway_checkout_id)
+										self::paypal_checkout_order_gateway_checkout_recover($invoice, $order_id, $snapshot['id'], $snapshot['status'], 'browser', $gateway_checkout_lock);
+									if($snapshot['status'] === 'COMPLETED' && !self::paypal_checkout_order_completion_error($details, $order_id, $token))
+									{
+										if($binding_name) delete_transient($binding_name);
+										return $details;
+									}
+									if($snapshot['status'] === 'PENDING')
+										return array_merge($details, array('__error' => 'capture_pending'));
+									if(in_array($snapshot['status'], array('DENIED', 'FAILED', 'DECLINED'), TRUE))
+										return array_merge($details, array('__error' => 'capture_'.strtolower($snapshot['status'])));
+								}
+							}
+
+							if($gateway_checkout_id && $ambiguous)
+								return array('__error' => 'order_capture_unresolved');
+							if(!empty($details['__error']))
+								return $details;
+							return array('__error' => 'order_capture_failed', '__code' => !empty($r['code']) ? (int)$r['code'] : 0, '__body' => !empty($r['body']) ? (string)$r['body'] : '');
+						}
+						finally
+						{
+							if($gateway_checkout_id && $gateway_checkout_lock)
+								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
+							else if(!$gateway_checkout_id && $capture_lock)
+								self::dedupe_lock_release($capture_lock);
+						}
+					}
+
+				/**
+				 * Reconciles a one-time PayPal order/capture into Gateway Checkout state.
+				 *
+				 * @since 260902.0635
+				 */
+				public static function paypal_checkout_order_gateway_checkout_recover($invoice = '', $order_id = '', $capture_id = '', $capture_status = '', $via = 'webhook', $gateway_checkout_lock = '')
+					{
+						$gateway_checkout_id = self::paypal_checkout_gateway_checkout_id_from_invoice($invoice);
+						$order_id = trim((string)$order_id);
+						$capture_id = trim((string)$capture_id);
+						$capture_status = strtoupper(trim((string)$capture_status));
+						$owns_lock = FALSE;
+
+						if(!$gateway_checkout_id || !$order_id)
+							return array('handled' => FALSE, 'ok' => FALSE, 'error' => 'not_coordinator_checkout');
+
+						if(!$gateway_checkout_lock)
+						{
+							$gateway_checkout_lock = c_ws_plugin__s2member_gateway_checkouts::processing_lock($gateway_checkout_id, 60);
+							if(!$gateway_checkout_lock)
+								return array('handled' => TRUE, 'ok' => FALSE, 'error' => 'gateway_checkout_busy', 'gateway_checkout_id' => $gateway_checkout_id);
+							$owns_lock = TRUE;
+						}
+
+						try
+						{
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
+								return array('handled' => FALSE, 'ok' => FALSE, 'error' => 'not_coordinator_checkout');
+
+							//260907.1820 Provider identities are immutable once learned: browser/webhook reconciliation may advance status only for the same PayPal order/capture and must never rebind a checkout to conflicting IDs.
+							$existing_order_id = !empty($gateway_checkout['gateway_ids']['order_id']) ? (string)$gateway_checkout['gateway_ids']['order_id'] : '';
+							$existing_capture_id = !empty($gateway_checkout['gateway_ids']['capture_id']) ? (string)$gateway_checkout['gateway_ids']['capture_id'] : '';
+							if($existing_order_id && !hash_equals($existing_order_id, $order_id))
+								return array('handled' => TRUE, 'ok' => FALSE, 'error' => 'gateway_checkout_order_conflict', 'gateway_checkout_id' => $gateway_checkout_id);
+							if($existing_capture_id && $capture_id && !hash_equals($existing_capture_id, $capture_id))
+								return array('handled' => TRUE, 'ok' => FALSE, 'error' => 'gateway_checkout_capture_conflict', 'gateway_checkout_id' => $gateway_checkout_id);
+
+							$existing_gateway_status = strtoupper((string)$gateway_checkout['gateway_status']);
+							//260902.0646 Provider finality is monotonic; stale browser/webhook observations must never downgrade a capture that already completed or reached a terminal failure.
+							if(in_array($existing_gateway_status, array('CAPTURE_COMPLETED', 'CAPTURE_DENIED', 'CAPTURE_FAILED', 'CAPTURE_DECLINED'), TRUE))
+								return array('handled' => TRUE, 'ok' => TRUE, 'error' => '', 'gateway_checkout_id' => $gateway_checkout_id, 'order_id' => $existing_order_id ? $existing_order_id : $order_id, 'capture_id' => $existing_capture_id ? $existing_capture_id : $capture_id, 'status' => $existing_gateway_status);
+
+							$gateway_ids = !empty($gateway_checkout['gateway_ids']) && is_array($gateway_checkout['gateway_ids']) ? $gateway_checkout['gateway_ids'] : array();
+							$gateway_ids['order_id'] = $order_id;
+							if($capture_id)
+								$gateway_ids['capture_id'] = $capture_id;
+
+							$status = $capture_status ? 'CAPTURE_'.$capture_status : (!empty($gateway_checkout['gateway_status']) ? (string)$gateway_checkout['gateway_status'] : 'ORDER_CREATED');
+							$context = !empty($gateway_checkout['context']) && is_array($gateway_checkout['context']) ? $gateway_checkout['context'] : array();
+							unset($context['paypal_order_create_started_at'], $context['paypal_order_request_id']);
+							if($capture_status && $capture_status !== 'PENDING')
+								unset($context['paypal_capture_started_at'], $context['paypal_capture_request_id']);
+							if($via === 'webhook')
+							{
+								//260902.0635 Preserve a compact breadcrumb for the future admin diagnostics screen without retaining raw gateway payloads.
+								$context['paypal_capture_recovered_at'] = time();
+								$context['paypal_capture_recovered_via'] = 'webhook';
+							}
+
+							if(!c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_ids' => $gateway_ids, 'gateway_status' => $status, 'context' => $context)))
+								return array('handled' => TRUE, 'ok' => FALSE, 'error' => 'gateway_checkout_save_failed', 'gateway_checkout_id' => $gateway_checkout_id);
+
+							return array('handled' => TRUE, 'ok' => TRUE, 'error' => '', 'gateway_checkout_id' => $gateway_checkout_id, 'order_id' => $order_id, 'capture_id' => $capture_id, 'status' => $status);
+						}
+						finally
+						{
+							if($owns_lock && $gateway_checkout_lock)
+								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
+						}
+					}
+
+				/**
+				 * Fulfills one completed coordinator-backed PayPal order and saves its browser result.
+				 *
+				 * @since 260902.0635
+				 */
+				public static function paypal_checkout_order_fulfill($order = array(), $token = array())
+					{
+						$order_id = !empty($order['id']) ? (string)$order['id'] : '';
+						$invoice = !empty($token['invoice']) ? (string)$token['invoice'] : '';
+						$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : self::paypal_checkout_gateway_checkout_id_from_invoice($invoice);
+
+						if(!$gateway_checkout_id || ($completion_error = self::paypal_checkout_order_completion_error($order, $order_id, $token)))
+							return array('ok' => FALSE, 'error' => $completion_error ? $completion_error : 'gateway_checkout_invalid');
+
+						$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+						if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
+							return array('ok' => FALSE, 'error' => 'gateway_checkout_invalid');
+
+						$private_context = c_ws_plugin__s2member_gateway_checkouts::private_context_get($gateway_checkout_id);
+						if($private_context === FALSE)
+							return array('ok' => FALSE, 'error' => 'gateway_checkout_private_context_failed');
+						//260907.1820 Gateway Checkout's fulfilled result is the outer browser/webhook convergence checkpoint; paypal_checkout_notify_once() remains the inner transaction-level entitlement dedupe.
+						if((string)$gateway_checkout['fulfillment_status'] === 'fulfilled' && !empty($private_context['paypal_checkout']['fulfillment_result']) && is_array($private_context['paypal_checkout']['fulfillment_result']))
+							return array_merge(array('ok' => TRUE, 'processed' => FALSE, 'duplicate' => TRUE), $private_context['paypal_checkout']['fulfillment_result']);
+
+						$capture = $order['purchase_units'][0]['payments']['captures'][0];
+						$pu_cap_id = (string)$capture['id'];
+						$paypal = array(
+							'txn_type' => 'web_accept', 'payment_status' => 'Completed', 'subscr_gateway' => 'paypal',
+							'txn_id' => $pu_cap_id, 'subscr_id' => $pu_cap_id, 'subscr_baid' => $pu_cap_id, 'subscr_cid' => $pu_cap_id,
+							'mc_gross' => (string)$capture['amount']['value'], 'mc_currency' => strtoupper((string)$capture['amount']['currency_code']),
+							'invoice' => $invoice, 'custom' => isset($token['custom']) ? (string)$token['custom'] : '',
+							'item_name' => isset($token['item_name']) ? (string)$token['item_name'] : '', 'item_number' => isset($token['item_number']) ? (string)$token['item_number'] : '',
+							'payer_email' => !empty($order['payer']['email_address']) ? (string)$order['payer']['email_address'] : (!empty($token['payer_email']) ? (string)$token['payer_email'] : ''),
+							'first_name' => !empty($order['payer']['name']['given_name']) ? (string)$order['payer']['name']['given_name'] : (!empty($token['first_name']) ? (string)$token['first_name'] : ''),
+							'last_name' => !empty($order['payer']['name']['surname']) ? (string)$order['payer']['name']['surname'] : (!empty($token['last_name']) ? (string)$token['last_name'] : ''),
+							'option_name1' => isset($token['on0']) ? (string)$token['on0'] : '', 'option_selection1' => isset($token['os0']) ? (string)$token['os0'] : '',
+							'option_name2' => isset($token['on1']) ? (string)$token['on1'] : '', 'option_selection2' => isset($token['os1']) ? (string)$token['os1'] : '',
+						);
+						if(isset($token['tax']))
+							$paypal['tax'] = (string)$token['tax'];
+
+						$proxy_use = !empty($token['s2member_paypal_proxy_use']) ? (string)$token['s2member_paypal_proxy_use'] : 'paypal_checkout';
+						$notify_extra = array();
+						if(!empty($token['s2member_paypal_proxy_coupon']) && is_array($token['s2member_paypal_proxy_coupon']))
+							$notify_extra['s2member_paypal_proxy_coupon'] = $token['s2member_paypal_proxy_coupon'];
+						if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+							$notify_extra['s2member_paypal_proxy_return_url'] = (string)$token['s2member_paypal_proxy_return_url'];
+
+						//260907.1820 Keep the established PayPal Notify path authoritative for entitlement side effects, keyed by capture ID so simultaneous browser/webhook completion cannot process the same transaction twice.
+						$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_capture_done_'.md5($pu_cap_id), $proxy_use, $notify_extra);
+						if(empty($notify_result['ok']))
+							return array('ok' => FALSE, 'error' => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed');
+
+						$return_url = add_query_arg('s2member_paypal_proxy', 'paypal', !empty($token['return']) ? (string)$token['return'] : home_url('/'));
+						$return_post = array_merge($paypal, array('s2member_paypal_proxy' => 'paypal', 's2member_paypal_proxy_use' => $proxy_use));
+						if(array_key_exists('s2member_paypal_proxy_return_url', $token))
+							$return_post['s2member_paypal_proxy_return_url'] = !empty($notify_result['body']) ? trim((string)$notify_result['body']) : '';
+
+						$return_handoff = self::paypal_checkout_return_handoff_create($return_post);
+						if(!$return_handoff)
+							return array('ok' => FALSE, 'error' => 'return_handoff_failed');
+						$return_post['s2member_paypal_checkout_handoff'] = $return_handoff;
+
+						$result = array('rtn_url' => $return_url, 'rtn_post' => $return_post, 'txn_id' => $pu_cap_id);
+						$private_context = (array)$private_context;
+						$private_context['paypal_checkout'] = !empty($private_context['paypal_checkout']) && is_array($private_context['paypal_checkout']) ? $private_context['paypal_checkout'] : array();
+						//260907.1820 Persist the minimal browser handoff before marking fulfillment complete; if the final state write fails after Notify, notify_once still blocks duplicate entitlement work and this result remains recoverable. Passwords/card credentials never belong here.
+						$private_context['paypal_checkout']['fulfillment_result'] = $result;
+						if(!c_ws_plugin__s2member_gateway_checkouts::private_context_set($gateway_checkout_id, $private_context))
+							return array('ok' => FALSE, 'error' => 'gateway_checkout_private_context_failed');
+
+						$gateway_ids = !empty($gateway_checkout['gateway_ids']) && is_array($gateway_checkout['gateway_ids']) ? $gateway_checkout['gateway_ids'] : array();
+						$gateway_ids['order_id'] = $order_id;
+						$gateway_ids['capture_id'] = $pu_cap_id;
+						if(!c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_ids' => $gateway_ids, 'gateway_status' => 'CAPTURE_COMPLETED', 'fulfillment_status' => 'fulfilled')))
+							return array('ok' => FALSE, 'error' => 'gateway_checkout_save_failed');
+
+						return array_merge(array('ok' => TRUE, 'processed' => !empty($notify_result['processed']), 'duplicate' => !empty($notify_result['duplicate'])), $result);
 					}
 
 				/**
@@ -2587,7 +2914,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						//260820.0218 Keep automatic webhook registration aligned with the events handled by s2Member and listed in PayPal Checkout setup help.
 						return array(
 							'PAYMENT.SALE.COMPLETED',
+							'PAYMENT.CAPTURE.PENDING',
 							'PAYMENT.CAPTURE.COMPLETED',
+							'PAYMENT.CAPTURE.DENIED',
 							'PAYMENT.SALE.REFUNDED',
 							'PAYMENT.CAPTURE.REFUNDED',
 							'PAYMENT.SALE.REVERSED',

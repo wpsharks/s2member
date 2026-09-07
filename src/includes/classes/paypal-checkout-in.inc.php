@@ -710,6 +710,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				else if(!in_array($status, array('ACTIVE', 'APPROVED', 'APPROVAL_PENDING'), TRUE) && !$allow_expired_single_cycle)
 				{
 					//260902.0200 Preserve existing non-coordinator PayPal Checkout button behavior until those flows migrate onto Gateway Checkout and gain the same activation polling.
+					//260902.0635 TO-DO: Migrate Framework PayPal Checkout button/redirect flows onto Gateway Checkout so one-time and subscription recovery/final-state rules match Pro-Forms.
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
 						'env_setting'     => $env_setting,
@@ -1032,10 +1033,36 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'token' => $token,
 						));
 
-					echo wp_json_encode(array('error' => 'order_create_failed'));
+					$error = !empty($order['__error']) ? (string)$order['__error'] : 'order_create_failed';
+					$recoverable = ($error === 'gateway_checkout_busy');
+					//260902.0646 Only an overlapping request can populate a missing order ID asynchronously; an ambiguous provider create has no pre-approval webhook, so tell the customer to retry the same idempotent checkout instead of polling pointlessly.
+					echo wp_json_encode(array('error' => $error, 'recoverable' => $recoverable, 'retryable' => ($error === 'order_create_unresolved')));
 					exit();
 				}
 				echo wp_json_encode(array('order_id' => $order['id']));
+				exit();
+			}
+			else if($op === 'get_order_status')
+			{
+				//260907.1820 This recovery endpoint is intentionally coordinator-only: the signed checkout token authorizes a local state read, while PayPal polling/retries remain server/webhook responsibilities.
+				$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
+				$gateway_checkout = $gateway_checkout_id ? c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id) : FALSE;
+				if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
+				{
+					echo wp_json_encode(array('error' => 'gateway_checkout_invalid'));
+					exit();
+				}
+
+				$private_context = c_ws_plugin__s2member_gateway_checkouts::private_context_get($gateway_checkout_id);
+				$fulfillment_result = is_array($private_context) && !empty($private_context['paypal_checkout']['fulfillment_result']) && is_array($private_context['paypal_checkout']['fulfillment_result']) ? $private_context['paypal_checkout']['fulfillment_result'] : array();
+				//260902.0635 Poll only local coordinator state while independent PayPal webhooks resolve delayed creates/captures; do not hammer the provider from the browser.
+				echo wp_json_encode(array(
+					'order_id'           => !empty($gateway_checkout['gateway_ids']['order_id']) ? (string)$gateway_checkout['gateway_ids']['order_id'] : '',
+					'capture_id'         => !empty($gateway_checkout['gateway_ids']['capture_id']) ? (string)$gateway_checkout['gateway_ids']['capture_id'] : '',
+					'status'             => !empty($gateway_checkout['gateway_status']) ? (string)$gateway_checkout['gateway_status'] : '',
+					'fulfillment_status' => !empty($gateway_checkout['fulfillment_status']) ? (string)$gateway_checkout['fulfillment_status'] : '',
+					'fulfilled'          => ((string)$gateway_checkout['fulfillment_status'] === 'fulfilled' && !empty($fulfillment_result)),
+				));
 				exit();
 			}
 			else if($op === 'capture_order')
@@ -1047,6 +1074,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					echo wp_json_encode(array('error' => 'missing_order_id'));
 					exit();
 				}
+
+				$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
+				if($gateway_checkout_id)
+				{
+					$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+					$private_context = $gateway_checkout ? c_ws_plugin__s2member_gateway_checkouts::private_context_get($gateway_checkout_id) : FALSE;
+					$fulfillment_result = is_array($private_context) && !empty($private_context['paypal_checkout']['fulfillment_result']) && is_array($private_context['paypal_checkout']['fulfillment_result']) ? $private_context['paypal_checkout']['fulfillment_result'] : array();
+					if($gateway_checkout && (string)$gateway_checkout['fulfillment_status'] === 'fulfilled' && !empty($fulfillment_result['rtn_url']) && !empty($fulfillment_result['rtn_post']))
+					{
+						//260902.0646 A webhook may have finished checkout while the browser was gone; return the saved browser result locally without touching PayPal or repeating fulfillment.
+						echo wp_json_encode(array('rtn_url' => $fulfillment_result['rtn_url'], 'rtn_post' => $fulfillment_result['rtn_post']));
+						exit();
+					}
+				}
+
 				$capture = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_capture($order_id, $token);
 
 				$cap0 = (!empty($capture['purchase_units'][0]['payments']['captures'][0]) && is_array($capture['purchase_units'][0]['payments']['captures'][0])) ? $capture['purchase_units'][0]['payments']['captures'][0] : array();
@@ -1063,6 +1105,27 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					'capture'    => $capture,
 					'token'      => $token,
 				));
+
+				if($gateway_checkout_id)
+				{
+					if(!empty($capture['__error']))
+					{
+						$error = (string)$capture['__error'];
+						$recoverable = in_array($error, array('capture_pending', 'order_capture_unresolved', 'gateway_checkout_busy'), TRUE);
+						echo wp_json_encode(array('error' => $error, 'recoverable' => $recoverable, 'pending' => ($error === 'capture_pending')));
+						exit();
+					}
+
+					$fulfillment = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_fulfill($capture, $token);
+					if(empty($fulfillment['ok']) || empty($fulfillment['rtn_url']) || empty($fulfillment['rtn_post']))
+					{
+						echo wp_json_encode(array('error' => !empty($fulfillment['error']) ? (string)$fulfillment['error'] : 'order_fulfillment_failed'));
+						exit();
+					}
+
+					echo wp_json_encode(array('rtn_url' => $fulfillment['rtn_url'], 'rtn_post' => $fulfillment['rtn_post']));
+					exit();
+				}
 
 				if(!empty($capture['__error']))
 				{
