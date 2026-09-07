@@ -219,7 +219,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<option value="s2o"'.(($dynamic_asset_loader === 's2o') ? ' selected="selected"' : '').'>s2Member Dynamic Loader (recommended)</option>'."\n";
 				echo '<option value="wordpress"'.(($dynamic_asset_loader === 'wordpress') ? ' selected="selected"' : '').'>WordPress Dynamic Loader (compatibility)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo '<em>The s2Member Dynamic Loader uses a lighter WordPress load for better performance. The WordPress Dynamic Loader uses the site\'s normal WordPress request and can help when a server or security tool blocks direct <code>s2member-o.php</code> requests. See <a href="https://s2member.com/kb-article/mod-security-odd-403-503-500-errors/">Mod Security (Odd 403, 503, 500 Errors)</a>.</em>'."\n";
+				echo '<em>The s2Member Dynamic Loader uses a lighter WordPress load for better performance. The WordPress Dynamic Loader uses the site\'s normal WordPress request and can help when a server or security tool blocks direct <code>s2member-o.php</code> requests. See <a href="https://s2member.com/kb-article/mod-security-odd-403-503-500-errors/" target="_blank" rel="external">Mod Security (Odd 403, 503, 500 Errors)</a>.</em>'."\n";
 				echo '</td></tr>'."\n";
 
 				echo '</tbody>'."\n";
