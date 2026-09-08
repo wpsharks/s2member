@@ -732,7 +732,8 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 				if(!function_exists('wp_cron') || !$recurring_at)
 					$issues['cron_missing'] = $critical = TRUE;
 				else if((int)$recurring_at < $now - HOUR_IN_SECONDS)
-					$issues['cron_overdue'] = $critical = TRUE;
+					//260908.2031 An overdue WP-Cron event can be normal on a quiet site; keep it visible as Attention, while missing cron or an actual overdue EOT backlog remain critical.
+					$issues['cron_overdue'] = TRUE;
 			}
 			else if($mode === '2' && !empty($state['last_external_completed_at']) && $now - (int)$state['last_external_completed_at'] >= 2 * HOUR_IN_SECONDS)
 				$issues['external_cron_stale'] = $critical = TRUE;
@@ -814,7 +815,8 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			if(in_array('repeated_abandoned', $health['issues'], TRUE))
 				$reasons[] = number_format_i18n($health['consecutive_abandoned_runs']).' consecutive Automatic End-of-Term workers ended without reaching normal completion.';
 
-			$settings_url = admin_url('/admin.php?page=ws-plugin--s2member-paypal-ops').'#ws-plugin--s2member-auto-eot-system-enabled';
+			//260908.2031 Open the collapsed EOT panel before scrolling to its setting; a hash alone targets a hidden control.
+			$settings_url = admin_url('/admin.php?page=ws-plugin--s2member-paypal-ops&s2member-open-panel=auto-eot').'#ws-plugin--s2member-auto-eot-system-enabled';
 			$notice = '<strong>s2Member Automatic End-of-Term needs attention.</strong> '.esc_html(implode(' ', $reasons)).' <a href="'.esc_url($settings_url).'">Review Automatic End-of-Term settings</a>.';
 			c_ws_plugin__s2member_admin_notices::display_admin_notice($notice, TRUE);
 		}

@@ -1671,7 +1671,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			{
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_eot_behavior", get_defined_vars());
 
-				echo '<div class="ws-menu-page-group" title="Automatic End-of-Term Behavior">'."\n";
+				//260908.2031 Allow diagnostic/admin-notice links to open this collapsed panel before the shared menu-page JavaScript scrolls to a setting inside it.
+				echo '<div class="ws-menu-page-group" title="Automatic End-of-Term Behavior"'.((!empty($_GET['s2member-open-panel']) && $_GET['s2member-open-panel'] === 'auto-eot') ? ' default-state="open"' : '').'>'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-eot-behavior-section">'."\n";
 				echo '<h3>PayPal End-of-Term Behavior (required, please choose)</h3>'."\n";
