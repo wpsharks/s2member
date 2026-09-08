@@ -925,6 +925,15 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					return;
 				$old = (array)$old_value;
 				$new = (array)$value;
+
+				//260907.2203 Keep a concise operational history of CSS/JS configuration changes when s2Member logging is enabled.
+				$config_changes = array();
+				foreach(array('dynamic_asset_loader', 'static_css', 'static_css_minify', 'static_js', 'static_js_text', 'static_js_minify', 'static_assets_combine') as $key)
+					if(serialize(isset($old[$key]) ? $old[$key] : NULL) !== serialize(isset($new[$key]) ? $new[$key] : NULL))
+						$config_changes[$key] = array('old' => isset($old[$key]) ? $old[$key] : NULL, 'new' => isset($new[$key]) ? $new[$key] : NULL);
+				if($config_changes)
+					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 'CSS/JS configuration changed', 'changes' => $config_changes));
+
 				if((string)(isset($old['static_assets_combine']) ? $old['static_assets_combine'] : '0') !== (string)(isset($new['static_assets_combine']) ? $new['static_assets_combine'] : '0'))
 				{
 					//260903.1918 A combine-mode change changes what the s2member.* filenames represent; discard all build state so the new 2-file/4-file representation starts with fresh timestamps.
@@ -1100,12 +1109,26 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				if($uses_data_map)
 					self::set_static_asset_data_map_signature($id, (string)$data_map_signature['signature']);
 				self::set_static_asset_build($id, $build);
+
+				//260907.2203 Record successful generation so automatic and manual rebuilds remain visible later.
+				c_ws_plugin__s2member_utils_logs::log_entry('css-js', array(
+					'event' => 'Static CSS/JS asset generated', 'result' => 'success', 'asset' => $id, 'build' => $build,
+					'trigger' => $force ? 'forced refresh' : 'automatic generation', 'minified' => !empty($definition['minify']), 'url' => $result['url'],
+				));
+
 				//260905.0106 Prune only after the new timestamp is current so the previous generation is treated as stale instead of protected.
 				self::prune_static_asset_generations(dirname($result['path']), $result['path']);
 				delete_transient($failure_key);
 				return self::$static_asset_cache[$id] = array('ok' => TRUE, 'url' => $result['url'], 'build' => $build, 'error' => '');
 			}
 			set_transient($failure_key, (string)$result['error'], 5 * MINUTE_IN_SECONDS);
+
+			//260907.2203 Preserve failed generation details even when delivery later falls back or recovers automatically.
+			c_ws_plugin__s2member_utils_logs::log_entry('css-js', array(
+				'event' => 'Static CSS/JS asset generation failed', 'result' => 'failure', 'asset' => $id, 'attempted_build' => $build,
+				'previous_build' => $active_build, 'trigger' => $force ? 'forced refresh' : 'automatic generation', 'error' => (string)$result['error'],
+			));
+
 			return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => $result['error']);
 		}
 
@@ -1192,7 +1215,16 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					$errors[] = strtoupper($type).': '.((!empty($result['error'])) ? $result['error'] : 'unknown build error');
 
 			if(!$errors)
+			{
+				//260907.2203 Record the administrator-triggered refresh result.
+				c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 'Manual Static CSS/JS refresh', 'result' => 'success', 'refreshed' => $success));
+
 				wp_send_json_success(array('message' => 'Static '.implode(' + ', $success).' refreshed. New timestamped files are active.'));
+			}
+
+			//260907.2203 Record partial and failed administrator-triggered refreshes too.
+			c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 'Manual Static CSS/JS refresh', 'result' => ($success ? 'partial failure' : 'failure'), 'refreshed' => $success, 'errors' => $errors));
+
 			$message = (($success) ? 'Refreshed '.implode(' + ', $success).'. ' : '').'Could not refresh '.implode('; ', $errors).'. Failed types continue with their previous valid files when still current, or dynamic delivery when stale.';
 			wp_send_json_error(array('message' => $message), 500);
 		}
@@ -1229,6 +1261,19 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 							if($build > 0 && !is_file($location['dir'].'/'.$base.'-'.$build.'.'.$type))
 								$missing[$id] = 'Expected static asset '.$id.' is missing.';
 						}
+
+			//260907.2203 Log only local-health transitions so recurring admin checks do not repeat the same event.
+			$previous = get_option('ws_plugin__s2member_static_asset_health', array());
+			$previous = is_array($previous) ? $previous : array();
+			if(serialize($previous) !== serialize($missing))
+			{
+				update_option('ws_plugin__s2member_static_asset_health', $missing, FALSE);
+				if($missing)
+					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 'Static CSS/JS local health issue', 'result' => 'failure', 'issues' => $missing));
+				else if($previous)
+					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 'Static CSS/JS local health recovered', 'result' => 'recovered', 'previous_issues' => $previous));
+			}
+
 			return self::$static_assets_health_cache = $missing;
 		}
 
@@ -1255,6 +1300,20 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 
 			$using_s2o = empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader']) || $GLOBALS['WS_PLUGIN__']['s2member']['o']['dynamic_asset_loader'] !== 'wordpress';
 			$s2o_missing = $using_s2o && !is_file(self::s2o_file_path());
+
+			//260907.2203 Track missing/recovered loader transitions without logging every admin health check.
+			$s2o_missing_logged = (bool)get_option('ws_plugin__s2member_css_js_s2o_missing', FALSE);
+			if($s2o_missing && !$s2o_missing_logged)
+			{
+				update_option('ws_plugin__s2member_css_js_s2o_missing', 1, FALSE);
+				c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 's2Member Dynamic Loader file missing', 'result' => 'failure', 'file' => self::s2o_file_path(), 'fallback' => 'WordPress Dynamic Loader'));
+			}
+			else if($using_s2o && !$s2o_missing && $s2o_missing_logged)
+			{
+				delete_option('ws_plugin__s2member_css_js_s2o_missing');
+				c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 's2Member Dynamic Loader file recovered', 'result' => 'recovered', 'file' => self::s2o_file_path()));
+			}
+
 			if($s2o_missing)
 				$messages[] = 'The selected s2Member Dynamic Loader file <code>s2member-o.php</code> is missing. s2Member is using the WordPress Dynamic Loader instead. Restore the file or <a href="'.esc_url($dynamic_settings_url).'">choose the WordPress Dynamic Loader</a>.';
 
@@ -1362,6 +1421,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			foreach($runtime_warnings as $key => $warning)
 				if(empty($warning['reported']) || (int)$warning['reported'] < time() - HOUR_IN_SECONDS)
 					unset($runtime_warnings[$key]);
+
+			$old_runtime_warnings = $runtime_warnings; //260907.2203 Preserve prior warning state so only new trusted transitions are logged.
+
 			$failures = array();
 			$suspicions = self::asset_runtime_suspicions();
 
@@ -1394,6 +1456,21 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			}
 
 			update_option('ws_plugin__s2member_asset_runtime_suspicions', $suspicions, FALSE);
+
+			//260907.2203 Keep an operational history of newly confirmed failures, recoveries, and runtime warnings.
+			foreach($failures as $id => $failure)
+				if(!isset($old_failures[$id]) || serialize($old_failures[$id]) !== serialize($failure))
+					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array(
+						'event' => 'CSS/JS delivery health failure', 'result' => 'failure', 'target' => $id, 'details' => $failure,
+						'fallback' => ($id === 's2o') ? 'WordPress Dynamic Loader' : ((strpos((string)$id, 'static:') === 0) ? 'dynamic delivery' : 'none'),
+					));
+			foreach($old_failures as $id => $failure)
+				if(!isset($failures[$id]))
+					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 'CSS/JS delivery health recovered', 'result' => 'recovered', 'target' => $id, 'previous_details' => $failure));
+			foreach($runtime_warnings as $key => $warning)
+				if(!isset($old_runtime_warnings[$key]))
+					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 'CSS/JS runtime warning confirmed', 'result' => 'warning', 'details' => $warning, 'delivery_changed' => FALSE));
+
 			$new_health = array('checked' => time(), 'target_hash' => $target_hash, 'failures' => $failures, 'runtime_warnings' => $runtime_warnings);
 			update_option('ws_plugin__s2member_asset_http_health', $new_health, FALSE);
 			self::$asset_http_health_cache = $new_health;
@@ -1467,10 +1544,21 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$key = md5((string)$expectation['id']."\0".(string)$expectation['url']."\0".(string)$expectation['marker']);
 				if(get_transient('ws_plugin__s2member_asset_runtime_suspect_'.$key))
 					continue;
+
+				$first_report = empty($suspicions[$key]); //260907.2203 Avoid duplicating the same low-trust runtime suspicion in the log.
+
 				set_transient('ws_plugin__s2member_asset_runtime_suspect_'.$key, 1, MINUTE_IN_SECONDS);
 				$expectation['reported'] = time();
 				$expectation['signature'] = $signature;
 				$suspicions[$key] = $expectation;
+
+				//260907.2203 Record the first frontend runtime suspicion for later troubleshooting and trusted confirmation.
+				if($first_report)
+					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array(
+						'event' => 'Frontend CSS/JS runtime issue reported', 'result' => 'suspected', 'asset' => (string)$expectation['id'],
+						'delivery' => (string)$expectation['delivery'], 'url' => (string)$expectation['url'], 'trusted_confirmation_pending' => TRUE,
+					));
+
 				$recorded++;
 			}
 			if($recorded)
@@ -1789,6 +1877,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					if(preg_match('/\/(s2member(?:-pro)?)-\d+\.(css|js)\z/', str_replace('\\', '/', $path), $match))
 						$groups[$match[1].'.'.$match[2]][] = $path;
 
+			$removed = array(); //260907.2203 Collect only files actually removed so cleanup logging stays accurate.
+
 			foreach($groups as $paths)
 			{
 				usort($paths, function($a, $b) {
@@ -1801,9 +1891,15 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 						continue;
 					$stale_kept++;
 					if((int)@filemtime($old_path) < time() - 30 * DAY_IN_SECONDS || $stale_kept > 10)
-						@unlink($old_path);
+						if(@unlink($old_path))
+							$removed[] = basename($old_path);
 				}
 			}
+
+			//260907.2203 Record cleanup only when stale files were actually deleted.
+			if($removed)
+				c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 'Stale Static CSS/JS files pruned', 'result' => 'success', 'removed' => $removed));
+
 			return;
 		}
 

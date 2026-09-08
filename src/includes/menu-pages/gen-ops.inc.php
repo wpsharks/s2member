@@ -303,6 +303,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<tr><td>'."\n";
 				echo '<span id="ws-plugin--s2member-refresh-static-assets-feedback" style="display:flex; align-items:center; gap:.5em; max-width:100%;"><button type="button" class="button" id="ws-plugin--s2member-refresh-static-assets" style="flex:0 0 auto;"'.((!$static_assets_enabled) ? ' disabled="disabled"' : '').'>Refresh Static Assets</button><span id="ws-plugin--s2member-refresh-static-assets-status" aria-live="polite" style="display:block; flex:1 1 auto; min-width:0;"></span></span><br />'."\n";
 				echo '<em>'.(($static_assets_enabled) ? 'Creates new timestamps immediately for every active generated file. Separate Framework/Pro files keep independent build timestamps, while combined mode uses one timestamp per enabled asset type. Save option changes before using this button.' : 'Enable Static CSS Delivery or Static JS Delivery and save the options before using this button.').'</em>'."\n";
+
+				//260907.2203 Point site owners to the CSS/JS operational history from the asset controls.
+				echo '<p style="margin:.75em 0 0;"><em>When s2Member logging is enabled, important static and dynamic CSS/JS events such as generation, refreshes, delivery problems, fallbacks, and recovery are recorded in <code>css-js.log</code>. Routine page loads are not logged.</em></p>'."\n";
+
 				if($static_asset_health)
 					echo '<p class="ws-menu-page-error" style="margin:.75em 0 0;"><em><strong>Static asset health:</strong> '.esc_html(implode(' ', $static_asset_health)).' Use Refresh Static Assets to recreate missing files.</em></p>'."\n";
 				echo '</td></tr>'."\n";
