@@ -86,13 +86,19 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 						$paypal['s2member_log'][] = 'Awake. It\'s '.date('D M j, Y g:i:s a T').'. s2Member `txn_type` identified as '.$identified_as.'.';
 					}
 					//260814 Set optional gateway elements used below so sparse/null payload fields do not trigger PHP diagnostics.
-					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('option_name2', 'option_selection2', 'invoice', 'first_name', 'last_name'));
+					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('option_name2', 'option_selection2', 'invoice', 'first_name', 'last_name', 'mc_currency'));
 
 					$paypal['ip'] = (preg_match('/ip address/i', $paypal['option_name2']) && $paypal['option_selection2']) ? $paypal['option_selection2'] : '';
 					$paypal['ip'] = (!$paypal['ip'] && preg_match('/^[a-z0-9]+~[0-9\.]+$/i', $paypal['invoice'])) ? preg_replace('/^[a-z0-9]+~/i', '', $paypal['invoice']) : $paypal['ip'];
 
-					$paypal['currency']        = strtoupper($paypal['mc_currency']); // Normalize input currency.
-					$paypal['currency_symbol'] = c_ws_plugin__s2member_utils_cur::symbol($paypal['currency']);
+					//260907.2309 Sparse proxied EOT payloads (e.g., Stripe cleanup/cancellation) may omit currency; recover it from stored signup vars when available, then normalize it safely so a genuinely unavailable currency leaves empty notification placeholders without PHP diagnostics.
+					if(!$paypal['mc_currency'] && !empty($paypal['subscr_id']))
+						$paypal['mc_currency'] = c_ws_plugin__s2member_utils_users::get_user_ipn_signup_var('mc_currency', FALSE, $paypal['subscr_id']);
+
+					$paypal['currency']        = strtoupper((string)$paypal['mc_currency']); // Normalize input currency.
+					$paypal['currency_symbol'] = $paypal['currency'] ? c_ws_plugin__s2member_utils_cur::symbol($paypal['currency']) : '';
+
+					//260907.2328 TO-DO: Audit the sibling PayPal recurring-payment and Specific Post/Page refund/reversal handlers that still normalize mc_currency directly; the sparse proxied EOT warning proves legacy notification payloads can omit assumed fields, but preserve monetary-event semantics unless a supported sparse path is reproduced and tested.
 
 					if(($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['subscr_id'])) && is_object($user = new WP_User($user_id)) && !empty($user->ID))
 					{
