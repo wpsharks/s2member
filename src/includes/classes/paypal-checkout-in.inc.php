@@ -710,7 +710,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				else if(!in_array($status, array('ACTIVE', 'APPROVED', 'APPROVAL_PENDING'), TRUE) && !$allow_expired_single_cycle)
 				{
 					//260902.0200 Preserve existing non-coordinator PayPal Checkout button behavior until those flows migrate onto Gateway Checkout and gain the same activation polling.
-					//260902.0635 TO-DO: Migrate Framework PayPal Checkout button/redirect flows onto Gateway Checkout so one-time and subscription recovery/final-state rules match Pro-Forms.
+					//260907.2142 TO-DO: Migrate maintained Framework PayPal Checkout button/redirect flows onto Gateway Checkout before claiming cross-surface PPCO dedupe/idempotency parity, preserving the Pro-Form guarantees for durable provider identity, stable idempotent retries, monotonic final-state recovery, and shared browser/webhook fulfillment dedupe.
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
 						'env_setting'     => $env_setting,
