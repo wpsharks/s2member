@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260829
-Stable tag: 260829
-Tested up to: 7.2-alpha-63379
+Version: 260909
+Stable tag: 260909
+Tested up to: 7.2-alpha-63521
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.5.9
@@ -176,11 +176,80 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260829 =
+= v260909 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v260909 =
+
+- (Framework & Pro) **Major Improvement:** Until now, s2Member normally generated CSS/JS assets dynamically because some of their contents can change depending on the visitor or other conditions. Dynamic generation requires PHP and WordPress to load before each file can be built. s2Member can now build in advance the parts that don't change and whose contents are shared across all visitors, and save them as static files, allowing the web server to return them directly without loading WordPress for each request. In our tests, static requests were consistently more than 100× faster than dynamic delivery, helping pages load faster while reducing server work. See _WP Admin > s2Member > General Options > Performance & Caching > Static CSS/JS Optimization (beta)_.
+	**Flexible opt-in controls:** Enable static CSS, static JavaScript, or both. The existing _CSS/JS Lazy Loading_ option still controls which pages load s2Member's files.
+	**Better caching for logged-in users:** Most of s2Member's JavaScript is the same for everyone, so it can now be shared and cached instead of being rebuilt separately for each visitor. Personal/member-specific values stay with the WordPress page and are never stored in reusable static files. This lets logged-in and logged-out visitors reuse the same shared JavaScript more effectively across page views.
+	**Pro and gateway support:** Pro core and enabled-gateway CSS and JavaScript can use the same static delivery, combining, and minification options.
+	**Flexible static asset delivery:** Static Framework and Pro assets can be kept separate for more granular caching, refreshing, and monitoring, or combined into one CSS file and one JavaScript file to minimize the number of requests.
+	**Optional automatic minification:** Generated CSS and JavaScript can also be minified automatically. Smaller files take less time and bandwidth to download, helping pages load faster, especially on slower connections.
+	**Multilingual-site optimization:** Sites that change language between pages or visitors can reuse the same static JavaScript file across languages. s2Member loads translated messages and other page-varying values with each WordPress page instead, while personal/member details always remain page-specific and are never stored in reusable static files. Single-language sites can keep more site-wide values in the static JavaScript file for maximum efficiency.
+	**Reliable automatic fallback:** Static delivery is an optimization, not a requirement for the site to keep working. If a static file cannot be used, rebuilt, or delivered correctly, s2Member automatically falls back to a compatible dynamic delivery method instead of serving a stale or broken asset.
+	**Targeted refreshes and recovery:** When relevant settings change, s2Member refreshes only the affected static files. During normal WordPress admin use, s2Member also checks that active generated files are still available and working. If a problem is confirmed, it can fall back safely, show an administrator warning, and provide a Refresh Static Assets control to recreate the files.
+	**Troubleshooting and event logging:** When s2Member logging is enabled, a dedicated `css-js.log` records important CSS/JavaScript delivery events such as generation and refreshes, configuration changes, loader or delivery problems, automatic fallbacks and recoveries, browser-reported runtime issues, and stale-file cleanup, without logging routine page loads.
+	**Safer plugin updates:** s2Member keeps its generated static JavaScript synchronized with the installed Framework and Pro versions. If an older generated file no longer matches the current plugin files, s2Member rebuilds it or falls back safely instead of risking broken JavaScript after an update.
+	**Cache-safe cleanup:** Recently replaced static files are kept temporarily so visitors can still load pages cached with an older file URL. Older unused generations are cleaned up automatically, preventing the generated-assets directory from growing indefinitely.
+
+- (Framework & Pro) **Improvement:** Added a choice of loaders for dynamically generated CSS and JavaScript. The Lightweight s2Member Loader remains the default and avoids loading more of WordPress than necessary for better performance. A WordPress Loader option is also available, loading WordPress normally for these asset requests on sites where the server or security software blocks direct s2member-o.php requests. Configure it from __WP Admin > s2Member > General Options > Performance & Caching > Dynamic CSS/JS Loader__. See [Mod Security (Odd 403, 503, 500 Errors)](https://s2member.com/kb-article/mod-security-odd-403-503-500-errors/)
+
+- (Framework & Pro) **Fix:** Due to an earlier change in WordPress, s2Member's dynamic CSS and JavaScript loader could end up loading more of WordPress than necessary, making those files slower to load. Its original lightweight loading behavior has now been restored. See: [s2Member-Only Mode](https://s2member.com/kb-article/s2member-only-mode/)
+
+- (Framework) **Improvement:** Added a shared checkout recovery system that lets supported gateways preserve an in-progress checkout across requests, prevent overlapping processing, and recognize a checkout that already completed even if the browser lost the final response. Recovery information can be retained securely for up to 7 days by default, providing a common foundation for safer retry and recovery behavior across payment gateways.
+
+- (Pro) **Improvement:** PayPal Checkout Pro-Forms now keep a durable checkout identity across reloads, back/forward navigation, and interrupted browser requests. This gives s2Member a reliable way to reconnect the customer with the same PayPal checkout already in progress, while remaining compatible with older in-progress recovery state during the transition.
+
+- (Pro) **Security:** Hardened password handling across Pro-Forms as part of the new checkout recovery protections. Submitted passwords are not carried into reusable PayPal Checkout recovery state or repopulated if the form has to be shown again after submission. If an interrupted checkout is later recovered without the original browser session, WordPress's secure set-password flow is used instead.
+
+- (Pro) **Security:** Hardened Specific Post/Page checkout recovery by minimizing the form data saved for interrupted-checkout recovery. Sensitive payment fields are explicitly excluded from saved recovery state, adding an extra safeguard against unexpected checkout data being retained.
+
+- (Pro) **Fix:** Significantly extended Stripe Pro-Form duplicate-billing protection for interrupted or retried checkouts. If a reload, interrupted request, lost response, or 3D Secure retry leaves an existing Stripe payment or subscription in progress, s2Member now preserves enough checkout state to find and resume that same payment or subscription instead of accidentally starting another one. This extends the duplicate-charge protection added in v260829 to several additional failure and recovery paths. See [thread 13589](https://f.wpsharks.com/t/13589).
+
+- (Pro) **Fix:** Improved handling when a successful Stripe Pro-Form checkout completes on the server but the final confirmation never reaches the customer. Because the form can still appear unfinished, the customer may submit it again even though Stripe already completed the payment. Successful checkout results are now retained server-side so s2Member can recognize the completed checkout and resume from the saved result instead of treating the retry as a new payment attempt.
+
+- (Pro) **Fix:** Strengthened duplicate-subscription protection in PayPal Checkout Pro-Forms. Subscription creation is now recorded before browser approval continues, so reloads, lost PayPal responses, interrupted callbacks, and retries can recover and reuse the subscription already created at PayPal instead of creating another one.
+
+- (Pro) **Fix:** Corrected PayPal Checkout subscription activation handling so membership access is not granted while PayPal still considers the subscription pending approval. s2Member now waits for PayPal to confirm activation, and can recover that confirmation through PayPal's webhook if the browser response is lost or delayed.
+
+- (Pro) **Fix:** Added comprehensive recovery for interrupted or delayed PayPal Checkout one-time payments. s2Member now keeps track of both the PayPal order and its payment capture, safely handles lost or ambiguous responses, keeps access pending until PayPal confirms the payment completed, and can later recover a completed payment through either the browser or PayPal's webhook without attempting a second capture. The recovery state is also kept deliberately minimal without retaining sensitive checkout data.
+
+- (Framework) **Performance:** Reduced overhead in high-frequency query and capability checks by bypassing hook and filter setup when nothing is registered and avoiding unnecessary construction of hook context variables, while preserving registered callbacks and WordPress `all` hook compatibility. Screens and operations that perform many capability checks, such as the WordPress Users list, can benefit especially from these savings.
+
+- (Framework) **Performance:** Reduced database overhead during page loads by eliminating repeated access-restriction database queries within the same request, reusing the initial lookup result.
+
+- (Pro) **Performance:** Moved checks for available Pro updates to a background task and reused the saved result, so slow update checks or connection problems can't delay frontend or admin page loads.
+
+- (Pro) **Performance:** Moved the Pro server environment details collection to a background task, so it can't delay normal admin page loads.
+
+- (Pro) **Performance:** Eliminated repeated cron and transient housekeeping during normal page loads when End-of-Term reminders are disabled, moving the necessary cleanup to settings changes and stale background callbacks.
+
+- (Framework) **Improvement:** End-of-Term Administrative Notes in the user's profile now use the level custom names when the "Force WordPress to use your Labels" setting is enabled. Also, if a user is already in the configured demotion role, the note now says so instead of recording a "role change" to the same role.
+
+- (Framework) **Fix:** Solved a remaining PayPal cancellation EOT issue when stored IPN Signup Vars are completely missing. An older subscription check could prevent the newer PayPal lookup from running, causing the EOT to fall back to an incorrect one-day period. s2Member now uses PayPal's next billing date when available. Thanks to Felix for reporting this. See [thread 13462](https://f.wpsharks.com/t/13462).
+
+- (Framework) **Fix:** Improved Automatic End-of-Term health warnings on low-traffic sites. A delayed WP-Cron event, which can happen when there have been few or no site visitors to trigger it, is now shown as an Attention item without triggering the admin warning by itself, while missing cron or an actual overdue EOT backlog still triggers the stronger warning. EOT warning links also now open the relevant settings panel and jump directly to the affected setting.
+
+- (Framework) **Fix:** Prevented PHP warnings during some Stripe cancellation/End-of-Term processing when currency information is missing. s2Member now recovers the stored payment currency when possible, and continues processing cleanly without PHP warnings.
+
+- (Framework) **Fix:** In some edge cases, legacy encryption/decryption could trigger a PHP 8.5 deprecation warning for certain byte values. The byte handling is now explicitly normalized while preserving compatibility with existing encrypted data.
+
+- (Framework) **Fix:** Redacting sensitive data in large multiline gateway/API logs could cause the regular-expression redaction step to fail and trigger PHP 8.1+ deprecation warnings. Redaction now handles large log entries more reliably.
+
+- (Framework) **Fix:** The bundled Mailchimp API client could trigger a PHP 8.1+ deprecation warning by passing a deprecated `null` value during query-string construction. It now uses the correct empty-string value instead, preserving the same API request behavior.
+
+- (Pro) **Fix:** ClickBank request processing could trigger PHP 8.1+ deprecation warnings by passing a deprecated `null` value during query-string construction. Those calls now use the correct empty-string value instead, preserving the same request behavior.
+
+- (Framework) **Fix:** PayPal notifications and returns could trigger PHP warnings when the optional `s2member_paypal_proxy` and `s2member_paypal_proxy_use` fields were absent. Those optional fields are now set to empty values when missing before processing, while preserving existing gateway integration behavior.
+
+- (Pro) **Fix:** Prevented a PHP warning when processing malformed Stripe webhook payloads by validating the decoded event before accessing its ID.
+
+- (Framework) **Fix:** Corrected an off-by-one issue in Brute Force Login Protection that allowed one additional login attempt after the configured failed-login limit had been reached.
 
 = v260829 =
 
