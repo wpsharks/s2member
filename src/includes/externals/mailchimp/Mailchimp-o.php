@@ -2417,7 +2417,8 @@ class Mailchimp_o {
         $this->errorCode = "";
         $error = false;
 
-        $post_vars = http_build_query($params, null, "&");
+        //260830.2347 PHP 8.1+ deprecates null for http_build_query()'s string $numeric_prefix argument; '' preserves the historical query output.
+        $post_vars = http_build_query($params, '', "&");
 
         $s2_ags = array("user-agent" => "MCAPI/" . $this->version, "timeout" => $this->timeout);
         $s2_url = $host . $this->apiUrl["path"] . "?" . $this->apiUrl["query"] . "&method=" . $method;

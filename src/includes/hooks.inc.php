@@ -82,6 +82,23 @@ add_action('wp_print_styles', 'c_ws_plugin__s2member_css_js_themes::add_css');
 add_action('wp_print_scripts', 'c_ws_plugin__s2member_css_js_themes::add_js_w_globals');
 add_filter('script_loader_tag', 'c_ws_plugin__s2member_css_js_themes::script_loader_tag', 10, 2);
 
+//260904.0300 Fresh activation can update options before funcs.inc.php installs s2Member's class autoloader, so defer this callback until s2Member is fully loaded.
+add_action('ws_plugin__s2member_loaded', function() {
+	add_action('updated_option', 'c_ws_plugin__s2member_utils_assets::maybe_invalidate_after_wp_option_update', 10, 3);
+});
+add_action('activated_plugin', 'c_ws_plugin__s2member_utils_assets::invalidate_after_plugin_change');
+add_action('deactivated_plugin', 'c_ws_plugin__s2member_utils_assets::invalidate_after_plugin_change');
+add_action('upgrader_process_complete', 'c_ws_plugin__s2member_utils_assets::maybe_invalidate_after_upgrade', 10, 2);
+add_action('ws_plugin__s2member_after_activation', 'c_ws_plugin__s2member_utils_assets::invalidate_static_assets', 10, 0);
+add_action('wp_ajax_ws_plugin__s2member_refresh_static_assets', 'c_ws_plugin__s2member_utils_assets::ajax_refresh_static_assets');
+add_action('wp_ajax_ws_plugin__s2member_asset_http_health', 'c_ws_plugin__s2member_utils_assets::ajax_asset_http_health_report');
+add_action('wp_ajax_ws_plugin__s2member_asset_runtime_suspect', 'c_ws_plugin__s2member_utils_assets::ajax_asset_runtime_suspicion');
+add_action('wp_ajax_nopriv_ws_plugin__s2member_asset_runtime_suspect', 'c_ws_plugin__s2member_utils_assets::ajax_asset_runtime_suspicion');
+add_action('admin_notices', 'c_ws_plugin__s2member_utils_assets::static_assets_admin_notice');
+add_action('admin_footer', 'c_ws_plugin__s2member_utils_assets::asset_http_health_probe', 900);
+add_action('wp_footer', 'c_ws_plugin__s2member_utils_assets::asset_http_health_probe', 900);
+add_action('wp_footer', 'c_ws_plugin__s2member_utils_assets::page_asset_runtime_monitor', 1000);
+
 add_action('wp_login_failed', 'c_ws_plugin__s2member_brute_force::track_failed_logins');
 add_filter('authenticate', 'c_ws_plugin__s2member_brute_force::stop_brute_force_logins', 100);
 

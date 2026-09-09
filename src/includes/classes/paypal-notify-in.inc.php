@@ -28,6 +28,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 	 */
 	class c_ws_plugin__s2member_paypal_notify_in
 	{
+		//260907.2110 TO-DO: Before final PayPal Standard deprecation, review IPN/return replay protection against the shared fulfillment/dedupe invariants; provider-hosted button creation itself does not need Gateway Checkout creation orchestration.
 		/**
 		 * Handles PayPal IPN processing.
 		 *
@@ -51,6 +52,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 			global $current_site, $current_blog;
 
 			do_action('ws_plugin__s2member_before_paypal_notify', get_defined_vars());
+
+			//260831.0135 Normalize optional s2Member proxy fields once; direct PayPal IPNs omit them, while proxied gateway integrations provide strings.
+			if(!isset($_REQUEST['s2member_paypal_proxy']) || !is_string($_REQUEST['s2member_paypal_proxy']))
+				$_REQUEST['s2member_paypal_proxy'] = '';
+			if(!isset($_REQUEST['s2member_paypal_proxy_use']) || !is_string($_REQUEST['s2member_paypal_proxy_use']))
+				$_REQUEST['s2member_paypal_proxy_use'] = '';
 
 			if(!empty($_GET['s2member_paypal_notify']) && ($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business'] || !empty($_REQUEST['s2member_paypal_proxy'])))
 			{

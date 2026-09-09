@@ -44,9 +44,13 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 			if(!empty($_GET["ws_plugin__s2member_css"]))
 			{
+				//260905.0009 A page-local WordPress fallback can carry the signed marker miss that caused recovery, avoiding a separate report request.
+				c_ws_plugin__s2member_utils_assets::record_asset_runtime_recovery_suspicion();
+
 				status_header(200); // 200 OK status header.
 
 				header("Content-Type: text/css; charset=UTF-8");
+				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "lightweight" : "wordpress")); //260904.2255 Expose which dynamic loader produced this response for diagnostics.
 				header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
 				header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 				header("Cache-Control: max-age=604800");
@@ -57,11 +61,14 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 				$u = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"];
 				$i = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/src/images";
 
-				ob_start("c_ws_plugin__s2member_utils_css::compress_css");
+				ob_start("c_ws_plugin__s2member_utils_assets::compress_css");
 
 				include_once dirname(dirname(__FILE__))."/s2member.css";
 
 				do_action("ws_plugin__s2member_during_css", get_defined_vars());
+
+				//260904.2255 Mark the very end of successful dynamic CSS so real pages can verify that the expected Framework/Pro styles arrived.
+				echo c_ws_plugin__s2member_utils_assets::dynamic_asset_marker_output('css');
 
 				exit(); // Clean exit.
 			}
@@ -86,9 +93,13 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 			if(!empty($_GET["ws_plugin__s2member_js_w_globals"]))
 			{
+				//260905.0009 A page-local WordPress fallback can carry the signed marker miss that caused recovery, avoiding a separate report request.
+				c_ws_plugin__s2member_utils_assets::record_asset_runtime_recovery_suspicion();
+
 				status_header(200); // 200 OK status header.
 
 				header("Content-Type: application/x-javascript; charset=UTF-8");
+				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "lightweight" : "wordpress")); //260904.2255 Expose which dynamic loader produced this response for diagnostics.
 				header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
 				header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 				header("Cache-Control: max-age=604800");
@@ -186,21 +197,9 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 					echo "S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1 = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_VALUE_FOR_PP_ON1)."',";
 					echo "S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1 = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_VALUE_FOR_PP_OS1)."';";
 
-				} else { // Expose only what is needed by the s2Member application itself; for the current user.
-					echo "var S2MEMBER_CURRENT_USER_IS_LOGGED_IN = ".((S2MEMBER_CURRENT_USER_IS_LOGGED_IN) ? "true" : "false").",";
-					echo "S2MEMBER_CURRENT_USER_IS_LOGGED_IN_AS_MEMBER = ".((S2MEMBER_CURRENT_USER_IS_LOGGED_IN_AS_MEMBER) ? "true" : "false").",";
+				} else // Expose only what is needed by the s2Member application itself; for the current user.
+					echo self::current_user_js_globals();
 
-					echo "S2MEMBER_CURRENT_USER_FIRST_NAME = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_FIRST_NAME)."',";
-					echo "S2MEMBER_CURRENT_USER_LAST_NAME = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_LAST_NAME)."',";
-
-					echo "S2MEMBER_CURRENT_USER_LOGIN = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_LOGIN)."',";
-					echo "S2MEMBER_CURRENT_USER_EMAIL = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_EMAIL)."',";
-
-					echo "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED = ".S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED.",";
-					echo "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED = ".((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED) ? "true" : "false").",";
-					echo "S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY = ".S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY.",";
-					echo "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS = ".S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS.";";
-				}
 				$u = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"];
 				$i = $GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["dir_url"]."/src/images";
 
@@ -209,9 +208,38 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 				do_action("ws_plugin__s2member_during_js_w_globals", get_defined_vars());
 
+				//260904.2255 Mark the very end of successful dynamic JavaScript so a late page check can detect blocked or interrupted delivery.
+				echo c_ws_plugin__s2member_utils_assets::dynamic_asset_marker_output('js');
+
 				exit(); // Clean exit.
 			}
 			do_action("ws_plugin__s2member_after_js_w_globals", get_defined_vars());
+		}
+
+		/**
+		 * Returns the current-user JavaScript globals required by s2Member's frontend application.
+		 *
+		 * @package s2Member\CSS_JS
+		 * @since 260903.0437
+		 *
+		 * @param bool $for_inline Escape HTML-closing sequences for safe inline-script output.
+		 * @return string JavaScript variable declarations.
+		 */
+		public static function current_user_js_globals($for_inline = FALSE)
+		{
+			$g = "var S2MEMBER_CURRENT_USER_IS_LOGGED_IN = ".((S2MEMBER_CURRENT_USER_IS_LOGGED_IN) ? "true" : "false").",";
+			$g .= "S2MEMBER_CURRENT_USER_IS_LOGGED_IN_AS_MEMBER = ".((S2MEMBER_CURRENT_USER_IS_LOGGED_IN_AS_MEMBER) ? "true" : "false").",";
+			$g .= "S2MEMBER_CURRENT_USER_FIRST_NAME = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_FIRST_NAME)."',";
+			$g .= "S2MEMBER_CURRENT_USER_LAST_NAME = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_LAST_NAME)."',";
+			$g .= "S2MEMBER_CURRENT_USER_LOGIN = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_LOGIN)."',";
+			$g .= "S2MEMBER_CURRENT_USER_EMAIL = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_EMAIL)."',";
+			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED = ".S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED.",";
+			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED = ".((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED) ? "true" : "false").",";
+			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY = ".S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY.",";
+			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS = ".S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS.";";
+
+			//260903.0437 Inline data is HTML, not an external JS response; neutralize any user-controlled closing-script sequence before WordPress prints it.
+			return ($for_inline) ? str_ireplace('</', '<\/', $g) : $g;
 		}
 	}
 }

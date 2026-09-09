@@ -44,6 +44,12 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 
 						do_action("ws_plugin__s2member_before_paypal_return", get_defined_vars ());
 
+						//260831.0135 Normalize optional s2Member proxy fields once; direct PayPal returns omit them, while proxied gateway integrations provide strings.
+						if(!isset($_GET["s2member_paypal_proxy"]) || !is_string($_GET["s2member_paypal_proxy"]))
+							$_GET["s2member_paypal_proxy"] = "";
+						if(!isset($_GET["s2member_paypal_proxy_use"]) || !is_string($_GET["s2member_paypal_proxy_use"]))
+							$_GET["s2member_paypal_proxy_use"] = "";
+
 						if (!empty($_GET["s2member_paypal_return"]) && ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_business"] || !empty($_GET["s2member_paypal_proxy"])))
 							{
 								$paypal = array(); // Initialize PayPal array; we also reference this with a variable for a possible proxy handler.

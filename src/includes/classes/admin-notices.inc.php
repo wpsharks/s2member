@@ -95,6 +95,29 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 		}
 
 		/**
+		 * Displays a branded s2Member administrative notice.
+		 *
+		 * @package s2Member\Admin_Notices
+		 * @since 260904.1923
+		 *
+		 * @param string $title Notice title.
+		 * @param string $message Main notice message.
+		 * @param bool $error Optional. True for an error notice; otherwise an informational notice.
+		 */
+		public static function display_branded_notice($title = '', $message = '', $error = FALSE)
+		{
+			$title = trim((string)$title);
+			$message = trim((string)$message);
+			if(!$message)
+				return;
+
+			$_logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
+			$_notice_class = ($error) ? 'notice notice-error' : 'notice notice-info';
+
+			echo '<div class="'.esc_attr($_notice_class).'" style="margin:0 0 15px 2px !important; padding:8px !important;"><table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;">'.(($title !== '') ? '<strong>'.esc_html($title).'</strong><br />' : '').wp_kses_post($message).'</td></tr></table></div>';
+		}
+
+		/**
 		 * Displays a branded s2Member security notice.
 		 *
 		 * @package s2Member\Admin_Notices

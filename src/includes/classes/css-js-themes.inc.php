@@ -85,10 +85,31 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 
 			if(!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js())
 			{
-				$s2o = $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'];
+				$static = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css'])) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('css') : array();
+				$static_css = !empty($static['ok']) && !empty($static['assets']);
+				$dynamic_css = !$static_css;
 
-				wp_enqueue_style('ws-plugin--s2member', $s2o.'?ws_plugin__s2member_css=1&qcABC=1', array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
+				if($static_css)
+				{
+					$dependency = array();
+					foreach($static['assets'] as $id => $asset)
+					{
+						$handle = ($id === 's2member-pro.css') ? 'ws-plugin--s2member-pro' : 'ws-plugin--s2member';
+						wp_enqueue_style($handle, $asset['url'], $dependency, NULL, 'all');
+						c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($id, 'css', $asset['url'], 'static', $asset['build']);
+						$dependency = array($handle);
+					}
+				}
+				else
+				{
+					//260906.0738 If requested static delivery cannot be used, prefer full WordPress so normal-plugin hooks/customizations that caused the fallback are preserved.
+					$dynamic_css_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css'])).'?ws_plugin__s2member_css=1&qcABC=1';
+					$dynamic_css_delivery = (strpos($dynamic_css_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-lightweight' : 'dynamic-wordpress';
+					wp_enqueue_style('ws-plugin--s2member', $dynamic_css_url, array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
+					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations('', 'css', $dynamic_css_url, $dynamic_css_delivery);
+				}
 
+				//260903.1918 Static CSS keeps Framework/Pro files separate by default, with optional combining; any incompatible hook/build failure retains the single legacy dynamic response.
 				do_action('ws_plugin__s2member_during_add_css', get_defined_vars());
 			}
 			do_action('ws_plugin__s2member_after_add_css', get_defined_vars());
@@ -114,19 +135,38 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 
 			if((!is_admin() && c_ws_plugin__s2member_css_js_themes::lazy_load_css_js()) || (is_user_admin() && $pagenow === 'profile.php' && !current_user_can('edit_users')))
 			{
-				$s2o = $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'];
+				$static = (!is_admin() && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && function_exists('wp_add_inline_script')) ? c_ws_plugin__s2member_utils_assets::ensure_static_assets('js') : array();
+				$static_js = !empty($static['ok']) && !empty($static['assets']);
+				$page_text = c_ws_plugin__s2member_utils_assets::static_js_text_delivery() === 'page';
+				$static_inline_js = ($static_js && $page_text) ? c_ws_plugin__s2member_utils_assets::static_js_inline_data($static['assets']) : '';
+				if($static_js && $page_text && $static_inline_js === '')
+					$static_js = FALSE; //260906.2049 Page-loaded JavaScript text requires the matching shipped data map before slot-based static JavaScript can be used.
+				$dynamic_js = !$static_js;
 
-				if(is_user_logged_in()) // Separate version for logged-in Users/Members.
+				if($static_js)
 				{
-					$md5 = WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5; // An MD5 hash based on global key => values.
-					// The MD5 hash allows the script to be cached in the browser until the globals happen to change.
-					// For instance, the global variables may change when a User who is logged-in changes their Profile.
-					wp_enqueue_script('ws-plugin--s2member', $s2o.'?ws_plugin__s2member_js_w_globals='.urlencode($md5).'&qcABC=1', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
+					$dependency = array('jquery');
+					foreach($static['assets'] as $id => $asset)
+					{
+						$handle = ($id === 's2member-pro.js') ? 'ws-plugin--s2member-pro' : 'ws-plugin--s2member';
+						wp_enqueue_script($handle, $asset['url'], $dependency, NULL, TRUE);
+						if($handle === 'ws-plugin--s2member')
+							wp_add_inline_script($handle, c_ws_plugin__s2member_css_js_in::current_user_js_globals(TRUE).(($static_inline_js !== '') ? "\n".$static_inline_js : ''), 'before');
+						c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($id, 'js', $asset['url'], 'static', $asset['build']);
+						$dependency = array($handle);
+					}
 				}
-				else // Else if they are not logged in, we distinguish the JavaScript file by NOT including $md5.
-				{ // This essentially creates 2 versions of the script. One while logged in & another when not.
-					wp_enqueue_script('ws-plugin--s2member', $s2o.'?ws_plugin__s2member_js_w_globals=1&qcABC=1', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
+				else
+				{
+					//260906.0738 A static-JS compatibility fallback uses full WordPress so runtime gettext/plugin customizations remain available; static-disabled sites retain their selected dynamic loader.
+					$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']));
+					$dynamic_js_value = (is_user_logged_in()) ? WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5 : '1';
+					$dynamic_js_url = $dynamic_asset_url.'?ws_plugin__s2member_js_w_globals='.urlencode($dynamic_js_value).'&qcABC=1';
+					$dynamic_js_delivery = (strpos($dynamic_js_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-lightweight' : 'dynamic-wordpress';
+					wp_enqueue_script('ws-plugin--s2member', $dynamic_js_url, array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
+					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations('', 'js', $dynamic_js_url, $dynamic_js_delivery);
 				}
+
 				do_action('ws_plugin__s2member_during_add_js_w_globals', get_defined_vars());
 			}
 			do_action('ws_plugin__s2member_after_add_js_w_globals', get_defined_vars());
@@ -147,7 +187,7 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 		 */
 		public static function script_loader_tag($tag = '', $handle = '')
 		{
-			if ($handle === 'ws-plugin--s2member') {
+			if (in_array($handle, array('ws-plugin--s2member', 'ws-plugin--s2member-pro'), TRUE)) {
 				$tag = str_replace(' src=', ' data-cfasync="false" src=', $tag);
 			}
 			return $tag; // Prevent RocketLoader from loading async.

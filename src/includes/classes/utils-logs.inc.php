@@ -128,23 +128,24 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 			$log_entry = preg_replace('/(\'.*pass_?(?:word)?(?:[0-9]+)?\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/pass'.'$3', $log_entry);
 			$log_entry = preg_replace('/(\[\s*[^\]\r\n]*pass_?(?:word)?(?:[0-9]+)?[^\]\r\n]*\]\s*\=\>\s*)([^\r\n]*)/i', '$1'.'xxxxxxxx/pass', $log_entry);
 			$log_entry = preg_replace('/(\".*pass_?(?:word)?(?:[0-9]+)?\"\s*\:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/pass'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&]*pass_?(?:word)?(?:[0-9]+)?\=)([^&]+)/', '$1'.'xxxxxxxx/pass', $log_entry);
+			//260830.1632 Query-string redaction must stop at CR/LF as well as `&`; debug logs are multiline, and scanning across entries can make PCRE fail and return NULL.
+			$log_entry = preg_replace('/([&?][^&\r\n]*pass_?(?:word)?(?:[0-9]+)?\=)([^&\r\n]+)/', '$1'.'xxxxxxxx/pass', $log_entry);
 
 			$log_entry = preg_replace('/(\'api_?(?:key|secret)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/api/key/sec'.'$3', $log_entry);
 			$log_entry = preg_replace('/(\[\s*[^\]\r\n]*api_?(?:key|secret)[^\]\r\n]*\]\s*\=\>\s*)([^\r\n]*)/i', '$1'.'xxxxxxxx/api/key/sec', $log_entry);
 			$log_entry = preg_replace('/(\"[^\"]*api_?(?:key|secret)[^\"]*\"\s*\:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/api/key/sec'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&]*api_?(?:key|secret)\=)([^&]+)/i', '$1'.'xxxxxxxx/api/key/sec', $log_entry);
+			$log_entry = preg_replace('/([&?][^&\r\n]*api_?(?:key|secret)\=)([^&\r\n]+)/i', '$1'.'xxxxxxxx/api/key/sec', $log_entry);
 
 			$log_entry = preg_replace('/(\'(?:PWD|SIGNATURE)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/PWD/SIG'.'$3', $log_entry);
 			$log_entry = preg_replace('/(\[\s*[^\]\r\n]*(?:PWD|SIGNATURE)[^\]\r\n]*\]\s*\=\>\s*)([^\r\n]*)/', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
 			$log_entry = preg_replace('/(\"(?:PWD|SIGNATURE)\"\s*\:\s*\")([^\"]+)(\")/', '$1'.'xxxxxxxx/PWD/SIG'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&]*(?:PWD|SIGNATURE)\=)([^&]+)/', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
+			$log_entry = preg_replace('/([&?][^&\r\n]*(?:PWD|SIGNATURE)\=)([^&\r\n]+)/', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
 			$log_entry = preg_replace('/((?:^|[&?])[^&\r\n]*(?:PWD|SIGNATURE)(?:\[[^\]&=]*\]|%5B[^&=]*%5D)?\=)([^&\r\n]+)/im', '$1'.'xxxxxxxx/PWD/SIG', $log_entry);
 
 			$log_entry = preg_replace('/(\'(?:x_login|x_tran_key)\'\s*\=\>\s*\')([^\']+)(\')/', '$1'.'xxxxxxxx/key/tran'.'$3', $log_entry);
 			$log_entry = preg_replace('/(\[\s*[^\]\r\n]*(?:x_login|x_tran_key)[^\]\r\n]*\]\s*\=\>\s*)([^\r\n]*)/i', '$1'.'xxxxxxxx/key/tran', $log_entry);
 			$log_entry = preg_replace('/(\"(?:x_login|x_tran_key)\"\s*\:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/key/tran'.'$3', $log_entry);
-			$log_entry = preg_replace('/([&?][^&]*(?:x_login|x_tran_key)\=)([^&]+)/i', '$1'.'xxxxxxxx/key/tran', $log_entry);
+			$log_entry = preg_replace('/([&?][^&\r\n]*(?:x_login|x_tran_key)\=)([^&\r\n]+)/i', '$1'.'xxxxxxxx/key/tran', $log_entry);
 
 			//260617 Conceal card verification values in gateway and HTTP API logs.
 			$log_entry = preg_replace('/(\'(?:CVV2?|CVC2?|CSC|CARD_?CODE|X_CARD_CODE|x_card_code|card_?code|card_?verification)\'\s*\=\>\s*\')([^\']+)(\')/i', '$1'.'xxxxxxxx/cvv'.'$3', $log_entry);

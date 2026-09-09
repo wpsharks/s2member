@@ -88,7 +88,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_logs"))
 				echo '<td>'."\n";
 				echo '<input type="radio" name="ws_plugin__s2member_gateway_debug_logs" id="ws-plugin--s2member-gateway-debug-logs-0" value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-0">No</label> &nbsp;&nbsp;&nbsp; <input type="radio" name="ws_plugin__s2member_gateway_debug_logs" id="ws-plugin--s2member-gateway-debug-logs-1" value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["gateway_debug_logs"]) ? ' checked="checked"' : '').' /> <label for="ws-plugin--s2member-gateway-debug-logs-1">Yes, enable debugging w/ HTTP, API, IPN &amp; Return Page logging (and List Server API logs too).</label><br />'."\n";
 				echo '<em>This enables logging overall. Includes s2Member HTTP, API, IPN and Return Page logging. Also logs any List Server integrations.</em><br />'."\n";
-				echo '<em>* Use only for debugging. This should NEVER be enabled on a live site.<br />* The log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code></em>'."\n";
+
+				//260907.2203 Document the CSS/JS operational log with the setting that enables s2Member logging.
+				echo '<em>The CSS/JS Asset Log (<code>css-js.log</code>) records important static and dynamic CSS/JS events such as generation, refreshes, delivery problems, fallbacks, and recovery. Routine page loads are not logged.</em><br />'."\n";
+
+				echo '<em>* Logging can contain sensitive operational data. Enable it only when needed, review log access carefully, and disable it when troubleshooting is complete.<br />* The log files are stored here: <code>'.esc_html(c_ws_plugin__s2member_utils_dirs::doc_root_path($GLOBALS["WS_PLUGIN__"]["s2member"]["c"]["logs_dir"])).'</code></em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
