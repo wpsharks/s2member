@@ -197,7 +197,7 @@ Please see: <http://s2member.com/r/translations/>
 	**Safer plugin updates:** s2Member keeps its generated static JavaScript synchronized with the installed Framework and Pro versions. If an older generated file no longer matches the current plugin files, s2Member rebuilds it or falls back safely instead of risking broken JavaScript after an update.
 	**Cache-safe cleanup:** Recently replaced static files are kept temporarily so visitors can still load pages cached with an older file URL. Older unused generations are cleaned up automatically, preventing the generated-assets directory from growing indefinitely.
 
-- (Framework & Pro) **Improvement:** Added a choice of loaders for dynamically generated CSS and JavaScript. The Lightweight s2Member Loader remains the default and avoids loading more of WordPress than necessary for better performance. A WordPress Loader option is also available, loading WordPress normally for these asset requests on sites where the server or security software blocks direct s2member-o.php requests. Configure it from __WP Admin > s2Member > General Options > Performance & Caching > Dynamic CSS/JS Loader__. See [Mod Security (Odd 403, 503, 500 Errors)](https://s2member.com/kb-article/mod-security-odd-403-503-500-errors/)
+- (Framework & Pro) **Improvement:** Added a choice of loaders for dynamically generated CSS and JavaScript. The Lightweight s2Member Loader remains the default and avoids loading more of WordPress than necessary for better performance. A WordPress Loader option is also available, loading WordPress normally for these asset requests on sites where the server or security software blocks direct s2member-o.php requests. Configure it from _WP Admin > s2Member > General Options > Performance & Caching > Dynamic CSS/JS Loader_. See [Mod Security (Odd 403, 503, 500 Errors)](https://s2member.com/kb-article/mod-security-odd-403-503-500-errors/)
 
 - (Framework & Pro) **Fix:** Due to an earlier change in WordPress, s2Member's dynamic CSS and JavaScript loader could end up loading more of WordPress than necessary, making those files slower to load. Its original lightweight loading behavior has now been restored. See: [s2Member-Only Mode](https://s2member.com/kb-article/s2member-only-mode/)
 
@@ -213,7 +213,7 @@ Please see: <http://s2member.com/r/translations/>
 
 - (Pro) **Fix:** Improved handling when a successful Stripe Pro-Form checkout completes on the server but the final confirmation never reaches the customer. Because the form can still appear unfinished, the customer may submit it again even though Stripe already completed the payment. Successful checkout results are now retained server-side so s2Member can recognize the completed checkout and resume from the saved result instead of treating the retry as a new payment attempt.
 
-- (Pro) **Fix:** Strengthened duplicate-subscription protection in PayPal Checkout Pro-Forms. Subscription creation is now recorded before browser approval continues, so reloads, lost PayPal responses, interrupted callbacks, and retries can recover and reuse the subscription already created at PayPal instead of creating another one.
+- (Pro) **Fix:** Strengthened duplicate-subscription protection in PayPal Checkout Pro-Forms. Subscriptions are now created server-side and recorded before browser approval continues, so reloads, lost PayPal responses, interrupted callbacks, and retries can recover and reuse the subscription already created at PayPal instead of creating another one.
 
 - (Pro) **Fix:** Corrected PayPal Checkout subscription activation handling so membership access is not granted while PayPal still considers the subscription pending approval. s2Member now waits for PayPal to confirm activation, and can recover that confirmation through PayPal's webhook if the browser response is lost or delayed.
 
@@ -223,7 +223,9 @@ Please see: <http://s2member.com/r/translations/>
 
 - (Framework) **Performance:** Reduced database overhead during page loads by eliminating repeated access-restriction database queries within the same request, reusing the initial lookup result.
 
-- (Pro) **Performance:** Moved checks for available Pro updates to a background task and reused the saved result, so slow update checks or connection problems can't delay frontend or admin page loads.
+- (Pro) **Improvement:** The Pro updater now handles version mismatches more clearly when the latest Pro release is ahead of the installed Framework. It recommends updating the Framework first, or links to the [Release Archive](https://s2member.com/release-archive/) for a matching Pro version when staying on the current Framework.
+
+- (Pro) **Performance:** Moved checks for available Pro updates to a background task. The latest available Pro version is now saved locally and reused for up to a day when deciding whether to show the Pro Updater. This way, slow Pro availability checks or connection problems can't delay frontend or admin page loads. After Framework updates, a fresh background check keeps compatibility information current.
 
 - (Pro) **Performance:** Moved the Pro server environment details collection to a background task, so it can't delay normal admin page loads.
 
