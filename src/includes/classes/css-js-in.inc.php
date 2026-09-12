@@ -44,13 +44,15 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 			if(!empty($_GET["ws_plugin__s2member_css"]))
 			{
-				//260905.0009 A page-local WordPress fallback can carry the signed marker miss that caused recovery, avoiding a separate report request.
+				//260912.0522 A page-local WordPress fallback can carry the signed activation miss that caused recovery, avoiding a separate report request.
+				//260912.0522 This carrier is compatibility-only for already-cached first-v260909 pages; the current monitor reports Late assets without injecting fallback assets.
 				c_ws_plugin__s2member_utils_assets::record_asset_runtime_recovery_suspicion();
 
 				status_header(200); // 200 OK status header.
 
 				header("Content-Type: text/css; charset=UTF-8");
-				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "lightweight" : "wordpress")); //260904.2255 Expose which dynamic loader produced this response for diagnostics.
+				//260904.2255 Expose which dynamic loader produced this response for diagnostics.
+				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "s2member-o" : "wordpress")); //260910.0724 Keep that diagnostic identity aligned with the actual endpoint: `s2member-o` maps to s2member-o.php and `wordpress` means the full WordPress route.
 				header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
 				header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 				header("Cache-Control: max-age=604800");
@@ -67,8 +69,8 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 				do_action("ws_plugin__s2member_during_css", get_defined_vars());
 
-				//260904.2255 Mark the very end of successful dynamic CSS so real pages can verify that the expected Framework/Pro styles arrived.
-				echo c_ws_plugin__s2member_utils_assets::dynamic_asset_marker_output('css');
+				//260912.0522 Append the activation-tag snippet after successful dynamic CSS so real pages can confirm that the expected styles became active.
+				echo c_ws_plugin__s2member_utils_assets::dynamic_activation_tag_snippet('css');
 
 				exit(); // Clean exit.
 			}
@@ -93,13 +95,15 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 			if(!empty($_GET["ws_plugin__s2member_js_w_globals"]))
 			{
-				//260905.0009 A page-local WordPress fallback can carry the signed marker miss that caused recovery, avoiding a separate report request.
+				//260912.0522 A page-local WordPress fallback can carry the signed activation miss that caused recovery, avoiding a separate report request.
+				//260912.0522 This carrier is compatibility-only for already-cached first-v260909 pages; the current monitor reports Late assets without injecting fallback assets.
 				c_ws_plugin__s2member_utils_assets::record_asset_runtime_recovery_suspicion();
 
 				status_header(200); // 200 OK status header.
 
 				header("Content-Type: application/x-javascript; charset=UTF-8");
-				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "lightweight" : "wordpress")); //260904.2255 Expose which dynamic loader produced this response for diagnostics.
+				//260904.2255 Expose which dynamic loader produced this response for diagnostics.
+				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "s2member-o" : "wordpress")); //260910.0724 Keep that diagnostic identity aligned with the actual endpoint: `s2member-o` maps to s2member-o.php and `wordpress` means the full WordPress route.
 				header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
 				header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 				header("Cache-Control: max-age=604800");
@@ -208,8 +212,8 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 				do_action("ws_plugin__s2member_during_js_w_globals", get_defined_vars());
 
-				//260904.2255 Mark the very end of successful dynamic JavaScript so a late page check can detect blocked or interrupted delivery.
-				echo c_ws_plugin__s2member_utils_assets::dynamic_asset_marker_output('js');
+				//260912.0522 Append the activation-tag snippet after successful dynamic JavaScript so real pages can confirm that the expected script became active.
+				echo c_ws_plugin__s2member_utils_assets::dynamic_activation_tag_snippet('js');
 
 				exit(); // Clean exit.
 			}

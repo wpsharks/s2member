@@ -49,7 +49,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_html"))
 						$static_inline_js = (!empty($static_js['ok']) && !empty($static_js['assets']) && c_ws_plugin__s2member_utils_assets::static_js_text_delivery() === 'page') ? c_ws_plugin__s2member_utils_assets::static_js_inline_data($static_js['assets']) : '';
 						if(!empty($static_js['ok']) && !empty($static_js['assets']) && c_ws_plugin__s2member_utils_assets::static_js_text_delivery() === 'page' && $static_inline_js === '')
 							$static_js = array(); //260906.2049 Do not emit slot-based static JavaScript in standalone documents without its page-loaded text values.
-						//260906.2219 Static disabled keeps the selected lightweight loader; requested static delivery that fails uses full WordPress so compatibility hooks are not skipped.
+						//260906.2219 Static disabled keeps the selected s2Member-Only Dynamic Loader (s2member-o.php); requested static delivery that fails uses full WordPress so compatibility hooks are not skipped.
 						$dynamic_css_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) && (empty($static_css['ok']) || empty($static_css['assets'])));
 						$dynamic_js_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']) && (empty($static_js['ok']) || empty($static_js['assets'])));
 

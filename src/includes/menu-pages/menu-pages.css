@@ -425,6 +425,18 @@ div.ws-menu-page > :not(.notice):not(.updated):not(.error) input[type='submit']:
 {
 	background : #4C6324;
 }
+/*260911.1924 Keep disabled admin buttons visibly present and neutral after the normal blue/green button rules have been applied. */
+div.ws-menu-page > :not(.notice):not(.updated):not(.error) button[disabled],
+div.ws-menu-page > :not(.notice):not(.updated):not(.error) input[type='button'][disabled],
+div.ws-menu-page > :not(.notice):not(.updated):not(.error) input[type='submit'][disabled]
+{
+	color      : #A7AAAD !important;
+	background : #F6F7F7 !important;
+	border     : 1px solid #DCDCDE !important;
+	box-shadow : none !important;
+	opacity    : 1;
+	cursor     : default;
+}
 div.ws-menu-page > :not(.notice):not(.updated):not(.error) p.submit button[type='submit'],
 div.ws-menu-page > :not(.notice):not(.updated):not(.error) p.submit input[type='submit']
 {

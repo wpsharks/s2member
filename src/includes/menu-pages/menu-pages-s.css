@@ -201,24 +201,25 @@ table.ws-plugin--s2member-status-table tr + tr td
 	border-radius  : 50%;
 	background     : #8c8f94;
 }
+/* 260911.1806 Use brighter shared health colors so tiny status lights remain easy to distinguish across Asset Health and EOT status sections. */
 .ws-plugin--s2member-status-light-healthy,
 .ws-plugin--s2member-status-light-processing
 {
-	background : #46b450;
+	background : #00bb00;
 }
 .ws-plugin--s2member-status-light-catching_up,
 .ws-plugin--s2member-status-light-delayed
 {
-	background : #dba617;
+	background : #fed748;
 }
 .ws-plugin--s2member-status-light-attention,
 .ws-plugin--s2member-status-light-retrying
 {
-	background : #d97706;
+	background : #ff8c00;
 }
 .ws-plugin--s2member-status-light-error
 {
-	background : #d63638;
+	background : #ee0000;
 }
 .ws-plugin--s2member-status-light-disabled
 {

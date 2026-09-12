@@ -216,10 +216,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<tr><th><label for="ws-plugin--s2member-dynamic-asset-loader">Dynamic CSS/JS Loader</label></th></tr>'."\n";
 				echo '<tr><td>'."\n";
 				echo '<select name="ws_plugin__s2member_dynamic_asset_loader" id="ws-plugin--s2member-dynamic-asset-loader">'."\n";
-				echo '<option value="s2o"'.(($dynamic_asset_loader === 's2o') ? ' selected="selected"' : '').'>s2Member Dynamic Loader (recommended)</option>'."\n";
-				echo '<option value="wordpress"'.(($dynamic_asset_loader === 'wordpress') ? ' selected="selected"' : '').'>WordPress Dynamic Loader (compatibility)</option>'."\n";
+				echo '<option value="s2o"'.(($dynamic_asset_loader === 's2o') ? ' selected="selected"' : '').'>s2Member-Only Dynamic Loader (recommended)</option>'."\n";
+				echo '<option value="wordpress"'.(($dynamic_asset_loader === 'wordpress') ? ' selected="selected"' : '').'>Full WordPress Dynamic Loader (compatibility)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo '<em>The s2Member Dynamic Loader uses a lighter WordPress load for better performance. The WordPress Dynamic Loader uses the site\'s normal WordPress request and can help when a server or security tool blocks direct <code>s2member-o.php</code> requests. See <a href="https://s2member.com/kb-article/mod-security-odd-403-503-500-errors/" target="_blank" rel="external">Mod Security (Odd 403, 503, 500 Errors)</a>.</em>'."\n";
+				//260910.0709 Keep the familiar s2member-o.php identity visible, explain the lighter WordPress load for new users, and link the two KB references needed when security rules block direct access to that plugin PHP file.
+				echo '<em>The s2Member-Only Dynamic Loader uses a lighter WordPress load for better performance through <code>s2member-o.php</code>. See <a href="https://s2member.com/kb-article/s2member-only-mode/" target="_blank" rel="noopener noreferrer external">s2Member-Only Mode</a>. Because this PHP file is inside the s2Member plugin directory, some server or security configurations need to explicitly allow web access to it. If it returns a 403, 503, or 500 error, see <a href="https://s2member.com/kb-article/mod-security-odd-403-503-500-errors/" target="_blank" rel="noopener noreferrer external">Mod Security (Odd 403, 503, 500 Errors)</a>. The Full WordPress Dynamic Loader uses the site\'s normal WordPress request as a compatibility alternative.</em>'."\n";
 				echo '</td></tr>'."\n";
 
 				echo '</tbody>'."\n";
@@ -232,7 +233,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				//260904.2014 Keep static CSS/JS delivery and its related optimizations together in a clearly named section.
 				echo '<div id="ws-plugin--s2member-static-assets" class="ws-menu-page-section ws-plugin--s2member-static-assets-section">'."\n";
-				echo '<h3>Static CSS/JS Optimization (beta)</h3>'."\n";
+				echo '<h3>CSS/JS Delivery &amp; Optimization (Beta)</h3>'."\n";
 				echo '<p>These beta options build CSS and JavaScript files ahead of time under the WordPress uploads directory, so the web server can serve them directly without starting PHP and WordPress for each request. Framework and Pro files remain separate by default, with optional combining and minification for further optimization.</p>'."\n";
 				echo '<p><em>After enabling these options, test your membership, registration, profile, and payment pages. If a static file cannot be used, s2Member automatically uses the selected Dynamic CSS/JS Loader instead.</em></p>'."\n";
 
@@ -297,9 +298,19 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<em>Applies when s2Member Pro is active. Separate delivery is the default; combining is an optional optimization that serves one generated CSS file and/or one generated JavaScript file instead of separate Framework and Pro files.</em>'."\n";
 				echo '</td></tr>'."\n";
 
+				//260912.0522 Expose the frontend-asset wait as a 1–60-second diagnostic control; changing it must not alter when the CSS/JS itself is enqueued or executed.
+				$asset_health_wait_seconds = (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['asset_health_wait_seconds'])) ? max(1, min(60, (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['asset_health_wait_seconds'])) : 3;
+				echo '<tr><th><label for="ws-plugin--s2member-asset-health-wait-seconds">Wait Before Checking Frontend Assets (in seconds)</label></th></tr>'."\n";
+				echo '<tr><td>'."\n";
+				echo '<input type="number" min="1" max="60" step="1" name="ws_plugin__s2member_asset_health_wait_seconds" id="ws-plugin--s2member-asset-health-wait-seconds" value="'.esc_attr($asset_health_wait_seconds).'" /><br />'."\n";
+				echo '<em>After the page finishes loading, s2Member waits this many seconds before checking that its frontend CSS and JavaScript have loaded and become active. This helps avoid false warnings when caching or optimization tools delay CSS/JS execution. Default: 3 seconds. Allowed range: 1–60.</em>'."\n";
+				echo '</td></tr>'."\n";
+				echo '</tbody></table>'."\n";
+
 				$static_assets_enabled = !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css']) || !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']);
-				$static_asset_health = ($static_assets_enabled) ? c_ws_plugin__s2member_utils_assets::static_assets_health(TRUE) : array();
-				echo '<tr><th>Static Asset Files</th></tr>'."\n";
+				echo '<table class="form-table">'."\n";
+				echo '<tbody>'."\n";
+				echo '<tr><th>Refresh Static Assets</th></tr>'."\n";
 				echo '<tr><td>'."\n";
 				echo '<span id="ws-plugin--s2member-refresh-static-assets-feedback" style="display:flex; align-items:center; gap:.5em; max-width:100%;"><button type="button" class="button" id="ws-plugin--s2member-refresh-static-assets" style="flex:0 0 auto;"'.((!$static_assets_enabled) ? ' disabled="disabled"' : '').'>Refresh Static Assets</button><span id="ws-plugin--s2member-refresh-static-assets-status" aria-live="polite" style="display:block; flex:1 1 auto; min-width:0;"></span></span><br />'."\n";
 				echo '<em>'.(($static_assets_enabled) ? 'Creates new timestamps immediately for every active generated file. Separate Framework/Pro files keep independent build timestamps, while combined mode uses one timestamp per enabled asset type. Save option changes before using this button.' : 'Enable Static CSS Delivery or Static JS Delivery and save the options before using this button.').'</em>'."\n";
@@ -307,13 +318,157 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				//260907.2203 Point site owners to the CSS/JS operational history from the asset controls.
 				echo '<p style="margin:.75em 0 0;"><em>When s2Member logging is enabled, important static and dynamic CSS/JS events such as generation, refreshes, delivery problems, fallbacks, and recovery are recorded in <code>css-js.log</code>. Routine page loads are not logged.</em></p>'."\n";
 
-				if($static_asset_health)
-					echo '<p class="ws-menu-page-error" style="margin:.75em 0 0;"><em><strong>Static asset health:</strong> '.esc_html(implode(' ', $static_asset_health)).' Use Refresh Static Assets to recreate missing files.</em></p>'."\n";
 				echo '</td></tr>'."\n";
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 				//260904.0649 Keep Refresh tied to saved settings: disable it when no static type is active and while related controls have unsaved changes.
-				echo '<script type="text/javascript">jQuery(function($){var $b=$("#ws-plugin--s2member-refresh-static-assets"),$s=$("#ws-plugin--s2member-refresh-static-assets-status"),$controls=$("#ws-plugin--s2member-static-css,#ws-plugin--s2member-static-css-minify,#ws-plugin--s2member-static-js,#ws-plugin--s2member-static-js-text,#ws-plugin--s2member-static-js-minify,#ws-plugin--s2member-static-assets-combine"),savedEnabled='.($static_assets_enabled ? 'true' : 'false').',dirtyMessage="Save option changes before refreshing.";function values(){return $controls.map(function(){return this.value;}).get().join("|");}var initial=values();function sync(){var changed=values()!==initial;$b.prop("disabled",!savedEnabled||changed);if(changed)$s.text(dirtyMessage);else if($s.text()===dirtyMessage)$s.text("");}$controls.on("change",sync);$b.on("click",function(){$b.prop("disabled",true);$s.text("Refreshing…");$.post(ajaxurl,{action:"ws_plugin__s2member_refresh_static_assets",_ajax_nonce:"'.esc_js(wp_create_nonce('ws-plugin--s2member-refresh-static-assets')).'"}).done(function(r){$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets refreshed.");}).fail(function(xhr){var r=xhr.responseJSON;$s.text(r&&r.data&&r.data.message?r.data.message:"Static assets could not be refreshed.");}).always(function(){sync();});});sync();});</script>'."\n";
+				//260911.1834 Refresh is an explicit admin recovery action; follow a completed server-side rebuild attempt with the existing trusted browser recheck so the displayed Health state updates without another click.
+				echo '<script type="text/javascript">jQuery(function($){var $b=$("#ws-plugin--s2member-refresh-static-assets"),$s=$("#ws-plugin--s2member-refresh-static-assets-status"),$controls=$("#ws-plugin--s2member-static-css,#ws-plugin--s2member-static-css-minify,#ws-plugin--s2member-static-js,#ws-plugin--s2member-static-js-text,#ws-plugin--s2member-static-js-minify,#ws-plugin--s2member-static-assets-combine"),savedEnabled='.($static_assets_enabled ? 'true' : 'false').',dirtyMessage="Save option changes before refreshing.";function values(){return $controls.map(function(){return this.value;}).get().join("|");}var initial=values();function sync(){var changed=values()!==initial;$b.prop("disabled",!savedEnabled||changed);if(changed)$s.text(dirtyMessage);else if($s.text()===dirtyMessage)$s.text("");}function recheck(message){var r=document.getElementById("ws-plugin--s2member-recheck-asset-health");$s.text(message+(r?" Rechecking delivery…":""));if(r)r.click();}$controls.on("change",sync);$b.on("click",function(){$b.prop("disabled",true);$s.text("Refreshing…");$.post(ajaxurl,{action:"ws_plugin__s2member_refresh_static_assets",_ajax_nonce:"'.esc_js(wp_create_nonce('ws-plugin--s2member-refresh-static-assets')).'"}).done(function(r){recheck(r&&r.data&&r.data.message?r.data.message:"Static assets refreshed.");}).fail(function(xhr){var r=xhr.responseJSON,m=r&&r.data&&r.data.message?r.data.message:"Static assets could not be refreshed.";if(r&&r.data)recheck(m);else $s.text(m);}).always(function(){sync();});});sync();});</script>'."\n";
+
+				$asset_health = c_ws_plugin__s2member_utils_assets::frontend_asset_health(TRUE);
+				$asset_health_http = get_option('ws_plugin__s2member_asset_http_health', array());
+				$asset_health_log = get_option('ws_plugin__s2member_assets_health_log', array());
+				$asset_health_last_generation = 0;
+				$asset_health_pending_rebuild = FALSE;
+				$asset_health_age = function($timestamp)
+				{
+					$seconds = max(0, time() - (int)$timestamp);
+					if($seconds < MINUTE_IN_SECONDS)
+						return '<1 min ago';
+					if($seconds < HOUR_IN_SECONDS)
+						return floor($seconds / MINUTE_IN_SECONDS).' min ago';
+					if($seconds < DAY_IN_SECONDS)
+						return floor($seconds / HOUR_IN_SECONDS).' hr ago';
+					return floor($seconds / DAY_IN_SECONDS).' d ago';
+				};
+				foreach(array('css', 'js') as $_asset_type)
+					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_'.$_asset_type]))
+						foreach(c_ws_plugin__s2member_utils_assets::static_asset_ids($_asset_type, 'all') as $_asset_id)
+						{
+							$_asset_build = abs((int)c_ws_plugin__s2member_utils_assets::static_asset_build($_asset_id));
+							if($_asset_build > $asset_health_last_generation)
+								$asset_health_last_generation = $_asset_build;
+						}
+				$asset_health_last_generation_label = (!$static_assets_enabled) ? 'Not in use' : (($asset_health_last_generation > 0) ? $asset_health_age($asset_health_last_generation) : 'Not generated yet');
+				//260912.1956 Loader rows depend on the complete trusted route check, so report that timestamp instead of a newer cheap partial probe when available.
+				$asset_health_last_check = (!empty($asset_health_http['full_checked'])) ? (int)$asset_health_http['full_checked'] : ((!empty($asset_health_http['checked'])) ? (int)$asset_health_http['checked'] : 0);
+				$asset_health_last_check_label = ($asset_health_last_check > 0) ? $asset_health_age($asset_health_last_check) : 'Not checked yet';
+				$asset_health_last_issue_time = 0;
+				$asset_health_last_issue_result = '';
+				$asset_health_last_issue_label = '';
+				$asset_health_last_issue_detail = '';
+				if(!empty($asset_health_log['last_issue']) && is_array($asset_health_log['last_issue']))
+				{
+					//260911.1806 Prefer the dedicated historical snapshot so natural recovery and busy healthy traffic do not erase the useful cause from Last issue.
+					$asset_health_last_issue_time = (!empty($asset_health_log['last_issue']['time'])) ? (int)$asset_health_log['last_issue']['time'] : 0;
+					$asset_health_last_issue_result = (!empty($asset_health_log['last_issue']['result'])) ? (string)$asset_health_log['last_issue']['result'] : '';
+					$asset_health_last_issue_label = (!empty($asset_health_log['last_issue']['label'])) ? (string)$asset_health_log['last_issue']['label'] : '';
+					$asset_health_last_issue_detail = (!empty($asset_health_log['last_issue']['detail'])) ? (string)$asset_health_log['last_issue']['detail'] : '';
+				}
+				else if(!empty($asset_health_log['last_10_asset_loads']) && is_array($asset_health_log['last_10_asset_loads']))
+					foreach(array_reverse($asset_health_log['last_10_asset_loads']) as $_asset_health_load)
+						if(!empty($_asset_health_load['time']) && !empty($_asset_health_load['result']) && (string)$_asset_health_load['result'] !== 'okay')
+						{
+							$asset_health_last_issue_time = (int)$_asset_health_load['time'];
+							$asset_health_last_issue_result = (string)$_asset_health_load['result'];
+							break;
+						}
+				$asset_health_last_issue_label = str_replace(array('Full WordPress Dynamic ', 's2Member-Only Dynamic ', 'JavaScript'), array('WordPress ', 's2Member-Only ', 'JS'), $asset_health_last_issue_label);
+				$asset_health_last_issue = 'None';
+				if($asset_health_last_issue_time > 0 && $asset_health_last_issue_result !== '')
+				{
+					//260911.1834 Self-repaired missing files are historical issues, not degraded scored loads.
+					$_asset_health_result_labels = array('late' => 'late', 'fallback' => 'fallback', 'failed' => 'failed', 'fallback-unavailable' => 'fallback unavailable', 'repaired' => 'static asset missing');
+					$_asset_health_result_label = (isset($_asset_health_result_labels[$asset_health_last_issue_result])) ? $_asset_health_result_labels[$asset_health_last_issue_result] : $asset_health_last_issue_result;
+					$asset_health_last_issue = $asset_health_age($asset_health_last_issue_time).' — '.(($asset_health_last_issue_label !== '') ? $asset_health_last_issue_label.' ' : '').$_asset_health_result_label;
+				}
+				unset($_asset_type, $_asset_id, $_asset_build, $_asset_health_load, $_asset_health_result_labels, $_asset_health_result_label);
+				//260910.0638 New Health Status section for easier review.
+				echo '<div class="ws-menu-page-hr"></div>'."\n";
+				echo '<h3 id="ws-plugin--s2member-asset-health">CSS/JS Asset Health: <span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($asset_health['status']).'" aria-hidden="true"></span>'.esc_html($asset_health['status_label']).'</h3>'."\n";
+				echo '<table class="ws-plugin--s2member-status-table"><tbody>'."\n";
+				//260911.0627 Keep healthy rows compact: the status light carries health while the value names the active delivery method; only exceptions add status text.
+				foreach($asset_health['rows'] as $_asset_health_row)
+				{
+					$_asset_health_pending = ((string)$_asset_health_row['status_label'] === 'Pending rebuild');
+					$_asset_health_url = (!empty($_asset_health_row['url'])) ? (string)$_asset_health_row['url'] : '';
+					$_asset_health_delivery = (!empty($_asset_health_row['delivery'])) ? (string)$_asset_health_row['delivery'] : '';
+					$_asset_health_exception = '';
+					if((string)$_asset_health_row['status_label'] !== 'Healthy' && (string)$_asset_health_row['status_label'] !== 'Using dynamic fallback')
+					{
+						$_asset_health_exception_labels = array('Recent refresh issue' => 'Refresh issue', 'Fallback check failed' => 'Check failed', 'Delivery check failed' => 'Check failed');
+						$_asset_health_exception = (isset($_asset_health_exception_labels[$_asset_health_row['status_label']])) ? $_asset_health_exception_labels[$_asset_health_row['status_label']] : (string)$_asset_health_row['status_label'];
+					}
+					$_asset_health_value = $_asset_health_delivery.(($_asset_health_exception !== '') ? ' — '.$_asset_health_exception : '');
+					$_asset_health_not_generated = ($_asset_health_delivery === 'Static' && $_asset_health_url === '' && $_asset_health_exception === '' && !$_asset_health_pending);
+					if($_asset_health_not_generated)
+						$_asset_health_value .= ' — Not generated yet';
+					$_asset_health_light = ($_asset_health_pending || $_asset_health_not_generated) ? 'disabled' : (string)$_asset_health_row['status'];
+					$_asset_health_light_label = ($_asset_health_not_generated) ? 'Not generated yet' : (string)$_asset_health_row['status_label'];
+					if($_asset_health_pending || $_asset_health_not_generated)
+						$asset_health_pending_rebuild = TRUE; //260911.1924 Both neutral waiting states benefit from the shared automatic-rebuild explanation.
+					//260911.1924 A Pending rebuild URL names the previous generation, so hiding [open] avoids implying that it is the asset waiting to be created.
+					echo '<tr><th scope="row">'.esc_html($_asset_health_row['label']).':</th><td><span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($_asset_health_light).'" style="margin-left:0; margin-right:.3em;" role="img" aria-label="'.esc_attr($_asset_health_light_label).'"></span>'.esc_html($_asset_health_value).((!$_asset_health_pending && $_asset_health_url !== '') ? '<span style="margin-left:.3em;">[<a href="'.esc_url($_asset_health_url).'" target="_blank" rel="noopener noreferrer">open</a>]</span>' : '').((!$_asset_health_pending && $_asset_health_row['status'] !== 'healthy' && (string)$_asset_health_row['detail'] !== '') ? '<br />'.wp_kses_post($_asset_health_row['detail']) : '').'</td></tr>'."\n";
+				}
+				echo '<tr><th scope="row">Last generation:</th><td>'.esc_html($asset_health_last_generation_label).'</td></tr>'."\n";
+				echo '<tr><th scope="row">Last trusted check:</th><td>'.esc_html($asset_health_last_check_label).'</td></tr>'."\n";
+				echo '<tr><th scope="row">Last issue:</th><td>'.esc_html($asset_health_last_issue).(($asset_health_last_issue_detail !== '') ? '<br />'.esc_html($asset_health_last_issue_detail) : '').'</td></tr>'."\n";
+				echo '</tbody></table>'."\n";
+				unset($_asset_health_row, $_asset_health_pending, $_asset_health_not_generated, $_asset_health_light, $_asset_health_light_label, $_asset_health_url, $_asset_health_delivery, $_asset_health_exception, $_asset_health_exception_labels, $_asset_health_value);
+				if($asset_health_pending_rebuild)
+					//260911.1924 Keep neutral waiting states easy to understand; normal admin use now also provides an automatic recovery opportunity before frontend traffic is needed.
+					echo '<p style="margin:.75em 0 0;"><em style="background:#e8f8fb; padding:2px 4px;">* Static assets marked Not generated yet or Pending rebuild will be created or rebuilt automatically on a later admin or frontend page-load, or immediately with Refresh Static Assets.</em></p>'."\n";
+				//260910.0818 Recheck gives immediate confirmation after an admin fixes routing/access; preserve this panel/anchor so the refreshed result returns here.
+				echo '<p><button type="button" class="button" id="ws-plugin--s2member-recheck-asset-health">Recheck Asset Health</button> <span id="ws-plugin--s2member-recheck-asset-health-status" aria-live="polite"></span></p>'."\n";
+				echo '<script type="text/javascript">(function(){var b=document.getElementById("ws-plugin--s2member-recheck-asset-health");if(!b||!window.URL||!window.history||!window.history.replaceState)return;b.addEventListener("click",function(){var u=new URL(window.location.href);u.searchParams.set("s2member-open-panel","frontend-static-assets");u.hash="ws-plugin--s2member-asset-health";window.history.replaceState(null,"",u.toString());},true);})();</script>'."\n";
+				if(!empty($asset_health['recent_issues']) && is_array($asset_health['recent_issues']))
+				{
+					//260910.2350 Keep recent physical-asset causes visible independently of optional css-js.log so a Yellow/Orange/Red headline can explain what recently drove it even after a trusted target recovers.
+					echo '<h3 style="margin:.75em 0 0;">Recent Issue Details (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-asset-health-recent-issues\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
+					echo '<div id="ws-plugin--s2member-asset-health-recent-issues" style="margin-top:10px; display:none;"><table class="ws-plugin--s2member-status-table"><tbody>'."\n";
+					foreach($asset_health['recent_issues'] as $_asset_health_issue)
+					{
+						$_issue_result = (!empty($_asset_health_issue['result'])) ? (string)$_asset_health_issue['result'] : 'late';
+						$_issue_label = ($_issue_result === 'failed') ? 'Failed recently' : 'Late recently';
+						$_issue_detail = (!empty($_asset_health_issue['detail'])) ? (string)$_asset_health_issue['detail'] : '';
+						if(!empty($_asset_health_issue['delivery']))
+							$_issue_detail .= (($_issue_detail !== '') ? ' ' : '').'Delivery: '.esc_html((string)$_asset_health_issue['delivery']).'.';
+						if(!empty($_asset_health_issue['count']))
+							$_issue_detail .= (($_issue_detail !== '') ? ' ' : '').'Seen '.number_format_i18n((int)$_asset_health_issue['count']).' time'.(((int)$_asset_health_issue['count'] === 1) ? '' : 's').'.';
+						if(!empty($_asset_health_issue['last_seen']))
+							$_issue_detail .= (($_issue_detail !== '') ? ' ' : '').'Last seen: '.esc_html(date_i18n('Y-m-d H:i:s', (int)$_asset_health_issue['last_seen'])).'.';
+						echo '<tr><th scope="row">'.esc_html((!empty($_asset_health_issue['label'])) ? $_asset_health_issue['label'] : 'Asset').':</th><td><strong>'.esc_html($_issue_label).'</strong>'.(($_issue_detail !== '') ? '<br />'.wp_kses_post($_issue_detail) : '').'</td></tr>'."\n";
+					}
+					echo '</tbody></table></div>'."\n";
+					unset($_asset_health_issue, $_issue_result, $_issue_label, $_issue_detail);
+				}
+				//260911.2004 Explain Asset Health in site-owner language, with scores first so the relationship between each result/status and its score is easy to scan.
+				echo '<h3 style="margin:1.5em 0 0;">How is this health status calculated? (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-asset-health-calculation\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
+				echo '<div id="ws-plugin--s2member-asset-health-calculation" style="margin-top:10px; display:none;">'."\n";
+				echo '<p><em><strong>Page-load results:</strong> Each relevant frontend page-load gets one result with a score from 1 to 4. If a page uses several s2Member CSS or JavaScript assets, the least healthy result is used for that page.</em></p>'."\n";
+				echo '<ul style="margin:.5em 0 1em 2em;">'."\n";
+				echo '<li><em><strong>4 - Okay:</strong> The expected CSS and JavaScript became active normally.</em></li>'."\n";
+				echo '<li><em><strong>3 - Late:</strong> s2Member could not confirm all expected assets within the configured wait time. They may still have loaded afterward, so this is a warning rather than a failure.</em></li>'."\n";
+				echo '<li><em><strong>2 - Fallback:</strong> The preferred delivery method was unavailable, but s2Member recovered using a working fallback.</em></li>'."\n";
+				echo '<li><em><strong>1 - Failed:</strong> Working delivery could not be confirmed.</em></li>'."\n";
+				echo '</ul>'."\n";
+				//260911.2004 Keep neutral static-asset maintenance states separate from delivery problems and identify the manual control explicitly.
+				echo '<p><em><strong>Not generated yet / Pending rebuild:</strong> These are not delivery failures. The static asset either has not been created yet or needs to be rebuilt after a configuration, plugin, upgrade, or other change. s2Member normally handles this automatically on an admin or frontend page-load. You can also rebuild them immediately with the <strong>Refresh Static Assets</strong> button in this section.</em></p>'."\n";
+				echo '<p><em><strong>Current Health:</strong> s2Member combines recent results from the last 10 page-loads with requests from the last 10 minutes. Newer activity carries more weight, so Health can improve again as successful requests replace older problems.</em></p>'."\n";
+				//260912.1956 The Full WordPress route is the safety net for static and s2Member-Only delivery, so a trusted failure there should lower Health without pretending that visitors actually used a fallback.
+				echo '<p><em><strong>Fallback health:</strong> When preferred delivery is working but its Full WordPress fallback is unavailable, that failed fallback check is averaged into Current Health because the safety net would not be available if needed.</em></p>'."\n";
+				echo '<p><em><strong>Health status:</strong> The combined result is shown as one of these health levels:</em></p>'."\n";
+				echo '<ul style="margin:.5em 0 1em 2em;">'."\n";
+				echo '<li><em><strong>4.00 &ndash; 3.51 - Healthy</strong></em></li>'."\n";
+				echo '<li><em><strong>3.50 &ndash; 2.51 - Recent issue</strong></em></li>'."\n";
+				echo '<li><em><strong>2.50 &ndash; 1.51 - Working, review suggested</strong></em></li>'."\n";
+				echo '<li><em><strong>1.50 &ndash; 1.00 - Needs attention</strong></em></li>'."\n";
+				echo '</ul>'."\n";
+				echo '<p><em>A new Late, Fallback, or Failed result also prevents Healthy from showing until the newest page-load result is Okay.</em></p>'."\n";
+				echo '<p><em><strong>Examples:</strong> One Late result followed by normal page-loads may briefly show Recent issue and then return to Healthy. Repeated Fallback results can move Health to Working, review suggested. Repeated Failed results can move it to Needs attention.</em></p>'."\n";
+				//260911.2004 Describe the six-hour review using the visible Healthy status instead of internal color/score terminology.
+				echo '<p><em><strong>Longer-term review:</strong> A Late result is only a diagnostic signal; it does not make s2Member load another copy of the CSS or JavaScript. A current Needs attention status can trigger an immediate admin notice. If Health does not return to Healthy within six hours, s2Member also reviews activity across that period and may suggest a review when the longer-term result remains substantially degraded.</em></p>'."\n";
+				echo '</div>'."\n";
 				echo '</div>'."\n";
 
 				echo '<div style="margin:1em 0;">'."\n";

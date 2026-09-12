@@ -104,9 +104,18 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 				{
 					//260906.0738 If requested static delivery cannot be used, prefer full WordPress so normal-plugin hooks/customizations that caused the fallback are preserved.
 					$dynamic_css_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_css'])).'?ws_plugin__s2member_css=1&qcABC=1';
-					$dynamic_css_delivery = (strpos($dynamic_css_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-lightweight' : 'dynamic-wordpress';
+					$dynamic_css_delivery = (strpos($dynamic_css_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-s2member-o' : 'dynamic-wordpress'; //260910.0709 Runtime diagnostics name the physical route; the saved loader preference intentionally remains the legacy `s2o` value.
+					$static_css_failed_id = '';
+					if(!empty($static['assets']) && is_array($static['assets']))
+						foreach($static['assets'] as $_static_css_id => $_static_css_asset)
+							if(empty($_static_css_asset['ok']))
+							{
+								$static_css_failed_id = (string)$_static_css_id;
+								break;
+							}
 					wp_enqueue_style('ws-plugin--s2member', $dynamic_css_url, array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
-					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations('', 'css', $dynamic_css_url, $dynamic_css_delivery);
+					//260911.1806 Preserve the failed preferred static asset and cause server-side so Last issue can remain specific after delivery recovers.
+					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($static_css_failed_id, 'css', $dynamic_css_url, $dynamic_css_delivery, 0, (!empty($static['error'])) ? (string)$static['error'] : '');
 				}
 
 				//260903.1918 Static CSS keeps Framework/Pro files separate by default, with optional combining; any incompatible hook/build failure retains the single legacy dynamic response.
@@ -162,9 +171,18 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 					$dynamic_asset_url = c_ws_plugin__s2member_utils_assets::dynamic_asset_url(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js']));
 					$dynamic_js_value = (is_user_logged_in()) ? WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5 : '1';
 					$dynamic_js_url = $dynamic_asset_url.'?ws_plugin__s2member_js_w_globals='.urlencode($dynamic_js_value).'&qcABC=1';
-					$dynamic_js_delivery = (strpos($dynamic_js_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-lightweight' : 'dynamic-wordpress';
+					$dynamic_js_delivery = (strpos($dynamic_js_url, $GLOBALS['WS_PLUGIN__']['s2member']['c']['s2o_url'].'?') === 0) ? 'dynamic-s2member-o' : 'dynamic-wordpress'; //260910.0709 Runtime diagnostics name the physical route; the saved loader preference intentionally remains the legacy `s2o` value.
+					$static_js_failed_id = '';
+					if(!empty($static['assets']) && is_array($static['assets']))
+						foreach($static['assets'] as $_static_js_id => $_static_js_asset)
+							if(empty($_static_js_asset['ok']))
+							{
+								$static_js_failed_id = (string)$_static_js_id;
+								break;
+							}
 					wp_enqueue_script('ws-plugin--s2member', $dynamic_js_url, array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
-					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations('', 'js', $dynamic_js_url, $dynamic_js_delivery);
+					//260911.1806 Preserve the failed preferred static asset and cause server-side so Last issue can remain specific after delivery recovers.
+					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($static_js_failed_id, 'js', $dynamic_js_url, $dynamic_js_delivery, 0, (!empty($static['error'])) ? (string)$static['error'] : '');
 				}
 
 				do_action('ws_plugin__s2member_during_add_js_w_globals', get_defined_vars());
