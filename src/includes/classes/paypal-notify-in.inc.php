@@ -83,6 +83,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 
 					$coupon = (!empty($_REQUEST['s2member_paypal_proxy_coupon']) && is_array($_REQUEST['s2member_paypal_proxy_coupon'])) ? stripslashes_deep($_REQUEST['s2member_paypal_proxy_coupon']) : array();
 					$coupon = (isset($coupon['full_coupon_code'], $coupon['coupon_code'], $coupon['affiliate_id']) && is_string($coupon['full_coupon_code']) && is_string($coupon['coupon_code']) && is_string($coupon['affiliate_id'])) ? $coupon : array('full_coupon_code' => '', 'coupon_code' => '', 'affiliate_id' => '');
+					$coupon = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($coupon); //260910.2249 Normalize proxy coupon data consistently with other notification values.
 
 					if(!empty($paypal['txn_type']) && $paypal['txn_type'] === 'merch_pmt')
 						// This is mostly irrelevant, but it helps to keep the logs cleaner.
@@ -98,9 +99,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 					else if(empty($paypal['custom']))
 						$paypal['custom'] = '';
 					
+					//260910.0356 Resolve the expected host consistently across different web-server request environments.
+					$ipn_host = (!empty($_SERVER['HTTP_HOST']) && is_string($_SERVER['HTTP_HOST'])) ? preg_replace('/\:([0-9]+)$/', '', $_SERVER['HTTP_HOST']) : (string)parse_url(home_url('/'), PHP_URL_HOST);
+
 					//250606 Added option to skip domain validation.
 					if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']
-					|| (!empty($paypal['custom']) && preg_match('/^'.preg_quote(preg_replace('/\:([0-9]+)$/', '', $_SERVER['HTTP_HOST']), '/').'/i', $paypal['custom'])))
+					|| ($ipn_host !== '' && !empty($paypal['custom']) && preg_match('/^'.preg_quote($ipn_host, '/').'/i', $paypal['custom'])))
 					{
 						if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) 
 							$paypal['s2member_log'][] = 's2Member originating domain validation was skipped.';
