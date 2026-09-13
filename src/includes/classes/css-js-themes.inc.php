@@ -127,7 +127,7 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 		/**
 		 * Enqueues JS file for theme integration.
 		 *
-		 * Be sure s2Member's API Constants are already defined before firing this.
+		 * Current-user inline globals tolerate unusually early script printing before s2Member's normal API Constants setup.
 		 *
 		 * @package s2Member\CSS_JS
 		 * @since 3.5

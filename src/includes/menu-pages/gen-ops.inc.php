@@ -357,6 +357,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				$asset_health_last_issue_result = '';
 				$asset_health_last_issue_label = '';
 				$asset_health_last_issue_detail = '';
+				$asset_health_last_issue_page_id = 0;
+				$asset_health_last_issue_page_path = '';
 				if(!empty($asset_health_log['last_issue']) && is_array($asset_health_log['last_issue']))
 				{
 					//260911.1806 Prefer the dedicated historical snapshot so natural recovery and busy healthy traffic do not erase the useful cause from Last issue.
@@ -364,8 +366,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 					$asset_health_last_issue_result = (!empty($asset_health_log['last_issue']['result'])) ? (string)$asset_health_log['last_issue']['result'] : '';
 					$asset_health_last_issue_label = (!empty($asset_health_log['last_issue']['label'])) ? (string)$asset_health_log['last_issue']['label'] : '';
 					$asset_health_last_issue_detail = (!empty($asset_health_log['last_issue']['detail'])) ? (string)$asset_health_log['last_issue']['detail'] : '';
+					$asset_health_last_issue_page_id = (!empty($asset_health_log['last_issue']['page_id'])) ? (int)$asset_health_log['last_issue']['page_id'] : 0;
+					$asset_health_last_issue_page_path = (!empty($asset_health_log['last_issue']['page_path'])) ? (string)$asset_health_log['last_issue']['page_path'] : '';
 				}
-				else if(!empty($asset_health_log['last_10_asset_loads']) && is_array($asset_health_log['last_10_asset_loads']))
+				else if(empty($asset_health_log['last_issue_cleared_at']) && !empty($asset_health_log['last_10_asset_loads']) && is_array($asset_health_log['last_10_asset_loads']))
 					foreach(array_reverse($asset_health_log['last_10_asset_loads']) as $_asset_health_load)
 						if(!empty($_asset_health_load['time']) && !empty($_asset_health_load['result']) && (string)$_asset_health_load['result'] !== 'okay')
 						{
@@ -382,7 +386,21 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 					$_asset_health_result_label = (isset($_asset_health_result_labels[$asset_health_last_issue_result])) ? $_asset_health_result_labels[$asset_health_last_issue_result] : $asset_health_last_issue_result;
 					$asset_health_last_issue = $asset_health_age($asset_health_last_issue_time).' — '.(($asset_health_last_issue_label !== '') ? $asset_health_last_issue_label.' ' : '').$_asset_health_result_label;
 				}
-				unset($_asset_type, $_asset_id, $_asset_build, $_asset_health_load, $_asset_health_result_labels, $_asset_health_result_label);
+				$asset_health_last_issue_page_label = '';
+				$asset_health_last_issue_page_url = '';
+				if($asset_health_last_issue_page_id > 0)
+				{
+					$_asset_health_page_title = (string)get_the_title($asset_health_last_issue_page_id);
+					$asset_health_last_issue_page_label = (($_asset_health_page_title !== '') ? $_asset_health_page_title.' ' : '').'(#'.$asset_health_last_issue_page_id.')';
+					$asset_health_last_issue_page_url = (string)get_permalink($asset_health_last_issue_page_id);
+				}
+				if($asset_health_last_issue_page_path !== '')
+				{
+					$asset_health_last_issue_page_label .= (($asset_health_last_issue_page_label !== '') ? ' — ' : '').$asset_health_last_issue_page_path;
+					if($asset_health_last_issue_page_url === '')
+						$asset_health_last_issue_page_url = home_url($asset_health_last_issue_page_path);
+				}
+				unset($_asset_type, $_asset_id, $_asset_build, $_asset_health_load, $_asset_health_result_labels, $_asset_health_result_label, $_asset_health_page_title);
 				//260910.0638 New Health Status section for easier review.
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 				echo '<h3 id="ws-plugin--s2member-asset-health">CSS/JS Asset Health: <span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($asset_health['status']).'" aria-hidden="true"></span>'.esc_html($asset_health['status_label']).'</h3>'."\n";
@@ -396,7 +414,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 					$_asset_health_exception = '';
 					if((string)$_asset_health_row['status_label'] !== 'Healthy' && (string)$_asset_health_row['status_label'] !== 'Using dynamic fallback')
 					{
-						$_asset_health_exception_labels = array('Recent refresh issue' => 'Refresh issue', 'Fallback check failed' => 'Check failed', 'Delivery check failed' => 'Check failed');
+						$_asset_health_exception_labels = array('Rebuild issue' => 'Rebuild issue', 'Fallback check failed' => 'Check failed', 'Delivery check failed' => 'Check failed');
 						$_asset_health_exception = (isset($_asset_health_exception_labels[$_asset_health_row['status_label']])) ? $_asset_health_exception_labels[$_asset_health_row['status_label']] : (string)$_asset_health_row['status_label'];
 					}
 					$_asset_health_value = $_asset_health_delivery.(($_asset_health_exception !== '') ? ' — '.$_asset_health_exception : '');
@@ -412,7 +430,9 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				}
 				echo '<tr><th scope="row">Last generation:</th><td>'.esc_html($asset_health_last_generation_label).'</td></tr>'."\n";
 				echo '<tr><th scope="row">Last trusted check:</th><td>'.esc_html($asset_health_last_check_label).'</td></tr>'."\n";
-				echo '<tr><th scope="row">Last issue:</th><td>'.esc_html($asset_health_last_issue).(($asset_health_last_issue_detail !== '') ? '<br />'.esc_html($asset_health_last_issue_detail) : '').'</td></tr>'."\n";
+				$_asset_health_last_issue_clear = ($asset_health_last_issue_time > 0) ? ' <span>[<a href="#" class="ws-plugin--s2member-clear-asset-health" data-scope="last_issue">clear</a>]</span>' : '';
+				$_asset_health_last_issue_page = ($asset_health_last_issue_page_label !== '') ? '<br />Page: '.esc_html($asset_health_last_issue_page_label).(($asset_health_last_issue_page_url !== '') ? ' [<a href="'.esc_url($asset_health_last_issue_page_url).'" target="_blank" rel="noopener noreferrer">open</a>]' : '') : '';
+				echo '<tr><th scope="row">Last issue'.$_asset_health_last_issue_clear.':</th><td>'.esc_html($asset_health_last_issue).(($asset_health_last_issue_detail !== '') ? '<br />'.esc_html($asset_health_last_issue_detail) : '').$_asset_health_last_issue_page.'</td></tr>'."\n";
 				echo '</tbody></table>'."\n";
 				unset($_asset_health_row, $_asset_health_pending, $_asset_health_not_generated, $_asset_health_light, $_asset_health_light_label, $_asset_health_url, $_asset_health_delivery, $_asset_health_exception, $_asset_health_exception_labels, $_asset_health_value);
 				if($asset_health_pending_rebuild)
@@ -421,27 +441,55 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				//260910.0818 Recheck gives immediate confirmation after an admin fixes routing/access; preserve this panel/anchor so the refreshed result returns here.
 				echo '<p><button type="button" class="button" id="ws-plugin--s2member-recheck-asset-health">Recheck Asset Health</button> <span id="ws-plugin--s2member-recheck-asset-health-status" aria-live="polite"></span></p>'."\n";
 				echo '<script type="text/javascript">(function(){var b=document.getElementById("ws-plugin--s2member-recheck-asset-health");if(!b||!window.URL||!window.history||!window.history.replaceState)return;b.addEventListener("click",function(){var u=new URL(window.location.href);u.searchParams.set("s2member-open-panel","frontend-static-assets");u.hash="ws-plugin--s2member-asset-health";window.history.replaceState(null,"",u.toString());},true);})();</script>'."\n";
-				if(!empty($asset_health['recent_issues']) && is_array($asset_health['recent_issues']))
+				$asset_health_latest_issues = (!empty($asset_health['latest_issues']) && is_array($asset_health['latest_issues'])) ? $asset_health['latest_issues'] : array();
+				$asset_health_latest_issues_blocks = array();
+				$_asset_health_result_labels = array('late' => 'Late', 'fallback' => 'Fallback', 'failed' => 'Failed', 'fallback-unavailable' => 'Fallback unavailable', 'repaired' => 'Static asset missing / repaired');
+				foreach($asset_health_latest_issues as $_asset_health_issue)
 				{
-					//260910.2350 Keep recent physical-asset causes visible independently of optional css-js.log so a Yellow/Orange/Red headline can explain what recently drove it even after a trusted target recovers.
-					echo '<h3 style="margin:.75em 0 0;">Recent Issue Details (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-asset-health-recent-issues\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
-					echo '<div id="ws-plugin--s2member-asset-health-recent-issues" style="margin-top:10px; display:none;"><table class="ws-plugin--s2member-status-table"><tbody>'."\n";
-					foreach($asset_health['recent_issues'] as $_asset_health_issue)
+					if(!is_array($_asset_health_issue))
+						continue;
+					$_issue_result = (!empty($_asset_health_issue['result'])) ? (string)$_asset_health_issue['result'] : 'issue';
+					$_issue_result_label = (isset($_asset_health_result_labels[$_issue_result])) ? $_asset_health_result_labels[$_issue_result] : ucfirst(str_replace('-', ' ', $_issue_result));
+					$_issue_label = (!empty($_asset_health_issue['label'])) ? (string)$_asset_health_issue['label'] : 'Asset';
+					$_issue_lines = array($_issue_label.' — '.$_issue_result_label);
+					if(!empty($_asset_health_issue['detail']))
+						$_issue_lines[] = (string)$_asset_health_issue['detail'];
+					//260913.0305 Keep Latest Issues compact and copyable: show the full queryless frontend URL, then one precise occurrence timestamp per line.
+					$_issue_page_path = (!empty($_asset_health_issue['page_path'])) ? (string)$_asset_health_issue['page_path'] : '';
+					$_issue_page_url = '';
+					if($_issue_page_path !== '')
 					{
-						$_issue_result = (!empty($_asset_health_issue['result'])) ? (string)$_asset_health_issue['result'] : 'late';
-						$_issue_label = ($_issue_result === 'failed') ? 'Failed recently' : 'Late recently';
-						$_issue_detail = (!empty($_asset_health_issue['detail'])) ? (string)$_asset_health_issue['detail'] : '';
-						if(!empty($_asset_health_issue['delivery']))
-							$_issue_detail .= (($_issue_detail !== '') ? ' ' : '').'Delivery: '.esc_html((string)$_asset_health_issue['delivery']).'.';
-						if(!empty($_asset_health_issue['count']))
-							$_issue_detail .= (($_issue_detail !== '') ? ' ' : '').'Seen '.number_format_i18n((int)$_asset_health_issue['count']).' time'.(((int)$_asset_health_issue['count'] === 1) ? '' : 's').'.';
-						if(!empty($_asset_health_issue['last_seen']))
-							$_issue_detail .= (($_issue_detail !== '') ? ' ' : '').'Last seen: '.esc_html(date_i18n('Y-m-d H:i:s', (int)$_asset_health_issue['last_seen'])).'.';
-						echo '<tr><th scope="row">'.esc_html((!empty($_asset_health_issue['label'])) ? $_asset_health_issue['label'] : 'Asset').':</th><td><strong>'.esc_html($_issue_label).'</strong>'.(($_issue_detail !== '') ? '<br />'.wp_kses_post($_issue_detail) : '').'</td></tr>'."\n";
+						$_issue_home_parts = wp_parse_url(home_url('/'));
+						if(is_array($_issue_home_parts) && !empty($_issue_home_parts['scheme']) && !empty($_issue_home_parts['host']))
+							$_issue_page_url = $_issue_home_parts['scheme'].'://'.$_issue_home_parts['host'].((!empty($_issue_home_parts['port'])) ? ':'.(int)$_issue_home_parts['port'] : '').'/'.ltrim($_issue_page_path, '/');
 					}
-					echo '</tbody></table></div>'."\n";
-					unset($_asset_health_issue, $_issue_result, $_issue_label, $_issue_detail);
+					if($_issue_page_url !== '')
+						$_issue_lines[] = 'Page: '.$_issue_page_url;
+					$_issue_count = (!empty($_asset_health_issue['count'])) ? max(1, (int)$_asset_health_issue['count']) : 1;
+					$_issue_times = array();
+					if(!empty($_asset_health_issue['times']) && is_array($_asset_health_issue['times']))
+						foreach($_asset_health_issue['times'] as $_issue_time)
+							if((int)$_issue_time > 0)
+								$_issue_times[] = date_i18n('Y-m-d H:i:s', (int)$_issue_time);
+					if($_issue_times)
+					{
+						if($_issue_count > count($_issue_times))
+							$_issue_lines[] = 'Seen '.number_format_i18n($_issue_count).' times. Latest '.number_format_i18n(count($_issue_times)).' occurrences:';
+						else
+							$_issue_lines[] = 'Seen '.number_format_i18n($_issue_count).' '.(($_issue_count === 1) ? 'time' : 'times').':';
+						$_issue_lines = array_merge($_issue_lines, $_issue_times);
+					}
+					else
+						$_issue_lines[] = 'Seen '.number_format_i18n($_issue_count).' '.(($_issue_count === 1) ? 'time.' : 'times.');
+					$asset_health_latest_issues_blocks[] = implode("\n", $_issue_lines);
 				}
+				$asset_health_latest_issues_text = ($asset_health_latest_issues_blocks) ? implode("\n\n", $asset_health_latest_issues_blocks) : 'No Asset Health issues are currently recorded.';
+				echo '<h3 style="margin:.75em 0 0;">Latest Issues'.(($asset_health_latest_issues) ? ' <span>[<a href="#" class="ws-plugin--s2member-clear-asset-health" data-scope="latest_issues">clear</a>]</span>' : '').'</h3>'."\n";
+				echo '<textarea id="ws-plugin--s2member-asset-health-latest-issues" rows="5" wrap="on" spellcheck="false" readonly="readonly" style="width:100%; max-width:100%; box-sizing:border-box; resize:vertical; box-shadow:inset 0 0 5px rgba(0,0,0,0.5); background:#EEEEEE; color:#000000; overflow-y:scroll;">'.esc_textarea($asset_health_latest_issues_text).'</textarea>'."\n";
+				echo '<p style="margin:.5em 0 0;"><em>s2Member keeps the latest 10 distinct Asset Health issues here until cleared. Repeated occurrences of the same issue on the same page are grouped together and keep up to 10 recent occurrence times. Clearing Last issue or Latest Issues does not change Current Health or its recent scoring history. Recheck Asset Health safely resets recent scoring history after current delivery and its fallback verify healthy. Enable s2Member logging for more detailed CSS/JavaScript troubleshooting history.</em></p>'."\n";
+				//260913.0056 Keep explicit historical clearing separate from Recheck; neither clear action changes rolling Health or current delivery state.
+				echo '<script type="text/javascript">jQuery(function($){$(document).on("click","a.ws-plugin--s2member-clear-asset-health",function(e){e.preventDefault();var $a=$(this),scope=$a.data("scope");if(!scope)return;$a.css("pointer-events","none");$.post(ajaxurl,{action:"ws_plugin__s2member_clear_asset_health_details",_ajax_nonce:"'.esc_js(wp_create_nonce('ws-plugin--s2member-clear-asset-health-details')).'",scope:scope}).done(function(){window.location.reload();}).fail(function(xhr){var r=xhr.responseJSON,m=r&&r.data&&r.data.message?r.data.message:"Asset Health details could not be cleared.";window.alert(m);$a.css("pointer-events","");});});});</script>'."\n";
+				unset($asset_health_latest_issues, $asset_health_latest_issues_blocks, $asset_health_latest_issues_text, $_asset_health_issue, $_asset_health_result_labels, $_issue_result, $_issue_result_label, $_issue_label, $_issue_lines, $_issue_page_path, $_issue_page_url, $_issue_home_parts, $_issue_count, $_issue_times, $_issue_time);
 				//260911.2004 Explain Asset Health in site-owner language, with scores first so the relationship between each result/status and its score is easy to scan.
 				echo '<h3 style="margin:1.5em 0 0;">How is this health status calculated? (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-asset-health-calculation\').toggle(); return false;" class="ws-dotted-link">click here</a>)</h3>'."\n";
 				echo '<div id="ws-plugin--s2member-asset-health-calculation" style="margin-top:10px; display:none;">'."\n";
@@ -464,7 +512,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<li><em><strong>2.50 &ndash; 1.51 - Working, review suggested</strong></em></li>'."\n";
 				echo '<li><em><strong>1.50 &ndash; 1.00 - Needs attention</strong></em></li>'."\n";
 				echo '</ul>'."\n";
-				echo '<p><em>A new Late, Fallback, or Failed result also prevents Healthy from showing until the newest page-load result is Okay.</em></p>'."\n";
 				echo '<p><em><strong>Examples:</strong> One Late result followed by normal page-loads may briefly show Recent issue and then return to Healthy. Repeated Fallback results can move Health to Working, review suggested. Repeated Failed results can move it to Needs attention.</em></p>'."\n";
 				//260911.2004 Describe the six-hour review using the visible Healthy status instead of internal color/score terminology.
 				echo '<p><em><strong>Longer-term review:</strong> A Late result is only a diagnostic signal; it does not make s2Member load another copy of the CSS or JavaScript. A current Needs attention status can trigger an immediate admin notice. If Health does not return to Healthy within six hours, s2Member also reviews activity across that period and may suggest a review when the longer-term result remains substantially degraded.</em></p>'."\n";

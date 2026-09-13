@@ -274,6 +274,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$state['last_6hour_10min_blocks'] = (!empty($state['last_6hour_10min_blocks']) && is_array($state['last_6hour_10min_blocks'])) ? $state['last_6hour_10min_blocks'] : array();
 			//260911.1806 Keep one compact historical issue outside the rolling score windows so Last issue remains useful after busy healthy traffic or natural recovery.
 			$state['last_issue'] = (!empty($state['last_issue']) && is_array($state['last_issue'])) ? $state['last_issue'] : array();
+			//260913.0041 Keep a bounded always-available troubleshooting summary independent of the rolling score and optional css-js.log.
+			$state['latest_issues'] = (!empty($state['latest_issues']) && is_array($state['latest_issues'])) ? array_slice($state['latest_issues'], 0, 10, TRUE) : array();
+			$state['last_issue_cleared_at'] = (!empty($state['last_issue_cleared_at'])) ? (int)$state['last_issue_cleared_at'] : 0;
+			$state['latest_issues_cleared_at'] = (!empty($state['latest_issues_cleared_at'])) ? (int)$state['latest_issues_cleared_at'] : 0;
 			//260912.0258 Keep a small duplicate-processing safeguard inside the existing health log in case a queued event survives after its changes were already stored.
 			$state['processed_event_times'] = (!empty($state['processed_event_times']) && is_array($state['processed_event_times'])) ? array_slice(array_values($state['processed_event_times']), -100) : array();
 			return $state;
@@ -398,14 +402,17 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 * @param string $label Site-owner-friendly asset label.
 		 * @param string $detail Concise explanation.
 		 * @param string $load_id Optional related load ID.
+		 * @param int $page_id Optional WordPress post/page ID.
+		 * @param string $page_path Optional queryless frontend path.
 		 * @return bool True when Last issue was replaced.
 		 */
-		protected static function set_asset_health_last_issue(&$state, $time = 0, $result = '', $label = '', $detail = '', $load_id = '')
+		protected static function set_asset_health_last_issue(&$state, $time = 0, $result = '', $label = '', $detail = '', $load_id = '', $page_id = 0, $page_path = '')
 		{
 			$time = max(1, (int)$time);
 			$result = strtolower((string)$result);
 			$current_time = (!empty($state['last_issue']['time'])) ? (int)$state['last_issue']['time'] : 0;
-			if($result === '' || $current_time > $time)
+			$cleared_at = (!empty($state['last_issue_cleared_at'])) ? (int)$state['last_issue_cleared_at'] : 0;
+			if($result === '' || $current_time > $time || $cleared_at >= $time)
 				return FALSE;
 
 			//260911.2325 Delayed browser reports may arrive out of order; Last issue must follow event time, not whichever request happened to write last.
@@ -415,7 +422,74 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				'label' => substr((string)$label, 0, 100),
 				'detail' => substr(wp_strip_all_tags((string)$detail), 0, 240),
 				'load_id' => (string)$load_id,
+				'page_id' => max(0, (int)$page_id),
+				'page_path' => substr((string)$page_path, 0, 240),
 			);
+			return TRUE;
+		}
+
+		/**
+		 * Adds one occurrence to the bounded persistent Asset Health Latest Issues summary.
+		 *
+		 * Distinct issues are grouped by asset/result/page so repeats do not crowd out other problems.
+		 * Each group keeps a total count and up to 10 recent occurrence times.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260913.0041
+		 *
+		 * @param array $state Asset-health log state, passed by reference.
+		 * @param int $time Original issue timestamp.
+		 * @param string $result Compact issue result.
+		 * @param array $issue Issue context.
+		 * @param array $page Page context with `page_id` and `page_path`.
+		 * @return bool True when the summary changed.
+		 */
+		protected static function add_asset_health_latest_issue(&$state, $time = 0, $result = '', $issue = array(), $page = array())
+		{
+			$time = max(1, (int)$time);
+			$result = strtolower((string)$result);
+			$issue = (is_array($issue)) ? $issue : array();
+			$page = (is_array($page)) ? $page : array();
+			$cleared_at = (!empty($state['latest_issues_cleared_at'])) ? (int)$state['latest_issues_cleared_at'] : 0;
+			if($result === '' || $cleared_at >= $time)
+				return FALSE;
+
+			$asset = substr(sanitize_text_field((!empty($issue['asset'])) ? (string)$issue['asset'] : ''), 0, 120);
+			$label = substr(sanitize_text_field((!empty($issue['label'])) ? (string)$issue['label'] : ''), 0, 120);
+			$detail = substr(wp_strip_all_tags((!empty($issue['detail'])) ? (string)$issue['detail'] : ''), 0, 240);
+			$delivery = substr(sanitize_text_field((!empty($issue['delivery'])) ? (string)$issue['delivery'] : ''), 0, 80);
+			$page_id = (!empty($page['page_id'])) ? max(0, (int)$page['page_id']) : 0;
+			$page_path = (!empty($page['page_path'])) ? substr((string)$page['page_path'], 0, 240) : '';
+			if($label === '' && $detail === '' && $asset === '')
+				return FALSE;
+
+			$page_identity = ($page_id > 0) ? 'id:'.$page_id : 'path:'.$page_path;
+			$key = sha1(($asset !== '' ? $asset : $label)."\0".$result."\0".$page_identity);
+			$issues = (!empty($state['latest_issues']) && is_array($state['latest_issues'])) ? $state['latest_issues'] : array();
+			$previous = (!empty($issues[$key]) && is_array($issues[$key])) ? $issues[$key] : array();
+			$times = (!empty($previous['times']) && is_array($previous['times'])) ? array_values($previous['times']) : array();
+			array_unshift($times, $time);
+			rsort($times, SORT_NUMERIC); //260913.0041 Delayed reports can arrive after newer issues; retain the 10 most recent occurrence times by event time, not processing order.
+			$times = array_slice($times, 0, 10);
+			$issues[$key] = array(
+				'asset' => $asset,
+				'label' => $label,
+				'result' => $result,
+				'delivery' => $delivery,
+				'detail' => $detail,
+				'page_id' => $page_id,
+				'page_path' => $page_path,
+				'first_seen' => (!empty($previous['first_seen'])) ? min((int)$previous['first_seen'], $time) : $time,
+				'last_seen' => (!empty($previous['last_seen'])) ? max((int)$previous['last_seen'], $time) : $time,
+				'count' => (!empty($previous['count'])) ? (int)$previous['count'] + 1 : 1,
+				'times' => $times,
+			);
+			uasort($issues, function($a, $b) {
+				$a_time = (!empty($a['last_seen'])) ? (int)$a['last_seen'] : 0;
+				$b_time = (!empty($b['last_seen'])) ? (int)$b['last_seen'] : 0;
+				return ($a_time === $b_time) ? 0 : (($a_time > $b_time) ? -1 : 1);
+			});
+			$state['latest_issues'] = array_slice($issues, 0, 10, TRUE);
 			return TRUE;
 		}
 
@@ -462,7 +536,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 * @since 260910.0630
 		 *
 		 * @param float|null $score Final health score, or NULL when there is no evidence yet.
-		 * @param string $latest_result Latest individual asset-load result when available.
+		 * @param string $latest_result Retained for call-site compatibility; the weighted score now determines status by itself.
 		 * @return string Status-light key.
 		 */
 		protected static function asset_health_status_from_score($score = NULL, $latest_result = '')
@@ -470,9 +544,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			if($score === NULL)
 				return 'unknown';
 			$score = (float)$score;
-			$latest_result = strtolower((string)$latest_result);
+			//260913.0046 Let the weighted score decide Health consistently; recency already gives a new non-Okay result the strongest influence without an extra status override.
 			//260912.2005 Exact half-point boundaries belong to the less-healthy band; use the documented two-decimal cutoffs so 2.50, for example, is Working, review suggested rather than Recent issue.
-			if($score >= 3.51 && ($latest_result === '' || $latest_result === 'okay'))
+			if($score >= 3.51)
 				return 'healthy';
 			if($score >= 2.51)
 				return 'delayed';
@@ -612,6 +686,64 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
+		 * Returns the current frontend page context without retaining query-string data.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260913.0048
+		 *
+		 * @return array Compact page ID/path context.
+		 */
+		protected static function current_asset_health_page_context()
+		{
+			$page_id = (function_exists('is_singular') && is_singular()) ? (int)get_queried_object_id() : 0;
+			$request_uri = (!empty($_SERVER['REQUEST_URI'])) ? wp_unslash((string)$_SERVER['REQUEST_URI']) : '';
+			$page_path = ($request_uri !== '') ? (string)wp_parse_url($request_uri, PHP_URL_PATH) : '';
+			$page_path = substr('/'.ltrim($page_path, '/'), 0, 240);
+			if($page_path === '/')
+				$page_path = '/';
+			return array('page_id' => max(0, $page_id), 'page_path' => $page_path);
+		}
+
+		/**
+		 * Signs page context separately from legacy load metadata so already-cached pages remain compatible.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260913.0048
+		 *
+		 * @param array $load Asset-load metadata.
+		 * @return string Signature.
+		 */
+		protected static function asset_health_page_signature($load = array())
+		{
+			$parts = array();
+			foreach(array('load_id', 'load_time', 'page_id', 'page_path') as $key)
+				$parts[$key] = isset($load[$key]) ? (string)$load[$key] : '';
+			return hash_hmac('sha256', serialize($parts), wp_salt('nonce'));
+		}
+
+		/**
+		 * Returns signed page context from browser-returned load metadata.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260913.0048
+		 *
+		 * @param array $load Browser-returned load metadata.
+		 * @return array Verified page context, or empty context for legacy/tampered metadata.
+		 */
+		protected static function verified_asset_health_page_context($load = array())
+		{
+			$load = (is_array($load)) ? $load : array();
+			if(empty($load['page_signature']) || empty($load['load_id']) || empty($load['load_time']))
+				return array('page_id' => 0, 'page_path' => '');
+			$signature = (string)$load['page_signature'];
+			if(!hash_equals(self::asset_health_page_signature($load), $signature))
+				return array('page_id' => 0, 'page_path' => '');
+			$page_id = (!empty($load['page_id'])) ? max(0, (int)$load['page_id']) : 0;
+			$page_path = (!empty($load['page_path'])) ? substr((string)$load['page_path'], 0, 240) : '';
+			return array('page_id' => $page_id, 'page_path' => $page_path);
+		}
+
+		/**
 		 * Queues one frontend asset load or signed Late correction for later collection.
 		 *
 		 * A WordPress-rendered frontend page queues one page-level result using the worst required
@@ -646,6 +778,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					'orig_result' => $result,
 					'orig_6hour' => 0,
 				);
+				//260913.0048 Frontend page identity is compact diagnostic context; keep query strings out and do not attach admin/AJAX request paths to explicit trusted rechecks.
+				if(!$reset_on_ok && !is_admin() && !(function_exists('wp_doing_ajax') && wp_doing_ajax()))
+					$load = array_merge($load, self::current_asset_health_page_context());
 			}
 
 			$event_time = ($is_late_correction && !empty($load['load_time'])) ? (int)$load['load_time'] : $now;
@@ -660,7 +795,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			));
 
 			if(!$is_late_correction)
+			{
 				$load['signature'] = self::asset_health_load_signature($load);
+				if(isset($load['page_id']) || isset($load['page_path']))
+					$load['page_signature'] = self::asset_health_page_signature($load);
+			}
 			return array('scores' => array(), 'load' => $load);
 		}
 
@@ -673,20 +812,30 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 * @param string $result Compact historical result key.
 		 * @param string $label Site-owner-friendly asset label.
 		 * @param string $detail Concise explanation.
+		 * @param array $issue Optional asset/delivery context.
+		 * @param array $page Optional page context.
+		 * @param int $event_time Optional original issue timestamp.
 		 * @return null
 		 */
-		protected static function queue_asset_health_issue_snapshot($result = '', $label = '', $detail = '')
+		protected static function queue_asset_health_issue_snapshot($result = '', $label = '', $detail = '', $issue = array(), $page = array(), $event_time = 0)
 		{
 			$result = strtolower((string)$result);
 			if($result === '')
 				return;
 
-			//260912.0258 Queue self-repair history like scored loads so a simultaneous healthy page cannot erase it with stale state.
+			$issue = (is_array($issue)) ? $issue : array();
+			$issue = array_merge($issue, array('label' => (string)$label, 'detail' => (string)$detail));
+			$page = (is_array($page)) ? $page : array();
+			if(!$page && !is_admin() && !(function_exists('wp_doing_ajax') && wp_doing_ajax()))
+				$page = self::current_asset_health_page_context();
+			//260913.0048 Self-repair/fallback/trusted-failure snapshots may identify the frontend page where they were encountered, without retaining its query string.
+			//260912.0258 Queue historical snapshots like scored loads so a simultaneous healthy page cannot erase them with stale state.
 			self::queue_asset_health_event(array(
 				'type' => 'issue',
-				'event_time' => time(),
+				'event_time' => ($event_time > 0) ? (int)$event_time : time(),
 				'result' => $result,
-				'issue' => array('label' => (string)$label, 'detail' => (string)$detail),
+				'issue' => $issue,
+				'page' => $page,
 			));
 			return;
 		}
@@ -714,13 +863,18 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$reset_on_ok = !empty($event['reset_on_ok']);
 			$load = (!empty($event['load']) && is_array($event['load'])) ? $event['load'] : array();
 			$issue = (!empty($event['issue']) && is_array($event['issue'])) ? $event['issue'] : array();
+			$issues = (!empty($issue['items']) && is_array($issue['items'])) ? array_values($issue['items']) : (($issue) ? array($issue) : array());
+			$page = array('page_id' => 0, 'page_path' => '');
 
 			if($reset_on_ok && $result === 'okay')
 			{
-				//260912.0258 A trusted successful recheck resets scoring only; Last issue and duplicate-processing protection remain historical state.
+				//260913.0041 A trusted successful recheck resets scoring only; durable issue summaries, clear watermarks, and duplicate-processing protection remain historical state.
 				$last_issue = (!empty($state['last_issue']) && is_array($state['last_issue'])) ? $state['last_issue'] : array();
+				$latest_issues = (!empty($state['latest_issues']) && is_array($state['latest_issues'])) ? $state['latest_issues'] : array();
+				$last_issue_cleared_at = (!empty($state['last_issue_cleared_at'])) ? (int)$state['last_issue_cleared_at'] : 0;
+				$latest_issues_cleared_at = (!empty($state['latest_issues_cleared_at'])) ? (int)$state['latest_issues_cleared_at'] : 0;
 				$processed_event_times = (!empty($state['processed_event_times']) && is_array($state['processed_event_times'])) ? $state['processed_event_times'] : array();
-				$state = array('last_10_asset_loads' => array(), 'last_10min_minutes' => array(), 'last_6hour_10min_blocks' => array(), 'last_issue' => $last_issue, 'processed_event_times' => $processed_event_times, 'status' => 'unknown', 'not_green_since' => 0, 'history_reset_at' => $event_time);
+				$state = array('last_10_asset_loads' => array(), 'last_10min_minutes' => array(), 'last_6hour_10min_blocks' => array(), 'last_issue' => $last_issue, 'latest_issues' => $latest_issues, 'last_issue_cleared_at' => $last_issue_cleared_at, 'latest_issues_cleared_at' => $latest_issues_cleared_at, 'processed_event_times' => $processed_event_times, 'status' => 'unknown', 'not_green_since' => 0, 'history_reset_at' => $event_time);
 				delete_option('ws_plugin__s2member_asset_notice_dismissed');
 			}
 
@@ -728,6 +882,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$is_late_correction = $result === 'late' && !empty($load['load_id']) && !empty($load['load_time']) && !empty($load['orig_result']) && isset($load['orig_6hour']) && !empty($load['signature']);
 			if($is_late_correction)
 			{
+				$page = self::verified_asset_health_page_context($load); //260913.0048 Browser-returned page context is useful only when its separate signature matches.
 				$load['load_id'] = preg_replace('/[^a-f0-9]/', '', strtolower((string)$load['load_id']));
 				$load['load_time'] = (int)$load['load_time'];
 				$load['orig_result'] = strtolower((string)$load['orig_result']);
@@ -735,16 +890,28 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$signature = (string)$load['signature'];
 				unset($load['signature']);
 				$is_late_correction = strlen($load['load_id']) === 40 && $load['load_time'] > 0 && in_array($load['orig_result'], array('okay', 'fallback'), TRUE) && hash_equals(self::asset_health_load_signature($load), $signature);
+				if(!$is_late_correction)
+					$page = array('page_id' => 0, 'page_path' => '');
 				if($is_late_correction && !empty($state['history_reset_at']) && $load['load_time'] < (int)$state['history_reset_at'])
 				{
 					$late_before_reset = TRUE;
 					$is_late_correction = FALSE;
 				}
 			}
+			else
+			{
+				$page['page_id'] = (!empty($load['page_id'])) ? max(0, (int)$load['page_id']) : 0;
+				$page['page_path'] = (!empty($load['page_path'])) ? substr((string)$load['page_path'], 0, 240) : '';
+			}
 
 			if($late_before_reset)
 			{
-				self::set_asset_health_last_issue($state, $load['load_time'], 'late', (!empty($issue['label'])) ? $issue['label'] : '', (!empty($issue['detail'])) ? $issue['detail'] : '', (!empty($load['load_id'])) ? $load['load_id'] : '');
+				foreach($issues as $late_issue)
+					if(is_array($late_issue))
+					{
+						self::add_asset_health_latest_issue($state, $load['load_time'], 'late', $late_issue, $page);
+						self::set_asset_health_last_issue($state, $load['load_time'], 'late', (!empty($late_issue['label'])) ? $late_issue['label'] : '', (!empty($late_issue['detail'])) ? $late_issue['detail'] : '', (!empty($load['load_id'])) ? $load['load_id'] : '', $page['page_id'], $page['page_path']);
+					}
 				return TRUE; //260911.2356 Old delayed reports remain useful history but never re-enter a newer scoring epoch.
 			}
 
@@ -783,7 +950,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$load_id = (!empty($load['load_id'])) ? preg_replace('/[^a-f0-9]/', '', strtolower((string)$load['load_id'])) : '';
 				$load_id = (strlen($load_id) === 40) ? $load_id : sha1(microtime(TRUE)."\0".wp_rand()."\0".home_url('/'));
 				$load_time = (!empty($load['load_time'])) ? max(1, (int)$load['load_time']) : $event_time;
-				$load = array('load_id' => $load_id, 'load_time' => $load_time, 'orig_result' => $result, 'orig_6hour' => 0);
+				$load = array('load_id' => $load_id, 'load_time' => $load_time, 'orig_result' => $result, 'orig_6hour' => 0, 'page_id' => $page['page_id'], 'page_path' => $page['page_path']);
 				//260912.0551 The Health Logkeeper already processes queued loads in event-time/queue-time order; preserve that order so simultaneous same-second requests are not randomized by load ID.
 				$state['last_10_asset_loads'][] = array('time' => $load_time, 'result' => $result, 'load_id' => $load_id, 'orig_6hour' => 0);
 				$state['last_10_asset_loads'] = array_slice($state['last_10_asset_loads'], -10);
@@ -847,7 +1014,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			if($result !== 'okay')
 			{
 				$issue_time = ($is_late_correction && !empty($load['load_time'])) ? (int)$load['load_time'] : $event_time;
-				self::set_asset_health_last_issue($state, $issue_time, $result, (!empty($issue['label'])) ? $issue['label'] : '', (!empty($issue['detail'])) ? $issue['detail'] : '', (!empty($load['load_id'])) ? $load['load_id'] : '');
+				foreach($issues as $health_issue)
+					if(is_array($health_issue))
+					{
+						self::add_asset_health_latest_issue($state, $issue_time, $result, $health_issue, $page);
+						self::set_asset_health_last_issue($state, $issue_time, $result, (!empty($health_issue['label'])) ? $health_issue['label'] : '', (!empty($health_issue['detail'])) ? $health_issue['detail'] : '', (!empty($load['load_id'])) ? $load['load_id'] : '', $page['page_id'], $page['page_path']);
+					}
 			}
 			return TRUE;
 		}
@@ -949,7 +1121,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					else if($type === 'issue' && !empty($event['result']))
 					{
 						$issue = (!empty($event['issue']) && is_array($event['issue'])) ? $event['issue'] : array();
-						$changed = self::set_asset_health_last_issue($state, (!empty($event['event_time'])) ? (int)$event['event_time'] : time(), (string)$event['result'], (!empty($issue['label'])) ? (string)$issue['label'] : '', (!empty($issue['detail'])) ? (string)$issue['detail'] : '') || $changed;
+						$page = (!empty($event['page']) && is_array($event['page'])) ? $event['page'] : array();
+						$issue_time = (!empty($event['event_time'])) ? (int)$event['event_time'] : time();
+						$changed = self::add_asset_health_latest_issue($state, $issue_time, (string)$event['result'], $issue, $page) || $changed;
+						$changed = self::set_asset_health_last_issue($state, $issue_time, (string)$event['result'], (!empty($issue['label'])) ? (string)$issue['label'] : '', (!empty($issue['detail'])) ? (string)$issue['detail'] : '', '', (!empty($page['page_id'])) ? (int)$page['page_id'] : 0, (!empty($page['page_path'])) ? (string)$page['page_path'] : '') || $changed;
 						$valid = TRUE;
 					}
 					if(!$valid)
@@ -985,6 +1160,47 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				wp_schedule_single_event(time() + 5, 'ws_plugin__s2member_assets_health_logkeeper');
 			self::health_logkeeper_lock_release($lock);
 			return ($stored) ? $handled : 0;
+		}
+
+		/**
+		 * Clears one administrator-selected Asset Health troubleshooting summary without changing scoring.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260913.0056
+		 *
+		 * @return null Exits through WordPress JSON helpers.
+		 */
+		public static function ajax_clear_asset_health_details()
+		{
+			if(!current_user_can('create_users'))
+				wp_send_json_error(array('message' => 'You do not have permission to clear Asset Health details.'), 403);
+			check_ajax_referer('ws-plugin--s2member-clear-asset-health-details');
+			$scope = (!empty($_POST['scope'])) ? sanitize_key(wp_unslash($_POST['scope'])) : '';
+			if(!in_array($scope, array('last_issue', 'latest_issues'), TRUE))
+				wp_send_json_error(array('message' => 'Invalid Asset Health clear request.'), 400);
+
+			$lock = self::health_logkeeper_lock_acquire();
+			if($lock === '')
+				wp_send_json_error(array('message' => 'Asset Health is updating. Please try again.'), 409);
+			$state = self::asset_health_log_state();
+			$now = time();
+			if($scope === 'last_issue')
+			{
+				$state['last_issue'] = array();
+				$state['last_issue_cleared_at'] = $now;
+			}
+			else
+			{
+				$state['latest_issues'] = array();
+				$state['latest_issues_cleared_at'] = $now;
+			}
+			$stored = update_option('ws_plugin__s2member_assets_health_log', $state, FALSE);
+			if(!$stored)
+				$stored = serialize(self::asset_health_log_state()) === serialize($state);
+			self::health_logkeeper_lock_release($lock);
+			if(!$stored)
+				wp_send_json_error(array('message' => 'Asset Health details could not be cleared.'), 500);
+			wp_send_json_success(array('message' => ($scope === 'last_issue') ? 'Last issue cleared.' : 'Latest Issues cleared.'));
 		}
 
 		/**
@@ -1040,13 +1256,17 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					$asset_id = (!empty($expectation['asset_id'])) ? (string)$expectation['asset_id'] : '';
 					$health_id = ($asset_id !== '') ? self::asset_runtime_health_id($asset_id, $type, 'static') : '';
 					return array(
+						'asset' => ($health_id !== '') ? $health_id : (string)$asset_id,
 						'label' => ($health_id !== '') ? self::asset_runtime_health_label($health_id) : strtoupper($type).' delivery',
+						'delivery' => 'Static → Full WordPress Dynamic fallback',
 						'detail' => (!empty($expectation['issue_detail'])) ? (string)$expectation['issue_detail'] : 'Requested static delivery was unavailable, so Full WordPress Dynamic fallback was used.',
 					);
 				}
 				if($selected_s2o)
 					return array(
+						'asset' => 'dynamic_'.$type,
 						'label' => 'Dynamic '.(($type === 'js') ? 'JS' : 'CSS'),
+						'delivery' => 's2Member-Only → Full WordPress Dynamic fallback',
 						'detail' => 'The selected s2Member-Only Dynamic Loader was unavailable, so Full WordPress Dynamic fallback was used.',
 					);
 			}
@@ -2428,9 +2648,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		/**
 		 * Returns timing status for one physical frontend CSS/JavaScript response.
 		 *
-		 * A real-page activation delay is Late/Yellow evidence. The trusted browser check decides
-		 * whether the response is actually valid or contributes a later Failed asset-load result.
-		 * Timing frequency alone does not escalate a response to Orange or Red.
+		 * A pending real-page activation delay is Late/Yellow until the trusted browser check decides
+		 * whether the response is valid. Confirmed historical timing evidence remains in Health scoring
+		 * and Latest Issues instead of making a recovered asset row look currently unhealthy.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260909.2021
@@ -2441,18 +2661,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		protected static function asset_runtime_health_event($id = '')
 		{
 			$id = (string)$id;
-			$count = 0;
 			$latest = 0;
 			$pending = FALSE;
-			$health = self::asset_http_health_state();
 
-			if(is_array($health) && !empty($health['runtime_warnings']) && is_array($health['runtime_warnings']))
-				foreach($health['runtime_warnings'] as $warning)
-					if(!empty($warning['id']) && (string)$warning['id'] === $id && !empty($warning['reported']) && (int)$warning['reported'] >= time() - HOUR_IN_SECONDS)
-					{
-						$count += (!empty($warning['count'])) ? max(1, (int)$warning['count']) : 1;
-						$latest = max($latest, (int)$warning['reported']);
-					}
+			//260913.0059 Current rows describe current known state only; a trusted-successful follow-up leaves the Late event in scoring/Latest Issues instead of holding this row Yellow for an hour.
 			foreach(self::asset_runtime_suspicions() as $suspicion)
 				if(!empty($suspicion['id']) && (string)$suspicion['id'] === $id)
 				{
@@ -2465,13 +2677,6 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					'status' => 'delayed',
 					'label' => 'Late',
 					'detail' => 'A frontend page could not confirm that this asset became active within the configured wait time. A trusted browser check will verify the asset response.',
-					'reported' => $latest,
-				);
-			if($count)
-				return array(
-					'status' => 'delayed',
-					'label' => 'Late',
-					'detail' => 'This asset was late '.number_format_i18n($count).' time'.(($count === 1) ? '' : 's').' in the past hour. Trusted follow-up checks verified that the expected asset response was available.',
 					'reported' => $latest,
 				);
 			return array('status' => 'healthy', 'label' => 'Healthy', 'detail' => '', 'reported' => 0);
@@ -2645,8 +2850,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					if($failure && $state > 0)
 					{
 						$status = ($status === 'healthy') ? 'delayed' : $status;
-						$status_label = ($status === 'delayed' && $event['status'] === 'healthy') ? 'Recent refresh issue' : $status_label;
-						$detail .= ' A recent refresh failed, but this previous valid file remains active. '.(string)$failure;
+						$status_label = ($status === 'delayed' && $event['status'] === 'healthy') ? 'Rebuild issue' : $status_label;
+						$detail .= ' A recent rebuild failed, but the previous valid static file remains active. '.(string)$failure;
 					}
 					if($event['detail'])
 						$detail .= ' '.$event['detail'];
@@ -2818,6 +3023,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				'request_count' => $scores['request_count'],
 				'time_count' => $scores['time_count'],
 				'recent_issues' => $recent_issues,
+				'latest_issues' => (!empty($state['latest_issues']) && is_array($state['latest_issues'])) ? $state['latest_issues'] : array(),
 				'six_hour_average' => $six_hour_average,
 				'not_green_since' => $not_green_since,
 				'notice_level' => $notice_level,
@@ -2992,6 +3198,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$old_health_status = (!empty($old_health_log['status'])) ? (string)$old_health_log['status'] : 'unknown';
 
 			$failures = array();
+			$failure_contexts = array();
 			$suspicions = self::asset_runtime_suspicions();
 
 			foreach($targets as $id => $target)
@@ -3008,6 +3215,19 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 						'detail' => (!empty($result['detail'])) ? substr(sanitize_text_field((string)$result['detail']), 0, 160) : '',
 					);
 					$recent_issues = self::add_asset_health_recent_issue($recent_issues, 'failure-'.$failure_id, 'failed', (string)$target['label'], (!empty($failures[$failure_id]['detail'])) ? (string)$failures[$failure_id]['detail'] : 'Trusted browser check failed.', (string)$failures[$failure_id]['url']);
+					if(!empty($target['suspicion']) && is_array($target['suspicion']))
+						$failure_contexts[$failure_id] = array(
+							'event_time' => (!empty($target['suspicion']['event_time'])) ? (int)$target['suspicion']['event_time'] : time(),
+							'page_id' => (!empty($target['suspicion']['page_id'])) ? (int)$target['suspicion']['page_id'] : 0,
+							'page_path' => (!empty($target['suspicion']['page_path'])) ? (string)$target['suspicion']['page_path'] : '',
+						);
+					if(strpos($failure_id, 'fallback:') !== 0 && (!isset($old_failures[$failure_id]) || serialize($old_failures[$failure_id]) !== serialize($failures[$failure_id])))
+					{
+						$_failure_suspicion = (!empty($target['suspicion']) && is_array($target['suspicion'])) ? $target['suspicion'] : array();
+						$_failure_page = array('page_id' => (!empty($_failure_suspicion['page_id'])) ? (int)$_failure_suspicion['page_id'] : 0, 'page_path' => (!empty($_failure_suspicion['page_path'])) ? (string)$_failure_suspicion['page_path'] : '');
+						$_failure_event_time = (!empty($_failure_suspicion['event_time'])) ? (int)$_failure_suspicion['event_time'] : time();
+						self::queue_asset_health_issue_snapshot('failed', (string)$target['label'], (!empty($failures[$failure_id]['detail'])) ? (string)$failures[$failure_id]['detail'] : 'Trusted browser check failed.', array('asset' => $failure_id, 'delivery' => (!empty($_failure_suspicion['delivery'])) ? (string)$_failure_suspicion['delivery'] : ''), $_failure_page, $_failure_event_time);
+					}
 				}
 				else if(!empty($target['suspicion_key']) && !empty($target['suspicion']))
 				{
@@ -3018,6 +3238,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 						'id' => (string)$target['suspicion']['id'],
 						'url' => (string)$target['suspicion']['url'],
 						'delivery' => (string)$target['suspicion']['delivery'],
+						'event_time' => (!empty($target['suspicion']['event_time'])) ? (int)$target['suspicion']['event_time'] : time(),
+						'page_id' => (!empty($target['suspicion']['page_id'])) ? (int)$target['suspicion']['page_id'] : 0,
+						'page_path' => (!empty($target['suspicion']['page_path'])) ? (string)$target['suspicion']['page_path'] : '',
 						'first_reported' => (!empty($previous_warning['first_reported'])) ? (int)$previous_warning['first_reported'] : ((!empty($previous_warning['reported'])) ? (int)$previous_warning['reported'] : time()),
 						'reported' => time(),
 						'count' => $previous_count + 1,
@@ -3034,10 +3257,13 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			//260910.0818 Routine Okay/Fallback/Late/Failed asset loads stay only in the fixed-size non-autoloaded health log so operational history is not flooded by normal frontend traffic.
 			foreach($failures as $id => $failure)
 				if(!isset($old_failures[$id]) || serialize($old_failures[$id]) !== serialize($failure))
-					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array(
+				{
+					$_failure_log_context = (!empty($failure_contexts[$id]) && is_array($failure_contexts[$id])) ? $failure_contexts[$id] : array();
+					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array_merge(array(
 						'event' => 'CSS/JS delivery health failure', 'result' => 'failure', 'target' => $id, 'details' => $failure,
 						'fallback' => ($id === 's2o' || strpos((string)$id, 'static:') === 0) ? 'Full WordPress Dynamic Loader' : 'none',
-					));
+					), $_failure_log_context));
+				}
 			foreach($old_failures as $id => $failure)
 				if(!isset($failures[$id]))
 					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array('event' => 'CSS/JS delivery health recovered', 'result' => 'recovered', 'target' => $id, 'previous_details' => $failure));
@@ -3066,15 +3292,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$load_result = self::asset_health_current_delivery_result($failures);
 				$standby_fallback_failures = ($load_result === 'okay') ? array_intersect_key($failures, array('fallback:dynamic_css' => TRUE, 'fallback:dynamic_js' => TRUE)) : array();
 				$reset_on_ok = $reset_health && $load_result === 'okay' && !$standby_fallback_failures;
-				$load_issue = array();
-				if($load_result !== 'okay' && $recent_issues)
-				{
-					//260911.1806 A trusted non-Okay recheck can refresh Last issue with the same concise per-asset context already retained for troubleshooting.
-					$latest_issue = end($recent_issues);
-					if(is_array($latest_issue))
-						$load_issue = array('label' => (!empty($latest_issue['label'])) ? (string)$latest_issue['label'] : '', 'detail' => (!empty($latest_issue['detail'])) ? (string)$latest_issue['detail'] : '');
-				}
-				self::queue_asset_health_load($load_result, $reset_on_ok, array(), $load_issue);
+				//260913.0102 Trusted failure transitions are queued separately as issue snapshots, so this scored recheck does not duplicate them in Latest Issues.
+				self::queue_asset_health_load($load_result, $reset_on_ok);
 				//260912.1956 A standby fallback outage is historical issue context, not an extra page-load; queue it once on the failure transition while Current Health applies the separate safety-net score.
 				foreach($standby_fallback_failures as $failure_id => $failure)
 					if(empty($old_failures[$failure_id]))
@@ -3164,7 +3383,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$suspicions = self::asset_runtime_suspicions();
 			$recorded = 0;
 			$valid_late_page = FALSE;
-			$late_issue = array();
+			$late_issues = array();
+			$page_context = self::verified_asset_health_page_context($load);
+			$event_time = (!empty($page_context['page_id']) || !empty($page_context['page_path'])) && !empty($load['load_time']) ? (int)$load['load_time'] : time();
 			foreach($missing as $expectation)
 			{
 				if(is_array($expectation) && isset($expectation[0]) && !isset($expectation['id']))
@@ -3176,11 +3397,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				if(!hash_equals(self::asset_runtime_expectation_signature($expectation), $signature) || !self::asset_runtime_expectation_is_current($expectation))
 					continue;
 				$valid_late_page = TRUE;
-				if(!$late_issue)
-					$late_issue = array(
-						'label' => self::asset_runtime_health_label((string)$expectation['id']),
-						'detail' => 's2Member could not confirm that this asset became active within the configured wait time.',
-					);
+				$late_issues[] = array(
+					'asset' => (string)$expectation['id'],
+					'label' => self::asset_runtime_health_label((string)$expectation['id']),
+					'delivery' => (!empty($expectation['delivery'])) ? (string)$expectation['delivery'] : '',
+					'detail' => 's2Member could not confirm that this asset became active within the configured wait time.',
+				);
 				$key = md5((string)$expectation['id']."\0".(string)$expectation['url']."\0".(string)$expectation['activation_tag']);
 				if(get_transient('ws_plugin__s2member_asset_runtime_suspect_'.$key))
 					continue;
@@ -3189,14 +3411,18 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 
 				set_transient('ws_plugin__s2member_asset_runtime_suspect_'.$key, 1, MINUTE_IN_SECONDS);
 				$expectation['reported'] = time();
+				$expectation['event_time'] = $event_time;
+				$expectation['page_id'] = (!empty($page_context['page_id'])) ? (int)$page_context['page_id'] : 0;
+				$expectation['page_path'] = (!empty($page_context['page_path'])) ? (string)$page_context['page_path'] : '';
 				$expectation['signature'] = $signature;
 				$suspicions[$key] = $expectation;
 
-				//260907.2203 Record the first frontend runtime suspicion for later troubleshooting and trusted confirmation.
+				//260913.0048 Record accepted signed page context with the operational issue so css-js.log can correlate intermittent failures without storing query strings.
 				if($first_report)
 					c_ws_plugin__s2member_utils_logs::log_entry('css-js', array(
 						'event' => 'Frontend CSS/JS runtime issue reported', 'result' => 'suspected', 'asset' => (string)$expectation['id'],
-						'delivery' => (string)$expectation['delivery'], 'url' => (string)$expectation['url'], 'trusted_confirmation_pending' => TRUE,
+						'delivery' => (string)$expectation['delivery'], 'url' => (string)$expectation['url'], 'event_time' => $event_time,
+						'page_id' => (!empty($page_context['page_id'])) ? (int)$page_context['page_id'] : 0, 'page_path' => (!empty($page_context['page_path'])) ? (string)$page_context['page_path'] : '', 'trusted_confirmation_pending' => TRUE,
 					));
 
 				$recorded++;
@@ -3205,9 +3431,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				update_option('ws_plugin__s2member_asset_runtime_suspicions', $suspicions, FALSE);
 			if($valid_late_page)
 			{
+				//260913.0048 One page still contributes one Late score, while all affected physical assets can share that signed page/time context in bounded Latest Issues.
 				//260910.2346 Current pages send signed load metadata so Late corrects the original page instead of becoming a second load. Cached first-v260909 pages have no load metadata, so only a newly accepted/rate-limited suspicion contributes standalone Late evidence.
 				if($load || $recorded)
-					self::queue_asset_health_load('late', FALSE, $load, $late_issue);
+					self::queue_asset_health_load('late', FALSE, $load, array('items' => $late_issues));
 			}
 			return $recorded;
 		}

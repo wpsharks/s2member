@@ -94,6 +94,7 @@ add_action('upgrader_process_complete', 'c_ws_plugin__s2member_utils_assets::may
 add_action('ws_plugin__s2member_after_activation', 'c_ws_plugin__s2member_utils_assets::invalidate_static_assets', 10, 0);
 add_action('wp_ajax_ws_plugin__s2member_refresh_static_assets', 'c_ws_plugin__s2member_utils_assets::ajax_refresh_static_assets');
 add_action('wp_ajax_ws_plugin__s2member_asset_http_health', 'c_ws_plugin__s2member_utils_assets::ajax_asset_http_health_report');
+add_action('wp_ajax_ws_plugin__s2member_clear_asset_health_details', 'c_ws_plugin__s2member_utils_assets::ajax_clear_asset_health_details'); //260913.0056 Clear only the requested persistent troubleshooting summary; scoring and current Health remain unchanged.
 add_action('wp_ajax_ws_plugin__s2member_asset_runtime_suspect', 'c_ws_plugin__s2member_utils_assets::ajax_asset_runtime_suspicion');
 add_action('wp_ajax_nopriv_ws_plugin__s2member_asset_runtime_suspect', 'c_ws_plugin__s2member_utils_assets::ajax_asset_runtime_suspicion');
 //260912.0258 Frontend requests queue separate health events; the Health Logkeeper merges them later so page delivery never waits on the shared health-log writer.
