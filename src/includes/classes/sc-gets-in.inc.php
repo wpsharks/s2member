@@ -85,6 +85,18 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 			if($attr['constant'] && defined($attr['constant']) && isset($valid_constants[$attr['constant']]))
 			{
 				$get = constant($attr['constant']);
+
+				//260913.1656 Only format explicitly known timestamp constants, and reject non-string formats before passing them to date().
+				if(is_string($attr['date_format']) && $attr['date_format'] && is_int($get) && $get > 0 && in_array($attr['constant'], array('S2MEMBER_CURRENT_USER_REGISTRATION_TIME', 'S2MEMBER_CURRENT_USER_PAID_REGISTRATION_TIME'), true))
+					{
+						if($attr['date_format'] === 'timestamp')
+							$get = (string)$get; // No change.
+
+						else if($attr['date_format'] === 'default')
+							$get = date(get_option('date_format'), $get);
+
+						else $get = date($attr['date_format'], $get);
+					}
 			}
 			else if($attr['user_field'] && isset($valid_user_fields[$attr['user_field']]))
 				{
