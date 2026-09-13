@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260909
-Stable tag: 260909
-Tested up to: 7.2-alpha-63521
+Version: 260913
+Stable tag: 260913
+Tested up to: 7.2-alpha-63604
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.5.9
@@ -176,11 +176,34 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260909 =
+= v260913 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v260913 =
+
+- (Framework) **Fix:** Made frontend CSS/JavaScript monitoring less impatient on sites where expected assets take a little longer to become active. Although the monitor already waited until the page had fully loaded before checking, some setups make their CSS/JavaScript become active a little later, which could cause a false alarm. This has now been fixed. Thanks to Gerard for reporting this. See: [thread #13609](https://f.wpsharks.com/t/13609)
+
+- (Framework) **Enhancement:** Expanded the frontend CSS/JavaScript monitoring introduced in the previous release into a new "CSS/JS Asset Health" system. The earlier monitoring layer is now smarter, more patient, more informative, more self-healing, quieter when the administrator does not need to intervene, and still designed to stay lightweight during normal frontend traffic.
+	- **New overall health status:** "CSS/JS Asset Health" monitors frontend assets, including the Pro add-on's assets when installed, keeps track of recent delivery results, and summarizes the current situation as "Healthy", "Recent issue", "Working, review suggested", or "Needs attention" instead of reacting to every individual hiccup in isolation.
+	- **More patient, configurable checks:** The original monitor checked whether expected assets had become active 1 second after the page finished loading. The default wait is now 3 seconds, and the new "Wait Before Checking Frontend Assets" setting lets site owners adjust that delay for setups where optimization, caching, networking, or other conditions make assets become active a little later.
+	- **Smarter issue handling:** A single delayed or uncertain result no longer needs to become an immediate administrator problem. Asset Health considers both how recent and how persistent problems are, and can return to "Healthy" as normal loads continue.
+	- **More resilient automatic recovery:** If an enabled static asset file unexpectedly disappears, s2Member will try to rebuild it automatically the moment the problem is encountered instead of waiting for the administrator to refresh it manually. Assets that need rebuilding can also be recovered during normal admin activity, avoiding an extra rebuild during a frontend page-load when possible, and relevant settings changes can trigger affected assets to be rebuilt immediately, too.
+	- **Clearer diagnostics:** The new Asset Health panel shows each CSS/JavaScript asset and its current delivery state, including "Healthy", "Late", "Fallback", "Failed", "Not generated yet", and "Pending rebuild", with plain-language details when more information is useful. A persistent "Last issue" reminder and compact "Latest Issues" log preserve useful troubleshooting details, including affected frontend URLs, occurrence times, and repeated occurrences, with controls to clear them when they are no longer useful.
+	- **Fallback visibility:** Asset Health understands s2Member's existing automatic fallback behavior, distinguishes successful delivery from successful fallback, and shows when the preferred delivery method could not be used but a compatible fallback kept the asset working. It can also show when the fallback itself is unavailable, even while the preferred delivery method is still working, so the administrator knows that the safety net needs attention before it's needed.
+	- **More useful administrator notices:** Short-lived issues are given time to recover without unnecessary warnings. When a problem persists long enough to deserve attention, or is serious enough to require attention sooner, s2Member can show a compact administrator notice explaining the affected asset and link directly to the "CSS/JS Asset Health" section for review.
+	- **Manual recovery and rechecking:** The "Refresh Static Assets" button rebuilds the enabled static files, while the "Recheck Asset Health" button performs a fresh check of the current delivery setup. Refreshing static assets also rechecks their health automatically afterward.
+	- **Performance-conscious health tracking:** Frontend page-loads save small, independent Asset Health records without waiting for the shared health history to be updated. Those events are merged into the rolling history separately and in chronological order, preserving delayed reports and recent-issue details without making normal frontend page-loads wait on Asset Health bookkeeping.
+
+- (Framework) **UI:** Refined the CSS/JavaScript delivery controls and status presentation. Renamed the beta section to "CSS/JS Delivery & Optimization (Beta)", improved the shared health-status colors used across s2Member status sections, clarified help text and status explanations, and corrected the disabled "Refresh Static Assets" button so it remains visibly disabled when unavailable because static assets are not enabled or a configuration change needs to be saved first.
+
+- (Framework) **Fix:** Corrected a compatibility issue that could cause a PHP fatal error when another plugin printed WordPress scripts unusually early, before s2Member had finished initializing. s2Member now handles that early script output safely. Thanks to Sim Architect for reporting it.
+
+- (Pro) **Improvement:** EOT Reminder failure notices are now more actionable. Reminder Status can identify the oldest failing recipient and, when available, the related WordPress user. Persistent admin warnings can now be dismissed for the current incident, while retry and failure details remain available in the _EOT Reminder Status_ section. A materially new or escalated critical reminder problem will alert administrators again. Thanks to Matt for reporting this.
+
+- (Framework & Pro) **Fix:** Restored compatibility with WordPress 4.2–4.3 by replacing uses of `wp_parse_url()`, which wasn't introduced until WordPress 4.4.
 
 = v260909 =
 
@@ -516,7 +539,7 @@ Please see: <http://s2member.com/r/translations/>
 
 = v260101 =
 
-- (Framework) **Security**: Improved sanitization and normalization of attribute values for the s2Eot, s2Strem and s2Member-Security-Badge  shortcodes.
+- (Framework) **Security**: Improved sanitization and normalization of attribute values for the s2Eot, s2Stream and s2Member-Security-Badge  shortcodes.
 
 - (Framework) **Security**: Improved sanitization of replacement values for confirmation and notification emails.
 
@@ -614,7 +637,7 @@ Please see: <http://s2member.com/r/translations/>
 
 = v240325 =
 
-- (Framework) **Fix**: Some sites were getting a warning from v240315's restriction improvement when the WP REST request doesn't include a type or ID. Fixed in this release.See [thread 11347](https://f.wpsharks.com/t/11347)
+- (Framework) **Fix**: Some sites were getting a warning from v240315's restriction improvement when the WP REST request doesn't include a type or ID. Fixed in this release. See [thread 11347](https://f.wpsharks.com/t/11347)
 
 - (Pro) **Enhancement**: Checkout success redirection URLs are now validated as safe with WordPress' _wp_validate_redirect_. To use a domain different than the site's, it can be allowed with wp's filter [allowed_redirect_hosts](https://developer.wordpress.org/reference/hooks/allowed_redirect_hosts/).
 

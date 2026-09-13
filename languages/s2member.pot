@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  260909\n"
+"Project-Id-Version:  260913\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-09-09 02:38:03+00:00\n"
+"POT-Creation-Date: 2026-09-13 06:17:05+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1309,17 +1309,17 @@ msgstr ""
 #. with `ws_plugin__s2member_paypal_payflow_api_response`.
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:97
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:326
-#: src/includes/classes/paypal-utilities.inc.php:629
-#: src/includes/classes/paypal-utilities.inc.php:637
+#: src/includes/classes/paypal-utilities.inc.php:635
+#: src/includes/classes/paypal-utilities.inc.php:643
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:100
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:329
-#: src/includes/classes/paypal-utilities.inc.php:503
-#: src/includes/classes/paypal-utilities.inc.php:631
-#: src/includes/classes/paypal-utilities.inc.php:639
+#: src/includes/classes/paypal-utilities.inc.php:509
+#: src/includes/classes/paypal-utilities.inc.php:637
+#: src/includes/classes/paypal-utilities.inc.php:645
 msgctxt "s2member-front"
 msgid "Error. Please contact Support for assistance."
 msgstr ""
@@ -1873,7 +1873,7 @@ msgctxt "s2member-front"
 msgid "My Profile Summary"
 msgstr ""
 
-#: pro/src/includes/classes/reminders.inc.php:1293
+#: pro/src/includes/classes/reminders.inc.php:1461
 msgid "0 / non-recurring"
 msgstr ""
 
@@ -2189,7 +2189,7 @@ msgctxt "s2member-front"
 msgid "No Billing Method; please try again."
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:294 src/includes/syscon.inc.php:741
+#: pro/src/includes/syscon.inc.php:294 src/includes/syscon.inc.php:748
 msgctxt "s2member-front"
 msgid "Congratulations! (your membership has been approved)"
 msgstr ""
@@ -2211,7 +2211,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:296 src/includes/syscon.inc.php:747
+#: pro/src/includes/syscon.inc.php:296 src/includes/syscon.inc.php:754
 msgctxt "s2member-front"
 msgid "Thank You! (instructions for access)"
 msgstr ""
@@ -4699,23 +4699,23 @@ msgstr ""
 #. by PayPal. Replace `%2$s` and `%3$s` with: `Unable to process, please try
 #. again`, or something to that affect. Or, if you prefer, you could Filter
 #. ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`.
-#: src/includes/classes/paypal-utilities.inc.php:500
+#: src/includes/classes/paypal-utilities.inc.php:506
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s. %3$s."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:547
 #: src/includes/classes/paypal-utilities.inc.php:553
+#: src/includes/classes/paypal-utilities.inc.php:559
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Please use an alternate funding source."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:550
+#: src/includes/classes/paypal-utilities.inc.php:556
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Express Checkout was NOT confirmed."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:684
+#: src/includes/classes/paypal-utilities.inc.php:690
 msgctxt "s2member-front"
 msgid " Please contact PayPal Merchant Technical Support (www.paypal.com/mts) and request `Recurring Billing` service, and also ask to have `Reference Transactions` enabled for Recurring Billing via Express Checkout."
 msgstr ""
@@ -5615,17 +5615,17 @@ msgctxt "s2member-front"
 msgid "every %s-day period"
 msgstr ""
 
-#: src/includes/syscon.inc.php:736
+#: src/includes/syscon.inc.php:743
 msgctxt "s2member-front"
 msgid "Yes, I want to receive updates via email."
 msgstr ""
 
-#: src/includes/syscon.inc.php:737
+#: src/includes/syscon.inc.php:744
 msgctxt "s2member-front"
 msgid "[%s] Username/Password"
 msgstr ""
 
-#: src/includes/syscon.inc.php:738
+#: src/includes/syscon.inc.php:745
 msgctxt "s2member-front"
 msgid ""
 "Your Username/Password for: \n"
@@ -5637,12 +5637,12 @@ msgid ""
 "%%%%wp_login_url%%%%"
 msgstr ""
 
-#: src/includes/syscon.inc.php:739
+#: src/includes/syscon.inc.php:746
 msgctxt "s2member-front"
 msgid "[%s] New User Registration"
 msgstr ""
 
-#: src/includes/syscon.inc.php:740
+#: src/includes/syscon.inc.php:747
 msgctxt "s2member-front"
 msgid ""
 "New User Registration on your site: \n"
@@ -5654,7 +5654,7 @@ msgid ""
 "IP Address: %%%%user_ip%%%%"
 msgstr ""
 
-#: src/includes/syscon.inc.php:742
+#: src/includes/syscon.inc.php:749
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your membership has been approved.\n"
@@ -5670,12 +5670,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/includes/syscon.inc.php:743 src/includes/syscon.inc.php:745
+#: src/includes/syscon.inc.php:750 src/includes/syscon.inc.php:752
 msgctxt "s2member-front"
 msgid "Thank you! Your account has been updated."
 msgstr ""
 
-#: src/includes/syscon.inc.php:744 src/includes/syscon.inc.php:746
+#: src/includes/syscon.inc.php:751 src/includes/syscon.inc.php:753
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your account now has access to: %%%%item_name%%%%.\n"
@@ -5686,7 +5686,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/includes/syscon.inc.php:748
+#: src/includes/syscon.inc.php:755
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! \n"
@@ -5703,37 +5703,37 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/includes/syscon.inc.php:749
+#: src/includes/syscon.inc.php:756
 msgctxt "s2member-front"
 msgid "Free Subscriber"
 msgstr ""
 
-#: src/includes/syscon.inc.php:750
+#: src/includes/syscon.inc.php:757
 msgctxt "s2member-front"
 msgid "Bronze Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:751
+#: src/includes/syscon.inc.php:758
 msgctxt "s2member-front"
 msgid "Silver Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:752
+#: src/includes/syscon.inc.php:759
 msgctxt "s2member-front"
 msgid "Gold Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:753
+#: src/includes/syscon.inc.php:760
 msgctxt "s2member-front"
 msgid "Platinum Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:758
+#: src/includes/syscon.inc.php:765
 msgctxt "s2member-front"
 msgid "Level %s Member"
 msgstr ""
 
-#: src/includes/syscon.inc.php:770
+#: src/includes/syscon.inc.php:777
 msgctxt "s2member-front recaptcha-lang-code"
 msgid "en"
 msgstr ""

@@ -2378,6 +2378,32 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
+		 * Deletes a static-asset repair lock only when the stored value still belongs to the expected owner.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260913.0704
+		 *
+		 * @param string $option Repair-lock option name.
+		 * @param string $lock   Expected lock-owner value.
+		 * @return bool True when this exact lock was deleted.
+		 */
+		protected static function static_asset_repair_lock_delete($option = '', $lock = '')
+		{
+			global $wpdb;
+
+			$option = (string)$option;
+			$lock = (string)$lock;
+			if($option === '' || $lock === '')
+				return FALSE;
+
+			//260913.0704 Delete only the lock version this request observed or acquired; another request may have replaced it in the meantime.
+			$deleted = $wpdb->delete($wpdb->options, array('option_name' => $option, 'option_value' => maybe_serialize($lock)), array('%s', '%s'));
+			if($deleted)
+				wp_cache_delete($option, 'options');
+			return (bool)$deleted;
+		}
+
+		/**
 		 * Returns one current generated frontend asset URL, building it when stale/uninitialized.
 		 *
 		 * Active timestamped files are existence-checked before their URLs are emitted. A missing or
@@ -2414,6 +2440,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$base = substr($id, 0, -strlen('.'.$type));
 			$failure_key = 'ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id);
 			$repair_lock_key = '';
+			$repair_lock_value = '';
 			$data_map_signature = array('ok' => TRUE, 'signature' => '', 'error' => '');
 			$uses_data_map = $type === 'js' && self::static_js_text_delivery() === 'page';
 			if($uses_data_map)
@@ -2442,13 +2469,14 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					if($failure = get_transient($failure_key))
 						return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$failure);
 					$repair_lock_key = 'ws_plugin__s2member_static_asset_repair_lock_'.str_replace('.', '_', $id);
-					$repair_lock_time = (int)get_option($repair_lock_key, 0);
-					if($repair_lock_time && $repair_lock_time < time() - 30)
-					{
-						delete_option($repair_lock_key);
-						$repair_lock_time = 0;
-					}
-					if(!add_option($repair_lock_key, time(), '', 'no'))
+					$repair_lock_current = (string)get_option($repair_lock_key, '');
+					$repair_lock_parts = explode(':', $repair_lock_current, 2);
+					$repair_lock_time = (!empty($repair_lock_parts[0]) && is_numeric($repair_lock_parts[0])) ? (int)$repair_lock_parts[0] : 0;
+					//260913.0704 Preserve compatibility with older timestamp-only locks while making stale takeover conditional on the exact lock value this request inspected.
+					if($repair_lock_current !== '' && (!$repair_lock_time || $repair_lock_time < time() - 30))
+						self::static_asset_repair_lock_delete($repair_lock_key, $repair_lock_current);
+					$repair_lock_value = time().':'.sha1(microtime(TRUE)."\0".wp_rand());
+					if(!add_option($repair_lock_key, $repair_lock_value, '', 'no'))
 						return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => 'Expected static asset '.$id.' is missing; another request is already rebuilding it.');
 					$dirty = TRUE;
 				}
@@ -2470,7 +2498,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				if($repair_lock_key !== '')
 				{
 					set_transient($failure_key, (string)$definition['error'], 5 * MINUTE_IN_SECONDS);
-					delete_option($repair_lock_key);
+					self::static_asset_repair_lock_delete($repair_lock_key, $repair_lock_value);
 				}
 				return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$definition['error']);
 			}
@@ -2497,13 +2525,13 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					//260911.1834 A missing active file that repaired successfully is still useful history, but it must not lower the health score because this request retained static delivery.
 					$health_id = self::asset_runtime_health_id($id, $type, 'static');
 					self::queue_asset_health_issue_snapshot('repaired', self::asset_runtime_health_label($health_id), 'Expected static asset '.$id.' was missing and was rebuilt automatically.');
-					delete_option($repair_lock_key);
+					self::static_asset_repair_lock_delete($repair_lock_key, $repair_lock_value);
 				}
 				return self::$static_asset_cache[$id] = array('ok' => TRUE, 'url' => $result['url'], 'build' => $build, 'error' => '');
 			}
 			set_transient($failure_key, (string)$result['error'], 5 * MINUTE_IN_SECONDS);
 			if($repair_lock_key !== '')
-				delete_option($repair_lock_key);
+				self::static_asset_repair_lock_delete($repair_lock_key, $repair_lock_value);
 
 			//260907.2203 Preserve failed generation details even when delivery later falls back or recovers automatically.
 			c_ws_plugin__s2member_utils_logs::log_entry('css-js', array(
