@@ -58,7 +58,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 					if(!empty($client_id) && !empty($secret))
 					{
-						$scheme = strtolower((string)wp_parse_url(home_url('/'), PHP_URL_SCHEME));
+						$scheme = strtolower((string)c_ws_plugin__s2member_utils_urls::parse_url(home_url('/'), PHP_URL_SCHEME));
 
 						//260224 Reverse-proxy/Cloudflare fallback for admin-side HTTPS detection.
 						// This only affects the admin gating check here. It does NOT change the webhook URL itself.
@@ -227,7 +227,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				$ppco_https_ready  = true;
 				$ppco_https_reason = '';
 
-				$ppco_https_scheme = strtolower((string)wp_parse_url(home_url('/'), PHP_URL_SCHEME));
+				$ppco_https_scheme = strtolower((string)c_ws_plugin__s2member_utils_urls::parse_url(home_url('/'), PHP_URL_SCHEME));
 
 				//260224 Reverse-proxy/Cloudflare fallback for admin-side HTTPS detection.
 				// This keeps PayPal Checkout configuration available when WordPress is behind a proxy
@@ -528,7 +528,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<em>'.esc_html__('Webhook URL:', 's2member').'</em><br /><code>'.esc_html(add_query_arg("s2member_paypal_webhook", "1", home_url("/", 'https'))).'</code>'."\n";
 				echo '<br /><em class="ws-menu-page-hilite">'.esc_html__('Note: PayPal requires an HTTPS (SSL) webhook URL.', 's2member').'</em>'."\n";
 
-				$ppco_https_scheme = strtolower((string)wp_parse_url(home_url('/'), PHP_URL_SCHEME));
+				$ppco_https_scheme = strtolower((string)c_ws_plugin__s2member_utils_urls::parse_url(home_url('/'), PHP_URL_SCHEME));
 
 				//260224 Reverse-proxy/Cloudflare fallback for admin-side HTTPS warning display.
 				$ppco_proxy_https = false;

@@ -23,7 +23,7 @@ if(isset($_GET['s2member_health_check']))
 	header('Content-Type: text/plain; charset=UTF-8');
 	header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 	header('Pragma: no-cache');
-	header('X-s2Member-Loader: lightweight');
+	header('X-s2Member-Loader: s2member-o'); //260910.0709 Keep the diagnostic identity aligned with the long-established s2member-o.php endpoint; the persisted loader option remains `s2o`.
 	header('X-s2Member-Health-Token: '.$ws_plugin__s2member_health_token);
 	header('X-s2Member-Health-Time: '.$ws_plugin__s2member_health_time);
 	echo 's2member-o-health:'.$ws_plugin__s2member_health_token.':'.$ws_plugin__s2member_health_time;

@@ -86,14 +86,22 @@ add_filter('script_loader_tag', 'c_ws_plugin__s2member_css_js_themes::script_loa
 add_action('ws_plugin__s2member_loaded', function() {
 	add_action('updated_option', 'c_ws_plugin__s2member_utils_assets::maybe_invalidate_after_wp_option_update', 10, 3);
 });
+//260911.1834 Relevant General Options saves rebuild enabled static assets after the complete new option set is available, instead of making the admin wait for a frontend page-load.
+add_action('ws_plugin__s2member_after_update_all_options', 'c_ws_plugin__s2member_utils_assets::rebuild_static_assets_after_options_save', 10, 1);
 add_action('activated_plugin', 'c_ws_plugin__s2member_utils_assets::invalidate_after_plugin_change');
 add_action('deactivated_plugin', 'c_ws_plugin__s2member_utils_assets::invalidate_after_plugin_change');
 add_action('upgrader_process_complete', 'c_ws_plugin__s2member_utils_assets::maybe_invalidate_after_upgrade', 10, 2);
 add_action('ws_plugin__s2member_after_activation', 'c_ws_plugin__s2member_utils_assets::invalidate_static_assets', 10, 0);
 add_action('wp_ajax_ws_plugin__s2member_refresh_static_assets', 'c_ws_plugin__s2member_utils_assets::ajax_refresh_static_assets');
 add_action('wp_ajax_ws_plugin__s2member_asset_http_health', 'c_ws_plugin__s2member_utils_assets::ajax_asset_http_health_report');
+add_action('wp_ajax_ws_plugin__s2member_clear_asset_health_details', 'c_ws_plugin__s2member_utils_assets::ajax_clear_asset_health_details'); //260913.0056 Clear only the requested persistent troubleshooting summary; scoring and current Health remain unchanged.
 add_action('wp_ajax_ws_plugin__s2member_asset_runtime_suspect', 'c_ws_plugin__s2member_utils_assets::ajax_asset_runtime_suspicion');
 add_action('wp_ajax_nopriv_ws_plugin__s2member_asset_runtime_suspect', 'c_ws_plugin__s2member_utils_assets::ajax_asset_runtime_suspicion');
+//260912.0258 Frontend requests queue separate health events; the Health Logkeeper merges them later so page delivery never waits on the shared health-log writer.
+add_action('ws_plugin__s2member_assets_health_logkeeper', 'c_ws_plugin__s2member_utils_assets::run_health_logkeeper');
+add_action('init', 'c_ws_plugin__s2member_utils_assets::maybe_upgrade_asset_health_format', 1); //260912.0522 Run before normal asset decisions so stale first-v260909 activation tags/builds cannot leak into the physical-response scoring format.
+add_action('admin_init', 'c_ws_plugin__s2member_utils_assets::maybe_rebuild_static_assets_on_admin_request', 20); //260911.1924 Privileged admin page-loads are a cheap recovery opportunity for pending, ungenerated, or locally missing enabled static assets; frontend traffic remains a fallback.
+add_action('admin_init', 'c_ws_plugin__s2member_utils_assets::dismiss_static_assets_admin_notice'); //260910.0709 Process the nonce-protected incident dismissal before the same request reaches admin_notices.
 add_action('admin_notices', 'c_ws_plugin__s2member_utils_assets::static_assets_admin_notice');
 add_action('admin_footer', 'c_ws_plugin__s2member_utils_assets::asset_http_health_probe', 900);
 add_action('wp_footer', 'c_ws_plugin__s2member_utils_assets::asset_http_health_probe', 900);

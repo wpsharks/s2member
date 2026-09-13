@@ -44,13 +44,15 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 			if(!empty($_GET["ws_plugin__s2member_css"]))
 			{
-				//260905.0009 A page-local WordPress fallback can carry the signed marker miss that caused recovery, avoiding a separate report request.
+				//260912.0522 A page-local WordPress fallback can carry the signed activation miss that caused recovery, avoiding a separate report request.
+				//260912.0522 This carrier is compatibility-only for already-cached first-v260909 pages; the current monitor reports Late assets without injecting fallback assets.
 				c_ws_plugin__s2member_utils_assets::record_asset_runtime_recovery_suspicion();
 
 				status_header(200); // 200 OK status header.
 
 				header("Content-Type: text/css; charset=UTF-8");
-				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "lightweight" : "wordpress")); //260904.2255 Expose which dynamic loader produced this response for diagnostics.
+				//260904.2255 Expose which dynamic loader produced this response for diagnostics.
+				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "s2member-o" : "wordpress")); //260910.0724 Keep that diagnostic identity aligned with the actual endpoint: `s2member-o` maps to s2member-o.php and `wordpress` means the full WordPress route.
 				header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
 				header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 				header("Cache-Control: max-age=604800");
@@ -67,8 +69,8 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 				do_action("ws_plugin__s2member_during_css", get_defined_vars());
 
-				//260904.2255 Mark the very end of successful dynamic CSS so real pages can verify that the expected Framework/Pro styles arrived.
-				echo c_ws_plugin__s2member_utils_assets::dynamic_asset_marker_output('css');
+				//260912.0522 Append the activation-tag snippet after successful dynamic CSS so real pages can confirm that the expected styles became active.
+				echo c_ws_plugin__s2member_utils_assets::dynamic_activation_tag_snippet('css');
 
 				exit(); // Clean exit.
 			}
@@ -93,13 +95,15 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 			if(!empty($_GET["ws_plugin__s2member_js_w_globals"]))
 			{
-				//260905.0009 A page-local WordPress fallback can carry the signed marker miss that caused recovery, avoiding a separate report request.
+				//260912.0522 A page-local WordPress fallback can carry the signed activation miss that caused recovery, avoiding a separate report request.
+				//260912.0522 This carrier is compatibility-only for already-cached first-v260909 pages; the current monitor reports Late assets without injecting fallback assets.
 				c_ws_plugin__s2member_utils_assets::record_asset_runtime_recovery_suspicion();
 
 				status_header(200); // 200 OK status header.
 
 				header("Content-Type: application/x-javascript; charset=UTF-8");
-				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "lightweight" : "wordpress")); //260904.2255 Expose which dynamic loader produced this response for diagnostics.
+				//260904.2255 Expose which dynamic loader produced this response for diagnostics.
+				header("X-s2Member-Loader: ".((defined('_WS_PLUGIN__S2MEMBER_ONLY')) ? "s2member-o" : "wordpress")); //260910.0724 Keep that diagnostic identity aligned with the actual endpoint: `s2member-o` maps to s2member-o.php and `wordpress` means the full WordPress route.
 				header("Expires: ".gmdate("D, d M Y H:i:s", strtotime("+1 week"))." GMT");
 				header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
 				header("Cache-Control: max-age=604800");
@@ -208,8 +212,8 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 
 				do_action("ws_plugin__s2member_during_js_w_globals", get_defined_vars());
 
-				//260904.2255 Mark the very end of successful dynamic JavaScript so a late page check can detect blocked or interrupted delivery.
-				echo c_ws_plugin__s2member_utils_assets::dynamic_asset_marker_output('js');
+				//260912.0522 Append the activation-tag snippet after successful dynamic JavaScript so real pages can confirm that the expected script became active.
+				echo c_ws_plugin__s2member_utils_assets::dynamic_activation_tag_snippet('js');
 
 				exit(); // Clean exit.
 			}
@@ -227,16 +231,60 @@ if(!class_exists("c_ws_plugin__s2member_css_js_in"))
 		 */
 		public static function current_user_js_globals($for_inline = FALSE)
 		{
-			$g = "var S2MEMBER_CURRENT_USER_IS_LOGGED_IN = ".((S2MEMBER_CURRENT_USER_IS_LOGGED_IN) ? "true" : "false").",";
-			$g .= "S2MEMBER_CURRENT_USER_IS_LOGGED_IN_AS_MEMBER = ".((S2MEMBER_CURRENT_USER_IS_LOGGED_IN_AS_MEMBER) ? "true" : "false").",";
-			$g .= "S2MEMBER_CURRENT_USER_FIRST_NAME = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_FIRST_NAME)."',";
-			$g .= "S2MEMBER_CURRENT_USER_LAST_NAME = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_LAST_NAME)."',";
-			$g .= "S2MEMBER_CURRENT_USER_LOGIN = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_LOGIN)."',";
-			$g .= "S2MEMBER_CURRENT_USER_EMAIL = '".c_ws_plugin__s2member_utils_strings::esc_js_sq(S2MEMBER_CURRENT_USER_EMAIL)."',";
-			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED = ".S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED.",";
-			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED = ".((S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED) ? "true" : "false").",";
-			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY = ".S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY.",";
-			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS = ".S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS.";";
+			$required_constants = array(
+				'S2MEMBER_CURRENT_USER_IS_LOGGED_IN', 'S2MEMBER_CURRENT_USER_IS_LOGGED_IN_AS_MEMBER', 'S2MEMBER_CURRENT_USER_FIRST_NAME', 'S2MEMBER_CURRENT_USER_LAST_NAME',
+				'S2MEMBER_CURRENT_USER_LOGIN', 'S2MEMBER_CURRENT_USER_EMAIL', 'S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED', 'S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED',
+				'S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY', 'S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS',
+			);
+			$constants_ready = TRUE;
+			foreach($required_constants as $constant)
+				if(!defined($constant))
+				{
+					$constants_ready = FALSE;
+					break;
+				}
+
+			if($constants_ready)
+			{
+				$is_logged_in = (bool)S2MEMBER_CURRENT_USER_IS_LOGGED_IN;
+				$is_member = (bool)S2MEMBER_CURRENT_USER_IS_LOGGED_IN_AS_MEMBER;
+				$first_name = (string)S2MEMBER_CURRENT_USER_FIRST_NAME;
+				$last_name = (string)S2MEMBER_CURRENT_USER_LAST_NAME;
+				$login = (string)S2MEMBER_CURRENT_USER_LOGIN;
+				$email = (string)S2MEMBER_CURRENT_USER_EMAIL;
+				$downloads_allowed = (int)S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED;
+				$downloads_unlimited = (bool)S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED;
+				$downloads_currently = (int)S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY;
+				$downloads_allowed_days = (int)S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS;
+			}
+			else
+			{
+				//260913.0036 Another plugin may print login-page scripts before s2Member's normal init-priority constants setup; derive only the values this inline JavaScript needs without changing initialization order.
+				$user = (is_user_logged_in() && is_object($user = wp_get_current_user()) && !empty($user->ID)) ? $user : FALSE;
+				$level = c_ws_plugin__s2member_user_access::user_access_level($user);
+				$downloads = c_ws_plugin__s2member_files::user_downloads($user);
+				$is_logged_in = (bool)$user;
+				$is_member = (bool)($user && $level >= 1);
+				$first_name = ($user) ? (string)$user->first_name : '';
+				$last_name = ($user) ? (string)$user->last_name : '';
+				$login = ($user) ? (string)$user->user_login : '';
+				$email = ($user) ? (string)$user->user_email : '';
+				$downloads_allowed = (!empty($downloads['allowed'])) ? (int)$downloads['allowed'] : 0;
+				$downloads_unlimited = $downloads_allowed >= 999999999;
+				$downloads_currently = (!empty($downloads['currently'])) ? (int)$downloads['currently'] : 0;
+				$downloads_allowed_days = (!empty($downloads['allowed_days'])) ? (int)$downloads['allowed_days'] : 0;
+			}
+
+			$g = "var S2MEMBER_CURRENT_USER_IS_LOGGED_IN = ".(($is_logged_in) ? "true" : "false").",";
+			$g .= "S2MEMBER_CURRENT_USER_IS_LOGGED_IN_AS_MEMBER = ".(($is_member) ? "true" : "false").",";
+			$g .= "S2MEMBER_CURRENT_USER_FIRST_NAME = '".c_ws_plugin__s2member_utils_strings::esc_js_sq($first_name)."',";
+			$g .= "S2MEMBER_CURRENT_USER_LAST_NAME = '".c_ws_plugin__s2member_utils_strings::esc_js_sq($last_name)."',";
+			$g .= "S2MEMBER_CURRENT_USER_LOGIN = '".c_ws_plugin__s2member_utils_strings::esc_js_sq($login)."',";
+			$g .= "S2MEMBER_CURRENT_USER_EMAIL = '".c_ws_plugin__s2member_utils_strings::esc_js_sq($email)."',";
+			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED = ".$downloads_allowed.",";
+			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_IS_UNLIMITED = ".(($downloads_unlimited) ? "true" : "false").",";
+			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_CURRENTLY = ".$downloads_currently.",";
+			$g .= "S2MEMBER_CURRENT_USER_DOWNLOADS_ALLOWED_DAYS = ".$downloads_allowed_days.";";
 
 			//260903.0437 Inline data is HTML, not an external JS response; neutralize any user-controlled closing-script sequence before WordPress prints it.
 			return ($for_inline) ? str_ireplace('</', '<\/', $g) : $g;

@@ -138,7 +138,9 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['static_js_text']               = 'static'; //260906.2049 Keep JavaScript text in cacheable static files by default; multilingual sites can load it with each WordPress page instead.
 		$default_options['static_js_minify']             = '0'; //260903.0437 Static JavaScript minification is independently opt-in and uses readable source files.
 		$default_options['static_assets_combine']        = '0'; //260903.1918 Keep Framework/Pro generated files separate by default; combining is an explicit request-reduction optimization.
-		$default_options['dynamic_asset_loader']         = 's2o'; //260904.1923 Keep the repaired s2Member Dynamic Loader as the default; WordPress routing is an explicit compatibility option.
+		$default_options['asset_health_wait_seconds']   = '3'; //260912.0522 Wait briefly after page load before treating an asset that cannot be confirmed active as Late.
+		//260904.1923 Keep the repaired s2Member Dynamic Loader as the default; WordPress routing is an explicit compatibility option.
+		$default_options['dynamic_asset_loader']         = 's2o'; //260910.0724 In current terminology, that established default is the s2Member-Only Dynamic Loader served by s2member-o.php.
 		$default_options['no_cache_headers_mode']        = 'always'; //260308 No-cache headers mode: `always`, `selective`, `evaluative`.
 		$default_options['no_cache_headers_debug']       = '0'; //260308 Adds Server-Timing no-cache debug header (support use only).
 		$default_options['sc_conds_allow_arbitrary_php'] = '0';
@@ -443,6 +445,11 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 				else if(preg_match('/^static_(?:css|js)(?:_minify)?$/', $key) && (!is_string($value) || !is_numeric($value))) //260903.0437
 					$value = $default_options[$key];
+
+				//260912.0522 Keep the operator-facing wait bounded so an accidental value cannot effectively disable health checking.
+				//260911.0010 Here, bounded means the explicit 1–60-second range exposed by the setting.
+				else if($key === 'asset_health_wait_seconds')
+					$value = (!is_string($value) || !is_numeric($value) || (int)$value < 1 || (int)$value > 60) ? $default_options[$key] : (string)(int)$value;
 
 				else if($key === 'no_cache_headers_mode' && (!is_string($value) || !in_array($value, array('always', 'selective', 'evaluative'), TRUE)))
 					$value = $default_options[$key];

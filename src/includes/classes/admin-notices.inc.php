@@ -103,18 +103,22 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 		 * @param string $title Notice title.
 		 * @param string $message Main notice message.
 		 * @param bool $error Optional. True for an error notice; otherwise an informational notice.
+		 * @param string $dismiss_url Optional explicit URL that dismisses the current notice incident.
 		 */
-		public static function display_branded_notice($title = '', $message = '', $error = FALSE)
+		public static function display_branded_notice($title = '', $message = '', $error = FALSE, $dismiss_url = '')
 		{
 			$title = trim((string)$title);
 			$message = trim((string)$message);
+			$dismiss_url = trim((string)$dismiss_url);
 			if(!$message)
 				return;
 
 			$_logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
-			$_notice_class = ($error) ? 'notice notice-error' : 'notice notice-info';
+			$_notice_class = ($error) ? 'notice notice-error' : 'notice notice-info'; //260910.0818 Use WordPress's standard error style for the immediate Red problem and the quieter informational style for the persistent Orange review notice.
+			$_dismiss = (($dismiss_url !== '') ? '<a href="'.esc_url($dismiss_url).'" title="Dismiss this incident" style="position:absolute; top:8px; right:10px; text-decoration:none;">Dismiss</a>' : ''); //260910.0709 The caller owns the nonce-protected incident URL so dismissal follows incident identity, not mutable notice text.
 
-			echo '<div class="'.esc_attr($_notice_class).'" style="margin:0 0 15px 2px !important; padding:8px !important;"><table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;">'.(($title !== '') ? '<strong>'.esc_html($title).'</strong><br />' : '').wp_kses_post($message).'</td></tr></table></div>';
+			//260909.2021 Keep incident dismissal explicit so changing notice text cannot accidentally make a persistent problem look like a new one.
+			echo '<div class="'.esc_attr($_notice_class).'" style="position:relative; margin:0 0 15px 2px !important; padding:8px '.(($dismiss_url !== '') ? '60px' : '8px').' 8px 8px !important;">'.$_dismiss.'<table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;">'.(($title !== '') ? '<strong>'.esc_html($title).'</strong><br />' : '').wp_kses_post($message).'</td></tr></table></div>';
 		}
 
 		/**

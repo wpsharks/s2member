@@ -121,7 +121,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										$postvars = self::paypal_postvars_utf8($postvars);
 										$endpoint = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com";
 
-										if(!empty($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && $_REQUEST["s2member_paypal_proxy_verification"] === c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen())
+										//260909.0411 Normalize proxy verification input types and use the standard constant-time comparison helper.
+										if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]))
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_REQUEST["s2member_paypal_proxy"])), get_defined_vars());
 
 										else if(empty($_POST) && !empty($_GET["s2member_paypal_proxy"]) && !empty($_GET["s2member_paypal_proxy_verification"]) && c_ws_plugin__s2member_utils_urls::s2member_sig_ok($_SERVER["REQUEST_URI"], false, false, "s2member_paypal_proxy_verification"))
@@ -324,8 +325,13 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							$key = md5(c_ws_plugin__s2member_utils_encryption::xencrypt(strtolower($current_blog->domain.$current_blog->path), false, false));
 
 						else {
-							$host = ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) ? parse_url(home_url('/'), PHP_URL_HOST) : $_SERVER["HTTP_HOST"]; //250917
-							$key  = md5(c_ws_plugin__s2member_utils_encryption::xencrypt(preg_replace("/\:[0-9]+$/", "", strtolower((string) $host)), false, false));
+							//260909.0217 Normalize host selection so proxy verification behaves consistently across different server configurations.
+							$site_host    = preg_replace("/\:[0-9]+$/", "", strtolower((string)parse_url(home_url('/'), PHP_URL_HOST)));
+							$request_host = (!empty($_SERVER["HTTP_HOST"]) && is_string($_SERVER["HTTP_HOST"])) ? preg_replace("/\:[0-9]+$/", "", strtolower($_SERVER["HTTP_HOST"])) : '';
+							$host         = ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) ? $site_host : $request_host;
+							$host         = strlen($host) ? $host : $site_host;
+							$host         = strlen($host) ? $host : 's2member-paypal-proxy'; //260909.0338 Provide a stable final fallback when no usable site host is available.
+							$key          = md5(c_ws_plugin__s2member_utils_encryption::xencrypt($host, false, false));
 						}
 
 						return apply_filters("ws_plugin__s2member_paypal_proxy_key_gen", $key, get_defined_vars());
