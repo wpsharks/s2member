@@ -973,7 +973,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			$name_hdr = str_replace(array("\r\n", "\r", "\n"), ' ', (string) $name);
 			$name_hdr = str_replace('"', "'", $name_hdr);
 
-			$sitename = wp_parse_url(home_url(), PHP_URL_HOST);
+			$sitename = c_ws_plugin__s2member_utils_urls::parse_url(home_url(), PHP_URL_HOST);
 			$sitename = is_string($sitename) ? strtolower($sitename) : '';
 			if (strpos($sitename, 'www.') === 0) $sitename = substr($sitename, 4);
 

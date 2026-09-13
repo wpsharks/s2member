@@ -398,9 +398,14 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				{
 					$asset_health_last_issue_page_label .= (($asset_health_last_issue_page_label !== '') ? ' — ' : '').$asset_health_last_issue_page_path;
 					if($asset_health_last_issue_page_url === '')
-						$asset_health_last_issue_page_url = home_url($asset_health_last_issue_page_path);
+					{
+						//260913.0454 REQUEST_URI already includes any WordPress subdirectory, so append it to the site origin instead of duplicating the home path.
+						$_asset_health_home_parts = c_ws_plugin__s2member_utils_urls::parse_url(home_url('/'));
+						if(is_array($_asset_health_home_parts) && !empty($_asset_health_home_parts['scheme']) && !empty($_asset_health_home_parts['host']))
+							$asset_health_last_issue_page_url = $_asset_health_home_parts['scheme'].'://'.$_asset_health_home_parts['host'].((!empty($_asset_health_home_parts['port'])) ? ':'.(int)$_asset_health_home_parts['port'] : '').'/'.ltrim($asset_health_last_issue_page_path, '/');
+					}
 				}
-				unset($_asset_type, $_asset_id, $_asset_build, $_asset_health_load, $_asset_health_result_labels, $_asset_health_result_label, $_asset_health_page_title);
+				unset($_asset_type, $_asset_id, $_asset_build, $_asset_health_load, $_asset_health_result_labels, $_asset_health_result_label, $_asset_health_page_title, $_asset_health_home_parts);
 				//260910.0638 New Health Status section for easier review.
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 				echo '<h3 id="ws-plugin--s2member-asset-health">CSS/JS Asset Health: <span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($asset_health['status']).'" aria-hidden="true"></span>'.esc_html($asset_health['status_label']).'</h3>'."\n";
@@ -459,7 +464,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 					$_issue_page_url = '';
 					if($_issue_page_path !== '')
 					{
-						$_issue_home_parts = wp_parse_url(home_url('/'));
+						$_issue_home_parts = c_ws_plugin__s2member_utils_urls::parse_url(home_url('/'));
 						if(is_array($_issue_home_parts) && !empty($_issue_home_parts['scheme']) && !empty($_issue_home_parts['host']))
 							$_issue_page_url = $_issue_home_parts['scheme'].'://'.$_issue_home_parts['host'].((!empty($_issue_home_parts['port'])) ? ':'.(int)$_issue_home_parts['port'] : '').'/'.ltrim($_issue_page_path, '/');
 					}

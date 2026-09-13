@@ -355,6 +355,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 */
 		protected static function health_logkeeper_lock_acquire()
 		{
+			global $wpdb;
+
 			$option = 'ws_plugin__s2member_assets_health_logkeeper_lock';
 			$lock = time().':'.sha1(microtime(TRUE)."\0".wp_rand());
 			if(add_option($option, $lock, '', 'no'))
@@ -363,12 +365,16 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$current = (string)get_option($option, '');
 			$parts = explode(':', $current, 2);
 			$locked_at = (!empty($parts[0]) && is_numeric($parts[0])) ? (int)$parts[0] : 0;
-			//260912.0258 Recover a Logkeeper lock left behind by an interrupted request, but never sleep waiting for a live run.
+			//260913.0454 Delete only the stale lock version we inspected; another Logkeeper may replace it before this request reaches the delete.
 			if(!$locked_at || $locked_at < time() - 2 * MINUTE_IN_SECONDS)
 			{
-				delete_option($option);
-				if(add_option($option, $lock, '', 'no'))
-					return $lock;
+				$deleted = $wpdb->delete($wpdb->options, array('option_name' => $option, 'option_value' => maybe_serialize($current)), array('%s', '%s'));
+				if($deleted)
+				{
+					wp_cache_delete($option, 'options');
+					if(add_option($option, $lock, '', 'no'))
+						return $lock;
+				}
 			}
 			return '';
 		}
@@ -384,9 +390,17 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 */
 		protected static function health_logkeeper_lock_release($lock = '')
 		{
+			global $wpdb;
+
 			$option = 'ws_plugin__s2member_assets_health_logkeeper_lock';
-			if($lock !== '' && (string)get_option($option, '') === (string)$lock)
-				delete_option($option);
+			$current = (string)get_option($option, '');
+			if($lock !== '' && $current !== '' && hash_equals($current, (string)$lock))
+			{
+				//260913.0454 Release only the exact lock version owned by this request; an expired owner must never delete a newer Logkeeper's lock.
+				$deleted = $wpdb->delete($wpdb->options, array('option_name' => $option, 'option_value' => maybe_serialize($current)), array('%s', '%s'));
+				if($deleted)
+					wp_cache_delete($option, 'options');
+			}
 			return;
 		}
 
@@ -697,7 +711,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		{
 			$page_id = (function_exists('is_singular') && is_singular()) ? (int)get_queried_object_id() : 0;
 			$request_uri = (!empty($_SERVER['REQUEST_URI'])) ? wp_unslash((string)$_SERVER['REQUEST_URI']) : '';
-			$page_path = ($request_uri !== '') ? (string)wp_parse_url($request_uri, PHP_URL_PATH) : '';
+			$page_path = ($request_uri !== '') ? (string)c_ws_plugin__s2member_utils_urls::parse_url($request_uri, PHP_URL_PATH) : '';
 			$page_path = substr('/'.ltrim($page_path, '/'), 0, 240);
 			if($page_path === '/')
 				$page_path = '/';
