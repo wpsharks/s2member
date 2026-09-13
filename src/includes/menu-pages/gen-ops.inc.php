@@ -208,7 +208,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				//260904.2014 Dynamic delivery applies independently of static delivery, so give its loader choice a separate section.
 				echo '<div id="ws-plugin--s2member-dynamic-asset-loader-section" class="ws-menu-page-section ws-plugin--s2member-dynamic-asset-loader-section">'."\n";
 				echo '<h3>Dynamic CSS/JS Loader</h3>'."\n";
-				echo '<p>When s2Member needs to generate CSS or JavaScript dynamically, this controls how that request is loaded.</p>'."\n";
+				echo '<p>When s2Member needs to generate CSS or JavaScript dynamically, this controls the preferred dynamic route. If Static CSS/JS Delivery is enabled but current hooks or configuration specifically require the normal WordPress environment, s2Member uses the Full WordPress Dynamic Loader for compatibility instead.</p>'."\n";
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
 
@@ -235,7 +235,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<div id="ws-plugin--s2member-static-assets" class="ws-menu-page-section ws-plugin--s2member-static-assets-section">'."\n";
 				echo '<h3>CSS/JS Delivery &amp; Optimization (Beta)</h3>'."\n";
 				echo '<p>These beta options build CSS and JavaScript files ahead of time under the WordPress uploads directory, so the web server can serve them directly without starting PHP and WordPress for each request. Framework and Pro files remain separate by default, with optional combining and minification for further optimization.</p>'."\n";
-				echo '<p><em>After enabling these options, test your membership, registration, profile, and payment pages. If a static file cannot be used, s2Member automatically uses the selected Dynamic CSS/JS Loader instead.</em></p>'."\n";
+				echo '<p><em>After enabling these options, test your membership, registration, profile, and payment pages. If static delivery cannot be used, s2Member switches to dynamic delivery automatically. Compatibility requirements that need normal WordPress hooks use the Full WordPress Dynamic Loader; Asset Health explains the active route and reason.</em></p>'."\n";
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
@@ -431,7 +431,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 					if($_asset_health_pending || $_asset_health_not_generated)
 						$asset_health_pending_rebuild = TRUE; //260911.1924 Both neutral waiting states benefit from the shared automatic-rebuild explanation.
 					//260911.1924 A Pending rebuild URL names the previous generation, so hiding [open] avoids implying that it is the asset waiting to be created.
-					echo '<tr><th scope="row">'.esc_html($_asset_health_row['label']).':</th><td><span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($_asset_health_light).'" style="margin-left:0; margin-right:.3em;" role="img" aria-label="'.esc_attr($_asset_health_light_label).'"></span>'.esc_html($_asset_health_value).((!$_asset_health_pending && $_asset_health_url !== '') ? '<span style="margin-left:.3em;">[<a href="'.esc_url($_asset_health_url).'" target="_blank" rel="noopener noreferrer">open</a>]</span>' : '').((!$_asset_health_pending && $_asset_health_row['status'] !== 'healthy' && (string)$_asset_health_row['detail'] !== '') ? '<br />'.wp_kses_post($_asset_health_row['detail']) : '').'</td></tr>'."\n";
+					echo '<tr><th scope="row">'.esc_html($_asset_health_row['label']).':</th><td><span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($_asset_health_light).'" style="margin-left:0; margin-right:.3em;" role="img" aria-label="'.esc_attr($_asset_health_light_label).'"></span>'.esc_html($_asset_health_value).((!$_asset_health_pending && $_asset_health_url !== '') ? '<span style="margin-left:.3em;">[<a href="'.esc_url($_asset_health_url).'" target="_blank" rel="noopener noreferrer">open</a>]</span>' : '').((!$_asset_health_pending && ($_asset_health_row['status'] !== 'healthy' || $_asset_health_delivery === 'Dynamic required') && (string)$_asset_health_row['detail'] !== '') ? '<br />'.wp_kses_post($_asset_health_row['detail']) : '').'</td></tr>'."\n";
 				}
 				echo '<tr><th scope="row">Last generation:</th><td>'.esc_html($asset_health_last_generation_label).'</td></tr>'."\n";
 				echo '<tr><th scope="row">Last trusted check:</th><td>'.esc_html($asset_health_last_check_label).'</td></tr>'."\n";

@@ -1220,9 +1220,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		/**
 		 * Returns the page-level Okay/Fallback result for the delivery routes selected by WordPress.
 		 *
-		 * A normal configured route is Okay. WordPress Dynamic delivery is Fallback when it was selected
-		 * only because requested static delivery or the selected s2member-o.php route could not
-		 * be used. Browser activation is checked separately by the frontend activation monitor.
+		 * A normal configured route is Okay. Compatibility-required Full WordPress Dynamic delivery is
+		 * also Okay because it is the correct route for the current request/configuration. WordPress Dynamic
+		 * is Fallback only when a requested route unexpectedly could not be used. Browser activation is
+		 * checked separately by the frontend activation monitor.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260910.0630
@@ -1239,7 +1240,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				if(!in_array($type, array('css', 'js'), TRUE))
 					continue;
 				if(!empty($expectation['delivery']) && $expectation['delivery'] === 'dynamic-wordpress' && (!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_'.$type]) || $selected_s2o))
+				{
+					//260913.2001 Static delivery can be intentionally incompatible with current hooks/configuration; successful required Dynamic delivery is the correct route, not a degraded fallback.
+					if(!empty($expectation['dynamic_required']) && !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_'.$type]))
+						continue;
 					return 'fallback';
+				}
 			}
 			return 'okay';
 		}
@@ -1288,7 +1294,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
-		 * Returns Okay/Fallback/Failed for the site's currently configured delivery using trusted failure state.
+		 * Returns Okay/Fallback/Failed for the site's currently required delivery using trusted failure state.
 		 *
 		 * @package s2Member\Utilities
 		 * @since 260910.0630
@@ -1310,24 +1316,30 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$type_rating = 4;
 				if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_'.$type]))
 				{
-					$fallback = !empty($local_health['location']);
-					foreach(self::static_asset_ids($type, 'all') as $id)
+					$dynamic_requirement = self::static_type_dynamic_requirement($type);
+					if(!empty($dynamic_requirement['required']))
+						$type_rating = (!empty($failures['dynamic:dynamic_'.$type])) ? 1 : 4; //260913.2001 Compatibility-required Dynamic delivery is the intended route; only failure of that route degrades Health.
+					else
 					{
-						$state = self::static_asset_build($id);
-						$definition = self::static_asset_definition($id, FALSE);
-						$generation_failure = get_transient('ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id));
-						if(empty($definition['ok']) || ($generation_failure && $state <= 0) || isset($local_health[$id]))
-							$fallback = TRUE;
-						if($state > 0 && !empty($location['ok']))
+						$fallback = !empty($local_health['location']);
+						foreach(self::static_asset_ids($type, 'all') as $id)
 						{
-							$base = substr($id, 0, -strlen('.'.$type));
-							$url = $location['url'].'/'.$base.'-'.$state.'.'.$type;
-							if(!empty($failures['static:'.$id]) && !empty($failures['static:'.$id]['url']) && (string)$failures['static:'.$id]['url'] === $url)
+							$state = self::static_asset_build($id);
+							$definition = self::static_asset_definition($id, FALSE);
+							$generation_failure = get_transient('ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id));
+							if(empty($definition['ok']) || ($generation_failure && $state <= 0) || isset($local_health[$id]))
 								$fallback = TRUE;
+							if($state > 0 && !empty($location['ok']))
+							{
+								$base = substr($id, 0, -strlen('.'.$type));
+								$url = $location['url'].'/'.$base.'-'.$state.'.'.$type;
+								if(!empty($failures['static:'.$id]) && !empty($failures['static:'.$id]['url']) && (string)$failures['static:'.$id]['url'] === $url)
+									$fallback = TRUE;
+							}
 						}
+						if($fallback)
+							$type_rating = (!empty($failures['fallback:dynamic_'.$type])) ? 1 : 2;
 					}
-					if($fallback)
-						$type_rating = (!empty($failures['fallback:dynamic_'.$type])) ? 1 : 2;
 				}
 				else if($selected_s2o)
 				{
@@ -1396,6 +1408,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			if(!empty($location['ok']))
 				foreach(array('css' => 'static_css', 'js' => 'static_js') as $type => $option)
 					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]))
+					{
+						$dynamic_requirement = self::static_type_dynamic_requirement($type);
+						if(!empty($dynamic_requirement['required']))
+							continue; //260913.2001 Intentionally inactive static files are not trusted-probe targets while compatibility requires Dynamic delivery.
 						foreach(self::static_asset_ids($type, 'all') as $id)
 						{
 							$build = self::static_asset_build($id);
@@ -1425,6 +1441,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 								$targets['static:'.$id] = $target;
 							}
 						}
+					}
 
 			if($full)
 			{
@@ -1448,9 +1465,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 
 					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_'.$type]))
 					{
-						$target_id = 'fallback:'.$health_id;
+						$dynamic_requirement = self::static_type_dynamic_requirement($type);
+						//260913.2001 Probe compatibility-required Full WordPress Dynamic as the active route; genuine static failures keep the existing fallback probe identity.
+						$target_id = (!empty($dynamic_requirement['required'])) ? 'active:'.$health_id : 'fallback:'.$health_id;
 						$wordpress_target['id'] = $target_id;
-						$wordpress_target['failure_id'] = $target_id;
+						$wordpress_target['failure_id'] = (!empty($dynamic_requirement['required'])) ? 'dynamic:'.$health_id : $target_id;
 						$wordpress_target['failure_url'] = $wordpress_url;
 						$targets[$target_id] = $wordpress_target;
 					}
@@ -1697,9 +1716,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 * @param string $delivery `static`, `dynamic-s2member-o`, or `dynamic-wordpress`.
 		 * @param int $build Static build timestamp, or zero for dynamic delivery.
 		 * @param string $issue_detail Optional reason a preferred route fell back before this response was selected.
+		 * @param bool $dynamic_required Whether Full WordPress Dynamic delivery is intentionally required for compatibility.
 		 * @return null
 		 */
-		public static function register_page_asset_expectations($asset_id = '', $type = '', $url = '', $delivery = '', $build = 0, $issue_detail = '')
+		public static function register_page_asset_expectations($asset_id = '', $type = '', $url = '', $delivery = '', $build = 0, $issue_detail = '', $dynamic_required = FALSE)
 		{
 			$type = strtolower((string)$type);
 			$url = (string)$url;
@@ -1722,6 +1742,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				'activation_tag' => self::activation_tag_snippet($id, $type, $tag_value),
 				//260911.1806 Server-side fallback context is not sent to the browser; it only supplies a useful Last issue snapshot for the page that selected fallback.
 				'issue_detail' => substr(wp_strip_all_tags((string)$issue_detail), 0, 240),
+				//260913.2001 Server-only compatibility context keeps intentional Full WordPress Dynamic delivery Healthy without changing the compact browser expectation/signature.
+				'dynamic_required' => (bool)$dynamic_required,
 			);
 			$expectation['signature'] = self::asset_runtime_expectation_signature($expectation);
 			self::$page_asset_expectations[$id] = $expectation;
@@ -2432,7 +2454,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			//260903.0544 Normal requests only check whether current hooks/configuration permit static delivery; source assembly and filesystem work wait until a build is actually needed.
 			$compatibility = self::static_asset_definition($id, FALSE);
 			if(empty($compatibility['ok']))
-				return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => abs(self::static_asset_build($id)), 'error' => (string)$compatibility['error']);
+				return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => abs(self::static_asset_build($id)), 'error' => (string)$compatibility['error'], 'dynamic_required' => !empty($compatibility['dynamic_required']));
 
 			$state = self::static_asset_build($id);
 			$dirty = $state < 0;
@@ -2568,7 +2590,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			{
 				$assets[$id] = self::ensure_static_asset($id, $force);
 				if(empty($assets[$id]['ok']))
-					return array('ok' => FALSE, 'assets' => $assets, 'error' => (string)$assets[$id]['error']);
+					return array('ok' => FALSE, 'assets' => $assets, 'error' => (string)$assets[$id]['error'], 'dynamic_required' => !empty($assets[$id]['dynamic_required']));
 			}
 			return array('ok' => (bool)$assets, 'assets' => $assets, 'error' => '');
 		}
@@ -2658,19 +2680,26 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				return self::$static_assets_health_cache = array();
 
 			$missing = array();
+			$checked_types = array();
+			foreach(array('css' => 'static_css', 'js' => 'static_js') as $type => $option)
+				if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]))
+				{
+					$dynamic_requirement = self::static_type_dynamic_requirement($type);
+					if(empty($dynamic_requirement['required']))
+						$checked_types[] = $type; //260913.2001 Only currently active static routes participate in local static-file health.
+				}
 			$location = self::static_assets_location(FALSE);
-			if(empty($location['ok']))
+			if($checked_types && empty($location['ok']))
 				$missing['location'] = $location['error'];
-			else
-				foreach(array('css' => 'static_css', 'js' => 'static_js') as $type => $option)
-					if(!empty($GLOBALS['WS_PLUGIN__']['s2member']['o'][$option]))
-						foreach(self::static_asset_ids($type, 'all') as $id)
-						{
-							$build = self::static_asset_build($id);
-							$base = substr($id, 0, -strlen('.'.$type));
-							if($build > 0 && !is_file($location['dir'].'/'.$base.'-'.$build.'.'.$type))
-								$missing[$id] = 'Expected static asset '.$id.' is missing.';
-						}
+			else if(!empty($location['ok']))
+				foreach($checked_types as $type)
+					foreach(self::static_asset_ids($type, 'all') as $id)
+					{
+						$build = self::static_asset_build($id);
+						$base = substr($id, 0, -strlen('.'.$type));
+						if($build > 0 && !is_file($location['dir'].'/'.$base.'-'.$build.'.'.$type))
+							$missing[$id] = 'Expected static asset '.$id.' is missing.';
+					}
 
 			//260907.2203 Log only local-health transitions so recurring admin checks do not repeat the same event.
 			$previous = get_option('ws_plugin__s2member_static_asset_health', array());
@@ -2757,6 +2786,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$dynamic_normal = array('css' => FALSE, 'js' => FALSE);
 			$wp_loader_active = array('css' => FALSE, 'js' => FALSE);
 			$wp_loader_fallback = array('css' => FALSE, 'js' => FALSE);
+			$wp_loader_required = array('css' => FALSE, 'js' => FALSE);
 
 			foreach(array('css' => 'CSS', 'js' => 'JS') as $type => $type_label)
 			{
@@ -2793,6 +2823,28 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				}
 
 				$ids = self::static_asset_ids($type, 'all');
+				$dynamic_requirement = self::static_type_dynamic_requirement($type);
+				if(!empty($dynamic_requirement['required']))
+				{
+					//260913.2001 A compatibility-required Dynamic route is expected delivery, not an Orange fallback; Full WordPress remains mandatory so the triggering hooks/configuration are present.
+					$wp_loader_active[$type] = TRUE;
+					$wp_loader_fallback[$type] = FALSE;
+					$wp_loader_required[$type] = TRUE;
+					$delivery_url = self::wordpress_dynamic_asset_url();
+					$delivery_url = ($type === 'css') ? add_query_arg(array('ws_plugin__s2member_css' => '1', 'qcABC' => '1'), $delivery_url) : add_query_arg(array('ws_plugin__s2member_js_w_globals' => (defined('WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5') ? WS_PLUGIN__S2MEMBER_API_CONSTANTS_MD5 : '1'), 'qcABC' => '1'), $delivery_url);
+					$failed = !empty($failures['dynamic:dynamic_'.$type]);
+					$status = ($failed) ? 'error' : 'healthy';
+					$status_label = ($failed) ? 'Delivery check failed' : 'Healthy';
+					$detail = (string)$dynamic_requirement['detail'].' Static '.$type_label.' remains enabled and will be used automatically when this compatibility requirement no longer applies.';
+					if($failed)
+					{
+						$detail .= ' The required Full WordPress Dynamic Loader could not be loaded or confirmed active.';
+						$error_notice_items['delivery:'.$type] = $type_label.' requires Full WordPress Dynamic delivery, but that route could not be loaded or verified.';
+					}
+					$rows[] = array('label' => $type_label.' Delivery', 'delivery' => 'Dynamic required', 'status' => $status, 'status_label' => $status_label, 'detail' => $detail, 'url' => $delivery_url);
+					continue;
+				}
+
 				$fallback = FALSE;
 				$fallback_reasons = array();
 				$states = array();
@@ -2953,7 +3005,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					$event = self::asset_runtime_health_event('dynamic_'.$type);
 					$status = $event['status'];
 					$status_label = $event['label'];
-					$detail = ($is_fallback) ? 'Full WordPress Dynamic Loader is currently serving this asset as fallback.' : 'Full WordPress Dynamic Loader is the configured delivery route.';
+					if(!empty($wp_loader_required[$type]))
+						$detail = 'Full WordPress Dynamic Loader is the active compatibility-required route.';
+					else
+						$detail = ($is_fallback) ? 'Full WordPress Dynamic Loader is currently serving this asset as fallback.' : 'Full WordPress Dynamic Loader is the configured delivery route.';
 					if($event['detail'])
 						$detail .= ' '.$event['detail'];
 				}
@@ -3515,6 +3570,39 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
+		 * Returns whether an enabled static asset type intentionally requires dynamic delivery for compatibility.
+		 *
+		 * A source/build/filesystem failure is not an intentional requirement and remains a real fallback condition.
+		 *
+		 * @package s2Member\Utilities
+		 * @since 260913.2001
+		 *
+		 * @param string $type `css` or `js`.
+		 * @return array Requirement state and site-owner detail.
+		 */
+		protected static function static_type_dynamic_requirement($type = '')
+		{
+			$type = strtolower((string)$type);
+			if(!in_array($type, array('css', 'js'), TRUE))
+				return array('required' => FALSE, 'detail' => '');
+
+			$required = FALSE;
+			$details = array();
+			foreach(self::static_asset_ids($type, 'all') as $id)
+			{
+				$definition = self::static_asset_definition($id, FALSE);
+				if(!empty($definition['ok']))
+					continue;
+				if(empty($definition['dynamic_required']))
+					return array('required' => FALSE, 'detail' => '');
+				$required = TRUE;
+				if(!empty($definition['error']))
+					$details[] = (string)$definition['error'];
+			}
+			return array('required' => $required, 'detail' => implode(' ', array_unique($details)));
+		}
+
+		/**
 		 * Returns the source definition for one currently enabled/compatible generated frontend asset file.
 		 *
 		 * @package s2Member\Utilities
@@ -3548,7 +3636,18 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				$hook_dynamic = (bool)apply_filters('ws_plugin__s2member_dynamic_css_required', $hook_dynamic, get_defined_vars());
 
 				if($framework_dynamic || $hook_dynamic)
-					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Current CSS hooks require legacy dynamic assets');
+				{
+					//260913.2001 Explain which compatibility condition makes Dynamic delivery intentional instead of collapsing all such cases into a generic fallback error.
+					$reasons = array();
+					if(has_action('ws_plugin__s2member_before_css'))
+						$reasons[] = 'the "ws_plugin__s2member_before_css" hook has a customization';
+					if(isset($GLOBALS['wp_filter']['all']))
+						$reasons[] = 'WordPress\'s global "all" hook is active';
+					if($hook_dynamic)
+						$reasons[] = (has_action('ws_plugin__s2member_during_css')) ? 'the "ws_plugin__s2member_during_css" hook has a customization that must remain dynamic' : 'the "ws_plugin__s2member_dynamic_css_required" filter requires dynamic CSS';
+					$error = 'Static CSS cannot be used with the current request/configuration because '.implode('; ', array_unique($reasons)).'. Full WordPress Dynamic Loader is required so the current hooks and customizations remain available.';
+					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => $error, 'dynamic_required' => TRUE);
+				}
 				if(!$include_sources)
 					return array('ok' => TRUE, 'sources' => array(), 'minify' => !empty($o['static_css_minify']), 'error' => '');
 
@@ -3572,11 +3671,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				if($page_text && !self::static_js_page_text_supported())
 					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Loading JavaScript text with each WordPress page requires a current s2Member Pro version');
 
+				$js_api_constants_enabled = (bool)apply_filters('ws_plugin__s2member_js_api_constants_enable', FALSE);
 				if($page_text)
 				{
 					//260906.2049 Text and other page-specific values resolve in the normal HTML request, so they do not make the external JavaScript dynamic.
-					$framework_dynamic = apply_filters('ws_plugin__s2member_js_api_constants_enable', FALSE)
-						|| has_action('ws_plugin__s2member_before_js_w_globals') || isset($GLOBALS['wp_filter']['all']);
+					$framework_dynamic = $js_api_constants_enabled || has_action('ws_plugin__s2member_before_js_w_globals') || isset($GLOBALS['wp_filter']['all']);
 				}
 				else
 				{
@@ -3585,8 +3684,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 						$site_locale = (string)WPLANG;
 					$site_locale = ($site_locale) ? $site_locale : 'en_US';
 					$current_locale = (function_exists('determine_locale')) ? (string)determine_locale() : (string)get_locale();
-					$framework_dynamic = apply_filters('ws_plugin__s2member_js_api_constants_enable', FALSE)
-						|| has_action('ws_plugin__s2member_before_js_w_globals') || $current_locale !== $site_locale || has_filter('ws_plugin__s2member_files_dir')
+					$framework_dynamic = $js_api_constants_enabled || has_action('ws_plugin__s2member_before_js_w_globals') || $current_locale !== $site_locale || has_filter('ws_plugin__s2member_files_dir')
 						|| has_filter('ws_plugin__s2member_min_password_length') || has_filter('ws_plugin__s2member_min_password_strength_code') || has_filter('ws_plugin__s2member_min_password_strength_score')
 						|| isset($GLOBALS['wp_filter']['all']);
 				}
@@ -3597,7 +3695,34 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					$hook_dynamic = FALSE; //260906.2049 Older Pro releases can still use static-file text when their JavaScript hook contains only known built-ins.
 
 				if($framework_dynamic || $hook_dynamic)
-					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => 'Current JavaScript hooks/configuration require dynamic assets');
+				{
+					//260913.2001 Preserve the compatibility decision while exposing the concrete condition(s) that make Full WordPress Dynamic delivery necessary.
+					$reasons = array();
+					if($js_api_constants_enabled)
+						$reasons[] = 'full s2Member JavaScript API constants are enabled by the "ws_plugin__s2member_js_api_constants_enable" filter';
+					if(has_action('ws_plugin__s2member_before_js_w_globals'))
+						$reasons[] = 'the "ws_plugin__s2member_before_js_w_globals" hook has a customization';
+					if(!$page_text && isset($current_locale, $site_locale) && $current_locale !== $site_locale)
+						$reasons[] = 'the current request locale ('.$current_locale.') differs from the site locale ('.$site_locale.')';
+					foreach(array(
+						'ws_plugin__s2member_files_dir' => 'the s2Member files directory',
+						'ws_plugin__s2member_min_password_length' => 'the minimum password length',
+						'ws_plugin__s2member_min_password_strength_code' => 'the password-strength code',
+						'ws_plugin__s2member_min_password_strength_score' => 'the password-strength score',
+					) as $filter => $value_label)
+						if(!$page_text && has_filter($filter))
+							$reasons[] = $value_label.' is filtered dynamically by "'.$filter.'"';
+					if(isset($GLOBALS['wp_filter']['all']))
+						$reasons[] = 'WordPress\'s global "all" hook is active';
+					if(has_filter('ws_plugin__s2member_pro_available_gateways'))
+						$reasons[] = 'the available Pro gateways are filtered dynamically by "ws_plugin__s2member_pro_available_gateways"';
+					if($hook_dynamic && has_action('ws_plugin__s2member_during_js_w_globals') && !self::static_js_builtin_pro_callbacks_supported())
+						$reasons[] = 'the "ws_plugin__s2member_during_js_w_globals" hook contains a custom, reordered, or unsupported callback';
+					if($hook_dynamic && !$reasons)
+						$reasons[] = 'the "ws_plugin__s2member_dynamic_js_required" filter explicitly requires dynamic JavaScript';
+					$error = 'Static JavaScript cannot be used with the current request/configuration because '.implode('; ', array_unique($reasons)).'. Full WordPress Dynamic Loader is required so the current hooks, values, and customizations remain available.';
+					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => $error, 'dynamic_required' => TRUE);
+				}
 				if($page_text)
 				{
 					$data_map_signature = self::static_js_data_map_signature($id);
