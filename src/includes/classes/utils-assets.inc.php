@@ -2835,7 +2835,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					$failed = !empty($failures['dynamic:dynamic_'.$type]);
 					$status = ($failed) ? 'error' : 'healthy';
 					$status_label = ($failed) ? 'Delivery check failed' : 'Healthy';
-					$detail = (string)$dynamic_requirement['detail'].' Static '.$type_label.' remains enabled and will be used automatically when this compatibility requirement no longer applies.';
+					//260913.2111 The requirement detail now carries concise, actionable guidance; do not append a generic compatibility sentence to every row.
+					$detail = (string)$dynamic_requirement['detail'];
 					if($failed)
 					{
 						$detail .= ' The required Full WordPress Dynamic Loader could not be loaded or confirmed active.';
@@ -3596,7 +3597,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				if(empty($definition['dynamic_required']))
 					return array('required' => FALSE, 'detail' => '');
 				$required = TRUE;
-				if(!empty($definition['error']))
+				if(!empty($definition['health_detail']))
+					$details[] = (string)$definition['health_detail'];
+				else if(!empty($definition['error']))
 					$details[] = (string)$definition['error'];
 			}
 			return array('required' => $required, 'detail' => implode(' ', array_unique($details)));
@@ -3696,32 +3699,43 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 
 				if($framework_dynamic || $hook_dynamic)
 				{
-					//260913.2001 Preserve the compatibility decision while exposing the concrete condition(s) that make Full WordPress Dynamic delivery necessary.
-					$reasons = array();
+					//260913.2111 Separate page-specific values that JavaScript Text Delivery can move into the page from requirements that still need Full WordPress Dynamic JS.
+					$text_delivery_reasons = array();
+					$other_reasons = array();
 					if($js_api_constants_enabled)
-						$reasons[] = 'full s2Member JavaScript API constants are enabled by the "ws_plugin__s2member_js_api_constants_enable" filter';
+						$other_reasons[] = 'full s2Member JavaScript API constants are enabled by the "ws_plugin__s2member_js_api_constants_enable" filter';
 					if(has_action('ws_plugin__s2member_before_js_w_globals'))
-						$reasons[] = 'the "ws_plugin__s2member_before_js_w_globals" hook has a customization';
+						$other_reasons[] = 'the "ws_plugin__s2member_before_js_w_globals" hook has a customization';
 					if(!$page_text && isset($current_locale, $site_locale) && $current_locale !== $site_locale)
-						$reasons[] = 'the current request locale ('.$current_locale.') differs from the site locale ('.$site_locale.')';
+						$text_delivery_reasons[] = 'the current page language differs from the site default ('.$current_locale.' vs '.$site_locale.')';
 					foreach(array(
-						'ws_plugin__s2member_files_dir' => 'the s2Member files directory',
-						'ws_plugin__s2member_min_password_length' => 'the minimum password length',
-						'ws_plugin__s2member_min_password_strength_code' => 'the password-strength code',
-						'ws_plugin__s2member_min_password_strength_score' => 'the password-strength score',
-					) as $filter => $value_label)
+						'ws_plugin__s2member_files_dir' => 'the s2Member files directory is generated dynamically',
+						'ws_plugin__s2member_min_password_length' => 'the minimum password length is generated dynamically',
+						'ws_plugin__s2member_min_password_strength_code' => 'the password-strength code is generated dynamically',
+						'ws_plugin__s2member_min_password_strength_score' => 'the password-strength score is generated dynamically',
+					) as $filter => $reason)
 						if(!$page_text && has_filter($filter))
-							$reasons[] = $value_label.' is filtered dynamically by "'.$filter.'"';
+							$text_delivery_reasons[] = $reason.' ("'.$filter.'")';
 					if(isset($GLOBALS['wp_filter']['all']))
-						$reasons[] = 'WordPress\'s global "all" hook is active';
+						$other_reasons[] = 'WordPress\'s global "all" hook is active';
 					if(has_filter('ws_plugin__s2member_pro_available_gateways'))
-						$reasons[] = 'the available Pro gateways are filtered dynamically by "ws_plugin__s2member_pro_available_gateways"';
+						$other_reasons[] = 'the available Pro gateways are filtered dynamically by "ws_plugin__s2member_pro_available_gateways"';
 					if($hook_dynamic && has_action('ws_plugin__s2member_during_js_w_globals') && !self::static_js_builtin_pro_callbacks_supported())
-						$reasons[] = 'the "ws_plugin__s2member_during_js_w_globals" hook contains a custom, reordered, or unsupported callback';
-					if($hook_dynamic && !$reasons)
-						$reasons[] = 'the "ws_plugin__s2member_dynamic_js_required" filter explicitly requires dynamic JavaScript';
-					$error = 'Static JavaScript cannot be used with the current request/configuration because '.implode('; ', array_unique($reasons)).'. Full WordPress Dynamic Loader is required so the current hooks, values, and customizations remain available.';
-					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => $error, 'dynamic_required' => TRUE);
+						$other_reasons[] = 'the "ws_plugin__s2member_during_js_w_globals" hook contains a custom, reordered, or unsupported callback';
+					if($hook_dynamic && !$text_delivery_reasons && !$other_reasons)
+						$other_reasons[] = 'the "ws_plugin__s2member_dynamic_js_required" filter explicitly requires Dynamic JS';
+
+					$text_delivery_reasons = array_unique($text_delivery_reasons);
+					$other_reasons = array_unique($other_reasons);
+					$reasons = array_merge($text_delivery_reasons, $other_reasons);
+					$error = 'Static JavaScript requires Dynamic delivery because '.implode('; ', $reasons).'. Full WordPress Dynamic Loader is required so the current hooks, values, and customizations remain available.';
+					if($text_delivery_reasons && !$other_reasons)
+						$health_detail = ucfirst(implode('; ', $text_delivery_reasons)).'. To keep the external JavaScript static, set <strong>JavaScript Text Delivery</strong> to <strong>Load JavaScript text with each WordPress page</strong>. [<a href="#ws-plugin--s2member-static-js-text">setting</a>]';
+					else if($text_delivery_reasons && $other_reasons)
+						$health_detail = 'Some page-specific JavaScript values require Dynamic JS: '.implode('; ', $text_delivery_reasons).'. Setting <strong>JavaScript Text Delivery</strong> to <strong>Load JavaScript text with each WordPress page</strong> lets pages affected only by those values keep using Static JS. Pages where another detected requirement applies will still use Full WordPress Dynamic JS: '.implode('; ', $other_reasons).'. [<a href="#ws-plugin--s2member-static-js-text">setting</a>]';
+					else
+						$health_detail = 'Static JavaScript requires Dynamic delivery because '.implode('; ', $other_reasons).'. Full WordPress Dynamic Loader is used so the required hooks and customizations remain available.';
+					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => $error, 'health_detail' => $health_detail, 'dynamic_required' => TRUE);
 				}
 				if($page_text)
 				{
