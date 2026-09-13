@@ -3715,7 +3715,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 						'ws_plugin__s2member_min_password_strength_score' => 'the password-strength score is generated dynamically',
 					) as $filter => $reason)
 						if(!$page_text && has_filter($filter))
-							$text_delivery_reasons[] = $reason.' ("'.$filter.'")';
+							$text_delivery_reasons[] = $reason.' (via hook '.$filter.')';
 					if(isset($GLOBALS['wp_filter']['all']))
 						$other_reasons[] = 'WordPress\'s global "all" hook is active';
 					if(has_filter('ws_plugin__s2member_pro_available_gateways'))
@@ -3730,9 +3730,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					$reasons = array_merge($text_delivery_reasons, $other_reasons);
 					$error = 'Static JavaScript requires Dynamic delivery because '.implode('; ', $reasons).'. Full WordPress Dynamic Loader is required so the current hooks, values, and customizations remain available.';
 					if($text_delivery_reasons && !$other_reasons)
-						$health_detail = ucfirst(implode('; ', $text_delivery_reasons)).'. To keep the external JavaScript static, set <strong><a href="#ws-plugin--s2member-static-js-text-setting" style="font-style:normal;">JavaScript Text Delivery</a></strong> to <strong>Load JavaScript text with each WordPress page</strong>.';
+						$health_detail = ucfirst(implode('; ', $text_delivery_reasons)).'. To keep the external JavaScript static, set <a href="#ws-plugin--s2member-static-js-text-setting">JavaScript Text Delivery</a> to "Load JavaScript text with each WordPress page".';
 					else if($text_delivery_reasons && $other_reasons)
-						$health_detail = 'Some page-specific JavaScript values require Dynamic JS: '.implode('; ', $text_delivery_reasons).'. Setting <strong><a href="#ws-plugin--s2member-static-js-text-setting" style="font-style:normal;">JavaScript Text Delivery</a></strong> to <strong>Load JavaScript text with each WordPress page</strong> lets pages affected only by those values keep using Static JS. Pages where another detected requirement applies will still use Full WordPress Dynamic JS: '.implode('; ', $other_reasons).'.';
+						$health_detail = 'Some page-specific JavaScript values require Dynamic JS: '.implode('; ', $text_delivery_reasons).'. Setting <a href="#ws-plugin--s2member-static-js-text-setting">JavaScript Text Delivery</a> to "Load JavaScript text with each WordPress page" lets pages affected only by those values keep using Static JS. Pages where another detected requirement applies will still use Full WordPress Dynamic JS: '.implode('; ', $other_reasons).'.';
 					else
 						$health_detail = 'Static JavaScript requires Dynamic delivery because '.implode('; ', $other_reasons).'. Full WordPress Dynamic Loader is used so the required hooks and customizations remain available.';
 					return array('ok' => FALSE, 'sources' => array(), 'minify' => FALSE, 'error' => $error, 'health_detail' => $health_detail, 'dynamic_required' => TRUE);
