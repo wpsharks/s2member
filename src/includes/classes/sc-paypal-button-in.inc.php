@@ -196,6 +196,10 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$ppco_btn_id = 's2member_ppco_cancel_'.md5($user_id.$subscr_id);
 												$ppco_msg_id = 's2member_ppco_cancel_msg_'.md5($user_id.$subscr_id);
 
+												//260913.1946 Validate Pro's optional success URL before exposing it to cancellation JavaScript; shortcode attributes may be authored by Editors.
+												$ppco_success_url = (c_ws_plugin__s2member_utils_conds::pro_is_installed() && !empty($attr["success"]) && is_string($attr["success"])) ? wp_validate_redirect($attr["success"], '') : '';
+												$ppco_success_json = wp_json_encode($ppco_success_url, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+
 												$code  = '<style type="text/css">#'.esc_attr($ppco_btn_id).'{display:inline-flex;align-items:center;justify-content:center;width:150px;height:40px;padding:10px 0;border-radius:4px;border:1px solid rgba(0,0,0,0.06);background:#ffc439;color:#003087;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-sizing:border-box;white-space:nowrap;}#'.esc_attr($ppco_btn_id).':hover{filter:brightness(0.98);}#'.esc_attr($ppco_btn_id).':disabled{opacity:0.65;cursor:not-allowed;}</style>'."\n";
 												$code .= '<button type="button" id="'.esc_attr($ppco_btn_id).'">'.esc_html(_x('Unsubscribe', 'paypal cancellation button label', 's2member')).'</button>'."\n"; //260218
 												$code .= '<div id="'.esc_attr($ppco_msg_id).'" style="display:none; margin-top:8px;"></div>'."\n";
@@ -204,6 +208,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$code .= 'var b=document.getElementById("'.esc_js($ppco_btn_id).'");'."\n";
 												$code .= 'var m=document.getElementById("'.esc_js($ppco_msg_id).'");'."\n";
 												$code .= 'var u="'.esc_js($pp_manage_url).'";'."\n";
+												$code .= 'var s='.$ppco_success_json.';'."\n";
 												$code .= 'function goManage(){try{var w=window.open(u,"_blank","noopener");if(!w){window.location.href=u;}}catch(e){window.location.href=u;}}'."\n";
 												$code .= 'function show(msg){try{if(m){m.style.display="block";m.innerHTML=msg;}}catch(e){}}'."\n";
 												$code .= 'function enc(o){var s=[];for(var k in o){if(!o.hasOwnProperty(k))continue;s.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return s.join("&");}'."\n";
@@ -215,7 +220,7 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 												$code .= 'b.disabled=true;'."\n";
 												$code .= 'fetch("'.esc_js($ppco_endpoint).'",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"cancel_subscription",s2member_paypal_checkout_t:"'.esc_js($ppco_token).'",s2member_paypal_checkout_nonce:"'.esc_js($ppco_nonce).'"} )})'."\n";
 												$code .= '.then(function(r){return r.json();})'."\n";
-												$code .= '.then(function(res){if(res&&res.ok){show("'.esc_js(__('Subscription cancelled.', 's2member')).'");}else{goManage(); b.disabled=false;}})'."\n"; //260218
+												$code .= '.then(function(res){if(res&&res.ok){if(s){window.location.assign(s);}else{show("'.esc_js(__('Subscription cancelled.', 's2member')).'");}}else{goManage(); b.disabled=false;}})'."\n"; //260913.1946 Honor Pro's validated success URL after a confirmed on-site cancellation.
 												$code .= '.catch(function(){goManage(); b.disabled=false;});'."\n";
 												$code .= '});'."\n";
 												$code .= '})();'."\n";
