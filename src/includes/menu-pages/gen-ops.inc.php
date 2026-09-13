@@ -268,7 +268,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				$static_js_text = (isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js_text']) && $GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js_text'] === 'page') ? 'page' : 'static';
 				$static_js_page_text_supported = c_ws_plugin__s2member_utils_assets::static_js_page_text_supported();
-				echo '<tr><th><label for="ws-plugin--s2member-static-js-text">JavaScript Text Delivery</label></th></tr>'."\n";
+				//260913.2140 Link Asset Health guidance to the full setting row and leave room above it so the setting label remains visible below the WordPress admin bar.
+				echo '<tr id="ws-plugin--s2member-static-js-text-setting" style="scroll-margin-top:64px;"><th><label for="ws-plugin--s2member-static-js-text">JavaScript Text Delivery</label></th></tr>'."\n";
 				echo '<tr><td>'."\n";
 				echo '<p style="margin-top:0;"><em>Some s2Member messages and labels are shown or updated by JavaScript—for example, form validation and password feedback—so JavaScript needs access to that text too.</em></p>'."\n";
 				echo '<select name="ws_plugin__s2member_static_js_text" id="ws-plugin--s2member-static-js-text">'."\n";
@@ -432,7 +433,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 					if($_asset_health_pending || $_asset_health_not_generated)
 						$asset_health_pending_rebuild = TRUE; //260911.1924 Both neutral waiting states benefit from the shared automatic-rebuild explanation.
 					//260911.1924 A Pending rebuild URL names the previous generation, so hiding [open] avoids implying that it is the asset waiting to be created.
-					echo '<tr><th scope="row">'.esc_html($_asset_health_row['label']).':</th><td><span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($_asset_health_light).'" style="margin-left:0; margin-right:.3em;" role="img" aria-label="'.esc_attr($_asset_health_light_label).'"></span>'.esc_html($_asset_health_value).((!$_asset_health_pending && $_asset_health_url !== '') ? '<span style="margin-left:.3em;">[<a href="'.esc_url($_asset_health_url).'" target="_blank" rel="noopener noreferrer">open</a>]</span>' : '').((!$_asset_health_pending && ($_asset_health_row['status'] !== 'healthy' || $_asset_health_delivery === 'Dynamic required') && (string)$_asset_health_row['detail'] !== '') ? '<br />'.wp_kses_post($_asset_health_row['detail']) : '').'</td></tr>'."\n";
+					echo '<tr><th scope="row">'.esc_html($_asset_health_row['label']).':</th><td><span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($_asset_health_light).'" style="margin-left:0; margin-right:.3em;" role="img" aria-label="'.esc_attr($_asset_health_light_label).'"></span>'.esc_html($_asset_health_value).((!$_asset_health_pending && $_asset_health_url !== '') ? '<span style="margin-left:.3em;">[<a href="'.esc_url($_asset_health_url).'" target="_blank" rel="noopener noreferrer">open</a>]</span>' : '').((!$_asset_health_pending && ($_asset_health_row['status'] !== 'healthy' || $_asset_health_delivery === 'Dynamic required') && (string)$_asset_health_row['detail'] !== '') ? '<br /><em>'.wp_kses_post($_asset_health_row['detail']).'</em>' : '').'</td></tr>'."\n";
 				}
 				echo '<tr><th scope="row">Last generation:</th><td>'.esc_html($asset_health_last_generation_label).'</td></tr>'."\n";
 				echo '<tr><th scope="row">Last trusted check:</th><td>'.esc_html($asset_health_last_check_label).'</td></tr>'."\n";
