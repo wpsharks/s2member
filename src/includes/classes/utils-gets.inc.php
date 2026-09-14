@@ -131,10 +131,21 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			if(is_array($post_ids = $wpdb->get_col("SELECT `ID` FROM `".$wpdb->posts."` WHERE `post_status` = 'publish' AND ".(($post_type) ? "`post_type` = '".esc_sql((string)$post_type)."'" : "`post_type` NOT IN('page','attachment','nav_menu_item','revision')"))))
-				$post_ids = c_ws_plugin__s2member_utils_arrays::force_integers($post_ids);
+			//260914.1643 Query-level access checks can request the same published Post IDs many times per page load, so cache each Posts-table/Post-Type combination for this request; including the table keeps switched Multisite blogs isolated.
+			static $_post_ids = array(), $_post_changes = array();
+			$_cache_key = $wpdb->posts.'|'.(string)$post_type;
 
-			return (!empty($post_ids) && is_array($post_ids)) ? array_unique($post_ids) : array();
+			//260914.1643 Refresh after normal WordPress post mutations so a write followed by another access check in the same request cannot reuse stale published Post IDs.
+			$_changes = did_action('save_post') + did_action('deleted_post');
+			if(!isset($_post_ids[$_cache_key]) || !isset($_post_changes[$_cache_key]) || $_post_changes[$_cache_key] !== $_changes)
+			{
+				$post_ids = $wpdb->get_col("SELECT `ID` FROM `".$wpdb->posts."` WHERE `post_status` = 'publish' AND ".(($post_type) ? "`post_type` = '".esc_sql((string)$post_type)."'" : "`post_type` NOT IN('page','attachment','nav_menu_item','revision')"));
+				if(is_array($post_ids)) $post_ids = c_ws_plugin__s2member_utils_arrays::force_integers($post_ids);
+
+				$_post_ids[$_cache_key] = (!empty($post_ids) && is_array($post_ids)) ? array_unique($post_ids) : array();
+				$_post_changes[$_cache_key] = $_changes;
+			}
+			return $_post_ids[$_cache_key];
 		}
 
 		/**
@@ -177,10 +188,21 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			if(is_array($page_ids = $wpdb->get_col("SELECT `ID` FROM `".$wpdb->posts."` WHERE `post_status` = 'publish' AND `post_type` = 'page'")))
-				$page_ids = c_ws_plugin__s2member_utils_arrays::force_integers($page_ids);
+			//260914.1643 Query-level access checks can request the complete published Page-ID list repeatedly in one page load, so cache it per Posts table for this request; the table key also isolates switched Multisite blogs.
+			static $_page_ids = array(), $_post_changes = array();
+			$_cache_key = $wpdb->posts;
 
-			return (!empty($page_ids) && is_array($page_ids)) ? array_unique($page_ids) : array();
+			//260914.1643 Refresh after normal WordPress post mutations so Pages created, deleted, or changed earlier in this request are reflected by later access checks.
+			$_changes = did_action('save_post') + did_action('deleted_post');
+			if(!isset($_page_ids[$_cache_key]) || !isset($_post_changes[$_cache_key]) || $_post_changes[$_cache_key] !== $_changes)
+			{
+				$page_ids = $wpdb->get_col("SELECT `ID` FROM `".$wpdb->posts."` WHERE `post_status` = 'publish' AND `post_type` = 'page'");
+				if(is_array($page_ids)) $page_ids = c_ws_plugin__s2member_utils_arrays::force_integers($page_ids);
+
+				$_page_ids[$_cache_key] = (!empty($page_ids) && is_array($page_ids)) ? array_unique($page_ids) : array();
+				$_post_changes[$_cache_key] = $_changes;
+			}
+			return $_page_ids[$_cache_key];
 		}
 
 		/**
@@ -427,10 +449,25 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			if(!empty($terms) && is_array($terms) && is_array($singular_ids = $wpdb->get_col("SELECT `object_id` FROM `".$wpdb->term_relationships."` WHERE `term_taxonomy_id` IN (SELECT `term_taxonomy_id` FROM `".$wpdb->term_taxonomy."` WHERE `term_id` IN('".implode("','", $terms)."'))")))
-				$singular_ids = c_ws_plugin__s2member_utils_arrays::force_integers($singular_ids);
+			if(empty($terms) || !is_array($terms)) return array();
 
-			return (!empty($singular_ids) && is_array($singular_ids)) ? array_unique($singular_ids) : array();
+			//260914.1643 Term restrictions can request the same term-to-Singular lookup repeatedly in one page load. Normalize only the cache key so equivalent term sets share one result regardless of order or duplicates, while leaving the legacy SQL input unchanged.
+			static $_singular_ids = array(), $_term_changes = array();
+			$_cache_terms = array_values(array_unique(c_ws_plugin__s2member_utils_arrays::force_integers($terms)));
+			sort($_cache_terms, SORT_NUMERIC);
+			$_cache_key = $wpdb->term_relationships.'|'.$wpdb->term_taxonomy.'|'.implode(',', $_cache_terms);
+
+			//260914.1643 Refresh after normal WordPress object-term mutations so a relationship changed earlier in this request is visible to later access checks; table names in the key isolate switched Multisite blogs.
+			$_changes = did_action('set_object_terms') + did_action('deleted_term_relationships');
+			if(!isset($_singular_ids[$_cache_key]) || !isset($_term_changes[$_cache_key]) || $_term_changes[$_cache_key] !== $_changes)
+			{
+				$singular_ids = $wpdb->get_col("SELECT `object_id` FROM `".$wpdb->term_relationships."` WHERE `term_taxonomy_id` IN (SELECT `term_taxonomy_id` FROM `".$wpdb->term_taxonomy."` WHERE `term_id` IN('".implode("','", $terms)."'))");
+				if(is_array($singular_ids)) $singular_ids = c_ws_plugin__s2member_utils_arrays::force_integers($singular_ids);
+
+				$_singular_ids[$_cache_key] = (!empty($singular_ids) && is_array($singular_ids)) ? array_unique($singular_ids) : array();
+				$_term_changes[$_cache_key] = $_changes;
+			}
+			return $_singular_ids[$_cache_key];
 		}
 	}
 }
