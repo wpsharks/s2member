@@ -242,7 +242,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			static $_results = array(), $_meta_changes = array();
+			//260914.2132 Keep both the SQL rows and their lazily unserialized CCAP requirements for this request. The parsed cache is reset whenever post-meta changes invalidate the SQL rows, and anonymous visitors never pay the unserialization cost.
+			static $_results = array(), $_result_ccaps = array(), $_meta_changes = array();
 			$_cache_key = $wpdb->posts.'|'.$wpdb->postmeta;
 			$_changes = did_action('added_post_meta') + did_action('updated_post_meta') + did_action('deleted_post_meta');
 			if(!isset($_results[$_cache_key]) || !isset($_meta_changes[$_cache_key]) || $_meta_changes[$_cache_key] !== $_changes)
@@ -250,9 +251,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 				$_results[$_cache_key] = $wpdb->get_results("SELECT `".$wpdb->postmeta."`.`post_id`, `".$wpdb->postmeta."`.`meta_value`, `".$wpdb->posts."`.`post_type`".
 				                                              " FROM `".$wpdb->posts."`, `".$wpdb->postmeta."` WHERE `".$wpdb->posts."`.`ID` = `".$wpdb->postmeta."`.`post_id`".
 				                                              " AND `".$wpdb->postmeta."`.`meta_key` = 's2member_ccaps_req' AND `".$wpdb->postmeta."`.`meta_value` != ''");
+				$_result_ccaps[$_cache_key] = array();
 				$_meta_changes[$_cache_key] = $_changes;
 			}
-			$results = $_results[$_cache_key]; unset($_cache_key, $_changes); //260901 Request-local SQL cache.
+			$results = $_results[$_cache_key];
+			$result_ccaps = &$_result_ccaps[$_cache_key];
+			unset($_cache_key, $_changes); //260901 Request-local SQL cache.
 
 			if(is_array($results))
 			{
@@ -260,20 +264,31 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 				$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
 				$bbpress_forum_post_type     = $bbpress_installed ? bbp_get_forum_post_type() : ''; // Acquire the current post type for forums.
 				$bbpress_topic_post_type     = $bbpress_installed ? bbp_get_topic_post_type() : ''; // Acquire the current post type for topics.
+				//260914.2132 Cache each distinct CCAP decision only for this helper invocation; many protected Posts share the same CCAP, but a later query pass can still receive a different filtered capability result.
+				$ccap_access = array();
 
-				foreach($results as $r) // Now we need to check Custom Capabilities against ``$user``. If ``$user`` is a valid `WP_User` object, else all are unavailable.
+				foreach($results as $_result_index => $r) // Now we need to check Custom Capabilities against ``$user``. If ``$user`` is a valid `WP_User` object, else all are unavailable.
 				{
 					if(!is_object($user) || empty($user->ID)) // No ``$user`` object? Maybe not logged-in?.
 						$singular_ids[] = (int)$r->post_id; // It's NOT available. There is no ``$user``.
 
-					else if(is_array($ccaps = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($r->meta_value))) // Make sure we unserialize.
+					else
 					{
-						foreach($ccaps as $ccap) // Test for Custom Capability Restrictions now.
-							if(strlen($ccap) && !$user->has_cap('access_s2member_ccap_'.$ccap))
+						if(!array_key_exists($_result_index, $result_ccaps))
+							$result_ccaps[$_result_index] = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($r->meta_value);
+
+						if(is_array($ccaps = $result_ccaps[$_result_index]))
+						{
+							foreach($ccaps as $ccap) // Test for Custom Capability Restrictions now.
 							{
-								$singular_ids[] = (int)$r->post_id; // It's NOT available.
-								break; // Break now, no need to continue in this loop.
+								$ccap = (string)$ccap;
+								if(strlen($ccap) && !(isset($ccap_access[$ccap]) ? $ccap_access[$ccap] : ($ccap_access[$ccap] = (bool)$user->has_cap('access_s2member_ccap_'.$ccap))))
+								{
+									$singular_ids[] = (int)$r->post_id; // It's NOT available.
+									break; // Break now, no need to continue in this loop.
+								}
 							}
+						}
 					}
 					if($bbpress_restrictions_enable && $bbpress_installed && $r->post_type === $bbpress_forum_post_type)
 						if(!empty($singular_ids) && in_array((int)$r->post_id, $singular_ids, TRUE))

@@ -151,9 +151,11 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 							}
 							unset($_lwp, $_dep, $_ccaps, $_sps); // A little housekeeping here. Ditch these temporary variables.
 
+							//260914.2132 Cache each Level capability result only for this query pass; Category/Tag/Post/Page restrictions can otherwise repeat the same `current_user_can()` check, while empty restriction settings still short-circuit without checking it.
+							$_level_access = array();
 							for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Category Level Restrictions.
 							{
-								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] === 'all' && (!$user || !current_user_can('access_s2member_level'.$n)))
+								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] === 'all' && (!$user || !(isset($_level_access[$n]) ? $_level_access[$n] : ($_level_access[$n] = (bool)current_user_can('access_s2member_level'.$n)))))
 								{
 									$wp_query->set('category__in', array()); // Include no other Categories.
 									$wp_query->set('category__not_in', ($_catgs = c_ws_plugin__s2member_utils_gets::get_all_category_ids()));
@@ -161,7 +163,7 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 									$wp_query->set('post__in', array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__in')), $_singulars)));
 									break; // All Categories will be locked down.
 								}
-								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] && (!$user || !current_user_can('access_s2member_level'.$n)))
+								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'] && (!$user || !(isset($_level_access[$n]) ? $_level_access[$n] : ($_level_access[$n] = (bool)current_user_can('access_s2member_level'.$n)))))
 								{
 									foreach(($_catgs = preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_catgs'])) as $_catg)
 										$_catgs = array_merge($_catgs, c_ws_plugin__s2member_utils_gets::get_all_child_category_ids($_catg));
@@ -176,7 +178,7 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 
 							for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Tag Level Restrictions.
 							{
-								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags'] === 'all' && (!$user || !current_user_can('access_s2member_level'.$n)))
+								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags'] === 'all' && (!$user || !(isset($_level_access[$n]) ? $_level_access[$n] : ($_level_access[$n] = (bool)current_user_can('access_s2member_level'.$n)))))
 								{
 									$wp_query->set('tag__in', array()); // Include no other Tags.
 									$wp_query->set('tag__not_in', ($_tags = c_ws_plugin__s2member_utils_gets::get_all_tag_ids()));
@@ -184,7 +186,7 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 									$wp_query->set('post__in', array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__in')), $_singulars)));
 									break; // ALL Tags will be locked down.
 								}
-								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags'] && (!$user || !current_user_can('access_s2member_level'.$n)))
+								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags'] && (!$user || !(isset($_level_access[$n]) ? $_level_access[$n] : ($_level_access[$n] = (bool)current_user_can('access_s2member_level'.$n)))))
 								{
 									$_tags = c_ws_plugin__s2member_utils_gets::get_tags_converted_to_ids($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags']);
 
@@ -198,13 +200,13 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 
 							for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Post Level Restrictions.
 							{
-								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] === 'all' && (!$user || !current_user_can('access_s2member_level'.$n)))
+								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] === 'all' && (!$user || !(isset($_level_access[$n]) ? $_level_access[$n] : ($_level_access[$n] = (bool)current_user_can('access_s2member_level'.$n)))))
 								{
 									$wp_query->set('post__in', array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__in')), ($_posts = c_ws_plugin__s2member_utils_gets::get_all_post_ids()))));
 									$wp_query->set('post__not_in', array_unique(array_merge(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__not_in')), $_posts)));
 									break; // ALL Posts will be locked down.
 								}
-								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] && (!$user || !current_user_can('access_s2member_level'.$n)))
+								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'] && (!$user || !(isset($_level_access[$n]) ? $_level_access[$n] : ($_level_access[$n] = (bool)current_user_can('access_s2member_level'.$n)))))
 								{
 									foreach(($_posts = preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_posts'])) as $_p)
 									{
@@ -224,13 +226,13 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 
 							for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // Page Level Restrictions.
 							{
-								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_pages'] === 'all' && (!$user || !current_user_can('access_s2member_level'.$n)))
+								if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_pages'] === 'all' && (!$user || !(isset($_level_access[$n]) ? $_level_access[$n] : ($_level_access[$n] = (bool)current_user_can('access_s2member_level'.$n)))))
 								{
 									$wp_query->set('post__in', array_unique(array_diff(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__in')), ($_pages = c_ws_plugin__s2member_utils_gets::get_all_page_ids()))));
 									$wp_query->set('post__not_in', array_unique(array_merge(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__not_in')), $_pages)));
 									break; // ALL Pages will be locked down.
 								}
-								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_pages'] && (!$user || !current_user_can('access_s2member_level'.$n)))
+								else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_pages'] && (!$user || !(isset($_level_access[$n]) ? $_level_access[$n] : ($_level_access[$n] = (bool)current_user_can('access_s2member_level'.$n)))))
 								{
 									$_pages = c_ws_plugin__s2member_utils_arrays::force_integers(preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_pages']));
 
@@ -238,7 +240,7 @@ if(!class_exists('c_ws_plugin__s2member_querys'))
 									$wp_query->set('post__not_in', array_unique(array_merge(c_ws_plugin__s2member_utils_arrays::force_integers((array)$wp_query->get('post__not_in')), $_pages)));
 								}
 							}
-							unset($_pages); // A little housekeeping here. Ditch these temporary variables.
+							unset($_pages, $_level_access); //260914.2132 Keep the per-pass Level capability cache out of the legacy `get_defined_vars()` hook context below.
 						}
 						$_hook = 'ws_plugin__s2member_during_query_level_access'; if (isset($GLOBALS['wp_filter'][$_hook]) || isset($GLOBALS['wp_filter']['all']))
 							{ foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v; do_action($_hook, get_defined_vars()); } unset($_hook, $__refs, $__v); //260901 Vars by reference.
