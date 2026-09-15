@@ -252,8 +252,8 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 
 			$_settings_url = add_query_arg('s2member-open-panel', 'shortcode-user-fields-whitelist', admin_url('/admin.php?page=ws-plugin--s2member-gen-ops')).'#ws-plugin--s2member-shortcode-user-fields-whitelist';
 			$_dismiss_url = wp_nonce_url(add_query_arg('s2member-dismiss-shortcode-user-fields-notice', '1', admin_url()), 's2member-dismiss-shortcode-user-fields-notice');
-			$_message = 'Some s2Member shortcodes use user fields that are not in <em><a href="'.esc_url($_settings_url).'">s2Member → General Options → Shortcode User Fields Whitelist</a></em>';
-			c_ws_plugin__s2member_admin_notices::display_security_notice($_message, 'Review the fields below and allow the ones that are okay for other users to see:', $_field_items, $_dismiss_url);
+			$_message = 'Some s2Member shortcodes attempted to display user fields from other accounts that are not in <em><a href="'.esc_url($_settings_url).'">s2Member → General Options → Shortcode User Fields Whitelist</a></em>. Those cross-user field values were blocked.';
+			c_ws_plugin__s2member_admin_notices::display_security_notice($_message, 'Review the blocked fields below and allow the ones that are okay for other users to see:', $_field_items, $_dismiss_url);
 		}
 
 		/**

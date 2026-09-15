@@ -1714,7 +1714,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-sc-get-shortcode-section">'."\n";
 				echo '<h3>Shortcode User Fields Whitelist (optional)</h3>'."\n";
 				echo '<p>Enter a comma-separated list of user fields that these shortcodes may display from a user account other than the person currently viewing the page. This applies to <code>[s2Get user_id="" /]</code> and <code>[s2Member-List show_fields="" /]</code>.</p>'."\n";
-				echo '<p>Only allow fields that are appropriate to reveal about other user accounts wherever these shortcodes are used. If either shortcode tries to display an unlisted field from another user account, s2Member will show administrators a security notice with the fields that need review.</p>'."\n";
+				echo '<p>Only allow fields that are appropriate to reveal about other user accounts wherever these shortcodes are used. If either shortcode tries to display an unlisted field from another user account, that cross-user field value will be blocked and s2Member will show administrators a security notice with the fields that need review.</p>'."\n";
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_sc_s2get_shortcode", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
