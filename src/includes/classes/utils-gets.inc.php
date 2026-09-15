@@ -403,10 +403,37 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 		 */
 		public static function get_unavailable_singular_ids_with_sp($exclude_conflicts = FALSE)
 		{
-			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'] && is_array($_singular_ids = preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'])))
-				foreach($_singular_ids as $_singular_id) // Now check access to this Singular, against the current Visitor, via read-only ``c_ws_plugin__s2member_sp_access::sp_access()``.
-					if(is_numeric($_singular_id) && !c_ws_plugin__s2member_sp_access::sp_access($_singular_id, 'read-only'))
+			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'])
+			{
+				//260915.0105 Parse/normalize configured Specific Post/Page IDs only once per distinct option value in this request; Alternative View filtering can call this helper many times on one page load.
+				static $_specific_ids_cache = array();
+				$_specific_ids = (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'];
+				if(!isset($_specific_ids_cache[$_specific_ids]))
+				{
+					$_specific_ids_cache[$_specific_ids] = array();
+					foreach((array)preg_split('/['."\r\n\t".'\s;,]+/', $_specific_ids) as $_specific_id)
+						if(is_numeric($_specific_id)) $_specific_ids_cache[$_specific_ids][] = (int)$_specific_id;
+					$_specific_ids_cache[$_specific_ids] = array_values(array_unique($_specific_ids_cache[$_specific_ids]));
+				}
+				$_singular_ids = $_specific_ids_cache[$_specific_ids];
+
+				//260915.0122 Most Alternative View requests have no Specific Access credential. Use WordPress's listener APIs instead of testing `$wp_filter` keys directly, because an empty retained hook object must not disable this fast path.
+				$_sp_access_customized = has_action('ws_plugin__s2member_before_sp_access')
+					|| has_filter('ws_plugin__s2member_sp_access_excluded')
+					|| has_filter('ws_plugin__s2member_sp_access_excluded_cap')
+					|| has_filter('ws_plugin__s2member_sp_access')
+					|| has_action('ws_plugin__s2member_before_sp_access_session')
+					|| has_filter('ws_plugin__s2member_sp_access_session');
+				$_sp_access_credential = !empty($_GET['s2member_sp_access']) || !empty($_COOKIE['s2member_sp_access']);
+
+				if(!$_sp_access_customized && !$_sp_access_credential)
+				{
+					if(!current_user_can('edit_posts')) $singular_ids = $_singular_ids;
+				}
+				else foreach($_singular_ids as $_singular_id) // A link/session or SP customization requires the established per-ID access routine.
+					if(!c_ws_plugin__s2member_sp_access::sp_access($_singular_id, 'read-only'))
 						$singular_ids[] = (int)$_singular_id;
+			}
 
 			if(!empty($singular_ids) && is_array($singular_ids) && $exclude_conflicts)
 			{
