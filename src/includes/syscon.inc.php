@@ -696,7 +696,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 				else if($key === 'membership_eot_behavior' && (!is_string($value) || !preg_match('/^(?:demote|delete)$/', $value)))
 					$value = $default_options[$key];
 
-				else if($key === 'eot_demotion_to_role' && (!is_string($value) || ($value !== 'subscriber' && (!preg_match('/^s2member_level([1-9][0-9]*)$/', $value, $m) || (int)$m[1] > $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']))))
+				//260916.2306 Keep bootstrap validation side-effect free; role existence is checked later when the EOT demotion role is resolved, after s2Member is fully loaded.
+				else if($key === 'eot_demotion_to_role' && (!is_string($value) || !$value || in_array($value, array('administrator', 'editor', 'author', 'contributor', 's2member_pending_deletion'), TRUE)))
 					$value = $default_options[$key];
 
 				else if($key === 'eot_demotion_from' && (!is_string($value) || !preg_match('/^(?:s2member_level|all)$/', $value)))

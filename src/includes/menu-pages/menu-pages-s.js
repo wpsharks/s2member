@@ -912,6 +912,30 @@ jQuery(document).ready(function($)
 
 					}).trigger('change');
 			}
+		//260917.0108 Keep Demote-only options visibly inactive for Delete behavior, and update them immediately when the administrator changes the behavior selector.
+		$('select#ws-plugin--s2member-membership-eot-behavior').change(function()
+			{
+				var disabled = ($(this).val() === 'delete');
+				var $demotionRows = $('tr.ws-plugin--s2member-eot-demotion-option-row');
+				var $demotionInputs = $(':input', $demotionRows);
+				var $ccapsInput = $('#ws-plugin--s2member-eots-remove-ccaps');
+				var $ccapsRows = $('label[for="ws-plugin--s2member-eots-remove-ccaps"]').closest('tr').add($ccapsInput.closest('tr'));
+
+				$demotionInputs.add($ccapsInput).prop('disabled', disabled);
+				$demotionRows.add($ccapsRows).css('opacity', disabled ? '0.5' : '');
+			}).trigger('change');
+
+		//260917.0108 Custom Maximum Runtime is meaningful only in Custom mode; preserve its saved value while making the dependency obvious in the UI.
+		$('select#ws-plugin--s2member-auto-eot-system-runtime-mode').change(function()
+			{
+				var disabled = ($(this).val() !== 'custom');
+				var $runtimeInput = $('#ws-plugin--s2member-auto-eot-system-runtime-custom');
+				var $runtimeRows = $('label[for="ws-plugin--s2member-auto-eot-system-runtime-custom"]').closest('tr').add($runtimeInput.closest('tr'));
+
+				$runtimeInput.prop('disabled', disabled);
+				$runtimeRows.css('opacity', disabled ? '0.5' : '');
+			}).trigger('change');
+
 		if(location.href.match(/page\=ws-plugin--s2member-paypal-ops/))
 			{
 				$('select#ws-plugin--s2member-auto-eot-system-enabled').change(function()

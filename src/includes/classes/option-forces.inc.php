@@ -79,6 +79,9 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 
 						//260916.1840 Use the administrator's configured EOT destination first; the long-standing filter remains the final developer override.
 						$demotion_role = !empty($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_demotion_to_role"]) ? $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["eot_demotion_to_role"] : "subscriber";
+						//260916.2306 Validate registered-role existence here, after s2Member is fully loaded; doing this in bootstrap option validation can initialize WordPress roles too early.
+						if(in_array($demotion_role, array('administrator', 'editor', 'author', 'contributor', 's2member_pending_deletion'), TRUE) || !get_role($demotion_role))
+							$demotion_role = "subscriber";
 
 						return apply_filters("ws_plugin__s2member_force_demotion_role", $demotion_role, get_defined_vars ());
 					}
