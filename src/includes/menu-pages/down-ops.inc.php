@@ -290,6 +290,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<option value="us-east-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-east-1') ? ' selected="selected"' : '').'>us-east-1</option>'."\n";
 				echo '<option value="us-west-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-west-1') ? ' selected="selected"' : '').'>us-west-1</option>'."\n";
 				echo '<option value="us-west-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-west-2') ? ' selected="selected"' : '').'>us-west-2</option>'."\n";
+				//260916.0703 Canada Central predates AWS's 2019 regional-endpoint cutoff, so it remains compatible with s2Member's legacy S3 endpoint handling.
+				echo '<option value="ca-central-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ca-central-1') ? ' selected="selected"' : '').'>ca-central-1</option>'."\n";
 				echo '<option value="eu-west-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-west-1') ? ' selected="selected"' : '').'>eu-west-1</option>'."\n";
 				echo '<option value="eu-west-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-west-2') ? ' selected="selected"' : '').'>eu-west-2</option>'."\n";
 				echo '<option value="eu-central-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-central-1') ? ' selected="selected"' : '').'>eu-central-1</option>'."\n";
