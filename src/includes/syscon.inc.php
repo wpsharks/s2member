@@ -386,7 +386,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['triggers_immediate_eot']          = 'reversals';
 		$default_options['membership_eot_behavior']         = 'demote';
 		$default_options['eot_demotion_to_role']               = 'subscriber';
-		$default_options['eot_demotion_from']                     = 's2member_level'; //260916.2004 New installations remove only the s2Member Level role during EOT demotion; upgrades explicitly retain legacy `all` behavior.
+		$default_options['eot_demotion_from']                     = 'all'; //260916.2137 Missing options must preserve legacy behavior until a fresh activation explicitly stores the new Level-only default.
 		$default_options['eot_time_ext_behavior']           = 'extend';
 		$default_options['auto_eot_system_enabled']         = '1';
 		$default_options['auto_eot_system_runtime_mode']    = 'auto';
