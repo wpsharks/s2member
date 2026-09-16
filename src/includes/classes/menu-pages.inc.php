@@ -147,6 +147,19 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			$demotion_from = (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_demotion_from'];
 
 			echo '<tr>'."\n";
+			echo '<th><label for="ws-plugin--s2member-eot-demotion-from">Demote From:</label></th>'."\n";
+			echo '</tr>'."\n";
+			echo '<tr>'."\n";
+			echo '<td>'."\n";
+			echo '<select name="ws_plugin__s2member_eot_demotion_from" id="ws-plugin--s2member-eot-demotion-from">'."\n";
+			echo '<option value="s2member_level"'.(($demotion_from === 's2member_level') ? ' selected="selected"' : '').'>s2Member Level role (preserve other WordPress roles)</option>'."\n";
+			echo '<option value="all"'.(($demotion_from === 'all') ? ' selected="selected"' : '').'>All WordPress roles (legacy behavior)</option>'."\n";
+			echo '</select><br />'."\n";
+			//260916.2004 Explain the fresh-install behavior, legacy compatibility, and capability caveat without treating Subscriber/Level 0 as a role users are demoted from.
+			echo '<em>New installations remove only the user\'s <code>s2member_levelN</code> role at EOT and preserve other WordPress roles; upgraded installations retain the legacy all-role replacement until you change this setting. Preserved roles also preserve their existing capabilities, so roles such as Editor/Author/Contributor or custom roles may continue to grant s2Member access.</em>'."\n";
+			echo '</td>'."\n";
+			echo '</tr>'."\n";
+			echo '<tr>'."\n";
 			echo '<th><label for="ws-plugin--s2member-eot-demotion-to-role">Demote To Role:</label></th>'."\n";
 			echo '</tr>'."\n";
 			echo '<tr>'."\n";
@@ -161,19 +174,6 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			}
 			echo '</select><br />'."\n";
 			echo '<em>The role selected under <strong>Demote To Role</strong> is assigned when s2Member demotes a member at EOT. Developers can still override this setting with <code>ws_plugin__s2member_force_demotion_role</code>.</em>'."\n";
-			echo '</td>'."\n";
-			echo '</tr>'."\n";
-			echo '<tr>'."\n";
-			echo '<th><label for="ws-plugin--s2member-eot-demotion-from">Demote From:</label></th>'."\n";
-			echo '</tr>'."\n";
-			echo '<tr>'."\n";
-			echo '<td>'."\n";
-			echo '<select name="ws_plugin__s2member_eot_demotion_from" id="ws-plugin--s2member-eot-demotion-from">'."\n";
-			echo '<option value="s2member_level"'.(($demotion_from === 's2member_level') ? ' selected="selected"' : '').'>s2Member Level role (preserve other WordPress roles)</option>'."\n";
-			echo '<option value="all"'.(($demotion_from === 'all') ? ' selected="selected"' : '').'>All WordPress roles (legacy behavior)</option>'."\n";
-			echo '</select><br />'."\n";
-			//260916.2004 Explain the fresh-install behavior, legacy compatibility, and capability caveat without treating Subscriber/Level 0 as a role users are demoted from.
-			echo '<em>New installations remove only the user\'s <code>s2member_levelN</code> role at EOT and preserve other WordPress roles; upgraded installations retain the legacy all-role replacement until you change this setting. Preserved roles also preserve their existing capabilities, so roles such as Editor/Author/Contributor or custom roles may continue to grant s2Member access.</em>'."\n";
 			echo '</td>'."\n";
 			echo '</tr>'."\n";
 		}
