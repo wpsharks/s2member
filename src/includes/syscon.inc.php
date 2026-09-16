@@ -385,6 +385,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['triggers_immediate_eot']          = 'reversals';
 		$default_options['membership_eot_behavior']         = 'demote';
+		$default_options['eot_demotion_to_role']               = 'subscriber';
+		$default_options['eot_demotion_from']                     = 's2member_level'; //260916.2004 New installations remove only the s2Member Level role during EOT demotion; upgrades explicitly retain legacy `all` behavior.
 		$default_options['eot_time_ext_behavior']           = 'extend';
 		$default_options['auto_eot_system_enabled']         = '1';
 		$default_options['auto_eot_system_runtime_mode']    = 'auto';
@@ -692,6 +694,12 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 					$value = $default_options[$key];
 
 				else if($key === 'membership_eot_behavior' && (!is_string($value) || !preg_match('/^(?:demote|delete)$/', $value)))
+					$value = $default_options[$key];
+
+				else if($key === 'eot_demotion_to_role' && (!is_string($value) || ($value !== 'subscriber' && (!preg_match('/^s2member_level([1-9][0-9]*)$/', $value, $m) || (int)$m[1] > $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']))))
+					$value = $default_options[$key];
+
+				else if($key === 'eot_demotion_from' && (!is_string($value) || !preg_match('/^(?:s2member_level|all)$/', $value)))
 					$value = $default_options[$key];
 
 				else if($key === 'eot_time_ext_behavior' && (!is_string($value) || !preg_match('/^(?:extend|reset)$/', $value)))

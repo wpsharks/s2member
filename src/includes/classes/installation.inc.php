@@ -92,6 +92,10 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 			{
 				$v = get_option('ws_plugin__s2member_activated_version'); // Currently.
 
+				//260916.2004 Existing installations keep legacy all-role demotion; fresh installs receive the s2Member-Level-only default from syscon.
+				if(!array_key_exists('eot_demotion_from', (array)get_option('ws_plugin__s2member_options')))
+					c_ws_plugin__s2member_menu_pages::update_all_options(array('ws_plugin__s2member_eot_demotion_from' => 'all'), TRUE, FALSE, FALSE, FALSE, FALSE);
+
 				//260822.2048 Older EOT demotions recorded their processing time only in Administrative Notes; recover that history asynchronously where the legacy note is still available.
 				if(!$v || version_compare($v, '260822.2048', '<'))
 					c_ws_plugin__s2member_auto_eots::start_eot_processed_time_backfill();

@@ -467,10 +467,11 @@ if(!class_exists('c_ws_plugin__s2member_utils_users'))
 					'debug' => 'This is a fixed EOT time recorded by s2Member. It can be altered in the WordPress Dashboard for this user.');
 
 			if(!$subscr_gateway && !$subscr_id && !$subscr_cid && $last_auto_eot_time // EOTd?
-				&& (!user_can($user->ID, 'access_s2member_level1') || c_ws_plugin__s2member_user_access::user_access_role($user) === $demotion_role)
+				//260916.1840 A preserved unrelated role may sort before the destination role, so inspect all assigned roles instead of only s2Member's historical first-role result.
+				&& (!user_can($user->ID, 'access_s2member_level1') || in_array($demotion_role, (array)$user->roles, TRUE))
 				&& !c_ws_plugin__s2member_user_access::user_access_ccaps($user) // And no CCAPs either?
 			) return array('type' => 'fixed', 'time' => $last_auto_eot_time, 'tense' => $last_auto_eot_time <= $now ? 'past' : 'future',
-				'debug' => 'This is an archived/fixed EOT time recorded by s2Member; i.e., the date this customer\'s access expired.');
+				'debug' => 'This is an archived/fixed EOT time recorded by s2Member; i.e., the date this customer\'s membership EOT was processed.');
 
 			if(!$subscr_gateway || !$subscr_id || !is_array($ipn_signup_vars) || !$ipn_signup_vars)
 				return array_merge($empty_response, array('debug' => 'This user has no subscription; i.e., missing `subscr_id`, `subscr_gateway` or `ipn_signup_vars`.'));

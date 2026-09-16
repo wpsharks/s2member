@@ -280,6 +280,47 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 		}
 
 		/**
+		 * Applies the configured EOT role demotion to a user.
+		 *
+		 * @package s2Member\Auto_EOT_System
+		 * @since 260916.2004
+		 *
+		 * @param \WP_User $user WordPress user being demoted.
+		 * @param string   $demotion_to_role Role assigned after EOT.
+		 *
+		 * @return string Role before demotion, for EOT history.
+		 */
+		public static function demote_user_roles($user = NULL, $demotion_to_role = 'subscriber')
+		{
+			if(!is_object($user) || empty($user->ID) || !is_string($demotion_to_role) || !$demotion_to_role)
+				return '';
+
+			$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
+			//260916.2030 Preserve the historical all-role path exactly; upgraded installations are explicitly seeded to this policy.
+			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_demotion_from'] === 'all')
+			{
+				if($existing_role !== $demotion_to_role)
+					$user->set_role($demotion_to_role);
+				return $existing_role;
+			}
+
+			$eot_original_role = '';
+			//260916.2030 The new default removes only explicit paid s2Member Level roles; Subscriber/Level 0 is a possible destination, never a Demote From role.
+			foreach((array)$user->roles as $role)
+				if(preg_match('/^s2member_level[1-9][0-9]*$/', $role))
+				{
+					if(!$eot_original_role)
+						$eot_original_role = $role;
+					if($role !== $demotion_to_role)
+						$user->remove_role($role);
+				}
+			if(!in_array($demotion_to_role, (array)$user->roles, TRUE))
+				$user->add_role($demotion_to_role);
+
+			return $eot_original_role ?: $existing_role;
+		}
+
+		/**
 		 * Records when an End-of-Term action was processed and appends one compact history note.
 		 *
 		 * @package s2Member\Auto_EOT_System
@@ -371,7 +412,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			$removed_ccaps = array_values(array_unique(array_filter(array_map('strval', (array)$removed_ccaps), 'strlen')));
 			sort($removed_ccaps, SORT_STRING);
 
-			//260829.0618 Avoid recording a misleading role transition when EOT processing finds the user already in the configured demotion role.
+			//260829.0618 Avoid recording a misleading role transition when EOT processing finds the user already in the role selected under Demote To Role.
 			if($original_role === $destination_role)
 				$note = $processed_display.' s2Member: EOT processed, already '.$role_labels[(string)$original_role];
 			else
@@ -1106,8 +1147,8 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'modification');
 									unset($__refs, $__v); // Housekeeping.
 
-									if($existing_role !== $demotion_role /* Only if NOT the existing Role. */)
-										$user->set_role($demotion_role /* Give User the demotion Role. */);
+									//260916.2004 New installs replace only the s2Member Level role; upgraded sites retain legacy all-role replacement until the administrator changes it.
+									$eot_membership_role = self::demote_user_roles($user, $demotion_role);
 
 									if(apply_filters('ws_plugin__s2member_remove_ccaps_during_eot_events', (bool)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eots_remove_ccaps'], get_defined_vars()))
 										foreach($user->allcaps as $cap => $cap_enabled)
@@ -1147,7 +1188,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									self::record_eot_history($user_id, array(
 										'eot_time'         => $auto_eot_time,
 										'processed_at'     => $processed_at,
-										'original_role'    => $existing_role,
+										'original_role'    => $eot_membership_role,
 										'destination_role' => $demotion_role,
 										'removed_ccaps'    => $removed_ccaps,
 										'subscr_gateway'   => $subscr_gateway,
