@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260913.1657
-Stable tag: 260913.1657
-Tested up to: 7.2-alpha-63604
+Version: 260917
+Stable tag: 260917
+Tested up to: 7.2-alpha-63608
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.5.9
@@ -176,11 +176,47 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260913 =
+= v260917 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v260917 =
+
+- (Framework) **Performance:** Further improved searching on the _WP Admin > Users_ screen, building on the performance improvements introduced in v260909. Searches across user profiles and s2Member membership data now require substantially less database work, with the biggest benefit on sites with large member databases. This can make member administration noticeably faster while preserving the same searchable fields, sorting, and pagination.
+
+- (Pro) **Performance:** Significantly improved `[s2Member-List]` and `[s2Member-List-Search]` performance for member directories and searches, especially on sites with larger user databases. Member searches now require substantially less database work, with much more efficient profile-field searching, filtering, sorting, and pagination. This can make large member directories noticeably faster and more responsive while preserving the shortcodes' existing Custom Field, wildcard, filtering, pagination, and sorting features. See: [s2Member-List Shortcode Documentation](https://s2member.com/kb-article/s2member-list-shortcode-documentation/).
+
+- (Framework) **Performance:** Improved Alternative View Protection performance on sites with larger amounts of protected content. Searches, archives, menus, widgets, and other areas where restricted content needs to be filtered now do less repeated work during each page request, helping busy pages load more efficiently while preserving the same access-control behavior. _WP Admin > s2Member > Alternative View Protection_
+
+- (Pro) **Performance:** Reduced overhead when End-of-Term reminder emails are disabled. The heavier reminder processing, health, and email code is now loaded only when it is actually needed.
+
+- (Framework & Pro) **Security & UI:** Added a prominent admin warning for outdated s2Member Pro installations that predate the current Pro updater. The Framework now warns administrators when an old Pro version may be missing recent security fixes, shows how old the installed release is, and provides a prominent link to download the latest Pro version. The warning does not disable the installed Pro add-on or its features.
+
+- (Pro) **Security:** Enforced the _Shortcode User Fields Whitelist_ for `[s2Member-List]`'s `show_fields` attribute. Fields not on the whitelist are now omitted from Member Lists, with an administrator notice identifying blocked fields that may need to be allowed. _WP Admin > s2Member > General Options > Shortcode User Fields Whitelist_
+
+- (Pro) **Security:** Enforced the _Pro Shortcode Templates Whitelist_. Custom templates specified with the `template` attribute are now blocked unless specifically allowed. The shortcode uses its standard template instead, and an administrator notice identifies blocked template files that may need to be allowed. _WP Admin > s2Member > General Options > Pro Shortcode Templates Whitelist_
+
+- (Pro) **Improvement:** Hardened validation of PayPal Pro-Form `success` URLs used after subscription cancellation. Redirects are now limited to normal HTTP(S) destinations after replacement codes are processed, preventing executable or other non-web URL schemes from being used. Also hardened malformed programmatic `success` values to avoid PHP warnings.
+
+- (Framework) **Fix & UI:** Corrected Asset Health reporting when static CSS or JavaScript cannot be used because the site's current hooks or configuration require dynamic delivery. This intentional compatibility behavior is now treated as healthy instead of being reported as an unexpected fallback, and it no longer creates misleading "Latest Issues" entries. Asset Health now identifies why dynamic delivery is required, explains when the Full WordPress Dynamic Loader is necessary, and points to the "JavaScript Text Delivery" setting when it can help more pages continue using static JavaScript.
+
+- (Framework) **Improvement:** EOT demotion traditionally replaced all of a member's WordPress roles, but some sites need to preserve unrelated roles. The new _Demote From_ setting can now remove only the member's s2Member Level role instead. New installations use this level-only behavior by default; existing installations keep the legacy replace-all behavior unless changed. Thanks to Craig for suggesting this. See: [thread #13494](https://f.wpsharks.com/t/13494).
+
+- (Framework) **Improvement:** EOT demotion normally sends members to _Subscriber / s2Member Level 0_, and using another role previously required custom code. The new _Demote To Role_ setting lets site owners choose another s2Member Level or an available custom role directly from the EOT settings. Existing customizations using the `ws_plugin__s2member_force_demotion_role` filter continue to work.
+
+- (Pro) **Improvement:** PayPal Checkout cancellation buttons using `output="button"` can now also use a `success=""` attribute to redirect the member after a successful subscription cancellation. If no Success URL is provided, the existing cancellation confirmation remains unchanged. Thanks to Felix for suggesting this. See: [thread #13462](https://f.wpsharks.com/t/13462/7)
+
+- (Framework) **Improvement:** Added date formatting support to the `[s2Get /]` shortcode when retrieving the current user's registration timestamps. `S2MEMBER_CURRENT_USER_REGISTRATION_TIME` and `S2MEMBER_CURRENT_USER_PAID_REGISTRATION_TIME` can now use the existing `date_format` attribute (e.g., `m/d/Y`, `default`, or `timestamp`), making these timestamps easier to display as readable dates without custom PHP. Also corrected the related scripting documentation to distinguish registration day counts from Unix timestamps. Thanks to Gerard for suggesting this. See [thread #13221](https://f.wpsharks.com/t/13221).
+
+- (Framework) **Improvement:** Expanded the AWS S3 region selector with several compatible regions that were missing: Canada Central (`ca-central-1`), Ohio (`us-east-2`), Mumbai (`ap-south-1`), Paris (`eu-west-3`), and Stockholm (`eu-north-1`). Sites using buckets in those regions can now select them directly. Thanks to David for the reminder. See: [thread #4706](https://f.wpsharks.com/t/4706).
+
+- (Framework & Pro) **Improvement:** Added some needed filters that were missing, giving developers more ways to customize s2Member emails and Tracking Codes.
+
+- (Pro) **Fix:** Resolved PHP 8.x warnings in `[s2Member-List]` caused by optional member-query arguments, including `meta_query`, not always being present.
+
+- (Framework) **Fix:** Prevented a fatal error in the s2Member-Only dynamic CSS/JS loader when BuddyPress is detected but its `bp_is_create_blog()` helper is unavailable. This also prevents affected sites from unnecessarily falling back to the Full WordPress Dynamic asset loader.
 
 = v260913 =
 

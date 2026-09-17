@@ -142,23 +142,22 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 				return;
 
 			$_account_url = 'https://s2member.com/account/';
-			//260917.0652 s2Member versions begin with yymmdd; show both the installed Pro release date and its approximate age so administrators can immediately see how far behind it is.
-			$_pro_release_date = $_pro_release_age = '';
+			//260917.2113 s2Member versions begin with yymmdd; show the installed Pro version's approximate age so administrators can immediately see how far behind it is.
+			$_pro_release_age = '';
 			if(preg_match('/^(\d{2})(\d{2})(\d{2})/', WS_PLUGIN__S2MEMBER_PRO_VERSION, $_pro_version_parts))
 			{
 				$_pro_release_timestamp = mktime(0, 0, 0, (int) $_pro_version_parts[2], (int) $_pro_version_parts[3], 2000 + (int) $_pro_version_parts[1]);
 				if($_pro_release_timestamp)
-				{
-					$_pro_release_date = date_i18n('F j, Y', $_pro_release_timestamp);
 					$_pro_release_age = human_time_diff($_pro_release_timestamp, current_time('timestamp'));
-				}
 			}
 
-			$_message = '<strong>s2Member Pro needs an update.</strong> This site is running s2Member Framework v'.esc_html(WS_PLUGIN__S2MEMBER_VERSION).' with Pro v'.esc_html(WS_PLUGIN__S2MEMBER_PRO_VERSION).($_pro_release_date ? ' (released '.esc_html($_pro_release_date).')' : '').'. This Pro version predates the current Pro Updater improvements and is missing important updates, including recent security fixes. Continuing to use an outdated Pro version could leave your site vulnerable to <strong>serious security issues</strong> that have already been fixed. Please update s2Member Pro now. You can download the latest Pro version from your s2Member Account, then install it from <em>WP Admin &gt; Plugins &gt; Add Plugin &gt; Upload Plugin</em> to keep Framework and Pro in sync and receive the security, compatibility, and reliability improvements'.($_pro_release_age ? ' released over the last '.esc_html($_pro_release_age) : '').'.';
-			$_update_button = '<a class="button button-primary" href="'.esc_url($_account_url).'" target="_blank" rel="external noopener">Update s2Member Pro Now</a>';
+			//260917.1937 Keep this urgent notice compact and skimmable: short paragraphs, prominent version age/security risk, and a clearly separated update action.
+			$_message = '<p style="line-height:1.3em; margin:.3em 0;"><strong>Your s2Member Pro v'.esc_html(WS_PLUGIN__S2MEMBER_PRO_VERSION).($_pro_release_age ? ' is '.esc_html($_pro_release_age).' old and' : '').' is missing important security fixes</strong>.</p>';
+			$_message .= '<p style="line-height:1.3em; margin:.3em 0;"><em>Please install the latest ZIP from WP Admin &gt; Plugins &gt; Add Plugin &gt; Upload Plugin.</em></p>';
+			$_update_button = '<a class="button button-primary" style="margin-top:.3em; background:darkred; border-color:darkred;" href="'.esc_url($_account_url).'" target="_blank" rel="external noopener">Download the Latest s2Member Pro Now</a>';
 
-			//260917.0516 Keep this Framework-owned Pro update warning persistent and red because older Pro versions may be missing serious security fixes.
-			c_ws_plugin__s2member_admin_notices::display_security_notice($_message, $_update_button, array(), '', 'notice-error');
+			//260917.1937 Keep this Framework-owned warning persistent and red; include the action in the message instead of the helper's review slot so no extra <br> is inserted before it.
+			c_ws_plugin__s2member_admin_notices::display_security_notice($_message.$_update_button, '', array(), '', 'notice-error');
 		}
 
 		/**
@@ -191,7 +190,10 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 
 			$_logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
 			$_dismiss = (($dismiss_url !== '') ? '<a href="'.esc_url($dismiss_url).'" title="Dismiss until detected again" style="position:absolute; top:8px; right:10px; text-decoration:none;">Dismiss</a>' : '');
-			echo '<div class="'.esc_attr($_notice_class).'" style="position:relative; margin:0 0 15px 2px !important; padding:8px 60px 8px 8px !important;">'.$_dismiss.'<table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;"><strong>s2Member Security Notice</strong><br />'.wp_kses_post($message).(($review !== '') ? '<br />'.wp_kses_post($review) : '').(($_items) ? '<br />'.implode('<br />', $_items) : '').'</td></tr></table></div>';
+
+			//260917.1937 Give urgent red security notices a stronger heading without changing the existing presentation of normal yellow security notices.
+			$_title = (($notice_class === 'notice-error') ? '<h2 style="margin:0 0 .3em; color:darkred;">s2Member Security Notice</h2>' : '<strong>s2Member Security Notice</strong><br />');
+			echo '<div class="'.esc_attr($_notice_class).'" style="position:relative; margin:0 0 15px 2px !important; padding:8px 60px 8px 8px !important;">'.$_dismiss.'<table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;">'.$_title.wp_kses_post($message).(($review !== '') ? '<br />'.wp_kses_post($review) : '').(($_items) ? '<br />'.implode('<br />', $_items) : '').'</td></tr></table></div>';
 		}
 
 		/**
@@ -329,7 +331,7 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 					//250510 Fixed for PHP 8.1+: safely normalize on_pages before foreach
 					$notice = (array)$notice;
 					$notice['on_pages'] = empty($notice['on_pages']) ? array('*') : (array)$notice['on_pages'];
-					foreach($notice['on_pages'] as $page) 
+					foreach($notice['on_pages'] as $page)
 					{
 						if(!preg_match('/^(.+?)\:/', $page)) // NO prefix?
 							$page = 'blog:'.ltrim($page, ':'); // `blog:`
