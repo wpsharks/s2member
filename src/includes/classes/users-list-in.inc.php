@@ -338,7 +338,7 @@ if(!class_exists("c_ws_plugin__s2member_users_list_in"))
 					unset($__refs, $__v);
 
 					echo '<tr>'."\n";
-					echo '<th><label for="ws-plugin--s2member-profile-s2member-notes">Administrative Notes:</label> <a href="#" onclick="alert(\'This is for Administrative purposes. You can keep a list of Notations about this account. These Notations are private; Users/Members will never see these.\\n\\n*Note* The s2Member software may `append` Notes to this field occasionally, under special circumstances. For example, when/if s2Member demotes a paid Member to a Free Subscriber, s2Member will leave a Note in this field.\'); return false;" tabindex="-1">[?]</a><br /><br /><small>These Notations are private; Users/Members will never see any of these notes.</small></th>'."\n";
+					echo '<th><label for="ws-plugin--s2member-profile-s2member-notes">Administrative Notes:</label> <a href="#" onclick="alert(\'This is for Administrative purposes. You can keep a list of Notations about this account. These Notations are private; Users/Members will never see these.\\n\\n*Note* The s2Member software may `append` Notes to this field occasionally, under special circumstances. For example, when/if s2Member demotes a paid Member at EOT, s2Member will leave a Note in this field.\'); return false;" tabindex="-1">[?]</a><br /><br /><small>These Notations are private; Users/Members will never see any of these notes.</small></th>'."\n";
 					echo '<td><textarea name="ws_plugin__s2member_profile_s2member_notes" id="ws-plugin--s2member-profile-s2member-notes" rows="5" wrap="off" spellcheck="false" style="width:99%;">'.format_to_edit(get_user_option("s2member_notes", $user_id)).'</textarea></td>'."\n";
 					echo '</tr>'."\n";
 

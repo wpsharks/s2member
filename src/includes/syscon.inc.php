@@ -385,6 +385,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 
 		$default_options['triggers_immediate_eot']          = 'reversals';
 		$default_options['membership_eot_behavior']         = 'demote';
+		$default_options['eot_demotion_to_role']               = 'subscriber';
+		$default_options['eot_demotion_from']                     = 'all'; //260916.2137 Missing options must preserve legacy behavior until a fresh activation explicitly stores the new Level-only default.
 		$default_options['eot_time_ext_behavior']           = 'extend';
 		$default_options['auto_eot_system_enabled']         = '1';
 		$default_options['auto_eot_system_runtime_mode']    = 'auto';
@@ -692,6 +694,13 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 					$value = $default_options[$key];
 
 				else if($key === 'membership_eot_behavior' && (!is_string($value) || !preg_match('/^(?:demote|delete)$/', $value)))
+					$value = $default_options[$key];
+
+				//260916.2306 Keep bootstrap validation side-effect free; role existence is checked later when the EOT demotion role is resolved, after s2Member is fully loaded.
+				else if($key === 'eot_demotion_to_role' && (!is_string($value) || !$value || in_array($value, array('administrator', 'editor', 'author', 'contributor', 's2member_pending_deletion'), TRUE)))
+					$value = $default_options[$key];
+
+				else if($key === 'eot_demotion_from' && (!is_string($value) || !preg_match('/^(?:s2member_level|all)$/', $value)))
 					$value = $default_options[$key];
 
 				else if($key === 'eot_time_ext_behavior' && (!is_string($value) || !preg_match('/^(?:extend|reset)$/', $value)))

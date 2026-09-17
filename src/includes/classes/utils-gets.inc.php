@@ -131,10 +131,21 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			if(is_array($post_ids = $wpdb->get_col("SELECT `ID` FROM `".$wpdb->posts."` WHERE `post_status` = 'publish' AND ".(($post_type) ? "`post_type` = '".esc_sql((string)$post_type)."'" : "`post_type` NOT IN('page','attachment','nav_menu_item','revision')"))))
-				$post_ids = c_ws_plugin__s2member_utils_arrays::force_integers($post_ids);
+			//260914.1643 Query-level access checks can request the same published Post IDs many times per page load, so cache each Posts-table/Post-Type combination for this request; including the table keeps switched Multisite blogs isolated.
+			static $_post_ids = array(), $_post_changes = array();
+			$_cache_key = $wpdb->posts.'|'.(string)$post_type;
 
-			return (!empty($post_ids) && is_array($post_ids)) ? array_unique($post_ids) : array();
+			//260914.1643 Refresh after normal WordPress post mutations so a write followed by another access check in the same request cannot reuse stale published Post IDs.
+			$_changes = did_action('save_post') + did_action('deleted_post');
+			if(!isset($_post_ids[$_cache_key]) || !isset($_post_changes[$_cache_key]) || $_post_changes[$_cache_key] !== $_changes)
+			{
+				$post_ids = $wpdb->get_col("SELECT `ID` FROM `".$wpdb->posts."` WHERE `post_status` = 'publish' AND ".(($post_type) ? "`post_type` = '".esc_sql((string)$post_type)."'" : "`post_type` NOT IN('page','attachment','nav_menu_item','revision')"));
+				if(is_array($post_ids)) $post_ids = c_ws_plugin__s2member_utils_arrays::force_integers($post_ids);
+
+				$_post_ids[$_cache_key] = (!empty($post_ids) && is_array($post_ids)) ? array_unique($post_ids) : array();
+				$_post_changes[$_cache_key] = $_changes;
+			}
+			return $_post_ids[$_cache_key];
 		}
 
 		/**
@@ -177,10 +188,21 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			if(is_array($page_ids = $wpdb->get_col("SELECT `ID` FROM `".$wpdb->posts."` WHERE `post_status` = 'publish' AND `post_type` = 'page'")))
-				$page_ids = c_ws_plugin__s2member_utils_arrays::force_integers($page_ids);
+			//260914.1643 Query-level access checks can request the complete published Page-ID list repeatedly in one page load, so cache it per Posts table for this request; the table key also isolates switched Multisite blogs.
+			static $_page_ids = array(), $_post_changes = array();
+			$_cache_key = $wpdb->posts;
 
-			return (!empty($page_ids) && is_array($page_ids)) ? array_unique($page_ids) : array();
+			//260914.1643 Refresh after normal WordPress post mutations so Pages created, deleted, or changed earlier in this request are reflected by later access checks.
+			$_changes = did_action('save_post') + did_action('deleted_post');
+			if(!isset($_page_ids[$_cache_key]) || !isset($_post_changes[$_cache_key]) || $_post_changes[$_cache_key] !== $_changes)
+			{
+				$page_ids = $wpdb->get_col("SELECT `ID` FROM `".$wpdb->posts."` WHERE `post_status` = 'publish' AND `post_type` = 'page'");
+				if(is_array($page_ids)) $page_ids = c_ws_plugin__s2member_utils_arrays::force_integers($page_ids);
+
+				$_page_ids[$_cache_key] = (!empty($page_ids) && is_array($page_ids)) ? array_unique($page_ids) : array();
+				$_post_changes[$_cache_key] = $_changes;
+			}
+			return $_page_ids[$_cache_key];
 		}
 
 		/**
@@ -220,7 +242,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			static $_results = array(), $_meta_changes = array();
+			//260914.2132 Keep both the SQL rows and their lazily unserialized CCAP requirements for this request. The parsed cache is reset whenever post-meta changes invalidate the SQL rows, and anonymous visitors never pay the unserialization cost.
+			static $_results = array(), $_result_ccaps = array(), $_meta_changes = array();
 			$_cache_key = $wpdb->posts.'|'.$wpdb->postmeta;
 			$_changes = did_action('added_post_meta') + did_action('updated_post_meta') + did_action('deleted_post_meta');
 			if(!isset($_results[$_cache_key]) || !isset($_meta_changes[$_cache_key]) || $_meta_changes[$_cache_key] !== $_changes)
@@ -228,9 +251,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 				$_results[$_cache_key] = $wpdb->get_results("SELECT `".$wpdb->postmeta."`.`post_id`, `".$wpdb->postmeta."`.`meta_value`, `".$wpdb->posts."`.`post_type`".
 				                                              " FROM `".$wpdb->posts."`, `".$wpdb->postmeta."` WHERE `".$wpdb->posts."`.`ID` = `".$wpdb->postmeta."`.`post_id`".
 				                                              " AND `".$wpdb->postmeta."`.`meta_key` = 's2member_ccaps_req' AND `".$wpdb->postmeta."`.`meta_value` != ''");
+				$_result_ccaps[$_cache_key] = array();
 				$_meta_changes[$_cache_key] = $_changes;
 			}
-			$results = $_results[$_cache_key]; unset($_cache_key, $_changes); //260901 Request-local SQL cache.
+			$results = $_results[$_cache_key];
+			$result_ccaps = &$_result_ccaps[$_cache_key];
+			unset($_cache_key, $_changes); //260901 Request-local SQL cache.
 
 			if(is_array($results))
 			{
@@ -238,20 +264,31 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 				$bbpress_installed           = c_ws_plugin__s2member_utils_conds::bbp_is_installed(); // bbPress is installed?
 				$bbpress_forum_post_type     = $bbpress_installed ? bbp_get_forum_post_type() : ''; // Acquire the current post type for forums.
 				$bbpress_topic_post_type     = $bbpress_installed ? bbp_get_topic_post_type() : ''; // Acquire the current post type for topics.
+				//260914.2132 Cache each distinct CCAP decision only for this helper invocation; many protected Posts share the same CCAP, but a later query pass can still receive a different filtered capability result.
+				$ccap_access = array();
 
-				foreach($results as $r) // Now we need to check Custom Capabilities against ``$user``. If ``$user`` is a valid `WP_User` object, else all are unavailable.
+				foreach($results as $_result_index => $r) // Now we need to check Custom Capabilities against ``$user``. If ``$user`` is a valid `WP_User` object, else all are unavailable.
 				{
 					if(!is_object($user) || empty($user->ID)) // No ``$user`` object? Maybe not logged-in?.
 						$singular_ids[] = (int)$r->post_id; // It's NOT available. There is no ``$user``.
 
-					else if(is_array($ccaps = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($r->meta_value))) // Make sure we unserialize.
+					else
 					{
-						foreach($ccaps as $ccap) // Test for Custom Capability Restrictions now.
-							if(strlen($ccap) && !$user->has_cap('access_s2member_ccap_'.$ccap))
+						if(!array_key_exists($_result_index, $result_ccaps))
+							$result_ccaps[$_result_index] = c_ws_plugin__s2member_utils_arrays::maybe_unserialize($r->meta_value);
+
+						if(is_array($ccaps = $result_ccaps[$_result_index]))
+						{
+							foreach($ccaps as $ccap) // Test for Custom Capability Restrictions now.
 							{
-								$singular_ids[] = (int)$r->post_id; // It's NOT available.
-								break; // Break now, no need to continue in this loop.
+								$ccap = (string)$ccap;
+								if(strlen($ccap) && !(isset($ccap_access[$ccap]) ? $ccap_access[$ccap] : ($ccap_access[$ccap] = (bool)$user->has_cap('access_s2member_ccap_'.$ccap))))
+								{
+									$singular_ids[] = (int)$r->post_id; // It's NOT available.
+									break; // Break now, no need to continue in this loop.
+								}
 							}
+						}
 					}
 					if($bbpress_restrictions_enable && $bbpress_installed && $r->post_type === $bbpress_forum_post_type)
 						if(!empty($singular_ids) && in_array((int)$r->post_id, $singular_ids, TRUE))
@@ -366,10 +403,37 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 		 */
 		public static function get_unavailable_singular_ids_with_sp($exclude_conflicts = FALSE)
 		{
-			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'] && is_array($_singular_ids = preg_split('/['."\r\n\t".'\s;,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'])))
-				foreach($_singular_ids as $_singular_id) // Now check access to this Singular, against the current Visitor, via read-only ``c_ws_plugin__s2member_sp_access::sp_access()``.
-					if(is_numeric($_singular_id) && !c_ws_plugin__s2member_sp_access::sp_access($_singular_id, 'read-only'))
+			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'])
+			{
+				//260915.0105 Parse/normalize configured Specific Post/Page IDs only once per distinct option value in this request; Alternative View filtering can call this helper many times on one page load.
+				static $_specific_ids_cache = array();
+				$_specific_ids = (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['specific_ids'];
+				if(!isset($_specific_ids_cache[$_specific_ids]))
+				{
+					$_specific_ids_cache[$_specific_ids] = array();
+					foreach((array)preg_split('/['."\r\n\t".'\s;,]+/', $_specific_ids) as $_specific_id)
+						if(is_numeric($_specific_id)) $_specific_ids_cache[$_specific_ids][] = (int)$_specific_id;
+					$_specific_ids_cache[$_specific_ids] = array_values(array_unique($_specific_ids_cache[$_specific_ids]));
+				}
+				$_singular_ids = $_specific_ids_cache[$_specific_ids];
+
+				//260915.0122 Most Alternative View requests have no Specific Access credential. Use WordPress's listener APIs instead of testing `$wp_filter` keys directly, because an empty retained hook object must not disable this fast path.
+				$_sp_access_customized = has_action('ws_plugin__s2member_before_sp_access')
+					|| has_filter('ws_plugin__s2member_sp_access_excluded')
+					|| has_filter('ws_plugin__s2member_sp_access_excluded_cap')
+					|| has_filter('ws_plugin__s2member_sp_access')
+					|| has_action('ws_plugin__s2member_before_sp_access_session')
+					|| has_filter('ws_plugin__s2member_sp_access_session');
+				$_sp_access_credential = !empty($_GET['s2member_sp_access']) || !empty($_COOKIE['s2member_sp_access']);
+
+				if(!$_sp_access_customized && !$_sp_access_credential)
+				{
+					if(!current_user_can('edit_posts')) $singular_ids = $_singular_ids;
+				}
+				else foreach($_singular_ids as $_singular_id) // A link/session or SP customization requires the established per-ID access routine.
+					if(!c_ws_plugin__s2member_sp_access::sp_access($_singular_id, 'read-only'))
 						$singular_ids[] = (int)$_singular_id;
+			}
 
 			if(!empty($singular_ids) && is_array($singular_ids) && $exclude_conflicts)
 			{
@@ -427,10 +491,25 @@ if(!class_exists('c_ws_plugin__s2member_utils_gets'))
 			/** @var wpdb $wpdb WordPress DB object instance. */
 			global $wpdb; // Global DB object reference.
 
-			if(!empty($terms) && is_array($terms) && is_array($singular_ids = $wpdb->get_col("SELECT `object_id` FROM `".$wpdb->term_relationships."` WHERE `term_taxonomy_id` IN (SELECT `term_taxonomy_id` FROM `".$wpdb->term_taxonomy."` WHERE `term_id` IN('".implode("','", $terms)."'))")))
-				$singular_ids = c_ws_plugin__s2member_utils_arrays::force_integers($singular_ids);
+			if(empty($terms) || !is_array($terms)) return array();
 
-			return (!empty($singular_ids) && is_array($singular_ids)) ? array_unique($singular_ids) : array();
+			//260914.1643 Term restrictions can request the same term-to-Singular lookup repeatedly in one page load. Normalize only the cache key so equivalent term sets share one result regardless of order or duplicates, while leaving the legacy SQL input unchanged.
+			static $_singular_ids = array(), $_term_changes = array();
+			$_cache_terms = array_values(array_unique(c_ws_plugin__s2member_utils_arrays::force_integers($terms)));
+			sort($_cache_terms, SORT_NUMERIC);
+			$_cache_key = $wpdb->term_relationships.'|'.$wpdb->term_taxonomy.'|'.implode(',', $_cache_terms);
+
+			//260914.1643 Refresh after normal WordPress object-term mutations so a relationship changed earlier in this request is visible to later access checks; table names in the key isolate switched Multisite blogs.
+			$_changes = did_action('set_object_terms') + did_action('deleted_term_relationships');
+			if(!isset($_singular_ids[$_cache_key]) || !isset($_term_changes[$_cache_key]) || $_term_changes[$_cache_key] !== $_changes)
+			{
+				$singular_ids = $wpdb->get_col("SELECT `object_id` FROM `".$wpdb->term_relationships."` WHERE `term_taxonomy_id` IN (SELECT `term_taxonomy_id` FROM `".$wpdb->term_taxonomy."` WHERE `term_id` IN('".implode("','", $terms)."'))");
+				if(is_array($singular_ids)) $singular_ids = c_ws_plugin__s2member_utils_arrays::force_integers($singular_ids);
+
+				$_singular_ids[$_cache_key] = (!empty($singular_ids) && is_array($singular_ids)) ? array_unique($singular_ids) : array();
+				$_term_changes[$_cache_key] = $_changes;
+			}
+			return $_singular_ids[$_cache_key];
 		}
 	}
 }

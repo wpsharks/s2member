@@ -134,6 +134,82 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 		}
 
 		/**
+		 * Displays shared End-of-Term demotion-role settings on gateway option pages.
+		 *
+		 * @package s2Member\Menu_Pages
+		 * @since 260916.2004
+		 *
+		 * @return null
+		 */
+		public static function eot_demotion_options()
+		{
+			$demotion_to_role = (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_demotion_to_role'];
+			$demotion_from = (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_demotion_from'];
+			$demotion_disabled = ($GLOBALS['WS_PLUGIN__']['s2member']['o']['membership_eot_behavior'] === 'delete');
+
+			//260917.0003 Keep Demote From/To visible but disabled when EOT behavior is Delete; JavaScript mirrors this immediately when the behavior selector changes.
+			echo '<tr class="ws-plugin--s2member-eot-demotion-option-row"'.(($demotion_disabled) ? ' style="opacity:0.5;"' : '').'>'."\n";
+			echo '<th><label for="ws-plugin--s2member-eot-demotion-from">Demote From:</label></th>'."\n";
+			echo '</tr>'."\n";
+			echo '<tr class="ws-plugin--s2member-eot-demotion-option-row"'.(($demotion_disabled) ? ' style="opacity:0.5;"' : '').'>'."\n";
+			echo '<td>'."\n";
+			echo '<select name="ws_plugin__s2member_eot_demotion_from" id="ws-plugin--s2member-eot-demotion-from"'.(($demotion_disabled) ? ' disabled="disabled"' : '').'>'."\n";
+			echo '<option value="s2member_level"'.(($demotion_from === 's2member_level') ? ' selected="selected"' : '').'>s2Member Level role (preserve other WordPress roles)</option>'."\n";
+			echo '<option value="all"'.(($demotion_from === 'all') ? ' selected="selected"' : '').'>All WordPress roles (legacy behavior)</option>'."\n";
+			echo '</select><br />'."\n";
+			echo '<em>These settings are used only when Membership End-of-Term Behavior is set to Demote.</em><br /><br />'."\n";
+			//260916.2004 Explain the fresh-install behavior, legacy compatibility, and capability caveat without treating Subscriber/Level 0 as a role users are demoted from.
+			echo '<em>New installations remove only the user\'s <code>s2member_levelN</code> role at EOT and preserve other WordPress roles; upgraded installations retain the legacy all-role replacement until you change this setting. Preserved roles also preserve their existing capabilities, so roles such as Editor/Author/Contributor or custom roles may continue to grant s2Member access.</em>'."\n";
+			echo '</td>'."\n";
+			echo '</tr>'."\n";
+			echo '<tr class="ws-plugin--s2member-eot-demotion-option-row"'.(($demotion_disabled) ? ' style="opacity:0.5;"' : '').'>'."\n";
+			echo '<th><label for="ws-plugin--s2member-eot-demotion-to-role">Demote To Role:</label></th>'."\n";
+			echo '</tr>'."\n";
+			echo '<tr class="ws-plugin--s2member-eot-demotion-option-row"'.(($demotion_disabled) ? ' style="opacity:0.5;"' : '').'>'."\n";
+			echo '<td>'."\n";
+			//260916.2345 Group Subscriber and s2Member Levels first, then list other registered roles by slug so larger role lists stay predictable and easier to scan.
+			global $wp_roles;
+			if(!is_object($wp_roles))
+				$wp_roles = new WP_Roles();
+			$level_roles = $other_roles = array();
+			foreach((array)$wp_roles->roles as $role_slug => $role_data)
+			{
+				if(in_array($role_slug, array('administrator', 'editor', 'author', 'contributor', 's2member_pending_deletion'), TRUE))
+					continue;
+				$role_name = !empty($role_data['name']) ? translate_user_role($role_data['name']) : $role_slug;
+				if($role_slug === 'subscriber')
+					$level_roles[0] = array($role_slug, $role_name);
+				else if(preg_match('/^s2member_level([1-9][0-9]*)$/', $role_slug, $m))
+					$level_roles[(int)$m[1]] = array($role_slug, $role_name);
+				else
+					$other_roles[$role_slug] = $role_name;
+			}
+			ksort($level_roles, SORT_NUMERIC);
+			ksort($other_roles, SORT_STRING);
+			echo '<select name="ws_plugin__s2member_eot_demotion_to_role" id="ws-plugin--s2member-eot-demotion-to-role"'.(($demotion_disabled) ? ' disabled="disabled"' : '').'>'."\n";
+			if($level_roles)
+			{
+				echo '<optgroup label="s2Member Levels">'."\n";
+				foreach($level_roles as $role)
+					echo '<option value="'.esc_attr($role[0]).'"'.(($demotion_to_role === $role[0]) ? ' selected="selected"' : '').'>'.esc_html($role[1]).' ('.esc_html($role[0]).')</option>'."\n";
+				echo '</optgroup>'."\n";
+			}
+			if($other_roles)
+			{
+				echo '<optgroup label="Other Roles">'."\n";
+				foreach($other_roles as $role_slug => $role_name)
+					echo '<option value="'.esc_attr($role_slug).'"'.(($demotion_to_role === $role_slug) ? ' selected="selected"' : '').'>'.esc_html($role_name).' ('.esc_html($role_slug).')</option>'."\n";
+				echo '</optgroup>'."\n";
+			}
+			echo '</select><br />'."\n";
+			echo '<em>Select the WordPress role to assign when s2Member demotes a member at EOT. Subscriber is the default.</em><br /><br />'."\n";
+			echo '<em>WordPress\'s elevated default roles and s2Member\'s Pending Deletion role are intentionally not available here. Any role selected here keeps the capabilities assigned to it. If those capabilities grant s2Member access, the member may still be able to access protected content after EOT.</em><br /><br />'."\n";
+			echo '<em>Developers who need a role not available here can use <code>ws_plugin__s2member_force_demotion_role</code>; see <a href="https://s2member.com/kb-article/how-do-i-specify-the-demotion-role-upon-eot/" target="_blank" rel="noopener noreferrer external">How do I specify the demotion role upon EOT?</a></em>'."\n";
+			echo '</td>'."\n";
+			echo '</tr>'."\n";
+		}
+
+		/**
 		 * Adds option menus / sub-menus.
 		 *
 		 * @package s2Member\Menu_Pages

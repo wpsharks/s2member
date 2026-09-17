@@ -64,11 +64,8 @@ if(!class_exists("c_ws_plugin__s2member_tracking_codes"))
 					do_action("ws_plugin__s2member_during_display_signup_tracking_codes", get_defined_vars());
 					unset($__refs, $__v);
 
-					if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
-						echo do_shortcode($code)."\n"; // No PHP here.
-
-					else // Otherwise, safe to allow PHP code.
-						echo do_shortcode(c_ws_plugin__s2member_utilities::evl($code));
+					$code = (string)apply_filters("ws_plugin__s2member_signup_tracking_codes", $code, get_defined_vars());
+					echo do_shortcode($code)."\n";
 				}
 			}
 			do_action("ws_plugin__s2member_after_display_signup_tracking_codes", get_defined_vars());
@@ -109,11 +106,8 @@ if(!class_exists("c_ws_plugin__s2member_tracking_codes"))
 					do_action("ws_plugin__s2member_during_display_modification_tracking_codes", get_defined_vars());
 					unset($__refs, $__v);
 
-					if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
-						echo do_shortcode($code)."\n"; // No PHP here.
-
-					else // Otherwise, safe to allow PHP code.
-						echo do_shortcode(c_ws_plugin__s2member_utilities::evl($code));
+					$code = (string)apply_filters("ws_plugin__s2member_modification_tracking_codes", $code, get_defined_vars());
+					echo do_shortcode($code)."\n";
 				}
 			}
 			do_action("ws_plugin__s2member_after_display_modification_tracking_codes", get_defined_vars());
@@ -154,11 +148,8 @@ if(!class_exists("c_ws_plugin__s2member_tracking_codes"))
 					do_action("ws_plugin__s2member_during_display_ccap_tracking_codes", get_defined_vars());
 					unset($__refs, $__v);
 
-					if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
-						echo do_shortcode($code)."\n"; // No PHP here.
-
-					else // Otherwise, safe to allow PHP code.
-						echo do_shortcode(c_ws_plugin__s2member_utilities::evl($code));
+					$code = (string)apply_filters("ws_plugin__s2member_ccap_tracking_codes", $code, get_defined_vars());
+					echo do_shortcode($code)."\n";
 				}
 			}
 			do_action("ws_plugin__s2member_after_display_ccap_tracking_codes", get_defined_vars());
@@ -197,11 +188,8 @@ if(!class_exists("c_ws_plugin__s2member_tracking_codes"))
 					do_action("ws_plugin__s2member_during_display_sp_tracking_codes", get_defined_vars());
 					unset($__refs, $__v);
 
-					if(is_multisite() && c_ws_plugin__s2member_utils_conds::is_multisite_farm() && !is_main_site())
-						echo $code."\n"; // No PHP here.
-
-					else // Otherwise, it's safe to allow PHP code.
-						eval("?>".$code);
+					$code = (string)apply_filters("ws_plugin__s2member_sp_tracking_codes", $code, get_defined_vars());
+					echo $code."\n";
 				}
 			}
 			do_action("ws_plugin__s2member_after_display_sp_tracking_codes", get_defined_vars());

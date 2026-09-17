@@ -288,11 +288,17 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_down_ops"))
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_amazon_s3_files_bucket_region" id="ws-plugin--s2member-amazon-s3-files-bucket-region">'."\n";
 				echo '<option value="us-east-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-east-1') ? ' selected="selected"' : '').'>us-east-1</option>'."\n";
+				//260916.2327 Include commercial AWS regions launched before the 2019 regional-endpoint cutoff that remain compatible with s2Member's legacy S3 endpoint handling.
+				echo '<option value="us-east-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-east-2') ? ' selected="selected"' : '').'>us-east-2</option>'."\n";
 				echo '<option value="us-west-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-west-1') ? ' selected="selected"' : '').'>us-west-1</option>'."\n";
 				echo '<option value="us-west-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'us-west-2') ? ' selected="selected"' : '').'>us-west-2</option>'."\n";
+				echo '<option value="ca-central-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ca-central-1') ? ' selected="selected"' : '').'>ca-central-1</option>'."\n";
 				echo '<option value="eu-west-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-west-1') ? ' selected="selected"' : '').'>eu-west-1</option>'."\n";
 				echo '<option value="eu-west-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-west-2') ? ' selected="selected"' : '').'>eu-west-2</option>'."\n";
+				echo '<option value="eu-west-3"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-west-3') ? ' selected="selected"' : '').'>eu-west-3</option>'."\n";
 				echo '<option value="eu-central-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-central-1') ? ' selected="selected"' : '').'>eu-central-1</option>'."\n";
+				echo '<option value="eu-north-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'eu-north-1') ? ' selected="selected"' : '').'>eu-north-1</option>'."\n";
+				echo '<option value="ap-south-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-south-1') ? ' selected="selected"' : '').'>ap-south-1</option>'."\n";
 				echo '<option value="ap-southeast-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-southeast-1') ? ' selected="selected"' : '').'>ap-southeast-1</option>'."\n";
 				echo '<option value="ap-southeast-2"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-southeast-2') ? ' selected="selected"' : '').'>ap-southeast-2</option>'."\n";
 				echo '<option value="ap-northeast-1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["amazon_s3_files_bucket_region"] === 'ap-northeast-1') ? ' selected="selected"' : '').'>ap-northeast-1</option>'."\n";

@@ -135,8 +135,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										do_action('ws_plugin__s2member_during_collective_eots', $user_id, get_defined_vars(), $eot_del_type, 'modification');
 										unset($__refs, $__v); // Housekeeping.
 
-										if($existing_role !== $demotion_role) // Only if NOT the existing Role.
-											$user->set_role($demotion_role); // Give User the demotion Role.
+										//260916.2004 Apply the same configurable Demote From behavior as scheduled Auto-EOT processing.
+										$eot_membership_role = c_ws_plugin__s2member_auto_eots::demote_user_roles($user, $demotion_role);
 
 										if(apply_filters('ws_plugin__s2member_remove_ccaps_during_eot_events', (bool)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eots_remove_ccaps'] || $is_refund_or_reversal, get_defined_vars()))
 											foreach($user->allcaps as $cap => $cap_enabled)
@@ -176,7 +176,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										c_ws_plugin__s2member_auto_eots::record_eot_history($user_id, array(
 											'eot_time'         => $last_auto_eot_time,
 											'processed_at'     => $processed_at,
-											'original_role'    => $existing_role,
+											'original_role'    => $eot_membership_role,
 											'destination_role' => $demotion_role,
 											'removed_ccaps'    => $removed_ccaps,
 											'subscr_gateway'   => $paypal['subscr_gateway'],

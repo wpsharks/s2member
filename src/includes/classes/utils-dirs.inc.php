@@ -51,10 +51,10 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 				* @param array $legacy_filenames Exact legacy filenames allowed automatically in the content root or active theme roots.
 				* @param string $shortcode Shortcode name for administrator notices.
 				* @param int $post_id Post/Page ID where the template was detected, when available.
-				* @param bool $enforce When true, return only approved templates. During the transition period this defaults to false.
+				* @param bool $enforce When true, return only approved templates. Defaults to enforcement.
 				* @return string Canonical template path, or an empty string if invalid or blocked.
 				*/
-				public static function shortcode_template ($template = FALSE, $legacy_filenames = array(), $shortcode = '', $post_id = 0, $enforce = FALSE)
+				public static function shortcode_template ($template = FALSE, $legacy_filenames = array(), $shortcode = '', $post_id = 0, $enforce = TRUE)
 					{
 						$template = c_ws_plugin__s2member_utils_dirs::n_dir_seps (trim (str_replace (chr (0), '', (string)$template)));
 						if (!$template)
@@ -171,7 +171,7 @@ if (!class_exists ("c_ws_plugin__s2member_utils_dirs"))
 						if ($_relative_path && $shortcode)
 							do_action ('ws_plugin__s2member_shortcode_template_unapproved', $_relative_path, $shortcode, (int)$post_id);
 
-						// During the transition period unapproved templates still work; enforcement can later be enabled centrally.
+						//260915.0134 Block unapproved custom templates; callers retain their existing standard-template fallback.
 						return ($enforce) ? '' : $candidate;
 					}
 				/**

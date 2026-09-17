@@ -114,8 +114,8 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 								break;
 							}
 					wp_enqueue_style('ws-plugin--s2member', $dynamic_css_url, array(), c_ws_plugin__s2member_utilities::ver_checksum(), 'all');
-					//260911.1806 Preserve the failed preferred static asset and cause server-side so Last issue can remain specific after delivery recovers.
-					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($static_css_failed_id, 'css', $dynamic_css_url, $dynamic_css_delivery, 0, (!empty($static['error'])) ? (string)$static['error'] : '');
+					//260913.2001 Preserve static-route context server-side; compatibility-required Dynamic delivery stays Healthy, while real fallback retains its specific Last issue cause.
+					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($static_css_failed_id, 'css', $dynamic_css_url, $dynamic_css_delivery, 0, (!empty($static['error'])) ? (string)$static['error'] : '', !empty($static['dynamic_required']));
 				}
 
 				//260903.1918 Static CSS keeps Framework/Pro files separate by default, with optional combining; any incompatible hook/build failure retains the single legacy dynamic response.
@@ -181,8 +181,8 @@ if(!class_exists('c_ws_plugin__s2member_css_js_themes'))
 								break;
 							}
 					wp_enqueue_script('ws-plugin--s2member', $dynamic_js_url, array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum(), TRUE);
-					//260911.1806 Preserve the failed preferred static asset and cause server-side so Last issue can remain specific after delivery recovers.
-					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($static_js_failed_id, 'js', $dynamic_js_url, $dynamic_js_delivery, 0, (!empty($static['error'])) ? (string)$static['error'] : '');
+					//260913.2001 Preserve static-route context server-side; compatibility-required Dynamic delivery stays Healthy, while real fallback retains its specific Last issue cause.
+					c_ws_plugin__s2member_utils_assets::register_page_asset_expectations($static_js_failed_id, 'js', $dynamic_js_url, $dynamic_js_delivery, 0, (!empty($static['error'])) ? (string)$static['error'] : '', !empty($static['dynamic_required']));
 				}
 
 				do_action('ws_plugin__s2member_during_add_js_w_globals', get_defined_vars());

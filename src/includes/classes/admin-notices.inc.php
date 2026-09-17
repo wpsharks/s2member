@@ -122,6 +122,45 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 		}
 
 		/**
+		 * Warns administrators when Pro is too old to contain the current Pro updater behavior.
+		 *
+		 * @package s2Member\Admin_Notices
+		 * @since 260917.0425
+		 *
+		 * @attaches-to `add_action('admin_notices');`
+		 * @attaches-to `add_action('user_admin_notices');`
+		 * @attaches-to `add_action('network_admin_notices');`
+		 */
+		public static function outdated_pro_notice()
+		{
+			if(!current_user_can('update_plugins') || !defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') || !defined('WS_PLUGIN__S2MEMBER_VERSION'))
+				return;
+
+			//260917.0425 v260913 introduced the current background Pro updater flow; Framework owns this fallback warning only for older Pro releases.
+			$_current_updater_version = '260913';
+			if(version_compare(WS_PLUGIN__S2MEMBER_PRO_VERSION, $_current_updater_version, '>=') || !version_compare(WS_PLUGIN__S2MEMBER_PRO_VERSION, WS_PLUGIN__S2MEMBER_VERSION, '<'))
+				return;
+
+			$_account_url = 'https://s2member.com/account/';
+			//260917.2113 s2Member versions begin with yymmdd; show the installed Pro version's approximate age so administrators can immediately see how far behind it is.
+			$_pro_release_age = '';
+			if(preg_match('/^(\d{2})(\d{2})(\d{2})/', WS_PLUGIN__S2MEMBER_PRO_VERSION, $_pro_version_parts))
+			{
+				$_pro_release_timestamp = mktime(0, 0, 0, (int) $_pro_version_parts[2], (int) $_pro_version_parts[3], 2000 + (int) $_pro_version_parts[1]);
+				if($_pro_release_timestamp)
+					$_pro_release_age = human_time_diff($_pro_release_timestamp, current_time('timestamp'));
+			}
+
+			//260917.1937 Keep this urgent notice compact and skimmable: short paragraphs, prominent version age/security risk, and a clearly separated update action.
+			$_message = '<p style="line-height:1.3em; margin:.3em 0;"><strong>Your s2Member Pro v'.esc_html(WS_PLUGIN__S2MEMBER_PRO_VERSION).($_pro_release_age ? ' is '.esc_html($_pro_release_age).' old and' : '').' is missing important security fixes</strong>.</p>';
+			$_message .= '<p style="line-height:1.3em; margin:.3em 0;"><em>Please install the latest ZIP from WP Admin &gt; Plugins &gt; Add Plugin &gt; Upload Plugin.</em></p>';
+			$_update_button = '<a class="button button-primary" style="margin-top:.3em; background:darkred; border-color:darkred;" href="'.esc_url($_account_url).'" target="_blank" rel="external noopener">Download the Latest s2Member Pro Now</a>';
+
+			//260917.1937 Keep this Framework-owned warning persistent and red; include the action in the message instead of the helper's review slot so no extra <br> is inserted before it.
+			c_ws_plugin__s2member_admin_notices::display_security_notice($_message.$_update_button, '', array(), '', 'notice-error');
+		}
+
+		/**
 		 * Displays a branded s2Member security notice.
 		 *
 		 * @package s2Member\Admin_Notices
@@ -131,14 +170,18 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 		 * @param string $review Review prompt shown above the items.
 		 * @param array $items Notice items, with safe HTML allowed.
 		 * @param string $dismiss_url Optional dismissal URL.
+		 * @param string $notice_class Optional WordPress notice severity class.
 		 */
-		public static function display_security_notice($message = '', $review = '', $items = array(), $dismiss_url = '')
+		public static function display_security_notice($message = '', $review = '', $items = array(), $dismiss_url = '', $notice_class = 'notice-warning')
 		{
 			$message = trim((string)$message);
 			$review = trim((string)$review);
 			$items = (array)$items;
 			if(!$message)
 				return;
+
+			//260917.0513 Preserve the existing warning style by default, while allowing especially urgent security notices to use WordPress's stronger error styling.
+			$_notice_class = (($notice_class === 'notice-error') ? 'notice notice-error' : 'notice notice-warning');
 
 			$_items = array();
 			foreach($items as $_item)
@@ -147,7 +190,10 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 
 			$_logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
 			$_dismiss = (($dismiss_url !== '') ? '<a href="'.esc_url($dismiss_url).'" title="Dismiss until detected again" style="position:absolute; top:8px; right:10px; text-decoration:none;">Dismiss</a>' : '');
-			echo '<div class="notice notice-warning" style="position:relative; margin:0 0 15px 2px !important; padding:8px 60px 8px 8px !important;">'.$_dismiss.'<table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;"><strong>s2Member Security Notice</strong><br />'.wp_kses_post($message).(($review !== '') ? '<br />'.wp_kses_post($review) : '').(($_items) ? '<br />'.implode('<br />', $_items) : '').'</td></tr></table></div>';
+
+			//260917.1937 Give urgent red security notices a stronger heading without changing the existing presentation of normal yellow security notices.
+			$_title = (($notice_class === 'notice-error') ? '<h2 style="margin:0 0 .3em; color:darkred;">s2Member Security Notice</h2>' : '<strong>s2Member Security Notice</strong><br />');
+			echo '<div class="'.esc_attr($_notice_class).'" style="position:relative; margin:0 0 15px 2px !important; padding:8px 60px 8px 8px !important;">'.$_dismiss.'<table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;">'.$_title.wp_kses_post($message).(($review !== '') ? '<br />'.wp_kses_post($review) : '').(($_items) ? '<br />'.implode('<br />', $_items) : '').'</td></tr></table></div>';
 		}
 
 		/**
@@ -252,8 +298,8 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 
 			$_settings_url = add_query_arg('s2member-open-panel', 'shortcode-user-fields-whitelist', admin_url('/admin.php?page=ws-plugin--s2member-gen-ops')).'#ws-plugin--s2member-shortcode-user-fields-whitelist';
 			$_dismiss_url = wp_nonce_url(add_query_arg('s2member-dismiss-shortcode-user-fields-notice', '1', admin_url()), 's2member-dismiss-shortcode-user-fields-notice');
-			$_message = 'Some s2Member shortcodes use user fields that are not in <em><a href="'.esc_url($_settings_url).'">s2Member → General Options → Shortcode User Fields Whitelist</a></em>';
-			c_ws_plugin__s2member_admin_notices::display_security_notice($_message, 'Review the fields below and allow the ones that are okay for other users to see:', $_field_items, $_dismiss_url);
+			$_message = 'Some s2Member shortcodes attempted to display user fields from other accounts that are not in <em><a href="'.esc_url($_settings_url).'">s2Member → General Options → Shortcode User Fields Whitelist</a></em>. Those cross-user field values were blocked.';
+			c_ws_plugin__s2member_admin_notices::display_security_notice($_message, 'Review the blocked fields below and allow the ones that are okay for other users to see:', $_field_items, $_dismiss_url);
 		}
 
 		/**
@@ -285,7 +331,7 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 					//250510 Fixed for PHP 8.1+: safely normalize on_pages before foreach
 					$notice = (array)$notice;
 					$notice['on_pages'] = empty($notice['on_pages']) ? array('*') : (array)$notice['on_pages'];
-					foreach($notice['on_pages'] as $page) 
+					foreach($notice['on_pages'] as $page)
 					{
 						if(!preg_match('/^(.+?)\:/', $page)) // NO prefix?
 							$page = 'blog:'.ltrim($page, ':'); // `blog:`

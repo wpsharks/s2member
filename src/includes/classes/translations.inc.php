@@ -155,7 +155,8 @@ if(!class_exists("c_ws_plugin__s2member_translations"))
 					}
 				}
 			}
-			else if((isset ($s["is_bp_blog_creation"]) && $s["is_bp_blog_creation"]) || (!isset ($s["is_bp_blog_creation"]) && ($s["is_bp_blog_creation"] = (c_ws_plugin__s2member_utils_conds::bp_is_installed() && bp_is_create_blog()) ? TRUE : FALSE)))
+			//260917.0727 Defer caching BuddyPress blog-creation state until bp_is_create_blog() exists; s2Member-Only can detect BuddyPress before that helper finishes loading.
+			else if((isset ($s["is_bp_blog_creation"]) && $s["is_bp_blog_creation"]) || (!isset ($s["is_bp_blog_creation"]) && function_exists('bp_is_create_blog') && ($s["is_bp_blog_creation"] = (c_ws_plugin__s2member_utils_conds::bp_is_installed() && bp_is_create_blog()) ? TRUE : FALSE)))
 			{
 				if($original === "If you&#8217;re not going to use a great domain, leave it for a new user. Now have at it!")
 				{

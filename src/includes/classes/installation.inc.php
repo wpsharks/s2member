@@ -65,10 +65,23 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 				if(!is_file($htaccess = $logs_dir.'/.htaccess') || !apply_filters('ws_plugin__s2member_preserve_logs_dir_htaccess', !is_writable($logs_dir.'/.htaccess'), get_defined_vars()))
 					file_put_contents($htaccess, trim(c_ws_plugin__s2member_utilities::evl(file_get_contents($GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir_htaccess']))));
 
+			//260916.2137 Detect a genuinely fresh activation before creating the options row; missing options on any prior installation must retain legacy EOT demotion behavior.
+			$fresh_install = !get_option('ws_plugin__s2member_activated_version') && !is_array(get_option('ws_plugin__s2member_options'));
+
 			(!is_array(get_option('ws_plugin__s2member_cache'))) ? update_option('ws_plugin__s2member_cache', array()) : NULL;
 			(!is_array(get_option('ws_plugin__s2member_notices'))) ? update_option('ws_plugin__s2member_notices', array()) : NULL;
 			(!is_array(get_option('ws_plugin__s2member_options'))) ? update_option('ws_plugin__s2member_options', array()) : NULL;
 			(!is_numeric(get_option('ws_plugin__s2member_configured'))) ? update_option('ws_plugin__s2member_configured', '0') : NULL;
+
+			$options = (array)get_option('ws_plugin__s2member_options');
+			if(!array_key_exists('eot_demotion_from', $options))
+			{
+				$options['eot_demotion_from'] = $fresh_install ? 's2member_level' : 'all';
+				update_option('ws_plugin__s2member_options', $options);
+				if(is_multisite() && is_main_site())
+					update_site_option('ws_plugin__s2member_options', $options);
+			}
+			unset($fresh_install, $options);
 
 			//260902.0420 A Framework activation/update invalidates cached Pro update availability; the next admin request will refresh it in the background.
 			if($reactivation_reason === '' || $reactivation_reason === 'version')

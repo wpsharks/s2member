@@ -208,7 +208,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				//260904.2014 Dynamic delivery applies independently of static delivery, so give its loader choice a separate section.
 				echo '<div id="ws-plugin--s2member-dynamic-asset-loader-section" class="ws-menu-page-section ws-plugin--s2member-dynamic-asset-loader-section">'."\n";
 				echo '<h3>Dynamic CSS/JS Loader</h3>'."\n";
-				echo '<p>When s2Member needs to generate CSS or JavaScript dynamically, this controls how that request is loaded.</p>'."\n";
+				echo '<p>When s2Member needs to generate CSS or JavaScript dynamically, this controls the preferred dynamic route. If Static CSS/JS Delivery is enabled but current hooks or configuration specifically require the normal WordPress environment, s2Member uses the Full WordPress Dynamic Loader for compatibility instead.</p>'."\n";
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
 
@@ -235,7 +235,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<div id="ws-plugin--s2member-static-assets" class="ws-menu-page-section ws-plugin--s2member-static-assets-section">'."\n";
 				echo '<h3>CSS/JS Delivery &amp; Optimization (Beta)</h3>'."\n";
 				echo '<p>These beta options build CSS and JavaScript files ahead of time under the WordPress uploads directory, so the web server can serve them directly without starting PHP and WordPress for each request. Framework and Pro files remain separate by default, with optional combining and minification for further optimization.</p>'."\n";
-				echo '<p><em>After enabling these options, test your membership, registration, profile, and payment pages. If a static file cannot be used, s2Member automatically uses the selected Dynamic CSS/JS Loader instead.</em></p>'."\n";
+				echo '<p><em>After enabling these options, test your membership, registration, profile, and payment pages. If static delivery cannot be used, s2Member switches to dynamic delivery automatically. Compatibility requirements that need normal WordPress hooks use the Full WordPress Dynamic Loader; Asset Health explains the active route and reason.</em></p>'."\n";
 
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
@@ -268,14 +268,16 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				$static_js_text = (isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js_text']) && $GLOBALS['WS_PLUGIN__']['s2member']['o']['static_js_text'] === 'page') ? 'page' : 'static';
 				$static_js_page_text_supported = c_ws_plugin__s2member_utils_assets::static_js_page_text_supported();
-				echo '<tr><th><label for="ws-plugin--s2member-static-js-text">JavaScript Text Delivery</label></th></tr>'."\n";
+				//260913.2140 Link Asset Health guidance to the full setting row and leave room above it so the setting label remains visible below the WordPress admin bar.
+				echo '<tr id="ws-plugin--s2member-static-js-text-setting" style="scroll-margin-top:64px;"><th><label for="ws-plugin--s2member-static-js-text">JavaScript Text Delivery</label></th></tr>'."\n";
 				echo '<tr><td>'."\n";
 				echo '<p style="margin-top:0;"><em>Some s2Member messages and labels are shown or updated by JavaScript—for example, form validation and password feedback—so JavaScript needs access to that text too.</em></p>'."\n";
 				echo '<select name="ws_plugin__s2member_static_js_text" id="ws-plugin--s2member-static-js-text">'."\n";
 				echo '<option value="static"'.(($static_js_text === 'static') ? ' selected="selected"' : '').'>Load JavaScript text with the static files</option>'."\n";
 				echo '<option value="page"'.(($static_js_text === 'page') ? ' selected="selected"' : '').((!$static_js_page_text_supported) ? ' disabled="disabled"' : '').'>Load JavaScript text with each WordPress page</option>'."\n";
 				echo '</select><br />'."\n";
-				echo '<em><strong>Static files:</strong> best for sites that use one language throughout; the text is cached with the generated JavaScript and does not add the larger text block to every page. <strong>WordPress page:</strong> use this for multilingual sites where the language can change between pages or visitors; the same external JavaScript can then be reused across languages. Personal/member details are always loaded with the page and are never stored in static files.</em>'."\n";
+				//260913.2111 Explain that page-loaded text can also preserve Static JS when request-specific values would otherwise require Dynamic delivery.
+				echo '<em><strong>Static files:</strong> best for sites that use one language throughout; the text is cached with the generated JavaScript and does not add the larger text block to every page. <strong>WordPress page:</strong> use this for multilingual sites or when page-specific JavaScript values vary by request; those values stay with the page so the same external JavaScript can remain static whenever no other compatibility requirement needs Dynamic delivery. Personal/member details are always loaded with the page and are never stored in static files.</em>'."\n";
 				if(!$static_js_page_text_supported)
 					echo '<p class="ws-menu-page-error" style="margin:.75em 0 0;"><em><strong>Load with each WordPress page is unavailable:</strong> update s2Member Pro to a version that supports page-loaded JavaScript text. If your site needs different JavaScript text between languages before updating Pro, set Static JS Delivery to No so WordPress generates the JavaScript dynamically.</em></p>'."\n";
 				echo '</td></tr>'."\n";
@@ -431,7 +433,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 					if($_asset_health_pending || $_asset_health_not_generated)
 						$asset_health_pending_rebuild = TRUE; //260911.1924 Both neutral waiting states benefit from the shared automatic-rebuild explanation.
 					//260911.1924 A Pending rebuild URL names the previous generation, so hiding [open] avoids implying that it is the asset waiting to be created.
-					echo '<tr><th scope="row">'.esc_html($_asset_health_row['label']).':</th><td><span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($_asset_health_light).'" style="margin-left:0; margin-right:.3em;" role="img" aria-label="'.esc_attr($_asset_health_light_label).'"></span>'.esc_html($_asset_health_value).((!$_asset_health_pending && $_asset_health_url !== '') ? '<span style="margin-left:.3em;">[<a href="'.esc_url($_asset_health_url).'" target="_blank" rel="noopener noreferrer">open</a>]</span>' : '').((!$_asset_health_pending && $_asset_health_row['status'] !== 'healthy' && (string)$_asset_health_row['detail'] !== '') ? '<br />'.wp_kses_post($_asset_health_row['detail']) : '').'</td></tr>'."\n";
+					echo '<tr><th scope="row">'.esc_html($_asset_health_row['label']).':</th><td><span class="ws-plugin--s2member-status-light ws-plugin--s2member-status-light-'.esc_attr($_asset_health_light).'" style="margin-left:0; margin-right:.3em;" role="img" aria-label="'.esc_attr($_asset_health_light_label).'"></span>'.esc_html($_asset_health_value).((!$_asset_health_pending && $_asset_health_url !== '') ? '<span style="margin-left:.3em;">[<a href="'.esc_url($_asset_health_url).'" target="_blank" rel="noopener noreferrer">open</a>]</span>' : '').((!$_asset_health_pending && ($_asset_health_row['status'] !== 'healthy' || $_asset_health_delivery === 'Dynamic required') && (string)$_asset_health_row['detail'] !== '') ? '<br /><em>'.wp_kses_post($_asset_health_row['detail']).'</em>' : '').'</td></tr>'."\n";
 				}
 				echo '<tr><th scope="row">Last generation:</th><td>'.esc_html($asset_health_last_generation_label).'</td></tr>'."\n";
 				echo '<tr><th scope="row">Last trusted check:</th><td>'.esc_html($asset_health_last_check_label).'</td></tr>'."\n";
@@ -847,7 +849,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ?
 					'<div class="ws-menu-page-hr"></div>'."\n".
-					'<p style="margin:0;"><strong>PHP Code:</strong> It is also possible to use PHP tags—optional (for developers). If you use PHP tags, please run a test email with <code>&lt;?php print_r(get_defined_vars()); ?&gt;</code>. This will give you a full list of all PHP variables available to you in this email. The <code>$user</code> variable is the most important one. It\'s an instance of the <a href="https://s2member.com/r/wordpress-codex-wp_user/" target="_blank" rel="external"><code>WP_User</code></a> class (e.g., <code>$user->ID</code>, <code>$user->has_cap()</code>, etc). Please remember that emails are sent in plain text format.</p>'."\n"
+					'<p style="margin:0;"><strong>Advanced Customization:</strong> Further customization is possible with the <code>ws_plugin__s2member_welcome_email_sbj</code> and <code>ws_plugin__s2member_welcome_email_msg</code> filters from a plugin or theme.</p>'."\n"
 					: '';
 				echo '</td>'."\n";
 
@@ -956,7 +958,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ?
 					'<div class="ws-menu-page-hr"></div>'."\n".
-					'<p style="margin:0;"><strong>PHP Code:</strong> It is also possible to use PHP tags—optional (for developers). If you use PHP tags, please run a test email with <code>&lt;?php print_r(get_defined_vars()); ?&gt;</code>. This will give you a full list of all PHP variables available to you in this email. The <code>$user</code> variable is the most important one. It\'s an instance of the <a href="https://s2member.com/r/wordpress-codex-wp_user/" target="_blank" rel="external"><code>WP_User</code></a> class (e.g., <code>$user->ID</code>, <code>$user->has_cap()</code>, etc). Please remember that emails are sent in plain text format.</p>'."\n"
+					'<p style="margin:0;"><strong>Advanced Customization:</strong> Further customization of the recipients, subject, and message is possible with the <code>ws_plugin__s2member_admin_new_user_email_recipients</code>, <code>ws_plugin__s2member_admin_new_user_email_sbj</code>, and <code>ws_plugin__s2member_admin_new_user_email_msg</code> filters from a plugin or theme.</p>'."\n"
 					: '';
 				echo '</td>'."\n";
 
@@ -1712,7 +1714,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-sc-get-shortcode-section">'."\n";
 				echo '<h3>Shortcode User Fields Whitelist (optional)</h3>'."\n";
 				echo '<p>Enter a comma-separated list of user fields that these shortcodes may display from a user account other than the person currently viewing the page. This applies to <code>[s2Get user_id="" /]</code> and <code>[s2Member-List show_fields="" /]</code>.</p>'."\n";
-				echo '<p>Only allow fields that are appropriate to reveal about other user accounts wherever these shortcodes are used. If either shortcode tries to display an unlisted field from another user account, s2Member will show administrators a security notice with the fields that need review.</p>'."\n";
+				echo '<p>Only allow fields that are appropriate to reveal about other user accounts wherever these shortcodes are used. If either shortcode tries to display an unlisted field from another user account, that cross-user field value will be blocked and s2Member will show administrators a security notice with the fields that need review.</p>'."\n";
 				do_action("ws_plugin__s2member_during_gen_ops_page_during_left_sections_during_sc_s2get_shortcode", get_defined_vars());
 
 				echo '<table class="form-table">'."\n";
