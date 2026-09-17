@@ -203,6 +203,11 @@ add_action('admin_notices', 'c_ws_plugin__s2member_auto_eots::auto_eot_system_ad
 add_action('user_admin_notices', 'c_ws_plugin__s2member_auto_eots::auto_eot_system_admin_notice', 12);
 add_action('network_admin_notices', 'c_ws_plugin__s2member_auto_eots::auto_eot_system_admin_notice', 12);
 
+//260917.0425 Warn administrators from the current Framework when the installed Pro add-on predates the current Pro updater, without disabling otherwise-compatible Pro features.
+add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::outdated_pro_notice', 10);
+add_action('user_admin_notices', 'c_ws_plugin__s2member_admin_notices::outdated_pro_notice', 10);
+add_action('network_admin_notices', 'c_ws_plugin__s2member_admin_notices::outdated_pro_notice', 10);
+
 add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_notices');
 add_action('user_admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_notices');
 add_action('network_admin_notices', 'c_ws_plugin__s2member_admin_notices::admin_notices');

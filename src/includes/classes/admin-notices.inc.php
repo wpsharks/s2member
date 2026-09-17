@@ -122,6 +122,46 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 		}
 
 		/**
+		 * Warns administrators when Pro is too old to contain the current Pro updater behavior.
+		 *
+		 * @package s2Member\Admin_Notices
+		 * @since 260917.0425
+		 *
+		 * @attaches-to `add_action('admin_notices');`
+		 * @attaches-to `add_action('user_admin_notices');`
+		 * @attaches-to `add_action('network_admin_notices');`
+		 */
+		public static function outdated_pro_notice()
+		{
+			if(!current_user_can('update_plugins') || !defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') || !defined('WS_PLUGIN__S2MEMBER_VERSION'))
+				return;
+
+			//260917.0425 v260913 introduced the current background Pro updater flow; Framework owns this fallback warning only for older Pro releases.
+			$_current_updater_version = '260913';
+			if(version_compare(WS_PLUGIN__S2MEMBER_PRO_VERSION, $_current_updater_version, '>=') || !version_compare(WS_PLUGIN__S2MEMBER_PRO_VERSION, WS_PLUGIN__S2MEMBER_VERSION, '<'))
+				return;
+
+			$_account_url = 'https://s2member.com/account/';
+			//260917.0652 s2Member versions begin with yymmdd; show both the installed Pro release date and its approximate age so administrators can immediately see how far behind it is.
+			$_pro_release_date = $_pro_release_age = '';
+			if(preg_match('/^(\d{2})(\d{2})(\d{2})/', WS_PLUGIN__S2MEMBER_PRO_VERSION, $_pro_version_parts))
+			{
+				$_pro_release_timestamp = mktime(0, 0, 0, (int) $_pro_version_parts[2], (int) $_pro_version_parts[3], 2000 + (int) $_pro_version_parts[1]);
+				if($_pro_release_timestamp)
+				{
+					$_pro_release_date = date_i18n('F j, Y', $_pro_release_timestamp);
+					$_pro_release_age = human_time_diff($_pro_release_timestamp, current_time('timestamp'));
+				}
+			}
+
+			$_message = '<strong>s2Member Pro needs an update.</strong> This site is running s2Member Framework v'.esc_html(WS_PLUGIN__S2MEMBER_VERSION).' with Pro v'.esc_html(WS_PLUGIN__S2MEMBER_PRO_VERSION).($_pro_release_date ? ' (released '.esc_html($_pro_release_date).')' : '').'. This Pro version predates the current Pro Updater improvements and is missing important updates, including recent security fixes. Continuing to use an outdated Pro version could leave your site vulnerable to <strong>serious security issues</strong> that have already been fixed. Please update s2Member Pro now. You can download the latest Pro version from your s2Member Account, then install it from <em>WP Admin &gt; Plugins &gt; Add Plugin &gt; Upload Plugin</em> to keep Framework and Pro in sync and receive the security, compatibility, and reliability improvements'.($_pro_release_age ? ' released over the last '.esc_html($_pro_release_age) : '').'.';
+			$_update_button = '<a class="button button-primary" href="'.esc_url($_account_url).'" target="_blank" rel="external noopener">Update s2Member Pro Now</a>';
+
+			//260917.0516 Keep this Framework-owned Pro update warning persistent and red because older Pro versions may be missing serious security fixes.
+			c_ws_plugin__s2member_admin_notices::display_security_notice($_message, $_update_button, array(), '', 'notice-error');
+		}
+
+		/**
 		 * Displays a branded s2Member security notice.
 		 *
 		 * @package s2Member\Admin_Notices
@@ -131,14 +171,18 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 		 * @param string $review Review prompt shown above the items.
 		 * @param array $items Notice items, with safe HTML allowed.
 		 * @param string $dismiss_url Optional dismissal URL.
+		 * @param string $notice_class Optional WordPress notice severity class.
 		 */
-		public static function display_security_notice($message = '', $review = '', $items = array(), $dismiss_url = '')
+		public static function display_security_notice($message = '', $review = '', $items = array(), $dismiss_url = '', $notice_class = 'notice-warning')
 		{
 			$message = trim((string)$message);
 			$review = trim((string)$review);
 			$items = (array)$items;
 			if(!$message)
 				return;
+
+			//260917.0513 Preserve the existing warning style by default, while allowing especially urgent security notices to use WordPress's stronger error styling.
+			$_notice_class = (($notice_class === 'notice-error') ? 'notice notice-error' : 'notice notice-warning');
 
 			$_items = array();
 			foreach($items as $_item)
@@ -147,7 +191,7 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 
 			$_logo_url = $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/images/logo-square-big.png';
 			$_dismiss = (($dismiss_url !== '') ? '<a href="'.esc_url($dismiss_url).'" title="Dismiss until detected again" style="position:absolute; top:8px; right:10px; text-decoration:none;">Dismiss</a>' : '');
-			echo '<div class="notice notice-warning" style="position:relative; margin:0 0 15px 2px !important; padding:8px 60px 8px 8px !important;">'.$_dismiss.'<table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;"><strong>s2Member Security Notice</strong><br />'.wp_kses_post($message).(($review !== '') ? '<br />'.wp_kses_post($review) : '').(($_items) ? '<br />'.implode('<br />', $_items) : '').'</td></tr></table></div>';
+			echo '<div class="'.esc_attr($_notice_class).'" style="position:relative; margin:0 0 15px 2px !important; padding:8px 60px 8px 8px !important;">'.$_dismiss.'<table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;"><strong>s2Member Security Notice</strong><br />'.wp_kses_post($message).(($review !== '') ? '<br />'.wp_kses_post($review) : '').(($_items) ? '<br />'.implode('<br />', $_items) : '').'</td></tr></table></div>';
 		}
 
 		/**
