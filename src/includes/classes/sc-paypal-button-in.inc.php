@@ -75,6 +75,10 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 						$force_notify_url_scheme = apply_filters("ws_plugin__s2member_during_sc_paypal_button_force_notify_url_scheme", null, get_defined_vars ());
 						$force_return_url_scheme = apply_filters("ws_plugin__s2member_during_sc_paypal_button_force_return_url_scheme", null, get_defined_vars ());
 
+						//260918.2104 TO-DO PayPal Checkout cache hardening: do not embed the one-hour, visitor-specific transaction token in rendered page HTML.
+						// Render a cache-safe encrypted checkout definition instead, then mint the short-lived invoice/IP/user-context transaction token server-side
+						// when checkout actually starts (output="button", "anchor", or "url"), preserving validation, idempotency, subscription context, and return/cancel behavior.
+
 						// PayPal Checkout SDK memoization (per request; shared across all button variants).
 						static $ppco_sdks = array();
 
