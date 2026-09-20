@@ -133,7 +133,8 @@ if(!class_exists('c_ws_plugin__s2member_sc_files_in'))
 
 			                             // Playback
 			                             'player_autostart'     => 'no', 'player_fallback' => 'yes', 'player_mute' => 'no',
-			                             'player_primary'       => (($attr['player'] === 'jw-player-v7' || $attr['player'] === 'jw-player-v6') ? 'html5' : 'flash'),
+			                             //260920.1835 Avoid reading the optional player attribute before shortcode defaults have been applied.
+			                             'player_primary'       => ((isset($attr['player']) && ($attr['player'] === 'jw-player-v7' || $attr['player'] === 'jw-player-v6')) ? 'html5' : 'flash'),
 			                             'player_repeat'        => 'no', 'player_startparam' => '', // `startparam` seems to be JW Player v6 only.
 
 			                             // Advanced Option Blocks
