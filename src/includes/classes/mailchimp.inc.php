@@ -43,7 +43,9 @@ if(!class_exists('c_ws_plugin__s2member_mailchimp'))
 
 			if(!class_exists('Mailchimp')) // Include the MailChimp API class here.
 				include_once dirname(dirname(__FILE__)).'/externals/mailchimp/Mailchimp.php';
-			return new Mailchimp($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], array('timeout' => 30));
+
+			//260920.2015 MailchimpV3 expects a numeric timeout, which is passed directly to PHP's HTTP stream context.
+			return new Mailchimp($GLOBALS['WS_PLUGIN__']['s2member']['o']['mailchimp_api_key'], 30);
 		}
 
 		/**
