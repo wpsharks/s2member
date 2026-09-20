@@ -138,7 +138,9 @@ if(!class_exists('c_ws_plugin__s2member_ssl_in'))
 
 						if(!in_array($scheme, array('http', 'https'), TRUE)) // If NOT explicit.
 						{
-							if(($scheme === 'login_post' || $scheme === 'rpc') && (force_ssl_login() || force_ssl_admin()))
+							//260920.2009 On WP < 4.4, preserve legacy login-only SSL support via force_ssl_login(); on newer WP, avoid that deprecated helper and rely on force_ssl_admin().
+							if(($scheme === 'login_post' || $scheme === 'rpc')
+							   && ((version_compare($GLOBALS['wp_version'], '4.4', '<') && force_ssl_login()) || force_ssl_admin()))
 								$scheme = 'https'; // Use an SSL scheme in this case.
 
 							else if(($scheme === 'login' || $scheme === 'admin') && force_ssl_admin())
