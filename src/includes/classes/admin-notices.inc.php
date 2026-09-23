@@ -300,10 +300,15 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 			$_settings_url = add_query_arg('s2member-open-panel', 'shortcode-user-fields-whitelist', admin_url('/admin.php?page=ws-plugin--s2member-gen-ops')).'#ws-plugin--s2member-shortcode-user-fields-whitelist';
 			$_dismiss_url = wp_nonce_url(add_query_arg('s2member-dismiss-shortcode-user-fields-notice', '1', admin_url()), 's2member-dismiss-shortcode-user-fields-notice');
 			$_field_is_singular = (count($_field_names) === 1);
-			$_message = ($_field_is_singular ? 'The following user field needs' : 'The following user fields need').' to be added to the whitelist before s2Member can show '.($_field_is_singular ? 'it' : 'them').' to users. <em><a href="'.esc_url($_settings_url).'">s2Member → General Options → Shortcode User Fields Whitelist</a></em>';
-			$_review = '<code>'.esc_html(implode(', ', array_values($_field_names))).'</code>';
+			$_message = ($_field_is_singular ? 'The following user field needs' : 'The following user fields need').' to be whitelisted. See: <em><a href="'.esc_url($_settings_url).'">s2Member → General Options → Shortcode User Fields Whitelist</a></em>';
+			$_review = '<span style="background:#ffebcd; padding:0 3px;"><em>'.esc_html(implode(', ', array_values($_field_names))).'</em></span>';
 			if($_post_links)
-				$_review .= '<br /><em>Used on:</em> '.implode(', ', $_post_links).'.';
+			{
+				$_post_links = array_values($_post_links);
+				$_last_post_link = (count($_post_links) > 1) ? array_pop($_post_links) : '';
+				$_used_on = $_last_post_link ? implode(', ', $_post_links).', and '.$_last_post_link : $_post_links[0];
+				$_review .= '<br /><em>Used on: '.$_used_on.'.</em>';
+			}
 			c_ws_plugin__s2member_admin_notices::display_security_notice($_message, $_review, array(), $_dismiss_url);
 		}
 
