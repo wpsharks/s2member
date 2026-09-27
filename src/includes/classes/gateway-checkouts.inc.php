@@ -227,6 +227,24 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		}
 
 		/**
+		 * Gets durable Gateway Checkout state.
+		 *
+		 * Backward-compatible alias for load_state().
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260829.2325
+		 *
+		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 * @param bool   $allow_expired       Optional. Return expired state instead of removing it.
+		 *
+		 * @return array|bool Gateway Checkout state, else FALSE.
+		 */
+		public static function get($gateway_checkout_id = '', $allow_expired = FALSE)
+		{
+			return self::load_state($gateway_checkout_id, $allow_expired); //260927.0432 Preserve the original public method for extensions written against the first Gateway Checkout implementation.
+		}
+
+		/**
 		 * Loads the latest durable Gateway Checkout state, bypassing this request's option cache.
 		 *
 		 * @package s2Member\Gateway_Checkouts

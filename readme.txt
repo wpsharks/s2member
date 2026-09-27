@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 260917
-Stable tag: 260917
-Tested up to: 7.2-alpha-63608
+Version: 260927
+Stable tag: 260927
+Tested up to: 7.2-alpha-63947
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.5.9
@@ -176,11 +176,55 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v260917 =
+= v260927 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v260927 =
+
+- (Pro) **Fix:** Improved Stripe 3D Secure recovery when browser and webhook processing overlap, or when the browser loses the final checkout response after successful authentication. s2Member now reconciles those recovery paths using the saved checkout state so successful signups can finish correctly without repeating fulfillment. Thanks to Felix for reporting it. See [thread #13627](https://f.wpsharks.com/t/13627).
+
+- (Framework) **Fix:** Improved Gateway Checkout state handling so concurrent recovery paths can safely patch independent checkout data and explicitly reload newly committed state without stale request-local cache values.
+
+- (Pro) **Fix:** Improved Stripe subscription recovery for new customers when payment authentication continues after the initial Pro-Form request. s2Member now keeps the pending WordPress account linked to the checkout, allowing browser or webhook recovery to complete the correct signup without losing its account association.
+
+- (Pro) **Fix:** In a rare Stripe pending-payment recovery case, membership processing could already be complete while the original checkout request still saw an older cached copy of the member's data and continued showing a processing state. s2Member now refreshes that data before deciding whether fulfillment has completed.
+
+- (Pro) **Fix:** Stripe one-time (Buy Now) Pro-Form purchases requiring 3D Secure could lose the password entered during the initial checkout when the form resumed after authentication. s2Member now keeps the same pending WordPress account through authentication and completes it with the password the customer originally chose.
+
+- (Pro) **Fix:** Closed a remaining failed-3D-Secure cleanup case where Stripe.js could return an authentication error without the PaymentIntent details used by s2Member's cleanup flow. s2Member now recovers the PaymentIntent ID from the existing Stripe client secret when needed so the incomplete subscription can still be cleaned up correctly.
+
+- (Pro) **Fix:** Failed card authentication during Stripe free-trial subscription checkout could leave the pending subscription active in a trialing state at Stripe. s2Member now cancels the incomplete subscription generation so unsuccessful authentication attempts do not leave orphaned trial subscriptions behind.
+
+- (Pro) **Fix:** Immediately retrying a Stripe free-trial subscription with another card after failed authentication could overlap with cleanup of the previous attempt or fail to continue correctly. s2Member now safely finishes that cleanup, confirms the retried authentication when needed, and starts a fresh subscription attempt without browser and webhook recovery interfering with each other.
+
+- (Pro) **Compatibility:** Improved Stripe SDK loading so s2Member does not accidentally trigger another plugin's dormant Stripe autoloader. This prevents an older Stripe library registered by another plugin from loading before s2Member Pro's bundled Stripe SDK.
+
+- (Pro) **Fix:** Prevented a PHP warning during Stripe Buy Now checkouts for existing members when determining whether a previous recurring subscription should be cancelled.
+
+- (Framework) **Compatibility:** Expanded no-cache support for caching solutions that use their own page-exclusion APIs or signals in addition to the commonly supported WordPress no-cache conventions. Added explicit compatibility for LiteSpeed Cache, FlyingPress, Super Page Cache for Cloudflare, WP Fastest Cache, and Cloudflare APO, helping prevent dynamic/private s2Member pages from being cached.
+
+- (Pro) **Fix:** When `[s2Member-List]` used `rlc_satisfy="ANY"` with multiple Levels, Roles, or Custom Capabilities, additional filtering on the member list could cause unrelated members to appear. Membership filters are now grouped correctly, so only members matching the requested criteria are returned. Thanks to Philip for reporting this.
+
+- (Framework) **Fix:** PayPal IPN domain checks could fail on some server setups when the incoming request did not provide a usable domain, for example with some reverse-proxy setups where something like Nginx, Cloudflare, a load balancer, etc. sits in front of WordPress and affects the request host. s2Member now falls back to the site's configured domain when needed.
+
+- (Framework) **Fix:** Some unexpected PayPal proxy values could cause notifications to fail and be ignored. These values are now normalized before the notification is processed.
+
+- (Framework) **Fix:** PayPal proxy notifications could fail on sites where their domain differs from the site's configured domain. s2Member now uses the appropriate site domain more consistently in these cases.
+
+- (Framework) **Fix:** Corrected the timeout value passed to the Mailchimp API client, preventing an invalid HTTP stream configuration that could interfere with list subscription requests.
+
+- (Framework) **Fix:** Avoided calling WordPress's deprecated `force_ssl_login()` helper on current WordPress versions when determining login and RPC URL schemes, preventing deprecation notices while preserving the same SSL behavior and compatibility with older WordPress versions.
+
+- (Framework) **Fix:** Prevented PHP notices from the `[s2Member-Security-Badge /]` shortcode when the optional `v` attribute is omitted. The shortcode now applies its default badge version before validating the value.
+
+- (Framework) **Fix:** Prevented PHP notices from the `[s2Stream /]` shortcode when the optional `player` attribute is omitted. Existing player defaults and behavior are unchanged.
+
+- (Framework & Pro) **UI:** Shortcode whitelist security notices are now more compact and easier to review, grouping detected user fields and template paths instead of repeating each shortcode occurrence, and listing the affected pages once with direct links. Thanks to Sherry for her feedback on these. _WP Admin > s2Member > General Options > Shortcode User Fields Whitelist_ and _Pro Shortcode Templates Whitelist_
+
+- (Framework) **UI:** Corrected several PayPal Button Generator shortcode attribute descriptions to match current PayPal Checkout behavior, particularly the `output` and `image` attributes.
 
 = v260917 =
 
