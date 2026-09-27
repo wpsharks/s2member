@@ -1561,7 +1561,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						if($gateway_checkout_id)
 						{
-							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
 								return array('__error' => 'gateway_checkout_invalid');
 
@@ -1574,7 +1574,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							if(!$gateway_checkout_lock)
 								return array('__error' => 'gateway_checkout_busy');
 
-							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
 							{
 								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
@@ -1857,7 +1857,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if($gateway_checkout_id)
 						{
 							//260907.1820 For coordinator-backed captures, the order ID already persisted server-side is authoritative; never let a browser-supplied order ID rebind this logical checkout to another PayPal resource.
-							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 							$expected_order_id = $gateway_checkout && !empty($gateway_checkout['gateway_ids']['order_id']) ? (string)$gateway_checkout['gateway_ids']['order_id'] : '';
 							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment' || !$expected_order_id || !hash_equals($expected_order_id, $order_id))
 								return array('__error' => 'gateway_checkout_order_mismatch');
@@ -1885,7 +1885,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						{
 							if($gateway_checkout_id)
 							{
-								$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+								$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 								if(!$gateway_checkout || empty($gateway_checkout['gateway_ids']['order_id']) || !hash_equals((string)$gateway_checkout['gateway_ids']['order_id'], $order_id))
 									return array('__error' => 'gateway_checkout_order_mismatch');
 
@@ -2037,7 +2037,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						try
 						{
-							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
 								return array('handled' => FALSE, 'ok' => FALSE, 'error' => 'not_coordinator_checkout');
 
@@ -2097,7 +2097,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(!$gateway_checkout_id || ($completion_error = self::paypal_checkout_order_completion_error($order, $order_id, $token)))
 							return array('ok' => FALSE, 'error' => $completion_error ? $completion_error : 'gateway_checkout_invalid');
 
-						$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+						$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 						if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
 							return array('ok' => FALSE, 'error' => 'gateway_checkout_invalid');
 
@@ -2289,7 +2289,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(!$subscription_id || !c_ws_plugin__s2member_gateway_checkouts::valid_id($gateway_checkout_id))
 							return array('handled' => false, 'ok' => false, 'recovered' => false, 'error' => 'not_coordinator_checkout');
 
-						$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+						$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 						if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
 							return array('handled' => false, 'ok' => false, 'recovered' => false, 'error' => 'not_coordinator_checkout');
 
@@ -2299,7 +2299,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						try
 						{
-							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
 								return array('handled' => true, 'ok' => false, 'recovered' => false, 'error' => 'gateway_checkout_invalid', 'gateway_checkout_id' => $gateway_checkout_id);
 
@@ -2357,7 +2357,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						if($gateway_checkout_id)
 						{
-							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
 								return array('__error' => 'gateway_checkout_invalid');
 
@@ -2369,7 +2369,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							if(!$gateway_checkout_lock)
 								return array('__error' => 'gateway_checkout_busy');
 
-							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+							$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 							if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
 							{
 								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);

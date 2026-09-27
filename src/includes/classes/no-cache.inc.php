@@ -135,11 +135,11 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 		}
 
 		/**
-		 * Defines no-cache constants for various WordPress plugins.
+		 * Defines no-cache constants/signals for WordPress caching plugins.
 		 *
-		 * This is compatible with Quick Cache, W3 Total Cache, and also with WP Super Cache.
-		 * Quick Cache uses: ``QUICK_CACHE_ALLOWED``, and other plugins use: ``DONOTCACHEPAGE``.
-		 * W3 Total Cache is also known to be compatible with ``DONOTCACHEOBJECT`` and ``DONOTCACHEDB``.
+		 * `DONOTCACHEPAGE` is the de facto cross-plugin page-cache bypass signal.
+		 * Legacy s2Member cache flags are retained, with explicit runtime APIs/filters
+		 * for popular caches that expose their own no-cache mechanisms.
 		 *
 		 * Disallow caching if the ``$no_cache`` parameter is passed in as ``true``, by other routines.
 		 * In addition, always disallow caching for logged in users, and GET requests with: `/?s2member` Systematics.
@@ -239,6 +239,19 @@ if(!class_exists('c_ws_plugin__s2member_no_cache'))
 				 */
 				if(!defined('QUICK_CACHE_ALLOWED'))
 					define('QUICK_CACHE_ALLOWED', FALSE);
+
+				//260918.2104 Explicit runtime no-cache APIs for popular caches that do not uniformly rely on the generic constants.
+				do_action('litespeed_control_set_nocache', 's2Member dynamic/private content'); // LiteSpeed Cache.
+				add_filter('flying_press_is_cacheable', '__return_false', PHP_INT_MAX); // FlyingPress.
+				add_filter('swcfpc_cache_bypass', '__return_true', PHP_INT_MAX); // Super Page Cache for Cloudflare.
+				if(function_exists('wpfc_exclude_current_page')) // WP Fastest Cache.
+					wpfc_exclude_current_page();
+
+				// Cloudflare APO uses its own edge-cache signal. The filter helps when this runs early;
+				// the response header also overrides APO when headers are still mutable on a later call.
+				add_filter('cloudflare_use_cache', '__return_false', PHP_INT_MAX);
+				if(class_exists('\Cloudflare\APO\WordPress\Hooks', FALSE) && !headers_sent())
+					header('cf-edge-cache: no-cache', TRUE);
 
 				$once = TRUE; // Set these one time only.
 

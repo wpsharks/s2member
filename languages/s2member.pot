@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  260917\n"
+"Project-Id-Version:  260927\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-09-17 21:30:07+00:00\n"
+"POT-Creation-Date: 2026-09-27 03:32:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: pro/src/includes/classes/coupons.inc.php:266
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:694
 #: pro/src/includes/classes/gateways/paypal/paypal-utilities.inc.php:343
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1833
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1902
 msgctxt "s2member-front percentage-symbol"
 msgid "%"
 msgstr ""
@@ -162,8 +162,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:754
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1088
 #: pro/src/includes/classes/gateways/paypal/paypal-utilities.inc.php:981
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:786
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1075
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:910
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1249
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; Please <a href=\"%s\" rel=\"nofollow\">log in</a>."
 msgstr ""
@@ -188,8 +188,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1123
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:130
 #: pro/src/includes/classes/gateways/paypal/paypal-registration-in.inc.php:152
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:809
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1088
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:933
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1265
 #: pro/src/includes/classes/gateways/stripe/stripe-registration-in.inc.php:132
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> A slight problem. Please contact Support for assistance."
@@ -204,8 +204,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:780
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1114
 #: pro/src/includes/classes/gateways/paypal/paypal-utilities.inc.php:979
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:787
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1076
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:911
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1250
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been approved.<br />&mdash; You'll receive an email momentarily."
 msgstr ""
@@ -215,7 +215,7 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-pf-in.inc.php:966
 #: pro/src/includes/classes/gateways/paypal/paypal-checkout-rdp-in.inc.php:1134
 #: pro/src/includes/classes/gateways/paypal/paypal-update-pf-in.inc.php:142
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1092
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1269
 msgctxt "s2member-front"
 msgid "<strong>Unknown error.</strong> Please contact Support for assistance."
 msgstr ""
@@ -442,23 +442,23 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:518
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:260
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:645
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:244
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:532
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:252
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:540
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">log in</a> to cancel your account."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:237
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:263
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:247
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:255
 msgctxt "s2member-front"
 msgid "Nothing to cancel. You're NOT a paid Member."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:242
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:245
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:250
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:253
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:258
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:261
 msgctxt "s2member-front"
 msgid "Nothing to cancel. You have NO recurring fees."
 msgstr ""
@@ -467,15 +467,15 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:529
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:268
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:656
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:258
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:543
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:266
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:551
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">log in</a> to update your billing information."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:254
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:271
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:261
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:269
 msgctxt "s2member-front"
 msgid "Nothing to update. You're NOT a paid Member."
 msgstr ""
@@ -485,22 +485,22 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:294
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:316
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:323
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:264
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:267
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:272
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:275
 msgctxt "s2member-front"
 msgid "Nothing to update. You have NO recurring fees. Or, your billing profile is no longer active. Please contact Support if you need assistance."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:268
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:338
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:272
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:280
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"level\" attribute. Membership Level. Must be numeric [0-%s]."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:271
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:341
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:275
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:283
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"level\" attribute. Membership Level. Must be numeric [0-%s]."
 msgstr ""
@@ -509,8 +509,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:362
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:344
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:450
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:278
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:369
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:286
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:377
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ccaps\" attribute. Custom Capabilities. When provided, must be all lowercase [a-z_0-9,]. A preceding `-all,` directive is also acceptable."
 msgstr ""
@@ -519,8 +519,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:386
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:347
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:492
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:281
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:393
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:289
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:401
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tp\" attribute. The Trial Period. When provided, must be numeric."
 msgstr ""
@@ -529,8 +529,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:389
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:350
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:495
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:284
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:396
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:292
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:404
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tp\" attribute. The Trial Period. When provided, must be >= 1."
 msgstr ""
@@ -539,8 +539,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:392
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:353
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:498
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:287
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:399
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:295
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:407
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"tt\" attribute. The Trial Term. When \"tp\" is provided, \"tt\" (Trial Term) must be one of D,W,M,Y."
 msgstr ""
@@ -549,71 +549,71 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:395
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:356
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:501
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:290
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:402
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:298
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:410
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tt\" attribute. The Trial Term. When \"tp\" is provided, \"tt\" (Trial Term) must be one of D,W,M,Y."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:289
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:359
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:293
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:301
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"custom\" attribute. When provided, must start with your domain name."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:294
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:364
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:298
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:306
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"ids\" attribute. Must contain comma-delimited Post/Page IDs."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:297
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:367
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:301
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:309
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ids\" attribute. Must contain comma-delimited Post/Page IDs. Must contain [0-9,] only."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:300
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:370
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:304
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:312
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"exp\" attribute. Specific Post/Page Expiration (in hours). Must be numeric."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:303
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:373
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:307
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:315
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"exp\" attribute. Specific Post/Page Expiration (in hours). Must be numeric."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:306
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:376
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:310
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:318
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"exp\" attribute. Specific Post/Page Expiration (in hours). Must be >= 1."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:309
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:379
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:313
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:321
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"exp\" attribute. Specific Post/Page Expiration (in hours). Must be <= 438291."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:312
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:382
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:316
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:324
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"sp_ids_exp\" internal attribute. Please check Shortcode Attributes."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:315
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:385
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:319
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:327
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"sp_ids_exp\" internal attribute. Please check Shortcode Attributes."
 msgstr ""
@@ -622,8 +622,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:368
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:388
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:456
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:322
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:375
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:330
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:383
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"desc\" attribute. Please provide a Description for this form."
 msgstr ""
@@ -632,8 +632,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:371
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:391
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:459
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:325
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:378
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:333
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:386
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Your \"desc\" (Description) attribute must be <= 100 characters long."
 msgstr ""
@@ -642,15 +642,15 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:374
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:394
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:462
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:328
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:381
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:336
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:389
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"custom\" attribute. Must start with your domain name."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:327
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:397
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:331
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:339
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"custom\" attribute. Must start with your domain name."
 msgstr ""
@@ -659,8 +659,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:380
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:400
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:468
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:334
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:387
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:342
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:395
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"cc\" attribute. Must be a 3 character Currency Code."
 msgstr ""
@@ -669,8 +669,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:383
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:403
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:471
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:337
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:390
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:345
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:398
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"cc\" attribute. Must be a 3 character Currency Code."
 msgstr ""
@@ -679,8 +679,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:464
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:424
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:561
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:340
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:468
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:348
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:476
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"ra\" attribute. The Regular Amount. Must be >= 0.00."
 msgstr ""
@@ -689,8 +689,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:467
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:427
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:564
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:343
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:471
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:351
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:479
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount. Must be numeric."
 msgstr ""
@@ -699,8 +699,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:470
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:430
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:567
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:346
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:474
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:354
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:482
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount. Must be >= 0.00."
 msgstr ""
@@ -713,60 +713,60 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:350
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:438
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:357
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:365
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">login</a> to update your billing plan."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:353
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:441
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:360
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:368
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">login</a> before making this purchase."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:356
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:444
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:363
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:371
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"level\" attribute. Membership Level. Must be numeric [1-%s], or an asterisk (*)."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:359
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:447
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:366
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:374
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"level\" attribute. Membership Level. Must be numeric [1-%s], or an asterisk (*)."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:365
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:453
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:372
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:380
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing or invalid \"ccaps\" attribute. When \"level\" is \"*\" for (Independent Custom Capabilities), \"ccaps\" is required. All lowercase [a-z_0-9,]. A preceding `-all,` directive is also acceptable."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:377
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:465
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:384
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:392
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"custom\" attribute. Must start with matching domain."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:398
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:405
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:413
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. There is an Intial/Trial amount, and \"tt\" (Trial Term) attribute is \"D\", and \"tp\" (Trial Period) > 365."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:401
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:408
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:416
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. There is an Intial/Trial amount, and \"tt\" (Trial Term) attribute is \"W\", and \"tp\" (Trial Period) > 52."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:404
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:411
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:419
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. There is an Intial/Trial amount, and \"tt\" (Trial Term) attribute is \"M\", and \"tp\" (Trial Period) > 12."
 msgstr ""
@@ -778,7 +778,7 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:410
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:504
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:417
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:425
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ta\" attribute. The Trial Amount. When provided, must be numeric."
 msgstr ""
@@ -796,35 +796,35 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:419
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:513
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:426
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:434
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"rp\" attribute. The Regular Period. Must be >= 1."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:422
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:516
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:429
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:437
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rp\" attribute. The Regular Period. Must be numeric."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:425
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:519
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:432
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:440
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rp\" attribute. The Regular Period. Must be >= 1."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:428
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:522
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:435
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:443
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"rt\" attribute. The Regular Term. Must be one of D,W,M,Y,L."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:431
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:525
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:438
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:446
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt\" attribute. The Regular Term. Must be one of D,W,M,Y,L."
 msgstr ""
@@ -836,49 +836,49 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:437
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:528
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:441
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:449
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\" (Regular Term) attribute is \"D\", \"rp\" (Regular Period) > 365, and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:440
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:531
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:444
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:452
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\" (Regular Term) attribute is \"W\", \"rp\" (Regular Period) > 52, and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:443
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:534
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:447
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:455
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\" (Regular Term) attribute is \"M\", \"rp\" (Regular Period) > 12, and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:446
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:543
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:450
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:458
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rp, rr\" attributes. The \"rt\" (Regular Term) attribute is \"Y\", \"rp\" (Regular Period) > 1, and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:449
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:546
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:453
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:461
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rp, rt\" attributes. The \"rt\" (Regular Term) attribute is \"L\" (Lifetime), and \"rp\" (Regular Period) > 1."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:452
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:549
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:456
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:464
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rt, rr\" attributes. The \"rt\" (Regular Term) attribute is \"L\" (Lifetime), and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:455
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:552
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:459
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:467
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Missing \"level_ccaps_eotper\" attribute. Please check Shortcode Attributes."
 msgstr ""
@@ -887,29 +887,29 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:461
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:555
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:558
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:462
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:465
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:470
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:473
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"level_ccaps_eotper\" attribute. Please check Shortcode Attributes."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:476
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:573
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:483
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:491
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rr\" attribute. Regular Recurring. When provided, must be 0, 1, or BN."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:479
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:576
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:486
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:494
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rr, tp\" attributes. The \"rr\" (Regular Recurring) attribute is \"BN\" (Buy Now), and \"tp\" (Trial Period) is not \"0\"."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:482
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:579
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:489
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:497
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"level, rr\" attributes. The \"level\" (Level) attribute is \"*\" for (Independent Custom Capabilities), and \"rr\" is not \"BN\" (Buy Now)."
 msgstr ""
@@ -922,21 +922,21 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:488
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:585
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:496
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:504
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rrt\" attribute. Recurring Times (fixed). When provided, must be numeric."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:491
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:588
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:499
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:507
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rrt\" attribute. Recurring Times (fixed). When provided, must be >= 1."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:494
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:591
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:502
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:510
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"rr, rrt\" attributes. When \"rrt\" (Recurring Times) is provided, \"rr\" (Regular Recurring) must be 1."
 msgstr ""
@@ -951,11 +951,11 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:745
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:801
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:896
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:535
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:552
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:601
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:630
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:700
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:543
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:560
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:609
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:638
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:717
 msgctxt "s2member-front"
 msgid "Missing or invalid Security Verification. Please try again."
 msgstr ""
@@ -966,9 +966,9 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:651
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:659
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:812
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:538
 #: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:546
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:643
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:554
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:660
 msgctxt "s2member-admin"
 msgid "Unable to process. You are an Administrator. Stopping here for security. Otherwise, an Administrator could lose access."
 msgstr ""
@@ -1073,8 +1073,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:689
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:792
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:887
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:621
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:691
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:629
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:708
 msgctxt "s2member-front"
 msgid "Missing State/Province. Please try again."
 msgstr ""
@@ -1085,8 +1085,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:692
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:795
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:890
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:624
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:694
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:632
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:711
 msgctxt "s2member-front"
 msgid "Missing Country. Please try again."
 msgstr ""
@@ -1097,8 +1097,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:695
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:798
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:893
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:627
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:697
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:635
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:714
 msgctxt "s2member-front"
 msgid "Missing Postal/Zip Code. Please try again."
 msgstr ""
@@ -1109,9 +1109,9 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:703
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:750
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:815
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:559
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:606
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:646
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:567
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:614
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:663
 msgctxt "s2member-front"
 msgid "Missing First Name. Please try again."
 msgstr ""
@@ -1122,9 +1122,9 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:706
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:753
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:818
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:562
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:609
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:649
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:570
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:617
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:666
 msgctxt "s2member-front"
 msgid "Missing Last Name. Please try again."
 msgstr ""
@@ -1135,9 +1135,9 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:709
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:756
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:821
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:565
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:612
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:652
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:573
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:620
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:669
 msgctxt "s2member-front"
 msgid "Missing or invalid Email Address. Please try again."
 msgstr ""
@@ -1148,9 +1148,9 @@ msgstr ""
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:712
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:759
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:824
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:568
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:615
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:655
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:576
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:623
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:672
 msgctxt "s2member-front"
 msgid "Invalid Email Address. Please try again."
 msgstr ""
@@ -1159,8 +1159,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:700
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:715
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:827
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:571
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:658
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:579
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:675
 msgctxt "s2member-front"
 msgid "That Email Address is already in use. Please try again."
 msgstr ""
@@ -1169,8 +1169,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:703
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:718
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:830
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:574
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:661
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:582
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:678
 msgctxt "s2member-front"
 msgid "Missing or invalid Username. Please try again."
 msgstr ""
@@ -1179,8 +1179,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:706
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:721
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:833
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:577
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:664
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:585
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:681
 msgctxt "s2member-front"
 msgid "Invalid Username. Please try again. Use ONLY lowercase alphanumerics."
 msgstr ""
@@ -1189,8 +1189,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:709
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:724
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:836
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:580
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:667
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:588
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:684
 msgctxt "s2member-front"
 msgid "That Username is already in use. Please try again."
 msgstr ""
@@ -1199,8 +1199,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:715
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:730
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:842
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:586
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:673
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:594
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:690
 msgctxt "s2member-front"
 msgid "Missing Password. Please try again."
 msgstr ""
@@ -1209,8 +1209,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:718
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:733
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:845
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:589
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:676
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:597
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:693
 msgctxt "s2member-front"
 msgid "Invalid Password. Must be at least %1$s characters. Please try again."
 msgstr ""
@@ -1219,8 +1219,8 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:721
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:736
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:848
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:592
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:679
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:600
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:696
 msgctxt "s2member-front"
 msgid "Invalid Password. Max length is 64 characters. Please try again."
 msgstr ""
@@ -1229,29 +1229,29 @@ msgstr ""
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:724
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:739
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:851
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:595
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:682
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:603
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:699
 msgctxt "s2member-front"
 msgid "Password fields do NOT match. Please try again."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:679
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:806
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:637
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:654
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">log in</a> to modify your billing plan."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:682
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:809
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:640
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:657
 msgctxt "s2member-front"
 msgid "You must <a href=\"%s\" rel=\"nofollow\">log in</a> before making this purchase."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-responses.inc.php:772
 #: pro/src/includes/classes/gateways/paypal/paypal-responses.inc.php:899
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:703
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:720
 msgctxt "s2member-front"
 msgid "Unknown form submission type. Please contact Support."
 msgstr ""
@@ -1602,7 +1602,7 @@ msgstr ""
 
 #: pro/src/includes/classes/gateways/paypal/paypal-sp-checkout-in.inc.php:218
 #: pro/src/includes/classes/gateways/paypal/paypal-utilities.inc.php:767
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:191
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:214
 #: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:121
 msgctxt "s2member-front"
 msgid "Unable to initialize this payment securely. Please reload the checkout page and try again."
@@ -1643,92 +1643,109 @@ msgctxt "s2member-front"
 msgid "API failure. Please contact Support for assistance."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:113
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:136
 #: pro/src/includes/classes/gateways/stripe/stripe-css-js.inc.php:85
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2273
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2501
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2459
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2697
 msgctxt "s2member-front"
 msgid "The payment failed, please try again with a different card."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:203
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:226
 #: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:133
 msgctxt "s2member-front"
 msgid "This checkout is already being processed. Please wait a moment and reload this page."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:343
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:611
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:864
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:983
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:367
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:671
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:988
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1117
 #: pro/src/includes/classes/gateways/stripe/stripe-sp-checkout-in.inc.php:182
 msgctxt "s2member-front"
 msgid "Please submit a card."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:372
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:640
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:396
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:700
 msgctxt "s2member-front"
 msgid "The payment could not be completed. Please try again or contact Support."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:431
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:455
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your payment is still pending. Your access will be updated once payment is confirmed, usually within a few minutes, but it can take up to 24 hours. Please do not submit the form again; contact support if access is not updated after 24 hours."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:446
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:769
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:470
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:843
 msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> A problem occurred while saving your pending payment details. Please contact Support for assistance."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:470
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:925
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:506
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:894
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:899
+msgctxt "s2member-front"
+msgid "<strong>Thank you.</strong> Your payment has been confirmed, but your account update is still processing. Access should be enabled shortly; please contact Support if it is not."
+msgstr ""
+
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:528
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:1050
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been updated :-)"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:751
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:821
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your account has been created, but your payment is still pending. Paid access will be enabled once payment is confirmed, usually within a few minutes, but it can take up to 24 hours. Please do not submit the form again; contact support if access is not enabled after 24 hours."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:217
+#: pro/src/includes/classes/gateways/stripe/stripe-checkout-in.inc.php:857
+msgctxt "s2member-front"
+msgid "<strong>Oops.</strong> A problem occurred while resuming your payment. Please contact Support for assistance."
+msgstr ""
+
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:225
 msgctxt "s2member-admin"
 msgid "Stripe configuration error. Please configure your Publishable Stripe API Key."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:220
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:228
 msgctxt "s2member-admin"
 msgid "Stripe configuration error. Your Secret Stripe API Key is not yet configured."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:349
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:477
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:357
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:485
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount (when greater than 0.00), must be >= 0.50; i.e., the minimum amount that Stripe will charge is 0.50"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:352
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:480
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:360
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:488
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ra\" attribute. The Regular Amount. Must be <= 999999.99."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:414
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:422
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"tt, tp\" attributes. There is an Intial/Trial amount, and \"tt\" (Trial Term) attribute is \"Y\", and \"tp\" (Trial Period) > 2."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:420
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:428
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ta\" attribute. The Trial Amount. When provided, must be >= 0.50."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:423
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:431
 msgctxt "s2member-admin"
 msgid "Invalid form configuration. Invalid \"ta\" attribute. The Trial Amount. When provided, must be <= 999999.99."
+msgstr ""
+
+#: pro/src/includes/classes/gateways/stripe/stripe-responses.inc.php:652
+msgctxt "s2member-front"
+msgid "Unable to resume this checkout securely. Please reload the checkout page and try again."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/stripe/stripe-update-in.inc.php:95
@@ -1741,74 +1758,74 @@ msgctxt "s2member-front"
 msgid "<strong>Oops.</strong> No Customer|Subscr. ID. Please contact Support for assistance."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:520
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:578
 msgctxt "s2member-front"
 msgid "Error: <strong>prepaid</strong> cards not accepted at this time. Please use a different card and try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:797
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:855
 msgctxt "s2member-front"
 msgid "Unable to prepare this subscription retry. Please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1306
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1341
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1364
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1403
 msgctxt "s2member-front"
 msgid "<strong>Thank you.</strong> Your payment has been confirmed and your account has been updated."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1605
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1674
 msgctxt "s2member-front"
 msgid "Error code: <code>%1$s</code>. %2$s."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1608
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1677
 msgctxt "s2member-front"
 msgid "Invalid parameters to Stripe; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1611
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1680
 msgctxt "s2member-front"
 msgid "Invalid Stripe API keys; please contact the site owner."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1614
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1683
 msgctxt "s2member-front"
 msgid "Network communication failure with Stripe; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1617
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1686
 msgctxt "s2member-front"
 msgid "Stripe API error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1619
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:1688
 msgctxt "s2member-front"
 msgid "Stripe error; please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2293
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2479
 msgctxt "s2member-front"
 msgid "Unable to prepare this payment retry. Please try again."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2436
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2496
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2632
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2692
 msgctxt "s2member-front"
 msgid "Action required: 3D Secure authorization."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2441
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2637
 msgctxt "s2member-front"
 msgid "Please try again with a different card."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2455
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2651
 msgctxt "s2member-front"
 msgid "The payment method could not be confirmed. Stripe returned status: %s."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2515
+#: pro/src/includes/classes/gateways/stripe/stripe-utilities.inc.php:2711
 msgctxt "s2member-front"
 msgid "The payment could not be completed. Stripe returned status: %s."
 msgstr ""
@@ -1902,7 +1919,7 @@ msgctxt "s2member-front"
 msgid "unused"
 msgstr ""
 
-#: pro/src/includes/classes/sc-member-list-in.inc.php:249
+#: pro/src/includes/classes/sc-member-list-in.inc.php:253
 msgctxt "s2member-front"
 msgid "Search users..."
 msgstr ""
@@ -2163,12 +2180,12 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:597
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
 #: src/includes/classes/sc-paypal-button-e.inc.php:83
-#: src/includes/classes/sc-paypal-button-in.inc.php:117
-#: src/includes/classes/sc-paypal-button-in.inc.php:150
-#: src/includes/classes/sc-paypal-button-in.inc.php:254
-#: src/includes/classes/sc-paypal-button-in.inc.php:286
-#: src/includes/classes/sc-paypal-button-in.inc.php:499
-#: src/includes/classes/sc-paypal-button-in.inc.php:714
+#: src/includes/classes/sc-paypal-button-in.inc.php:121
+#: src/includes/classes/sc-paypal-button-in.inc.php:154
+#: src/includes/classes/sc-paypal-button-in.inc.php:258
+#: src/includes/classes/sc-paypal-button-in.inc.php:290
+#: src/includes/classes/sc-paypal-button-in.inc.php:503
+#: src/includes/classes/sc-paypal-button-in.inc.php:718
 #: src/includes/templates/buttons/paypal-ccaps-checkout-button.php:35
 #: src/includes/templates/buttons/paypal-checkout-button.php:47
 #: src/includes/templates/buttons/paypal-sp-checkout-button.php:35
@@ -4826,19 +4843,19 @@ msgctxt "s2member-front"
 msgid "—"
 msgstr ""
 
-#: src/includes/classes/sc-paypal-button-in.inc.php:127
-#: src/includes/classes/sc-paypal-button-in.inc.php:160
-#: src/includes/classes/sc-paypal-button-in.inc.php:204
-#: src/includes/classes/sc-paypal-button-in.inc.php:243
+#: src/includes/classes/sc-paypal-button-in.inc.php:131
+#: src/includes/classes/sc-paypal-button-in.inc.php:164
+#: src/includes/classes/sc-paypal-button-in.inc.php:208
+#: src/includes/classes/sc-paypal-button-in.inc.php:247
 msgctxt "paypal cancellation button label"
 msgid "Unsubscribe"
 msgstr ""
 
-#: src/includes/classes/sc-paypal-button-in.inc.php:219
+#: src/includes/classes/sc-paypal-button-in.inc.php:223
 msgid "Cancel your subscription now?"
 msgstr ""
 
-#: src/includes/classes/sc-paypal-button-in.inc.php:223
+#: src/includes/classes/sc-paypal-button-in.inc.php:227
 msgid "Subscription cancelled."
 msgstr ""
 

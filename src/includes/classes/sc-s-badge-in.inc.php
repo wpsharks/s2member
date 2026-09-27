@@ -49,14 +49,13 @@ if(!class_exists('c_ws_plugin__s2member_sc_s_badge_in'))
 			unset($__refs, $__v);
 
 			$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr);
-			
-			//251225 Validate attr value.
+			$attr = shortcode_atts(array('v' => '1'), $attr); // One attribute.
+
+			//260920.1758 Validate the badge version after shortcode defaults are applied, avoiding an undefined-index notice when v is omitted.
 			$attr['v'] = (string)(int)$attr['v'];
 			if (!in_array($attr['v'], array('1','2','3'), true)) {
 					$attr['v'] = '1';
 			}
-
-			$attr = shortcode_atts(array('v' => '1'), $attr); // One attribute.
 			$code = c_ws_plugin__s2member_utilities::s_badge_gen($attr['v'], FALSE, FALSE);
 
 			return apply_filters('ws_plugin__s2member_sc_s_badge', $code, get_defined_vars());

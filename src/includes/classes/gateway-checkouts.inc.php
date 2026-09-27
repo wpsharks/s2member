@@ -136,14 +136,14 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			if($gateway_checkout_id && $browser_token && self::browser_token_verify($gateway_checkout_id, $browser_token))
 			{
 				$browser_expires_at = self::browser_token_expires_at($browser_token);
-				$state = self::get($gateway_checkout_id);
+				$state = self::load_state($gateway_checkout_id);
 
 				if(!$state && $browser_expires_at > time())
 				{
 					//260830.0059 Form renders use a signed provisional identity without writing to the database; persist it only when checkout processing actually begins.
 					$state = self::create_with_id($gateway_checkout_id, $gateway, $operation, $purchase_fingerprint, $user_id, 0, $browser_expires_at);
 					if(!$state)
-						$state = self::get($gateway_checkout_id); // Another concurrent request may have created the same signed checkout first.
+						$state = self::load_state($gateway_checkout_id); // Another concurrent request may have created the same signed checkout first.
 				}
 				if($state && (string)$state['gateway'] === $gateway && (string)$state['operation'] === $operation
 				   && (empty($state['user_id']) || ($user_id && (int)$state['user_id'] === $user_id)))
@@ -161,7 +161,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 
 						if(!update_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, $state, FALSE))
 						{
-							$persisted_state = self::get($gateway_checkout_id);
+							$persisted_state = self::load_state($gateway_checkout_id);
 							if($persisted_state !== $state)
 								return FALSE;
 						}
@@ -207,7 +207,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 *
 		 * @return array|bool Gateway Checkout state, else FALSE.
 		 */
-		public static function get($gateway_checkout_id = '', $allow_expired = FALSE)
+		public static function load_state($gateway_checkout_id = '', $allow_expired = FALSE)
 		{
 			if(!self::valid_id($gateway_checkout_id))
 				return FALSE;
@@ -227,6 +227,46 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		}
 
 		/**
+		 * Gets durable Gateway Checkout state.
+		 *
+		 * Backward-compatible alias for load_state().
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260829.2325
+		 *
+		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 * @param bool   $allow_expired       Optional. Return expired state instead of removing it.
+		 *
+		 * @return array|bool Gateway Checkout state, else FALSE.
+		 */
+		public static function get($gateway_checkout_id = '', $allow_expired = FALSE)
+		{
+			return self::load_state($gateway_checkout_id, $allow_expired); //260927.0432 Preserve the original public method for extensions written against the first Gateway Checkout implementation.
+		}
+
+		/**
+		 * Loads the latest durable Gateway Checkout state, bypassing this request's option cache.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260925.0411
+		 *
+		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 * @param bool   $allow_expired       Optional. Return expired state instead of removing it.
+		 *
+		 * @return array|bool Gateway Checkout state, else FALSE.
+		 */
+		public static function load_state_uncached($gateway_checkout_id = '', $allow_expired = FALSE)
+		{
+			if(!self::valid_id($gateway_checkout_id))
+				return FALSE;
+
+			//260925.0411 Concurrent webhook/browser requests can leave this PHP request's option cache stale after another worker commits a checkout patch.
+			wp_cache_delete('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, 'options');
+
+			return self::load_state($gateway_checkout_id, $allow_expired);
+		}
+
+		/**
 		 * Updates operational Gateway Checkout state.
 		 *
 		 * @package s2Member\Gateway_Checkouts
@@ -239,7 +279,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 */
 		public static function update($gateway_checkout_id = '', $updates = array())
 		{
-			$state = self::get($gateway_checkout_id);
+			$state = self::load_state($gateway_checkout_id);
 			if(!$state || !is_array($updates))
 				return FALSE;
 
@@ -251,11 +291,77 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			if(!update_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, $state, FALSE))
 			{
 				//260829.2325 WordPress returns FALSE when an update makes no database change; return the persisted state if it already matches.
-				$persisted_state = self::get($gateway_checkout_id);
+				$persisted_state = self::load_state($gateway_checkout_id);
 				if($persisted_state !== $state)
 					return FALSE;
 			}
 			return $state;
+		}
+
+		/**
+		 * Atomically patches operational Gateway Checkout state without replacing unrelated nested keys.
+		 *
+		 * This is intentionally separate from update(), whose full-field replacement semantics are relied on by
+		 * callers that deliberately remove stale context. Nested `gateway_ids` and `context` values supplied here
+		 * are merged into the latest persisted state using compare-and-swap retries, preventing concurrent browser
+		 * and webhook requests from overwriting each other's independently-owned keys.
+		 *
+		 * @package s2Member\Gateway_Checkouts
+		 * @since 260925.0232
+		 *
+		 * @param string $gateway_checkout_id Gateway Checkout ID.
+		 * @param array  $updates             Operational values to patch. Nested gateway_ids/context keys are merged.
+		 * @param int    $max_attempts        Maximum compare-and-swap attempts under contention.
+		 *
+		 * @return array|bool Updated state, else FALSE.
+		 */
+		public static function patch($gateway_checkout_id = '', $updates = array(), $max_attempts = 8)
+		{
+			global $wpdb;
+
+			if(!self::valid_id($gateway_checkout_id) || !is_array($updates))
+				return FALSE;
+
+			$updates = array_intersect_key($updates, array('gateway_ids' => TRUE, 'gateway_status' => TRUE, 'fulfillment_status' => TRUE, 'context' => TRUE));
+			$max_attempts = max(1, min(20, abs((int)$max_attempts)));
+			$option_name = 'ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id;
+
+			for($attempt = 0; $attempt < $max_attempts; $attempt++)
+			{
+				//260925.0232 Read directly from the options table so every retry starts from the latest committed version, not a possibly stale object-cache copy.
+				$raw_state = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option_name));
+				$state = maybe_unserialize($raw_state);
+				if(!is_array($state) || empty($state['id']) || !hash_equals((string)$gateway_checkout_id, (string)$state['id']) || empty($state['expires_at']) || (int)$state['expires_at'] <= time())
+					return FALSE;
+
+				$patched_state = $state;
+				if(isset($updates['gateway_ids']) && is_array($updates['gateway_ids']))
+					$patched_state['gateway_ids'] = array_merge((array)$patched_state['gateway_ids'], $updates['gateway_ids']);
+				if(array_key_exists('gateway_status', $updates))
+					$patched_state['gateway_status'] = (string)$updates['gateway_status'];
+				if(array_key_exists('fulfillment_status', $updates))
+				{
+					//260925.0232 Fulfillment is terminal; a slower pending browser request must never downgrade a checkout already fulfilled by a webhook.
+					if((string)@$patched_state['fulfillment_status'] !== 'fulfilled' || (string)$updates['fulfillment_status'] === 'fulfilled')
+						$patched_state['fulfillment_status'] = (string)$updates['fulfillment_status'];
+				}
+				if(isset($updates['context']) && is_array($updates['context']))
+					$patched_state['context'] = array_merge((array)$patched_state['context'], $updates['context']);
+				$patched_state['updated_at'] = time();
+
+				$serialized_state = maybe_serialize($patched_state);
+				if($serialized_state === (string)$raw_state)
+					return $patched_state;
+
+				//260925.0232 Update only the exact state version read above. A concurrent winner makes this affect zero rows, then we reload and reapply the patch without losing its keys.
+				$updated = $wpdb->query($wpdb->prepare("UPDATE {$wpdb->options} SET option_value = %s WHERE option_name = %s AND BINARY option_value = BINARY %s", $serialized_state, $option_name, (string)$raw_state));
+				if($updated)
+				{
+					wp_cache_delete($option_name, 'options');
+					return $patched_state;
+				}
+			}
+			return FALSE;
 		}
 
 		/**
@@ -271,7 +377,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 */
 		public static function private_context_set($gateway_checkout_id = '', $context = array())
 		{
-			$state = self::get($gateway_checkout_id);
+			$state = self::load_state($gateway_checkout_id);
 			if(!$state || !is_array($context) || !self::private_context_is_safe($context))
 				return FALSE;
 
@@ -290,7 +396,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 
 			if(!update_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, $state, FALSE))
 			{
-				$persisted_state = self::get($gateway_checkout_id);
+				$persisted_state = self::load_state($gateway_checkout_id);
 				if($persisted_state !== $state)
 					return FALSE;
 			}
@@ -309,7 +415,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 */
 		public static function private_context_get($gateway_checkout_id = '')
 		{
-			$state = self::get($gateway_checkout_id);
+			$state = self::load_state($gateway_checkout_id);
 			if(!$state)
 				return FALSE;
 			if(empty($state['private_context']))
@@ -356,7 +462,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		{
 			global $wpdb;
 
-			if(!self::valid_id($gateway_checkout_id) || !self::get($gateway_checkout_id))
+			if(!self::valid_id($gateway_checkout_id) || !self::load_state($gateway_checkout_id))
 				return FALSE;
 
 			$option_name = 's2m_gateway_checkout_lock_'.$gateway_checkout_id;
@@ -451,7 +557,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 
 			if(!$expires_at)
 			{
-				$state = self::get($gateway_checkout_id);
+				$state = self::load_state($gateway_checkout_id);
 				if(!$state)
 					return '';
 
@@ -493,7 +599,7 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			if(!hash_equals($expected, strtolower($matches[2])))
 				return FALSE;
 
-			$state = self::get($gateway_checkout_id);
+			$state = self::load_state($gateway_checkout_id);
 			//260830.0059 A provisional browser identity has no state yet; once state exists, its expiration must remain bound to the signed token.
 			return !$state || $expires_at === (int)$state['expires_at'];
 		}

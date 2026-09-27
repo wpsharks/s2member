@@ -513,7 +513,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				}
 
 				$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
-				$gateway_checkout = $gateway_checkout_id ? c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id) : FALSE;
+				$gateway_checkout = $gateway_checkout_id ? c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id) : FALSE;
 				if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'subscription')
 				{
 					echo wp_json_encode(array('error' => 'gateway_checkout_invalid'));
@@ -576,7 +576,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
 				if($gateway_checkout_id)
 				{
-					$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+					$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 					$expected_subscription_id = $gateway_checkout && !empty($gateway_checkout['gateway_ids']['subscription_id']) ? (string)$gateway_checkout['gateway_ids']['subscription_id'] : '';
 					//260901.2145 A coordinator-backed browser may confirm only the PayPal subscription that s2Member created and persisted for this logical checkout.
 					if(!$expected_subscription_id || !hash_equals($expected_subscription_id, $subscription_id))
@@ -1046,7 +1046,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 			{
 				//260907.1820 This recovery endpoint is intentionally coordinator-only: the signed checkout token authorizes a local state read, while PayPal polling/retries remain server/webhook responsibilities.
 				$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
-				$gateway_checkout = $gateway_checkout_id ? c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id) : FALSE;
+				$gateway_checkout = $gateway_checkout_id ? c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id) : FALSE;
 				if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
 				{
 					echo wp_json_encode(array('error' => 'gateway_checkout_invalid'));
@@ -1078,7 +1078,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
 				if($gateway_checkout_id)
 				{
-					$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::get($gateway_checkout_id);
+					$gateway_checkout = c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id);
 					$private_context = $gateway_checkout ? c_ws_plugin__s2member_gateway_checkouts::private_context_get($gateway_checkout_id) : FALSE;
 					$fulfillment_result = is_array($private_context) && !empty($private_context['paypal_checkout']['fulfillment_result']) && is_array($private_context['paypal_checkout']['fulfillment_result']) ? $private_context['paypal_checkout']['fulfillment_result'] : array();
 					if($gateway_checkout && (string)$gateway_checkout['fulfillment_status'] === 'fulfilled' && !empty($fulfillment_result['rtn_url']) && !empty($fulfillment_result['rtn_post']))

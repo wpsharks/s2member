@@ -280,26 +280,36 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 			}
 			update_option('ws_plugin__s2member_shortcode_user_fields_transition_fields', $_fields, FALSE);
 
-			// Build a useful field list with a separate entry for each detected shortcode location.
-			$_field_items = array();
+			//260921.2025 Keep this notice compact by listing unique fields once and aggregating the pages where they were detected.
+			$_field_names = $_post_links = array();
 			foreach($_fields as $_details)
 			{
-				$_item = esc_html($_details['field']).' — ['.esc_html($_details['shortcode']).']';
+				$_field_key = strtolower((string)$_details['field']);
+				$_field_names[$_field_key] = (string)$_details['field'];
+
 				$_post_id = (!empty($_details['post_id'])) ? (int)$_details['post_id'] : 0;
-				if($_post_id > 0 && ($_edit_link = get_edit_post_link($_post_id, '')))
+				if($_post_id > 0 && !isset($_post_links[$_post_id]) && ($_edit_link = get_edit_post_link($_post_id, '')))
 				{
 					$_post_title = get_the_title($_post_id);
 					$_post_title = ($_post_title !== '') ? $_post_title : '(no title)';
-					$_item .= ' — <a href="'.esc_url($_edit_link).'">'.esc_html($_post_title).' (#'.$_post_id.')</a>';
+					$_post_links[$_post_id] = '<a href="'.esc_url($_edit_link).'">'.esc_html($_post_title).'</a>';
 				}
-				$_field_items[] = $_item;
 			}
-			unset($_details, $_item, $_post_id, $_edit_link, $_post_title);
+			unset($_details, $_field_key, $_post_id, $_edit_link, $_post_title);
 
 			$_settings_url = add_query_arg('s2member-open-panel', 'shortcode-user-fields-whitelist', admin_url('/admin.php?page=ws-plugin--s2member-gen-ops')).'#ws-plugin--s2member-shortcode-user-fields-whitelist';
 			$_dismiss_url = wp_nonce_url(add_query_arg('s2member-dismiss-shortcode-user-fields-notice', '1', admin_url()), 's2member-dismiss-shortcode-user-fields-notice');
-			$_message = 'Some s2Member shortcodes attempted to display user fields from other accounts that are not in <em><a href="'.esc_url($_settings_url).'">s2Member → General Options → Shortcode User Fields Whitelist</a></em>. Those cross-user field values were blocked.';
-			c_ws_plugin__s2member_admin_notices::display_security_notice($_message, 'Review the blocked fields below and allow the ones that are okay for other users to see:', $_field_items, $_dismiss_url);
+			$_field_is_singular = (count($_field_names) === 1);
+			$_message = ($_field_is_singular ? 'The following user field needs' : 'The following user fields need').' to be whitelisted. See: <em><a href="'.esc_url($_settings_url).'">s2Member → General Options → Shortcode User Fields Whitelist</a></em>';
+			$_review = '<span style="background:#ffebcd; padding:0 3px;"><em>'.esc_html(implode(', ', array_values($_field_names))).'</em></span>';
+			if($_post_links)
+			{
+				$_post_links = array_values($_post_links);
+				$_last_post_link = (count($_post_links) > 1) ? array_pop($_post_links) : '';
+				$_used_on = $_last_post_link ? implode(', ', $_post_links).', and '.$_last_post_link : $_post_links[0];
+				$_review .= '<br /><em>Used on: '.$_used_on.'.</em>';
+			}
+			c_ws_plugin__s2member_admin_notices::display_security_notice($_message, $_review, array(), $_dismiss_url);
 		}
 
 		/**
