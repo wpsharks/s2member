@@ -1,5 +1,8 @@
 <?php
 // @codingStandardsIgnoreFile
+if(!defined('WPINC')) //260928.0402 This OAuth library is only loaded through WordPress/s2Member; reject direct web requests.
+	exit('Do not access this file directly.');
+
 if (!class_exists('CurlObject')) require_once('curl_object.php');
 if (!class_exists('CurlResponse')) require_once('curl_response.php');
 
