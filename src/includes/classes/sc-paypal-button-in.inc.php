@@ -297,6 +297,14 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 								$paypal_invoice_input_value = /* s2Member's Unique Code~IP combo. */ uniqid () . "~" . c_ws_plugin__s2member_utils_ip::current();
 
+								//260928.1515 Give each rendered PayPal Checkout button a signed provisional identity; persist its Gateway Checkout only when the buyer starts, never on page render.
+								$ppco_gateway_checkout_identity = FALSE;
+								if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled())
+								{
+									$ppco_gateway_checkout_identity = c_ws_plugin__s2member_gateway_checkouts::browser_identity();
+									$paypal_invoice_input_value = 's2mb-'.(string)$ppco_gateway_checkout_identity['id'];
+								}
+
 								$attr["sp_ids_exp"] = /* Combined "sp:ids:expiration hours". */ "sp:" . $attr["ids"] . ":" . $attr["exp"];
 
 								$success_return_url = /* s2Member handles this all by itself. However, it can be Filtered. */ home_url ("/?s2member_paypal_return=1", $force_return_url_scheme);
@@ -355,6 +363,13 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 											'checksum'    => md5($paypal_invoice_input_value.c_ws_plugin__s2member_utils_ip::current().$attr["sp_ids_exp"]),
 										);
+
+										//260928.1515 Bind the PayPal invoice and encrypted purchase terms to the same provisional Gateway Checkout identity, including in anchor/url mode.
+										if($ppco_gateway_checkout_identity)
+										{
+											$ppco_token['gateway_checkout_id'] = (string)$ppco_gateway_checkout_identity['id'];
+											$ppco_token['gateway_checkout_token'] = (string)$ppco_gateway_checkout_identity['token'];
+										}
 
 										$ppco_token = urlencode(c_ws_plugin__s2member_utils_encryption::encrypt(serialize($ppco_token)));
 
@@ -421,28 +436,35 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$code .= 'var e="'.esc_js($ppco_err_id).'";'."\n";
 										$code .= 'var t="'.esc_js($ppco_token).'";'."\n";
 										$code .= 'var u="'.esc_js($ppco_endpoint).'";'."\n";
+										//260928.1739 Bind to the SDK script actually emitted above and encode its URL as JavaScript, not HTML entities.
 										$code .= 'var ns="'.esc_js($ppco_sdk_ns).'";'."\n";
-										$code .= 'var s="'.esc_js($ppco_sdk_src).'";'."\n";
+										$code .= 'var sdkId="'.esc_js($ppco_sdk_id).'";'."\n";
+										$code .= 'var s='.wp_json_encode($ppco_sdk_src, JSON_HEX_AMP | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT).';'."\n";
 										$code .= 'var cid="'.esc_js($paypal_invoice_input_value).'";'."\n";
 										//260819.0042 Keep standalone Checkout feedback consistent with Pro-Forms while distinguishing cancellation from errors.
 										$code .= 'function showMsg(m,t){try{var el=document.getElementById(e);if(el){el.style.display="block";el.innerHTML="<span class=\"ws-plugin--s2member-ppco-"+(t==="info"?"info":"error")+"\">"+m+"</span>";}}catch(x){}}function showErr(m){showMsg(m,"error");}function showInfo(m){showMsg(m,"info");}'."\n";
 										$code .= 'function postTo(url, data){var f=document.createElement("form");f.method="post";f.acceptCharset="UTF-8";f.action=url;for(var k in data){if(!data.hasOwnProperty(k))continue;var i=document.createElement("input");i.type="hidden";i.name=k;i.value=data[k];f.appendChild(i);}document.body.appendChild(f);f.submit();}'."\n"; //260817 Keep signed PayPal Checkout returns in UTF-8.
 										$code .= 'function enc(o){var a=[];for(var k in o){if(!o.hasOwnProperty(k))continue;a.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return a.join("&");}'."\n";
-										$code .= 'function loadSdk(cb){var P=window[ns];if(P&&P.Buttons){cb(P);return;}var id=ns+"_sdk",tag=document.getElementById(id),done=false;function finish(){if(done)return;done=true;cb(window[ns]&&window[ns].Buttons?window[ns]:null);}function ok(){finish();}function fail(){finish();}if(tag){if(window[ns]&&window[ns].Buttons){finish();return;}if(tag.getAttribute("src")!==s){tag.setAttribute("src",s);}if(tag.readyState==="complete"||tag.readyState==="loaded"){setTimeout(finish,0);return;}tag.addEventListener("load",ok);tag.addEventListener("error",fail);setTimeout(finish,3500);return;}tag=document.createElement("script");tag.id=id;tag.setAttribute("data-namespace",ns);tag.src=s;tag.async=true;tag.onload=ok;tag.onerror=fail;(document.head||document.body||document.documentElement).appendChild(tag);setTimeout(finish,3500);}'."\n";
+										$code .= 'function loadSdk(cb){var P=window[ns];if(P&&P.Buttons){cb(P);return;}var id=sdkId,tag=document.getElementById(id),done=false;function finish(){if(done)return;done=true;cb(window[ns]&&window[ns].Buttons?window[ns]:null);}function ok(){finish();}function fail(){finish();}if(tag){if(window[ns]&&window[ns].Buttons){finish();return;}if(tag.getAttribute("src")!==s){tag.setAttribute("src",s);}if(tag.readyState==="complete"||tag.readyState==="loaded"){setTimeout(finish,0);return;}tag.addEventListener("load",ok);tag.addEventListener("error",fail);setTimeout(finish,3500);return;}tag=document.createElement("script");tag.id=id;tag.setAttribute("data-namespace",ns);tag.src=s;tag.async=true;tag.onload=ok;tag.onerror=fail;(document.head||document.body||document.documentElement).appendChild(tag);setTimeout(finish,3500);}'."\n";
 										if($ppco_intent === 'subscription')
 											{
-												$code .= 'function getPlanId(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"get_plan_id",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.plan_id)return res.plan_id;throw(res&&res.error?res.error:"plan_get_failed");});}'."\n";
+												//260928.1739 WordPress rendered this inline JS with &#038;&#038; inside throw(res&&res.error), breaking the entire PayPal Button script. Use a ternary and || instead.
+												$code .= 'function getPlanId(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"get_plan_id",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.plan_id)return res.plan_id;throw(res ? (res.error || "plan_get_failed") : "plan_get_failed");});}'."\n";
 												$code .= 'var planId=null;'."\n";
 												$code .= 'function createSubscription(data,actions){if(planId)return actions.subscription.create({plan_id:planId,custom_id:cid,application_context:{shipping_preference:"NO_SHIPPING"}});return getPlanId().then(function(pid){planId=pid;return actions.subscription.create({plan_id:planId,custom_id:cid,application_context:{shipping_preference:"NO_SHIPPING"}});});}'."\n";
-												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"confirm_subscription",s2member_paypal_checkout_t:t,subscription_id:(data&&data.subscriptionID?data.subscriptionID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"subscription_confirm_failed");}).catch(function(e){showErr("Subscription could not be completed. Please try again.");});}'."\n";
+												//260928.1739 WordPress rendered this inline JS with &#038;&#038; inside throw(res&&res.error), breaking the entire PayPal Button script. Use a ternary and || instead.
+												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"confirm_subscription",s2member_paypal_checkout_t:t,subscription_id:(data&&data.subscriptionID?data.subscriptionID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res ? (res.error || "subscription_confirm_failed") : "subscription_confirm_failed");}).catch(function(e){showErr("Subscription could not be completed. Please try again.");});}'."\n";
 												$code .= 'function onCancel(){showInfo("Subscription cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
 												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createSubscription:createSubscription,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
 											}
 										else
 											{
-												$code .= 'function createOrder(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"create_order",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.order_id)return res.order_id;throw(res&&res.error?res.error:"order_create_failed");});}'."\n";
-												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"capture_order",s2member_paypal_checkout_t:t,order_id:(data&&data.orderID?data.orderID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"order_capture_failed");}).catch(function(e){showErr("Payment could not be completed. Please try again.");});}'."\n";
+												$code .= 'function request(op,vars){var body={s2member_paypal_checkout_op:op,s2member_paypal_checkout_t:t};for(var k in (vars||{})){if(vars.hasOwnProperty(k))body[k]=vars[k];}return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc(body)}).then(function(r){return r.json();});}'."\n";
+												$code .= 'function createOrder(){return request("create_order").then(function(res){if(res&&res.order_id)return res.order_id;throw(res ? (res.error || "order_create_failed") : "order_create_failed");});}'."\n";
+												//260928.1703 A completed PayPal capture can reach the verified webhook even when the browser loses its response. Poll only our durable state and submit its saved signed handoff; never issue a second capture on uncertainty.
+												$code .= 'function recoverOrder(n){return request("get_order_status").then(function(res){if(res&&res.fulfilled&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}if(n>=20)throw "order_confirmation_pending";return new Promise(function(resolve){setTimeout(resolve,1200);}).then(function(){return recoverOrder(n+1);});});}'."\n";
+												$code .= 'function onApprove(data){var oid=data&&data.orderID?data.orderID:"";return request("capture_order",{order_id:oid}).catch(function(){return {recoverable:true};}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}if(res&&res.recoverable)return recoverOrder(0).catch(function(){showInfo("Payment confirmation is pending. Please do not pay again; check your email or contact support.");});showErr("Payment could not be confirmed. Please contact support before trying again.");});}'."\n";
 												$code .= 'function onCancel(){showInfo("Payment cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
 												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createOrder:createOrder,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
@@ -510,6 +532,14 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 								$paypal_invoice_input_value = /* s2Member's Unique Code~IP combo. */ uniqid () . "~" . c_ws_plugin__s2member_utils_ip::current();
 
+								//260928.1515 Give each rendered PayPal Checkout button a signed provisional identity; persist its Gateway Checkout only when the buyer starts, never on page render.
+								$ppco_gateway_checkout_identity = FALSE;
+								if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled())
+								{
+									$ppco_gateway_checkout_identity = c_ws_plugin__s2member_gateway_checkouts::browser_identity();
+									$paypal_invoice_input_value = 's2mb-'.(string)$ppco_gateway_checkout_identity['id'];
+								}
+
 								$attr["level_ccaps_eotper"] = ($attr["rr"] === "BN" && $attr["rt"] !== "L") ? $attr["level"] . ":" . $attr["ccaps"] . ":" . $attr["rp"] . " " . $attr["rt"] : $attr["level"] . ":" . $attr["ccaps"];
 								$attr["level_ccaps_eotper"] = /* Clean any trailing separators from this string. */ rtrim ($attr["level_ccaps_eotper"], ":");
 
@@ -570,6 +600,13 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 
 											'checksum'    => md5($paypal_invoice_input_value.c_ws_plugin__s2member_utils_ip::current().$attr["level_ccaps_eotper"]),
 										);
+
+										//260928.1515 Bind the PayPal invoice and encrypted purchase terms to the same provisional Gateway Checkout identity, including in anchor/url mode.
+										if($ppco_gateway_checkout_identity)
+										{
+											$ppco_token['gateway_checkout_id'] = (string)$ppco_gateway_checkout_identity['id'];
+											$ppco_token['gateway_checkout_token'] = (string)$ppco_gateway_checkout_identity['token'];
+										}
 
 										$ppco_token = urlencode(c_ws_plugin__s2member_utils_encryption::encrypt(serialize($ppco_token)));
 
@@ -636,28 +673,34 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$code .= 'var e="'.esc_js($ppco_err_id).'";'."\n";
 										$code .= 'var t="'.esc_js($ppco_token).'";'."\n";
 										$code .= 'var u="'.esc_js($ppco_endpoint).'";'."\n";
+										//260928.1739 Bind to the SDK script actually emitted above and encode its URL as JavaScript, not HTML entities.
 										$code .= 'var ns="'.esc_js($ppco_sdk_ns).'";'."\n";
-										$code .= 'var s="'.esc_js($ppco_sdk_src).'";'."\n";
+										$code .= 'var sdkId="'.esc_js($ppco_sdk_id).'";'."\n";
+										$code .= 'var s='.wp_json_encode($ppco_sdk_src, JSON_HEX_AMP | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT).';'."\n";
 										$code .= 'var cid="'.esc_js($paypal_invoice_input_value).'";'."\n";
 										//260819.0042 Keep standalone Checkout feedback consistent with Pro-Forms while distinguishing cancellation from errors.
 										$code .= 'function showMsg(m,t){try{var el=document.getElementById(e);if(el){el.style.display="block";el.innerHTML="<span class=\"ws-plugin--s2member-ppco-"+(t==="info"?"info":"error")+"\">"+m+"</span>";}}catch(x){}}function showErr(m){showMsg(m,"error");}function showInfo(m){showMsg(m,"info");}'."\n";
 										$code .= 'function postTo(url, data){var f=document.createElement("form");f.method="post";f.acceptCharset="UTF-8";f.action=url;for(var k in data){if(!data.hasOwnProperty(k))continue;var i=document.createElement("input");i.type="hidden";i.name=k;i.value=data[k];f.appendChild(i);}document.body.appendChild(f);f.submit();}'."\n"; //260817 Keep signed PayPal Checkout returns in UTF-8.
 										$code .= 'function enc(o){var a=[];for(var k in o){if(!o.hasOwnProperty(k))continue;a.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return a.join("&");}'."\n";
-										$code .= 'function loadSdk(cb){var P=window[ns];if(P&&P.Buttons){cb(P);return;}var id=ns+"_sdk",tag=document.getElementById(id),done=false;function finish(){if(done)return;done=true;cb(window[ns]&&window[ns].Buttons?window[ns]:null);}function ok(){finish();}function fail(){finish();}if(tag){if(window[ns]&&window[ns].Buttons){finish();return;}if(tag.getAttribute("src")!==s){tag.setAttribute("src",s);}if(tag.readyState==="complete"||tag.readyState==="loaded"){setTimeout(finish,0);return;}tag.addEventListener("load",ok);tag.addEventListener("error",fail);setTimeout(finish,3500);return;}tag=document.createElement("script");tag.id=id;tag.setAttribute("data-namespace",ns);tag.src=s;tag.async=true;tag.onload=ok;tag.onerror=fail;(document.head||document.body||document.documentElement).appendChild(tag);setTimeout(finish,3500);}'."\n";
+										$code .= 'function loadSdk(cb){var P=window[ns];if(P&&P.Buttons){cb(P);return;}var id=sdkId,tag=document.getElementById(id),done=false;function finish(){if(done)return;done=true;cb(window[ns]&&window[ns].Buttons?window[ns]:null);}function ok(){finish();}function fail(){finish();}if(tag){if(window[ns]&&window[ns].Buttons){finish();return;}if(tag.getAttribute("src")!==s){tag.setAttribute("src",s);}if(tag.readyState==="complete"||tag.readyState==="loaded"){setTimeout(finish,0);return;}tag.addEventListener("load",ok);tag.addEventListener("error",fail);setTimeout(finish,3500);return;}tag=document.createElement("script");tag.id=id;tag.setAttribute("data-namespace",ns);tag.src=s;tag.async=true;tag.onload=ok;tag.onerror=fail;(document.head||document.body||document.documentElement).appendChild(tag);setTimeout(finish,3500);}'."\n";
 										if($ppco_intent === 'subscription')
 											{
-												$code .= 'function getPlanId(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"get_plan_id",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.plan_id)return res.plan_id;throw(res&&res.error?res.error:"plan_get_failed");});}'."\n";
+												$code .= 'function getPlanId(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"get_plan_id",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.plan_id)return res.plan_id;throw(res ? (res.error || "plan_get_failed") : "plan_get_failed");});}'."\n";
 												$code .= 'var planId=null;'."\n";
 												$code .= 'function createSubscription(data,actions){if(planId)return actions.subscription.create({plan_id:planId,custom_id:cid,application_context:{shipping_preference:"NO_SHIPPING"}});return getPlanId().then(function(pid){planId=pid;return actions.subscription.create({plan_id:planId,custom_id:cid,application_context:{shipping_preference:"NO_SHIPPING"}});});}'."\n";
-												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"confirm_subscription",s2member_paypal_checkout_t:t,subscription_id:(data&&data.subscriptionID?data.subscriptionID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"subscription_confirm_failed");}).catch(function(e){showErr("Subscription could not be completed. Please try again.");});}'."\n";
+												//260928.1739 WordPress rendered this inline JS with &#038;&#038; inside throw(res&&res.error), breaking the entire PayPal Button script. Use a ternary and || instead.
+												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"confirm_subscription",s2member_paypal_checkout_t:t,subscription_id:(data&&data.subscriptionID?data.subscriptionID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res ? (res.error || "subscription_confirm_failed") : "subscription_confirm_failed");}).catch(function(e){showErr("Subscription could not be completed. Please try again.");});}'."\n";
 												$code .= 'function onCancel(){showInfo("Subscription cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
 												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createSubscription:createSubscription,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
 											}
 										else
 											{
-												$code .= 'function createOrder(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"create_order",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.order_id)return res.order_id;throw(res&&res.error?res.error:"order_create_failed");});}'."\n";
-												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"capture_order",s2member_paypal_checkout_t:t,order_id:(data&&data.orderID?data.orderID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"order_capture_failed");}).catch(function(e){showErr("Payment could not be completed. Please try again.");});}'."\n";
+												$code .= 'function request(op,vars){var body={s2member_paypal_checkout_op:op,s2member_paypal_checkout_t:t};for(var k in (vars||{})){if(vars.hasOwnProperty(k))body[k]=vars[k];}return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc(body)}).then(function(r){return r.json();});}'."\n";
+												$code .= 'function createOrder(){return request("create_order").then(function(res){if(res&&res.order_id)return res.order_id;throw(res ? (res.error || "order_create_failed") : "order_create_failed");});}'."\n";
+												//260928.1703 A completed PayPal capture can reach the verified webhook even when the browser loses its response. Poll only our durable state and submit its saved signed handoff; never issue a second capture on uncertainty.
+												$code .= 'function recoverOrder(n){return request("get_order_status").then(function(res){if(res&&res.fulfilled&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}if(n>=20)throw "order_confirmation_pending";return new Promise(function(resolve){setTimeout(resolve,1200);}).then(function(){return recoverOrder(n+1);});});}'."\n";
+												$code .= 'function onApprove(data){var oid=data&&data.orderID?data.orderID:"";return request("capture_order",{order_id:oid}).catch(function(){return {recoverable:true};}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}if(res&&res.recoverable)return recoverOrder(0).catch(function(){showInfo("Payment confirmation is pending. Please do not pay again; check your email or contact support.");});showErr("Payment could not be confirmed. Please contact support before trying again.");});}'."\n";
 												$code .= 'function onCancel(){showInfo("Payment cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
 												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createOrder:createOrder,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
@@ -724,6 +767,14 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 								$paypal_os1_input_value = /* Current User's IP Address for tracking purposes. */ c_ws_plugin__s2member_utils_ip::current();
 
 								$paypal_invoice_input_value = /* s2Member's Unique Code~IP combo. */ uniqid () . "~" . c_ws_plugin__s2member_utils_ip::current();
+
+								//260928.1515 Give each rendered PayPal Checkout button a signed provisional identity; persist its Gateway Checkout only when the buyer starts, never on page render.
+								$ppco_gateway_checkout_identity = FALSE;
+								if(c_ws_plugin__s2member_paypal_utilities::paypal_checkout_is_enabled())
+								{
+									$ppco_gateway_checkout_identity = c_ws_plugin__s2member_gateway_checkouts::browser_identity();
+									$paypal_invoice_input_value = 's2mb-'.(string)$ppco_gateway_checkout_identity['id'];
+								}
 
 								$attr["desc"] = (!$attr["desc"]) ? $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["level" . $attr["level"] . "_label"] : $attr["desc"];
 
@@ -815,6 +866,13 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 											'checksum'    => md5($paypal_invoice_input_value.c_ws_plugin__s2member_utils_ip::current().$attr["level_ccaps_eotper"]),
 										);
 
+										//260928.1515 Bind the PayPal invoice and encrypted purchase terms to the same provisional Gateway Checkout identity, including in anchor/url mode.
+										if($ppco_gateway_checkout_identity)
+										{
+											$ppco_token['gateway_checkout_id'] = (string)$ppco_gateway_checkout_identity['id'];
+											$ppco_token['gateway_checkout_token'] = (string)$ppco_gateway_checkout_identity['token'];
+										}
+
 										$ppco_token = urlencode(c_ws_plugin__s2member_utils_encryption::encrypt(serialize($ppco_token)));
 
 										// output="anchor|url" support (no JS SDK; redirects through s2Member, then to PayPal approval URL).
@@ -879,28 +937,36 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 										$code .= 'var e="'.esc_js($ppco_err_id).'";'."\n";
 										$code .= 'var t="'.esc_js($ppco_token).'";'."\n";
 										$code .= 'var u="'.esc_js($ppco_endpoint).'";'."\n";
+										//260928.1739 Bind to the SDK script actually emitted above and encode its URL as JavaScript, not HTML entities.
 										$code .= 'var ns="'.esc_js($ppco_sdk_ns).'";'."\n";
-										$code .= 'var s="'.esc_js($ppco_sdk_src).'";'."\n";
+										$code .= 'var sdkId="'.esc_js($ppco_sdk_id).'";'."\n";
+										$code .= 'var s='.wp_json_encode($ppco_sdk_src, JSON_HEX_AMP | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT).';'."\n";
 										$code .= 'var cid="'.esc_js($paypal_invoice_input_value).'";'."\n";
 										//260819.0042 Keep standalone Checkout feedback consistent with Pro-Forms while distinguishing cancellation from errors.
 										$code .= 'function showMsg(m,t){try{var el=document.getElementById(e);if(el){el.style.display="block";el.innerHTML="<span class=\"ws-plugin--s2member-ppco-"+(t==="info"?"info":"error")+"\">"+m+"</span>";}}catch(x){}}function showErr(m){showMsg(m,"error");}function showInfo(m){showMsg(m,"info");}'."\n";
 										$code .= 'function postTo(url, data){var f=document.createElement("form");f.method="post";f.acceptCharset="UTF-8";f.action=url;for(var k in data){if(!data.hasOwnProperty(k))continue;var i=document.createElement("input");i.type="hidden";i.name=k;i.value=data[k];f.appendChild(i);}document.body.appendChild(f);f.submit();}'."\n"; //260817 Keep signed PayPal Checkout returns in UTF-8.
 										$code .= 'function enc(o){var a=[];for(var k in o){if(!o.hasOwnProperty(k))continue;a.push(encodeURIComponent(k)+"="+encodeURIComponent(o[k]));}return a.join("&");}'."\n";
-										$code .= 'function loadSdk(cb){var P=window[ns];if(P&&P.Buttons){cb(P);return;}var id=ns+"_sdk",tag=document.getElementById(id),done=false;function finish(){if(done)return;done=true;cb(window[ns]&&window[ns].Buttons?window[ns]:null);}function ok(){finish();}function fail(){finish();}if(tag){if(window[ns]&&window[ns].Buttons){finish();return;}if(tag.getAttribute("src")!==s){tag.setAttribute("src",s);}if(tag.readyState==="complete"||tag.readyState==="loaded"){setTimeout(finish,0);return;}tag.addEventListener("load",ok);tag.addEventListener("error",fail);setTimeout(finish,3500);return;}tag=document.createElement("script");tag.id=id;tag.setAttribute("data-namespace",ns);tag.src=s;tag.async=true;tag.onload=ok;tag.onerror=fail;(document.head||document.body||document.documentElement).appendChild(tag);setTimeout(finish,3500);}'."\n";
+										$code .= 'function loadSdk(cb){var P=window[ns];if(P&&P.Buttons){cb(P);return;}var id=sdkId,tag=document.getElementById(id),done=false;function finish(){if(done)return;done=true;cb(window[ns]&&window[ns].Buttons?window[ns]:null);}function ok(){finish();}function fail(){finish();}if(tag){if(window[ns]&&window[ns].Buttons){finish();return;}if(tag.getAttribute("src")!==s){tag.setAttribute("src",s);}if(tag.readyState==="complete"||tag.readyState==="loaded"){setTimeout(finish,0);return;}tag.addEventListener("load",ok);tag.addEventListener("error",fail);setTimeout(finish,3500);return;}tag=document.createElement("script");tag.id=id;tag.setAttribute("data-namespace",ns);tag.src=s;tag.async=true;tag.onload=ok;tag.onerror=fail;(document.head||document.body||document.documentElement).appendChild(tag);setTimeout(finish,3500);}'."\n";
 										if($ppco_intent === 'subscription')
 											{
-												$code .= 'function getPlanId(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"get_plan_id",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.plan_id)return res.plan_id;throw(res&&res.error?res.error:"plan_get_failed");});}'."\n";
-												$code .= 'var planId=null;'."\n";
-												$code .= 'function createSubscription(data,actions){if(planId)return actions.subscription.create({plan_id:planId,custom_id:cid,application_context:{shipping_preference:"NO_SHIPPING"}});return getPlanId().then(function(pid){planId=pid;return actions.subscription.create({plan_id:planId,custom_id:cid,application_context:{shipping_preference:"NO_SHIPPING"}});});}'."\n";
-												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"confirm_subscription",s2member_paypal_checkout_t:t,subscription_id:(data&&data.subscriptionID?data.subscriptionID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"subscription_confirm_failed");}).catch(function(e){showErr("Subscription could not be completed. Please try again.");});}'."\n";
+												//260928.1540 Move Framework subscription creation onto the same server-side provider/idempotency path Pro-Forms use. Only the persisted ID reaches the PayPal SDK for buyer approval.
+												$code .= 'function request(op,vars){var body={s2member_paypal_checkout_op:op,s2member_paypal_checkout_t:t};for(var k in (vars||{})){if(vars.hasOwnProperty(k))body[k]=vars[k];}return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc(body)}).then(function(r){return r.json();});}' . "\n";
+												$code .= 'function waitForSubscription(n){return request("get_subscription_id").then(function(res){if(res&&res.subscription_id)return res.subscription_id;if(n>=20)throw "subscription_create_unresolved";return new Promise(function(resolve){setTimeout(resolve,1000);}).then(function(){return waitForSubscription(n+1);});});}' . "\n";
+												$code .= 'function createSubscription(){return request("create_subscription").then(function(res){if(res&&res.subscription_id)return res.subscription_id;if(res&&res.recoverable)return waitForSubscription(0);throw(res ? (res.error || "subscription_create_failed") : "subscription_create_failed");});}' . "\n";
+												//260928.1540 PayPal can report APPROVED before subscription ACTIVATED; poll the same backend until entitlement is confirmed or the activation webhook fulfills off-session.
+												//260928.1739 WordPress rendered this inline JS with &#038;&#038; inside throw(res&&res.error), breaking the entire PayPal Button script. Use a ternary and || instead.
+												$code .= 'function onApprove(data){var sid=data&&data.subscriptionID?data.subscriptionID:"";function finish(n){return request("confirm_subscription",{subscription_id:sid}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}if(res&&res.pending_activation&&n<25){return new Promise(function(resolve){setTimeout(resolve,1200);}).then(function(){return finish(n+1);});}throw(res ? (res.error || "subscription_confirm_failed") : "subscription_confirm_failed");});}return finish(0).catch(function(){showErr("Subscription could not be completed. Please try again.");});}' . "\n";
 												$code .= 'function onCancel(){showInfo("Subscription cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
 												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createSubscription:createSubscription,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
 											}
 										else
 											{
-												$code .= 'function createOrder(){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"create_order",s2member_paypal_checkout_t:t})}).then(function(r){return r.json();}).then(function(res){if(res&&res.order_id)return res.order_id;throw(res&&res.error?res.error:"order_create_failed");});}'."\n";
-												$code .= 'function onApprove(data){return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc({s2member_paypal_checkout_op:"capture_order",s2member_paypal_checkout_t:t,order_id:(data&&data.orderID?data.orderID:"")})}).then(function(r){return r.json();}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}throw(res&&res.error?res.error:"order_capture_failed");}).catch(function(e){showErr("Payment could not be completed. Please try again.");});}'."\n";
+												$code .= 'function request(op,vars){var body={s2member_paypal_checkout_op:op,s2member_paypal_checkout_t:t};for(var k in (vars||{})){if(vars.hasOwnProperty(k))body[k]=vars[k];}return fetch(u,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8"},body:enc(body)}).then(function(r){return r.json();});}'."\n";
+												$code .= 'function createOrder(){return request("create_order").then(function(res){if(res&&res.order_id)return res.order_id;throw(res ? (res.error || "order_create_failed") : "order_create_failed");});}'."\n";
+												//260928.1703 A completed PayPal capture can reach the verified webhook even when the browser loses its response. Poll only our durable state and submit its saved signed handoff; never issue a second capture on uncertainty.
+												$code .= 'function recoverOrder(n){return request("get_order_status").then(function(res){if(res&&res.fulfilled&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}if(n>=20)throw "order_confirmation_pending";return new Promise(function(resolve){setTimeout(resolve,1200);}).then(function(){return recoverOrder(n+1);});});}'."\n";
+												$code .= 'function onApprove(data){var oid=data&&data.orderID?data.orderID:"";return request("capture_order",{order_id:oid}).catch(function(){return {recoverable:true};}).then(function(res){if(res&&res.rtn_url&&res.rtn_post){postTo(res.rtn_url,res.rtn_post);return;}if(res&&res.recoverable)return recoverOrder(0).catch(function(){showInfo("Payment confirmation is pending. Please do not pay again; check your email or contact support.");});showErr("Payment could not be confirmed. Please contact support before trying again.");});}'."\n";
 												$code .= 'function onCancel(){showInfo("Payment cancelled.");}'."\n";
 												$code .= 'function onError(err){var m="PayPal error. Please try again.";try{if(err){if(typeof err==="string")m="PayPal error: "+err;else if(err.message)m="PayPal error: "+err.message;}}catch(x){}showErr(m);}'."\n";
 												$code .= 'function init(){loadSdk(function(P){var el=document.getElementById(d);if(!el){return;}if(el.getAttribute("data-s2m-ppco-rendered")==="1"){return;}if(!P||!P.Buttons){showErr("PayPal SDK failed to load.");return;}el.setAttribute("data-s2m-ppco-rendered","1");try{P.Buttons({fundingSource:P.FUNDING.PAYPAL,style:{layout:"vertical",tagline:false,height:40},createOrder:createOrder,onApprove:onApprove,onCancel:onCancel,onError:onError}).render("#"+d);}catch(x){el.removeAttribute("data-s2m-ppco-rendered");showErr("PayPal render failed.");}});}'."\n";
