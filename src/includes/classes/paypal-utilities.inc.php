@@ -121,8 +121,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										$postvars = self::paypal_postvars_utf8($postvars);
 										$endpoint = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com";
 
+										//260927.2250 Browser PayPal Returns must use the transaction-bound Checkout handoff above; never let the reusable server-to-server proxy credential authenticate them.
+										if(!empty($_GET["s2member_paypal_return"]) && !empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && $_REQUEST["s2member_paypal_proxy"] === "paypal")
+											return false;
+
 										//260909.0411 Normalize proxy verification input types and use the standard constant-time comparison helper.
-										if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]))
+										else if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]))
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_REQUEST["s2member_paypal_proxy"])), get_defined_vars());
 
 										else if(empty($_POST) && !empty($_GET["s2member_paypal_proxy"]) && !empty($_GET["s2member_paypal_proxy_verification"]) && c_ws_plugin__s2member_utils_urls::s2member_sig_ok($_SERVER["REQUEST_URI"], false, false, "s2member_paypal_proxy_verification"))
