@@ -1,5 +1,8 @@
 <?php
 // @codingStandardsIgnoreFile
+if(!defined('WPINC')) //260928.0402 This API library is only loaded through WordPress/s2Member; reject direct web requests.
+	exit('Do not access this file directly.');
+
 require_once('exceptions.php');
 require_once('oauth_adapter.php');
 require_once('oauth_application.php');

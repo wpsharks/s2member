@@ -389,6 +389,29 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						exit();
 					}
 
+
+					//260928.1538 Standalone Framework buttons are coordinator-backed; a verified activation now recovers all original purchase terms and completes membership even if the browser never calls confirm_subscription.
+					if(strpos((string)$paypal['invoice'], 's2mb-') === 0)
+					{
+						$button_checkout_id = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_gateway_checkout_id_from_invoice((string)$paypal['invoice']);
+						$button_private = $button_checkout_id ? c_ws_plugin__s2member_gateway_checkouts::private_context_get($button_checkout_id) : FALSE;
+						$button_token = is_array($button_private) && !empty($button_private['paypal_checkout']['token']) && is_array($button_private['paypal_checkout']['token']) ? $button_private['paypal_checkout']['token'] : array();
+						$subscription_details = $subscr_id ? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_details($subscr_id) : array();
+						$button_fulfillment = (!$button_token || !empty($subscription_details['__error']))
+							? array('ok' => FALSE, 'error' => 'gateway_checkout_purchase_context_or_provider_missing')
+							: c_ws_plugin__s2member_paypal_utilities::paypal_checkout_button_subscription_fulfill($subscription_details, $button_token, 'webhook');
+						if(empty($button_fulfillment['ok']))
+						{
+							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'button_subscription_fulfillment_retry', 'subscription_id' => $subscr_id, 'invoice' => (string)$paypal['invoice'], 'error' => !empty($button_fulfillment['error']) ? (string)$button_fulfillment['error'] : 'unknown'));
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							status_header(500); //260928.1538 Leave the activation event unconsumed so PayPal retries on temporary recovery/Notify failure.
+							exit();
+						}
+						c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						status_header(200);
+						exit();
+					}
 					$paypal['txn_type']       = 'subscr_signup'; //260401 Keep webhook activation as a fallback to the legacy signup handler only when checkout did not already handle this Subscription.
 					$paypal['payment_status'] = 'Completed';
 

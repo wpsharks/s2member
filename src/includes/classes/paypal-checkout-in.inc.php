@@ -77,6 +77,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				echo wp_json_encode(array('error' => 'invalid_token'));
 				exit();
 			}
+			//260928.1645 Never write a reusable signed Gateway Checkout browser token to PayPal debug logs; the encrypted shortcode token remains available to the handler itself.
+			$log_token = $token;
+			unset($log_token['gateway_checkout_token']);
 			if(!empty($token['exp']) && is_numeric($token['exp']) && time() > (int)$token['exp'])
 			{
 				echo wp_json_encode(array('error' => 'token_expired'));
@@ -93,6 +96,22 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				exit();
 			}
 
+			//260928.1520 Framework button shortcodes use the same durable coordinator as Pro-Forms, initialized before any provider-side create operation and required for later browser return/confirmation.
+			if(strpos((string)$token['invoice'], 's2mb-') === 0 && $op !== 'cancel')
+			{
+				$create_allowed = in_array($op, array('create_order', 'create_subscription', 'get_plan_id', 'redirect'), TRUE);
+				$prepared = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_button_gateway_checkout_prepare($token, $create_allowed);
+				if(empty($prepared['ok']))
+				{
+					$error = !empty($prepared['error']) ? (string)$prepared['error'] : 'gateway_checkout_unavailable';
+					if($is_redirect_mode)
+						echo esc_html($error);
+					else
+						echo wp_json_encode(array('error' => $error));
+					exit();
+				}
+			}
+
 			if($token['ip'] !== c_ws_plugin__s2member_utils_ip::current())
 			{
 				//260414 PayPal Checkout browser returns can legitimately arrive with a different client IP; log it, but do not fail the token.
@@ -100,7 +119,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'ppco'  => 'checkout',
 						'env_setting' => $env_setting,
 						'event' => 'token_ip_mismatch',
-						'token' => $token,
+						'token' => $log_token,
 						'ip'    => c_ws_plugin__s2member_utils_ip::current(),
 					));
 			}
@@ -144,7 +163,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'env_setting' => $env_setting,
 							'event'  => 'redirect_order_create_response',
 							'order'  => $order,
-							'token'  => $token,
+							'token'  => $log_token,
 						));
 
 						$approve_url = '';
@@ -156,6 +175,16 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 									if($rel === 'approve' || $rel === 'payer-action' || $rel === 'approval_url')
 										$approve_url = (string)$link['href'];
 								}
+
+						//260928.1605 A resumed Gateway Checkout returns its existing provider ID, not the original create response links; fetch the provider resource rather than create another chargeable order.
+						if(!$approve_url && !empty($order['id']) && strpos((string)$token['invoice'], 's2mb-') === 0)
+						{
+							$order_details = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_details((string)$order['id']);
+							if(empty($order_details['__error']) && !empty($order_details['links']) && is_array($order_details['links']))
+								foreach($order_details['links'] as $link)
+									if(!empty($link['rel']) && !empty($link['href']) && in_array(strtolower((string)$link['rel']), array('approve', 'payer-action', 'approval_url'), TRUE))
+										$approve_url = (string)$link['href'];
+						}
 
 						if(!$approve_url)
 						{
@@ -175,7 +204,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'env_setting' => $env_setting,
 							'event'        => 'redirect_subscription_create_response',
 							'subscription' => $subscription,
-							'token'        => $token,
+							'token'        => $log_token,
 						));
 
 						$approve_url = '';
@@ -183,6 +212,16 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							foreach($subscription['links'] as $link)
 								if(!empty($link['rel']) && !empty($link['href']) && strtolower((string)$link['rel']) === 'approve')
 									$approve_url = (string)$link['href'];
+
+						//260928.1605 Reuse the same persisted PayPal subscription on repeated redirect clicks. A details GET may supply the approval link without starting a second subscription.
+						if(!$approve_url && !empty($subscription['id']) && strpos((string)$token['invoice'], 's2mb-') === 0)
+						{
+							$subscription_details = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_subscription_details((string)$subscription['id']);
+							if(empty($subscription_details['__error']) && !empty($subscription_details['links']) && is_array($subscription_details['links']))
+								foreach($subscription_details['links'] as $link)
+									if(!empty($link['rel']) && !empty($link['href']) && strtolower((string)$link['rel']) === 'approve')
+										$approve_url = (string)$link['href'];
+						}
 
 						if(!$approve_url)
 						{
@@ -219,7 +258,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'cc'         => !empty($cap0['amount']['currency_code']) ? (string)$cap0['amount']['currency_code'] : '',
 						'payer'      => !empty($capture['payer']['email_address']) ? (string)$capture['payer']['email_address'] : '',
 						'capture'    => $capture,
-						'token'      => $token,
+						'token'      => $log_token,
 					));
 
 					if(!empty($capture['__error']))
@@ -231,6 +270,23 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					if(empty($capture['status']) || strtoupper($capture['status']) !== 'COMPLETED')
 					{
 						echo 'order_capture_failed';
+						exit();
+					}
+
+					//260928.1538 Framework button redirect purchases use the shared coordinator fulfillment instead of a second hand-written notify/return path.
+					if(strpos((string)$token['invoice'], 's2mb-') === 0)
+					{
+						$fulfillment = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_fulfill($capture, $token);
+						if(empty($fulfillment['ok']) || empty($fulfillment['rtn_url']) || empty($fulfillment['rtn_post']))
+						{
+							echo esc_html(!empty($fulfillment['error']) ? (string)$fulfillment['error'] : 'order_fulfillment_failed');
+							exit();
+						}
+						echo '<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="robots" content="noindex,nofollow" /></head><body>';
+						echo '<form id="s2m_ppco_rtn" method="post" accept-charset="UTF-8" action="'.esc_attr($fulfillment['rtn_url']).'">';
+						foreach($fulfillment['rtn_post'] as $k => $v)
+							echo '<input type="hidden" name="'.esc_attr($k).'" value="'.esc_attr((string)$v).'" />';
+						echo '</form><script type="text/javascript">document.getElementById("s2m_ppco_rtn").submit();</script></body></html>';
 						exit();
 					}
 
@@ -366,7 +422,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'subscription_id' => $subscription_id,
 						'code'            => !empty($subscription_r['code']) ? (int)$subscription_r['code'] : 0,
 						'body'            => !empty($subscription_r['body']) ? (string)$subscription_r['body'] : '',
-						'token'           => $token,
+						'token'           => $log_token,
 					));
 
 					$subscription_code = !empty($subscription_r['code']) ? (int)$subscription_r['code'] : 0;
@@ -389,6 +445,39 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					if($custom_id && (string)$token['invoice'] && $custom_id !== (string)$token['invoice'])
 					{
 						echo 'subscription_custom_id_mismatch';
+						exit();
+					}
+
+					//260928.1538 A returned Framework button and an ACTIVATED webhook resolve the same provider subscription against the same saved purchase token.
+					if(strpos((string)$token['invoice'], 's2mb-') === 0)
+					{
+						$fulfillment = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_button_subscription_fulfill($subscription, $token, 'return');
+						if(!empty($fulfillment['pending_activation']))
+						{
+							//260928.1703 PayPal can redirect before ACTIVE (or while the webhook holds the checkout lock). Recheck the same signed return, without creating another subscription or showing a false payment failure.
+							$wait_attempt = isset($_GET['s2member_paypal_checkout_wait']) ? max(0, (int)$_GET['s2member_paypal_checkout_wait']) : 0;
+							echo '<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="robots" content="noindex,nofollow" /><title>PayPal subscription confirmation</title></head><body>';
+							echo '<p>PayPal is confirming your subscription. Please do not start a second checkout.</p>';
+							if($wait_attempt < 12)
+							{
+								$poll_url = add_query_arg(array('subscription_id' => $subscription_id, 's2member_paypal_checkout_wait' => $wait_attempt + 1), $return_url);
+								echo '<script type="text/javascript">setTimeout(function(){window.location.replace('.wp_json_encode($poll_url, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT).');},2000);</script>';
+							}
+							else
+								echo '<p>Confirmation is taking longer than expected. If PayPal activates the subscription, s2Member will complete it through the webhook; check your registration email before trying again.</p>';
+							echo '</body></html>';
+							exit();
+						}
+						if(empty($fulfillment['ok']) || empty($fulfillment['rtn_url']) || empty($fulfillment['rtn_post']))
+						{
+							echo esc_html(!empty($fulfillment['error']) ? (string)$fulfillment['error'] : 'subscription_fulfillment_failed');
+							exit();
+						}
+						echo '<!DOCTYPE html><html><head><meta charset="utf-8" /><meta name="robots" content="noindex,nofollow" /></head><body>';
+						echo '<form id="s2m_ppco_rtn" method="post" accept-charset="UTF-8" action="'.esc_attr($fulfillment['rtn_url']).'">';
+						foreach($fulfillment['rtn_post'] as $k => $v)
+							echo '<input type="hidden" name="'.esc_attr($k).'" value="'.esc_attr((string)$v).'" />';
+						echo '</form><script type="text/javascript">document.getElementById("s2m_ppco_rtn").submit();</script></body></html>';
 						exit();
 					}
 
@@ -487,7 +576,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					'env_setting'  => $env_setting,
 					'event'        => 'create_subscription_response',
 					'subscription' => $subscription,
-					'token'        => $token,
+					'token'        => $log_token,
 				));
 
 				if(empty($subscription['id']))
@@ -545,7 +634,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'env_setting' => $env_setting,
 						'event'   => 'get_plan_id_response',
 						'plan_id' => $plan_id,
-						'token'   => $token,
+						'token'   => $log_token,
 					));
 
 				if(!$plan_id)
@@ -594,7 +683,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'event'           => 'subscription_get_response',
 						'subscription_id' => $subscription_id,
 						'subscription'    => $subscription_r,
-						'token'           => $token,
+						'token'           => $log_token,
 					));
 
 				$subscription_code = !empty($subscription_r['code']) ? (int)$subscription_r['code'] : 0;
@@ -683,6 +772,24 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					exit();
 				}
 
+				//260928.1538 Framework button and webhook share a single durable fulfillment path; do not create a second simulated IPN here.
+				if(strpos((string)$token['invoice'], 's2mb-') === 0)
+				{
+					$fulfillment = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_button_subscription_fulfill($subscription, $token, 'browser');
+					if(!empty($fulfillment['pending_activation']))
+					{
+						echo wp_json_encode(array('pending_activation' => TRUE, 'subscription_id' => $subscription_id, 'status' => (string)$fulfillment['status']));
+						exit();
+					}
+					if(empty($fulfillment['ok']) || empty($fulfillment['rtn_url']) || empty($fulfillment['rtn_post']))
+					{
+						echo wp_json_encode(array('error' => !empty($fulfillment['error']) ? (string)$fulfillment['error'] : 'subscription_fulfillment_failed'));
+						exit();
+					}
+					echo wp_json_encode(array('rtn_url' => $fulfillment['rtn_url'], 'rtn_post' => $fulfillment['rtn_post']));
+					exit();
+				}
+
 				if($gateway_checkout_id)
 				{
 					if(in_array($status, array('APPROVAL_PENDING', 'APPROVED'), TRUE))
@@ -710,7 +817,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				else if(!in_array($status, array('ACTIVE', 'APPROVED', 'APPROVAL_PENDING'), TRUE) && !$allow_expired_single_cycle)
 				{
 					//260902.0200 Preserve existing non-coordinator PayPal Checkout button behavior until those flows migrate onto Gateway Checkout and gain the same activation polling.
-					//260907.2142 TO-DO: Migrate maintained Framework PayPal Checkout button/redirect flows onto Gateway Checkout before claiming cross-surface PPCO dedupe/idempotency parity, preserving the Pro-Form guarantees for durable provider identity, stable idempotent retries, monotonic final-state recovery, and shared browser/webhook fulfillment dedupe.
+					//260928.1645 Existing pre-migration browser tabs still carry the legacy PayPal Checkout token without Gateway Checkout identity. Preserve their original confirmation behavior until those in-flight tokens expire.
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'            => 'checkout',
 						'env_setting'     => $env_setting,
@@ -847,7 +954,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'ppco'  => 'checkout',
 						'env_setting' => $env_setting,
 						'event' => 'cancel_subscription_not_logged_in',
-						'token' => $token,
+						'token' => $log_token,
 					));
 
 					echo wp_json_encode(array('error' => 'not_logged_in'));
@@ -879,7 +986,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'env_setting' => $env_setting,
 						'event'   => 'cancel_subscription_token_mismatch',
 						'user_id' => $user_id,
-						'token'   => $token,
+						'token'   => $log_token,
 					));
 
 					echo wp_json_encode(array('error' => 'token_mismatch'));
@@ -1020,7 +1127,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'env_setting' => $env_setting,
 						'event' => 'create_order_response',
 						'order' => $order,
-						'token' => $token,
+						'token' => $log_token,
 					));
 
 				if(empty($order['id']))
@@ -1030,7 +1137,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'env_setting' => $env_setting,
 							'event' => 'order_create_failed',
 							'order' => $order,
-							'token' => $token,
+							'token' => $log_token,
 						));
 
 					$error = !empty($order['__error']) ? (string)$order['__error'] : 'order_create_failed';
@@ -1046,7 +1153,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 			{
 				//260907.1820 This recovery endpoint is intentionally coordinator-only: the signed checkout token authorizes a local state read, while PayPal polling/retries remain server/webhook responsibilities.
 				$gateway_checkout_id = !empty($token['gateway_checkout_id']) && c_ws_plugin__s2member_gateway_checkouts::valid_id((string)$token['gateway_checkout_id']) ? (string)$token['gateway_checkout_id'] : '';
-				$gateway_checkout = $gateway_checkout_id ? c_ws_plugin__s2member_gateway_checkouts::load_state($gateway_checkout_id) : FALSE;
+				//260928.1703 Read fresh option state during capture-loss polling: a webhook may have fulfilled the checkout in another PHP worker moments earlier.
+				$gateway_checkout = $gateway_checkout_id ? c_ws_plugin__s2member_gateway_checkouts::load_state_uncached($gateway_checkout_id) : FALSE;
 				if(!$gateway_checkout || (string)$gateway_checkout['gateway'] !== 'paypal_checkout' || (string)$gateway_checkout['operation'] !== 'payment')
 				{
 					echo wp_json_encode(array('error' => 'gateway_checkout_invalid'));
@@ -1056,13 +1164,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				$private_context = c_ws_plugin__s2member_gateway_checkouts::private_context_get($gateway_checkout_id);
 				$fulfillment_result = is_array($private_context) && !empty($private_context['paypal_checkout']['fulfillment_result']) && is_array($private_context['paypal_checkout']['fulfillment_result']) ? $private_context['paypal_checkout']['fulfillment_result'] : array();
 				//260902.0635 Poll only local coordinator state while independent PayPal webhooks resolve delayed creates/captures; do not hammer the provider from the browser.
-				echo wp_json_encode(array(
+				$fulfilled = ((string)$gateway_checkout['fulfillment_status'] === 'fulfilled' && !empty($fulfillment_result['rtn_url']) && !empty($fulfillment_result['rtn_post']));
+				$response = array(
 					'order_id'           => !empty($gateway_checkout['gateway_ids']['order_id']) ? (string)$gateway_checkout['gateway_ids']['order_id'] : '',
 					'capture_id'         => !empty($gateway_checkout['gateway_ids']['capture_id']) ? (string)$gateway_checkout['gateway_ids']['capture_id'] : '',
 					'status'             => !empty($gateway_checkout['gateway_status']) ? (string)$gateway_checkout['gateway_status'] : '',
 					'fulfillment_status' => !empty($gateway_checkout['fulfillment_status']) ? (string)$gateway_checkout['fulfillment_status'] : '',
-					'fulfilled'          => ((string)$gateway_checkout['fulfillment_status'] === 'fulfilled' && !empty($fulfillment_result)),
-				));
+					'fulfilled'          => $fulfilled,
+				);
+				//260928.1703 A lost capture response can be recovered with the already-signed return handoff; only the original encrypted checkout token can reach this endpoint.
+				if($fulfilled)
+				{
+					$response['rtn_url'] = $fulfillment_result['rtn_url'];
+					$response['rtn_post'] = $fulfillment_result['rtn_post'];
+				}
+				echo wp_json_encode($response);
 				exit();
 			}
 			else if($op === 'capture_order')
@@ -1103,7 +1219,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					'cc'         => !empty($cap0['amount']['currency_code']) ? (string)$cap0['amount']['currency_code'] : '',
 					'payer'      => !empty($capture['payer']['email_address']) ? (string)$capture['payer']['email_address'] : '',
 					'capture'    => $capture,
-					'token'      => $token,
+					'token'      => $log_token,
 				));
 
 				if($gateway_checkout_id)
@@ -1158,7 +1274,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 							'event'    => 'capture_missing_fields',
 							'order_id' => $order_id,
 							'capture'  => $capture,
-							'token'    => $token,
+							'token'    => $log_token,
 						));
 
 					echo wp_json_encode(array('error' => 'capture_missing_fields'));
@@ -1174,7 +1290,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'env_setting' => $env_setting,
 						'event'    => 'amount_mismatch',
 						'order_id' => $order_id,
-						'token'    => $token,
+						'token'    => $log_token,
 						'pu'       => array('amount' => $pu_amount, 'cc' => $pu_cc),
 					));
 					echo wp_json_encode(array('error' => 'amount_mismatch'));
@@ -1187,7 +1303,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'env_setting' => $env_setting,
 						'event'    => 'currency_mismatch',
 						'order_id' => $order_id,
-						'token'    => $token,
+						'token'    => $log_token,
 						'pu'       => array('amount' => $pu_amount, 'cc' => $pu_cc),
 					));
 					echo wp_json_encode(array('error' => 'currency_mismatch'));
@@ -1206,7 +1322,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'env_setting' => $env_setting,
 						'event'    => 'invoice_mismatch',
 						'order_id' => $order_id,
-						'token'    => $token,
+						'token'    => $log_token,
 						'invoice'  => $cap_invoice_id,
 					));
 					echo wp_json_encode(array('error' => 'invoice_mismatch'));
@@ -1226,7 +1342,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'env_setting' => $env_setting,
 						'event'    => 'custom_mismatch',
 						'order_id' => $order_id,
-						'token'    => $token,
+						'token'    => $log_token,
 						'custom'   => array(
 							'token'   => !empty($token['custom']) ? $token['custom'] : '',
 							'paypal'  => $cap_custom_id,

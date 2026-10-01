@@ -179,7 +179,8 @@ jQuery(document).ready(function($)
 								var i, fieldDefaults, tools, table, $tools, $table;
 								var $fields = $('input#ws-plugin--s2member-custom-reg-fields');
 								var $configuration = $('div#ws-plugin--s2member-custom-reg-field-configuration');
-								var fields = ($fields.val()) ? $.JSON.parse($fields.val()) : [];
+								//260928.0402 Use the standard JSON API provided natively or by WordPress's JSON2 compatibility dependency.
+								var fields = ($fields.val()) ? JSON.parse($fields.val()) : [];
 
 								fields = /* Force fields to an array. */ (fields instanceof Array) ? fields : [];
 
@@ -381,7 +382,7 @@ jQuery(document).ready(function($)
 									};
 								var updateFields = /* Update hidden input value. */ function()
 									{
-										$fields.val(((fields.length > 0) ? $.JSON.stringify(fields) : ''));
+										$fields.val(((fields.length > 0) ? JSON.stringify(fields) : ''));
 									};
 								var fieldId2Var = /* Convert ids to variables. */ function(fieldId)
 									{

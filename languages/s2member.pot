@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  260927\n"
+"Project-Id-Version:  261001\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-09-27 03:32:02+00:00\n"
+"POT-Creation-Date: 2026-10-01 05:20:09+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1309,17 +1309,17 @@ msgstr ""
 #. with `ws_plugin__s2member_paypal_payflow_api_response`.
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:97
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:326
-#: src/includes/classes/paypal-utilities.inc.php:635
-#: src/includes/classes/paypal-utilities.inc.php:643
+#: src/includes/classes/paypal-utilities.inc.php:639
+#: src/includes/classes/paypal-utilities.inc.php:647
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s."
 msgstr ""
 
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:100
 #: pro/src/includes/classes/gateways/authnet/authnet-utilities.inc.php:329
-#: src/includes/classes/paypal-utilities.inc.php:509
-#: src/includes/classes/paypal-utilities.inc.php:637
-#: src/includes/classes/paypal-utilities.inc.php:645
+#: src/includes/classes/paypal-utilities.inc.php:513
+#: src/includes/classes/paypal-utilities.inc.php:641
+#: src/includes/classes/paypal-utilities.inc.php:649
 msgctxt "s2member-front"
 msgid "Error. Please contact Support for assistance."
 msgstr ""
@@ -2184,8 +2184,8 @@ msgstr ""
 #: src/includes/classes/sc-paypal-button-in.inc.php:154
 #: src/includes/classes/sc-paypal-button-in.inc.php:258
 #: src/includes/classes/sc-paypal-button-in.inc.php:290
-#: src/includes/classes/sc-paypal-button-in.inc.php:503
-#: src/includes/classes/sc-paypal-button-in.inc.php:718
+#: src/includes/classes/sc-paypal-button-in.inc.php:525
+#: src/includes/classes/sc-paypal-button-in.inc.php:761
 #: src/includes/templates/buttons/paypal-ccaps-checkout-button.php:35
 #: src/includes/templates/buttons/paypal-checkout-button.php:47
 #: src/includes/templates/buttons/paypal-sp-checkout-button.php:35
@@ -4541,36 +4541,36 @@ msgctxt "s2member-front"
 msgid "<strong>ERROR</strong>: Max simultaneous logins for username: %1$s. Please wait %2$s and try again."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:975
-#: src/includes/classes/menu-pages.inc.php:1096
+#: src/includes/classes/menu-pages.inc.php:977
+#: src/includes/classes/menu-pages.inc.php:1098
 msgid "Thanks — your message was sent. You’ll receive a copy by email."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:978
+#: src/includes/classes/menu-pages.inc.php:980
 msgid "Sorry, your message could not be sent. Please try again."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1017
+#: src/includes/classes/menu-pages.inc.php:1019
 msgid "You do not have permission to send support requests from this page."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1028
+#: src/includes/classes/menu-pages.inc.php:1030
 msgid "Please provide a valid email address."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1031
+#: src/includes/classes/menu-pages.inc.php:1033
 msgid "Please describe how I can help."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1046
+#: src/includes/classes/menu-pages.inc.php:1048
 msgid "s2Member help request"
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1085
+#: src/includes/classes/menu-pages.inc.php:1087
 msgid "Support mailbox is not configured correctly."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1094
+#: src/includes/classes/menu-pages.inc.php:1096
 msgid "Email could not be sent (mail server issue). Please try again or contact us directly."
 msgstr ""
 
@@ -4590,8 +4590,8 @@ msgstr ""
 #: src/includes/classes/paypal-return-in-proxy-ty-email.inc.php:66
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:211
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:222
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:266
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:277
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:269
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:280
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:167
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:178
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:189
@@ -4615,32 +4615,32 @@ msgid "Continue (Click Here)"
 msgstr ""
 
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:199
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:254
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:257
 msgctxt "s2member-front"
 msgid "Thank you! You've been updated to:"
 msgstr ""
 
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:200
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:255
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:258
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:156
 msgctxt "s2member-front"
 msgid "Please Log Back In (Click Here)"
 msgstr ""
 
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:210
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:265
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:268
 msgctxt "s2member-front"
 msgid "<strong>ERROR:</strong> Unable to modify Subscription.<br />Please contact Support for assistance.<br /><br />The existing User ID is associated with an Administrator. Stopping here. Otherwise, an Administrator could lose access. Please make sure that you are NOT logged in as an Administrator while testing."
 msgstr ""
 
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:221
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:276
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:279
 msgctxt "s2member-front"
 msgid "<strong>ERROR:</strong> Unable to modify Subscription.<br />Please contact Support for assistance.<br /><br />Could not get the existing User ID from the DB."
 msgstr ""
 
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:232
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:388
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:391
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:199
 #: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:141
 msgctxt "s2member-front"
@@ -4648,21 +4648,21 @@ msgid "Thank you! Please check your email for further details regarding your pur
 msgstr ""
 
 #: src/includes/classes/paypal-return-in-subscr-modify-w-level.inc.php:233
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:389
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:392
 #: src/includes/classes/paypal-return-in-wa-ccaps-wo-level.inc.php:200
 #: src/includes/classes/paypal-return-in-web-accept-sp.inc.php:142
 msgctxt "s2member-front"
 msgid "Return to Home Page"
 msgstr ""
 
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:349
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:372
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:352
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:375
 msgctxt "s2member-front"
 msgid "<strong>Thank you! Your account has been approved.<br />The next step is to Register a Username for immediate access.</strong>"
 msgstr ""
 
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:350
-#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:373
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:353
+#: src/includes/classes/paypal-return-in-subscr-or-wa-w-level.inc.php:376
 msgctxt "s2member-front"
 msgid "Please Register Now (Click Here)"
 msgstr ""
@@ -4716,23 +4716,23 @@ msgstr ""
 #. by PayPal. Replace `%2$s` and `%3$s` with: `Unable to process, please try
 #. again`, or something to that affect. Or, if you prefer, you could Filter
 #. ``$response["__error"]`` with `ws_plugin__s2member_paypal_api_response`.
-#: src/includes/classes/paypal-utilities.inc.php:506
+#: src/includes/classes/paypal-utilities.inc.php:510
 msgctxt "s2member-front"
 msgid "Error #%1$s. %2$s. %3$s."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:553
-#: src/includes/classes/paypal-utilities.inc.php:559
+#: src/includes/classes/paypal-utilities.inc.php:557
+#: src/includes/classes/paypal-utilities.inc.php:563
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Please use an alternate funding source."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:556
+#: src/includes/classes/paypal-utilities.inc.php:560
 msgctxt "s2member-front"
 msgid "Error #%s. Transaction declined. Express Checkout was NOT confirmed."
 msgstr ""
 
-#: src/includes/classes/paypal-utilities.inc.php:690
+#: src/includes/classes/paypal-utilities.inc.php:694
 msgctxt "s2member-front"
 msgid " Please contact PayPal Merchant Technical Support (www.paypal.com/mts) and request `Recurring Billing` service, and also ask to have `Reference Transactions` enabled for Recurring Billing via Express Checkout."
 msgstr ""

@@ -42,6 +42,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level'))
 		{
 			extract($vars, EXTR_OVERWRITE | EXTR_REFS); // Extract all vars passed in from: ``c_ws_plugin__s2member_paypal_notify_in::paypal_notify()``.
 
+			//260927.2250 Strip PHP opening tags from verified Return data before any values can be substituted into configurable emails, URLs, or tracking-code templates.
+			$paypal = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($paypal);
+
 			if((!empty($paypal['txn_type']) && preg_match('/^(web_accept|subscr_signup|subscr_payment)$/i', $paypal['txn_type']))
 			   && (!empty($paypal['item_number']) && preg_match($GLOBALS['WS_PLUGIN__']['s2member']['c']['membership_item_number_w_level_regex'], $paypal['item_number']))
 			   && (!empty($paypal['subscr_id']) || (!empty($paypal['txn_id']) && ($paypal['subscr_id'] = $paypal['txn_id'])))

@@ -374,9 +374,9 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				wp_enqueue_script('media-upload');
 				wp_enqueue_script('jquery-ui-core');
 				wp_enqueue_script('jquery-sprintf', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/includes/jquery/jquery.sprintf/jquery.sprintf.min.js', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum());
-				wp_enqueue_script('jquery-json-ps', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/includes/jquery/jquery.json-ps/jquery.json-ps.min.js', array('jquery'), c_ws_plugin__s2member_utilities::ver_checksum());
 				wp_enqueue_script('jquery-ui-effects', $GLOBALS['WS_PLUGIN__']['s2member']['c']['dir_url'].'/src/includes/jquery/jquery.ui-effects/jquery.ui-effects.min.js', array('jquery', 'jquery-ui-core'), c_ws_plugin__s2member_utilities::ver_checksum());
-				wp_enqueue_script('ws-plugin--s2member-menu-pages', admin_url('admin.php?ws_plugin__s2member_menu_pages_js='.urlencode(mt_rand()), is_ssl() ? 'https' : 'http'), array('jquery', 'thickbox', 'media-upload', 'jquery-sprintf', 'jquery-json-ps', 'jquery-ui-core', 'jquery-ui-effects', 'password-strength-meter'), c_ws_plugin__s2member_utilities::ver_checksum());
+				//260928.0402 Use WordPress's registered JSON2 compatibility script instead of shipping a duplicate JSON parser.
+				wp_enqueue_script('ws-plugin--s2member-menu-pages', admin_url('admin.php?ws_plugin__s2member_menu_pages_js='.urlencode(mt_rand()), is_ssl() ? 'https' : 'http'), array('jquery', 'thickbox', 'media-upload', 'jquery-sprintf', 'json2', 'jquery-ui-core', 'jquery-ui-effects', 'password-strength-meter'), c_ws_plugin__s2member_utilities::ver_checksum());
 
 				do_action('ws_plugin__s2member_during_add_admin_scripts', get_defined_vars());
 			}
@@ -550,7 +550,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 					}
 				if(!empty($error))
 					c_ws_plugin__s2member_admin_notices::display_admin_notice('Unknown error when attempting to archive log files. Please check directory permissions.', TRUE);
-				else c_ws_plugin__s2member_admin_notices::display_admin_notice('All log files have been archived succesfully.');
+				else
+					c_ws_plugin__s2member_admin_notices::display_admin_notice('All log files have been archived successfully.');
 			}
 		}
 
@@ -577,7 +578,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 					}
 				if(!empty($error))
 					c_ws_plugin__s2member_admin_notices::display_admin_notice('Unknown error when attempting to delete log files. Please check directory permissions.', TRUE);
-				else c_ws_plugin__s2member_admin_notices::display_admin_notice('All log files have been deleted succesfully.');
+				else
+					c_ws_plugin__s2member_admin_notices::display_admin_notice('All log files have been deleted successfully.');
 			}
 		}
 

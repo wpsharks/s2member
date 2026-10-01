@@ -121,8 +121,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										$postvars = self::paypal_postvars_utf8($postvars);
 										$endpoint = ($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["paypal_sandbox"]) ? "www.sandbox.paypal.com" : "www.paypal.com";
 
+										//260927.2250 Browser PayPal Returns must use the transaction-bound Checkout handoff above; never let the reusable server-to-server proxy credential authenticate them.
+										if(!empty($_GET["s2member_paypal_return"]) && !empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && $_REQUEST["s2member_paypal_proxy"] === "paypal")
+											return false;
+
 										//260909.0411 Normalize proxy verification input types and use the standard constant-time comparison helper.
-										if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]))
+										else if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]))
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_REQUEST["s2member_paypal_proxy"])), get_defined_vars());
 
 										else if(empty($_POST) && !empty($_GET["s2member_paypal_proxy"]) && !empty($_GET["s2member_paypal_proxy_verification"]) && c_ws_plugin__s2member_utils_urls::s2member_sig_ok($_SERVER["REQUEST_URI"], false, false, "s2member_paypal_proxy_verification"))
@@ -1529,9 +1533,72 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							$gateway_checkout_id = substr($invoice, strlen('s2mpf-'));
 						else if(strpos($invoice, 's2msp-') === 0)
 							$gateway_checkout_id = substr($invoice, strlen('s2msp-'));
+						else if(strpos($invoice, 's2mb-') === 0) //260928.1515 Standalone Framework buttons use their own invoice namespace, separate from Pro-Form account preparation.
+							$gateway_checkout_id = substr($invoice, strlen('s2mb-'));
 
 						return c_ws_plugin__s2member_gateway_checkouts::valid_id($gateway_checkout_id) ? $gateway_checkout_id : '';
 					}
+
+				/**
+				 * Starts or resumes a standalone Framework PayPal Checkout button using shared durable state.
+				 *
+				 * @since 260928.1520
+				 *
+				 * @param array $token Verified, signed standalone button purchase token.
+				 * @param bool  $create_allowed True only before starting provider work.
+				 * @return array Operation result containing ok and error.
+				 */
+				public static function paypal_checkout_button_gateway_checkout_prepare($token = array(), $create_allowed = FALSE)
+				{
+					$invoice = !empty($token['invoice']) ? (string)$token['invoice'] : '';
+					if(strpos($invoice, 's2mb-') !== 0)
+						return array('ok' => TRUE, 'coordinator' => FALSE, 'error' => ''); // Existing in-flight button tokens and Pro-Forms use their established paths.
+
+					$id = self::paypal_checkout_gateway_checkout_id_from_invoice($invoice);
+					$browser_token = !empty($token['gateway_checkout_token']) ? (string)$token['gateway_checkout_token'] : '';
+					if(!$id || empty($token['gateway_checkout_id']) || !hash_equals($id, (string)$token['gateway_checkout_id'])
+					|| !c_ws_plugin__s2member_gateway_checkouts::browser_token_verify($id, $browser_token))
+						return array('ok' => FALSE, 'coordinator' => TRUE, 'error' => 'gateway_checkout_identity_invalid');
+
+					$operation = (!empty($token['rr']) && strtoupper((string)$token['rr']) !== 'BN') ? 'subscription' : 'payment';
+					$purchase_terms = (array)$token;
+					unset($purchase_terms['exp'], $purchase_terms['gateway_checkout_token']); //260928.1520 Token renewal does not alter the underlying purchase contract.
+					$fingerprint = c_ws_plugin__s2member_gateway_checkouts::purchase_fingerprint($purchase_terms);
+
+					if($create_allowed)
+					{
+						//260928.1705 Do not rewrite a bound option on every retry: create_or_resume() may otherwise overwrite provider/fulfillment updates committed concurrently by a webhook.
+						$state = c_ws_plugin__s2member_gateway_checkouts::load_state_uncached($id);
+						if(!$state)
+							$state = c_ws_plugin__s2member_gateway_checkouts::create_or_resume('paypal_checkout', $operation, $id, $browser_token, $fingerprint, get_current_user_id());
+						else if(!empty($state['user_id']) && (int)$state['user_id'] !== (int)get_current_user_id())
+							return array('ok' => FALSE, 'coordinator' => TRUE, 'error' => 'gateway_checkout_user_mismatch');
+					}
+					else
+						$state = c_ws_plugin__s2member_gateway_checkouts::load_state_uncached($id);
+
+					//260928.1520 Reject a checkout returned under a replacement identity: the verified button token and PayPal invoice must keep pointing to the same durable record.
+					if(!$state || !hash_equals($id, (string)$state['id']) || (string)$state['gateway'] !== 'paypal_checkout'
+					|| (string)$state['operation'] !== $operation || !hash_equals($fingerprint, (string)$state['purchase_fingerprint']))
+						return array('ok' => FALSE, 'coordinator' => TRUE, 'error' => 'gateway_checkout_mismatch');
+
+					$private = c_ws_plugin__s2member_gateway_checkouts::private_context_get($id);
+					if($private === FALSE)
+						return array('ok' => FALSE, 'coordinator' => TRUE, 'error' => 'gateway_checkout_private_context_invalid');
+
+					if(empty($private['paypal_checkout']['token']))
+					{
+						if(!$create_allowed)
+							return array('ok' => FALSE, 'coordinator' => TRUE, 'error' => 'gateway_checkout_purchase_context_missing');
+						$private = (array)$private;
+						$private['paypal_checkout'] = !empty($private['paypal_checkout']) && is_array($private['paypal_checkout']) ? $private['paypal_checkout'] : array();
+						//260928.1520 The first provider operation durably stores the authenticated purchase token for webhook-only fulfillment. No password/card data is stored.
+						$private['paypal_checkout']['token'] = $token;
+						if(!c_ws_plugin__s2member_gateway_checkouts::private_context_set($id, $private))
+							return array('ok' => FALSE, 'coordinator' => TRUE, 'error' => 'gateway_checkout_purchase_context_save_failed');
+					}
+					return array('ok' => TRUE, 'coordinator' => TRUE, 'error' => '', 'gateway_checkout_id' => $id);
+				}
 
 				/**
 				 * Creates a PayPal Checkout order for one-time (Buy Now) purchases.
@@ -1654,7 +1721,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$private_context = (array)$private_context;
 								$private_context['paypal_checkout'] = !empty($private_context['paypal_checkout']) && is_array($private_context['paypal_checkout']) ? $private_context['paypal_checkout'] : array();
 								//260902.0635 Save the validated token before contacting PayPal so a later capture webhook has enough trusted server-side context to finish an interrupted browser checkout.
-								$private_context['paypal_checkout']['token'] = $token;
+								//260928.1615 An anchor/url checkout temporarily substitutes PayPal's internal approval-return URL for provider creation; keep the canonical, previously validated button token so a capture webhook returns the buyer to the original success page.
+								if(strpos($invoice, 's2mb-') !== 0 || empty($private_context['paypal_checkout']['token']))
+									$private_context['paypal_checkout']['token'] = $token;
 								if(!c_ws_plugin__s2member_gateway_checkouts::private_context_set($gateway_checkout_id, $private_context))
 									return array('__error' => 'gateway_checkout_private_context_failed');
 
@@ -2155,10 +2224,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(!c_ws_plugin__s2member_gateway_checkouts::private_context_set($gateway_checkout_id, $private_context))
 							return array('ok' => FALSE, 'error' => 'gateway_checkout_private_context_failed');
 
-						$gateway_ids = !empty($gateway_checkout['gateway_ids']) && is_array($gateway_checkout['gateway_ids']) ? $gateway_checkout['gateway_ids'] : array();
-						$gateway_ids['order_id'] = $order_id;
-						$gateway_ids['capture_id'] = $pu_cap_id;
-						if(!c_ws_plugin__s2member_gateway_checkouts::update($gateway_checkout_id, array('gateway_ids' => $gateway_ids, 'gateway_status' => 'CAPTURE_COMPLETED', 'fulfillment_status' => 'fulfilled')))
+						//260928.1705 Final fulfillment must patch the latest checkout version: a concurrent webhook/browser context write must not be lost or downgrade the terminal fulfilled state.
+						if(!c_ws_plugin__s2member_gateway_checkouts::patch($gateway_checkout_id, array('gateway_ids' => array('order_id' => $order_id, 'capture_id' => $pu_cap_id), 'gateway_status' => 'CAPTURE_COMPLETED', 'fulfillment_status' => 'fulfilled')))
 							return array('ok' => FALSE, 'error' => 'gateway_checkout_save_failed');
 
 						return array_merge(array('ok' => TRUE, 'processed' => !empty($notify_result['processed']), 'duplicate' => !empty($notify_result['duplicate'])), $result);
@@ -2284,7 +2351,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$invoice = trim((string)$invoice);
 						$subscription_id = trim((string)$subscription_id);
 						$status = strtoupper(trim((string)$status));
-						$gateway_checkout_id = (strpos($invoice, 's2mpf-') === 0) ? substr($invoice, strlen('s2mpf-')) : '';
+						$gateway_checkout_id = self::paypal_checkout_gateway_checkout_id_from_invoice($invoice); //260928.1515 Recover both Pro-Forms and standalone Framework button subscriptions by their signed invoice identity.
 
 						if(!$subscription_id || !c_ws_plugin__s2member_gateway_checkouts::valid_id($gateway_checkout_id))
 							return array('handled' => false, 'ok' => false, 'recovered' => false, 'error' => 'not_coordinator_checkout');
@@ -2333,6 +2400,113 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $lock);
 						}
 					}
+
+				/**
+				 * Completes an approved standalone Framework button subscription from the same
+				 * authoritative PayPal resource whether invoked by browser or verified webhook.
+				 *
+				 * @since 260928.1530
+				 */
+				public static function paypal_checkout_button_subscription_fulfill($subscription = array(), $token = array(), $via = 'webhook')
+				{
+					$invoice = !empty($token['invoice']) ? (string)$token['invoice'] : '';
+					$id = self::paypal_checkout_gateway_checkout_id_from_invoice($invoice);
+					if(!$id || strpos($invoice, 's2mb-') !== 0 || empty($token['gateway_checkout_id']) || !hash_equals($id, (string)$token['gateway_checkout_id']))
+						return array('ok' => FALSE, 'error' => 'gateway_checkout_identity_invalid');
+
+					$state = c_ws_plugin__s2member_gateway_checkouts::load_state($id);
+					if(!$state || (string)$state['gateway'] !== 'paypal_checkout' || (string)$state['operation'] !== 'subscription')
+						return array('ok' => FALSE, 'error' => 'gateway_checkout_invalid');
+
+					$subscription_id = !empty($subscription['id']) ? (string)$subscription['id'] : '';
+					$status = !empty($subscription['status']) ? strtoupper((string)$subscription['status']) : '';
+					$custom_id = !empty($subscription['custom_id']) ? (string)$subscription['custom_id'] : '';
+					if(!$subscription_id || !$custom_id || !hash_equals($invoice, $custom_id))
+						return array('ok' => FALSE, 'error' => 'subscription_purchase_identity_mismatch');
+
+					$expected_plan = self::paypal_checkout_plan_get_id($token);
+					if(!$expected_plan || empty($subscription['plan_id']) || !hash_equals((string)$expected_plan, (string)$subscription['plan_id']))
+						return array('ok' => FALSE, 'error' => 'subscription_plan_mismatch');
+
+					$is_single_cycle = isset($token['rr']) && (string)$token['rr'] === '0';
+					$last_payment_amount = isset($subscription['billing_info']['last_payment']['amount']['value']) ? (string)$subscription['billing_info']['last_payment']['amount']['value'] : '';
+					$last_payment_currency = !empty($subscription['billing_info']['last_payment']['amount']['currency_code']) ? strtoupper((string)$subscription['billing_info']['last_payment']['amount']['currency_code']) : '';
+					//260928.1703 An immediately EXPIRED single-cycle subscription is paid only when PayPal's reported last payment matches the signed price and currency, not merely when a payment field exists.
+					$last_paid = ($last_payment_amount !== '' && is_numeric($last_payment_amount) && isset($token['amount'])
+						&& number_format((float)$last_payment_amount, 2, '.', '') === number_format((float)$token['amount'], 2, '.', '')
+						&& !empty($token['cc']) && $last_payment_currency === strtoupper((string)$token['cc']));
+					if($status !== 'ACTIVE' && !($is_single_cycle && $status === 'EXPIRED' && $last_paid))
+						return in_array($status, array('APPROVAL_PENDING', 'APPROVED'), TRUE)
+							? array('ok' => FALSE, 'pending_activation' => TRUE, 'error' => 'pending_activation', 'status' => $status)
+							: array('ok' => FALSE, 'error' => 'subscription_status_invalid', 'status' => $status);
+
+					//260928.1530 Bind the real subscription ID before fulfillment so a second event/browser request cannot attach a different provider subscription to this purchase.
+					$recovery = self::paypal_checkout_subscription_gateway_checkout_recover($invoice, $subscription_id, $status);
+					if(empty($recovery['handled']) || empty($recovery['ok']))
+					{
+						//260928.1608 An independent CREATED/ACTIVATED webhook can own the coordinator lock briefly; the browser should poll rather than report a permanent checkout failure.
+						//260928.1703 A redirect return also competes with CREATED/ACTIVATED webhook recovery; let it retry the signed return instead of displaying a spurious failure.
+						if(in_array($via, array('browser', 'return'), TRUE) && !empty($recovery['error']) && $recovery['error'] === 'gateway_checkout_busy')
+							return array('ok' => FALSE, 'pending_activation' => TRUE, 'status' => $status, 'error' => 'gateway_checkout_busy');
+						return array('ok' => FALSE, 'error' => !empty($recovery['error']) ? $recovery['error'] : 'subscription_recovery_failed');
+					}
+
+					$private = c_ws_plugin__s2member_gateway_checkouts::private_context_get($id);
+					if(!is_array($private) || empty($private['paypal_checkout']['token']) || !is_array($private['paypal_checkout']['token']))
+						return array('ok' => FALSE, 'error' => 'gateway_checkout_purchase_context_missing');
+					$stored_token = $private['paypal_checkout']['token'];
+					if(empty($stored_token['invoice']) || !hash_equals($invoice, (string)$stored_token['invoice']) || empty($stored_token['item_number']))
+						return array('ok' => FALSE, 'error' => 'gateway_checkout_purchase_context_mismatch');
+
+					$state = c_ws_plugin__s2member_gateway_checkouts::load_state($id);
+					if($state && (string)$state['fulfillment_status'] === 'fulfilled' && !empty($private['paypal_checkout']['fulfillment_result']))
+						return array_merge(array('ok' => TRUE, 'processed' => FALSE, 'duplicate' => TRUE), $private['paypal_checkout']['fulfillment_result']);
+
+					$paypal = array(
+						'txn_type' => 'subscr_signup', 'payment_status' => 'Completed', 'subscr_gateway' => 'paypal',
+						'txn_id' => $subscription_id, 'subscr_id' => $subscription_id, 'subscr_baid' => $subscription_id, 'subscr_cid' => $subscription_id,
+						'mc_gross' => (string)$stored_token['amount'], 'mc_currency' => strtoupper((string)$stored_token['cc']),
+						'period1' => (!empty($stored_token['tp']) && !empty($stored_token['tt'])) ? ((string)$stored_token['tp'].' '.strtoupper((string)$stored_token['tt'])) : '0 D',
+						'mc_amount1' => (!empty($stored_token['tp']) && !empty($stored_token['tt'])) ? (string)$stored_token['ta'] : '0.00',
+						'period3' => ((string)$stored_token['rp'].' '.strtoupper((string)$stored_token['rt'])),
+						'mc_amount3' => (string)$stored_token['amount'],
+						'recurring' => ((isset($stored_token['rr']) && (string)$stored_token['rr'] === '1') ? '1' : '0'),
+						'invoice' => $invoice, 'custom' => (string)$stored_token['custom'],
+						'item_name' => (string)$stored_token['item_name'], 'item_number' => (string)$stored_token['item_number'],
+						'payer_email' => !empty($subscription['subscriber']['email_address']) ? (string)$subscription['subscriber']['email_address'] : '',
+						'first_name' => !empty($subscription['subscriber']['name']['given_name']) ? (string)$subscription['subscriber']['name']['given_name'] : '',
+						'last_name' => !empty($subscription['subscriber']['name']['surname']) ? (string)$subscription['subscriber']['name']['surname'] : '',
+						'option_name1' => (string)$stored_token['on0'], 'option_selection1' => (string)$stored_token['os0'],
+						'option_name2' => (string)$stored_token['on1'], 'option_selection2' => (string)$stored_token['os1'],
+					);
+
+					$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_subscr_done_'.md5($subscription_id));
+					if(empty($notify_result['ok']))
+						return array('ok' => FALSE, 'error' => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed');
+
+					$return_url = add_query_arg('s2member_paypal_proxy', 'paypal', (string)$stored_token['return']);
+					$return_post = array_merge($paypal, array('s2member_paypal_proxy' => 'paypal', 's2member_paypal_proxy_use' => 'paypal_checkout'));
+					$handoff = self::paypal_checkout_return_handoff_create($return_post);
+					if(!$handoff)
+						return array('ok' => FALSE, 'error' => 'return_handoff_failed');
+					$return_post['s2member_paypal_checkout_handoff'] = $handoff;
+					$result = array('rtn_url' => $return_url, 'rtn_post' => $return_post, 'subscription_id' => $subscription_id);
+
+					$private['paypal_checkout']['fulfillment_result'] = $result;
+					if(!c_ws_plugin__s2member_gateway_checkouts::private_context_set($id, $private))
+						return array('ok' => FALSE, 'error' => 'gateway_checkout_private_context_save_failed');
+					if(!c_ws_plugin__s2member_gateway_checkouts::patch($id, array('gateway_ids' => array('subscription_id' => $subscription_id), 'gateway_status' => $status, 'fulfillment_status' => 'fulfilled')))
+						return array('ok' => FALSE, 'error' => 'gateway_checkout_save_failed');
+
+					//260928.1530 Preserve button upgrade semantics: only the request that processed Notify may cancel the old subscription, never a duplicate callback.
+					$old_id = !empty($stored_token['old__subscr_id']) ? (string)$stored_token['old__subscr_id'] : '';
+					if(!empty($notify_result['processed']) && $old_id && $old_id !== $subscription_id && apply_filters('s2member_pro_cancels_old_rp_before_new_rp', TRUE, array('old__subscr_id' => $old_id, 'subscr_id' => $subscription_id)))
+						c_ws_plugin__s2member_utilities::cancel_gateway_subscription(!empty($stored_token['old__subscr_gateway']) ? (string)$stored_token['old__subscr_gateway'] : '', $old_id,
+							!empty($stored_token['old__subscr_baid']) ? (string)$stored_token['old__subscr_baid'] : '', !empty($stored_token['old__subscr_cid']) ? (string)$stored_token['old__subscr_cid'] : '',
+							!empty($stored_token['old__ipn_signup_vars']) && is_array($stored_token['old__ipn_signup_vars']) ? $stored_token['old__ipn_signup_vars'] : array());
+
+					return array_merge(array('ok' => TRUE, 'processed' => !empty($notify_result['processed']), 'duplicate' => !empty($notify_result['duplicate'])), $result);
+				}
 
 				/**
 				 * Creates a PayPal Checkout subscription server-side.
