@@ -16,7 +16,7 @@ project_php_required_version                            = 5.6.2
 project_php_tested_up_to_version                        = 8.5.9
 
 project_wp_required_version                             = 4.2
-project_wp_tested_up_to_version                         = 7.2-alpha-63947
+project_wp_tested_up_to_version                         = 7.2-alpha-64027
 
-#260928.0515 Keep repository/build sentinels available to local tooling without shipping them in release ZIP/TGZ packages.
+# 260928.0515 Keep repository/build sentinels available to local tooling without shipping them in release ZIP/TGZ packages.
 project_other_zip_tgz_fileset_exclusions                = languages/.generate

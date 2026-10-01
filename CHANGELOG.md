@@ -1,3 +1,29 @@
+= v261001 =
+
+- (Framework) **Improvement:** PayPal Checkout buttons now keep a recoverable record of each checkout, allowing s2Member to complete a subscription signup even if the customer closes the page or loses their connection before the final confirmation. PayPal's verified webhook can finish the signup using the original purchase details, while checkout retries reuse the same subscription instead of creating another. Thanks to Felix for reporting the issue. See [thread #13627](https://f.wpsharks.com/t/13627).
+
+- (Framework) **Fix:** When a PayPal Checkout Buy Now payment succeeded but the browser lost the final response, the customer could see a payment error despite having been charged. s2Member now recovers the completed checkout and continues to the registration instructions without capturing the payment again.
+
+- (Framework) **Fix:** Corrected JavaScript issues that could prevent PayPal Checkout buttons from appearing, including incorrectly encoded characters and problems loading the PayPal SDK.
+
+- (Framework) **Fix:** Corrected an edge case where PayPal Checkout returns could fall back to the legacy site-wide proxy handler. Checkout returns now consistently use their transaction-specific return flow, with returned values normalized before downstream processing.
+
+- (Pro) **Security:** Hardened Remote Operations API authentication by using timing-safe comparisons when validating API keys.
+
+- (Pro) **Fix:** Improved legacy Multisite Membership-Only registration after WordPress core updates. s2Member now restores its required patches after successful automatic/background upgrades, while avoiding unnecessary rewrites when files are already patched. Thanks to Tim for reporting the issue. See [thread #13641](https://f.wpsharks.com/t/13641).
+
+- (Framework) **Compatibility:** Updated admin JSON handling to use WordPress's bundled JSON compatibility script instead of maintaining a separate bundled copy.
+
+- (Framework) **Maintenance:** Added missing direct-access safeguards to Markdown, AWeber, and IP utility files that are only intended to load through WordPress/s2Member.
+
+- (Framework) **Maintenance:** Removed obsolete inactive code that previously prevented automatic Framework updates when Pro was installed.
+
+- (Framework) **Maintenance:** Aligned the plugin's GPL license declaration with the existing GPLv2-or-later declaration in the readme.
+
+- (Pro) **Maintenance:** Added the existing GPLv2-or-later license declaration to the installer-compatible Pro plugin header.
+
+- (Framework) **Maintenance:** Updated release packaging so the internal language-generation marker remains available in the source repository without being included in the distributed ZIP build.
+
 = v260927 =
 
 - (Pro) **Fix:** Improved Stripe 3D Secure recovery when browser and webhook processing overlap, or when the browser loses the final checkout response after successful authentication. s2Member now reconciles those recovery paths using the saved checkout state so successful signups can finish correctly without repeating fulfillment. Thanks to Felix for reporting it. See [thread #13627](https://f.wpsharks.com/t/13627).

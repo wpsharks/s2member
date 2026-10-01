@@ -550,7 +550,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 					}
 				if(!empty($error))
 					c_ws_plugin__s2member_admin_notices::display_admin_notice('Unknown error when attempting to archive log files. Please check directory permissions.', TRUE);
-				else c_ws_plugin__s2member_admin_notices::display_admin_notice('All log files have been archived succesfully.');
+				else
+					c_ws_plugin__s2member_admin_notices::display_admin_notice('All log files have been archived successfully.');
 			}
 		}
 
@@ -577,7 +578,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 					}
 				if(!empty($error))
 					c_ws_plugin__s2member_admin_notices::display_admin_notice('Unknown error when attempting to delete log files. Please check directory permissions.', TRUE);
-				else c_ws_plugin__s2member_admin_notices::display_admin_notice('All log files have been deleted succesfully.');
+				else
+					c_ws_plugin__s2member_admin_notices::display_admin_notice('All log files have been deleted successfully.');
 			}
 		}
 
