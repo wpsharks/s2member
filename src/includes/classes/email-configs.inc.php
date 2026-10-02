@@ -366,6 +366,17 @@ if (!class_exists ('c_ws_plugin__s2member_email_configs'))
 										$level = c_ws_plugin__s2member_user_access::user_access_level($user);
 										$ccaps = implode(',', c_ws_plugin__s2member_user_access::user_access_ccaps($user));
 
+										//261002.0228 A pending gateway signup may safely hold the account at Level 0; let the admin notification describe the access actually being purchased.
+										if(!empty($GLOBALS['ws_plugin__s2member_new_user_notification_access']) && is_array($GLOBALS['ws_plugin__s2member_new_user_notification_access'])
+										   && isset($GLOBALS['ws_plugin__s2member_new_user_notification_access']['user_id']) && (int)$GLOBALS['ws_plugin__s2member_new_user_notification_access']['user_id'] === (int)$user_id)
+										{
+											$notification_access = $GLOBALS['ws_plugin__s2member_new_user_notification_access'];
+											$level = isset($notification_access['level']) && is_numeric($notification_access['level']) ? (int)$notification_access['level'] : $level;
+											$role  = ($level > 0) ? 's2member_level'.$level : 'subscriber';
+											$label = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$level.'_label']) ? (string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$level.'_label'] : $label;
+											$ccaps = isset($notification_access['ccaps']) ? (string)$notification_access['ccaps'] : $ccaps;
+										}
+
 										$user->user_email = ($user_email) ? $user_email : $user->user_email;
 										$user_full_name = trim ($user->first_name . ' ' . $user->last_name);
 										$user_ip = c_ws_plugin__s2member_utils_ip::current();
