@@ -1678,7 +1678,7 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<th>'."\n";
 				echo '<label for="ws-plugin--s2member-custom-reg-require-valid-email-domain">'."\n";
-				echo 'Require a Valid Email Domain During Registration?'."\n";
+				echo 'Check Email Domain? (beta)'."\n";
 				echo '</label>'."\n";
 				echo '</th>'."\n";
 
@@ -1687,10 +1687,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_custom_reg_require_valid_email_domain" id="ws-plugin--s2member-custom-reg-require-valid-email-domain">'."\n";
-				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_require_valid_email_domain"]) ? ' selected="selected"' : '').'>No (do not validate the email domain\'s mail-routing DNS)</option>'."\n";
-				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_require_valid_email_domain"]) ? ' selected="selected"' : '').'>Yes (require a valid mail domain)</option>'."\n";
+				echo '<option value="0"'.((!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_require_valid_email_domain"]) ? ' selected="selected"' : '').'>No (do not check)</option>'."\n";
+				echo '<option value="1"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["custom_reg_require_valid_email_domain"]) ? ' selected="selected"' : '').'>Yes (check the email domain)</option>'."\n";
 				echo '</select><br />'."\n";
-				echo 'When enabled, s2Member checks the email domain\'s mail-routing DNS before creating an account. MX records are accepted, as is the standard A/AAAA fallback when no MX exists; domains that explicitly publish a null MX are rejected. Temporary DNS lookup failures fail open so registration is not blocked by a resolver outage.'."\n";
+				echo 'When enabled, s2Member checks the email domain\'s DNS to confirm that it can receive mail. This applies when creating an account or changing the email address through the s2Member Profile form. Temporary DNS lookup failures are allowed so members are not blocked by a resolver outage.'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";

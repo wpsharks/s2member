@@ -52,6 +52,20 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 
 					$_p = c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)); // Clean ``$_POST`` vars.
 
+					//261005.0548 Apply the optional mail-domain check only when the s2Member Profile form is actually changing the account email; unrelated profile edits must not be blocked by the existing address.
+					if(!empty($_p['ws_plugin__s2member_profile_email']) && is_email($_p['ws_plugin__s2member_profile_email']) && strcasecmp($_p['ws_plugin__s2member_profile_email'], $user->user_email) !== 0 && ($email_domain_error = c_ws_plugin__s2member_registrations::registration_email_domain_validation_error($_p['ws_plugin__s2member_profile_email'])))
+						{
+							$GLOBALS['ws_plugin__s2member_profile_saved'] = FALSE;
+							$GLOBALS['ws_plugin__s2member_profile_error'] = $email_domain_error;
+							if(empty($_p['ws_plugin__s2member_sc_profile_save']))
+								{
+									echo '<script type="text/javascript">window.alert(\''.c_ws_plugin__s2member_utils_strings::esc_js_sq($email_domain_error).'\'); window.history.back();</script>'."\n";
+									exit();
+								}
+							do_action('ws_plugin__s2member_after_handle_profile_modifications', get_defined_vars());
+							return;
+						}
+
 					$userdata['ID'] = $user_id; // Needed for database update.
 
 					if(!empty($_p['ws_plugin__s2member_profile_email']))

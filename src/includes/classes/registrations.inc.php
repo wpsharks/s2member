@@ -57,12 +57,12 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 		}
 
 		/**
-		 * Returns a registration error when an email domain cannot receive mail.
+		 * Returns an error when an email domain cannot receive mail.
 		 *
 		 * @package s2Member\Registrations
 		 * @since 261005
 		 *
-		 * @param string $email Email address being used for account creation.
+		 * @param string $email Email address being validated.
 		 *
 		 * @return string Error message, or an empty string when allowed/not enabled.
 		 */
