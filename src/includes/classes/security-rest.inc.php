@@ -38,6 +38,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 		 *
 		 * @return null May give a 403 error *(exiting script execution)*, when/if content is NOT available to the current User/Member.
 		 */
+		//261005.2216 REST denials use the plugin's text domain so s2Member translations apply.
 		public static function security_gate($response, $handler, $request) // s2Member's Security Gate.
 		{
       $route = $request->get_route(); // e.g. /wp/v2/pages
@@ -96,7 +97,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
       && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
       && (!$user || !$user->has_cap('access_s2member_level0')) 
       && $id !== (int)$s2_options['membership_options_page'])
-        return new WP_Error('rest_forbidden', __('You do not have access to this page. [sys level 0]', 'text-domain'), array('status' => 403));
+        return new WP_Error('rest_forbidden', __('You do not have access to this page. [sys level 0]', 's2member'), array('status' => 403));
     
       // Login redirection override
       else if($s2_options['login_redirection_override'] 
@@ -105,7 +106,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
       && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
       && (!$user || !$user->has_cap('access_s2member_level0')) 
       && $id !== (int)$s2_options['membership_options_page'])
-        return new WP_Error('rest_forbidden', __('You do not have access to this page. [sys level 0]', 'text-domain'), array('status' => 403));
+        return new WP_Error('rest_forbidden', __('You do not have access to this page. [sys level 0]', 's2member'), array('status' => 403));
     
       // File download limit exceeded page
       else if($s2_options['file_download_limit_exceeded_page'] 
@@ -113,7 +114,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
       && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
       && (!$user || !$user->has_cap('access_s2member_level0')) 
       && $id !== (int)$s2_options['membership_options_page'])
-        return new WP_Error('rest_forbidden', __('You do not have access to this page. [sys level 0]', 'text-domain'), array('status' => 403));
+        return new WP_Error('rest_forbidden', __('You do not have access to this page. [sys level 0]', 's2member'), array('status' => 403));
     
       // Do NOT protect Systematics (exceptions above)
       if (c_ws_plugin__s2member_systematics::is_systematic_use_page()) {
@@ -130,14 +131,14 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
           if($s2_options['level'.$n.'_catgs'] === 'all' 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this category. [catg level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this category. [catg level %d]', 's2member'), $n), array('status' => 403));
     
           // This specific categ
           else if($s2_options['level'.$n.'_catgs'] 
           && in_array($id, ($catgs = preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_catgs']))) 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this category. [catg level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this category. [catg level %d]', 's2member'), $n), array('status' => 403));
     
           // Check parent categs
           else if($s2_options['level'.$n.'_catgs'] /* Check Category ancestry. */)
@@ -146,7 +147,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
               && cat_is_ancestor_of($catg, $id) 
               && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
               && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-                return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this category. [catg level %d]', 'text-domain'), $n), array('status' => 403));
+                return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this category. [catg level %d]', 's2member'), $n), array('status' => 403));
           }
       }
     
@@ -159,7 +160,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
           if($s2_options['level'.$n.'_ptags'] === 'all' 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this tag. [ptag level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this tag. [ptag level %d]', 's2member'), $n), array('status' => 403));
     
           // This tag
           else if($s2_options['level'.$n.'_ptags'] 
@@ -169,7 +170,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
           && in_array($tag->name, $level_ptags)
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this tag. [ptag level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this tag. [ptag level %d]', 's2member'), $n), array('status' => 403));
         }
       }
     
@@ -183,21 +184,21 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
           if($s2_options['level'.$n.'_posts'] === 'all' 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [post level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [post level %d]', 's2member'), $n), array('status' => 403));
     
           // what about custom post types?
           else if(strpos($s2_options['level'.$n.'_posts'], 'all-') !== FALSE 
           && (in_array('all-'.$type, preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_posts'])) || in_array('all-'.$type.'s', preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_posts']))) 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [post level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [post level %d]', 's2member'), $n), array('status' => 403));
     
           // a specific post by ID
           else if($s2_options['level'.$n.'_posts'] 
           && in_array($id, preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_posts'])) 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [post level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [post level %d]', 's2member'), $n), array('status' => 403));
         }
     
         // Category Level restrictions.
@@ -206,14 +207,14 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
           if($s2_options['level'.$n.'_catgs'] === 'all' 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [catg level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [catg level %d]', 's2member'), $n), array('status' => 403));
     
           else if($s2_options['level'.$n.'_catgs'] 
           && ($catgs = preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_catgs']))
           && (in_category($catgs, $id) || c_ws_plugin__s2member_utils_conds::in_descendant_category($catgs, $id)) 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [catg level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [catg level %d]', 's2member'), $n), array('status' => 403));
         }
     
         if(has_term('', 'post_tag', $id)) // Here we take a look to see if this Post has any Tags. If so, we need to run the full set of routines against Tags also.
@@ -223,13 +224,13 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
             if($s2_options['level'.$n.'_ptags'] === 'all' 
             && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
             && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [ptag level %d]', 'text-domain'), $n), array('status' => 403));
+              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [ptag level %d]', 's2member'), $n), array('status' => 403));
     
             else if($s2_options['level'.$n.'_ptags'] 
             && has_tag(preg_split('/['."\r\n\t".';,]+/', $s2_options['level'.$n.'_ptags']), $id) 
             && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
             && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [ptag level %d]', 'text-domain'), $n), array('status' => 403));
+              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [ptag level %d]', 's2member'), $n), array('status' => 403));
           }
         }
     
@@ -240,14 +241,14 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
           foreach($ccaps_req as $ccap) // The ``$user`` MUST satisfy ALL Custom Capability requirements. Stored as an array of Custom Capabilities.
             if(strlen($ccap) 
             && (!$user || !$user->has_cap('access_s2member_ccap_'.$ccap)) /* Does this ``$user``, have this Custom Capability? */)
-              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [ccap %s]', 'text-domain'), $ccap), array('status' => 403));
+              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [ccap %s]', 's2member'), $ccap), array('status' => 403));
         }
     
         if($s2_options['specific_ids'] 
         && in_array($id, preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['specific_ids'])) 
         && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
         && !c_ws_plugin__s2member_sp_access::sp_access($id))
-          return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [sp %d]', 'text-domain'), $id), array('status' => 403));
+          return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this post. [sp %d]', 's2member'), $id), array('status' => 403));
     
       }
     
@@ -260,21 +261,21 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
           if($s2_options['level'.$n.'_pages'] === 'all' 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [page level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [page level %d]', 's2member'), $n), array('status' => 403));
     
-          // "all" of custom post type "page"
-          else if(strpos($s2_options['level'.$n.'_posts'], 'all-') 
+          //261005.2216 Match page post-type restrictions even when the token starts at offset zero.
+          else if(strpos($s2_options['level'.$n.'_posts'], 'all-') !== FALSE
           && (in_array('all-page', preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_posts'])) || in_array('all-pages', preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_posts']))) 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [page level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [page level %d]', 's2member'), $n), array('status' => 403));
     
           // Current page ID
           else if($s2_options['level'.$n.'_pages'] 
           && in_array($id, preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_pages'])) 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [page level %d]', 'text-domain'), $n), array('status' => 403));
+            return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [page level %d]', 's2member'), $n), array('status' => 403));
         }
     
         // Tag restriction
@@ -286,14 +287,14 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
             if($s2_options['level'.$n.'_ptags'] === 'all' 
             && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
             && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [ptag level %d]', 'text-domain'), $n), array('status' => 403));
+              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [ptag level %d]', 's2member'), $n), array('status' => 403));
     
             // Has a restricted tag
             else if($s2_options['level'.$n.'_ptags'] 
             && has_tag(preg_split('/['."\r\n\t".';,]+/', $s2_options['level'.$n.'_ptags']), $id) 
             && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
             && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [ptag level %d]', 'text-domain'), $n), array('status' => 403));
+              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [ptag level %d]', 's2member'), $n), array('status' => 403));
           }
         }
     
@@ -305,7 +306,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
           foreach($ccaps_req as $ccap) // The ``$user`` MUST satisfy ALL Custom Capability requirements. Stored as an array of Custom Capabilities.
             if(strlen($ccap) 
             && (!$user || !$user->has_cap('access_s2member_ccap_'.$ccap)) /* Does this ``$user``, have this Custom Capability? */)
-              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [ccap %s]', 'text-domain'), $ccap), array('status' => 403));
+              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [ccap %s]', 's2member'), $ccap), array('status' => 403));
         }
     
         // Specific Page restriction
@@ -313,7 +314,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
         && in_array($id, preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['specific_ids'])) 
         && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
         && !c_ws_plugin__s2member_sp_access::sp_access($id))
-          return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [sp %d]', 'text-domain'), $id), array('status' => 403));
+          return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [sp %d]', 's2member'), $id), array('status' => 403));
     
       }
     
@@ -328,7 +329,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
             && preg_match('/'.preg_quote($str, '/').'/'.$ci, $path) 
             && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 
             && (!$user || !$user->has_cap('access_s2member_level'.$n)))
-              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this content. [ruri level %d]', 'text-domain'), $n), array('status' => 403));
+              return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this content. [ruri level %d]', 's2member'), $n), array('status' => 403));
           }
       }
 
