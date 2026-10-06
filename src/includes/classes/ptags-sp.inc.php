@@ -82,7 +82,8 @@ if(!class_exists('c_ws_plugin__s2member_ptags_sp'))
 							if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags'] === 'all' && (!$check_user || !$user || !$user->has_cap('access_s2member_level'.$n)))
 								return apply_filters('ws_plugin__s2member_check_specific_ptag_level_access', array('s2member_level_req' => $n), get_defined_vars());
 
-							else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags'] && (in_array($tag_name, ($tags = preg_split('/['."\r\n\t".';,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags']))) || in_array($tag_slug, $tags)) && (!$check_user || !$user || !$user->has_cap('access_s2member_level'.$n)))
+							//261006.0145 Tag restrictions can identify a tag by its numeric ID, name, or slug.
+							else if($GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags'] && (in_array($tag_name, ($tags = preg_split('/['."\r\n\t".';,]+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['level'.$n.'_ptags']))) || in_array($tag_slug, $tags) || in_array($tag_id, $tags)) && (!$check_user || !$user || !$user->has_cap('access_s2member_level'.$n)))
 								return apply_filters('ws_plugin__s2member_check_specific_ptag_level_access', array('s2member_level_req' => $n), get_defined_vars());
 						}
 						for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--) // URIs. Go through each Level.

@@ -31,7 +31,15 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 		/**
 		 * Protects the resource selected by WordPress after route matching and validation.
 		 *
+		 * @package s2Member\Security
+		 * @since 240312
+		 *
 		 * @attaches-to ``add_filter('rest_request_before_callbacks');``
+		 *
+		 * @param mixed $response Original response from earlier filters.
+		 * @param array $handler Matched WordPress REST endpoint handler.
+		 * @param WP_REST_Request $request Validated REST request.
+		 *
 		 * @return mixed Original response, or a membership WP_Error with HTTP 403.
 		 */
 		public static function security_gate($response, $handler, $request)
@@ -65,7 +73,18 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			return $response;
 		}
 
-		/** Resolve controller ownership on older WordPress versions without REST controller accessors. */
+		/**
+		 * Determines whether the matched REST controller owns the requested resource.
+		 *
+		 * @package s2Member\Security
+		 * @since 261005
+		 *
+		 * @param WP_Post_Type|WP_Taxonomy $resource Registered post type or taxonomy.
+		 * @param WP_REST_Controller $controller Matched endpoint controller.
+		 * @param WP_REST_Request $request Validated REST request.
+		 *
+		 * @return bool True if the controller owns the resource; false otherwise.
+		 */
 		private static function controller_owns_resource($resource, $controller, $request)
 		{
 			if(method_exists($resource, 'get_rest_controller'))
@@ -78,14 +97,33 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			return (bool)preg_match('/^'.preg_quote('/'.$namespace.'/'.$base, '/').'\/\d+\/?$/', $request->get_route());
 		}
 
-		/** Applies the existing REST restriction policy to a real post, including comment parents. */
+		/**
+		 * Checks REST access to a post, page, or comment parent.
+		 *
+		 * @package s2Member\Security
+		 * @since 261005
+		 *
+		 * @param WP_Post $post Existing post whose membership restrictions are checked.
+		 * @param mixed $response Original response to preserve when access is allowed.
+		 *
+		 * @return mixed Original response, or a membership WP_Error with HTTP 403.
+		 */
 		private static function check_post_access($post, $response = NULL)
 		{
 			$type = $post->post_type === 'page' ? 'pages' : 'posts';
 			return self::check_resource_access($type, (int)$post->ID, $response, $post->post_type);
 		}
 
-		/** Install query protection for registered resources, independently of alternative-view settings. */
+		/**
+		 * Registers REST collection and search access filters for exposed resources.
+		 *
+		 * @package s2Member\Security
+		 * @since 261005
+		 *
+		 * @attaches-to ``add_action('rest_api_init');``
+		 *
+		 * @return void
+		 */
 		public static function register_collection_filters()
 		{
 			foreach(get_post_types(array('show_in_rest' => TRUE), 'names') as $post_type)
@@ -97,7 +135,16 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			add_filter('rest_comment_query', array(__CLASS__, 'filter_comment_query'), PHP_INT_MAX, 2);
 		}
 
-		/** Public collections need no content scan when the current user satisfies every configured rule. */
+		/**
+		 * Determines whether configured restrictions require a REST collection access check.
+		 *
+		 * @package s2Member\Security
+		 * @since 261005
+		 *
+		 * @param bool $posts Include post/page, Specific Post/Page, and Custom Capability rules?
+		 *
+		 * @return bool True if an applicable restriction may deny access to collection items.
+		 */
 		private static function needs_query_check($posts = FALSE)
 		{
 			$o = $GLOBALS['WS_PLUGIN__']['s2member']['o'];
@@ -120,7 +167,19 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			return FALSE;
 		}
 
-		/** Exclude protected posts before SQL pagination and counts, including explicit include requests. */
+		/**
+		 * Excludes protected posts before REST collection/search pagination and counts.
+		 *
+		 * @package s2Member\Security
+		 * @since 261005
+		 *
+		 * @attaches-to ``add_filter('rest_{$post_type}_query'); add_filter('rest_post_search_query');``
+		 *
+		 * @param array $args Prepared WP_Query arguments.
+		 * @param WP_REST_Request $request Validated collection or search request.
+		 *
+		 * @return array Query arguments with inaccessible posts excluded.
+		 */
 		public static function filter_post_query($args, $request)
 		{
 			if(!self::needs_query_check(TRUE))
@@ -152,7 +211,19 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			return self::exclude_query_ids($args, $excluded, 'post__in', 'post__not_in');
 		}
 
-		/** Exclude protected taxonomy metadata from both term collections and REST term search. */
+		/**
+		 * Excludes protected terms from REST taxonomy collections and term search.
+		 *
+		 * @package s2Member\Security
+		 * @since 261005
+		 *
+		 * @attaches-to ``add_filter('rest_{$taxonomy}_query'); add_filter('rest_term_search_query');``
+		 *
+		 * @param array $args Prepared WP_Term_Query arguments.
+		 * @param WP_REST_Request $request Validated collection or search request.
+		 *
+		 * @return array Query arguments with inaccessible terms excluded.
+		 */
 		public static function filter_term_query($args, $request)
 		{
 			if(!self::needs_query_check())
@@ -172,7 +243,19 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			return self::exclude_query_ids($args, $excluded, 'include', 'exclude');
 		}
 
-		/** An approved comment must not reveal the contents of a membership-protected parent. */
+		/**
+		 * Excludes comments whose parent posts are inaccessible to the current user.
+		 *
+		 * @package s2Member\Security
+		 * @since 261005
+		 *
+		 * @attaches-to ``add_filter('rest_comment_query');``
+		 *
+		 * @param array $args Prepared WP_Comment_Query arguments.
+		 * @param WP_REST_Request $request Validated comment collection request.
+		 *
+		 * @return array Query arguments with comments on inaccessible posts excluded.
+		 */
 		public static function filter_comment_query($args, $request)
 		{
 			if(!self::needs_query_check(TRUE))
@@ -204,7 +287,19 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			return self::exclude_query_ids($args, $excluded, 'comment__in', 'comment__not_in');
 		}
 
-		/** WordPress include lists can override excludes; an empty include list means "include everything". */
+		/**
+		 * Applies exclusions without letting an exhausted include list expand the query.
+		 *
+		 * @package s2Member\Security
+		 * @since 261005
+		 *
+		 * @param array $args Prepared collection query arguments.
+		 * @param int[] $excluded Resource IDs denied by membership restrictions.
+		 * @param string $include_key Query argument containing explicit included IDs.
+		 * @param string $exclude_key Query argument containing excluded IDs.
+		 *
+		 * @return array Query arguments with exclusions and a restrictive include list.
+		 */
 		private static function exclude_query_ids($args, $excluded, $include_key, $exclude_key)
 		{
 			if(!$excluded)
@@ -219,7 +314,19 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			return $args;
 		}
 
-		/** Checks canonical resource identity instead of the current HTTP page or REST path. */
+		/**
+		 * Checks the REST restriction policy against a canonical content resource.
+		 *
+		 * @package s2Member\Security
+		 * @since 261005
+		 *
+		 * @param string $type Resource kind: posts, pages, categories, tags, or terms.
+		 * @param int $id Existing post or term ID.
+		 * @param mixed $response Original response to preserve when access is allowed.
+		 * @param string $post_type Actual registered post type for post/page restrictions.
+		 *
+		 * @return mixed Original response, or a membership WP_Error with HTTP 403.
+		 */
 		private static function check_resource_access($type, $id, $response = NULL, $post_type = '')
 		{
       $s2_options = $GLOBALS['WS_PLUGIN__']['s2member']['o'];
@@ -438,7 +545,7 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
           && (!$user || !$user->has_cap('access_s2member_level'.$n)))
             return new WP_Error('rest_forbidden', sprintf(__('You do not have access to this page. [page level %d]', 's2member'), $n), array('status' => 403));
     
-          //261005.2216 Match page post-type restrictions even when the token starts at offset zero.
+          //261006.0145 The Posts restriction setting also accepts "all-page" and "all-pages" to protect every page.
           else if(strpos($s2_options['level'.$n.'_posts'], 'all-') !== FALSE
           && (in_array('all-page', preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_posts'])) || in_array('all-pages', preg_split('/['."\r\n\t".'\s;,]+/', $s2_options['level'.$n.'_posts']))) 
           && c_ws_plugin__s2member_no_cache::no_cache_constants('restricted') 

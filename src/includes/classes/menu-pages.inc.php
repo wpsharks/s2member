@@ -422,9 +422,11 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				{
 					$logs_dir = $GLOBALS['WS_PLUGIN__']['s2member']['c']['logs_dir'];
 
-					if(file_exists($logs_dir.'/'.$log_file))
-						$log_file_contents = file_get_contents($logs_dir.'/'.$log_file);
-					else $log_file_contents = '';
+					$resource = FALSE;
+					$log_file_size = 0;
+					if(is_file($logs_dir.'/'.$log_file) && is_readable($logs_dir.'/'.$log_file) && ($resource = @fopen($logs_dir.'/'.$log_file, 'rb')))
+						if(($log_file_stat = fstat($resource)) !== FALSE)
+							$log_file_size = $log_file_stat['size'];
 
 					@set_time_limit(0);
 					@ini_set('memory_limit', apply_filters('admin_memory_limit', WP_MAX_MEMORY_LIMIT));
@@ -440,7 +442,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 					header('Content-Encoding: none');
 					header('Accept-Ranges: none');
 					header('Content-Type: text/plain; charset=UTF-8');
-					header('Content-Length: '.strlen($log_file_contents));
+					header('Content-Length: '.$log_file_size);
 					header('Expires: '.gmdate('D, d M Y H:i:s', strtotime('-1 week')).' GMT');
 					header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 					header('Cache-Control: no-cache, must-revalidate, max-age=0');
@@ -449,7 +451,22 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 					header('Content-Disposition: attachment; filename="'.$log_file.'"');
 
-					exit($log_file_contents); // Log file.
+					if(is_resource($resource))
+					{
+						//261006.0145 Stream log downloads in bounded chunks so large logs do not exhaust PHP memory.
+						$chunk_size = max(1, min(2097152, (int)apply_filters('ws_plugin__s2member_file_downloads_chunk_size', 2097152, get_defined_vars())));
+						$bytes_remaining = $log_file_size;
+						while($bytes_remaining > 0 && !feof($resource))
+						{
+							$chunk = fread($resource, min($chunk_size, $bytes_remaining));
+							if($chunk === FALSE || $chunk === '') break;
+							$bytes_remaining -= strlen($chunk);
+							echo $chunk;
+							flush();
+						}
+						fclose($resource);
+					}
+					exit; // Clean exit after serving file.
 				}
 		}
 
