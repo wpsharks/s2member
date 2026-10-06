@@ -74,6 +74,29 @@ if (!class_exists('c_ws_plugin__s2member_utils_defuse')) {
         }
 
         /**
+         * Checks whether a stored Defuse key can be loaded.
+         *
+         * @since 261006
+         *
+         * @param string $defuse_key Stored ASCII-safe Defuse key.
+         * @return bool True for a valid key, else false.
+         */
+        private static function valid_defuse_key($defuse_key)
+        {
+            if (!is_string($defuse_key) || !isset($defuse_key[0])) {
+                return false;
+            }
+            try {
+                Key::loadFromAsciiSafeString($defuse_key);
+                return true;
+            } catch (Throwable $Exception) {
+                return false;
+            } catch (Exception $Exception) {
+                return false;
+            }
+        }
+
+        /**
          * Migrates legacy Defuse key mappings to hashed mappings.
          *
          * Preserves the existing Defuse keys while creating hashed mappings for
@@ -88,26 +111,34 @@ if (!class_exists('c_ws_plugin__s2member_utils_defuse')) {
         {
             $options = array();
 
-            // Migrate the current default mapping without changing its Defuse key.
+            //261006.0424 Fingerprinted associations are authoritative; legacy data fills only missing or invalid keys, including direct upgrades.
             $legacy_mapping        = $GLOBALS['WS_PLUGIN__']['s2member']['o']['def_combo_encryption_key'];
             $converted_defuse_keys = self::convert_legacy_defuse_key_mapping($legacy_mapping);
-            $defuse_keys           = $converted_defuse_keys ? $converted_defuse_keys : $GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key'];
-            if ($converted_defuse_keys && $converted_defuse_keys !== $GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key']) {
+            $defuse_keys           = $GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key'];
+            foreach ($converted_defuse_keys as $_secret_key_hash => $_defuse_key) {
+                if (!isset($defuse_keys[$_secret_key_hash]) || !self::valid_defuse_key($defuse_keys[$_secret_key_hash])) {
+                    $defuse_keys[$_secret_key_hash] = $_defuse_key;
+                }
+            }
+            if ($defuse_keys !== $GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key']) {
                 $defuse_keys_update = $defuse_keys;
                 array_unshift($defuse_keys_update, 'update-signal');
                 $options['ws_plugin__s2member_secret_key_to_defuse_key'] = $defuse_keys_update;
             }
 
-            // Preserve default mappings as recovery-only history; normal decryption does not search it.
+            //261006.0424 Keep canonical recovery history ahead of legacy additions; conflicting keys remain available for explicit recovery, not normal lookup.
             $defuse_key_history = $defuse_keys ? array($defuse_keys) : array();
-            foreach ($GLOBALS['WS_PLUGIN__']['s2member']['o']['def_combo_encryption_key_history'] as $_legacy_mapping) {
-                $_defuse_keys = self::convert_legacy_defuse_key_mapping($_legacy_mapping);
-                if ($_defuse_keys && !in_array($_defuse_keys, $defuse_key_history, true)) {
+            foreach ($GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key_history'] as $_defuse_keys) {
+                if (is_array($_defuse_keys) && count($_defuse_keys) === 1 && !in_array($_defuse_keys, $defuse_key_history, true)) {
                     $defuse_key_history[] = $_defuse_keys;
                 }
             }
-            foreach ($GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key_history'] as $_defuse_keys) {
-                if (is_array($_defuse_keys) && count($_defuse_keys) === 1 && !in_array($_defuse_keys, $defuse_key_history, true)) {
+            if ($converted_defuse_keys && !in_array($converted_defuse_keys, $defuse_key_history, true)) {
+                $defuse_key_history[] = $converted_defuse_keys;
+            }
+            foreach ($GLOBALS['WS_PLUGIN__']['s2member']['o']['def_combo_encryption_key_history'] as $_legacy_mapping) {
+                $_defuse_keys = self::convert_legacy_defuse_key_mapping($_legacy_mapping);
+                if ($_defuse_keys && !in_array($_defuse_keys, $defuse_key_history, true)) {
                     $defuse_key_history[] = $_defuse_keys;
                 }
             }
@@ -124,8 +155,11 @@ if (!class_exists('c_ws_plugin__s2member_utils_defuse')) {
                 $_secret_key = (string) $_secret_key;
                 $_defuse_key = (string) $_defuse_key;
 
-                if (isset($_secret_key[0]) && isset($_defuse_key[0])) {
-                    $custom_defuse_keys[self::secret_key_hash($_secret_key)] = $_defuse_key;
+                if (isset($_secret_key[0]) && self::valid_defuse_key($_defuse_key)) {
+                    $_secret_key_hash = self::secret_key_hash($_secret_key);
+                    if (!isset($custom_defuse_keys[$_secret_key_hash]) || !self::valid_defuse_key($custom_defuse_keys[$_secret_key_hash])) {
+                        $custom_defuse_keys[$_secret_key_hash] = $_defuse_key;
+                    }
                 }
             }
             if ($custom_defuse_keys !== $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_secret_key_to_defuse_key']) {
@@ -157,27 +191,27 @@ if (!class_exists('c_ws_plugin__s2member_utils_defuse')) {
             $secret_key_hash       = self::secret_key_hash($secret_key);
 
             if ($has_custom_secret_key) {
-                // Prefer the legacy custom mapping during the compatibility release.
-                $legacy_custom_defuse_keys = $GLOBALS['WS_PLUGIN__']['s2member']['o']['def_custom_combo_encryption_keys'];
-                if ($secret_key && !empty($legacy_custom_defuse_keys[$secret_key])) {
-                    return $legacy_custom_defuse_keys[$secret_key];
-                }
-                // Fall back to the hashed custom mapping prepared for later releases.
+                //261006.0424 Prefer valid fingerprinted keys while retaining legacy lookup for installations not yet migrated.
                 $custom_defuse_keys = $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_secret_key_to_defuse_key'];
-                if ($secret_key_hash && !empty($custom_defuse_keys[$secret_key_hash])) {
+                if ($secret_key_hash && isset($custom_defuse_keys[$secret_key_hash]) && self::valid_defuse_key($custom_defuse_keys[$secret_key_hash])) {
                     return $custom_defuse_keys[$secret_key_hash];
+                }
+                $legacy_custom_defuse_keys = $GLOBALS['WS_PLUGIN__']['s2member']['o']['def_custom_combo_encryption_keys'];
+                if ($secret_key && isset($legacy_custom_defuse_keys[$secret_key]) && self::valid_defuse_key($legacy_custom_defuse_keys[$secret_key])) {
+                    return $legacy_custom_defuse_keys[$secret_key];
                 }
                 return '';
             }
-            // Prefer the legacy default mapping during the compatibility release.
+            $defuse_keys = $GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key'];
+            if ($secret_key_hash && isset($defuse_keys[$secret_key_hash]) && self::valid_defuse_key($defuse_keys[$secret_key_hash])) {
+                return $defuse_keys[$secret_key_hash];
+            }
             $legacy_mapping = $GLOBALS['WS_PLUGIN__']['s2member']['o']['def_combo_encryption_key'];
             if ($secret_key && $legacy_mapping && strpos($legacy_mapping, $secret_key."\n") === 0) {
-                return substr($legacy_mapping, strlen($secret_key) + 1);
+                $legacy_defuse_key = substr($legacy_mapping, strlen($secret_key) + 1);
+                return self::valid_defuse_key($legacy_defuse_key) ? $legacy_defuse_key : '';
             }
-            // Fall back to the hashed default mapping prepared for later releases.
-            $defuse_keys = $GLOBALS['WS_PLUGIN__']['s2member']['o']['secret_key_to_defuse_key'];
-
-            return ($secret_key_hash && !empty($defuse_keys[$secret_key_hash])) ? $defuse_keys[$secret_key_hash] : '';
+            return '';
         }
 
         /**

@@ -48,16 +48,16 @@ if (!class_exists ("c_ws_plugin__s2member_register_in"))
 
 								$msg_503 = _x ('<strong>Your Link Expired:</strong><br />Please contact Support if you need assistance.', "s2member-front", "s2member");
 
-								if (is_array($register = preg_split ("/\:\.\:\|\:\.\:/", c_ws_plugin__s2member_utils_encryption::decrypt (trim (stripslashes ((string)$_GET["s2member_register"]))))))
+								if (is_array($register = preg_split ("/\:\.\:\|\:\.\:/", c_ws_plugin__s2member_register_access::decrypt_token (trim (stripslashes ((string)$_GET["s2member_register"])), "link"))))
 									{
-										if (count ($register) === 6 && $register[0] === "subscr_gateway_subscr_id_custom_item_number_time" /* Does the checksum value match up here? */)
+										if (count ($register) === 6 && $register[0] === "subscr_gateway_subscr_id_custom_item_number_time" /* Identifies the expected registration payload. */)
 											{
 												if (is_numeric ($register[5]) && $register[5] <= strtotime ("now") && $register[5] >= strtotime ("-" . apply_filters("ws_plugin__s2member_register_link_exp_time", "2 days", get_defined_vars ())))
 													{
-														$_COOKIE["s2member_subscr_gateway"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_utils_encryption::encrypt ($register[1]);
-														$_COOKIE["s2member_subscr_id"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_utils_encryption::encrypt ($register[2]);
-														$_COOKIE["s2member_custom"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_utils_encryption::encrypt ($register[3]);
-														$_COOKIE["s2member_item_number"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_utils_encryption::encrypt ($register[4]);
+														$_COOKIE["s2member_subscr_gateway"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_register_access::encrypt_token ($register[1], "subscr_gateway");
+														$_COOKIE["s2member_subscr_id"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_register_access::encrypt_token ($register[2], "subscr_id");
+														$_COOKIE["s2member_custom"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_register_access::encrypt_token ($register[3], "custom");
+														$_COOKIE["s2member_item_number"] = /* For ``reg_cookies_ok ()``. */ c_ws_plugin__s2member_register_access::encrypt_token ($register[4], "item_number");
 
 														if (($reg_cookies = c_ws_plugin__s2member_register_access::reg_cookies_ok ()) && extract ($reg_cookies) /* Needed? */)
 															{

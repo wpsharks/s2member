@@ -29,6 +29,60 @@ if(!class_exists('c_ws_plugin__s2member_register_access'))
 	class c_ws_plugin__s2member_register_access
 	{
 		/**
+		 * Encrypts and authenticates a registration link or cookie value.
+		 *
+		 * @package s2Member\Registrations
+		 * @since 261006
+		 *
+		 * @param string $string Value to encrypt.
+		 * @param string $purpose Registration context: `link` or the cookie field name.
+		 * @return string Authenticated encrypted token, or an empty string for an empty value.
+		 */
+		public static function encrypt_token($string, $purpose)
+		{
+			$string = is_scalar($string) ? (string)$string : '';
+			if($string === '' || !is_string($purpose) || $purpose === '')
+				return '';
+
+			$encrypted = c_ws_plugin__s2member_utils_encryption::encrypt($string);
+			if($encrypted === '')
+				return '';
+			$payload = c_ws_plugin__s2member_utils_strings::base64_url_safe_encode($encrypted);
+			//261006.0428 Authenticate even older-runtime encryption; use a separate WordPress salt because legacy ciphertext can expose its encryption key.
+			$signature = hash_hmac('sha256', 's2member:registration:v1:'.$purpose.':'.$payload, wp_salt('auth'));
+			return 's2reg1.'.$payload.'.'.$signature;
+		}
+
+		/**
+		 * Verifies a registration token before decrypting it.
+		 *
+		 * @package s2Member\Registrations
+		 * @since 261006
+		 *
+		 * @param string $token Encrypted registration token.
+		 * @param string $purpose Expected registration context: `link` or the cookie field name.
+		 * @return string Verified plaintext, or an empty string for an invalid token.
+		 */
+		public static function decrypt_token($token, $purpose)
+		{
+			if(!is_string($token) || $token === '' || !is_string($purpose) || $purpose === '')
+				return '';
+
+			if(strpos($token, 's2reg1.') === 0)
+			{
+				$parts = explode('.', $token);
+				if(count($parts) !== 3 || $parts[1] === '' || !preg_match('/^[a-f0-9]{64}$/D', $parts[2]))
+					return '';
+				$signature = hash_hmac('sha256', 's2member:registration:v1:'.$purpose.':'.$parts[1], wp_salt('auth'));
+				if(!hash_equals($signature, $parts[2]))
+					return '';
+				return c_ws_plugin__s2member_utils_encryption::decrypt(c_ws_plugin__s2member_utils_strings::base64_url_safe_decode($parts[1]));
+			}
+			//261006.0428 Existing authenticated Defuse registrations remain valid; unsigned legacy registrations must never reach the fallback decryptor.
+			return c_ws_plugin__s2member_utils_defuse::decrypt($token);
+		}
+
+		/**
 		 * Generates Registration Access Links.
 		 *
 		 * @package s2Member\Registrations
@@ -50,7 +104,7 @@ if(!class_exists('c_ws_plugin__s2member_register_access'))
 
 			if($subscr_gateway && is_string($subscr_gateway) && $subscr_id && is_string($subscr_id) && $custom && is_string($custom) && $item_number && (is_string($item_number) || is_numeric($item_number)))
 			{
-				$register = c_ws_plugin__s2member_utils_encryption::encrypt('subscr_gateway_subscr_id_custom_item_number_time:.:|:.:'.$subscr_gateway.':.:|:.:'.$subscr_id.':.:|:.:'.$custom.':.:|:.:'.$item_number.':.:|:.:'.strtotime('now'));
+				$register = self::encrypt_token('subscr_gateway_subscr_id_custom_item_number_time:.:|:.:'.$subscr_gateway.':.:|:.:'.$subscr_id.':.:|:.:'.$custom.':.:|:.:'.$item_number.':.:|:.:'.strtotime('now'), 'link');
 
 				$register_link            = home_url('/?s2member_register='.urlencode($register)); // Generate long URL/link.
 				$now                      = strtotime('now');
@@ -113,7 +167,7 @@ if(!class_exists('c_ws_plugin__s2member_register_access'))
 			do_action('ws_plugin__s2member_before_reg_cookies_ok', get_defined_vars());
 
 			if(isset ($_COOKIE['s2member_subscr_gateway'], $_COOKIE['s2member_subscr_id'], $_COOKIE['s2member_custom'], $_COOKIE['s2member_item_number']))
-				if(($subscr_gateway = c_ws_plugin__s2member_utils_encryption::decrypt((string)$_COOKIE['s2member_subscr_gateway'])) && ($subscr_id = c_ws_plugin__s2member_utils_encryption::decrypt((string)$_COOKIE['s2member_subscr_id'])) && preg_match('/^'.preg_quote(preg_replace('/\:([0-9]+)$/', '', $_SERVER['HTTP_HOST']), '/').'/i', ($custom = c_ws_plugin__s2member_utils_encryption::decrypt((string)$_COOKIE['s2member_custom']))) && preg_match($GLOBALS['WS_PLUGIN__']['s2member']['c']['membership_item_number_w_level_regex'], ($item_number = c_ws_plugin__s2member_utils_encryption::decrypt((string)$_COOKIE['s2member_item_number']))) && !$wpdb->get_var("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE `meta_key` = '".$wpdb->prefix."s2member_subscr_id' AND `meta_value` = '".esc_sql($subscr_id)."' LIMIT 1"))
+				if(($subscr_gateway = self::decrypt_token((string)$_COOKIE['s2member_subscr_gateway'], 'subscr_gateway')) && ($subscr_id = self::decrypt_token((string)$_COOKIE['s2member_subscr_id'], 'subscr_id')) && preg_match('/^'.preg_quote(preg_replace('/\:([0-9]+)$/', '', $_SERVER['HTTP_HOST']), '/').'/i', ($custom = self::decrypt_token((string)$_COOKIE['s2member_custom'], 'custom'))) && preg_match($GLOBALS['WS_PLUGIN__']['s2member']['c']['membership_item_number_w_level_regex'], ($item_number = self::decrypt_token((string)$_COOKIE['s2member_item_number'], 'item_number'))) && !$wpdb->get_var("SELECT `user_id` FROM `".$wpdb->usermeta."` WHERE `meta_key` = '".$wpdb->prefix."s2member_subscr_id' AND `meta_value` = '".esc_sql($subscr_id)."' LIMIT 1"))
 					$reg_cookies_ok = $reg_cookies = array('subscr_gateway' => $subscr_gateway, 'subscr_id' => $subscr_id, 'custom' => $custom, 'item_number' => $item_number);
 
 			return apply_filters('ws_plugin__s2member_reg_cookies_ok', !empty($reg_cookies_ok) && !empty($reg_cookies) ? $reg_cookies : FALSE, get_defined_vars());
