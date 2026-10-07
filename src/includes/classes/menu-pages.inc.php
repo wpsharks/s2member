@@ -207,6 +207,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			echo '<em>Developers who need a role not available here can use <code>ws_plugin__s2member_force_demotion_role</code>; see <a href="https://s2member.com/kb-article/how-do-i-specify-the-demotion-role-upon-eot/" target="_blank" rel="noopener noreferrer external">How do I specify the demotion role upon EOT?</a></em>'."\n";
 			echo '</td>'."\n";
 			echo '</tr>'."\n";
+			do_action('ws_plugin__s2member_after_eot_demotion_options', get_defined_vars());
 		}
 
 		/**

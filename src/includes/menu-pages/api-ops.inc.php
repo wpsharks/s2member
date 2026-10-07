@@ -652,6 +652,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_api_ops"))
 				echo '<li><code>%%user_login%%</code> = The Username associated with their account. The Customer created this during registration.</li>'."\n";
 				echo '<li><code>%%user_ip%%</code> = The Customer\'s original IP Address, during checkout/registration via <code>$_SERVER["REMOTE_ADDR"]</code>.</li>'."\n";
 				echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>'."\n";
+				echo '<li><code>%%previous_role%%</code> = The membership role before EOT/deletion (or the WordPress role if no paid membership role was assigned).</li>'."\n";
+				echo '<li><code>%%previous_s2member_level%%</code> = The previous s2Member level number, or an empty value for unrelated WordPress roles.</li>'."\n";
+				echo '<li><code>%%ccaps_before%%</code> = The custom capabilities enabled before the event, as comma-separated names.</li>'."\n";
+				echo '<li><code>%%ccaps_removed%%</code> = The custom capabilities actually lost during the event, as comma-separated names.</li>'."\n";
+				echo '<li><code>%%ccaps_remaining%%</code> = The custom capabilities still enabled afterward; empty for a deleted account/site membership.</li>'."\n";
 				echo '</ul>'."\n";
 
 				echo '<strong>Custom Registration/Profile Fields are also supported in this Notification:</strong>'."\n";

@@ -71,9 +71,10 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 				* @since 3.5
 				*
 				* @param string $demotion_role Expects the role to demote the user to.
+				* @param \WP_User|null $user Optional user being demoted, for EOT-specific destination filters.
 				* @return string Role users are demoted to, as configured by s2Member.
 				*/
-				public static function force_demotion_role ($demotion_role = FALSE)
+				public static function force_demotion_role ($demotion_role = FALSE, $user = NULL)
 					{
 						do_action("ws_plugin__s2member_before_force_demotion_role", get_defined_vars ());
 
@@ -82,6 +83,9 @@ if (!class_exists ("c_ws_plugin__s2member_option_forces"))
 						//260916.2306 Validate registered-role existence here, after s2Member is fully loaded; doing this in bootstrap option validation can initialize WordPress roles too early.
 						if(in_array($demotion_role, array('administrator', 'editor', 'author', 'contributor', 's2member_pending_deletion'), TRUE) || !get_role($demotion_role))
 							$demotion_role = "subscriber";
+
+						//261007.2005 Resolve user-specific EOT destinations before the established final developer override.
+						$demotion_role = apply_filters("ws_plugin__s2member_eot_demotion_role", $demotion_role, get_defined_vars ());
 
 						return apply_filters("ws_plugin__s2member_force_demotion_role", $demotion_role, get_defined_vars ());
 					}

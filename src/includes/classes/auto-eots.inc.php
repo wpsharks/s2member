@@ -296,10 +296,10 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 				return '';
 
 			$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
-			//260916.2030 Preserve the historical all-role path exactly; upgraded installations are explicitly seeded to this policy.
+			//261007.2030 All-role demotion must leave only the destination role, including when it was already assigned.
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_demotion_from'] === 'all')
 			{
-				if($existing_role !== $demotion_to_role)
+				if(count((array)$user->roles) !== 1 || !in_array($demotion_to_role, (array)$user->roles, TRUE))
 					$user->set_role($demotion_to_role);
 				return $existing_role;
 			}
@@ -550,6 +550,8 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			if(!$user_id || !is_object($user = new WP_User($user_id)) || !$user->ID)
 				return '';
 
+			$eot_access_before = c_ws_plugin__s2member_eot_notifications::snapshot($user);
+
 			if(self::allow_eot_user_deletion($user_id, $eot_del_type))
 			{
 				//260822.0535 True deletion is deliberately opt-in; preserve the historical deletion/removal path only after the developer filter explicitly allows it.
@@ -558,7 +560,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 				{
 					$blog_id = get_current_blog_id();
 					remove_user_from_blog($user_id, $blog_id);
-					c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions($user_id, $blog_id, 's2says');
+					c_ws_plugin__s2member_user_deletions::handle_ms_user_deletions($user_id, $blog_id, 's2says', $eot_access_before);
 					return 'removed';
 				}
 				include_once ABSPATH.'wp-admin/includes/admin.php';
@@ -569,7 +571,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			$pending_role = 's2member_pending_deletion';
 			$pending_meta = get_user_option('s2member_eot_pending_deletion', $user_id);
 			$already_pending = in_array($pending_role, (array)$user->roles, TRUE) && is_array($pending_meta) && isset($pending_meta['eot_time'], $pending_meta['processed_at'], $pending_meta['original_role']);
-			$original_role = $already_pending ? (string)$pending_meta['original_role'] : c_ws_plugin__s2member_user_access::user_access_role($user);
+			$original_role = $already_pending ? (string)$pending_meta['original_role'] : $eot_access_before['previous_role'];
 			$processed_at = time();
 			$removed_ccaps = $already_pending ? array() : c_ws_plugin__s2member_user_access::user_access_ccaps($user);
 			$subscr_gateway = $already_pending ? '' : get_user_option('s2member_subscr_gateway', $user_id);
@@ -610,7 +612,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 					'subscr_id'        => $subscr_id,
 				));
 				//260822.0535 A preserved account never reaches WordPress' deletion hook, so send the configured EOT/Deletion notifications explicitly instead of silently dropping them.
-				self::pending_deletion_notifications($user_id, $eot_del_type);
+				self::pending_deletion_notifications($user_id, $eot_del_type, c_ws_plugin__s2member_eot_notifications::context($eot_access_before, $user));
 			}
 
 			return 'pending_deletion';
@@ -624,14 +626,18 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 		 *
 		 * @param int    $user_id WordPress user ID being preserved.
 		 * @param string $eot_del_type EOT/deletion event type.
+		 * @param array $eot_notification_context Optional access context captured before Pending Deletion.
 		 *
 		 * @return null
 		 */
-		public static function pending_deletion_notifications($user_id = 0, $eot_del_type = '')
+		public static function pending_deletion_notifications($user_id = 0, $eot_del_type = '', $eot_notification_context = array())
 		{
 			$user_id = (int)$user_id;
 			if(!$user_id || !is_object($user = new WP_User($user_id)) || !$user->ID)
 				return;
+
+			if(!$eot_notification_context)
+				$eot_notification_context = c_ws_plugin__s2member_eot_notifications::context(c_ws_plugin__s2member_eot_notifications::snapshot($user), $user);
 
 			$custom      = get_user_option('s2member_custom', $user_id);
 			$subscr_id   = get_user_option('s2member_subscr_id', $user_id);
@@ -643,7 +649,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'])
 			{
 				foreach(preg_split("/[\r\n\t]+/", $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url)
-					if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
+					if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(c_ws_plugin__s2member_eot_notifications::fill($url, $eot_notification_context, TRUE), $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
 						if(($url = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_baid)), $url)) && ($url = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_cid)), $url)))
 							if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
 								if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
@@ -680,6 +686,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 				$msg .= 'user_login: %%user_login%%'."\n";
 				$msg .= 'user_ip: %%user_ip%%'."\n";
 				$msg .= 'user_id: %%user_id%%'."\n";
+				$msg .= c_ws_plugin__s2member_eot_notifications::email_fields($eot_notification_context);
 
 				if(is_array($fields) && !empty($fields))
 					foreach($fields as $var => $val)
@@ -1137,7 +1144,9 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									$user_reg_ip     = get_user_option('s2member_registration_ip', $user_id);
 									$ipn_signup_vars = get_user_option('s2member_ipn_signup_vars', $user_id);
 
-									$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber');
+									//261007.2005 Capture access before role or capability changes so notifications report the actual EOT transition.
+									$eot_access_before = c_ws_plugin__s2member_eot_notifications::snapshot($user);
+									$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber', $user);
 									$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
 									$removed_ccaps = array();
 
@@ -1150,13 +1159,20 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									//260916.2004 New installs replace only the s2Member Level role; upgraded sites retain legacy all-role replacement until the administrator changes it.
 									$eot_membership_role = self::demote_user_roles($user, $demotion_role);
 
-									if(apply_filters('ws_plugin__s2member_remove_ccaps_during_eot_events', (bool)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eots_remove_ccaps'], get_defined_vars()))
+									$remove_ccaps_default = (bool)apply_filters('ws_plugin__s2member_eot_remove_ccaps_default', (bool)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eots_remove_ccaps'], get_defined_vars());
+									if(apply_filters('ws_plugin__s2member_remove_ccaps_during_eot_events', $remove_ccaps_default, get_defined_vars()))
+									{
+										$ccaps_to_remove = array();
 										foreach($user->allcaps as $cap => $cap_enabled)
 											if(preg_match('/^access_s2member_ccap_/', $cap))
-											{
-												$removed_ccaps[] = preg_replace('/^access_s2member_ccap_/', '', $cap);
-												$user->remove_cap($ccap = $cap);
-											}
+												$ccaps_to_remove[] = $cap;
+										//261007.2005 Capability-selection filters run only after the existing removal permission filter allows the operation.
+										foreach((array)apply_filters('ws_plugin__s2member_eot_ccaps_to_remove', $ccaps_to_remove, get_defined_vars()) as $ccap)
+											if(is_string($ccap) && preg_match('/^access_s2member_ccap_/', $ccap))
+												$user->remove_cap($ccap);
+									}
+									$eot_notification_context = c_ws_plugin__s2member_eot_notifications::context($eot_access_before, $user);
+									$removed_ccaps = $eot_notification_context['ccaps_removed'] === '' ? array() : explode(',', $eot_notification_context['ccaps_removed']);
 
 									delete_user_option($user_id, 's2member_subscr_gateway');
 									delete_user_option($user_id, 's2member_subscr_id');
@@ -1188,7 +1204,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									self::record_eot_history($user_id, array(
 										'eot_time'         => $auto_eot_time,
 										'processed_at'     => $processed_at,
-										'original_role'    => $eot_membership_role,
+										'original_role'    => $eot_access_before['previous_role'],
 										'destination_role' => $demotion_role,
 										'removed_ccaps'    => $removed_ccaps,
 										'subscr_gateway'   => $subscr_gateway,
@@ -1199,7 +1215,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 									{
 										foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url) // Handle EOT Notifications.
 
-											if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode('auto-eot-cancellation-expiration-demotion')), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
+											if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(c_ws_plugin__s2member_eot_notifications::fill($url, $eot_notification_context, TRUE), $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode('auto-eot-cancellation-expiration-demotion')), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
 												if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
 													if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
 														if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_email)), $url)))
@@ -1235,6 +1251,7 @@ if(!class_exists('c_ws_plugin__s2member_auto_eots'))
 										$msg .= 'user_login: %%user_login%%'."\n";
 										$msg .= 'user_ip: %%user_ip%%'."\n";
 										$msg .= 'user_id: %%user_id%%'."\n";
+										$msg .= c_ws_plugin__s2member_eot_notifications::email_fields($eot_notification_context);
 
 										if(is_array($fields) && !empty($fields))
 											foreach($fields as $var => $val)
