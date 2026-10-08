@@ -1846,6 +1846,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
+			//261008.0740 Pro's per-level editor follows the site-wide capability setting that its blank fields use.
+			do_action('ws_plugin__s2member_after_eot_ccap_options', get_defined_vars());
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 
