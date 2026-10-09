@@ -2,21 +2,21 @@
 /**
  * Access context shared by EOT and deletion notifications.
  *
- * @package s2Member\EOT_Notifications
+ * @package s2Member\Utils_EOT
  * @since 261007
  */
 if(!defined('WPINC'))
 	exit('Do not access this file directly.');
 
-if(!class_exists('c_ws_plugin__s2member_eot_notifications'))
+if(!class_exists('c_ws_plugin__s2member_utils_eot'))
 {
 	/**
 	 * Captures membership access before an EOT and formats the resulting change.
 	 *
-	 * @package s2Member\EOT_Notifications
+	 * @package s2Member\Utils_EOT
 	 * @since 261007
 	 */
-	class c_ws_plugin__s2member_eot_notifications
+	class c_ws_plugin__s2member_utils_eot
 	{
 		/**
 		 * Captures the paid membership role and enabled custom capabilities.

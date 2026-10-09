@@ -126,7 +126,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 											'ipn-refund-reversal-demotion' : 'ipn-cancellation-expiration-demotion';
 
 										//261007.2005 Capture access before role or capability changes so notifications report the actual EOT transition.
-										$eot_access_before = c_ws_plugin__s2member_eot_notifications::snapshot($user);
+										$eot_access_before = c_ws_plugin__s2member_utils_eot::snapshot($user);
 										$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber', $user);
 										$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
 										$removed_ccaps = array();
@@ -152,7 +152,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 												if(is_string($ccap) && preg_match('/^access_s2member_ccap_/', $ccap))
 													$user->remove_cap($ccap);
 										}
-										$eot_notification_context = c_ws_plugin__s2member_eot_notifications::context($eot_access_before, $user);
+										$eot_notification_context = c_ws_plugin__s2member_utils_eot::context($eot_access_before, $user);
 										$removed_ccaps = $eot_notification_context['ccaps_removed'] === '' ? array() : explode(',', $eot_notification_context['ccaps_removed']);
 
 										delete_user_option($user_id, 's2member_subscr_gateway');
@@ -198,7 +198,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										{
 											foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url) // Handle EOT Notifications.
 
-												if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(c_ws_plugin__s2member_eot_notifications::fill($url, $eot_notification_context, TRUE), $paypal['custom'], true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_id'])), $url)))
+												if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(c_ws_plugin__s2member_utils_eot::fill($url, $eot_notification_context, TRUE), $paypal['custom'], true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_id'])), $url)))
 													if(($url = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_baid'])), $url)) && ($url = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_cid'])), $url)))
 														if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
 															if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
@@ -233,7 +233,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 											$msg .= 'user_login: %%user_login%%'."\n";
 											$msg .= 'user_ip: %%user_ip%%'."\n";
 											$msg .= 'user_id: %%user_id%%'."\n";
-											$msg .= c_ws_plugin__s2member_eot_notifications::email_fields($eot_notification_context);
+											$msg .= c_ws_plugin__s2member_utils_eot::email_fields($eot_notification_context);
 
 											if(is_array($fields) && !empty($fields))
 												foreach($fields as $var => $val)
