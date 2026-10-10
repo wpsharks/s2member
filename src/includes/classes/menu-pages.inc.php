@@ -96,7 +96,7 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				update_option('ws_plugin__s2member_options', $options).((is_multisite() && is_main_site()) ? update_site_option('ws_plugin__s2member_options', $options) : NULL).update_option('ws_plugin__s2member_cache', array());
 
 				if($update_other === TRUE || in_array('auto_eot_system', (array)$update_other)) // Handle the Auto-EOT System now (enable/disable).
-					($options['auto_eot_system_enabled'] == 1) ? c_ws_plugin__s2member_auto_eots::add_auto_eot_system() : c_ws_plugin__s2member_auto_eots::delete_auto_eot_system();
+					($options['auto_eot_system_enabled'] == 1) ? c_ws_plugin__s2member_eot::add_auto_eot_system() : c_ws_plugin__s2member_eot::delete_auto_eot_system();
 
 				if(($display_notices === TRUE || in_array('success', (array)$display_notices)) && ($notice = '<strong>Options saved.'.(($request_refresh) ? ' Please <a href="'.esc_attr($_SERVER['REQUEST_URI']).'">refresh</a>.' : '').'</strong>'))
 					($enqueue_notices === TRUE || in_array('success', (array)$enqueue_notices)) ? c_ws_plugin__s2member_admin_notices::enqueue_admin_notice($notice, '*:*') : c_ws_plugin__s2member_admin_notices::display_admin_notice($notice);

@@ -107,7 +107,7 @@ if(!class_exists('c_ws_plugin__s2member_installation'))
 
 				//260822.2048 Older EOT demotions recorded their processing time only in Administrative Notes; recover that history asynchronously where the legacy note is still available.
 				if(!$v || version_compare($v, '260822.2048', '<'))
-					c_ws_plugin__s2member_auto_eots::start_eot_processed_time_backfill();
+					c_ws_plugin__s2member_eot::start_eot_processed_time_backfill();
 
 				//260824.1727 Refresh existing Checkout webhooks once more to add dispute-created notifications.
 				if(!$v || version_compare($v, '260824.1727', '<'))

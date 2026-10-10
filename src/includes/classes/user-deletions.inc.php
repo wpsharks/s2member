@@ -98,8 +98,8 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 
 				//261007.2015 Direct multisite removal can run after site roles are gone; use its captured access when supplied.
 				if(!is_array($eot_access_before))
-					$eot_access_before = c_ws_plugin__s2member_utils_eot::snapshot(new WP_User($user_id));
-				$eot_notification_context = c_ws_plugin__s2member_utils_eot::context($eot_access_before);
+					$eot_access_before = c_ws_plugin__s2member_eot::access_snapshot(new WP_User($user_id));
+				$eot_notification_context = c_ws_plugin__s2member_eot::access_context($eot_access_before);
 
 				$custom      = get_user_option('s2member_custom', $user_id);
 				$subscr_id   = get_user_option('s2member_subscr_id', $user_id);
@@ -152,7 +152,7 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 				{
 					foreach(preg_split("/[\r\n\t]+/", $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url) // Handle EOT Notifications on user deletion.
 
-						if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(c_ws_plugin__s2member_utils_eot::fill($url, $eot_notification_context, TRUE), $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
+						if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(c_ws_plugin__s2member_eot::notification_fill($url, $eot_notification_context, TRUE), $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
 							if(($url = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_baid)), $url)) && ($url = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_cid)), $url)))
 								if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
 									if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
@@ -189,7 +189,7 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 					$msg .= 'user_login: %%user_login%%'."\n";
 					$msg .= 'user_ip: %%user_ip%%'."\n";
 					$msg .= 'user_id: %%user_id%%'."\n";
-					$msg .= c_ws_plugin__s2member_utils_eot::email_fields($eot_notification_context);
+					$msg .= c_ws_plugin__s2member_eot::notification_email_fields($eot_notification_context);
 
 					if(is_array($fields) && !empty($fields))
 						foreach($fields as $var => $val)
