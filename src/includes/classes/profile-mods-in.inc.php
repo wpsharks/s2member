@@ -46,24 +46,47 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 
 			if(!empty($_POST['ws_plugin__s2member_profile_save']) && is_user_logged_in() && is_object($user) && !empty($user->ID) && ($user_id = $user->ID))
 			{
-				if(($nonce = $_POST['ws_plugin__s2member_profile_save']) && wp_verify_nonce($nonce, 'ws-plugin--s2member-profile-save'))
+				if(is_string($nonce = $_POST['ws_plugin__s2member_profile_save']) && wp_verify_nonce($nonce, 'ws-plugin--s2member-profile-save'))
 				{
-					$GLOBALS['ws_plugin__s2member_profile_saved'] = TRUE; // Global flag as having been saved/updated successfully.
+					$GLOBALS['ws_plugin__s2member_profile_saved'] = FALSE;
+					unset($GLOBALS['ws_plugin__s2member_profile_error']);
 
 					$_p = c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)); // Clean ``$_POST`` vars.
+					$userdata = array('ID' => $user_id);
+					$profile_error = '';
 
-					$userdata['ID'] = $user_id; // Needed for database update.
+					//261006.0145 Account fields are scalar strings; custom profile fields may legitimately contain arrays.
+					foreach(array('email', 'password1', 'password2', 'first_name', 'last_name', 'display_name') as $account_field)
+						if(isset($_p['ws_plugin__s2member_profile_'.$account_field]) && !is_string($_p['ws_plugin__s2member_profile_'.$account_field]))
+							$profile_error = _x('Invalid profile field value.', 's2member-front', 's2member');
 
-					if(!empty($_p['ws_plugin__s2member_profile_email']))
-						if(is_email($_p['ws_plugin__s2member_profile_email']) && !email_exists($_p['ws_plugin__s2member_profile_email']))
+					if(!$profile_error && !empty($_p['ws_plugin__s2member_profile_email']))
+					{
+						$email = $_p['ws_plugin__s2member_profile_email'];
+						if(!is_email($email))
+							$profile_error = _x('Please enter a valid email address.', 's2member-front', 's2member');
+						else if(($email_owner = email_exists($email)) && (int)$email_owner !== (int)$user_id)
+							$profile_error = _x('That email address is already in use.', 's2member-front', 's2member');
+						else if(strcasecmp($email, $user->user_email) !== 0)
 						{
-							$userdata['user_email'] = $_p['ws_plugin__s2member_profile_email'];
-							if(strcasecmp($userdata['user_email'], $user->user_email) !== 0)
-								$email_change = $user->user_email;
+							//261006.0145 Email-domain validation applies only when the account email changes.
+							$profile_error = c_ws_plugin__s2member_registrations::registration_email_domain_validation_error($email);
+							$userdata['user_email'] = $email;
+							$email_change = $user->user_email;
 						}
-					if(!empty($_p['ws_plugin__s2member_profile_password1']))
-						if($user->user_login !== 'demo') // No pass change on demo!
-							$userdata['user_pass'] = $_p['ws_plugin__s2member_profile_password1'];
+					}
+					if(!$profile_error && isset($_p['ws_plugin__s2member_profile_password1']) && $_p['ws_plugin__s2member_profile_password1'] !== '' && $user->user_login !== 'demo')
+					{
+						//261006.0145 Password changes require confirmation and the site's configured password policy on the server.
+						$password = $_p['ws_plugin__s2member_profile_password1'];
+						if(!isset($_p['ws_plugin__s2member_profile_password2']) || $password !== $_p['ws_plugin__s2member_profile_password2'])
+							$profile_error = _x('Please enter matching passwords.', 's2member-front', 's2member');
+						else if(strlen($password) < c_ws_plugin__s2member_user_securities::min_password_length())
+							$profile_error = sprintf(_x('Password must contain at least %d characters.', 's2member-front', 's2member'), c_ws_plugin__s2member_user_securities::min_password_length());
+						else if(c_ws_plugin__s2member_user_securities::password_strength_score($password) < c_ws_plugin__s2member_user_securities::min_password_strength_score())
+							$profile_error = _x('Password does not meet the configured minimum strength.', 's2member-front', 's2member');
+						else $userdata['user_pass'] = $password;
+					}
 
 					if(!empty($_p['ws_plugin__s2member_profile_first_name']))
 						$userdata['first_name'] = $_p['ws_plugin__s2member_profile_first_name'];
@@ -74,7 +97,22 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 					if(!empty($_p['ws_plugin__s2member_profile_last_name']))
 						$userdata['last_name'] = $_p['ws_plugin__s2member_profile_last_name'];
 
-					wp_update_user(wp_slash($userdata)); // OK. Now send this array for an update.
+					//261006.0145 Custom fields and post-save integrations run only after validation and a successful account update.
+					if(!$profile_error && is_wp_error($user_update = wp_update_user(wp_slash($userdata))))
+						$profile_error = $user_update->get_error_message();
+
+					if($profile_error)
+					{
+						$GLOBALS['ws_plugin__s2member_profile_error'] = $profile_error;
+						if(empty($_p['ws_plugin__s2member_sc_profile_save']))
+						{
+							echo '<script type="text/javascript">window.alert(\''.c_ws_plugin__s2member_utils_strings::esc_js_sq($profile_error).'\'); window.history.back();</script>'."\n";
+							exit();
+						}
+						do_action('ws_plugin__s2member_after_handle_profile_modifications', get_defined_vars());
+						return;
+					}
+					$GLOBALS['ws_plugin__s2member_profile_saved'] = TRUE;
 
 					if($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_fields'])
 						if($fields_applicable = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level('auto-detection', 'profile'))
@@ -151,7 +189,12 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 						c_ws_plugin__s2member_list_servers::process_list_server_removals($role, $level, $user->user_login, ((!empty($userdata['user_pass'])) ? $userdata['user_pass'] : ''), $user->user_email, $user->first_name, $user->last_name, c_ws_plugin__s2member_utils_ip::current(), TRUE, $user_id);
 					}
 					$lwp = c_ws_plugin__s2member_login_redirects::login_redirection_url($user);
-					$lwp = (!$lwp) ? get_page_link($GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page']) : $lwp;
+					if(!$lwp)
+					{
+						//261006.0202 Profile saves fall back to the home page when no existing Login Welcome Page is configured.
+						$welcome_page_id = (int)$GLOBALS['WS_PLUGIN__']['s2member']['o']['login_welcome_page'];
+						$lwp = ($welcome_page_id > 0 && get_post($welcome_page_id)) ? get_page_link($welcome_page_id) : home_url('/');
+					}
 
 					if(empty($_p['ws_plugin__s2member_sc_profile_save']))
 					{

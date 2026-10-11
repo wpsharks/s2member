@@ -112,8 +112,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 							$coupon_class = new c_ws_plugin__s2member_pro_coupons();
 							$coupon_class->update_uses($coupon['coupon_code']);
 						}
-					$ipn_signup_vars = $paypal; // Create array of IPN signup vars w/o s2member_log.
-					unset($ipn_signup_vars['s2member_log']);
+					$ipn_signup_vars = $paypal; // Create array of IPN signup vars w/o one-shot processing markers/logs.
+					unset($ipn_signup_vars['s2member_log'], $ipn_signup_vars['pending_new_user_signup']);
 					/*
 					New Subscription with advanced update vars (option_name1, option_selection1)? These variables are used in Subscr. Modifications.
 					*/
@@ -125,11 +125,16 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 
 						$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `web_accept|subscr_signup` ) w/ update vars.';
 
+						//261002.0228 A pending-new-user-signup is internally fulfilled through this existing-user update branch, but outwardly it must remain the original Stripe signup.
+						$pending_new_user_signup = !empty($paypal['pending_new_user_signup']) && $paypal['subscr_gateway'] === 'stripe'
+							&& !empty($_REQUEST['s2member_paypal_proxy']) && (string)$_REQUEST['s2member_paypal_proxy'] === 'stripe';
+
 						if(($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['subscr_id'], $paypal['option_selection1'])) && is_object($user = new WP_User ($user_id)) && $user->ID)
 						{
 							if(!$user->has_cap('administrator')) // Do NOT process this routine on Administrators.
 							{
-								$processing = $modifying = $during = TRUE; // Yes, we ARE processing this.
+								$processing = $during = TRUE; // Yes, we ARE processing this.
+								$modifying = !$pending_new_user_signup; //261002.0228 Delayed activation completes the original signup; it is not a later membership modification.
 
 								foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 								do_action('ws_plugin__s2member_during_paypal_notify_during_before_subscr_signup_w_update_vars', get_defined_vars());
@@ -197,9 +202,27 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 
 								$paypal['s2member_log'][] = 's2Member Level/Capabilities updated w/ advanced update routines.';
 
-								$sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_subject']; // The same for standard and w/ Pro-Forms.
-								$msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_message']; // The same for standard and w/ Pro-Forms.
-								$rec = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_recipients']; // The same for standard and w/ Pro-Forms.
+								if($pending_new_user_signup)
+								{
+									//261002.0228 The New User/credentials email was already sent when the Level-0 holding account was created; successful delayed activation now gets the normal Pro Signup Confirmation.
+									$sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_signup_email_subject'];
+									$msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_signup_email_message'];
+									$rec = $GLOBALS['WS_PLUGIN__']['s2member']['o']['pro_signup_email_recipients'];
+									$notification_urls       = $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_notification_urls'];
+									$notification_recipients = $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_notification_recipients'];
+									$tracking_codes          = $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_tracking_codes'];
+									$notification_type       = 'signup';
+								}
+								else
+								{
+									$sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_subject']; // The same for standard and w/ Pro-Forms.
+									$msg = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_message']; // The same for standard and w/ Pro-Forms.
+									$rec = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_email_recipients']; // The same for standard and w/ Pro-Forms.
+									$notification_urls       = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_notification_urls'];
+									$notification_recipients = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_notification_recipients'];
+									$tracking_codes          = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_tracking_codes'];
+									$notification_type       = 'modification';
+								}
 
 								$paypal = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($paypal); //251226
 								if(($rec = c_ws_plugin__s2member_utils_strings::fill_cvs($rec, $paypal['custom'])) && ($rec = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_id']), $rec)))
@@ -277,18 +300,18 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 																																																															{
 																																																																//250617 HTML email support.
 																																																																if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
-																																																																	c_ws_plugin__s2member_email_configs::email_config().wp_mail($recipient, apply_filters('ws_plugin__s2member_modification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_modification_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8').c_ws_plugin__s2member_email_configs::email_config_release();;
+																																																																	c_ws_plugin__s2member_email_configs::email_config().wp_mail($recipient, apply_filters('ws_plugin__s2member_'.$notification_type.'_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_'.$notification_type.'_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8').c_ws_plugin__s2member_email_configs::email_config_release();;
 																																																																} else {
-																																																																	c_ws_plugin__s2member_utilities::mail($recipient, apply_filters('ws_plugin__s2member_modification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_modification_email_msg', $msg, get_defined_vars()));
+																																																																	c_ws_plugin__s2member_utilities::mail($recipient, apply_filters('ws_plugin__s2member_'.$notification_type.'_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_'.$notification_type.'_email_msg', $msg, get_defined_vars()));
 																																																																}
 																																																															}
 
-																																																															$paypal['s2member_log'][] = 'Modification Confirmation Email sent to: '.$rec.'.';
+																																																															$paypal['s2member_log'][] = ucfirst($notification_type).' Confirmation Email sent to: '.$rec.'.';
 																																																														}
 																																																													}
-								if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_notification_urls'])
+								if($processing && $notification_urls)
 								{
-									foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_notification_urls']) as $url)
+									foreach(preg_split('/['."\r\n\t".']+/', $notification_urls) as $url)
 
 										if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_id'])), $url)))
 											if(($url = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_baid'])), $url)) && ($url = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_cid'])), $url)))
@@ -317,11 +340,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 																										if(($url = trim(preg_replace('/%%(.+?)%%/i', '', $url))))
 																											c_ws_plugin__s2member_utils_urls::remote($url);
 																									}
-									$paypal['s2member_log'][] = 'Modification Notification URLs have been processed.';
+									$paypal['s2member_log'][] = ucfirst($notification_type).' Notification URLs have been processed.';
 								}
-								if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_notification_recipients'])
+								if($processing && $notification_recipients)
 								{
-									$msg = $sbj = '(s2Member / API Notification Email) - Modification';
+									$msg = $sbj = '(s2Member / API Notification Email) - '.ucfirst($notification_type);
 									$msg .= "\n\n"; // Spacing in the message body.
 
 									$msg .= 'subscr_id: %%subscr_id%%'."\n";
@@ -394,12 +417,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 
 																									if($sbj && ($msg = trim(preg_replace('/%%(.+?)%%/i', '', $msg)))) // Still have a ``$sbj`` and a ``$msg``?
 
-																										foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_notification_recipients']) as $recipient)
-																											wp_mail($recipient, apply_filters('ws_plugin__s2member_modification_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_modification_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
+																										foreach(c_ws_plugin__s2member_utils_strings::parse_emails($notification_recipients) as $recipient)
+																											wp_mail($recipient, apply_filters('ws_plugin__s2member_'.$notification_type.'_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_'.$notification_type.'_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
 																								}
-									$paypal['s2member_log'][] = 'Modification Notification Emails have been processed.';
+									$paypal['s2member_log'][] = ucfirst($notification_type).' Notification Emails have been processed.';
 								}
-								if($processing && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_tracking_codes']))
+								if($processing && ($code = $tracking_codes))
 								{
 									if(($code = c_ws_plugin__s2member_utils_strings::fill_cvs($code, $paypal['custom'])) && ($code = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_id']), $code)))
 										if(($code = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_baid']), $code)) && ($code = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['subscr_cid']), $code)))
@@ -427,8 +450,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 
 																									if(($code = trim(preg_replace('/%%(.+?)%%/i', '', $code))) /* This gets stored into a transient queue. */)
 																									{
-																										$paypal['s2member_log'][] = 'Storing Modification Tracking Codes into a Transient Queue. These will be processed on-site.';
-																										set_transient('s2m_'.md5('s2member_transient_modification_tracking_codes_'.$paypal['subscr_id']), $code, 43200);
+																										$paypal['s2member_log'][] = 'Storing '.ucfirst($notification_type).' Tracking Codes into a Transient Queue. These will be processed on-site.';
+																										set_transient('s2m_'.md5('s2member_transient_'.$notification_type.'_tracking_codes_'.$paypal['subscr_id']), $code, 43200);
 																									}
 																								}
 								}

@@ -125,7 +125,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										$eot_del_type = ($is_refund_or_reversal) ? // Set EOT/Del type.
 											'ipn-refund-reversal-demotion' : 'ipn-cancellation-expiration-demotion';
 
-										$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber');
+										//261007.2005 Capture access before role or capability changes so notifications report the actual EOT transition.
+										$eot_access_before = c_ws_plugin__s2member_eot::access_snapshot($user);
+										$demotion_role = c_ws_plugin__s2member_option_forces::force_demotion_role('subscriber', $user);
 										$existing_role = c_ws_plugin__s2member_user_access::user_access_role($user);
 										$removed_ccaps = array();
 
@@ -136,15 +138,22 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										unset($__refs, $__v); // Housekeeping.
 
 										//260916.2004 Apply the same configurable Demote From behavior as scheduled Auto-EOT processing.
-										$eot_membership_role = c_ws_plugin__s2member_auto_eots::demote_user_roles($user, $demotion_role);
+										$eot_membership_role = c_ws_plugin__s2member_eot::demote_user_roles($user, $demotion_role);
 
-										if(apply_filters('ws_plugin__s2member_remove_ccaps_during_eot_events', (bool)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eots_remove_ccaps'] || $is_refund_or_reversal, get_defined_vars()))
+										$remove_ccaps_default = (bool)apply_filters('ws_plugin__s2member_eot_remove_ccaps_default', (bool)$GLOBALS['WS_PLUGIN__']['s2member']['o']['eots_remove_ccaps'] || $is_refund_or_reversal, get_defined_vars());
+										if(apply_filters('ws_plugin__s2member_remove_ccaps_during_eot_events', $remove_ccaps_default, get_defined_vars()))
+										{
+											$ccaps_to_remove = array();
 											foreach($user->allcaps as $cap => $cap_enabled)
 												if(preg_match('/^access_s2member_ccap_/', $cap))
-												{
-													$removed_ccaps[] = preg_replace('/^access_s2member_ccap_/', '', $cap);
-													$user->remove_cap($ccap = $cap);
-												}
+													$ccaps_to_remove[] = $cap;
+											//261007.2005 Capability-selection filters run only after the existing removal permission filter allows the operation.
+											foreach((array)apply_filters('ws_plugin__s2member_eot_ccaps_to_remove', $ccaps_to_remove, get_defined_vars()) as $ccap)
+												if(is_string($ccap) && preg_match('/^access_s2member_ccap_/', $ccap))
+													$user->remove_cap($ccap);
+										}
+										$eot_notification_context = c_ws_plugin__s2member_eot::access_context($eot_access_before, $user);
+										$removed_ccaps = $eot_notification_context['ccaps_removed'] === '' ? array() : explode(',', $eot_notification_context['ccaps_removed']);
 
 										delete_user_option($user_id, 's2member_subscr_gateway');
 										delete_user_option($user_id, 's2member_subscr_id');
@@ -173,10 +182,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 											update_user_option($user_id, 's2member_last_auto_eot_details', array('time' => $last_auto_eot_time, 'source' => 'refund_reversal', 'updated_at' => $last_auto_eot_time));
 
 										//260822.0653 Immediate gateway EOTs use the same processed-time/history record as scheduled demotions, with the gateway payload retained before usermeta cleanup.
-										c_ws_plugin__s2member_auto_eots::record_eot_history($user_id, array(
+										c_ws_plugin__s2member_eot::record_eot_history($user_id, array(
 											'eot_time'         => $last_auto_eot_time,
 											'processed_at'     => $processed_at,
-											'original_role'    => $eot_membership_role,
+											'original_role'    => $eot_access_before['previous_role'],
 											'destination_role' => $demotion_role,
 											'removed_ccaps'    => $removed_ccaps,
 											'subscr_gateway'   => $paypal['subscr_gateway'],
@@ -189,7 +198,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										{
 											foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url) // Handle EOT Notifications.
 
-												if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_id'])), $url)))
+												if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(c_ws_plugin__s2member_eot::notification_fill($url, $eot_notification_context, TRUE), $paypal['custom'], true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_id'])), $url)))
 													if(($url = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_baid'])), $url)) && ($url = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['subscr_cid'])), $url)))
 														if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
 															if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
@@ -224,6 +233,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 											$msg .= 'user_login: %%user_login%%'."\n";
 											$msg .= 'user_ip: %%user_ip%%'."\n";
 											$msg .= 'user_id: %%user_id%%'."\n";
+											$msg .= c_ws_plugin__s2member_eot::notification_email_fields($eot_notification_context);
 
 											if(is_array($fields) && !empty($fields))
 												foreach($fields as $var => $val)
@@ -278,7 +288,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										unset($__refs, $__v); // Housekeeping.
 
 										//260822.1458 Immediate gateway EOTs use the same safe "Delete" policy as scheduled Auto-EOT processing.
-										$eot_delete_action = c_ws_plugin__s2member_auto_eots::process_eot_deletion($user_id, $eot_del_type, time());
+										$eot_delete_action = c_ws_plugin__s2member_eot::process_eot_deletion($user_id, $eot_del_type, time());
 										if($eot_delete_action === 'pending_deletion')
 											$paypal['s2member_log'][] = 'Member access removed; account moved to Pending Deletion for administrator review.';
 										else

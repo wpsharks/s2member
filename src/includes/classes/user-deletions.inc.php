@@ -40,8 +40,9 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 		 * @param int|string $blog_id Numeric WordPress Blog ID.
 		 * @param bool       $s2says Optional. Defaults to false. If true, it's definitely OK to process this deletion?
 		 *   The ``$s2says`` flag can be used when/if the routine is called directly for whatever reason.
+		 * @param array|null $eot_access_before Optional access snapshot when removal has already cleared site roles.
 		 */
-		public static function handle_ms_user_deletions($user_id = 0, $blog_id = 0, $s2says = FALSE)
+		public static function handle_ms_user_deletions($user_id = 0, $blog_id = 0, $s2says = FALSE, $eot_access_before = NULL)
 		{
 			static $processed = array(); // No duplicate processing.
 			global $pagenow; // Need this to detect the current admin page.
@@ -58,7 +59,7 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 				do_action('ws_plugin__s2member_during_handle_ms_user_deletions_before', get_defined_vars());
 				unset($__refs, $__v);
 
-				c_ws_plugin__s2member_user_deletions::handle_user_deletions($user_id);
+				c_ws_plugin__s2member_user_deletions::handle_user_deletions($user_id, $eot_access_before);
 
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_handle_ms_user_deletions_after', get_defined_vars());
@@ -79,8 +80,9 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 		 * @attaches-to ``add_action('wpmu_delete_user');``
 		 *
 		 * @param int|string $user_id Numeric WordPress User ID.
+		 * @param array|null $eot_access_before Optional access snapshot captured before site membership removal.
 		 */
-		public static function handle_user_deletions($user_id = 0)
+		public static function handle_user_deletions($user_id = 0, $eot_access_before = NULL)
 		{
 			static $processed = array(); // No duplicate processing.
 
@@ -93,6 +95,11 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 				$eot_del_type = // Configure EOT/DEL type (possibly through this global variable).
 					(!empty($GLOBALS['ws_plugin__s2member_eot_del_type'])) ? // Is the global available for use?
 						$GLOBALS['ws_plugin__s2member_eot_del_type'] : 'user-removal-deletion'; // Else use default.
+
+				//261007.2015 Direct multisite removal can run after site roles are gone; use its captured access when supplied.
+				if(!is_array($eot_access_before))
+					$eot_access_before = c_ws_plugin__s2member_eot::access_snapshot(new WP_User($user_id));
+				$eot_notification_context = c_ws_plugin__s2member_eot::access_context($eot_access_before);
 
 				$custom      = get_user_option('s2member_custom', $user_id);
 				$subscr_id   = get_user_option('s2member_subscr_id', $user_id);
@@ -145,7 +152,7 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 				{
 					foreach(preg_split("/[\r\n\t]+/", $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url) // Handle EOT Notifications on user deletion.
 
-						if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
+						if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(c_ws_plugin__s2member_eot::notification_fill($url, $eot_notification_context, TRUE), $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
 							if(($url = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_baid)), $url)) && ($url = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_cid)), $url)))
 								if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
 									if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
@@ -182,6 +189,7 @@ if(!class_exists('c_ws_plugin__s2member_user_deletions'))
 					$msg .= 'user_login: %%user_login%%'."\n";
 					$msg .= 'user_ip: %%user_ip%%'."\n";
 					$msg .= 'user_id: %%user_id%%'."\n";
+					$msg .= c_ws_plugin__s2member_eot::notification_email_fields($eot_notification_context);
 
 					if(is_array($fields) && !empty($fields))
 						foreach($fields as $var => $val)

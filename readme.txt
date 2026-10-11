@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 261001
-Stable tag: 261001
-Tested up to: 7.2-alpha-64027
+Version: 261011
+Stable tag: 261011
+Tested up to: 7.2-alpha-64295
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.5.9
@@ -181,6 +181,59 @@ Please see: <http://s2member.com/r/translations/>
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v261011 =
+
+- (Pro) **Major Improvement:** Expanded the existing _Pro-Form CAPTCHA Anti-Spam Security_ with multiple independent and optional layers of protection while preserving the existing pro-form `captcha` shortcode control. See _s2Member Pro > General Options > Pro-Form Anti-Spam & Bot Protection (Beta)_
+	- **Built-in Protection:** Added Honeypot and configurable Speedtrap checks that can reject common automated submissions without requiring an external service. Speedtrap uses a server-signed form timestamp and has an adjustable minimum form age.
+	- **More Bot Check Choices:** The existing Google reCAPTCHA v2 integration remains available for compatibility, alongside new support for Google reCAPTCHA v3 and Cloudflare Turnstile. Only one external Bot Check provider is active at a time.
+	- **Signup Screening:** Added Akismet screening for pro-forms that create new WordPress users. This check only applies to account-creation pro-forms; it does not apply to payment-only, account-maintenance, modification, update, or cancellation pro-forms that are not creating a new account.
+	- **Configuration Health Checks:** Added status information and configuration tests for the selected protection services, making missing, invalid, or unverified configurations easier to identify before relying on them to protect live pro-forms.
+	- **Administrator Diagnostics:** Added optional administrator-only pro-form diagnostics and a dry-run _Simulate Bot_ test for checking anti-spam behavior without creating a user, processing a payment, or submitting the actual form.
+	- **Privacy-Preserving Statistics:** Added 30-day totals for Allowed and Blocked submissions, plus summaries of form age and active entry time. These can help administrators choose an appropriate Speedtrap threshold. The statistics are aggregate only; individual timings, IP addresses, emails, usernames, tokens, and submitted form data are not stored.
+	- **Backward-Compatible Activation:** Existing CAPTCHA-enabled pro-forms continue to use their `captcha` shortcode attribute to control whether s2Member's protection is active. `captcha="0"` disables it, while `clean`, `light`, or `dark` values enable it.
+
+- (Pro) **Enhancement:** EOT demotion and custom capability removal previously used site-wide settings for every level. New Custom EOT Demotions let each paid level have its own destination level and custom capability removal list, preserving unrelated access. Choose the same destination level to remove capabilities without changing the level. Use `all-ccaps` to remove all of the member's custom capabilities when that level's rule applies. Thanks to Carole for suggesting this. See _WP Admin > s2Member Pro > PayPal Options > Automatic End-of-Term Behavior > Custom EOT Demotions (Beta)_
+
+- (Framework) **Improvement:** EOT demotion and account-deletion notifications now report the previous s2Member Level and custom capabilities, plus which custom capabilities were removed and which remained after the access change. These details are included in notification emails and available as URL replacement codes, making access changes easier to track. See _WP Admin > s2Member > API / Notifications > EOT/Deletion_
+
+- (Framework) **Fix:** EOT demotion could leave other roles assigned when the member already had the destination role. The setting to replace “All WordPress roles” now consistently leaves only the destination role.
+
+- (Framework & Pro) **Enhancement:** Added an optional setting to check whether a user's email domain is configured to receive mail, helping catch mistyped or unusable addresses during `wp-login.php` registration, account creation through pro-forms, or email changes in the `s2Member Profile` form. See _WP Admin > s2Member > General Options > Registration/Profile Fields & Options > Check Email Domain? (Beta)_
+
+- (Framework) **Improvement:** Continued the _s2Member Security Encryption Key_ improvements introduced in v260814. The newer fingerprint-based key records are now used first, with older records kept as a fallback for compatibility. Upgrades preserve valid newer records, and the encryption keys themselves remain unchanged so existing encrypted data can still be decrypted.
+
+- (Framework) **Security:** Strengthened verification of registration links and cookies to ensure membership access follows the original registration details, and that registration links respect their expiration. Existing authenticated registration links remain supported. Older registration links and cookies using legacy encryption are no longer accepted. Specific Post/Page access links are unaffected.
+
+- (Pro) **Improvement:** Updated PayPal and Authorize.Net pro-forms to work with the strengthened registration security checks, ensuring purchased membership levels, custom capabilities, and subscription details continue to be assigned correctly.
+
+- (Framework & Pro) **Fix:** Corrected notifications for new Stripe Pro-Form signups that complete after delayed payment authentication. Pending accounts still remain at s2Member Level 0 until Stripe confirms payment, but new-user notifications now reflect the membership being purchased. Once payment is confirmed, the signup follows the normal confirmation and notification paths instead of being treated as a membership modification. Thanks to Gerard for reporting the issue. See [thread #13644](https://f.wpsharks.com/t/13644).
+
+- (Pro) **Fix:** Corrected Stripe Free Registration when Custom Registration Passwords are disabled. The registration form can legitimately omit its password fields in this configuration, but the registration handler still assumed a password value was present, which could trigger an undefined-array-key warning on PHP 8+. s2Member now handles the optional password correctly and continues using its existing generated-password flow when no custom password is supplied.
+
+- (Pro) **Fix:** Improved Stripe SetupIntent checkout reliability when webhook fulfillment is still processing, giving the webhook more time to complete the membership update before the browser reports that processing is still underway.
+
+- (Framework) **Fix:** Some WordPress REST API requests could expose protected content, including custom post types and content protected by URI restrictions. Collections and search results could also include protected items when alternative-view filtering was disabled or specific items were explicitly requested. s2Member now applies access restrictions to these API requests before returning results, preventing these request options from exposing protected content.
+
+- (Framework) **Fix:** Page restrictions using `all-page` or `all-pages` could leave pages accessible when the rule appeared first in the restriction list. s2Member now recognizes these rules in that position for both normal page requests and the WordPress REST API, so their placement no longer affects page protection.
+
+- (Framework) **Fix:** WordPress REST API requests could overlook the singular `all-post` rule or apply page exemptions to other types of content. Unrelated API routes could also be blocked because their names or numeric IDs matched protected resources. s2Member now recognizes `all-post` consistently and applies restrictions and exemptions to the appropriate resources, preserving access to unrelated API functionality.
+
+- (Framework) **Fix:** WordPress REST API requests could expose comments on protected posts, along with protected categories and tags in collections and search results. Comments now follow the access restrictions of their parent post, and inaccessible categories and tags are excluded from those results. REST tag checks also consistently recognize restrictions configured by name, slug, or numeric ID.
+
+- (Framework) **Fix:** Tag protection and permission helpers could report a tag as unrestricted when its restriction was configured using a numeric tag ID, even though the tag archive restriction recognized that ID. These helpers now recognize the same restrictions, keeping custom access checks consistent with archive protection.
+
+- (Framework) **Fix:** s2Member's access-denied messages for protected content requested through the WordPress REST API could remain untranslated even when an s2Member translation was available. These messages now use the correct s2Member translation domain, allowing available translations to apply.
+
+- (Framework) **Fix:** Profile password requirements were checked in the browser but were not enforced when a member submitted a password change directly or without JavaScript. s2Member now also checks password confirmation and the site's minimum length and strength requirements on the server, ensuring these requirements apply regardless of how the form is submitted.
+
+- (Framework) **Fix:** Profile updates could display a success message even when a requested email change was rejected (e.g. invalid address, already-used address), or WordPress returned an update error. s2Member now reports the error and stops the save, leaving profile fields unchanged and preventing post-save integrations from running for rejected updates.
+
+- (Framework) **Fix:** Successful profile updates could produce WordPress warnings or an invalid redirect when the Login Welcome Page was unset or had been deleted. s2Member now falls back to the site's home page when that page is unavailable.
+
+- (Framework) **Fix:** Coupon codes could be created with characters that prevented them from working correctly afterwards. Coupon code validation now handles these cases more reliably.
+
+- (Framework) **Fix:** Downloading an individual s2Member log file could exhaust PHP memory because the entire file was loaded before sending it to the browser. Downloads now send the file in small chunks, allowing large logs to be downloaded without requiring enough memory to hold the whole file.
 
 = v261001 =
 

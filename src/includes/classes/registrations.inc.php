@@ -57,6 +57,83 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 		}
 
 		/**
+		 * Returns an error when an email domain cannot receive mail.
+		 *
+		 * @package s2Member\Registrations
+		 * @since 261005
+		 *
+		 * @param string $email Email address being validated.
+		 *
+		 * @return string Error message, or an empty string when allowed/not enabled.
+		 */
+		public static function registration_email_domain_validation_error($email = '')
+		{
+			if(empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_require_valid_email_domain']) || !is_email($email))
+				return '';
+
+			if(self::email_domain_validates($email))
+				return '';
+
+			return _x('Please use an email address with a valid mail domain.', 's2member-front', 's2member');
+		}
+
+		/**
+		 * Determines whether an email domain can receive mail.
+		 *
+		 * An MX record is preferred. Without MX, SMTP permits delivery to the domain's
+		 * address record, so A/AAAA is accepted as a standards-compatible fallback.
+		 * Resolver/runtime failures fail open; an explicit null MX fails closed.
+		 *
+		 * @package s2Member\Registrations
+		 * @since 261005
+		 *
+		 * @param string $email Syntactically valid email address.
+		 *
+		 * @return bool True when mail delivery is possible or DNS cannot be checked safely.
+		 */
+		public static function email_domain_validates($email = '')
+		{
+			$email = trim((string)$email);
+			if(!is_email($email) || !($at = strrpos($email, '@')) || !isset($email[$at + 1]))
+				return TRUE; // Syntax validation belongs to the existing email validator, not this DNS-only check.
+
+			$domain = strtolower(substr($email, $at + 1));
+			//261005.0438 Allow deterministic QA/custom resolvers to short-circuit DNS without changing the production fail-open behavior.
+			$pre = apply_filters('ws_plugin__s2member_pre_email_domain_validation', NULL, $domain, $email);
+			if($pre !== NULL)
+				return (bool)$pre;
+
+			if(!function_exists('dns_get_record'))
+				return TRUE;
+
+			$mx_records = @dns_get_record($domain, DNS_MX);
+			if($mx_records === FALSE)
+				return TRUE; // Resolver/runtime problem: do not lock out registration.
+
+			$has_null_mx = FALSE;
+			foreach((array)$mx_records as $_record)
+				if(isset($_record['target']))
+					{
+						if(strlen(trim((string)$_record['target'], ". \t\n\r\0\x0B")))
+							return TRUE;
+						$has_null_mx = TRUE;
+					}
+			unset($_record);
+			if($has_null_mx)
+				return FALSE; // Explicit null MX: the domain intentionally does not accept email.
+
+			$address_records = @dns_get_record($domain, DNS_A | DNS_AAAA);
+			if($address_records === FALSE)
+				return TRUE; // Resolver/runtime problem: fail open.
+
+			foreach((array)$address_records as $_record)
+				if(!empty($_record['type']) && ($_record['type'] === 'A' || $_record['type'] === 'AAAA'))
+					return TRUE;
+			unset($_record);
+			return FALSE;
+		}
+
+		/**
 		 * Filters WordPress-generated passwords.
 		 *
 		 * This can ONLY be fired through `/wp-login.php` on the front-side.
@@ -131,6 +208,10 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 			if(!is_admin() && preg_match('/\/wp-login\.php/'.$ci, $_SERVER['REQUEST_URI']))
 				if(is_wp_error($errors) && !empty($_POST) && is_array($_POST))
 				{
+					//261005.0438 Validate the core registration email server-side; browser JavaScript cannot reliably inspect DNS.
+					if(($_email_domain_error = self::registration_email_domain_validation_error($user_email)))
+						$errors->add('invalid_email_domain', $_email_domain_error);
+
 					foreach(c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)) as $_key => $_value)
 						if(strpos($_key, 'ws_plugin__s2member_custom_reg_field_') === 0)
 							$input[str_replace('ws_plugin__s2member_custom_reg_field_', '', $_key)] = $_value;
@@ -162,21 +243,27 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 			unset($__refs, $__v); // Housekeeping.
 
 			if(!is_admin() && c_ws_plugin__s2member_utils_conds::bp_is_installed() && bp_is_register_page())
-				if(in_array('registration', $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_fields_4bp']))
-					if(apply_filters('ws_plugin__s2member_custom_registration_fields_4bp_display', TRUE, get_defined_vars()))
-						if(!empty($GLOBALS['bp']->signup) && is_object($GLOBALS['bp']->signup) && !empty($_POST) && is_array($_POST))
-						{
-							foreach(c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)) as $_key => $_value)
-								if(strpos($_key, 'ws_plugin__s2member_custom_reg_field_') === 0)
-									$input[str_replace('ws_plugin__s2member_custom_reg_field_', '', $_key)] = $_value;
+				{
+					//261005.0438 On single-site BuddyPress, validate the account email here; Multisite is covered by `wpmu_validate_user_signup` below.
+					if(!is_multisite() && !empty($GLOBALS['bp']->signup) && is_object($GLOBALS['bp']->signup) && !empty($_POST['signup_email']) && ($_email_domain_error = self::registration_email_domain_validation_error(stripslashes((string)$_POST['signup_email']))))
+						$GLOBALS['bp']->signup->errors['signup_email'] = $_email_domain_error;
 
-							$fields_to_validate = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level('auto-detection', 'registration', TRUE);
-							$validation_errors  = c_ws_plugin__s2member_custom_reg_fields::validation_errors(!empty($input) ? $input : array(), $fields_to_validate);
+					if(in_array('registration', $GLOBALS['WS_PLUGIN__']['s2member']['o']['custom_reg_fields_4bp']))
+						if(apply_filters('ws_plugin__s2member_custom_registration_fields_4bp_display', TRUE, get_defined_vars()))
+							if(!empty($GLOBALS['bp']->signup) && is_object($GLOBALS['bp']->signup) && !empty($_POST) && is_array($_POST))
+							{
+								foreach(c_ws_plugin__s2member_utils_strings::trim_deep(stripslashes_deep($_POST)) as $_key => $_value)
+									if(strpos($_key, 'ws_plugin__s2member_custom_reg_field_') === 0)
+										$input[str_replace('ws_plugin__s2member_custom_reg_field_', '', $_key)] = $_value;
 
-							if($validation_errors) foreach($validation_errors as $_field_var => $_error)
-								$GLOBALS['bp']->signup->errors['custom_reg_field_'.$_field_var] = $_error;
-							unset($_field_var, $_error);
-						}
+								$fields_to_validate = c_ws_plugin__s2member_custom_reg_fields::custom_fields_configured_at_level('auto-detection', 'registration', TRUE);
+								$validation_errors  = c_ws_plugin__s2member_custom_reg_fields::validation_errors(!empty($input) ? $input : array(), $fields_to_validate);
+
+								if($validation_errors) foreach($validation_errors as $_field_var => $_error)
+									$GLOBALS['bp']->signup->errors['custom_reg_field_'.$_field_var] = $_error;
+								unset($_field_var, $_error);
+							}
+				}
 		}
 
 		/**
@@ -214,6 +301,10 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 							unset($errors->errors['user_name'], $errors->errors['user_email'], $errors->errors['user_email_used']);
 							unset($errors->error_data['user_name'], $errors->error_data['user_email'], $errors->error_data['user_email_used']);
 						}
+					//261005.0438 Enforce mail-domain validity on Multisite account creation after s2Member's existing-user join exception has been handled.
+					if(!c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog($result['user_name'], $result['user_email']) && ($_email_domain_error = self::registration_email_domain_validation_error($result['user_email'])))
+						$errors->add('user_email_domain', $_email_domain_error);
+
 					foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 					do_action('ws_plugin__s2member_during_ms_validate_user_signup', get_defined_vars());
 					unset($__refs, $__v); // Housekeeping.

@@ -185,8 +185,9 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['custom_reg_auto_opt_outs']            = array();
 		$default_options['custom_reg_auto_opt_out_transitions'] = '0';
 
-		$default_options['custom_reg_fields_4bp']            = array();
-		$default_options['custom_reg_force_personal_emails'] = '';
+		$default_options['custom_reg_fields_4bp']                 = array();
+		$default_options['custom_reg_force_personal_emails']      = '';
+		$default_options['custom_reg_require_valid_email_domain'] = '0'; //261005.0548 Opt-in DNS mail-domain validation during account creation and s2Member Profile email changes.
 
 		$default_options['allow_subscribers_in'] = '0';
 		$default_options['force_admin_lockouts'] = '0';
@@ -510,7 +511,7 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 				else if($key === 'custom_reg_fields' && (!is_string($value) || !strlen($value)))
 					$value = $default_options[$key];
 
-				else if(preg_match('/^custom_reg_(?:names|password|password_min_length|opt_in|auto_opt_out_transitions)$/', $key) && (!is_string($value) || !is_numeric($value)))
+				else if(preg_match('/^custom_reg_(?:names|password|password_min_length|opt_in|auto_opt_out_transitions|require_valid_email_domain)$/', $key) && (!is_string($value) || !is_numeric($value)))
 					$value = $default_options[$key];
 
 				else if($key === 'custom_reg_password_min_strength' && (!is_string($value) || !strlen($value)))

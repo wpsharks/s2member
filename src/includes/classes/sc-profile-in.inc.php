@@ -66,6 +66,13 @@ if(!class_exists('c_ws_plugin__s2member_sc_profile_in'))
 
 				echo '<form method="post" name="ws_plugin__s2member_profile" id="ws-plugin--s2member-profile" autocomplete="off">'."\n";
 
+				//261005.0548 Surface server-side profile validation failures inline instead of reporting a successful save when an email-domain change is rejected.
+				if(!empty($GLOBALS['ws_plugin__s2member_profile_error']))
+					{
+						echo '<div id="ws-plugin--s2member-profile-error" class="alert alert-error" style="margin-bottom:15px;font-weight:bold;font-size:110%;">'."\n";
+						echo esc_html($GLOBALS['ws_plugin__s2member_profile_error'])."\n";
+						echo '</div>'."\n";
+					}
 				if(!empty($GLOBALS['ws_plugin__s2member_profile_saved'])) // Respond to successful updates.
 				{
 					echo '<div id="ws-plugin--s2member-profile-saved" class="alert alert-success">'."\n";

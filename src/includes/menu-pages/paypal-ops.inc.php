@@ -1683,10 +1683,10 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_eot_behavior", get_defined_vars());
 
 				//260820.0306 Show current processing health where Auto-EOT is configured, so pending/stalled work is visible before it becomes a support issue.
-				$auto_eot_health = c_ws_plugin__s2member_auto_eots::auto_eot_system_health(TRUE);
-				$auto_eot_legacy_cap = c_ws_plugin__s2member_auto_eots::auto_eot_system_legacy_cap_info();
+				$auto_eot_health = c_ws_plugin__s2member_eot::auto_eot_system_health(TRUE);
+				$auto_eot_legacy_cap = c_ws_plugin__s2member_eot::auto_eot_system_legacy_cap_info();
 				$auto_eot_mode = (string)$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["auto_eot_system_enabled"];
-				$auto_eot_runtime_target = c_ws_plugin__s2member_auto_eots::auto_eot_system_runtime_budget($auto_eot_mode === '2');
+				$auto_eot_runtime_target = c_ws_plugin__s2member_eot::auto_eot_system_runtime_budget($auto_eot_mode === '2');
 				$php_execution_limit = (int)ini_get('max_execution_time');
 				$auto_eot_status_labels = array('healthy' => 'Healthy', 'processing' => 'Processing', 'catching_up' => 'Catching up', 'attention' => 'Attention', 'error' => 'Needs attention', 'disabled' => 'Disabled');
 				$auto_eot_status_label = isset($auto_eot_status_labels[$auto_eot_health['status']]) ? $auto_eot_status_labels[$auto_eot_health['status']] : ucfirst($auto_eot_health['status']);
@@ -1846,6 +1846,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
+			//261008.0740 Pro's per-level editor follows the site-wide capability setting that its blank fields use.
+			do_action('ws_plugin__s2member_after_eot_ccap_options', get_defined_vars());
 				echo '</tbody>'."\n";
 				echo '</table>'."\n";
 
