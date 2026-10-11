@@ -654,6 +654,9 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_api_ops"))
 				echo '<li><code>%%user_id%%</code> = A unique WordPress User ID that references this account in the WordPress database.</li>'."\n";
 				echo '<li><code>%%previous_role%%</code> = The membership role before EOT/deletion (or the WordPress role if no paid membership role was assigned).</li>'."\n";
 				echo '<li><code>%%previous_s2member_level%%</code> = The previous s2Member level number, or an empty value for unrelated WordPress roles.</li>'."\n";
+				//261011.1631 Expose the resulting role and level alongside the pre-EOT access state for notification integrations.
+				echo '<li><code>%%new_role%%</code> = The WordPress role after EOT/demotion, or an empty value if the account/site membership was deleted.</li>'."\n";
+				echo '<li><code>%%new_s2member_level%%</code> = The resulting s2Member level number (0 for Subscriber), or an empty value for unrelated WordPress roles or deletion.</li>'."\n";
 				echo '<li><code>%%ccaps_before%%</code> = The custom capabilities enabled before the event, as comma-separated names.</li>'."\n";
 				echo '<li><code>%%ccaps_removed%%</code> = The custom capabilities actually lost during the event, as comma-separated names.</li>'."\n";
 				echo '<li><code>%%ccaps_remaining%%</code> = The custom capabilities still enabled afterward; empty for a deleted account/site membership.</li>'."\n";
