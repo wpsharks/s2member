@@ -1952,6 +1952,13 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<p style="margin-bottom:0;"><strong>Shortcode (copy/paste)</strong>, for an Inline Profile Modification Form:<br />'."\n";
 				echo '<p style="margin-top:0;"><input type="text" autocomplete="off" value="'.format_to_edit('[s2Member-Profile /]').'" onclick="this.select ();" /></p>'."\n";
 
+				//261012.0830 Document the optional profile shortcode success redirect beside its copy/paste example.
+				echo '<h3>Shortcode Attributes (Explained)</h3>'."\n";
+				echo '<ul>'."\n";
+				echo '<li><code>success=""</code> Success Redirect URL <em>(optional)</em>. After a successful update through the inline profile form, redirect the member to a page on this site. Leave this attribute empty or omit it to keep the normal confirmation message on the profile page. Failed updates do not redirect.</li>'."\n";
+				echo '</ul>'."\n";
+				echo '<p>Example: <code>[s2Member-Profile success="/account-updated/" /]</code>. This applies to the inline Shortcode form, not the Stand-Alone Profile Editing Panel.</p>'."\n";
+
 				echo '<p style="margin-top:25px; margin-bottom:0;"><strong>Stand-Alone (copy/paste)</strong>, for popup window:</p>'."\n";
 				echo '<p style="margin-top:0;"><input type="text" autocomplete="off" value="'.format_to_edit(preg_replace("/\<\?php echo S2MEMBER_CURRENT_USER_PROFILE_MODIFICATION_PAGE_URL; \?\>/", c_ws_plugin__s2member_utils_strings::esc_refs(home_url("/?s2member_profile=1")), file_get_contents(dirname(__FILE__)."/code-samples/current-user-profile-modification-page-url-2-ops.x-php"))).'" onclick="this.select ();" /></p>'."\n";
 				echo '</div>'."\n";

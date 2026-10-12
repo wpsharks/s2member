@@ -208,6 +208,14 @@ if(!class_exists('c_ws_plugin__s2member_profile_mods_in'))
 				}
 			}
 			do_action('ws_plugin__s2member_after_handle_profile_modifications', get_defined_vars());
+			//261012.0752 Redirect after the successful shortcode save, including all post-save hooks.
+			// WordPress safe redirects disallow untrusted external destinations.
+			if(!empty($GLOBALS['ws_plugin__s2member_profile_saved']) && !empty($_p['ws_plugin__s2member_sc_profile_save']) && isset($_p['ws_plugin__s2member_profile_success']) && is_string($_p['ws_plugin__s2member_profile_success']))
+			{
+				$profile_success_url = wp_validate_redirect(trim($_p['ws_plugin__s2member_profile_success']), '');
+				if($profile_success_url && wp_safe_redirect($profile_success_url, 303))
+					exit();
+			}
 		}
 	}
 }
