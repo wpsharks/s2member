@@ -185,30 +185,24 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			if(!self::needs_query_check(TRUE))
 				return $args;
 			$scan = $args;
-			//261005.2324 Scan only matching candidates in bounded batches; presentation filters must not decide REST access.
+			//261012.0211 One bounded candidate scan per REST request; preserve the prepared query ordering and restrict the final query to candidates actually checked.
 			$scan['fields'] = 'ids';
 			$scan['posts_per_page'] = 200;
 			$scan['nopaging'] = FALSE;
 			$scan['paged'] = 1;
-			$scan['orderby'] = 'ID';
-			$scan['order'] = 'ASC';
+			$scan['offset'] = 0;
 			$scan['suppress_filters'] = TRUE;
 			$scan['no_found_rows'] = TRUE;
-			$excluded = array();
-			for($offset = 0; ; $offset += 200)
+			$ids = get_posts($scan);
+			$allowed = array();
+			if($ids)
 			{
-				$scan['offset'] = $offset;
-				$ids = get_posts($scan);
-				if(!$ids)
-					break;
 				_prime_post_caches($ids, TRUE, TRUE);
 				foreach($ids as $id)
-					if(($post = get_post($id)) && is_wp_error(self::check_post_access($post)))
-						$excluded[] = (int)$id;
-				if(count($ids) < 200)
-					break;
+					if(($post = get_post($id)) && !is_wp_error(self::check_post_access($post)))
+						$allowed[] = (int)$id;
 			}
-			return self::exclude_query_ids($args, $excluded, 'post__in', 'post__not_in');
+			return self::restrict_query_ids($args, $allowed, 'post__in');
 		}
 
 		/**
@@ -229,18 +223,19 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			if(!self::needs_query_check())
 				return $args;
 			$scan = $args;
-			$scan['number'] = 0;
+			//261012.0021 Never request all terms for a public REST access decision.
+			$scan['number'] = 200;
 			$scan['offset'] = 0;
 			$scan['fields'] = 'all';
 			if(!empty($scan['post']))
 				$scan['object_ids'] = $scan['post'];
 			$terms = get_terms($scan);
-			$excluded = array();
+			$allowed = array();
 			if(!is_wp_error($terms))
 				foreach($terms as $term)
-					if(is_wp_error(self::check_resource_access($term->taxonomy === 'category' ? 'categories' : ($term->taxonomy === 'post_tag' ? 'tags' : 'terms'), (int)$term->term_id)))
-						$excluded[] = (int)$term->term_id;
-			return self::exclude_query_ids($args, $excluded, 'include', 'exclude');
+					if(!is_wp_error(self::check_resource_access($term->taxonomy === 'category' ? 'categories' : ($term->taxonomy === 'post_tag' ? 'tags' : 'terms'), (int)$term->term_id)))
+						$allowed[] = (int)$term->term_id;
+			return self::restrict_query_ids($args, $allowed, 'include');
 		}
 
 		/**
@@ -261,56 +256,45 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			if(!self::needs_query_check(TRUE))
 				return $args;
 			$scan = $args;
+			//261012.0021 Bound comment traversal and expose only comments whose parent access was checked inside this request budget.
 			$scan['number'] = 200;
+			$scan['offset'] = 0;
 			$scan['fields'] = 'all';
 			$scan['count'] = FALSE;
-			$scan['orderby'] = 'comment_ID';
-			$scan['order'] = 'ASC';
 			$scan['hierarchical'] = FALSE;
-			$excluded = $parents = array();
-			for($offset = 0; ; $offset += 200)
+			$comments = get_comments($scan);
+			$allowed = $parents = array();
+			_prime_post_caches(array_unique(wp_list_pluck($comments, 'comment_post_ID')), TRUE, TRUE);
+			foreach($comments as $comment)
 			{
-				$scan['offset'] = $offset;
-				$comments = get_comments($scan);
-				_prime_post_caches(array_unique(wp_list_pluck($comments, 'comment_post_ID')), TRUE, TRUE);
-				foreach($comments as $comment)
-				{
-					$parent = (int)$comment->comment_post_ID;
-					if(!isset($parents[$parent]))
-						$parents[$parent] = ($post = get_post($parent)) && is_wp_error(self::check_post_access($post));
-					if($parents[$parent])
-						$excluded[] = (int)$comment->comment_ID;
-				}
-				if(count($comments) < 200)
-					break;
+				$parent = (int)$comment->comment_post_ID;
+				if(!isset($parents[$parent]))
+					$parents[$parent] = ($post = get_post($parent)) && !is_wp_error(self::check_post_access($post));
+				if($parents[$parent])
+					$allowed[] = (int)$comment->comment_ID;
 			}
-			return self::exclude_query_ids($args, $excluded, 'comment__in', 'comment__not_in');
+			return self::restrict_query_ids($args, $allowed, 'comment__in');
 		}
 
 		/**
-		 * Applies exclusions without letting an exhausted include list expand the query.
+		 * Restricts a REST collection query to resource IDs checked within the request work budget.
 		 *
 		 * @package s2Member\Security
-		 * @since 261005
+		 * @since 261012
 		 *
 		 * @param array $args Prepared collection query arguments.
-		 * @param int[] $excluded Resource IDs denied by membership restrictions.
+		 * @param int[] $allowed Resource IDs whose access checks succeeded.
 		 * @param string $include_key Query argument containing explicit included IDs.
-		 * @param string $exclude_key Query argument containing excluded IDs.
 		 *
-		 * @return array Query arguments with exclusions and a restrictive include list.
+		 * @return array Query arguments constrained to checked, accessible resources only.
 		 */
-		private static function exclude_query_ids($args, $excluded, $include_key, $exclude_key)
+		private static function restrict_query_ids($args, $allowed, $include_key)
 		{
-			if(!$excluded)
-				return $args;
-			$args[$exclude_key] = array_values(array_unique(array_merge(isset($args[$exclude_key]) ? wp_parse_id_list($args[$exclude_key]) : array(), $excluded)));
+			$allowed = array_values(array_unique(wp_parse_id_list($allowed)));
 			if(!empty($args[$include_key]))
-			{
-				$included = array_values(array_diff(wp_parse_id_list($args[$include_key]), $args[$exclude_key]));
-				//261005.2324 Keep an exhausted include list restrictive instead of expanding it to the whole collection.
-				$args[$include_key] = $included ? $included : array(0);
-			}
+				$allowed = array_values(array_intersect(wp_parse_id_list($args[$include_key]), $allowed));
+			//261012.0021 An exhausted/empty checked set must remain restrictive instead of expanding back to the collection.
+			$args[$include_key] = $allowed ? $allowed : array(0);
 			return $args;
 		}
 

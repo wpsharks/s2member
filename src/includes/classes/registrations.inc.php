@@ -578,26 +578,18 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 
 							if(empty($other_important_errors_exist)) // Only if/when NO other important errors exist already.
 							{
-								$user_pass = wp_generate_password(); // Generate password for this user.
-								$has_custom_password = !empty($GLOBALS['ws_plugin__s2member_custom_password'])
-													&& $user_pass === $GLOBALS['ws_plugin__s2member_custom_password'];
-								c_ws_plugin__s2member_registrations::ms_create_existing_user($user_login, $user_email, $user_pass, $user_id);
+								//261012.0021 Existing network accounts may only attach themselves while already authenticated; registration data is not proof of account ownership.
+								if((int)get_current_user_id() !== (int)$user_id)
+									return apply_filters('ws_plugin__s2member_ms_register_existing_user', $errors, get_defined_vars());
 
-								update_user_option($user_id, 'default_password_nag', $has_custom_password ? false : true, true);
+								if(c_ws_plugin__s2member_registrations::ms_create_existing_user($user_login, $user_email, '', $user_id))
+								{
+									$redirect_to = !empty($_REQUEST['redirect_to']) ? trim(stripslashes($_REQUEST['redirect_to'])) : admin_url();
 
-								if (version_compare(get_bloginfo('version'), '4.3.1', '>='))
-									wp_new_user_notification($user_id, null, $has_custom_password ? 'admin' : 'both', $user_pass);
-								else if (version_compare(get_bloginfo('version'), '4.3', '>='))
-									wp_new_user_notification($user_id, $has_custom_password ? 'admin' : 'both', $user_pass);
-								else wp_new_user_notification($user_id, $user_pass);
+									do_action('ws_plugin__s2member_during_ms_register_existing_user', get_defined_vars());
 
-								$redirect_to = !empty($_REQUEST['redirect_to']) ? trim(stripslashes($_REQUEST['redirect_to'])) : FALSE;
-								$redirect_to = $redirect_to ? $redirect_to // Note: the `checkemail` message is translated if using custom passwords.
-									: add_query_arg('checkemail', urlencode('registered'), wp_login_url());
-
-								do_action('ws_plugin__s2member_during_ms_register_existing_user', get_defined_vars());
-
-								wp_safe_redirect($redirect_to).exit (); // Safe, like: ``register_new_user()``.
+									wp_safe_redirect($redirect_to).exit ();
+								}
 							}
 						}
 					}
@@ -608,7 +600,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 		}
 
 		/**
-		 * For Multisite Networks, this function is used to add a User to an existing Blog; and to simulate ``wp_create_user()`` behavior.
+		 * For Multisite Networks, this function allows an authenticated existing network User to add only their own account to the current Blog.
 		 *
 		 * The ``$user_id`` value will be returned by this function, just like ``wp_create_user()`` does.
 		 * This function will fire the Hook `user_register`.
@@ -618,7 +610,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 		 *
 		 * @param string     $user_login Expects the User's Username.
 		 * @param string     $user_email Expects the User's Email Address.
-		 * @param string     $user_pass Expects the User's plain text Password.
+		 * @param string     $user_pass Deprecated compatibility argument. Existing network passwords are never changed here.
 		 * @param int|string $user_id Optional. A numeric WordPress User ID.
 		 *   If unspecified, a lookup is performed with ``$user_login`` and ``$user_email``.
 		 *
@@ -632,14 +624,22 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 
 			if(is_multisite()) // This event should ONLY be processed with Multisite Networking.
 			{
-				if(($user_id || ($user_id = c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog($user_login, $user_email))) && $user_pass)
+				$user_id = (int)$user_id;
+				if(!$user_id)
+					$user_id = (int)c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog($user_login, $user_email);
+
+				//261012.0021 Never treat a supplied password, username, email, or user ID as proof that the caller owns an existing network account.
+				if($user_id && (int)get_current_user_id() === $user_id && !is_user_member_of_blog($user_id, get_current_blog_id()) && ($user = get_userdata($user_id))
+				   && strcasecmp((string)$user->user_login, (string)$user_login) === 0 && strcasecmp((string)$user->user_email, (string)$user_email) === 0)
 				{
 					$role = get_option('default_role'); // Use default Role.
-					add_existing_user_to_blog(array('user_id' => $user_id, 'role' => $role)); // Add User.
-					wp_update_user(wp_slash(array('ID' => $user_id, 'user_pass' => $user_pass))); // Update to ``$user_pass``.
+					$result = add_existing_user_to_blog(array('user_id' => $user_id, 'role' => $role)); // Add only the authenticated account itself.
+					if(is_wp_error($result) || !$result)
+						return apply_filters('ws_plugin__s2member_ms_create_existing_user', FALSE, get_defined_vars());
 
+					// The password argument is retained for backward-compatible signatures only; existing network credentials are never changed here.
 					do_action('ws_plugin__s2member_during_ms_create_existing_user', get_defined_vars());
-					do_action('user_register', $user_id); // So s2Member knows a User is registering.
+					do_action('user_register', $user_id); // So s2Member knows an authenticated existing User is joining this site.
 
 					return apply_filters('ws_plugin__s2member_ms_create_existing_user', $user_id, get_defined_vars());
 				}
