@@ -295,13 +295,9 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 					$errors =& $result['errors'];
 					/** @var $errors WP_Error Reference for IDEs. Needed in the routines below. */
 
-					if(in_array($errors->get_error_code(), array('user_name', 'user_email', 'user_email_used')))
-						if(c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog($result['user_name'], $result['user_email']))
-						{
-							unset($errors->errors['user_name'], $errors->errors['user_email'], $errors->errors['user_email_used']);
-							unset($errors->error_data['user_name'], $errors->error_data['user_email'], $errors->error_data['user_email_used']);
-						}
-					//261005.0438 Enforce mail-domain validity on Multisite account creation after s2Member's existing-user join exception has been handled.
+					//261013.0140 Matching a username and email does not authorize an anonymous visitor to join an existing network account.
+					// Preserve WordPress's duplicate-account errors; authorized existing-account joins use a separate authenticated path.
+					//261005.0438 Enforce mail-domain validity for new Multisite accounts; duplicate network accounts remain rejected.
 					if(!c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog($result['user_name'], $result['user_email']) && ($_email_domain_error = self::registration_email_domain_validation_error($result['user_email'])))
 						$errors->add('user_email_domain', $_email_domain_error);
 
@@ -390,8 +386,8 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 		/**
 		 * Intersects with ``wpmu_activate_signup()`` through s2Member's Multisite Networking patch.
 		 *
-		 * This function should return the same array that `wpmu_activate_signup()` returns; with the assumption that ``$user_already_exists``.
-		 *   Which is exactly where this function intersects inside the `/wp-includes/ms-functions.php`.
+		 * Retained as a compatibility hook for existing Multisite core patches. Public activation must not attach
+		 * pre-existing network users or modify their network-wide credentials.
 		 *
 		 * This can ONLY be fired through `/wp-activate.php` on the front-side.
 		 *   Or through `/activate` via BuddyPress.
@@ -404,8 +400,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 		 * @param WP_Error $_error Expects a `WP_Error` object to be passed through by the Filter.
 		 * @param array    $vars Expects the defined variables from the scope of the calling Filter.
 		 *
-		 * @return WP_Error|array If unable to add an existing User, the original ``$_error`` obj is returned.
-		 *   Otherwise we return an array of User details for continued processing by the caller.
+		 * @return WP_Error The original WordPress activation error, filterable for compatibility.
 		 */
 		public static function ms_activate_existing_user($_error = NULL, $vars = array())
 		{
@@ -413,26 +408,9 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 			do_action('ws_plugin__s2member_before_ms_activate_existing_user', get_defined_vars());
 			unset($__refs, $__v); // Housekeeping.
 
-			extract($vars); // Extract all variables from ``wpmu_activate_signup()`` function.
-
-			$ci = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ruris_case_sensitive'] ? '' : 'i';
-
-			if(is_multisite()) // This event should ONLY be processed with Multisite Networking.
-				if(!is_admin() && ((preg_match('/\/wp-activate\.php/'.$ci, $_SERVER['REQUEST_URI'])) || (c_ws_plugin__s2member_utils_conds::bp_is_installed() && bp_is_activation_page())))
-				{
-					if(!empty($user_id) && !empty($user_login) && !empty($user_email) && !empty($password) && !empty($meta) && !empty($meta['add_to_blog']) && !empty($meta['new_role']))
-						if(!empty($user_already_exists) && c_ws_plugin__s2member_utils_users::ms_user_login_email_exists_but_not_on_blog($user_login, $user_email, $meta['add_to_blog']))
-						{
-							add_user_to_blog($meta['add_to_blog'], $user_id, $meta['new_role']); // Add this User to the specified Blog.
-							wp_update_user(wp_slash(array('ID' => $user_id, 'user_pass' => $password))); // Update Password so it's the same as in the following msg.
-							wpmu_welcome_user_notification($user_id, $password, $meta); // Send welcome letter via email just like ``wpmu_activate_signup()`` does.
-
-							do_action('wpmu_activate_user', $user_id, $password, $meta); // Process Hook that would have been fired inside ``wpmu_activate_signup()``.
-
-							return apply_filters('ws_plugin__s2member_ms_activate_existing_user', array('user_id' => $user_id, 'password' => $password, 'meta' => $meta), get_defined_vars());
-						}
-				}
-			return apply_filters('ws_plugin__s2member_ms_activate_existing_user', $_error, get_defined_vars()); // Else, return the standardized error.
+			//261013.0140 Never convert public Multisite activation into an unauthorized join or network-wide password reset.
+			// Existing accounts can be attached only by an independently authenticated and authorized path.
+			return apply_filters('ws_plugin__s2member_ms_activate_existing_user', $_error, get_defined_vars());
 		}
 
 		/**
