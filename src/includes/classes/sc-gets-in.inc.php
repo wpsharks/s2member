@@ -87,15 +87,16 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 				$get = constant($attr['constant']);
 
 				//260913.1656 Only format explicitly known timestamp constants, and reject non-string formats before passing them to date().
+				//261014.1524 Escape the rendered date: custom formats can contain HTML, while other s2Get fields may intentionally return markup.
 				if(is_string($attr['date_format']) && $attr['date_format'] && is_int($get) && $get > 0 && in_array($attr['constant'], array('S2MEMBER_CURRENT_USER_REGISTRATION_TIME', 'S2MEMBER_CURRENT_USER_PAID_REGISTRATION_TIME'), true))
 					{
 						if($attr['date_format'] === 'timestamp')
 							$get = (string)$get; // No change.
 
 						else if($attr['date_format'] === 'default')
-							$get = date(get_option('date_format'), $get);
+							$get = esc_html(date(get_option('date_format'), $get));
 
-						else $get = date($attr['date_format'], $get);
+						else $get = esc_html(date($attr['date_format'], $get));
 					}
 			}
 			else if($attr['user_field'] && isset($valid_user_fields[$attr['user_field']]))
@@ -114,9 +115,9 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 									$get = (string)$get; // No change.
 
 								else if($attr['date_format'] === 'default')
-									$get = date(get_option('date_format'), (int)$get);
+									$get = esc_html(date(get_option('date_format'), (int)$get));
 
-								else $get = date($attr['date_format'], (int)$get);
+								else $get = esc_html(date($attr['date_format'], (int)$get));
 							}
 				}
 			else if($attr['user_option'] && isset($valid_user_options[$attr['user_option']]))
@@ -130,9 +131,9 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 									$get = (string)$get; // No change.
 
 								else if($attr['date_format'] === 'default')
-									$get = date(get_option('date_format'), (int)$get);
+									$get = esc_html(date(get_option('date_format'), (int)$get));
 
-								else $get = date($attr['date_format'], (int)$get);
+								else $get = esc_html(date($attr['date_format'], (int)$get));
 							}
 				}
 			if(isset($get) && (is_array($get) || is_object($get)))
