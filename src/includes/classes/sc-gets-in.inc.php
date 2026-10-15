@@ -154,6 +154,19 @@ if(!class_exists('c_ws_plugin__s2member_sc_gets_in'))
 				$get = ''; // Do not allow non-scalar values to be returned by a shortcode.
 			else if(isset($get)) $get = (string)$get; // Convert to a string.
 
+			//261015.0030 Escape data returned into shortcode HTML; only avatar deliberately renders WordPress-generated markup.
+			// Encode the fields JSON as JSON (not HTML entities), while preventing embedded markup from reaching the page.
+			$constant_selected = ($attr['constant'] && defined($attr['constant']) && isset($valid_constants[$attr['constant']]));
+			if(isset($get) && ($constant_selected || $attr['user_field'] !== 'avatar'))
+			{
+				if($constant_selected && $attr['constant'] === 'S2MEMBER_CURRENT_USER_FIELDS')
+				{
+					$fields = json_decode($get, true);
+					$get = is_array($fields) ? wp_json_encode($fields, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) : esc_html($get);
+				}
+				else $get = esc_html($get);
+			}
+
 			return apply_filters('ws_plugin__s2member_sc_get_details', isset($get) ? $get : '', get_defined_vars());
 		}
 	}
