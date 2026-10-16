@@ -736,6 +736,91 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 			return like_escape($string); // Deprecated in WP v4.0.
 		}
 
+		/**
+		 * Builds recognized IPN template values without modifying the original payment data.
+		 *
+		 * @since 261015
+		 */
+		public static function paypal_template_values($paypal, $coupon = array(), $locals = array())
+		{
+			$values = array();
+			foreach(array('txn_id', 'txn_baid', 'txn_cid', 'subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'item_number', 'item_name', 'first_name', 'last_name', 'payer_email', 'initial', 'regular', 'initial_term', 'regular_term', 'recurring') as $key)
+				$values[$key] = (isset($paypal[$key]) && is_scalar($paypal[$key])) ? (string)$paypal[$key] : '';
+
+			$values['amount'] = isset($paypal['mc_gross']) ? (string)$paypal['mc_gross'] : '';
+			$values['full_name'] = trim($values['first_name'].' '.$values['last_name']);
+			$values['user_ip'] = isset($locals['user_reg_ip']) ? (string)$locals['user_reg_ip'] : (isset($paypal['ip']) ? (string)$paypal['ip'] : '');
+			//261016.0346 Do not parse missing or malformed periods in sparse payment notifications.
+			$initial_term_is_valid = (bool)preg_match('/^[0-9]+ [DWMYL]$/i', $values['initial_term']);
+			$regular_term_is_valid = (bool)preg_match('/^[0-9]+ [DWMYL]$/i', $values['regular_term']);
+			$values['initial_cycle'] = $initial_term_is_valid ? c_ws_plugin__s2member_utils_time::period_term($values['initial_term']) : '';
+			$values['regular_cycle'] = $regular_term_is_valid ? c_ws_plugin__s2member_utils_time::period_term($values['regular_term'], $values['recurring']) : '';
+			$values['recurring/regular_cycle'] = $values['recurring'] ? ($regular_term_is_valid ? $values['recurring'].' / '.c_ws_plugin__s2member_utils_time::period_term($values['regular_term'], TRUE) : '') : '0 / non-recurring';
+			foreach(array('full_coupon_code' => 'full_coupon_code', 'coupon_code' => 'coupon_code', 'coupon_affiliate_id' => 'affiliate_id') as $key => $coupon_key)
+				$values[$key] = isset($coupon[$coupon_key]) && is_scalar($coupon[$coupon_key]) ? (string)$coupon[$coupon_key] : '';
+
+			foreach(array('sp_access_url', 'registration_url') as $key)
+				if(isset($locals[$key])) $values[$key] = (string)$locals[$key];
+			if(isset($paypal['hours']))
+				$values['sp_access_exp'] = c_ws_plugin__s2member_utils_time::approx_time_difference(time(), strtotime('+'.$paypal['hours'].' hours'));
+
+			if(isset($locals['user']) && is_object($locals['user']))
+			{
+				$user = $locals['user'];
+				foreach(array('first_name', 'last_name', 'user_email', 'user_login') as $key)
+					if(isset($user->$key)) $values['user_'.$key] = (string)$user->$key;
+				$values['user_full_name'] = trim((isset($user->first_name) ? $user->first_name : '').' '.(isset($user->last_name) ? $user->last_name : ''));
+			}
+			if(isset($locals['user_id'])) $values['user_id'] = (string)$locals['user_id'];
+			if(isset($locals['modifying'])) $values['modification'] = (string)(int)$locals['modifying'];
+			if(isset($locals['fields']) && is_array($locals['fields']))
+				foreach($locals['fields'] as $key => $value)
+					if(is_string($key) && !array_key_exists(strtolower($key), $values)) $values[strtolower($key)] = maybe_serialize($value);
+
+			foreach(explode('|', isset($paypal['custom']) ? (string)$paypal['custom'] : '') as $i => $value)
+				$values['cv'.$i] = trim($value);
+			return $values;
+		}
+
+		/**
+		 * Replaces only codes in the original template; inserted values are never scanned again.
+		 *
+		 * @since 261015
+		 */
+		public static function fill_paypal_template_once($template, $values, $destination = 'text')
+		{
+			$values = array_change_key_case((array)$values, CASE_LOWER);
+			return preg_replace_callback('/%%(.+?)%%/i', function($match) use($values, $destination)
+			{
+				$key = strtolower($match[1]);
+				if(!array_key_exists($key, $values)) return '';
+				$value = (string)$values[$key];
+				if($destination === 'url') return urlencode($value);
+				if($destination === 'html') return esc_html($value);
+				if($destination === 'recipient' || $destination === 'subject')
+				{
+					$value = str_replace(array("\r", "\n", "\0"), '', $value);
+					return ($destination === 'recipient' && in_array($key, array('first_name', 'last_name', 'full_name'), TRUE)) ? self::esc_dq($value) : $value;
+				}
+				if($destination === 'tracking')
+				{
+					//261015.0435 Tracking markup may be HTML or JavaScript; preserve a readable nonstructural alphabet only.
+					return preg_replace('/[^A-Za-z0-9 @._-]+/', '-', remove_accents($value));
+				}
+				return $value;
+			}, (string)$template);
+		}
+
+		/**
+		 * Generates a harmless intermediate string for legacy nested IPN guards.
+		 * Only the final rendering of the saved original template is used for output.
+		 * @since 261015
+		 */
+		public static function paypal_template_preview($template)
+		{
+			return preg_replace('/%%(.+?)%%/i', 'S2M_VALUE', (string)$template);
+		}
+
 		public static function fill_cvs($string, $custom, $urlencode = false)
 		{
 			$string = (string)$string;
