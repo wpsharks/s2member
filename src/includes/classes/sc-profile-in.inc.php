@@ -56,9 +56,6 @@ if(!class_exists('c_ws_plugin__s2member_sc_profile_in'))
 			{
 				$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr);
 
-				//261012.0752 Allow an optional post-save redirect; the default inline confirmation remains unchanged.
-				$attr = shortcode_atts(array('success' => ''), $attr);
-
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_before_sc_profile_after_shortcode_atts', get_defined_vars());
 				unset($__refs, $__v);
@@ -295,9 +292,6 @@ if(!class_exists('c_ws_plugin__s2member_sc_profile_in'))
 
 				echo '<tr>'."\n";
 				echo '<td>'."\n";
-				//261012.0752 Carry the shortcode's optional redirect through the early init POST handler.
-				if(is_string($attr['success']) && trim($attr['success']) !== '')
-					echo '<input type="hidden" name="ws_plugin__s2member_profile_success" value="'.esc_attr(trim($attr['success'])).'" />'."\n";
 				echo '<input type="hidden" name="ws_plugin__s2member_sc_profile_save" id="ws-plugin--s2member-sc-profile-save" value="'.esc_attr(wp_create_nonce('ws-plugin--s2member-sc-profile-save')).'" />'."\n";
 				echo '<input type="hidden" name="ws_plugin__s2member_profile_save" id="ws-plugin--s2member-profile-save" value="'.esc_attr(wp_create_nonce('ws-plugin--s2member-profile-save')).'" />'."\n";
 				echo '<input type="submit" id="ws-plugin--s2member-profile-submit" class="btn btn-primary" value="'.esc_attr(_x('Save All Changes', 's2member-front', 's2member')).'" tabindex="'.esc_attr(($tabindex = $tabindex + 10)).'" />'."\n";
