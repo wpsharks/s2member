@@ -161,10 +161,83 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 			{
 				if((!empty($o['login_welcome_page']) || !empty($o['file_download_limit_exceeded_page'])) && !$user->has_cap('access_s2member_level0'))
 					return TRUE;
-				if(!empty($o['specific_ids']) || c_ws_plugin__s2member_utils_gets::get_unavailable_singular_ids_with_ccaps($user->ID ? $user : FALSE))
+				if(!empty($o['specific_ids']))
+					return TRUE;
+				//261017.0120 REST needs only to detect possible CCAP restrictions, not enumerate all protected posts.
+				// Probe the indexed meta_key with LIMIT 1; even empty metadata safely triggers extra checks.
+				global $wpdb;
+				if($wpdb->get_var("SELECT 1 FROM `".$wpdb->postmeta."` WHERE `meta_key` = 's2member_ccaps_req' LIMIT 1"))
 					return TRUE;
 			}
 			return FALSE;
+		}
+
+		/**
+		 * Finds denied resources from an explicit-ID-only policy, without walking a REST collection.
+		 *
+		 * @package s2Member\Security
+		 * @since 261017.0149
+		 *
+		 * @return int[]|false Denied IDs, or FALSE when the full bounded checker is required.
+		 */
+		private static function explicit_post_exclusions()
+		{
+			global $wpdb;
+			$o = $GLOBALS['WS_PLUGIN__']['s2member']['o'];
+			$user = wp_get_current_user();
+			$ids = array();
+
+			//261017.0149 URI redirects and taxonomy rules can hide resources not listed in the post/page settings.
+			if(!empty($o['login_redirection_override']) && !$user->has_cap('access_s2member_level0'))
+				return FALSE;
+			//261017.0149 An indexed existence probe is bounded; CCAP checks still need the per-post fallback.
+			if($wpdb->get_var("SELECT 1 FROM `".$wpdb->postmeta."` WHERE `meta_key` = 's2member_ccaps_req' LIMIT 1"))
+				return FALSE;
+
+			for($n = $GLOBALS['WS_PLUGIN__']['s2member']['c']['levels']; $n >= 0; $n--)
+			{
+				if($user->has_cap('access_s2member_level'.$n))
+					continue;
+				foreach(array('catgs', 'ptags', 'ruris') as $kind)
+					if(!empty($o['level'.$n.'_'.$kind]))
+						return FALSE;
+				foreach(array('posts', 'pages') as $kind)
+				{
+					if(empty($o['level'.$n.'_'.$kind]))
+						continue;
+					foreach(preg_split('/[\s;,]+/', (string)$o['level'.$n.'_'.$kind], -1, PREG_SPLIT_NO_EMPTY) as $id)
+					{
+						//261017.0149 An `all`/`all-type` or unfamiliar rule must never reach the explicit-ID fast path.
+						if(!ctype_digit($id) || !(int)$id)
+							return FALSE;
+						$ids[(int)$id] = (int)$id;
+					}
+				}
+			}
+
+			//261017.0149 Specific Access is granted by a link or cookie; evaluate each configured ID with the existing checker.
+			if(!empty($o['specific_ids']))
+				foreach(preg_split('/[\s;,]+/', (string)$o['specific_ids'], -1, PREG_SPLIT_NO_EMPTY) as $id)
+				{
+					if(!ctype_digit($id) || !(int)$id)
+						return FALSE;
+					$ids[(int)$id] = (int)$id;
+				}
+
+			//261017.0149 Systematic pages have ID-based exceptions or denial rules; check only those known IDs.
+			if(!$user->has_cap('access_s2member_level0'))
+				foreach(array('login_welcome_page', 'file_download_limit_exceeded_page') as $key)
+					if(!empty($o[$key]))
+						$ids[(int)$o[$key]] = (int)$o[$key];
+
+			//261017.0149 Bound configured-ID evaluation too; large policies retain the existing 200-candidate fallback.
+			if(count($ids) > 200)
+				return FALSE;
+			$denied = array();
+			foreach($ids as $id)
+				if(($post = get_post($id)) && is_wp_error(self::check_post_access($post)))
+					$denied[] = $id;
+			return $denied;
 		}
 
 		/**
@@ -184,6 +257,14 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 		{
 			if(!self::needs_query_check(TRUE))
 				return $args;
+			//261017.0149 Explicit ID-only policies can be excluded by SQL without scanning the first 200 collection items.
+			// Fall back to bounded per-resource checks for dynamic restrictions and incompatible include lists.
+			if(empty($args['post__in']) && ($denied = self::explicit_post_exclusions()) !== FALSE)
+			{
+				if($denied)
+					$args['post__not_in'] = array_values(array_unique(array_merge(wp_parse_id_list(isset($args['post__not_in']) ? $args['post__not_in'] : array()), $denied)));
+				return $args;
+			}
 			$scan = $args;
 			//261012.0211 One bounded candidate scan per REST request; preserve the prepared query ordering and restrict the final query to candidates actually checked.
 			$scan['fields'] = 'ids';
@@ -255,6 +336,13 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 		{
 			if(!self::needs_query_check(TRUE))
 				return $args;
+			//261017.0149 WordPress comment queries can exclude known protected parent IDs before pagination.
+			if(empty($args['post__in']) && ($denied = self::explicit_post_exclusions()) !== FALSE)
+			{
+				if($denied)
+					$args['post__not_in'] = array_values(array_unique(array_merge(wp_parse_id_list(isset($args['post__not_in']) ? $args['post__not_in'] : array()), $denied)));
+				return $args;
+			}
 			$scan = $args;
 			//261012.0021 Bound comment traversal and expose only comments whose parent access was checked inside this request budget.
 			$scan['number'] = 200;
@@ -290,6 +378,9 @@ if(!class_exists('c_ws_plugin__s2member_security_rest'))
 		 */
 		private static function restrict_query_ids($args, $allowed, $include_key)
 		{
+			//261017.0152 TO-DO: Complex post, term, and comment restrictions still use only the first 200 candidates.
+			// This can hide later accessible items and distort REST totals. Keep the fallback bounded;
+			// extend query-level filtering without Alternative Views' unbounded ID-enumeration helpers.
 			$allowed = array_values(array_unique(wp_parse_id_list($allowed)));
 			if(!empty($args[$include_key]))
 				$allowed = array_values(array_intersect(wp_parse_id_list($args[$include_key]), $allowed));
