@@ -93,7 +93,11 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 					$options['sc_s2get_userid_whitelist'] = $options['sc_user_fields_whitelist'];
 
 				$options = ws_plugin__s2member_configure_options_and_their_defaults(($options = array_merge($options, array('options_version' => (string)($options['options_version'] + 0.001)))));
-				update_option('ws_plugin__s2member_options', $options).((is_multisite() && is_main_site()) ? update_site_option('ws_plugin__s2member_options', $options) : NULL).update_option('ws_plugin__s2member_cache', array());
+				update_option('ws_plugin__s2member_options', $options);
+				//261012.0021 A nonce or internal `$verified` flag does not authorize a network-scoped option write.
+				if(is_multisite() && is_main_site() && current_user_can('manage_network_options'))
+					update_site_option('ws_plugin__s2member_options', $options);
+				update_option('ws_plugin__s2member_cache', array());
 
 				if($update_other === TRUE || in_array('auto_eot_system', (array)$update_other)) // Handle the Auto-EOT System now (enable/disable).
 					($options['auto_eot_system_enabled'] == 1) ? c_ws_plugin__s2member_eot::add_auto_eot_system() : c_ws_plugin__s2member_eot::delete_auto_eot_system();

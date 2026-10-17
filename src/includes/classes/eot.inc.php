@@ -333,6 +333,9 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 			return array(
 				'previous_role' => isset($before['previous_role']) ? (string)$before['previous_role'] : '',
 				'previous_s2member_level' => isset($before['previous_s2member_level']) ? (string)$before['previous_s2member_level'] : '',
+				//261011.1631 Capture the effective destination role and level after EOT; deleted users have no surviving role.
+				'new_role' => $after['previous_role'],
+				'new_s2member_level' => $after['previous_s2member_level'],
 				'ccaps_before' => implode(',', $before_ccaps),
 				'ccaps_removed' => implode(',', $removed),
 				'ccaps_remaining' => implode(',', $remaining),
@@ -352,7 +355,8 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 		 */
 		public static function notification_fill($text, $context, $is_url = FALSE)
 		{
-			return preg_replace_callback('/%%(previous_role|previous_s2member_level|ccaps_before|ccaps_removed|ccaps_remaining)%%/i', function($matches) use ($context, $is_url)
+			//261011.1631 Support both prior and resulting access states in EOT notification URLs and emails.
+			return preg_replace_callback('/%%(previous_role|previous_s2member_level|new_role|new_s2member_level|ccaps_before|ccaps_removed|ccaps_remaining)%%/i', function($matches) use ($context, $is_url)
 			{
 				$key = strtolower($matches[1]);
 				$value = isset($context[$key]) ? (string)$context[$key] : '';

@@ -56,8 +56,6 @@ if(!class_exists('c_ws_plugin__s2member_sc_profile_in'))
 			{
 				$attr = c_ws_plugin__s2member_utils_strings::trim_qts_deep((array)$attr);
 
-				$attr = shortcode_atts(array(), $attr); // Possible Attributes. None.
-
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_before_sc_profile_after_shortcode_atts', get_defined_vars());
 				unset($__refs, $__v);

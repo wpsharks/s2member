@@ -1,3 +1,31 @@
+= v261017 =
+
+- (Pro) **Enhancement:** Added an optional `success` attribute to the `s2Member-Profile` shortcode, allowing site owners to redirect members to a custom page after successfully updating their profile. Without this attribute, the existing inline confirmation remains unchanged. Redirects use WordPress's safe-redirect validation, and failed updates do not redirect. See _WP Admin > s2Member > General Options > Member Profile Modifications > Shortcode Attributes (Explained)_. Thanks to Bert for the idea: [thread #10228](https://f.wpsharks.com/t/10228)
+
+- (Framework) **Improvement:** EOT/deletion notifications now report the resulting WordPress role and s2Member Level after demotion. Added the `%%new_role%%` and `%%new_s2member_level%%` replacement codes for notification URLs, and the same values included in the notification emails.
+
+- (Framework) **Security:** Improved how the `[s2Get /]` shortcode handles custom date formats and member profile values, ensuring dynamically displayed content is safely encoded while preserving stored information.
+
+- (Pro) **Security:** Improved how custom descriptions are displayed in PayPal, Stripe, and Authorize.Net Pro-Forms. Descriptions now follow WordPress's standard HTML sanitization rules, preserving supported formatting while safely handling other markup.
+
+- (Framework) **Improvement:** Refined how dynamic values are handled in notification and tracking templates, improving consistency and reliability across different configurations.
+
+- (Framework) **Fix:** Improved replacement-code handling in purchase and membership notification emails, ensuring more accurate output for custom values and payment details. Also resolved PHP warnings in certain edge cases.
+
+- (Framework) **Fix:** Improved WordPress Multisite registration for users who already have an account on another site in the network. Existing members can join additional sites through their logged-in session, while new registrations continue through the normal WordPress signup process.
+
+- (Framework) **Fix:** Refined legacy WordPress Multisite activation handling for accounts already registered on the network. Activation now follows WordPress's standard duplicate-account validation, while retaining the existing s2Member integration hooks for compatibility.
+
+- (Framework) **Fix:** Prevented PHP warnings in the Stand-Alone Profile Modification Form (e.g., the "Edit My Profile" popup in the Pro Login Widget) when a configured custom profile field had no entry in a member's saved data. Thanks to Philip R. for reporting it.
+
+- (Framework) **Improvement:** Optimized REST API collection filtering for membership-protected posts, comments, and taxonomy terms. Access checks now operate on a bounded set of matching items per request, preserving query ordering and improving performance predictability on sites with large content collections.
+
+- (Framework) **Fix:** Improved the s2Member settings-saving routine by separating option updates and cache clearing into individual steps, rather than combining them into a single operation. This makes the process easier to maintain and provides more consistent handling on WordPress Multisite installations.
+
+- (Pro) **Fix:** Refined how Cloudflare Turnstile and Google reCAPTCHA v3 configuration test results are saved on WordPress Multisite, ensuring each provider's verification status is updated correctly.
+
+- (Pro) **Fix:** Improved the migration of legacy anti-spam provider settings on WordPress Multisite. Site-level and network-level configurations are now initialized independently, allowing either migration to complete even if the other has already run, while preserving existing provider selections and unrelated settings.
+
 = v261011 =
 
 - (Pro) **Major Improvement:** Expanded the existing _Pro-Form CAPTCHA Anti-Spam Security_ with multiple independent and optional layers of protection while preserving the existing pro-form `captcha` shortcode control. See _s2Member Pro > General Options > Pro-Form Anti-Spam & Bot Protection (Beta)_
