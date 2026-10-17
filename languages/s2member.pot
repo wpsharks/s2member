@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  261011\n"
+"Project-Id-Version:  261017\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-10-11 05:05:54+00:00\n"
+"POT-Creation-Date: 2026-10-17 02:39:28+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -118,8 +118,8 @@ msgstr ""
 #: pro/src/includes/classes/antispam-turnstile.inc.php:194
 #: pro/src/includes/classes/antispam-turnstile.inc.php:199
 #: pro/src/includes/classes/antispam-turnstile.inc.php:203
-#: pro/src/includes/classes/antispam.inc.php:768
-#: pro/src/includes/classes/antispam.inc.php:840
+#: pro/src/includes/classes/antispam.inc.php:779
+#: pro/src/includes/classes/antispam.inc.php:851
 msgid "Security verification failed. Please try again."
 msgstr ""
 
@@ -157,88 +157,88 @@ msgstr ""
 msgid "Configuration test passed."
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:610
+#: pro/src/includes/classes/antispam.inc.php:621
 msgid "None"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:614
+#: pro/src/includes/classes/antispam.inc.php:625
 msgid "Anti-Spam Diagnostics (administrators only)"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:615
+#: pro/src/includes/classes/antispam.inc.php:626
 msgid "Surface:"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:616
+#: pro/src/includes/classes/antispam.inc.php:627
 msgid "Per-form switch:"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:616
+#: pro/src/includes/classes/antispam.inc.php:627
 msgid "enabled"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:616
+#: pro/src/includes/classes/antispam.inc.php:627
 msgid "disabled"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:617
+#: pro/src/includes/classes/antispam.inc.php:628
 msgid "Built-in checks:"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:617
-#: pro/src/includes/classes/antispam.inc.php:619
+#: pro/src/includes/classes/antispam.inc.php:628
+#: pro/src/includes/classes/antispam.inc.php:630
 msgid "Disabled"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:618
+#: pro/src/includes/classes/antispam.inc.php:629
 msgid "Bot check:"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:619
+#: pro/src/includes/classes/antispam.inc.php:630
 msgid "Signup screening:"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:619
+#: pro/src/includes/classes/antispam.inc.php:630
 msgid "(new-user surfaces only)"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:620
+#: pro/src/includes/classes/antispam.inc.php:631
 msgid "Simulate Bot"
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:621
+#: pro/src/includes/classes/antispam.inc.php:632
 msgid "Testing..."
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:621
+#: pro/src/includes/classes/antispam.inc.php:632
 msgid "Self-test completed."
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:621
+#: pro/src/includes/classes/antispam.inc.php:632
 msgid "Self-test failed."
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:686
+#: pro/src/includes/classes/antispam.inc.php:697
 msgid "Anti-spam is disabled on this form by its captcha attribute."
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:698
+#: pro/src/includes/classes/antispam.inc.php:709
 msgid "No built-in or modern bot-verification gate is active for a safe dry-run simulation."
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:704
+#: pro/src/includes/classes/antispam.inc.php:715
 msgid "The simulated bot was not blocked. Review the anti-spam configuration."
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:706
+#: pro/src/includes/classes/antispam.inc.php:717
 msgid "Simulated bot blocked (%s). No form was submitted."
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:719
+#: pro/src/includes/classes/antispam.inc.php:730
 msgid "You do not have permission to run this self-test."
 msgstr ""
 
-#: pro/src/includes/classes/antispam.inc.php:848
+#: pro/src/includes/classes/antispam.inc.php:859
 msgid "The form was submitted too quickly. Please wait a moment and try again."
 msgstr ""
 
@@ -2380,7 +2380,7 @@ msgstr ""
 #: pro/src/includes/templates/forms/stripe-registration-form.php:60
 #: pro/src/includes/templates/forms/stripe-sp-checkout-form.php:76
 #: src/includes/classes/profile-in.inc.php:96
-#: src/includes/classes/sc-profile-in.inc.php:121
+#: src/includes/classes/sc-profile-in.inc.php:119
 msgctxt "s2member-front"
 msgid "Email Address"
 msgstr ""
@@ -2442,12 +2442,12 @@ msgctxt "s2member-front"
 msgid "No Billing Method; please try again."
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:346 src/includes/syscon.inc.php:758
+#: pro/src/includes/syscon.inc.php:362 src/includes/syscon.inc.php:758
 msgctxt "s2member-front"
 msgid "Congratulations! (your membership has been approved)"
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:347
+#: pro/src/includes/syscon.inc.php:363
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! Your membership has been approved.\n"
@@ -2464,12 +2464,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:348 src/includes/syscon.inc.php:764
+#: pro/src/includes/syscon.inc.php:364 src/includes/syscon.inc.php:764
 msgctxt "s2member-front"
 msgid "Thank You! (instructions for access)"
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:349
+#: pro/src/includes/syscon.inc.php:365
 msgctxt "s2member-front"
 msgid ""
 "Thanks %%%%first_name%%%%! \n"
@@ -2489,12 +2489,12 @@ msgid ""
 "%s"
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:350
+#: pro/src/includes/syscon.inc.php:366
 msgctxt "s2member-front"
 msgid "Renewal Reminder (Account Expires in %%%%eot_descriptive_time%%%%)"
 msgstr ""
 
-#: pro/src/includes/syscon.inc.php:351
+#: pro/src/includes/syscon.inc.php:367
 msgctxt "s2member-front"
 msgid ""
 "Hi %%%%first_name%%%%! \n"
@@ -2566,7 +2566,7 @@ msgstr ""
 #: src/includes/classes/custom-reg-fields.inc.php:339
 #: src/includes/classes/custom-reg-fields.inc.php:471
 #: src/includes/classes/profile-in.inc.php:117
-#: src/includes/classes/sc-profile-in.inc.php:142
+#: src/includes/classes/sc-profile-in.inc.php:140
 msgctxt "s2member-front"
 msgid "First Name"
 msgstr ""
@@ -2583,7 +2583,7 @@ msgstr ""
 #: src/includes/classes/custom-reg-fields.inc.php:351
 #: src/includes/classes/custom-reg-fields.inc.php:486
 #: src/includes/classes/profile-in.inc.php:136
-#: src/includes/classes/sc-profile-in.inc.php:161
+#: src/includes/classes/sc-profile-in.inc.php:159
 msgctxt "s2member-front"
 msgid "Last Name"
 msgstr ""
@@ -2615,8 +2615,8 @@ msgstr ""
 #: pro/src/includes/templates/forms/stripe-checkout-form.php:92
 #: pro/src/includes/templates/forms/stripe-registration-form.php:76
 #: src/includes/classes/custom-reg-fields.inc.php:453
-#: src/includes/classes/profile-in.inc.php:236
-#: src/includes/classes/sc-profile-in.inc.php:261
+#: src/includes/classes/profile-in.inc.php:237
+#: src/includes/classes/sc-profile-in.inc.php:259
 msgctxt "s2member-front"
 msgid "password strength indicator"
 msgstr ""
@@ -4123,10 +4123,10 @@ msgstr ""
 
 #: src/includes/classes/custom-reg-fields.inc.php:444
 #: src/includes/classes/custom-reg-fields.inc.php:449
-#: src/includes/classes/profile-in.inc.php:226
-#: src/includes/classes/profile-in.inc.php:232
-#: src/includes/classes/sc-profile-in.inc.php:251
-#: src/includes/classes/sc-profile-in.inc.php:257
+#: src/includes/classes/profile-in.inc.php:227
+#: src/includes/classes/profile-in.inc.php:233
+#: src/includes/classes/sc-profile-in.inc.php:249
+#: src/includes/classes/sc-profile-in.inc.php:255
 msgctxt "s2member-front"
 msgid "Please type your Password twice to confirm."
 msgstr ""
@@ -4777,36 +4777,36 @@ msgctxt "s2member-front"
 msgid "<strong>ERROR</strong>: Max simultaneous logins for username: %1$s. Please wait %2$s and try again."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:995
-#: src/includes/classes/menu-pages.inc.php:1116
+#: src/includes/classes/menu-pages.inc.php:999
+#: src/includes/classes/menu-pages.inc.php:1120
 msgid "Thanks — your message was sent. You’ll receive a copy by email."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:998
+#: src/includes/classes/menu-pages.inc.php:1002
 msgid "Sorry, your message could not be sent. Please try again."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1037
+#: src/includes/classes/menu-pages.inc.php:1041
 msgid "You do not have permission to send support requests from this page."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1048
+#: src/includes/classes/menu-pages.inc.php:1052
 msgid "Please provide a valid email address."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1051
+#: src/includes/classes/menu-pages.inc.php:1055
 msgid "Please describe how I can help."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1066
+#: src/includes/classes/menu-pages.inc.php:1070
 msgid "s2Member help request"
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1105
+#: src/includes/classes/menu-pages.inc.php:1109
 msgid "Support mailbox is not configured correctly."
 msgstr ""
 
-#: src/includes/classes/menu-pages.inc.php:1114
+#: src/includes/classes/menu-pages.inc.php:1118
 msgid "Email could not be sent (mail server issue). Please try again or contact us directly."
 msgstr ""
 
@@ -4974,43 +4974,43 @@ msgid " Please contact PayPal Merchant Technical Support (www.paypal.com/mts) an
 msgstr ""
 
 #: src/includes/classes/profile-in.inc.php:77
-#: src/includes/classes/sc-profile-in.inc.php:102
+#: src/includes/classes/sc-profile-in.inc.php:100
 msgctxt "s2member-front"
 msgid "Username"
 msgstr ""
 
 #: src/includes/classes/profile-in.inc.php:77
-#: src/includes/classes/sc-profile-in.inc.php:102
+#: src/includes/classes/sc-profile-in.inc.php:100
 msgctxt "s2member-front"
 msgid "(cannot be changed)"
 msgstr ""
 
 #: src/includes/classes/profile-in.inc.php:155
-#: src/includes/classes/sc-profile-in.inc.php:180
+#: src/includes/classes/sc-profile-in.inc.php:178
 msgctxt "s2member-front"
 msgid "Display Name"
 msgstr ""
 
-#: src/includes/classes/profile-in.inc.php:227
-#: src/includes/classes/sc-profile-in.inc.php:252
+#: src/includes/classes/profile-in.inc.php:228
+#: src/includes/classes/sc-profile-in.inc.php:250
 msgctxt "s2member-front"
 msgid "New Password?"
 msgstr ""
 
-#: src/includes/classes/profile-in.inc.php:227
-#: src/includes/classes/sc-profile-in.inc.php:252
+#: src/includes/classes/profile-in.inc.php:228
+#: src/includes/classes/sc-profile-in.inc.php:250
 msgctxt "s2member-front"
 msgid "(please type it twice)"
 msgstr ""
 
-#: src/includes/classes/profile-in.inc.php:228
-#: src/includes/classes/sc-profile-in.inc.php:253
+#: src/includes/classes/profile-in.inc.php:229
+#: src/includes/classes/sc-profile-in.inc.php:251
 msgctxt "s2member-front"
 msgid "Only if changing password, otherwise leave blank."
 msgstr ""
 
-#: src/includes/classes/profile-in.inc.php:273
-#: src/includes/classes/sc-profile-in.inc.php:299
+#: src/includes/classes/profile-in.inc.php:274
+#: src/includes/classes/sc-profile-in.inc.php:297
 msgctxt "s2member-front"
 msgid "Save All Changes"
 msgstr ""
@@ -5048,7 +5048,7 @@ msgstr ""
 #: src/includes/classes/profile-mods-in.inc.php:202
 #: src/includes/classes/profile-mods-in.inc.php:203
 #: src/includes/classes/profile-mods-in.inc.php:204
-#: src/includes/classes/sc-profile-in.inc.php:79
+#: src/includes/classes/sc-profile-in.inc.php:77
 msgctxt "s2member-front"
 msgid "Profile updated successfully."
 msgstr ""
@@ -5064,7 +5064,7 @@ msgctxt "s2member-front"
 msgid "Please use an email address with a valid mail domain."
 msgstr ""
 
-#: src/includes/classes/registrations.inc.php:722
+#: src/includes/classes/registrations.inc.php:700
 msgctxt "s2member-front"
 msgid "s2Member security violation. You attempted to POST administrative variables that will NOT be trusted in a NON-administrative zone!"
 msgstr ""
@@ -5130,67 +5130,67 @@ msgstr ""
 msgid "Subscription cancelled."
 msgstr ""
 
-#: src/includes/classes/security-rest.inc.php:383
-#: src/includes/classes/security-rest.inc.php:392
-#: src/includes/classes/security-rest.inc.php:400
+#: src/includes/classes/security-rest.inc.php:458
+#: src/includes/classes/security-rest.inc.php:467
+#: src/includes/classes/security-rest.inc.php:475
 msgid "You do not have access to this page. [sys level 0]"
-msgstr ""
-
-#: src/includes/classes/security-rest.inc.php:417
-#: src/includes/classes/security-rest.inc.php:424
-#: src/includes/classes/security-rest.inc.php:433
-msgid "You do not have access to this category. [catg level %d]"
-msgstr ""
-
-#: src/includes/classes/security-rest.inc.php:446
-#: src/includes/classes/security-rest.inc.php:456
-msgid "You do not have access to this tag. [ptag level %d]"
-msgstr ""
-
-#: src/includes/classes/security-rest.inc.php:469
-#: src/includes/classes/security-rest.inc.php:476
-#: src/includes/classes/security-rest.inc.php:483
-msgid "You do not have access to this post. [post level %d]"
 msgstr ""
 
 #: src/includes/classes/security-rest.inc.php:492
 #: src/includes/classes/security-rest.inc.php:499
+#: src/includes/classes/security-rest.inc.php:508
+msgid "You do not have access to this category. [catg level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:521
+#: src/includes/classes/security-rest.inc.php:531
+msgid "You do not have access to this tag. [ptag level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:544
+#: src/includes/classes/security-rest.inc.php:551
+#: src/includes/classes/security-rest.inc.php:558
+msgid "You do not have access to this post. [post level %d]"
+msgstr ""
+
+#: src/includes/classes/security-rest.inc.php:567
+#: src/includes/classes/security-rest.inc.php:574
 msgid "You do not have access to this post. [catg level %d]"
 msgstr ""
 
-#: src/includes/classes/security-rest.inc.php:509
-#: src/includes/classes/security-rest.inc.php:515
+#: src/includes/classes/security-rest.inc.php:584
+#: src/includes/classes/security-rest.inc.php:590
 msgid "You do not have access to this post. [ptag level %d]"
 msgstr ""
 
-#: src/includes/classes/security-rest.inc.php:526
+#: src/includes/classes/security-rest.inc.php:601
 msgid "You do not have access to this post. [ccap %s]"
 msgstr ""
 
-#: src/includes/classes/security-rest.inc.php:533
+#: src/includes/classes/security-rest.inc.php:608
 msgid "You do not have access to this post. [sp %d]"
 msgstr ""
 
-#: src/includes/classes/security-rest.inc.php:546
-#: src/includes/classes/security-rest.inc.php:553
-#: src/includes/classes/security-rest.inc.php:560
+#: src/includes/classes/security-rest.inc.php:621
+#: src/includes/classes/security-rest.inc.php:628
+#: src/includes/classes/security-rest.inc.php:635
 msgid "You do not have access to this page. [page level %d]"
 msgstr ""
 
-#: src/includes/classes/security-rest.inc.php:572
-#: src/includes/classes/security-rest.inc.php:579
+#: src/includes/classes/security-rest.inc.php:647
+#: src/includes/classes/security-rest.inc.php:654
 msgid "You do not have access to this page. [ptag level %d]"
 msgstr ""
 
-#: src/includes/classes/security-rest.inc.php:591
+#: src/includes/classes/security-rest.inc.php:666
 msgid "You do not have access to this page. [ccap %s]"
 msgstr ""
 
-#: src/includes/classes/security-rest.inc.php:599
+#: src/includes/classes/security-rest.inc.php:674
 msgid "You do not have access to this page. [sp %d]"
 msgstr ""
 
-#: src/includes/classes/security-rest.inc.php:614
+#: src/includes/classes/security-rest.inc.php:689
 msgid "You do not have access to this content. [ruri level %d]"
 msgstr ""
 
