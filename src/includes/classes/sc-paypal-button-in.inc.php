@@ -86,6 +86,9 @@ if (!class_exists ("c_ws_plugin__s2member_sc_paypal_button_in"))
 						do_action("ws_plugin__s2member_before_sc_paypal_button_after_shortcode_atts", get_defined_vars ());
 						unset($__refs, $__v);
 
+						//261018.0632 Allow Pro calendar validation to stop checkout before any payment button is generated.
+						if(!empty($attr["calendar_payment_error"])) return '<div class="s2member-pro-calendar-error">'.esc_html($attr["calendar_payment_error"]).'</div>';
+
 						if /* Cancellation Buttons. */ ($attr["cancel"])
 							{
 								//260114 PayPal Checkout (REST) cancellation override.

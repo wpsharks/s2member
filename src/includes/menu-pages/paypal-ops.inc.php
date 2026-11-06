@@ -1739,8 +1739,6 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					echo '</div>'."\n";
 				}
 
-				echo '<p id="ws-plugin--s2member-auto-eot-system-enabled-via-cron"'.(($auto_eot_mode === '2') ? '' : ' style="display:none;"').'>If you\'d like to run s2Member\'s Auto-EOT System through a traditional Cron Job instead of WP-Cron, configure an HTTP Cron Job through your hosting/server control panel. Running it every <code>1 to 10 minutes</code> works well; about every <code>5 minutes</code> is a good default. Load this URL:<br /><code>'.esc_html(home_url("/?s2member_auto_eot_system_via_cron=1")).'</code></p>'."\n";
-
 				echo '<table class="form-table">'."\n";
 				echo '<tbody>'."\n";
 				echo '<tr>'."\n";
@@ -1757,12 +1755,16 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 				echo '<td>'."\n";
 				echo '<select name="ws_plugin__s2member_auto_eot_system_enabled" id="ws-plugin--s2member-auto-eot-system-enabled">'."\n";
 				//260820.0306 Health warnings now report scheduler problems explicitly, so always show the saved mode instead of blanking this field when cron is unhealthy.
-				echo '<option value="1"'.(($auto_eot_mode === '1') ? ' selected="selected"' : '').'>Yes (enable the Auto-EOT System through WP-Cron)</option>'."\n";
-				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? '<option value="2"'.(($auto_eot_mode === '2') ? ' selected="selected"' : '').'>Yes (but, I\'ll run it with my own Cron Job)</option>'."\n" : '';
-				echo '<option value="0"'.(($auto_eot_mode === '0') ? ' selected="selected"' : '').'>No (disable the Auto-EOT System)</option>'."\n";
+				//261020.2244 Clarify how EOT checks are scheduled, without changing the saved mode values or EOT processing behavior.
+				echo '<option value="1"'.(($auto_eot_mode === '1') ? ' selected="selected"' : '').'>Enabled — Through WordPress (recommended)</option>'."\n";
+				echo (!is_multisite() || !c_ws_plugin__s2member_utils_conds::is_multisite_farm() || is_main_site()) ? '<option value="2"'.(($auto_eot_mode === '2') ? ' selected="selected"' : '').'>Enabled — Through My Own Schedule (advanced)</option>'."\n" : '';
+				echo '<option value="0"'.(($auto_eot_mode === '0') ? ' selected="selected"' : '').'>Disabled</option>'."\n";
 				echo '</select><br />'."\n";
-				echo 'Recommended setting: (<code>Yes / enable via WP-Cron</code>)'."\n";
-				echo '<br /><em>When disabled, automatic End-of-Term processing is paused. s2Member can still record End-of-Term dates, and s2Member Pro reminders based on stored End-of-Term dates can continue independently. Overdue End-of-Term actions remain pending and will be processed if the Auto-EOT System is enabled again.</em>'."\n";
+				echo '<em><strong>Through WordPress:</strong> s2Member schedules EOT checks through WordPress. They can run during site visits or when your server runs WordPress\' scheduled tasks (e.g., via WP-CLI).</em>'."\n";
+				//261020.2320 Keep all scheduling explanations visible and consistently styled; without the old target paragraph, legacy mode-toggle JavaScript cannot hide these instructions.
+				//261020.2332 Keep schedule intervals as plain text and link the EOT trigger URL inline; escape the target and open it in a separate tab.
+				echo '<br /><em><strong>Through My Own Schedule:</strong> s2Member won\'t add EOT checks to WordPress\' schedule. Configure your server to visit this URL every 1 to 10 minutes (5 minutes recommended): <a href="'.esc_url(home_url("/?s2member_auto_eot_system_via_cron=1")).'" target="_blank" rel="noopener noreferrer">'.esc_html(home_url("/?s2member_auto_eot_system_via_cron=1")).'</a></em>'."\n";
+				echo '<br /><em><strong>When disabled:</strong> Expired members won\'t be automatically demoted or deleted, so they may keep access beyond expiration. EOT dates can still be recorded, and reminders based on those dates can continue independently. Pending expirations will be processed when you re-enable this setting.</em>'."\n";
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";

@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version:  261017\n"
+"Project-Id-Version:  261106\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/s2member\n"
-"POT-Creation-Date: 2026-10-17 02:39:28+00:00\n"
+"POT-Creation-Date: 2026-11-06 04:39:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -450,191 +450,191 @@ msgctxt "s2member-front"
 msgid "<strong>Unknown error.</strong> Please contact Support for assistance."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:196
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:307
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:460
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:599
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:809
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:202
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:313
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:467
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:606
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:826
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:231
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:312
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:386
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:486
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:669
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:199
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:310
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:463
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:602
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:812
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:205
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:316
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:470
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:609
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:829
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:237
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:318
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:392
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:492
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:675
 msgctxt "s2member-front"
 msgid "Security Verification"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:274
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:776
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:281
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:794
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:285
-#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:641
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:277
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:779
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:284
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:797
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:291
+#: pro/src/includes/classes/gateways/stripe/stripe-form-in.inc.php:647
 msgctxt "s2member-front"
 msgid "Additional Info"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:415
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:554
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:728
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:422
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:561
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:746
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:418
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:557
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:731
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:425
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:564
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:749
 msgctxt "s2member-front"
 msgid "Visa"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:415
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:554
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:728
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:422
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:561
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:746
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:418
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:557
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:731
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:425
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:564
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:749
 msgctxt "s2member-front"
 msgid "MasterCard"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:415
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:554
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:728
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:422
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:561
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:746
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:418
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:557
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:731
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:425
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:564
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:749
 msgctxt "s2member-front"
 msgid "Discover"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:415
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:554
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:728
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:422
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:561
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:746
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:418
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:557
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:731
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:425
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:564
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:749
 msgctxt "s2member-front"
 msgid "American Express"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "01 January"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "02 February"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "03 March"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "04 April"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "05 May"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "06 June"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "07 July"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "08 August"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "09 September"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "10 October"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "11 November"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:425
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:564
-#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:738
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:432
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:571
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:756
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:428
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:567
+#: pro/src/includes/classes/gateways/authnet/authnet-form-in.inc.php:741
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:435
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:574
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:759
 msgctxt "s2member-front"
 msgid "12 December"
 msgstr ""
@@ -1638,28 +1638,28 @@ msgctxt "s2member-front"
 msgid "PayPal Checkout was cancelled."
 msgstr ""
 
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:422
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:561
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:746
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:425
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:564
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:749
 msgctxt "s2member-front"
 msgid "Maestro"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:422
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:561
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:746
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:425
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:564
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:749
 msgctxt "s2member-front"
 msgid "Solo"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:561
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:746
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:564
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:749
 msgctxt "s2member-front"
 msgid "PayPal"
 msgstr ""
 
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:662
-#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:884
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:665
+#: pro/src/includes/classes/gateways/paypal/paypal-form-in.inc.php:887
 msgctxt "s2member-front"
 msgid "We Accept PayPal"
 msgstr ""
@@ -2416,12 +2416,12 @@ msgstr ""
 #: pro/src/includes/separates/gateways/paypal/paypal.js:597
 #: pro/src/includes/separates/gateways/paypal/paypal.min.js:1
 #: src/includes/classes/sc-paypal-button-e.inc.php:83
-#: src/includes/classes/sc-paypal-button-in.inc.php:121
-#: src/includes/classes/sc-paypal-button-in.inc.php:154
-#: src/includes/classes/sc-paypal-button-in.inc.php:258
-#: src/includes/classes/sc-paypal-button-in.inc.php:290
-#: src/includes/classes/sc-paypal-button-in.inc.php:525
-#: src/includes/classes/sc-paypal-button-in.inc.php:761
+#: src/includes/classes/sc-paypal-button-in.inc.php:124
+#: src/includes/classes/sc-paypal-button-in.inc.php:157
+#: src/includes/classes/sc-paypal-button-in.inc.php:261
+#: src/includes/classes/sc-paypal-button-in.inc.php:293
+#: src/includes/classes/sc-paypal-button-in.inc.php:528
+#: src/includes/classes/sc-paypal-button-in.inc.php:764
 #: src/includes/templates/buttons/paypal-ccaps-checkout-button.php:35
 #: src/includes/templates/buttons/paypal-checkout-button.php:47
 #: src/includes/templates/buttons/paypal-sp-checkout-button.php:35
@@ -5114,19 +5114,19 @@ msgctxt "s2member-front"
 msgid "—"
 msgstr ""
 
-#: src/includes/classes/sc-paypal-button-in.inc.php:131
-#: src/includes/classes/sc-paypal-button-in.inc.php:164
-#: src/includes/classes/sc-paypal-button-in.inc.php:208
-#: src/includes/classes/sc-paypal-button-in.inc.php:247
+#: src/includes/classes/sc-paypal-button-in.inc.php:134
+#: src/includes/classes/sc-paypal-button-in.inc.php:167
+#: src/includes/classes/sc-paypal-button-in.inc.php:211
+#: src/includes/classes/sc-paypal-button-in.inc.php:250
 msgctxt "paypal cancellation button label"
 msgid "Unsubscribe"
 msgstr ""
 
-#: src/includes/classes/sc-paypal-button-in.inc.php:223
+#: src/includes/classes/sc-paypal-button-in.inc.php:226
 msgid "Cancel your subscription now?"
 msgstr ""
 
-#: src/includes/classes/sc-paypal-button-in.inc.php:227
+#: src/includes/classes/sc-paypal-button-in.inc.php:230
 msgid "Subscription cancelled."
 msgstr ""
 
