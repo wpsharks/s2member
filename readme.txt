@@ -3,9 +3,9 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 261017
-Stable tag: 261017
-Tested up to: 7.2-alpha-64371
+Version: 261106
+Stable tag: 261106
+Tested up to: 7.2-beta4-65283
 Requires at least: 4.2
 Requires PHP: 5.6.2
 Tested up to PHP: 8.5.9
@@ -176,11 +176,25 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v261017 =
+= v261106 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v261106 =
+
+- (Pro) **Enhancement:** Added optional `rs` (Regular Start) and `sa` (Starting Amount) shortcode attributes to pro-forms and PayPal buttons to schedule the first regular payment for a calendar date. For example, `rs="01"` schedules it for the first day of the month, while `rs="01-01"` schedules it for January 1, provided the date falls within one regular billing period. The initial period is prorated automatically using actual calendar days. Use `sa` to override the calculated amount with a fixed one, or make the initial period free with `sa="0"` where supported by the payment gateway.
+
+- (Pro) **Enhancement:** Added an optional `re` (Regular End) shortcode attribute for buy-now pro-forms and buttons to calculate the purchased membership duration from a calendar end date, e.g., `re="12-31"` for December 31. s2Member automatically calculates the corresponding purchase duration. Any configured EOT grace period is added afterward, and existing Auto-Extend settings continue to apply.
+
+- (Pro) **Fix:** Restored the missing day-selection tabs in the EOT Renewal/Reminder Emails editor by replacing obsolete jQuery JSON calls with the standard JavaScript JSON API.
+
+- (Framework) **Fix:** Fixed a compatibility issue where s2Member's CSS Asset Health check could cause some mobile pages to appear blank, particularly for logged-out visitors. The check now avoids interfering with the page layout. Thanks to Ami for reporting this.
+
+- (Pro) **Fix:** Fixed PHP warnings in Authorize.Net payment notifications when recurring subscription fields are missing. Thanks to bcolflesh for reporting this. See [thread #13725](https://f.wpsharks.com/t/13725)
+
+- (Framework & Pro) **UI:** Improved the Auto-EOT settings with clearer scheduling options and explanations. The interface now distinguishes between WordPress' scheduling, a custom server schedule, and disabling EOT processing, explaining the consequences of each.
 
 = v261017 =
 
