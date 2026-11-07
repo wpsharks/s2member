@@ -190,13 +190,13 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		}
 
 		/**
-		 * Sanitizes a string by breaking PHP opening tags (including encoded/mixed/double-encoded forms).
+		 * Rejects values containing PHP opening tags (including encoded/mixed/double-encoded forms).
 		 *
 		 * @package s2Member\Utilities
 		 * @since 241207
 		 *
 		 * @param string $input Input string to sanitize.
-		 * @return string Original input when safe, otherwise decoded string with PHP opening tags removed.
+		 * @return string Original input when safe; a dash when PHP opening tags are detected.
 		 */
 		public static function strip_php_tags($input = '') {
 				$copy = (string) $input;
@@ -208,27 +208,22 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 						$copy = rawurldecode($copy);                        // %3C, %3F, %3E, etc.
 				}
 
-				// If no opener after normalization, return the original.
-				if (strpos($copy, '<?') === false) {
-					return $input;
+				//261107.0212 Preserve original encoding when sanitizing values.
+				if (strpos($copy, '<?') !== false) {
+					return '-';
 				}
 
-				// Break all openers by removing all occurrences of '<?'.
-				while (strpos($copy, '<?') !== false) {
-						$copy = str_replace('<?', 'NEUTERED_', $copy);
-				}
-
-				return $copy;
+				return $input;
 		}
 
 		/**
-		 * Recursively breaks PHP opening tags from strings in arrays/objects using strip_php_tags().
+		 * Recursively replaces suspicious values in arrays/objects using strip_php_tags().
 		 *
 		 * @package s2Member\Utilities
 		 * @since 251002
 		 *
 		 * @param mixed $input A scalar, array, or object to sanitize.
-		 * @return mixed The sanitized value with PHP opening tags removed from all scalar leaves.
+		 * @return mixed Original structure with suspicious scalar values replaced by a dash.
 		 */
 		public static function strip_php_tags_deep($input) {
 				if (is_array($input)) {
@@ -783,6 +778,57 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		}
 
 		/**
+		 * Returns the supported tracking fields for a PayPal return flow.
+		 *
+		 * @since 261107
+		 */
+		public static function paypal_return_template_values($paypal, $locals, $flow)
+		{
+			$values = self::paypal_template_values($paypal, array(), $locals);
+			//261107.0412 Keep tracking fields specific to the payment flow.
+			$common = array('currency', 'currency_symbol', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email');
+			$subscriptions = array('subscr_id', 'subscr_baid', 'subscr_cid', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term');
+			$user = array('user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id');
+			$fields = FALSE;
+			switch($flow)
+			{
+				case 'sp':
+					$allowed = array_merge($common, array('amount', 'txn_id', 'txn_baid', 'txn_cid', 'user_ip'));
+					break;
+				case 'member_signup':
+					$allowed = array_merge($common, $subscriptions, array('user_ip'));
+					break;
+				case 'member_modify':
+				case 'subscr_modify':
+					$allowed = array_merge($common, $subscriptions, $user);
+					$fields = TRUE;
+					break;
+				case 'ccap':
+					$allowed = array_merge($common, array('amount', 'txn_id', 'txn_baid', 'txn_cid', 'subscr_id', 'subscr_baid', 'subscr_cid'), $user);
+					$fields = TRUE;
+					//261107.0412 Preserve capability-purchase transaction aliases.
+					foreach(array('id', 'baid', 'cid') as $suffix)
+						$values['subscr_'.$suffix] = $values['txn_'.$suffix];
+					break;
+				default:
+					return array();
+			}
+			// Custom fields are supported only in modification/capability tracking.
+			if($fields && isset($locals['fields']) && is_array($locals['fields']))
+				foreach($locals['fields'] as $key => $value)
+					if(is_string($key) && !in_array(strtolower($key), $allowed, TRUE))
+					{
+						$values[strtolower($key)] = maybe_serialize($value);
+						$allowed[] = strtolower($key);
+					}
+			if($flow === 'sp') $values['user_ip'] = isset($paypal['ip']) ? (string)$paypal['ip'] : '';
+			// Only the custom variables present in the PayPal custom field are eligible.
+			foreach(explode('|', isset($paypal['custom']) ? (string)$paypal['custom'] : '') as $i => $unused)
+				$allowed[] = 'cv'.$i;
+			return array_intersect_key($values, array_fill_keys($allowed, TRUE));
+		}
+
+		/**
 		 * Replaces only codes in the original template; inserted values are never scanned again.
 		 *
 		 * @since 261015
@@ -794,7 +840,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 			{
 				$key = strtolower($match[1]);
 				if(!array_key_exists($key, $values)) return '';
-				$value = (string)$values[$key];
+				$value = self::strip_php_tags((string)$values[$key]); //261107.0412 Sanitize values before output formatting.
 				if($destination === 'url') return urlencode($value);
 				if($destination === 'html') return esc_html($value);
 				if($destination === 'recipient' || $destination === 'subject')

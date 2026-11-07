@@ -267,6 +267,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 																if(($code = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($original_code, c_ws_plugin__s2member_utils_strings::paypal_template_values($paypal, $coupon, get_defined_vars()), 'tracking')))) // This gets stored into a Transient Queue.
 																{
 																	$paypal['s2member_log'][] = 'Storing Specific Post/Page Tracking Codes into a Transient Queue. These will be processed on-site.';
+																	//261107.0212 Sanitize completed tracking data before storage.
+																	$code = str_replace('<?', '-', $code);
 																	set_transient('s2m_'.md5('s2member_transient_sp_tracking_codes_'.$paypal['txn_id']), $code, 43200);
 																}
 						}

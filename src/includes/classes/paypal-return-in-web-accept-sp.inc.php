@@ -79,21 +79,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_web_accept_sp'))
 
 						if($processing && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_tracking_codes']))
 						{
-							$paypal = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($paypal); //251003
-							if(($code = c_ws_plugin__s2member_utils_strings::fill_cvs($code, $paypal['custom'])) && ($code = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $code)) && ($code = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $code)))
-								if(($code = preg_replace('/%%txn_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $code)) && ($code = preg_replace('/%%txn_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $code)))
-									if(($code = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $code)) && ($code = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $code)))
-										if(($code = preg_replace('/%%item_number%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_number']), $code)) && ($code = preg_replace('/%%item_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_name']), $code)))
-											if(($code = preg_replace('/%%first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['first_name']), $code)) && ($code = preg_replace('/%%last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['last_name']), $code)))
-												if(($code = preg_replace('/%%full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($paypal['first_name'].' '.$paypal['last_name'])), $code)))
-													if(($code = preg_replace('/%%payer_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['payer_email']), $code)))
-														if(($code = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['ip']), $code)))
-
-															if(($code = trim(preg_replace('/%%(.+?)%%/i', '', $code)))) // This gets stored into a Transient Queue.
-															{
-																$paypal['s2member_log'][] = 'Storing Specific Post/Page Tracking Codes into a Transient Queue. These will be processed on-site.';
-																set_transient('s2m_'.md5('s2member_transient_sp_tracking_codes_'.$paypal['txn_id']), $code, 43200);
-															}
+							//261107.0412 Use the supported tracking fields for this payment flow.
+							$paypal = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($paypal);
+							$tracking_values = c_ws_plugin__s2member_utils_strings::paypal_return_template_values($paypal, get_defined_vars(), 'sp');
+							if(($code = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($code, $tracking_values, 'tracking'))))
+							{
+								$paypal['s2member_log'][] = 'Storing Specific Post/Page Tracking Codes into a Transient Queue. These will be processed on-site.';
+								$code = str_replace('<?', '-', $code); //261107.0212 Sanitize completed tracking data before storage.
+								set_transient('s2m_'.md5('s2member_transient_sp_tracking_codes_'.$paypal['txn_id']), $code, 43200);
+							}
 						}
 						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 						do_action('ws_plugin__s2member_during_paypal_return_during_sp_access', get_defined_vars());
