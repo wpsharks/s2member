@@ -78,17 +78,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal'))
 					{
 						foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_ref_rev_notification_urls']) as $url)
 
-							if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $paypal['custom'], true)) && ($url = preg_replace('/%%parent_txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['parent_txn_id'])), $url)))
-								if(($url = preg_replace('/%%parent_txn_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['parent_txn_baid'])), $url)) && ($url = preg_replace('/%%parent_txn_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['parent_txn_cid'])), $url)))
-									if(($url = preg_replace('/%%item_number%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['item_number'])), $url)) && ($url = preg_replace('/%%item_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['item_name'])), $url)))
-										if(($url = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency'])), $url)) && ($url = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['currency_symbol'])), $url)))
-											if(($url = preg_replace('/%%-amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['mc_gross'])), $url)) && ($url = preg_replace('/%%-fee%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['mc_fee'])), $url)))
-												if(($url = preg_replace('/%%first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['first_name'])), $url)) && ($url = preg_replace('/%%last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['last_name'])), $url)))
-													if(($url = preg_replace('/%%full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($paypal['first_name'].' '.$paypal['last_name']))), $url)))
-														if(($url = preg_replace('/%%payer_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['payer_email'])), $url)))
-															if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($paypal['ip'])), $url)))
+							//261109.0511 Render IPN template with the supported fields.
+							if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'sp-refund-reversal-1-url'), 'url')))
 
-																if(($url = trim(preg_replace('/%%(.+?)%%/i', '', $url))))
+																if(($url = trim($url)))
 																	c_ws_plugin__s2member_utils_urls::remote($url);
 
 						$paypal['s2member_log'][] = 'Specific Post/Page ~ Refund/Reversal Notification URLs have been processed.';
@@ -124,17 +117,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_sp_refund_reversal'))
 						$msg .= 'cv8: %%cv8%%'."\n";
 						$msg .= 'cv9: %%cv9%%';
 
-						if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $paypal['custom'])) && ($msg = preg_replace('/%%parent_txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['parent_txn_id']), $msg)))
-							if(($msg = preg_replace('/%%parent_txn_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['parent_txn_baid']), $msg)) && ($msg = preg_replace('/%%parent_txn_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['parent_txn_cid']), $msg)))
-								if(($msg = preg_replace('/%%item_number%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_number']), $msg)) && ($msg = preg_replace('/%%item_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_name']), $msg)))
-									if(($msg = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $msg)) && ($msg = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $msg)))
-										if(($msg = preg_replace('/%%-amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $msg)) && ($msg = preg_replace('/%%-fee%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_fee']), $msg)))
-											if(($msg = preg_replace('/%%first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['first_name']), $msg)) && ($msg = preg_replace('/%%last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['last_name']), $msg)))
-												if(($msg = preg_replace('/%%full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($paypal['first_name'].' '.$paypal['last_name'])), $msg)))
-													if(($msg = preg_replace('/%%payer_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['payer_email']), $msg)))
-														if(($msg = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['ip']), $msg)))
+						//261109.0511 Render IPN template with the supported fields.
+						if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'sp-refund-reversal-2-msg'), 'text')))
 
-															if($sbj && ($msg = trim(preg_replace('/%%(.+?)%%/i', '', $msg)))) // Still have a ``$sbj`` and a ``$msg``?
+															if($sbj && ($msg = trim($msg))) // Still have a ``$sbj`` and a ``$msg``?
 
 																foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['sp_ref_rev_notification_recipients']) as $recipient)
 																	wp_mail($recipient, apply_filters('ws_plugin__s2member_sp_ref_rev_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_sp_ref_rev_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
