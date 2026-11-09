@@ -224,51 +224,47 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 									$notification_type       = 'modification';
 								}
 
-								$original_rec = $rec; //261015.0435 Preserve template before legacy replacement checks.
-								$original_sbj = $sbj; //261015.0435 Preserve template before legacy replacement checks.
-								$original_msg = $msg; //261015.0435 Preserve template before legacy replacement checks.
+								//261109.1514 Retain the unrendered templates for get_defined_vars() consumers after rendering overwrites $rec/$sbj/$msg.
+								$original_rec = $rec;
+								$original_sbj = $sbj;
+								$original_msg = $msg;
 								$paypal = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($paypal); //251226
-								//261109.0511 Render IPN template with the supported fields.
-								if(($rec = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($rec, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-1-rec'), 'recipient')))
+								//261109.1531 Member confirmation: resolve the three output-specific templates before sending; an empty required part suppresses the email.
+								if(($rec = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($rec, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-1-rec'), 'recipient')) &&
+									($sbj = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($sbj, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-2-sbj'), 'subject')) &&
+									($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-3-msg'), !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled']) ? 'html' : 'text')) &&
+									($rec = trim($rec)) && ($sbj = trim($sbj)) && ($msg = trim($msg)))
+								{
+									foreach(c_ws_plugin__s2member_utils_strings::parse_emails($rec) as $recipient /* Go through a possible list of recipients. */)
+									{
+										//250617 HTML email support.
+										if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
+											//261109.1726 Scope temporary WordPress sender filters to this plaintext notification; other emails must not inherit them.
+											c_ws_plugin__s2member_email_configs::email_config();
+											wp_mail($recipient, apply_filters('ws_plugin__s2member_'.$notification_type.'_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_'.$notification_type.'_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8');
+											c_ws_plugin__s2member_email_configs::email_config_release();
+										} else {
+											c_ws_plugin__s2member_utilities::mail($recipient, apply_filters('ws_plugin__s2member_'.$notification_type.'_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_'.$notification_type.'_email_msg', $msg, get_defined_vars()));
+										}
+									}
 
-																										//261109.0511 Render IPN template with the supported fields.
-																										if(($sbj = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($sbj, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-2-sbj'), 'subject')))
+									$paypal['s2member_log'][] = ucfirst($notification_type).' Confirmation Email sent to: '.$rec.'.';
+								}
 
-																																												//261109.0511 Render IPN template with the supported fields.
-																																												if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-3-msg'), !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled']) ? 'html' : 'text')))
-
-
-																																																													{
-																																																														if(($rec = trim($rec)) && ($sbj = trim($sbj)) && ($msg = trim($msg)))
-																																																														{
-																																																															foreach(c_ws_plugin__s2member_utils_strings::parse_emails($rec) as $recipient /* Go through a possible list of recipients. */)
-																																																															{
-																																																																//250617 HTML email support.
-																																																																if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
-																																																																	c_ws_plugin__s2member_email_configs::email_config().wp_mail($recipient, apply_filters('ws_plugin__s2member_'.$notification_type.'_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_'.$notification_type.'_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8').c_ws_plugin__s2member_email_configs::email_config_release();;
-																																																																} else {
-																																																																	c_ws_plugin__s2member_utilities::mail($recipient, apply_filters('ws_plugin__s2member_'.$notification_type.'_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_'.$notification_type.'_email_msg', $msg, get_defined_vars()));
-																																																																}
-																																																															}
-
-																																																															$paypal['s2member_log'][] = ucfirst($notification_type).' Confirmation Email sent to: '.$rec.'.';
-																																																														}
-																																																													}
+								//261109.1531 Webhook/API URL notifications: send each configured URL independently; an empty rendered URL must not skip later entries.
 								if($processing && $notification_urls)
 								{
 									foreach(preg_split('/['."\r\n\t".']+/', $notification_urls) as $url)
-
-										//261109.0511 Render IPN template with the supported fields.
-										if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-4-url'), 'url')))
-
-
-																									{
-
-																										if(($url = trim($url)))
-																											c_ws_plugin__s2member_utils_urls::remote($url);
-																									}
+									{
+										if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-4-url'), 'url')) && ($url = trim($url)))
+										{
+											c_ws_plugin__s2member_utils_urls::remote($url);
+										}
+									}
 									$paypal['s2member_log'][] = ucfirst($notification_type).' Notification URLs have been processed.';
 								}
+
+								//261109.1531 API notification email: assemble a plaintext event summary for configured recipients.
 								if($processing && $notification_recipients)
 								{
 									$msg = $sbj = '(s2Member / API Notification Email) - '.ucfirst($notification_type);
@@ -317,24 +313,22 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 									$msg .= 'cv7: %%cv7%%'."\n";
 									$msg .= 'cv8: %%cv8%%'."\n";
 									$msg .= 'cv9: %%cv9%%';
-									$original_msg = $msg; //261015.0435 Preserve original before legacy replacement checks.
+									$original_msg = $msg; //261109.1514 Preserve the raw message for get_defined_vars() consumers after rendering mutates $msg.
 
-									//261109.0511 Render IPN template with the supported fields.
-									if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-5-msg'), 'text')))
-
-
-																								{
-
-																									if($sbj && ($msg = trim($msg))) // Still have a ``$sbj`` and a ``$msg``?
-
-																										foreach(c_ws_plugin__s2member_utils_strings::parse_emails($notification_recipients) as $recipient)
-																											wp_mail($recipient, apply_filters('ws_plugin__s2member_'.$notification_type.'_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_'.$notification_type.'_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-																								}
+									//261109.1531 Only render after appending every event/custom-field row; replacement values are not rescanned.
+									if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-5-msg'), 'text')) && $sbj && ($msg = trim($msg)))
+									{
+										foreach(c_ws_plugin__s2member_utils_strings::parse_emails($notification_recipients) as $recipient)
+										{
+											wp_mail($recipient, apply_filters('ws_plugin__s2member_'.$notification_type.'_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_'.$notification_type.'_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
+										}
+									}
 									$paypal['s2member_log'][] = ucfirst($notification_type).' Notification Emails have been processed.';
 								}
+
+								//261109.1531 On-site tracking: queue the rendered code for the next visitor request instead of running it during this IPN.
 								if($processing && ($code = $tracking_codes))
 								{
-									//261109.0511 Render tracking data in a single pass.
 									if(($code = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($code, c_ws_plugin__s2member_utils_strings::paypal_ipn_tracking_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-6-code'), 'tracking'))))
 									{
 										$paypal['s2member_log'][] = 'Storing '.ucfirst($notification_type).' Tracking Codes into a Transient Queue. These will be processed on-site.';
@@ -342,6 +336,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 										set_transient('s2m_'.md5('s2member_transient_'.$notification_type.'_tracking_codes_'.$paypal['subscr_id']), $code, 43200);
 									}
 								}
+
 								foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 								do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_signup_w_update_vars', get_defined_vars());
 								unset($__refs, $__v);
@@ -369,48 +364,51 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 						{
 							$processing = $during = TRUE; // Yes, we ARE processing this.
 
-							$original_sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'signup_email_subject']; //261015.0435 Original, before interpolation.
+							//261109.1514 Keep configured originals available to get_defined_vars() consumers after the copies are rendered.
+							$original_sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'signup_email_subject'];
 							$sbj = $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'signup_email_subject'];
-							$original_msg = $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'signup_email_message']; //261015.0435 Original, before interpolation.
+							$original_msg = $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'signup_email_message'];
 							$msg = $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'signup_email_message'];
-							$original_rec = $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'signup_email_recipients']; //261015.0435 Original, before interpolation.
+							$original_rec = $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'signup_email_recipients'];
 							$rec = $GLOBALS['WS_PLUGIN__']['s2member']['o'][(($_REQUEST['s2member_paypal_proxy'] && preg_match('/pro-emails/', $_REQUEST['s2member_paypal_proxy_use'])) ? 'pro_' : '').'signup_email_recipients'];
 
 							$paypal = c_ws_plugin__s2member_utils_strings::strip_php_tags_deep($paypal); //251226
-							//261109.0511 Render IPN template with the supported fields.
-							if(($rec = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($rec, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-7-rec'), 'recipient')))
+							//261109.1531 Member confirmation: resolve the three output-specific templates before sending; an empty required part suppresses the email.
+							if(($rec = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($rec, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-7-rec'), 'recipient')) &&
+								($sbj = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($sbj, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-8-sbj'), 'subject')) &&
+								($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-9-msg'), !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled']) ? 'html' : 'text')) &&
+								($rec = trim($rec)) && ($sbj = trim($sbj)) && ($msg = trim($msg)))
+							{
+								foreach(c_ws_plugin__s2member_utils_strings::parse_emails($rec) as $recipient) // Go through a possible list of recipients.
+								{
+									//250617 HTML email support.
+									if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
+										//261109.1726 Scope temporary WordPress sender filters to this plaintext notification; other emails must not inherit them.
+										c_ws_plugin__s2member_email_configs::email_config();
+										wp_mail($recipient, apply_filters('ws_plugin__s2member_signup_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_signup_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8');
+										c_ws_plugin__s2member_email_configs::email_config_release();
+									} else {
+										c_ws_plugin__s2member_utilities::mail($recipient, apply_filters('ws_plugin__s2member_signup_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_signup_email_msg', $msg, get_defined_vars()));
+									}
+								}
+								$paypal['s2member_log'][] = 'Signup Confirmation Email sent to: '.$rec.'.';
+							}
 
-																				//261109.0511 Render IPN template with the supported fields.
-																				if(($sbj = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($sbj, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-8-sbj'), 'subject')))
-
-																																	//261109.0511 Render IPN template with the supported fields.
-																																	if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-9-msg'), !empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled']) ? 'html' : 'text')))
-
-																																														if(($rec = trim($rec)) && ($sbj = trim($sbj)) && ($msg = trim($msg)))
-																																														{
-																																															foreach(c_ws_plugin__s2member_utils_strings::parse_emails($rec) as $recipient) // Go through a possible list of recipients.
-																																															{
-																																																//250617 HTML email support.
-																																																if (empty($GLOBALS['WS_PLUGIN__']['s2member']['o']['html_emails_enabled'])) {
-																																																	c_ws_plugin__s2member_email_configs::email_config().wp_mail($recipient, apply_filters('ws_plugin__s2member_signup_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_signup_email_msg', $msg, get_defined_vars()), 'From: "'.preg_replace('/"/', "'", $GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_name']).'" <'.$GLOBALS['WS_PLUGIN__']['s2member']['o']['reg_email_from_email'].'>'."\r\n".'Content-Type: text/plain; charset=UTF-8').c_ws_plugin__s2member_email_configs::email_config_release();;
-																																																} else {
-																																																	c_ws_plugin__s2member_utilities::mail($recipient, apply_filters('ws_plugin__s2member_signup_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_signup_email_msg', $msg, get_defined_vars()));
-																																																}
-																																															}
-																																															$paypal['s2member_log'][] = 'Signup Confirmation Email sent to: '.$rec.'.';
-																																														}
+							//261109.1531 Webhook/API URL notifications: send each configured URL independently; an empty rendered URL must not skip later entries.
 							if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_notification_urls'])
 							{
 								foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_notification_urls']) as $url)
-
-									//261109.0511 Render IPN template with the supported fields.
-									if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-10-url'), 'url')))
-
-																				if(($url = trim($url)))
-																					c_ws_plugin__s2member_utils_urls::remote($url);
+								{
+									if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-10-url'), 'url')) && ($url = trim($url)))
+									{
+										c_ws_plugin__s2member_utils_urls::remote($url);
+									}
+								}
 
 								$paypal['s2member_log'][] = 'Signup Notification URLs have been processed.';
 							}
+
+							//261109.1531 API notification email: assemble a plaintext event summary for configured recipients.
 							if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_notification_recipients'])
 							{
 								$msg = $sbj = '(s2Member / API Notification Email) - Signup';
@@ -448,21 +446,23 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 								$msg .= 'cv7: %%cv7%%'."\n";
 								$msg .= 'cv8: %%cv8%%'."\n";
 								$msg .= 'cv9: %%cv9%%';
-								$original_msg = $msg; //261015.0435 Preserve original before legacy replacement checks.
+								$original_msg = $msg; //261109.1514 Preserve the raw message for get_defined_vars() consumers after rendering mutates $msg.
 
-								//261109.0511 Render IPN template with the supported fields.
-								if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-11-msg'), 'text')))
-
-																			if($sbj && ($msg = trim($msg))) // Still have a ``$sbj`` and a ``$msg``?
-
-																				foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_notification_recipients']) as $recipient)
-																					wp_mail($recipient, apply_filters('ws_plugin__s2member_signup_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_signup_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
+								//261109.1531 Only render after appending every event/custom-field row; replacement values are not rescanned.
+								if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-11-msg'), 'text')) && $sbj && ($msg = trim($msg)))
+								{
+									foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_notification_recipients']) as $recipient)
+									{
+										wp_mail($recipient, apply_filters('ws_plugin__s2member_signup_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_signup_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
+									}
+								}
 
 								$paypal['s2member_log'][] = 'Signup Notification Emails have been processed.';
 							}
+
+							//261109.1531 On-site tracking: queue the rendered code for the next visitor request instead of running it during this IPN.
 							if($processing && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_tracking_codes']))
 							{
-								//261109.0511 Render tracking data in a single pass.
 								if(($code = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($code, c_ws_plugin__s2member_utils_strings::paypal_ipn_tracking_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-12-code'), 'tracking'))))
 								{
 									$paypal['s2member_log'][] = 'Storing Signup Tracking Codes into a Transient Queue. These will be processed on-site.';
@@ -470,6 +470,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 									set_transient('s2m_'.md5('s2member_transient_signup_tracking_codes_'.$paypal['subscr_id']), $code, 43200);
 								}
 							}
+
 							foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 							do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_signup_wo_update_vars', get_defined_vars());
 							unset($__refs, $__v);
@@ -490,16 +491,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 						{
 							$fields      = get_user_option('s2member_custom_fields', $user_id); // These will be needed in the routines below.
 							$user_reg_ip = get_user_option('s2member_registration_ip', $user_id); // Original IP during Registration.
-
-							//261109.0511 Render IPN template with the supported fields.
-							if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-13-url'), 'url-preserve')))
-
-
-																							{
-
-																								if(($url = trim($url))) // Preserve remaining replacements; parent routine may perform replacements too.
-																									$paypal['s2member_paypal_proxy_return_url'] = $url;
-																							}
+							//261109.1512 Proxy return templates can contain placeholders this handler cannot resolve; url-preserve keeps them intact for the proxy consumer.
+							if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-13-url'), 'url-preserve')) && ($url = trim($url)))
+							{
+								$paypal['s2member_paypal_proxy_return_url'] = $url;
+							}
 						}
 						$paypal['s2member_log'][] = 'Subscr. Return ( `modification='.(int)$modifying.'` ), a Proxy Return URL is ready.';
 					}
@@ -528,21 +524,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 								//250214 Improved coupon use logging.
 								$processed_coupons = c_ws_plugin__s2member_pro_coupons::log_user_coupons_use($user_id, $coupon); // Flag for routines below.
 							}
+
+						//261109.1531 Webhook/API URL notifications: send each configured URL independently; an empty rendered URL must not skip later entries.
 						if($GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_urls'])
 						{
 							foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_urls']) as $url)
-
-								//261109.0511 Render IPN template with the supported fields.
-								if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-14-url'), 'url')))
-
-
-																						{
-
-																							if(($url = trim($url)))
-																								c_ws_plugin__s2member_utils_urls::remote($url);
-																						}
+							{
+								if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-14-url'), 'url')) && ($url = trim($url)))
+								{
+									c_ws_plugin__s2member_utils_urls::remote($url);
+								}
+							}
 							$paypal['s2member_log'][] = 'Payment Notification URLs have been processed.';
 						}
+
+						//261109.1531 API notification email: assemble a plaintext event summary for configured recipients.
 						if($GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_recipients'])
 						{
 							$msg = $sbj = '(s2Member / API Notification Email) - Payment';
@@ -588,21 +584,19 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 							$msg .= 'cv7: %%cv7%%'."\n";
 							$msg .= 'cv8: %%cv8%%'."\n";
 							$msg .= 'cv9: %%cv9%%';
-							$original_msg = $msg; //261015.0435 Preserve original before legacy replacement checks.
+							$original_msg = $msg; //261109.1514 Preserve the raw message for get_defined_vars() consumers after rendering mutates $msg.
 
-							//261109.0511 Render IPN template with the supported fields.
-							if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-15-msg'), 'text')))
-
-
-																					{
-
-																						if($sbj && ($msg = trim($msg))) // Still have a ``$sbj`` and a ``$msg``?
-
-																							foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_recipients']) as $recipient)
-																								wp_mail($recipient, apply_filters('ws_plugin__s2member_payment_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_payment_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-																					}
+							//261109.1531 Only render after appending every event/custom-field row; replacement values are not rescanned.
+							if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-wa-w-level-15-msg'), 'text')) && $sbj && ($msg = trim($msg)))
+							{
+								foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['payment_notification_recipients']) as $recipient)
+								{
+									wp_mail($recipient, apply_filters('ws_plugin__s2member_payment_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_payment_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
+								}
+							}
 							$paypal['s2member_log'][] = 'Payment Notification Emails have been processed.';
 						}
+
 						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 						do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_or_wa_payment', get_defined_vars());
 						unset($__refs, $__v);

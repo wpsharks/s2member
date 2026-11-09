@@ -207,17 +207,18 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level'))
 
 								$paypal['s2member_log'][] = 'Transient Tracking Cookie set on ( `web_accept|subscr_signup|subscr_payment` ) w/ update vars.';
 
+								//261109.1531 Return-page tracking: restrict placeholders to this purchase flow before queuing the code for the visitor.
 								if($processing && $tracking_properties && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['modification_tracking_codes']))
 								{
-									//261107.0412 Use the supported tracking fields for this payment flow.
 									$tracking_values = c_ws_plugin__s2member_utils_strings::paypal_return_template_values($paypal, get_defined_vars(), 'member_modify');
 									if(($code = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($code, $tracking_values, 'tracking'))))
 									{
 										$paypal['s2member_log'][] = 'Storing Modification Tracking Codes into a Transient Queue. These will be processed on-site.';
-										$code = str_replace('<?', '-', $code); //261107.0212 Sanitize completed tracking data before storage.
+										$code = str_replace('<?', '-', $code); //261109.1512 The tracking template itself may contain PHP openers, even when interpolated values are sanitized.
 										set_transient('s2m_'.md5('s2member_transient_modification_tracking_codes_'.$paypal['subscr_id']), $code, 43200);
 									}
 								}
+
 								foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 								do_action('ws_plugin__s2member_during_paypal_return_during_subscr_signup_w_update_vars', get_defined_vars());
 								unset($__refs, $__v); // Housekeeping.
@@ -286,17 +287,18 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level'))
 
 						$paypal['s2member_log'][] = 'Transient Tracking Cookie set on ( `web_accept|subscr_signup|subscr_payment` ) w/o update vars.';
 
+						//261109.1531 Return-page tracking: restrict placeholders to this purchase flow before queuing the code for the visitor.
 						if($processing && $tracking_properties && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['signup_tracking_codes']))
 						{
-							//261107.0412 Use the supported tracking fields for this payment flow.
 							$tracking_values = c_ws_plugin__s2member_utils_strings::paypal_return_template_values($paypal, get_defined_vars(), 'member_signup');
 							if(($code = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($code, $tracking_values, 'tracking'))))
 							{
 								$paypal['s2member_log'][] = 'Storing Signup Tracking Codes into a Transient Queue. These will be processed on-site.';
-								$code = str_replace('<?', '-', $code); //261107.0212 Sanitize completed tracking data before storage.
+								$code = str_replace('<?', '-', $code); //261109.1512 The tracking template itself may contain PHP openers, even when interpolated values are sanitized.
 								set_transient('s2m_'.md5('s2member_transient_signup_tracking_codes_'.$paypal['subscr_id']), $code, 43200);
 							}
 						}
+
 						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 						do_action('ws_plugin__s2member_during_paypal_return_during_subscr_signup_wo_update_vars', get_defined_vars());
 						unset($__refs, $__v); // Housekeeping.

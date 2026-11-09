@@ -194,20 +194,22 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 										$paypal['s2member_log'][] = 'Member Level/Capabilities demoted to: '.ucwords(preg_replace('/_/', ' ', $demotion_role)).'.';
 
+										//261109.1531 Webhook/API URL notifications: send each configured URL independently; an empty rendered URL must not skip later entries.
 										if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'])
 										{
 											foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url) // Handle EOT Notifications.
-
+											{
+												//261109.1512 Both legacy EOT expansion and IPN rendering/dispatch must run per URL; otherwise only the last configured URL is notified.
 												$url = c_ws_plugin__s2member_eot::notification_fill($url, $eot_notification_context, TRUE);
-												//261109.0511 Render IPN template with the supported fields.
-												if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-rp-eots-w-level-1-url'), 'url')))
-																			{
-
-																				if(($url = trim($url)))
-																					c_ws_plugin__s2member_utils_urls::remote($url);
-																			}
+												if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-rp-eots-w-level-1-url'), 'url')) && ($url = trim($url)))
+												{
+													c_ws_plugin__s2member_utils_urls::remote($url);
+												}
+											}
 											$paypal['s2member_log'][] = 'EOT/Deletion Notification URLs have been processed.';
 										}
+
+										//261109.1531 API notification email: assemble a plaintext event summary for configured recipients.
 										if($processing && $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients'])
 										{
 											$msg = $sbj = '(s2Member / API Notification Email) - EOT/Deletion';
@@ -241,17 +243,17 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 											$msg .= 'cv8: %%cv8%%'."\n";
 											$msg .= 'cv9: %%cv9%%';
 
-											//261109.0511 Render IPN template with the supported fields.
-											if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-rp-eots-w-level-2-msg'), 'text')))
-																		{
-
-																			if($sbj && ($msg = trim($msg))) // Still have a ``$sbj`` and a ``$msg``?
-
-																				foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
-																					wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-																		}
+											//261109.1531 Only render after appending every event/custom-field row; replacement values are not rescanned.
+											if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-rp-eots-w-level-2-msg'), 'text')) && $sbj && ($msg = trim($msg)))
+											{
+												foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
+												{
+													wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
+												}
+											}
 											$paypal['s2member_log'][] = 'EOT/Deletion Notification Emails have been processed.';
 										}
+
 										foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_demote', get_defined_vars());
 										unset($__refs, $__v); // Housekeeping.
@@ -282,6 +284,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 										do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_delete', get_defined_vars());
 										unset($__refs, $__v); // Housekeeping.
 									}
+
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 									do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot', get_defined_vars());
 									unset($__refs, $__v); // Housekeeping.
@@ -366,19 +369,20 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 						$user_reg_ip = ($user_id) ? get_user_option('s2member_registration_ip', $user_id) : ''; // Needed below.
 						$user_reg_ip = $paypal['ip'] = ($user_reg_ip) ? $user_reg_ip : $paypal['ip']; // Now merge conditionally.
 
+						//261109.1531 Webhook/API URL notifications: send each configured URL independently; an empty rendered URL must not skip later entries.
 						if($GLOBALS['WS_PLUGIN__']['s2member']['o']['ref_rev_notification_urls'])
 						{
 							foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['ref_rev_notification_urls']) as $url)
-
-								//261109.0511 Render IPN template with the supported fields.
-								if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-rp-eots-w-level-3-url'), 'url')))
-																	{
-
-																		if(($url = trim($url)))
-																			c_ws_plugin__s2member_utils_urls::remote($url);
-																	}
+							{
+								if(($url = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-rp-eots-w-level-3-url'), 'url')) && ($url = trim($url)))
+								{
+									c_ws_plugin__s2member_utils_urls::remote($url);
+								}
+							}
 							$paypal['s2member_log'][] = 'Refund/Reversal Notification URLs have been processed.';
 						}
+
+						//261109.1531 API notification email: assemble a plaintext event summary for configured recipients.
 						if($GLOBALS['WS_PLUGIN__']['s2member']['o']['ref_rev_notification_recipients'])
 						{
 							$msg = $sbj = '(s2Member / API Notification Email) - Refund/Reversal';
@@ -416,17 +420,17 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 							$msg .= 'cv8: %%cv8%%'."\n";
 							$msg .= 'cv9: %%cv9%%';
 
-							//261109.0511 Render IPN template with the supported fields.
-							if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-rp-eots-w-level-4-msg'), 'text')))
-																{
-
-																	if($sbj && ($msg = trim($msg))) // Still have a ``$sbj`` and a ``$msg``?
-
-																		foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['ref_rev_notification_recipients']) as $recipient)
-																			wp_mail($recipient, apply_filters('ws_plugin__s2member_ref_rev_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_ref_rev_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-																}
+							//261109.1531 Only render after appending every event/custom-field row; replacement values are not rescanned.
+							if(($msg = c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, c_ws_plugin__s2member_utils_strings::paypal_ipn_template_values($paypal, (isset($coupon) ? $coupon : array()), get_defined_vars(), 'subscr-or-rp-eots-w-level-4-msg'), 'text')) && $sbj && ($msg = trim($msg)))
+							{
+								foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['ref_rev_notification_recipients']) as $recipient)
+								{
+									wp_mail($recipient, apply_filters('ws_plugin__s2member_ref_rev_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_ref_rev_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
+								}
+							}
 							$paypal['s2member_log'][] = 'Refund/Reversal Notification Emails have been processed.';
 						}
+
 						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 						do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_eot_refund_reversal', get_defined_vars());
 						unset($__refs, $__v); // Housekeeping.
