@@ -105,13 +105,16 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 									}
 								else if($field["type"] === "select" && !empty($field["options"]))
 									{
+										//261110.0205 Saved or submitted multi-value fields can be arrays; a single-select must not cast them to the literal string "Array".
+										$selected_value = is_scalar($_value) ? (string)$_value : '';
+
 										if($_editable_context === "profile-view")
 											{
 												foreach(preg_split("/[\r\n\t]+/", $field["options"]) as $option_line)
 													{
 														$option_value = $option_label = $option_default = "";
 														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
-														if($option_value === (string)$_value)
+														if($option_value === $selected_value)
 															{
 																$gen = $option_label;
 																break;
@@ -126,7 +129,7 @@ if(!class_exists("c_ws_plugin__s2member_custom_reg_fields"))
 													{
 														$option_value = $option_label = $option_default = "";
 														@list($option_value, $option_label, $option_default) = c_ws_plugin__s2member_utils_strings::trim_deep(preg_split("/\|/", trim($option_line)));
-														$gen .= '<option value="'.esc_attr($option_value).'"'.(((($option_default && !$_submission) || ($option_value === (string)$_value && !$selected_default_option)) && ($selected_default_option = true)) ? ' selected="selected"' : '').'>'.$option_label.'</option>';
+														$gen .= '<option value="'.esc_attr($option_value).'"'.(((($option_default && !$_submission) || ($option_value === $selected_value && !$selected_default_option)) && ($selected_default_option = true)) ? ' selected="selected"' : '').'>'.$option_label.'</option>';
 													}
 												$gen .= '</select>';
 											}
