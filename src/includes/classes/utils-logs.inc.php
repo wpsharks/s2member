@@ -154,6 +154,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 			$log_entry = preg_replace('/((?:^|[&?])[^&\r\n]*(?:CVV2?|CVC2?|CSC|CARD_?CODE|X_CARD_CODE|x_card_code|card_?code|card_?verification)(?:\[[^\]&=]*\]|%5B[^&=]*%5D)?\=)([^&\r\n]+)/im', '$1'.'xxxxxxxx/cvv', $log_entry);
 			$log_entry = preg_replace('/(<((?:CVV2?|CVC2?|CSC|CARD_?CODE|X_CARD_CODE|x_card_code|card_?code|card_?verification))\b[^>]*>)(.*?)(<\/\2>)/is', '$1'.'xxxxxxxx/cvv'.'$4', $log_entry);
 
+			//261110.1847 Redact proxy verification values from diagnostics, including request URLs.
+			$log_entry = preg_replace('/(\'s2member_paypal_proxy_verification\'\s*\=\>\s*\')([^\']+)(\')/i', '$1'.'xxxxxxxx/proxy-key'.'$3', $log_entry);
+			$log_entry = preg_replace('/(\[\s*s2member_paypal_proxy_verification\s*\]\s*\=\>\s*)([^\r\n]*)/i', '$1'.'xxxxxxxx/proxy-key', $log_entry);
+			$log_entry = preg_replace('/(\"s2member_paypal_proxy_verification\"\s*\:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/proxy-key'.'$3', $log_entry);
+			$log_entry = preg_replace('/((?:^|[&?])s2member_paypal_proxy_verification=)([^&\r\n]+)/im', '$1'.'xxxxxxxx/proxy-key', $log_entry);
+
 			$log_entry = preg_replace('/(Authorization\s*:\s*Basic\s+)[A-Za-z0-9\/\+\=]+/i', '$1'.'xxxxxxxx/basic-auth', $log_entry);
 			$log_entry = preg_replace('/(\[\s*Authorization\s*\]\s*=\>\s*Basic\s+)[A-Za-z0-9\/\+\=]+/i', '$1'.'xxxxxxxx/basic-auth', $log_entry);
 			$log_entry = preg_replace('/(\"Authorization\"\s*:\s*\"Basic\s+)[A-Za-z0-9\/\+\=]+(\")/i', '$1'.'xxxxxxxx/basic-auth'.'$2', $log_entry);
