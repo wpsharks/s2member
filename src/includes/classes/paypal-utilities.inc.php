@@ -112,6 +112,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											if(preg_match("/^s2member_/", $key))
 												unset($postvars[$key]);
 
+										//261110.1954 `proxy_verified` is an internal authentication result, never a PayPal-supplied field.
+										unset($postvars["proxy_verified"]);
 										$postback = $postvars; // Copy.
 										$postback["cmd"] = "_notify-validate";
 

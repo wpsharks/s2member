@@ -68,9 +68,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status(); // Filters on?
 				c_ws_plugin__s2member_email_configs::email_config_release(); // Release s2Member Filters.
 
-				$paypal = array(); // Initialize PayPal array; we also reference this with a variable for a possible proxy handler.
-				if(!empty($_REQUEST['s2member_paypal_proxy']) && in_array($_REQUEST['s2member_paypal_proxy'], array('alipay', 'stripe', 'authnet', 'clickbank', 'ccbill', 'google'), TRUE))
-					${esc_html(trim(stripslashes($_REQUEST['s2member_paypal_proxy'])))} = & $paypal; // Internal alias by reference.
+				$paypal = array(); // Initialize PayPal array; verified proxy aliases are established only after authentication.
 
 				if(is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars()) && ($_paypal = $paypal) && ($_paypal_s = serialize($_paypal)))
 				{
@@ -79,7 +77,18 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 
 					$payment_status_issues = '/^(failed|denied|expired|refunded|partially_refunded|reversed|reversal|canceled_reversal|voided)$/i';
 
-					$paypal['subscr_gateway'] = (!empty($_REQUEST['s2member_paypal_proxy'])) ? esc_html(trim(stripslashes($_REQUEST['s2member_paypal_proxy']))) : 'paypal';
+					//261110.1954 Use the authenticated source, not an unverified proxy label supplied beside a PayPal IPN.
+					$paypal['subscr_gateway'] = (!empty($paypal['proxy_verified']) && is_string($paypal['proxy_verified'])) ? esc_html(trim(stripslashes($paypal['proxy_verified']))) : 'paypal';
+					if(in_array($paypal['subscr_gateway'], array('alipay', 'stripe', 'authnet', 'clickbank', 'ccbill', 'google'), TRUE))
+						${$paypal['subscr_gateway']} = & $paypal; // Preserve existing proxy gateway aliases, but only for verified proxies.
+
+					//261110.1954 Native PayPal verification does not authenticate accompanying s2Member-specific proxy metadata.
+					if(empty($paypal['proxy_verified']))
+					{
+						foreach(array('s2member_paypal_proxy', 's2member_paypal_proxy_use', 's2member_paypal_proxy_coupon', 's2member_paypal_proxy_return_url', 's2member_paypal_proxy_verification') as $_unverified_proxy_field)
+							unset($_REQUEST[$_unverified_proxy_field]);
+						unset($_unverified_proxy_field);
+					}
 
 					$coupon = (!empty($_REQUEST['s2member_paypal_proxy_coupon']) && is_array($_REQUEST['s2member_paypal_proxy_coupon'])) ? stripslashes_deep($_REQUEST['s2member_paypal_proxy_coupon']) : array();
 					$coupon = (isset($coupon['full_coupon_code'], $coupon['coupon_code'], $coupon['affiliate_id']) && is_string($coupon['full_coupon_code']) && is_string($coupon['coupon_code']) && is_string($coupon['affiliate_id'])) ? $coupon : array('full_coupon_code' => '', 'coupon_code' => '', 'affiliate_id' => '');

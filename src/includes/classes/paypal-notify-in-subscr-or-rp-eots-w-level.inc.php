@@ -79,7 +79,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 						$paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `[empty or irrelevant]` ) w/ `payment_status` ( `refunded|reversed|reversal` ) - or - `new_case` w/ `case_type` ( `chargeback|dispute` )').'.';
 					else $paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `subscr_eot|recurring_payment_expired|recurring_payment_suspended_due_to_max_failed_payment` ) - or - `recurring_payment_profile_cancel` w/ `initial_payment_status` ( `failed` )').'.';
 
-					if(empty($_REQUEST['s2member_paypal_proxy'])) // Only on true PayPal IPNs; e.g., we can bypass this on proxied IPNs.
+					if(empty($paypal['proxy_verified'])) //261110.1954 Only native PayPal IPNs need this delay; use authenticated origin.
 					{
 						$paypal['s2member_log'][] = 'Sleeping for 15 seconds. Waiting for a possible ( `subscr_signup|subscr_modify|recurring_payment_profile_created` ).';
 						sleep(15); // Sleep here for a moment. PayPal sometimes sends a subscr_eot before the subscr_signup, subscr_modify.
