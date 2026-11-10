@@ -15,6 +15,10 @@
  * @package s2Member\Utilities
  * @since 110912
  */
+//261110.1730 This utility is loaded before WordPress defines ABSPATH in s2Member-only mode.
+if(!defined('ABSPATH') && !defined('_WS_PLUGIN__S2MEMBER_ONLY'))
+	exit('Do not access this file directly.');
+
 if(!class_exists('c_ws_plugin__s2member_utils_s2o'))
 {
 	/**
