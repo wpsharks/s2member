@@ -116,7 +116,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 
 					//250606 Added option to skip domain validation.
 					if ($recipient_verified && ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']
-					|| ($ipn_host !== '' && !empty($paypal['custom']) && preg_match('/^'.preg_quote($ipn_host, '/').'/i', $paypal['custom']))))
+					|| ($ipn_host !== '' && !empty($paypal['custom']) && c_ws_plugin__s2member_paypal_utilities::paypal_custom_origin_matches($paypal['custom'], $ipn_host))))
 					{
 						if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) 
 							$paypal['s2member_log'][] = 's2Member originating domain validation was skipped.';

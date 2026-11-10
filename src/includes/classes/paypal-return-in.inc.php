@@ -90,7 +90,7 @@ if (!class_exists ("c_ws_plugin__s2member_paypal_return_in"))
 											{
 												$payment_status_issues = "/^(failed|denied|expired|refunded|partially_refunded|reversed|reversal|canceled_reversal|voided)$/i";
 
-												if (!empty($paypal["custom"]) && preg_match ("/^" . preg_quote (preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"]), "/") . "/i", $paypal["custom"]))
+												if (!empty($paypal["custom"]) && c_ws_plugin__s2member_paypal_utilities::paypal_custom_origin_matches($paypal["custom"], preg_replace ("/\:([0-9]+)$/", "", $_SERVER["HTTP_HOST"])))
 													{
 														$paypal["s2member_log"][] = "s2Member originating domain ( `\$_SERVER[\"HTTP_HOST\"]` ) validated.";
 

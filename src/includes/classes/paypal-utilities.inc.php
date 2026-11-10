@@ -151,6 +151,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				/**
 				 * Verify the account receiving a native PayPal IPN against this site's merchant settings.
 				 *
+				 * @since 261110.2142
+				 *
 				 * @param array $postvars Verified PayPal notification fields.
 				 *
 				 * @return bool Whether the recipient is the configured PayPal merchant.
@@ -178,7 +180,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return ($merchant_email !== '' && $receiver_email !== '' && strcasecmp($merchant_email, $receiver_email) === 0);
 					}
 				/**
-				 * 261110.2228 Validate native PayPal payment completion before granting access; preserve nonpayment and proxy event semantics.
+				 * Validate native PayPal payment completion before granting access; preserve nonpayment and proxy event semantics.
+				 *
+				 * @since 261110.2228
 				 *
 				 * @param array $postvars Authenticated gateway payment or subscription fields.
 				 * @param string $payment_status_issues Legacy rejected statuses for other gateway events.
@@ -201,6 +205,26 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							return true;
 						return is_string($postvars['payment_status'])
 							&& ($payment_status_issues === '' || !preg_match($payment_status_issues, $postvars['payment_status']));
+					}
+				/**
+				 * Verify the complete host portion of s2Member's PayPal custom field, not just a matching prefix.
+				 *
+				 * @since 261110.2250
+				 *
+				 * @param string $custom Verified payment's custom value (host, optionally followed by pipe-delimited data).
+				 * @param string $host Expected installation host, without a numeric port.
+				 *
+				 * @return bool Whether the custom value identifies the exact installation host.
+				 */
+				public static function paypal_custom_origin_matches($custom, $host)
+					{
+						if(!is_string($custom) || !is_string($host) || $host === '')
+							return false;
+
+						//261110.2250 Preserve the documented host|custom-fields format and custom values created with HTTP_HOST including a numeric port.
+						$custom_parts = explode('|', $custom, 2);
+						$custom_host = preg_replace('/:[0-9]+$/', '', $custom_parts[0]);
+						return strcasecmp($custom_host, $host) === 0;
 					}
 				/**
 				 * Convert PayPal post vars to UTF-8 when PayPal reports a usable charset.
