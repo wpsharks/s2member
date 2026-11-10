@@ -3,8 +3,8 @@
 Plugin Name: s2Member Framework
 Plugin URI: https://s2member.com/
 Tags: membership, content restriction, paid subscriptions, members only, paid access
-Version: 261106
-Stable tag: 261106
+Version: 261110
+Stable tag: 261110
 Tested up to: 7.2-beta4-65283
 Requires at least: 4.2
 Requires PHP: 5.6.2
@@ -176,11 +176,23 @@ Please see: <http://s2member.com/r/translations/>
 
 == Upgrade Notice ==
 
-= v261106 =
+= v261110 =
 
 (SECURITY RELEASE) UPGRADE IMMEDIATELY. v260215 included a CRITICAL VULNERABILITY fix, and you shouldn't wait any longer to update if you're behind.
 
 == Changelog ==
+
+= v261110 =
+
+- (Framework) **Improvement:** Refactored s2Member's Tracking, Notification, and URL template processing to use more efficient single-pass replacements, improving consistency and value handling, while preserving supported replacement codes and custom fields.
+
+- (Framework) **Fix:** Corrected the %%user_email%% and %%user_login%% replacements in payment notification templates, which could leave member email addresses blank and prevent confirmation emails from being sent. Thanks to Hermione for reporting this. See [thread #13719](https://f.wpsharks.com/t/13719).
+
+- (Framework) **Fix:** Prevented PHP warnings when manually adding WordPress users with missing s2Member custom registration fields or EOT values. Thanks to bcolflesh for reporting this. See [thread #13731](https://f.wpsharks.com/t/13731).
+
+- (Framework) **Fix:** Prevented PHP array-to-string conversion warnings when displaying single-select custom registration fields containing unexpected array values. Thanks to bcolflesh for reporting this. See [thread #13732](https://f.wpsharks.com/t/13732).
+
+- (Framework) **Fix:** Restored access to saved Security Encryption Key history when only one recoverable key remains, even if the current key is blank. Also corrected the display of keys containing special characters.
 
 = v261106 =
 
