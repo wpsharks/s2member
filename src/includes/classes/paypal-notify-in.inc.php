@@ -108,12 +108,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 					else if(empty($paypal['custom']))
 						$paypal['custom'] = '';
 					
+					//261110.2142 A PayPal VERIFIED postback does not itself prove that receiver_email/receiver_id belongs to this site's merchant.
+					$recipient_verified = !empty($paypal['proxy_verified']) || c_ws_plugin__s2member_paypal_utilities::paypal_ipn_recipient_matches($paypal);
+
 					//260910.0356 Resolve the expected host consistently across different web-server request environments.
 					$ipn_host = (!empty($_SERVER['HTTP_HOST']) && is_string($_SERVER['HTTP_HOST'])) ? preg_replace('/\:([0-9]+)$/', '', $_SERVER['HTTP_HOST']) : (string)parse_url(home_url('/'), PHP_URL_HOST);
 
 					//250606 Added option to skip domain validation.
-					if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']
-					|| ($ipn_host !== '' && !empty($paypal['custom']) && preg_match('/^'.preg_quote($ipn_host, '/').'/i', $paypal['custom'])))
+					if ($recipient_verified && ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']
+					|| ($ipn_host !== '' && !empty($paypal['custom']) && preg_match('/^'.preg_quote($ipn_host, '/').'/i', $paypal['custom']))))
 					{
 						if ($GLOBALS['WS_PLUGIN__']['s2member']['o']['skip_ipn_domain_validation']) 
 							$paypal['s2member_log'][] = 's2Member originating domain validation was skipped.';
@@ -175,6 +178,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 						}
 						else unset($__refs, $__v); // Else a custom conditional has been applied by Filters.
 					}
+					else if(!$recipient_verified)
+						$paypal['s2member_log'][] = 'Unable to verify the PayPal payment recipient against this site\'s configured PayPal account. No membership action was taken.';
+
 					else if(!empty($paypal['txn_type']) && preg_match('/^recurring_payment_profile_cancel$/i', $paypal['txn_type']))
 					{
 						$paypal['s2member_log'][] = 'Transaction type (`recurring_payment_profile_cancel`), but there is no match to an existing account; so verification of `$_SERVER["HTTP_HOST"]` was not possible.';

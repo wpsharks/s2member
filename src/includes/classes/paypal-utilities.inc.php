@@ -149,6 +149,34 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 					}
 				/**
+				 * Verify the account receiving a native PayPal IPN against this site's merchant settings.
+				 *
+				 * @param array $postvars Verified PayPal notification fields.
+				 *
+				 * @return bool Whether the recipient is the configured PayPal merchant.
+				 */
+				public static function paypal_ipn_recipient_matches($postvars)
+					{
+						if(!is_array($postvars))
+							return false;
+
+						$merchant_id = (isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_merchant_id']) && is_string($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_merchant_id'])) ? trim($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_merchant_id']) : '';
+						$merchant_email = (isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business']) && is_string($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business'])) ? trim($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business']) : '';
+
+						//261110.2142 Prefer the PayPal account ID when both sides provide one; email aliases may differ on the same merchant account.
+						if(isset($postvars['receiver_id']) && !is_string($postvars['receiver_id']))
+							return false;
+						$receiver_id = isset($postvars['receiver_id']) ? trim($postvars['receiver_id']) : '';
+						if($merchant_id !== '' && $receiver_id !== '')
+							return hash_equals($merchant_id, $receiver_id);
+
+						//261110.2142 Older subscription events may omit receiver_id; fall back to the verified recipient email.
+						if(isset($postvars['receiver_email']) && !is_string($postvars['receiver_email']))
+							return false;
+						$receiver_email = isset($postvars['receiver_email']) ? trim($postvars['receiver_email']) : '';
+						return ($merchant_email !== '' && $receiver_email !== '' && strcasecmp($merchant_email, $receiver_email) === 0);
+					}
+				/**
 				 * Convert PayPal post vars to UTF-8 when PayPal reports a usable charset.
 				 *
 				 * @since 260603
