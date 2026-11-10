@@ -1088,7 +1088,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 				if($destination === 'tracking')
 				{
 					//261109.1820 Keep '+' in email aliases and similar identifiers; replacing it breaks real tracking values.
-					//261109.1820 Tracking templates can contain HTML or JavaScript, so other syntax characters still need context-aware handling before being allowed.
+					//261110.0631 TO-DO: The shared tracking alphabet changes legitimate punctuation in names,
+					//261110.0631 product titles, and email addresses. Explore format-aware escaping for
+					//261110.0631 HTML, JavaScript, and URL tracking templates with compatibility and security QA
+					//261110.0631 before relaxing the current normalization rules.
 					return preg_replace('/[^A-Za-z0-9 @._+-]+/', '-', remove_accents($value));
 				}
 
