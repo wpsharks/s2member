@@ -190,13 +190,13 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		}
 
 		/**
-		 * Sanitizes a string by breaking PHP opening tags (including encoded/mixed/double-encoded forms).
+		 * Rejects values containing PHP opening tags (including encoded/mixed/double-encoded forms).
 		 *
 		 * @package s2Member\Utilities
 		 * @since 241207
 		 *
 		 * @param string $input Input string to sanitize.
-		 * @return string Original input when safe, otherwise decoded string with PHP opening tags removed.
+		 * @return string Original input when safe; a dash when PHP opening tags are detected.
 		 */
 		public static function strip_php_tags($input = '') {
 				$copy = (string) $input;
@@ -208,27 +208,22 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 						$copy = rawurldecode($copy);                        // %3C, %3F, %3E, etc.
 				}
 
-				// If no opener after normalization, return the original.
-				if (strpos($copy, '<?') === false) {
-					return $input;
+				//261109.1512 Decode only for PHP-tag detection; return the original safe value so its final output context controls encoding.
+				if (strpos($copy, '<?') !== false) {
+					return '-';
 				}
 
-				// Break all openers by removing all occurrences of '<?'.
-				while (strpos($copy, '<?') !== false) {
-						$copy = str_replace('<?', 'NEUTERED_', $copy);
-				}
-
-				return $copy;
+				return $input;
 		}
 
 		/**
-		 * Recursively breaks PHP opening tags from strings in arrays/objects using strip_php_tags().
+		 * Recursively replaces suspicious values in arrays/objects using strip_php_tags().
 		 *
 		 * @package s2Member\Utilities
 		 * @since 251002
 		 *
 		 * @param mixed $input A scalar, array, or object to sanitize.
-		 * @return mixed The sanitized value with PHP opening tags removed from all scalar leaves.
+		 * @return mixed Original structure with suspicious scalar values replaced by a dash.
 		 */
 		public static function strip_php_tags_deep($input) {
 				if (is_array($input)) {
@@ -743,6 +738,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		 */
 		public static function paypal_template_values($paypal, $coupon = array(), $locals = array())
 		{
+			//261109.1531 Collect PayPal and local context independently: IPN variants may omit values that later templates still reference.
 			$values = array();
 			foreach(array('txn_id', 'txn_baid', 'txn_cid', 'subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'item_number', 'item_name', 'first_name', 'last_name', 'payer_email', 'initial', 'regular', 'initial_term', 'regular_term', 'recurring') as $key)
 				$values[$key] = (isset($paypal[$key]) && is_scalar($paypal[$key])) ? (string)$paypal[$key] : '';
@@ -756,30 +752,309 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 			$values['initial_cycle'] = $initial_term_is_valid ? c_ws_plugin__s2member_utils_time::period_term($values['initial_term']) : '';
 			$values['regular_cycle'] = $regular_term_is_valid ? c_ws_plugin__s2member_utils_time::period_term($values['regular_term'], $values['recurring']) : '';
 			$values['recurring/regular_cycle'] = $values['recurring'] ? ($regular_term_is_valid ? $values['recurring'].' / '.c_ws_plugin__s2member_utils_time::period_term($values['regular_term'], TRUE) : '') : '0 / non-recurring';
+
+			//261109.1531 Coupon placeholders come from parsed coupon details rather than the basic PayPal IPN fields.
 			foreach(array('full_coupon_code' => 'full_coupon_code', 'coupon_code' => 'coupon_code', 'coupon_affiliate_id' => 'affiliate_id') as $key => $coupon_key)
 				$values[$key] = isset($coupon[$coupon_key]) && is_scalar($coupon[$coupon_key]) ? (string)$coupon[$coupon_key] : '';
 
+			//261109.1531 Access and registration links are generated locally and are absent from many IPN events.
 			foreach(array('sp_access_url', 'registration_url') as $key)
 				if(isset($locals[$key])) $values[$key] = (string)$locals[$key];
 			if(isset($paypal['hours']))
 				$values['sp_access_exp'] = c_ws_plugin__s2member_utils_time::approx_time_difference(time(), strtotime('+'.$paypal['hours'].' hours'));
 
+			//261109.1531 Use the resolved WordPress member for profile placeholders; the PayPal payload alone cannot supply them.
 			if(isset($locals['user']) && is_object($locals['user']))
 			{
 				$user = $locals['user'];
-				foreach(array('first_name', 'last_name', 'user_email', 'user_login') as $key)
-					if(isset($user->$key)) $values['user_'.$key] = (string)$user->$key;
+				//261109.1512 WP_User has first_name/last_name, but user_email/user_login already include the prefix; avoid user_user_email/login keys.
+				foreach(array('first_name', 'last_name') as $key)
+				{
+					if(isset($user->$key))
+					{
+						$values['user_'.$key] = (string)$user->$key;
+					}
+				}
+				foreach(array('user_email', 'user_login') as $key)
+				{
+					if(isset($user->$key))
+					{
+						$values[$key] = (string)$user->$key;
+					}
+				}
 				$values['user_full_name'] = trim((isset($user->first_name) ? $user->first_name : '').' '.(isset($user->last_name) ? $user->last_name : ''));
 			}
+
 			if(isset($locals['user_id'])) $values['user_id'] = (string)$locals['user_id'];
 			if(isset($locals['modifying'])) $values['modification'] = (string)(int)$locals['modifying'];
+
+			//261109.1531 Make custom profile fields available to eligible flows; the per-flow allowlist below decides which may render.
 			if(isset($locals['fields']) && is_array($locals['fields']))
 				foreach($locals['fields'] as $key => $value)
 					if(is_string($key) && !array_key_exists(strtolower($key), $values)) $values[strtolower($key)] = maybe_serialize($value);
 
+			//261109.1531 PayPal custom segments are positional cvN values; preserve their original order.
 			foreach(explode('|', isset($paypal['custom']) ? (string)$paypal['custom'] : '') as $i => $value)
 				$values['cv'.$i] = trim($value);
+
 			return $values;
+		}
+
+		/**
+		 * Returns the supported tracking fields for a PayPal return flow.
+		 *
+		 * @since 261107
+		 */
+		public static function paypal_return_template_values($paypal, $locals, $flow)
+		{
+			$values = self::paypal_template_values($paypal, array(), $locals);
+
+			//261109.1512 Each return flow historically exposed different tracking placeholders; avoid exposing all collected PayPal/user fields.
+			$common = array('currency', 'currency_symbol', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email');
+			$subscriptions = array('subscr_id', 'subscr_baid', 'subscr_cid', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term');
+			$user = array('user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id');
+			$fields = FALSE;
+
+			switch($flow)
+			{
+				case 'sp':
+					$allowed = array_merge($common, array('amount', 'txn_id', 'txn_baid', 'txn_cid', 'user_ip'));
+					break;
+				case 'member_signup':
+					$allowed = array_merge($common, $subscriptions, array('user_ip'));
+					break;
+				case 'member_modify':
+				case 'subscr_modify':
+					$allowed = array_merge($common, $subscriptions, $user);
+					$fields = TRUE;
+					break;
+				case 'ccap':
+					$allowed = array_merge($common, array('amount', 'txn_id', 'txn_baid', 'txn_cid', 'subscr_id', 'subscr_baid', 'subscr_cid'), $user);
+					$fields = TRUE;
+					//261109.1512 Capability purchases also support legacy subscr_* placeholders, populated from the transaction IDs.
+					foreach(array('id', 'baid', 'cid') as $suffix)
+						$values['subscr_'.$suffix] = $values['txn_'.$suffix];
+					break;
+				default:
+					return array();
+			}
+
+			//261109.1512 Custom profile fields were available in modification/capability tracking, not signup or specific-post tracking.
+			if($fields && isset($locals['fields']) && is_array($locals['fields']))
+			{
+				foreach($locals['fields'] as $key => $value)
+				{
+					if(is_string($key) && !in_array(strtolower($key), $allowed, TRUE))
+					{
+						$values[strtolower($key)] = maybe_serialize($value);
+						$allowed[] = strtolower($key);
+					}
+				}
+			}
+
+			//261109.1531 Specific-post return tracking uses the IPN address, not the saved member registration IP.
+			if($flow === 'sp') $values['user_ip'] = isset($paypal['ip']) ? (string)$paypal['ip'] : '';
+
+			//261109.1512 Limit cvN placeholders to positions supplied by the PayPal custom field; do not expose arbitrary indices.
+			foreach(explode('|', isset($paypal['custom']) ? (string)$paypal['custom'] : '') as $i => $unused)
+				$allowed[] = 'cv'.$i;
+			return array_intersect_key($values, array_fill_keys($allowed, TRUE));
+		}
+
+
+		/**
+		 * Returns supported tracking fields for each PayPal IPN flow.
+		 *
+		 * @since 261109
+		 */
+		public static function paypal_ipn_tracking_values($paypal, $coupon, $locals, $flow)
+		{
+			//261109.1512 Preserve the legacy placeholders per tracking flow; a shared broad list would expose fields absent from some events.
+			static $allowed_lists = array(
+				'subscr-modify-w-level-6-code' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-wa-w-level-6-code' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-wa-w-level-12-code' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+				'wa-ccaps-wo-level-7-code' => array('subscr_id', 'txn_id', 'subscr_baid', 'txn_baid', 'subscr_cid', 'txn_cid', 'currency', 'currency_symbol', 'amount', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'web-accept-sp-7-code' => array('amount', 'txn_id', 'currency', 'currency_symbol', 'txn_baid', 'txn_cid', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+			);
+
+			if(!isset($allowed_lists[$flow])) return array();
+			$allowed = $allowed_lists[$flow];
+			$values = self::paypal_template_values($paypal, $coupon, $locals);
+
+			//261109.1531 Legacy capability-purchase templates accept subscription IDs as aliases of transaction IDs.
+			if(strpos($flow, 'wa-ccaps-wo-level-') === 0)
+			{
+				foreach(array('id', 'baid', 'cid') as $suffix)
+				{
+					$values['subscr_'.$suffix] = $values['txn_'.$suffix];
+				}
+			}
+
+			//261109.1531 Some IPN tracking events use the gateway request IP rather than the saved registration IP.
+			if($flow === 'subscr-or-wa-w-level-12-code' || $flow === 'web-accept-sp-7-code')
+				$values['user_ip'] = isset($paypal['ip']) ? (string)$paypal['ip'] : '';
+
+			//261109.1531 Only these tracking contexts historically expose arbitrary custom profile fields.
+			$profile_flows = array('subscr-modify-w-level-6-code', 'subscr-or-wa-w-level-6-code', 'wa-ccaps-wo-level-7-code');
+			if(in_array($flow, $profile_flows, TRUE) && isset($locals['fields']) && is_array($locals['fields']))
+			{
+				foreach($locals['fields'] as $key => $value)
+				{
+					if(is_string($key) && !array_key_exists(strtolower($key), $values))
+					{
+						$values[strtolower($key)] = maybe_serialize($value);
+					}
+				}
+			}
+			if(in_array($flow, $profile_flows, TRUE) && isset($locals['fields']) && is_array($locals['fields']))
+			{
+				foreach($locals['fields'] as $key => $unused)
+				{
+					if(is_string($key))
+					{
+						$allowed[] = strtolower($key);
+					}
+				}
+			}
+
+			//261109.1531 The PayPal custom field defines the allowed cvN positions, even when later templates name higher indices.
+			foreach(explode('|', isset($paypal['custom']) ? (string)$paypal['custom'] : '') as $i => $unused)
+				$allowed[] = 'cv'.$i;
+			return array_intersect_key($values, array_fill_keys($allowed, TRUE));
+		}
+
+
+		/**
+		 * Returns supported values for each PayPal notification template.
+		 *
+		 * @since 261109
+		 */
+		public static function paypal_ipn_template_values($paypal, $coupon, $locals, $group)
+		{
+			//261109.1512 Numeric suffixes (e.g., -1-rec/-2-sbj/-3-msg) identify template call sites, not membership levels.
+			//261109.1512 Each call site has its own placeholder allowlist; fill_paypal_template_once() handles destination-specific escaping.
+			static $allowed_lists = array(
+				'sp-refund-reversal-1-url' => array('parent_txn_id', 'parent_txn_baid', 'parent_txn_cid', 'item_number', 'item_name', 'currency', 'currency_symbol', '-amount', '-fee', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip'),
+				'sp-refund-reversal-2-msg' => array('parent_txn_id', 'parent_txn_baid', 'parent_txn_cid', 'item_number', 'item_name', 'currency', 'currency_symbol', '-amount', '-fee', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip'),
+
+				'subscr-modify-w-level-1-rec' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'initial_term', 'regular_term', 'initial_cycle', 'regular_cycle', 'recurring', 'recurring/regular_cycle', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-modify-w-level-2-sbj' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'initial_term', 'regular_term', 'initial_cycle', 'regular_cycle', 'recurring', 'recurring/regular_cycle', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-modify-w-level-3-msg' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'initial_term', 'regular_term', 'initial_cycle', 'regular_cycle', 'recurring', 'recurring/regular_cycle', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-modify-w-level-4-url' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-modify-w-level-5-msg' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+
+				'subscr-or-rp-cancellation-w-level-1-url' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'item_number', 'item_name', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-rp-cancellation-w-level-2-msg' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'item_number', 'item_name', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+
+				'subscr-or-rp-eots-w-level-1-url' => array('eot_del_type', 'subscr_id', 'subscr_baid', 'subscr_cid', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-rp-eots-w-level-2-msg' => array('eot_del_type', 'subscr_id', 'subscr_baid', 'subscr_cid', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-rp-eots-w-level-3-url' => array('subscr_id', 'parent_txn_id', 'subscr_baid', 'subscr_cid', 'item_number', 'item_name', 'currency', 'currency_symbol', '-amount', '-fee', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'user_id'),
+				'subscr-or-rp-eots-w-level-4-msg' => array('subscr_id', 'parent_txn_id', 'subscr_baid', 'subscr_cid', 'item_number', 'item_name', 'currency', 'currency_symbol', '-amount', '-fee', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'user_id'),
+
+				'subscr-or-rp-payment-w-level-1-url' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'amount', 'txn_id', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-rp-payment-w-level-2-msg' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'amount', 'txn_id', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+
+				'subscr-or-wa-w-level-1-rec' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'initial_term', 'regular_term', 'initial_cycle', 'regular_cycle', 'recurring', 'recurring/regular_cycle', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-wa-w-level-2-sbj' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'initial_term', 'regular_term', 'initial_cycle', 'regular_cycle', 'recurring', 'recurring/regular_cycle', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-wa-w-level-3-msg' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'initial_term', 'regular_term', 'initial_cycle', 'regular_cycle', 'recurring', 'recurring/regular_cycle', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-wa-w-level-4-url' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-wa-w-level-5-msg' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-wa-w-level-7-rec' => array('registration_url', 'subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'initial_term', 'regular_term', 'initial_cycle', 'regular_cycle', 'recurring', 'recurring/regular_cycle', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+				'subscr-or-wa-w-level-8-sbj' => array('registration_url', 'subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'initial_term', 'regular_term', 'initial_cycle', 'regular_cycle', 'recurring', 'recurring/regular_cycle', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+				'subscr-or-wa-w-level-9-msg' => array('registration_url', 'subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'initial_term', 'regular_term', 'initial_cycle', 'regular_cycle', 'recurring', 'recurring/regular_cycle', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+				'subscr-or-wa-w-level-10-url' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+				'subscr-or-wa-w-level-11-msg' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+				'subscr-or-wa-w-level-13-url' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'initial', 'regular', 'recurring', 'initial_term', 'regular_term', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'modification', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-wa-w-level-14-url' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'amount', 'txn_id', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'subscr-or-wa-w-level-15-msg' => array('subscr_id', 'subscr_baid', 'subscr_cid', 'currency', 'currency_symbol', 'amount', 'txn_id', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+
+				'wa-ccaps-wo-level-1-rec' => array('subscr_id', 'txn_id', 'subscr_baid', 'txn_baid', 'subscr_cid', 'txn_cid', 'currency', 'currency_symbol', 'amount', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'wa-ccaps-wo-level-2-sbj' => array('subscr_id', 'txn_id', 'subscr_baid', 'txn_baid', 'subscr_cid', 'txn_cid', 'currency', 'currency_symbol', 'amount', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'wa-ccaps-wo-level-3-msg' => array('subscr_id', 'txn_id', 'subscr_baid', 'txn_baid', 'subscr_cid', 'txn_cid', 'currency', 'currency_symbol', 'amount', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'wa-ccaps-wo-level-4-url' => array('subscr_id', 'txn_id', 'subscr_baid', 'txn_baid', 'subscr_cid', 'txn_cid', 'currency', 'currency_symbol', 'amount', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'wa-ccaps-wo-level-5-url' => array('subscr_id', 'txn_id', 'subscr_baid', 'txn_baid', 'subscr_cid', 'txn_cid', 'currency', 'currency_symbol', 'amount', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+				'wa-ccaps-wo-level-6-msg' => array('subscr_id', 'txn_id', 'subscr_baid', 'txn_baid', 'subscr_cid', 'txn_cid', 'currency', 'currency_symbol', 'amount', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'user_first_name', 'user_last_name', 'user_full_name', 'user_email', 'user_login', 'user_ip', 'user_id'),
+
+				'web-accept-sp-1-rec' => array('txn_id', 'amount', 'currency', 'currency_symbol', 'txn_baid', 'txn_cid', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'sp_access_url', 'sp_access_exp'),
+				'web-accept-sp-2-sbj' => array('txn_id', 'amount', 'currency', 'currency_symbol', 'txn_baid', 'txn_cid', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'sp_access_url', 'sp_access_exp'),
+				'web-accept-sp-3-msg' => array('txn_id', 'amount', 'currency', 'currency_symbol', 'txn_baid', 'txn_cid', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id', 'sp_access_url', 'sp_access_exp'),
+				'web-accept-sp-4-url' => array('sp_access_url', 'sp_access_exp', 'currency', 'currency_symbol', 'amount', 'txn_id', 'txn_baid', 'txn_cid', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+				'web-accept-sp-5-msg' => array('sp_access_url', 'sp_access_exp', 'currency', 'currency_symbol', 'amount', 'txn_id', 'txn_baid', 'txn_cid', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+				'web-accept-sp-6-url' => array('sp_access_url', 'sp_access_exp', 'currency', 'currency_symbol', 'amount', 'txn_id', 'txn_baid', 'txn_cid', 'item_number', 'item_name', 'first_name', 'last_name', 'full_name', 'payer_email', 'user_ip', 'full_coupon_code', 'coupon_code', 'coupon_affiliate_id'),
+			);
+
+			if(!isset($allowed_lists[$group])) return array();
+			$allowed = $allowed_lists[$group];
+			$values = self::paypal_template_values($paypal, $coupon, $locals);
+
+			//261109.1531 Refund/reversal templates use parent transaction IDs plus their separate -amount/-fee placeholders.
+			foreach(array('parent_txn_id','parent_txn_baid','parent_txn_cid') as $key)
+				$values[$key] = isset($paypal[$key]) && is_scalar($paypal[$key]) ? (string)$paypal[$key] : '';
+			$values['-amount'] = isset($paypal['mc_gross']) ? (string)$paypal['mc_gross'] : '';
+			$values['-fee'] = isset($paypal['mc_fee']) ? (string)$paypal['mc_fee'] : '';
+			$values['eot_del_type'] = isset($locals['eot_del_type']) ? (string)$locals['eot_del_type'] : '';
+
+			//261109.1531 Capability notification templates support subscription-ID aliases for their transaction identifiers.
+			if(strpos($group, 'wa-ccaps-wo-level-') === 0)
+			{
+				foreach(array('id','baid','cid') as $suffix)
+				{
+					$values['subscr_'.$suffix] = $values['txn_'.$suffix];
+				}
+			}
+
+			//261109.1531 These notification contexts expose the gateway IP, while other contexts may use the saved registration IP.
+			if(preg_match('/^(subscr-or-wa-w-level-(7|8|9|10|11)-|web-accept-sp-)/', $group))
+				$values['user_ip'] = isset($paypal['ip']) ? (string)$paypal['ip'] : '';
+
+			//261109.1531 Custom profile fields belong only to these notification templates; other events must keep their historical field lists.
+			$profile_groups = array(
+				'subscr-modify-w-level-5-msg',
+				'subscr-modify-w-level-4-url',
+				'subscr-or-rp-cancellation-w-level-2-msg',
+				'subscr-or-rp-cancellation-w-level-1-url',
+				'subscr-or-rp-eots-w-level-4-msg',
+				'subscr-or-rp-eots-w-level-3-url',
+				'subscr-or-rp-eots-w-level-2-msg',
+				'subscr-or-rp-eots-w-level-1-url',
+				'subscr-or-rp-payment-w-level-2-msg',
+				'subscr-or-rp-payment-w-level-1-url',
+				'subscr-or-wa-w-level-15-msg',
+				'subscr-or-wa-w-level-14-url',
+				'subscr-or-wa-w-level-13-url',
+				'subscr-or-wa-w-level-5-msg',
+				'subscr-or-wa-w-level-4-url',
+				'wa-ccaps-wo-level-6-msg',
+				'wa-ccaps-wo-level-5-url',
+				'wa-ccaps-wo-level-4-url',
+			);
+			if(in_array($group, $profile_groups, TRUE) && isset($locals['fields']) && is_array($locals['fields']))
+			{
+				foreach($locals['fields'] as $key => $value)
+				{
+					if(is_string($key) && !array_key_exists(strtolower($key), $values))
+					{
+						$values[strtolower($key)] = maybe_serialize($value);
+					}
+				}
+			}
+
+			if(in_array($group, $profile_groups, TRUE) && isset($locals['fields']) && is_array($locals['fields']))
+			{
+				foreach($locals['fields'] as $key => $unused)
+				{
+					if(is_string($key))
+					{
+						$allowed[] = strtolower($key);
+					}
+				}
+			}
+
+			//261109.1531 The PayPal custom field defines the allowed cvN positions, even when later templates name higher indices.
+			foreach(explode('|', isset($paypal['custom']) ? (string)$paypal['custom'] : '') as $i => $unused)
+				$allowed[] = 'cv'.$i;
+			return array_intersect_key($values, array_fill_keys($allowed, TRUE));
 		}
 
 		/**
@@ -790,30 +1065,43 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 		public static function fill_paypal_template_once($template, $values, $destination = 'text')
 		{
 			$values = array_change_key_case((array)$values, CASE_LOWER);
+
 			return preg_replace_callback('/%%(.+?)%%/i', function($match) use($values, $destination)
 			{
 				$key = strtolower($match[1]);
-				if(!array_key_exists($key, $values)) return '';
-				$value = (string)$values[$key];
-				if($destination === 'url') return urlencode($value);
+
+				//261109.1531 Unknown placeholders are removed except for proxy return URLs, where a later consumer must resolve them.
+				if(!array_key_exists($key, $values)) return ($destination === 'url-preserve') ? $match[0] : '';
+				$value = self::strip_php_tags((string)$values[$key]);
+
+				//261109.1531 Apply URL parameter encoding here; sp_access_url deliberately uses rawurlencode() instead of urlencode().
+				if($destination === 'url' || $destination === 'url-preserve') return ($key === 'sp_access_url') ? rawurlencode($value) : urlencode($value);
 				if($destination === 'html') return esc_html($value);
+
+				//261109.1531 Mail headers must not contain CR/LF/NUL, even if the source is a configured template.
 				if($destination === 'recipient' || $destination === 'subject')
 				{
 					$value = str_replace(array("\r", "\n", "\0"), '', $value);
 					return ($destination === 'recipient' && in_array($key, array('first_name', 'last_name', 'full_name'), TRUE)) ? self::esc_dq($value) : $value;
 				}
+
 				if($destination === 'tracking')
 				{
-					//261015.0435 Tracking markup may be HTML or JavaScript; preserve a readable nonstructural alphabet only.
-					return preg_replace('/[^A-Za-z0-9 @._-]+/', '-', remove_accents($value));
+					//261109.1820 Keep '+' in email aliases and similar identifiers; replacing it breaks real tracking values.
+					//261110.0631 TO-DO: The shared tracking alphabet changes legitimate punctuation in names,
+					//261110.0631 product titles, and email addresses. Explore format-aware escaping for
+					//261110.0631 HTML, JavaScript, and URL tracking templates with compatibility and security QA
+					//261110.0631 before relaxing the current normalization rules.
+					return preg_replace('/[^A-Za-z0-9 @._+-]+/', '-', remove_accents($value));
 				}
+
 				return $value;
 			}, (string)$template);
 		}
 
 		/**
-		 * Generates a harmless intermediate string for legacy nested IPN guards.
-		 * Only the final rendering of the saved original template is used for output.
+		 * Generates a placeholder-only template preview without applying payment values.
+		 * 261109.1514 Core IPN handlers now render templates directly; keep this public helper for compatibility.
 		 * @since 261015
 		 */
 		public static function paypal_template_preview($template)

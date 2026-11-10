@@ -263,6 +263,13 @@ if(!class_exists('c_ws_plugin__s2member_utilities'))
 		 */
 		public static function mail($to, $subject, $message, $headers = '', $attachments = [])
 		{
+			//261109.1750 TO-DO: Unify plaintext and HTML confirmation-email delivery behind an explicit
+			// content type, with separate regression coverage before altering existing behavior.
+			// Plaintext IPN confirmations call wp_mail() directly with temporary sender filters;
+			// HTML-enabled ones use this helper, which detects HTML heuristically, may run wpautop(),
+			// and releases its sender filters before calling wp_mail(). API notifications stay plaintext.
+			// Preserve configured From headers, filters/hooks, template escaping, and formatting.
+
 			// If From: not already in headers, add it using configured options.
 			if (stripos($headers, 'From:') === false) {
 				c_ws_plugin__s2member_email_configs::email_config(); // Setup From filters

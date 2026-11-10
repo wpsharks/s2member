@@ -1,3 +1,15 @@
+= v261110 =
+
+- (Framework) **Improvement:** Refactored s2Member's Tracking, Notification, and URL template processing to use more efficient single-pass replacements, improving consistency and value handling, while preserving supported replacement codes and custom fields.
+
+- (Framework) **Fix:** Corrected the %%user_email%% and %%user_login%% replacements in payment notification templates, which could leave member email addresses blank and prevent confirmation emails from being sent. Thanks to Hermione for reporting this. See [thread #13719](https://f.wpsharks.com/t/13719).
+
+- (Framework) **Fix:** Prevented PHP warnings when manually adding WordPress users with missing s2Member custom registration fields or EOT values. Thanks to bcolflesh for reporting this. See [thread #13731](https://f.wpsharks.com/t/13731).
+
+- (Framework) **Fix:** Prevented PHP array-to-string conversion warnings when displaying single-select custom registration fields containing unexpected array values. Thanks to bcolflesh for reporting this. See [thread #13732](https://f.wpsharks.com/t/13732).
+
+- (Framework) **Fix:** Restored access to saved Security Encryption Key history when only one recoverable key remains, even if the current key is blank. Also corrected the display of keys containing special characters.
+
 = v261106 =
 
 - (Pro) **Enhancement:** Added optional `rs` (Regular Start) and `sa` (Starting Amount) shortcode attributes to pro-forms and PayPal buttons to schedule the first regular payment for a calendar date. For example, `rs="01"` schedules it for the first day of the month, while `rs="01-01"` schedules it for January 1, provided the date falls within one regular billing period. The initial period is prorated automatically using actual calendar days. Use `sa` to override the calculated amount with a fixed one, or make the initial period free with `sa="0"` where supported by the payment gateway.

@@ -106,37 +106,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_wa_ccaps_wo_level'))
 
 								$paypal['s2member_log'][] = 'Transient Tracking Cookie set on ( `web_accept` ) w/ update vars for Capabilities w/o Level.';
 
+								//261109.1531 Return-page tracking: restrict placeholders to this purchase flow before queuing the code for the visitor.
 								if($processing && ($code = $GLOBALS['WS_PLUGIN__']['s2member']['o']['ccap_tracking_codes']))
 								{
-									if(($code = c_ws_plugin__s2member_utils_strings::fill_cvs($code, $paypal['custom'])) && ($code = preg_replace('/%%(?:subscr|txn)_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $code)))
-										if(($code = preg_replace('/%%(?:subscr|txn)_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_baid']), $code)) && ($code = preg_replace('/%%(?:subscr|txn)_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_cid']), $code)))
-											if(($code = preg_replace('/%%currency%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency']), $code)) && ($code = preg_replace('/%%currency_symbol%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['currency_symbol']), $code)))
-												if(($code = preg_replace('/%%amount%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['mc_gross']), $code)) && ($code = preg_replace('/%%txn_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['txn_id']), $code)))
-													if(($code = preg_replace('/%%item_number%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_number']), $code)) && ($code = preg_replace('/%%item_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['item_name']), $code)))
-														if(($code = preg_replace('/%%first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['first_name']), $code)) && ($code = preg_replace('/%%last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['last_name']), $code)))
-															if(($code = preg_replace('/%%full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($paypal['first_name'].' '.$paypal['last_name'])), $code)))
-																if(($code = preg_replace('/%%payer_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($paypal['payer_email']), $code)))
-																{
-																	if(($code = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->first_name), $code)) && ($code = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->last_name), $code)))
-																		if(($code = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($user->first_name.' '.$user->last_name)), $code)))
-																			if(($code = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_email), $code)))
-																				if(($code = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_login), $code)))
-																					if(($code = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $code)))
-																						if(($code = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $code)))
-																						{
-																							if(is_array($fields) && !empty($fields))
-																								foreach($fields as $var => $val /* Custom Registration/Profile Fields. */)
-																									if(!($code = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $code)))
-																										break;
-
-																							if(($code = trim(preg_replace('/%%(.+?)%%/i', '', $code))) /* This gets stored into a Transient Queue. */)
-																							{
-																								$paypal['s2member_log'][] = 'Storing Payment Tracking Codes into a Transient Queue. These will be processed on-site.';
-																								set_transient('s2m_'.md5('s2member_transient_ccap_tracking_codes_'.$paypal['txn_id']), $code, 43200);
-																							}
-																						}
-																}
+									$tracking_values = c_ws_plugin__s2member_utils_strings::paypal_return_template_values($paypal, get_defined_vars(), 'ccap');
+									$tracking_values['subscr_id'] = $tracking_values['txn_id'];
+									$tracking_values['subscr_baid'] = $tracking_values['txn_baid'];
+									$tracking_values['subscr_cid'] = $tracking_values['txn_cid'];
+									if(($code = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($code, $tracking_values, 'tracking'))))
+									{
+										$paypal['s2member_log'][] = 'Storing Payment Tracking Codes into a Transient Queue. These will be processed on-site.';
+										$code = str_replace('<?', '-', $code); //261109.1512 The tracking template itself may contain PHP openers, even when interpolated values are sanitized.
+										set_transient('s2m_'.md5('s2member_transient_ccap_tracking_codes_'.$paypal['txn_id']), $code, 43200);
+									}
 								}
+
 								foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 								do_action('ws_plugin__s2member_during_paypal_return_during_new_ccaps', get_defined_vars());
 								unset($__refs, $__v);

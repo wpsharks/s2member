@@ -125,7 +125,12 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_gen_ops"))
 				echo '<input type="text" maxlength="256" autocomplete="off" name="ws_plugin__s2member_sec_encryption_key" id="ws-plugin--s2member-sec-encryption-key" value="'.format_to_edit($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]).'"'.(($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) ? ' disabled="disabled"' : '').' />'."\n";
 				//260810 Make the configured-key guidance explicit without implying that a separate key is required.
 				echo (!$GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"]) ? '<br />If you configure a separate key, use at least 60 characters. It may contain letters, numbers, spaces, and punctuation; up to 256 characters.<br /><em>Ex: <code>'.esc_html(strtoupper(c_ws_plugin__s2member_utils_strings::random_str_gen(64))).'</code></em>'."\n" : '';
-				echo (count($GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key_history"]) > 1) ? '<br /><a href="#" onclick="ws_plugin__s2member_securityKeyHistory(); return false;">Click here</a> for a history of your last 10 configured Security Encryption Keys.<div id="ws-plugin--s2member-sec-encryption-key-history" style="display:none;"><code>'.implode('</code><br /><code>', $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key_history"]).'</code></div>'."\n" : '';
+				//261109.2140 A single stored key may still be recoverable when the current key is blank or differs from it; a matching entry alone needs no history link.
+				$sec_encryption_key_history = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key_history"];
+				$sec_encryption_key = $GLOBALS["WS_PLUGIN__"]["s2member"]["o"]["sec_encryption_key"];
+				$show_sec_encryption_key_history = !empty($sec_encryption_key_history) && (count($sec_encryption_key_history) > 1 || !in_array($sec_encryption_key, $sec_encryption_key_history, TRUE));
+				//261109.2140 Stored keys may contain HTML-special characters; render them as text when the history is revealed.
+				echo $show_sec_encryption_key_history ? '<br /><a href="#" onclick="ws_plugin__s2member_securityKeyHistory(); return false;">Click here</a> for a history of your last 10 configured Security Encryption Keys.<div id="ws-plugin--s2member-sec-encryption-key-history" style="display:none;"><code>'.implode('</code><br /><code>', array_map('esc_html', $sec_encryption_key_history)).'</code></div>'."\n" : '';
 				echo '</td>'."\n";
 
 				echo '</tr>'."\n";
