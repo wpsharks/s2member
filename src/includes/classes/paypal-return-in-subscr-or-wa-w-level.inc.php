@@ -50,7 +50,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_subscr_or_wa_w_level'))
 			   && (!empty($paypal['subscr_id']) || (!empty($paypal['txn_id']) && ($paypal['subscr_id'] = $paypal['txn_id'])))
 			   && (!empty($paypal['subscr_baid']) || ($paypal['subscr_baid'] = $paypal['subscr_id']))
 			   && (!empty($paypal['subscr_cid']) || ($paypal['subscr_cid'] = $paypal['subscr_id']))
-			   && (empty($paypal['payment_status']) || empty($payment_status_issues) || !preg_match($payment_status_issues, $paypal['payment_status']))
+			   && c_ws_plugin__s2member_paypal_utilities::paypal_payment_status_allows_access($paypal, $payment_status_issues)
 			)
 			{
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;

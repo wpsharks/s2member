@@ -170,11 +170,37 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if($merchant_id !== '' && $receiver_id !== '')
 							return hash_equals($merchant_id, $receiver_id);
 
+						//261110.2223 TO-DO: Consider an optional, site-owner-verified primary PayPal recipient email for legacy IPNs without receiver_id. PayPal can report its primary email when paypal_business is a secondary alias; do not trust the IPN business field.
 						//261110.2142 Older subscription events may omit receiver_id; fall back to the verified recipient email.
 						if(isset($postvars['receiver_email']) && !is_string($postvars['receiver_email']))
 							return false;
 						$receiver_email = isset($postvars['receiver_email']) ? trim($postvars['receiver_email']) : '';
 						return ($merchant_email !== '' && $receiver_email !== '' && strcasecmp($merchant_email, $receiver_email) === 0);
+					}
+				/**
+				 * 261110.2228 Validate native PayPal payment completion before granting access; preserve nonpayment and proxy event semantics.
+				 *
+				 * @param array $postvars Authenticated gateway payment or subscription fields.
+				 * @param string $payment_status_issues Legacy rejected statuses for other gateway events.
+				 *
+				 * @return bool Whether the event may proceed to the matching handler.
+				 */
+				public static function paypal_payment_status_allows_access($postvars, $payment_status_issues = '')
+					{
+						if(!is_array($postvars))
+							return false;
+
+						//261110.2228 PayPal's VERIFIED response authenticates an event, not receipt of a completed payment.
+						if(empty($postvars['proxy_verified']) && !empty($postvars['txn_type']) && is_string($postvars['txn_type'])
+						&& preg_match('/^(web_accept|subscr_payment|recurring_payment|merch_pmt)$/i', $postvars['txn_type']))
+							return isset($postvars['payment_status']) && is_string($postvars['payment_status'])
+								&& strcasecmp(trim($postvars['payment_status']), 'Completed') === 0;
+
+						//261110.2228 Subscription signups may omit payment_status; existing authenticated proxy integrations use their own status conventions.
+						if(empty($postvars['payment_status']))
+							return true;
+						return is_string($postvars['payment_status'])
+							&& ($payment_status_issues === '' || !preg_match($payment_status_issues, $postvars['payment_status']));
 					}
 				/**
 				 * Convert PayPal post vars to UTF-8 when PayPal reports a usable charset.

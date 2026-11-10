@@ -45,7 +45,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 			if((!empty($paypal['txn_type']) && preg_match('/^(subscr_payment|recurring_payment|merch_pmt)$/i', $paypal['txn_type']))
 			   && ((!empty($paypal['item_number']) || ($paypal['item_number'] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_number($paypal))) && preg_match($GLOBALS['WS_PLUGIN__']['s2member']['c']['membership_item_number_w_level_regex'], $paypal['item_number']))
 			   && (!empty($paypal['subscr_id']) || ($paypal['subscr_id'] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_subscr_id($paypal)))
-			   && (empty($paypal['payment_status']) || empty($payment_status_issues) || !preg_match($payment_status_issues, $paypal['payment_status']))
+			   && c_ws_plugin__s2member_paypal_utilities::paypal_payment_status_allows_access($paypal, $payment_status_issues)
 			   && (!empty($paypal['item_name']) || ($paypal['item_name'] = c_ws_plugin__s2member_paypal_utilities::paypal_pro_item_name($paypal)))
 			   && (!empty($paypal['payer_email']) || ($paypal['payer_email'] = c_ws_plugin__s2member_utils_users::get_user_email_with($paypal['subscr_id'])))
 			   && (!empty($paypal['subscr_baid']) || ($paypal['subscr_baid'] = $paypal['subscr_id']))

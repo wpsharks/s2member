@@ -44,7 +44,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_return_in_web_accept_sp'))
 
 			if((!empty($paypal['txn_type']) && preg_match('/^web_accept$/i', $paypal['txn_type']))
 			   && (!empty($paypal['item_number']) && preg_match($GLOBALS['WS_PLUGIN__']['s2member']['c']['sp_access_item_number_regex'], $paypal['item_number']))
-			   && (empty($paypal['payment_status']) || empty($payment_status_issues) || !preg_match($payment_status_issues, $paypal['payment_status']))
+			   && c_ws_plugin__s2member_paypal_utilities::paypal_payment_status_allows_access($paypal, $payment_status_issues)
 			   && (!empty($paypal['txn_id'])) && (!empty($paypal['txn_baid']) || ($paypal['txn_baid'] = $paypal['txn_id']))
 			   && (!empty($paypal['txn_cid']) || ($paypal['txn_cid'] = $paypal['txn_id']))
 			)
