@@ -146,8 +146,10 @@ if(!class_exists('c_ws_plugin__s2member_database'))
 			if(!hash_equals($parts['token'], $token) || $parts['expires'] <= time())
 				return FALSE;
 
-			//261111.0240 Guarantee a changed value even when renewed twice within one second; compare-and-swap rejects stale updates.
-			$new_expiry = max($parts['expires'] + 1, time() + (int)$lease_seconds);
+			//261111.0524 Do not inflate a sufficient lease on rapid renewals; recheck ownership if no database update is needed.
+			$new_expiry = max($parts['expires'], time() + (int)$lease_seconds);
+			if($new_expiry === $parts['expires'])
+				return self::lock_is_owned($resource, $token);
 			$changed = $wpdb->query($wpdb->prepare("UPDATE `{$wpdb->options}` SET `option_value` = %s WHERE `option_name` = %s AND `option_value` = %s", $new_expiry.':'.$token, $option, $previous));
 			if($changed === FALSE || $wpdb->last_error !== '')
 				return new WP_Error('s2member_lock_database_error', 'Could not renew database lock.');
