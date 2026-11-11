@@ -75,7 +75,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `subscr_payment|recurring_payment` ).';
 					$paypal['s2member_log'][] = 'Duplicate notification. This transaction was already processed via another PayPal notification path. This notification will be ignored.';
 				}
-				else if(!c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire($txn_lock_option, $txn_lock_ttl))
+				//261111.1750 Recurring payments use the shared owned lease across native IPN and Checkout webhook paths; retain the original transaction identity and busy result.
+				else if(!is_string($txn_lock_token = c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire_owned($txn_lock_option, $txn_lock_ttl)))
 				{
 					$paypal['s2member_log'][] = 'Not processing. Duplicate notification.';
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `subscr_payment|recurring_payment` ).';
@@ -210,7 +211,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 
 					//260406 Mark this payment transaction done after the winning PayPal notification path has been accepted or queued.
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($txn_done_option);
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($txn_lock_option);
+					//261111.1750 Release only this worker's token after the legacy completion marker is written.
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($txn_lock_option, $txn_lock_token);
 				}
 				else // Else, this is a duplicate IPN. Must stop here.
 				{
@@ -219,7 +221,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 					$paypal['s2member_log'][] = 'Duplicate IPN. Already processed. This IPN will be ignored.';
 
 					//260406 Release the shared transaction lock when the older exact duplicate-IPN transient check blocks this request.
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($txn_lock_option);
+					//261111.1750 A duplicate-IPN rejection must not release another worker's replacement lease.
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($txn_lock_option, $txn_lock_token);
 				}
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify_after_subscr_payment', get_defined_vars());
