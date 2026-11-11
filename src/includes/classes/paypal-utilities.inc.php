@@ -2427,7 +2427,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 
 						$lock_option = 's2m_ppco_notify_lock_'.md5($done_option);
-						if(!self::dedupe_lock_acquire($lock_option, 900))
+						//261111.0618 Use the shared owner-token lease for Notify forwarding; the bridge also respects active historical timestamp locks.
+						$lock_token = self::dedupe_lock_acquire_owned($lock_option, 900);
+						if(!is_string($lock_token))
 							{
 								if(self::dedupe_done_time_get($done_option, DAY_IN_SECONDS))
 									{
@@ -2494,7 +2496,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 						finally
 							{
-								self::dedupe_lock_release($lock_option);
+								//261111.0618 Only this Notify worker can release its lease; retry paths retain the existing done-marker semantics.
+								self::dedupe_lock_release_owned($lock_option, $lock_token);
 							}
 					}
 
