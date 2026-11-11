@@ -189,7 +189,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				exit();
 			}
 
-			if(!c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire($event_lock_option, $event_lock_ttl))
+			//261111.1723 Webhook retries keep their existing HTTP/done-marker behavior, but only the claiming worker may release this event lease.
+			$event_lock_token = c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire_owned($event_lock_option, $event_lock_ttl);
+			if(!is_string($event_lock_token))
 			{
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
@@ -245,7 +247,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								'subscr_id'  => $subscr_id,
 								'details'    => $subscription_details,
 							));
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500);
 							exit();
 						}
@@ -283,7 +285,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								'invoice'    => $invoice,
 								'recovery'   => $recovery,
 							));
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500);
 							exit();
 						}
@@ -303,7 +305,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 					//260902.0200 CREATED repairs coordinator identity only; it remains unpaid/unfulfilled until PayPal activates the subscription.
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 					status_header(200);
 					exit();
@@ -328,7 +330,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						));
 
 						c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 						status_header(200);
 						exit();
@@ -357,7 +359,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								'subscr_id'  => $subscr_id,
 							));
 
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500);
 							exit();
 						}
@@ -379,12 +381,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								'recovery'   => $activation_recovery,
 							));
 							c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(200);
 							exit();
 						}
 
-						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 						status_header(500);
 						exit();
 					}
@@ -403,12 +405,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						if(empty($button_fulfillment['ok']))
 						{
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'button_subscription_fulfillment_retry', 'subscription_id' => $subscr_id, 'invoice' => (string)$paypal['invoice'], 'error' => !empty($button_fulfillment['error']) ? (string)$button_fulfillment['error'] : 'unknown'));
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500); //260928.1538 Leave the activation event unconsumed so PayPal retries on temporary recovery/Notify failure.
 							exit();
 						}
 						c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 						status_header(200);
 						exit();
 					}
@@ -441,7 +443,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 					//260406 Mark the webhook event done and release its lock for valid terminal events.
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 					status_header(200);
 					exit();
@@ -500,7 +502,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					));
 
 					// A verified but incomplete dispute should be retried; do not mark it complete.
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 					status_header(500);
 					exit();
 				}
@@ -605,7 +607,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						if(!empty($order['__error']))
 						{
 							//260902.0635 Do not consume a coordinator capture webhook when its authoritative order lookup temporarily fails; PayPal can redeliver it.
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500);
 							exit();
 						}
@@ -624,13 +626,13 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 									//260902.0646 A conflicting late webhook is diagnostic only; never let it replace or fulfill against the checkout's authoritative provider identity.
 									c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'capture_recovery_conflict_ignored', 'event_id' => $event_id, 'event_type' => $event_type, 'recovery' => $recovery));
 									c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 									status_header(200);
 									exit();
 								}
 								else
 								{
-									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 									status_header(500);
 									exit();
 								}
@@ -644,7 +646,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								$token = is_array($private_context) && !empty($private_context['paypal_checkout']['token']) && is_array($private_context['paypal_checkout']['token']) ? $private_context['paypal_checkout']['token'] : array();
 								if(!$token || ($validation_error = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_completion_error($order, $order_id, $token)))
 								{
-									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 									status_header(500);
 									exit();
 								}
@@ -652,7 +654,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								$fulfillment = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_fulfill($order, $token);
 								if(empty($fulfillment['ok']))
 								{
-									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 									status_header(500);
 									exit();
 								}
@@ -660,7 +662,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'one_time_capture_recovered', 'event_id' => $event_id, 'event_type' => $event_type, 'order_id' => $order_id, 'capture_id' => $capture_id, 'invoice' => $invoice));
 							c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(200);
 							exit();
 						}
@@ -682,7 +684,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 					//260406 Mark the webhook event done and release its lock for valid terminal events.
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 					status_header(200);
 					exit();
@@ -767,7 +769,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 				//260406 Mark the webhook event done and release its lock for valid terminal events.
 				c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 				status_header(200);
 				exit();
@@ -814,7 +816,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						));
 
 						c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 						status_header(200);
 						exit();
@@ -858,7 +860,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			if($notify_ok)
 			{
 				c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 				if(!empty($txn_done_option))
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($txn_done_option);
@@ -881,7 +883,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			else
 			{
 				//260406 Release the in-flight webhook lock on failure so PayPal retries can proceed.
-				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
