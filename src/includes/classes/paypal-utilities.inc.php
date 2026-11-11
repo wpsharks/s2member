@@ -421,6 +421,83 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return apply_filters("ws_plugin__s2member_paypal_proxy_key_gen", $key, get_defined_vars());
 					}
 				/**
+				 * Check whether an older, timestamp-only PayPal deduplication lock is still active.
+				 *
+				 * This transitional check fails closed on malformed records or database errors. The
+				 * new owner-token locks use a separate namespace and never delete these legacy rows.
+				 *
+				 * @since 261111.0352
+				 *
+				 * @param string $lock_option Existing PayPal lock option name.
+				 * @param int    $lock_timeout Legacy lock lifetime in seconds.
+				 *
+				 * @return bool TRUE when a legacy lock might still be active or cannot be read safely.
+				 */
+				private static function dedupe_lock_legacy_active($lock_option, $lock_timeout)
+					{
+						global $wpdb;
+
+						$value = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $lock_option));
+						if($wpdb->last_error !== '')
+							return TRUE;
+						if($value === NULL)
+							return FALSE;
+						if(!is_string($value) || !preg_match('/^[1-9][0-9]{0,12}$/D', $value))
+							return TRUE;
+
+						return ((int)$value > time() - $lock_timeout);
+					}
+				/**
+				 * Acquire an owner-token lease while respecting still-active legacy PayPal locks.
+				 *
+				 * The old boolean-only dedupe_lock_* API is retained for unmigrated callers.
+				 * This bridge protects new requests but cannot fence already-running PHP workers
+				 * executing an older plugin version; deployments must drain those workers.
+				 *
+				 * @since 261111.0352
+				 *
+				 * @param string $lock_option Original PayPal dedupe lock identity.
+				 * @param int    $lock_timeout Lease duration in seconds.
+				 *
+				 * @return string|bool Owner token on success; FALSE on contention or failure.
+				 */
+				public static function dedupe_lock_acquire_owned($lock_option, $lock_timeout = 900)
+					{
+						if(!is_string($lock_option) || $lock_option === '' || !is_int($lock_timeout) || $lock_timeout < 1 || $lock_timeout > 86400)
+							return FALSE;
+						if(self::dedupe_lock_legacy_active($lock_option, $lock_timeout))
+							return FALSE;
+
+						$resource = 'paypal-dedupe/'.$lock_option;
+						$token = c_ws_plugin__s2member_database::lock_acquire($resource, $lock_timeout);
+						if(!is_string($token)) //261111.0352 WP_Error is truthy; treat database errors as failed acquisition.
+							return FALSE;
+
+						//261111.0352 Recheck the old record after our claim so an overlapping older worker cannot be silently ignored.
+						if(self::dedupe_lock_legacy_active($lock_option, $lock_timeout))
+							{
+								c_ws_plugin__s2member_database::lock_release($resource, $token);
+								return FALSE;
+							}
+						return $token;
+					}
+				/**
+				 * Release a migrated PayPal dedupe lease only when this worker owns its token.
+				 *
+				 * @since 261111.0352
+				 *
+				 * @param string $lock_option Original PayPal lock identity.
+				 * @param string $token Owner token returned by dedupe_lock_acquire_owned().
+				 *
+				 * @return bool Whether this worker released its lease.
+				 */
+				public static function dedupe_lock_release_owned($lock_option, $token)
+					{
+						if(!is_string($lock_option) || $lock_option === '')
+							return FALSE;
+						return c_ws_plugin__s2member_database::lock_release('paypal-dedupe/'.$lock_option, $token) === TRUE;
+					}
+				/**
 				* Acquires a short-lived dedupe lock.
 				*
 				* @package s2Member\PayPal
@@ -2027,8 +2104,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						}
 
 						$capture_lock = $gateway_checkout_id ? '' : 's2m_ppco_capture_lock_'.md5($order_id);
-						if(!$gateway_checkout_id && !self::dedupe_lock_acquire($capture_lock, 300))
-							return array('__error' => 'capture_in_progress');
+						$capture_lock_token = '';
+						if(!$gateway_checkout_id)
+							{
+								//261111.0352 Coordinator-free capture now uses an owner-token lease; keep its existing 300-second timeout and busy result.
+								$capture_lock_token = self::dedupe_lock_acquire_owned($capture_lock, 300);
+								if(!$capture_lock_token)
+									return array('__error' => 'capture_in_progress');
+							}
 
 						try
 						{
@@ -2155,8 +2238,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						{
 							if($gateway_checkout_id && $gateway_checkout_lock)
 								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
-							else if(!$gateway_checkout_id && $capture_lock)
-								self::dedupe_lock_release($capture_lock);
+							else if(!$gateway_checkout_id && $capture_lock_token)
+								self::dedupe_lock_release_owned($capture_lock, $capture_lock_token);
 						}
 					}
 
