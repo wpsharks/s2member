@@ -615,6 +615,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_wa_w_level'))
 
 						$paypal['s2member_log'][] = 'Creating an IPN response for `subscr_payment`. This will go into a Transient Queue; and be processed during registration.';
 
+						//261112.1205 Store each verified payment independently before the legacy single-slot compatibility replay.
+						$merchant = c_ws_plugin__s2member_payment_events::trusted_merchant($paypal['subscr_gateway']);
+						$queued_payment = is_wp_error($merchant) ? $merchant : c_ws_plugin__s2member_payment_events::queue_verified_payment($paypal['subscr_gateway'], $merchant, $ipn);
+						if(is_wp_error($queued_payment))
+							$paypal['s2member_log'][] = 'Durable pending payment queue unavailable ('.$queued_payment->get_error_code().'); retaining legacy transient fallback.';
+						else
+							$paypal['s2member_log'][] = 'Durable pending payment queue status: '.$queued_payment['status'].'.';
+
 						set_transient('s2m_'.md5('s2member_transient_ipn_subscr_payment_'.$paypal['subscr_id']), $ipn, 43200);
 					}
 					if($processing // Store signup vars now? If the User already exists in the database, we can go ahead and store these right now.

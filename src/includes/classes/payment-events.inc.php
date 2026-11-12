@@ -54,6 +54,57 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 		}
 
 		/**
+		 * Obtain an account scope from trusted, configured gateway settings.
+		 *
+		 * This is never read from an IPN or webhook payload. Provider account/key
+		 * rotation can change the derived identity; migrate existing event records
+		 * explicitly when changing a gateway account or configured identifier.
+		 *
+		 * @since 261112.1205
+		 *
+		 * @param string $gateway Authenticated canonical gateway slug.
+		 *
+		 * @return string|WP_Error Configured account scope or a failure to resolve it.
+		 */
+		public static function trusted_merchant($gateway)
+		{
+			if(!is_string($gateway) || !preg_match('/^[a-z0-9_-]{1,48}$/D', $gateway = strtolower(trim($gateway))))
+				return new WP_Error('s2m_pay_invalid_gateway', 'Invalid authenticated payment gateway.');
+			$options = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']) && is_array($GLOBALS['WS_PLUGIN__']['s2member']['o']) ? $GLOBALS['WS_PLUGIN__']['s2member']['o'] : array();
+			$field = '';
+			$kind = 'id';
+			switch($gateway)
+			{
+				case 'paypal':
+					$field = !empty($options['paypal_merchant_id']) ? 'paypal_merchant_id' : 'paypal_business';
+					$kind = $field === 'paypal_business' ? 'email' : 'id';
+					break;
+				case 'stripe': $field = 'pro_stripe_api_publishable_key'; break;
+				case 'authnet': $field = 'pro_authnet_api_login_id'; break;
+				case 'clickbank': $field = 'pro_clickbank_username'; break;
+				case 'alipay': $field = 'pro_alipay_seller_email'; $kind = 'email'; break;
+				case 'google': $field = 'pro_google_merchant_id'; break;
+				case 'ccbill':
+					//261112.1205 Both CCBill account and subaccount are relevant to merchant routing.
+					$client = isset($options['pro_ccbill_client_id']) && is_scalar($options['pro_ccbill_client_id']) ? trim((string)$options['pro_ccbill_client_id']) : '';
+					$sid = isset($options['pro_ccbill_client_sid']) && is_scalar($options['pro_ccbill_client_sid']) ? trim((string)$options['pro_ccbill_client_sid']) : '';
+					if($client === '' || $sid === '')
+						return new WP_Error('s2m_pay_missing_merchant', 'CCBill account identity is not configured.');
+					$merchant = 'id:'.strlen($client).':'.$client.':'.strlen($sid).':'.$sid;
+					return strlen($merchant) <= 254 && !preg_match('/[\x00-\x1f\x7f]/', $merchant) ? $merchant : new WP_Error('s2m_pay_invalid_merchant', 'Invalid configured CCBill account identity.');
+				default:
+					return new WP_Error('s2m_pay_unknown_gateway', 'Gateway account identity is not supported.');
+			}
+			$value = isset($options[$field]) && is_scalar($options[$field]) ? trim((string)$options[$field]) : '';
+			if($value === '')
+				return new WP_Error('s2m_pay_missing_merchant', 'Gateway account identity is not configured.');
+			if($kind === 'email')
+				$value = strtolower($value);
+			$merchant = $kind.':'.$value;
+			return strlen($merchant) <= 254 && !preg_match('/[\x00-\x1f\x7f]/', $merchant) ? $merchant : new WP_Error('s2m_pay_invalid_merchant', 'Invalid configured gateway account identity.');
+		}
+
+		/**
 		 * Read an event receipt without relying on potentially stale option caches.
 		 *
 		 * @since 261111.2149
@@ -85,7 +136,14 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 			       || !preg_match('/^[a-f0-9]{64}$/D', $record['owner']) || $record['attempts'] === 0))
 			   || ($record['status'] !== 'processing' && array_key_exists('owner', $record))
 			   || (array_key_exists('subscription_hash', $record) && (!is_string($record['subscription_hash'])
-			       || !preg_match('/^[a-f0-9]{64}$/D', $record['subscription_hash']))))
+			       || !preg_match('/^[a-f0-9]{64}$/D', $record['subscription_hash'])))
+			   //261112.1300 A processing worker records its irreversible-work boundary before changing a member or calling external hooks.
+			   || (array_key_exists('fulfillment_started', $record) && (!is_int($record['fulfillment_started'])
+			       || $record['fulfillment_started'] < $record['created']))
+			   //261112.1527 A replay permission is immutable first-receipt metadata; old shadow receipts lack it and must not be replayed automatically.
+			   || (array_key_exists('replay_authorized', $record) && $record['replay_authorized'] !== TRUE)
+			   || (array_key_exists('replay_origin', $record) && $record['replay_origin'] !== 'authoritative')
+			   || (isset($record['replay_authorized']) && !isset($record['replay_origin'])))
 				return new WP_Error('s2m_pay_event_invalid_record', 'Payment event record has an unknown format.');
 
 			return $record;
@@ -104,13 +162,16 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 		 * @param string $merchant Trusted merchant identifier from site configuration.
 		 * @param string $transaction Provider transaction ID.
 		 * @param string $event Canonical semantic event type.
+		 * @param bool $authoritative TRUE only when the entire incoming payment flow bypasses legacy transient fulfillment.
 		 *
 		 * @return array|WP_Error Array with `created` flag and `record`, or WP_Error.
 		 */
-		public static function receive($gateway, $merchant, $transaction, $event)
+		public static function receive($gateway, $merchant, $transaction, $event, $authoritative = FALSE)
 		{
 			global $wpdb;
 
+			if(!is_bool($authoritative) || ($authoritative && (!is_string($event) || strtolower(trim($event)) !== 'payment')))
+				return new WP_Error('s2m_pay_event_invalid_origin', 'Invalid payment-event replay origin.');
 			$name = self::option_name($gateway, $merchant, $transaction, $event);
 			if($name === FALSE)
 				return new WP_Error('s2m_pay_event_invalid_identity', 'Invalid payment event identity.');
@@ -126,6 +187,9 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 				'updated' => $now,
 				'attempts' => 0,
 			);
+			//261112.1534 Persist the authoritative origin with the first INSERT, so a pre-enqueue crash remains safely retryable.
+			if($authoritative)
+				$record['replay_origin'] = 'authoritative';
 			$value = wp_json_encode($record);
 			if(!is_string($value))
 				return new WP_Error('s2m_pay_event_encode_failed', 'Could not encode payment event.');
@@ -201,6 +265,14 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 					return $released;
 				return array('claimed' => FALSE, 'status' => $previous['status'], 'record' => $previous);
 			}
+			//261112.1300 A crashed worker may already have applied membership changes or external notifications; never automatically repeat ambiguous effects.
+			if(isset($previous['fulfillment_started']))
+			{
+				$released = c_ws_plugin__s2member_database::lock_release($resource, $token);
+				if(is_wp_error($released))
+					return $released;
+				return new WP_Error('s2m_pay_event_ambiguous_fulfillment', 'Payment fulfillment may have already produced side effects; reconciliation is required before retry.');
+			}
 			if($previous['attempts'] === PHP_INT_MAX)
 			{
 				c_ws_plugin__s2member_database::lock_release($resource, $token);
@@ -222,6 +294,44 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 				return array('claimed' => FALSE, 'status' => 'raced');
 			}
 			return array('claimed' => TRUE, 'status' => 'processing', 'token' => $token, 'record' => $next);
+		}
+
+		/**
+		 * Record the irreversible-fulfillment boundary before modifying user data or firing hooks.
+		 *
+		 * This is a conservative crash barrier, not proof of completed fulfillment. If the
+		 * worker dies after this marker is stored, claim() refuses an automatic replay.
+		 * The operator must reconcile the payment and any external side effects first.
+		 * Callers must confirm a TRUE result before beginning any side effects.
+		 *
+		 * @since 261112.1300
+		 *
+		 * @param string $name Payment event option name.
+		 * @param string $token Current processing lease owner token.
+		 *
+		 * @return bool|WP_Error TRUE only when the marker was recorded by this owner, FALSE on lost ownership or repeat, or WP_Error.
+		 */
+		public static function begin_fulfillment($name, $token)
+		{
+			if(!self::valid_name($name) || !is_string($token) || !preg_match('/^[a-f0-9]{64}$/D', $token))
+				return new WP_Error('s2m_pay_event_invalid_owner', 'Invalid payment event owner.');
+			$previous = self::read($name);
+			if(is_wp_error($previous) || $previous === FALSE)
+				return is_wp_error($previous) ? $previous : FALSE;
+			if($previous['status'] !== 'processing' || !isset($previous['owner']) || !hash_equals($previous['owner'], $token)
+			   || isset($previous['fulfillment_started']))
+				return FALSE;
+			$owned = c_ws_plugin__s2member_database::lock_is_owned(self::lease_resource($name), $token);
+			if($owned !== TRUE)
+				return $owned;
+			$next = $previous;
+			$next['fulfillment_started'] = max(time(), $previous['created']);
+			$next['updated'] = max(time(), $previous['updated']);
+			$changed = self::replace($name, $previous, $next);
+			if($changed !== TRUE)
+				return $changed;
+			//261112.1300 Recheck ownership after CAS: an expired lease must not authorize external side effects.
+			return c_ws_plugin__s2member_database::lock_is_owned(self::lease_resource($name), $token);
 		}
 
 		/**
@@ -405,11 +515,14 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 		 * @param string $gateway Authenticated canonical gateway.
 		 * @param string $merchant Trusted configured merchant identifier.
 		 * @param array $ipn Verified, normalized simulated subscr_payment payload.
+		 * @param bool $authoritative TRUE only for a first-ever payment received on a path with NO legacy fulfillment or transient replay.
 		 *
 		 * @return array|WP_Error `status`, `event`, `created` on success/busy, or WP_Error.
 		 */
-		public static function queue_verified_payment($gateway, $merchant, $ipn)
+		public static function queue_verified_payment($gateway, $merchant, $ipn, $authoritative = FALSE)
 		{
+			if(!is_bool($authoritative))
+				return new WP_Error('s2m_pay_pending_invalid_authority', 'Invalid pending payment replay authorization.');
 			if(!is_array($ipn) || !isset($ipn['txn_type'], $ipn['txn_id'], $ipn['subscr_id'], $ipn['subscr_gateway'])
 			   || !is_string($gateway) || !is_string($ipn['subscr_gateway']) || !is_string($ipn['txn_id'])
 			   || !self::valid_subscription(isset($ipn['subscr_id']) ? $ipn['subscr_id'] : NULL)
@@ -420,12 +533,16 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 			if($name === FALSE)
 				return new WP_Error('s2m_pay_pending_invalid_identity', 'Pending payment identity is invalid.');
 
-			$receipt = self::receive($gateway, $merchant, $ipn['txn_id'], 'payment');
+			$receipt = self::receive($gateway, $merchant, $ipn['txn_id'], 'payment', $authoritative);
 			if(is_wp_error($receipt))
 				return $receipt;
 
 			if($receipt['record']['status'] === 'completed')
 				return array('event' => $name, 'status' => 'completed', 'created' => FALSE);
+
+			//261112.1527 A pre-cutover shadow receipt may have been fulfilled by the legacy transient; never promote it on redelivery.
+			if($authoritative && !isset($receipt['record']['replay_origin']))
+				return new WP_Error('s2m_pay_pending_legacy_shadow', 'Existing payment receipts require reconciliation before authoritative replay.');
 
 			if($receipt['record']['status'] === 'pending_registration')
 			{
@@ -451,6 +568,41 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 			try
 			{
 				$queued = self::queue_pending($gateway, $merchant, $ipn, $claim['token']);
+				if(!is_wp_error($queued) && $authoritative)
+				{
+					//261112.1527 Only a new, immutable queue item from the same first receipt may be authorized for the future consumer.
+					if(!$queued['created'] && !isset($receipt['record']['replay_origin']))
+						$queued = new WP_Error('s2m_pay_pending_legacy_shadow', 'An existing queued payment cannot be promoted to automatic replay.');
+					else
+					{
+						$current = self::read($name);
+						if(is_wp_error($current))
+							$queued = $current;
+						else if($current === FALSE || $current['status'] !== 'processing' || !isset($current['owner'])
+						        || !hash_equals($current['owner'], $claim['token']) || isset($current['fulfillment_started']))
+							$queued = new WP_Error('s2m_pay_pending_lost_owner', 'Cannot authorize a changed or fulfilled payment receipt.');
+						else
+						{
+							$owned = c_ws_plugin__s2member_database::lock_is_owned(self::lease_resource($name), $claim['token']);
+							if($owned !== TRUE)
+								$queued = is_wp_error($owned) ? $owned : new WP_Error('s2m_pay_pending_lost_owner', 'Cannot authorize an expired payment lease.');
+							else
+							{
+								if(!isset($current['replay_origin']))
+									$queued = new WP_Error('s2m_pay_pending_legacy_shadow', 'Untrusted payment origin cannot be authorized for replay.');
+								else if(!isset($current['replay_authorized']))
+								{
+									$authorized = $current;
+									$authorized['replay_authorized'] = TRUE;
+									$authorized['updated'] = max(time(), $current['updated']);
+									$stored = self::replace($name, $current, $authorized);
+									if($stored !== TRUE)
+										$queued = is_wp_error($stored) ? $stored : new WP_Error('s2m_pay_pending_raced', 'Payment receipt changed before replay authorization.');
+								}
+							}
+						}
+					}
+				}
 				if(is_wp_error($queued))
 				{
 					//261112.1116 A failed enqueue is retryable; it must never be marked as a completed payment.
@@ -516,9 +668,43 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 					return is_wp_error($receipt) ? $receipt : new WP_Error('s2m_pay_pending_missing', 'Pending payment has no durable receipt.');
 				if(!isset($receipt['subscription_hash']) || !hash_equals($receipt['subscription_hash'], hash('sha256', $subscription)))
 					return new WP_Error('s2m_pay_pending_subscription_mismatch', 'Pending payment is bound to another subscription.');
-				$entries[] = array('name' => $name, 'event' => $event, 'status' => $receipt['status'], 'ipn' => $record['ipn']);
+				//261112.1527 Old v5 shadow records have no authorization flag, even when a pending row is present.
+				$entries[] = array('name' => $name, 'event' => $event, 'status' => $receipt['status'],
+				                   'replay_authorized' => isset($receipt['replay_authorized']), 'ipn' => $record['ipn']);
 			}
 			return $entries;
+		}
+
+		/**
+		 * Check whether a new, first-receipt payment is eligible for automated registration replay.
+		 *
+		 * This is a read-only prerequisite, NOT a processing claim or proof of fulfillment.
+		 * Consumers must separately claim with ownership, checkpoint side effects, verify
+		 * completion, and acknowledge only a completed receipt. Missing metadata on v5
+		 * shadow receipts is an intentional permanent deny, not an upgrade opportunity.
+		 *
+		 * @since 261112.1527
+		 *
+		 * @param string $subscription Provider subscription ID, case-sensitive.
+		 * @param string $event Durable event option name.
+		 *
+		 * @return bool|WP_Error TRUE only for an authorized, intact pending receipt; FALSE for ineligible state, or WP_Error.
+		 */
+		public static function replay_is_authorized($subscription, $event)
+		{
+			if(!self::valid_subscription($subscription) || !self::valid_name($event))
+				return new WP_Error('s2m_pay_pending_invalid_query', 'Invalid replay eligibility query.');
+			$receipt = self::read($event);
+			if(is_wp_error($receipt) || $receipt === FALSE)
+				return is_wp_error($receipt) ? $receipt : FALSE;
+			if($receipt['status'] !== 'pending_registration' || !isset($receipt['replay_origin']) || !isset($receipt['replay_authorized']))
+				return FALSE;
+			if(!isset($receipt['subscription_hash']) || !hash_equals($receipt['subscription_hash'], hash('sha256', $subscription)))
+				return new WP_Error('s2m_pay_pending_subscription_mismatch', 'Payment event belongs to another subscription.');
+			$pending = self::read_pending(self::pending_name($subscription, $event), $event, $subscription);
+			if(is_wp_error($pending))
+				return $pending;
+			return $pending !== FALSE ? TRUE : new WP_Error('s2m_pay_pending_missing', 'Authorized receipt has no matching replay record.');
 		}
 
 		/**
