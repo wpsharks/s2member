@@ -676,6 +676,96 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 		}
 
 		/**
+		 * Read one cursor-based registration batch without starving newer events behind legacy shadows.
+		 *
+		 * The cursor is the immutable options row ID, not a count of active or authorized
+		 * entries. A caller can continue past any number of ineligible v5 shadow rows
+		 * without OFFSET drift or dropping the next payment at a page boundary.
+		 *
+		 * @since 261112.2203
+		 *
+		 * @param string $subscription Exact provider subscription ID.
+		 * @param int $after_id Last examined options row ID; zero for the first page.
+		 * @param int $limit Rows to examine in one pass (1–100).
+		 *
+		 * @return array|WP_Error Entries, next cursor, and whether another page exists.
+		 */
+		public static function pending_page_for_subscription($subscription, $after_id = 0, $limit = 50)
+		{
+			global $wpdb;
+
+			if(!self::valid_subscription($subscription) || !is_int($after_id) || $after_id < 0
+			   || !is_int($limit) || $limit < 1 || $limit > 100)
+				return new WP_Error('s2m_pay_pending_invalid_query', 'Invalid pending-payment cursor or batch limit.');
+			$prefix = 's2m_pay_pend_'.hash('sha256', $subscription).'_';
+			//261112.2203 Fetch one lookahead row to prove that continuation is needed; no unbounded SQL scan or OFFSET pagination.
+			$rows = $wpdb->get_results($wpdb->prepare("SELECT `option_id`, `option_name` FROM `{$wpdb->options}` WHERE `option_name` LIKE %s AND `option_id` > %d ORDER BY `option_id` ASC LIMIT %d",
+				$wpdb->esc_like($prefix).'%', $after_id, $limit + 1), ARRAY_A);
+			if($wpdb->last_error !== '' || !is_array($rows))
+				return new WP_Error('s2m_pay_pending_database_error', 'Could not read a pending-payment page.');
+			$has_more = count($rows) > $limit;
+			if($has_more)
+				array_pop($rows);
+			$entries = array();
+			$cursor = $after_id;
+			foreach($rows as $row)
+			{
+				$name = isset($row['option_name']) ? $row['option_name'] : '';
+				$id = isset($row['option_id']) ? $row['option_id'] : 0;
+				if(!is_string($name) || !preg_match('/^s2m_pay_pend_[a-f0-9]{64}_[a-f0-9]{64}$/D', $name)
+				   || !is_numeric($id) || (int)$id <= $cursor)
+					return new WP_Error('s2m_pay_pending_invalid_record', 'Pending payment has an invalid ordered cursor.');
+				$event = 's2m_pay_evt_'.substr($name, -64);
+				$pending = self::read_pending($name, $event, $subscription);
+				if(is_wp_error($pending) || $pending === FALSE)
+					return is_wp_error($pending) ? $pending : new WP_Error('s2m_pay_pending_lost', 'Pending payment vanished during enumeration.');
+				$receipt = self::read($event);
+				if(is_wp_error($receipt) || $receipt === FALSE)
+					return is_wp_error($receipt) ? $receipt : new WP_Error('s2m_pay_pending_missing', 'Pending payment has no durable receipt.');
+				if(!isset($receipt['subscription_hash']) || !hash_equals($receipt['subscription_hash'], hash('sha256', $subscription)))
+					return new WP_Error('s2m_pay_pending_subscription_mismatch', 'Pending payment belongs to another subscription.');
+				$cursor = (int)$id;
+				$entries[] = array('name' => $name, 'event' => $event, 'option_id' => $cursor, 'status' => $receipt['status'],
+				                   'gateway' => $receipt['gateway'], 'replay_authorized' => isset($receipt['replay_authorized']),
+				                   'ipn' => $pending['ipn']);
+			}
+			return array('entries' => $entries, 'cursor' => $cursor, 'has_more' => $has_more);
+		}
+
+		/**
+		 * Decide whether the old HTTP transient replay is safe for a given PayPal transaction.
+		 *
+		 * A first-receipt authoritative record, even if its later enqueue failed, owns
+		 * this transaction forever. Never send its legacy transient to another handler.
+		 * Non-PayPal proxy integrations retain their existing legacy behavior for now.
+		 *
+		 * @since 261112.2203
+		 *
+		 * @param array $ipn Original legacy transient data.
+		 *
+		 * @return bool|WP_Error TRUE for legacy, FALSE for an authoritative PayPal event.
+		 */
+		public static function legacy_registration_replay_is_safe($ipn)
+		{
+			if(!is_array($ipn) || !isset($ipn['subscr_gateway']) || $ipn['subscr_gateway'] !== 'paypal')
+				return TRUE;
+			if(!isset($ipn['txn_id'], $ipn['subscr_id']) || !is_string($ipn['txn_id']) || !self::valid_subscription($ipn['subscr_id']))
+				return new WP_Error('s2m_pay_pending_invalid_origin', 'Cannot verify a PayPal legacy payment identity.');
+			$merchant = self::trusted_merchant('paypal');
+			if(is_wp_error($merchant))
+				return $merchant;
+			$name = self::option_name('paypal', $merchant, $ipn['txn_id'], 'payment');
+			if($name === FALSE)
+				return new WP_Error('s2m_pay_pending_invalid_identity', 'Cannot verify a PayPal legacy payment key.');
+			$receipt = self::read($name);
+			if(is_wp_error($receipt) || $receipt === FALSE)
+				return $receipt === FALSE ? TRUE : $receipt;
+			if(isset($receipt['subscription_hash']) && !hash_equals($receipt['subscription_hash'], hash('sha256', $ipn['subscr_id'])))
+				return new WP_Error('s2m_pay_pending_subscription_mismatch', 'Legacy payment identity is bound to another subscription.');
+			return !isset($receipt['replay_origin']);
+		}
+
+		/**
 		 * Check whether a new, first-receipt payment is eligible for automated registration replay.
 		 *
 		 * This is a read-only prerequisite, NOT a processing claim or proof of fulfillment.

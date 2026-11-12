@@ -133,6 +133,8 @@ add_filter('bp_core_get_site_options', 'c_ws_plugin__s2member_option_forces::che
 
 add_filter('random_password', 'c_ws_plugin__s2member_registrations::generate_password');
 add_action('user_register', 'c_ws_plugin__s2member_registrations::configure_user_registration');
+//261112.2203 Continue bounded PayPal registration queue pages in separate WP-Cron requests; each pass revalidates the member binding.
+add_action('ws_plugin__s2member_pending_registration_payment_batch', 'c_ws_plugin__s2member_registrations::consume_pending_registration_payments', 10, 4);
 add_action('register_form', 'c_ws_plugin__s2member_custom_reg_fields::custom_registration_fields');
 add_filter('registration_errors', 'c_ws_plugin__s2member_registrations::custom_registration_field_errors', 10, 3);
 add_filter('send_password_change_email', '__return_false'); // Turn this off in favor of s2Member.

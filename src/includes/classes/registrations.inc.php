@@ -29,6 +29,147 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 	class c_ws_plugin__s2member_registrations
 	{
 		/**
+		 * Schedule owned registration payment processing without delaying the registering member.
+		 *
+		 * Only the exact existing PayPal member is eligible. Scheduling an event is not
+		 * evidence of fulfillment: the Cron consumer still verifies each owned receipt.
+		 *
+		 * @since 261112.2236
+		 *
+		 * @param int $user_id Existing registered member ID.
+		 * @param string $subscription Exact provider subscription ID.
+		 *
+		 * @return bool|WP_Error TRUE if queued, or an explicit failure.
+		 */
+		public static function schedule_pending_registration_payments($user_id, $subscription)
+		{
+			$user_id = (int)$user_id;
+			if($user_id < 1 || !is_string($subscription) || $subscription === '' || strlen($subscription) > 255
+			   || get_user_option('s2member_subscr_id', $user_id) !== $subscription
+			   || get_user_option('s2member_subscr_gateway', $user_id) !== 'paypal'
+			   || (int)c_ws_plugin__s2member_utils_users::get_user_id_with($subscription) !== $user_id)
+				return new WP_Error('s2m_pay_pending_member_mismatch', 'Cannot schedule a payment for an unbound PayPal member.');
+			//261112.2236 No queue SQL or payment hooks execute in the registration request. WP-Cron owns all new durable-queue work.
+			if(!c_ws_plugin__s2member_cron_jobs::maybe_schedule_single_event(
+				'ws_plugin__s2member_pending_registration_payment_batch', time() + 10, array($user_id, $subscription, 0, 0)))
+				return new WP_Error('s2m_pay_pending_initial_unscheduled', 'Could not schedule background payment processing.');
+			return TRUE;
+		}
+
+		/**
+		 * Calculate a conservative, request-relative wall-clock budget for payment callbacks.
+		 *
+		 * Based on Auto-EOT and Pro reminder runtime budgets, but kept payment-specific:
+		 * notification URLs and third-party hooks have different latency and retry risks.
+		 *
+		 * @since 261112.2236
+		 *
+		 * @return float Runtime budget in seconds.
+		 */
+		public static function pending_registration_payment_runtime_budget()
+		{
+			$limit = (int)ini_get('max_execution_time');
+			$automatic = $limit > 0 ? max(1, floor($limit * 0.50)) : 20;
+			//261112.2236 Allow site-specific tuning while keeping headroom under a finite PHP execution limit.
+			$budget = (float)apply_filters('ws_plugin__s2member_pending_registration_payment_runtime', $automatic);
+			return max(1.0, $limit > 0 ? min($budget, max(1, floor($limit * 0.80))) : $budget);
+		}
+
+		/**
+		 * Consume one ordered PayPal payment page within the shared WP-Cron time budget.
+		 *
+		 * Each invocation rechecks user, subscription and gateway; shadows are never
+		 * replayed. A page size bounds SQL reads, not the count of payment side effects.
+		 * Continuation keeps the first unexamined row, including after runtime exhaustion.
+		 *
+		 * @since 261112.2203
+		 *
+		 * @param int $user_id Existing registered member ID.
+		 * @param string $subscription Exact provider subscription ID.
+		 * @param int $after_id Last scanned options row ID.
+		 * @param int $retry Attempt count for transient busy/error recovery (0–2).
+		 *
+		 * @return array|WP_Error Count/status summary, or a fail-closed error.
+		 */
+		public static function consume_pending_registration_payments($user_id, $subscription, $after_id = 0, $retry = 0)
+		{
+			$user_id = (int)$user_id;
+			if($user_id < 1 || !is_string($subscription) || $subscription === '' || strlen($subscription) > 255
+			   || !is_int($after_id) || $after_id < 0 || !is_int($retry) || $retry < 0 || $retry > 2
+			   || get_user_option('s2member_subscr_id', $user_id) !== $subscription
+			   || get_user_option('s2member_subscr_gateway', $user_id) !== 'paypal'
+			   || (int)c_ws_plugin__s2member_utils_users::get_user_id_with($subscription) !== $user_id)
+				return new WP_Error('s2m_pay_pending_member_mismatch', 'Pending payment does not belong to this registered PayPal member.');
+			$runtime_budget = self::pending_registration_payment_runtime_budget();
+			$request_started = isset($_SERVER['REQUEST_TIME_FLOAT']) && is_numeric($_SERVER['REQUEST_TIME_FLOAT'])
+				? (float)$_SERVER['REQUEST_TIME_FLOAT'] : microtime(TRUE);
+			$deadline = $request_started + $runtime_budget;
+			$safety_buffer = min($runtime_budget * 0.25, 1.0);
+			$page = c_ws_plugin__s2member_payment_events::pending_page_for_subscription($subscription, $after_id, 50);
+			if(is_wp_error($page))
+				return $page;
+			$completed = 0;
+			$unresolved = 0;
+			$retryable = FALSE;
+			$cursor = $after_id;
+			$scanned = 0;
+			$effect_duration = 0.0;
+			$last_effect_duration = 0.0;
+			$runtime_exhausted = FALSE;
+			foreach($page['entries'] as $entry)
+			{
+				//261112.2236 Stop before advancing the cursor: an unexamined payment must survive in the next Cron page.
+				$average_effect_duration = ($completed + $unresolved) > 0 ? $effect_duration / ($completed + $unresolved) : 0.0;
+				$estimated_next_duration = max(2.0, $last_effect_duration, $average_effect_duration);
+				if($deadline - microtime(TRUE) <= $safety_buffer + $estimated_next_duration)
+				{
+					$runtime_exhausted = TRUE;
+					break;
+				}
+				$cursor = $entry['option_id'];
+				++$scanned;
+				//261112.2203 Only an immutable authoritative PayPal receipt may enter the v9 owned handler; Pro gateways remain untouched.
+				if(!$entry['replay_authorized'] || $entry['gateway'] !== 'paypal' || $entry['ipn']['subscr_gateway'] !== 'paypal')
+					continue;
+				$effect_started = microtime(TRUE);
+				$result = c_ws_plugin__s2member_payment_events::consume_authorized_registration_payment($subscription, $entry['event'],
+					array('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level', 'fulfill_authorized_registration_payment'));
+				$last_effect_duration = max(0.0, microtime(TRUE) - $effect_started);
+				$effect_duration += $last_effect_duration;
+				if(is_array($result) && $result['status'] === 'completed')
+					++$completed;
+				else
+				{
+					++$unresolved;
+					//261112.2203 Busy or pre-checkpoint faults deserve bounded retry; an ambiguous checkpoint does NOT permit automatic replay.
+					if((is_array($result) && $result['status'] === 'busy')
+					   || (is_wp_error($result) && $result->get_error_code() !== 's2m_pay_event_ambiguous_fulfillment'))
+						$retryable = TRUE;
+					do_action('ws_plugin__s2member_pending_registration_payment_unresolved', $entry['event'], $result);
+				}
+			}
+			$has_more = $page['has_more'] || $cursor < $page['cursor'];
+			if($has_more)
+			{
+				//261112.2236 Leave remaining payment work to a fresh Cron request; the current worker already used its measured budget.
+				$scheduled = c_ws_plugin__s2member_cron_jobs::maybe_schedule_single_event(
+					'ws_plugin__s2member_pending_registration_payment_batch', time() + 10, array($user_id, $subscription, $cursor, 0));
+				if(!$scheduled)
+					return new WP_Error('s2m_pay_pending_continuation_unscheduled', 'Pending payment continuation could not be scheduled.');
+			}
+			if($retryable && $retry < 2)
+			{
+				//261112.2203 Retry the same page at most twice; ambiguous outcomes remain available for explicit reconciliation, not automatic replay.
+				$scheduled = c_ws_plugin__s2member_cron_jobs::maybe_schedule_single_event(
+					'ws_plugin__s2member_pending_registration_payment_batch', time() + 60, array($user_id, $subscription, $after_id, $retry + 1));
+				if(!$scheduled)
+					return new WP_Error('s2m_pay_pending_retry_unscheduled', 'Pending payment retry could not be scheduled.');
+			}
+			return array('completed' => $completed, 'unresolved' => $unresolved, 'scanned' => $scanned,
+			             'cursor' => $cursor, 'has_more' => $has_more, 'stop_reason' => $runtime_exhausted ? 'runtime_budget' : 'page_end');
+		}
+
+		/**
 		 * Custom password; else randomly generated password.
 		 *
 		 * @package s2Member\Registrations
@@ -852,9 +993,24 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											}
 											if(($transient = 's2m_'.md5('s2member_transient_ipn_subscr_payment_'.$subscr_id)) && is_array($subscr_payment = get_transient($transient)) && !empty($subscr_payment['subscr_gateway']))
 											{
-												$proxy = array('s2member_paypal_proxy' => stripslashes((string)$subscr_payment['subscr_gateway']), 's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen());
-												c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'), array_merge(stripslashes_deep($subscr_payment), $proxy), array('timeout' => 20));
-												delete_transient($transient); // This can be deleted now.
+												//261112.2203 A dual-written authoritative receipt must never also execute the old HTTP replay; leave its transient intact for reconciliation.
+												$legacy_safe = c_ws_plugin__s2member_payment_events::legacy_registration_replay_is_safe($subscr_payment);
+												if($legacy_safe === TRUE)
+												{
+													$proxy = array('s2member_paypal_proxy' => stripslashes((string)$subscr_payment['subscr_gateway']), 's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen());
+													c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'), array_merge(stripslashes_deep($subscr_payment), $proxy), array('timeout' => 20));
+													delete_transient($transient); // This can be deleted now.
+												}
+												else
+													do_action('ws_plugin__s2member_pending_registration_legacy_blocked', $user_id, $legacy_safe);
+											}
+											//261112.2203 Drain the new authorized PayPal queue after the registered member binding exists; shadow payments remain legacy-only.
+											if($subscr_gateway === 'paypal')
+											{
+												//261112.2236 Registration has its own membership work; do not make this member wait for payment notifications or other queued payments.
+												$queue_result = self::schedule_pending_registration_payments($user_id, $subscr_id);
+												if(is_wp_error($queue_result))
+													do_action('ws_plugin__s2member_pending_registration_payment_error', $queue_result, $user_id);
 											}
 											if(($transient = 's2m_'.md5('s2member_transient_ipn_subscr_eot_'.$subscr_id)) && is_array($subscr_eot = get_transient($transient)) && !empty($subscr_eot['subscr_gateway']))
 											{
