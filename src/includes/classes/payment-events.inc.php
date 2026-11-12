@@ -393,6 +393,92 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 		}
 
 		/**
+		 * Record one verified payment as pending registration, without fulfilling it.
+		 *
+		 * The caller must already have authenticated the gateway and supplied a merchant
+		 * identity from trusted site settings. Neither a raw IPN nor the gateway field
+		 * in its replay payload can establish those identities. This method only queues
+		 * work; it never claims that a member has received the purchased access.
+		 *
+		 * @since 261112.1116
+		 *
+		 * @param string $gateway Authenticated canonical gateway.
+		 * @param string $merchant Trusted configured merchant identifier.
+		 * @param array $ipn Verified, normalized simulated subscr_payment payload.
+		 *
+		 * @return array|WP_Error `status`, `event`, `created` on success/busy, or WP_Error.
+		 */
+		public static function queue_verified_payment($gateway, $merchant, $ipn)
+		{
+			if(!is_array($ipn) || !isset($ipn['txn_type'], $ipn['txn_id'], $ipn['subscr_id'], $ipn['subscr_gateway'])
+			   || !is_string($gateway) || !is_string($ipn['subscr_gateway']) || !is_string($ipn['txn_id'])
+			   || !self::valid_subscription(isset($ipn['subscr_id']) ? $ipn['subscr_id'] : NULL)
+			   || $ipn['txn_type'] !== 'subscr_payment' || strtolower(trim($gateway)) !== strtolower(trim($ipn['subscr_gateway'])))
+				return new WP_Error('s2m_pay_pending_invalid_origin', 'Pending payment requires a verified matching gateway and payment identity.');
+
+			$name = self::option_name($gateway, $merchant, $ipn['txn_id'], 'payment');
+			if($name === FALSE)
+				return new WP_Error('s2m_pay_pending_invalid_identity', 'Pending payment identity is invalid.');
+
+			$receipt = self::receive($gateway, $merchant, $ipn['txn_id'], 'payment');
+			if(is_wp_error($receipt))
+				return $receipt;
+
+			if($receipt['record']['status'] === 'completed')
+				return array('event' => $name, 'status' => 'completed', 'created' => FALSE);
+
+			if($receipt['record']['status'] === 'pending_registration')
+			{
+				//261112.1116 A pending status without its matching queue row is inconsistent; never acknowledge it as queued.
+				$subscription_hash = hash('sha256', $ipn['subscr_id']);
+				if(!isset($receipt['record']['subscription_hash']) || !hash_equals($receipt['record']['subscription_hash'], $subscription_hash))
+					return new WP_Error('s2m_pay_pending_subscription_mismatch', 'Pending payment is not bound to this subscription.');
+				$existing = self::read_pending(self::pending_name($ipn['subscr_id'], $name), $name, $ipn['subscr_id']);
+				if(is_wp_error($existing))
+					return $existing;
+				if($existing === FALSE)
+					return new WP_Error('s2m_pay_pending_missing', 'Pending receipt has no matching replay record.');
+				return array('event' => $name, 'status' => 'pending_registration', 'created' => FALSE);
+			}
+
+			$claim = self::claim($name, 300);
+			if(is_wp_error($claim))
+				return $claim;
+			if(empty($claim['claimed']))
+				return array('event' => $name, 'status' => $claim['status'], 'created' => FALSE);
+
+			$result = new WP_Error('s2m_pay_pending_unknown_outcome', 'Payment queue outcome is unknown.');
+			try
+			{
+				$queued = self::queue_pending($gateway, $merchant, $ipn, $claim['token']);
+				if(is_wp_error($queued))
+				{
+					//261112.1116 A failed enqueue is retryable; it must never be marked as a completed payment.
+					$failed = self::transition($name, $claim['token'], 'failed');
+					$result = is_wp_error($failed) ? $failed : ($failed === TRUE ? $queued : new WP_Error('s2m_pay_pending_lost_owner', 'Could not persist the failed queue outcome.'));
+				}
+				else
+				{
+					//261112.1116 Record pending only after the separate replay row is durably written.
+					$pending = self::transition($name, $claim['token'], 'pending_registration');
+					$result = is_wp_error($pending) ? $pending : ($pending === TRUE
+						? array('event' => $name, 'status' => 'pending_registration', 'created' => $queued['created'])
+						: new WP_Error('s2m_pay_pending_lost_owner', 'Could not persist the pending payment outcome.'));
+				}
+			}
+			finally
+			{
+				//261112.1116 Always release our own lease, including after a database exception during enqueue.
+				$released = self::release($name, $claim['token']);
+			}
+			if(is_wp_error($released))
+				return $released;
+			if($released !== TRUE)
+				return new WP_Error('s2m_pay_pending_lost_owner', 'Payment queue lease was lost.');
+			return $result;
+		}
+
+		/**
 		 * List a bounded batch of distinct registration payments in insert order.
 		 *
 		 * Entries are returned even if a receipt is already completed, so callers can
