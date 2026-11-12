@@ -708,6 +708,146 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 		}
 
 		/**
+		 * Process exactly one authorized pending registration payment under its event lease.
+		 *
+		 * This is a lower-level consumer primitive, not a registration hook. The callback
+		 * must be an audited, in-process handler that returns TRUE only after it has
+		 * verified the required membership updates and notification attempts. Neither
+		 * an HTTP status nor a gateway acknowledgement is sufficient completion proof.
+		 * Do not call this with an untrusted callback or activate authoritative producers
+		 * until the registration and gateway integrations have been jointly tested.
+		 *
+		 * @since 261112.1932
+		 *
+		 * @param string $subscription Exact case-sensitive provider subscription ID.
+		 * @param string $event Durable payment-event option name.
+		 * @param callable $fulfill Internal verified handler; receives IPN, event name, token, and must return exactly TRUE on verified fulfillment.
+		 * @param int $lease_seconds Processing lease (1 to 86400 seconds).
+		 *
+		 * @return array|WP_Error `status`, `event`, and `acknowledged` on completion, or a safe non-processing status/error.
+		 */
+		public static function consume_authorized_registration_payment($subscription, $event, $fulfill, $lease_seconds = 300)
+		{
+			if(!self::valid_subscription($subscription) || !self::valid_name($event) || !is_callable($fulfill)
+			   || !is_int($lease_seconds) || $lease_seconds < 1 || $lease_seconds > 86400)
+				return new WP_Error('s2m_pay_pending_invalid_consumer', 'Invalid pending payment consumer request.');
+
+			$receipt = self::read($event);
+			if(is_wp_error($receipt) || $receipt === FALSE)
+				return is_wp_error($receipt) ? $receipt : new WP_Error('s2m_pay_pending_missing', 'Pending payment receipt is missing.');
+
+			//261112.1932 A completed receipt can survive a crash before queue acknowledgement; never fulfill it twice.
+			if($receipt['status'] === 'completed')
+				return self::acknowledge_authoritative_completion($subscription, $event);
+
+			if($receipt['status'] === 'pending_registration')
+				$eligible = self::replay_is_authorized($subscription, $event);
+			else if(in_array($receipt['status'], array('processing', 'failed'), TRUE)
+			        && isset($receipt['replay_origin'], $receipt['replay_authorized']))
+			{
+				//261112.1936 A worker may crash after authorizing the queue but before changing processing to pending; only its immutable original replay can resume.
+				if(!isset($receipt['subscription_hash']) || !hash_equals($receipt['subscription_hash'], hash('sha256', $subscription)))
+					return new WP_Error('s2m_pay_pending_subscription_mismatch', 'Payment event belongs to another subscription.');
+				$pending = self::read_pending(self::pending_name($subscription, $event), $event, $subscription);
+				$eligible = is_wp_error($pending) ? $pending : $pending !== FALSE;
+			}
+			else
+				$eligible = FALSE;
+			if(is_wp_error($eligible))
+				return $eligible;
+			if($eligible !== TRUE)
+				return array('event' => $event, 'status' => 'ineligible');
+
+			//261112.2034 Let claim() arbitrate checkpointed work: an active owner is busy, while an expired or released lease with possible effects requires reconciliation.
+			$claim = self::claim($event, $lease_seconds, TRUE);
+			if(is_wp_error($claim))
+				return $claim;
+			if(empty($claim['claimed']))
+			{
+				if($claim['status'] === 'completed')
+					return self::acknowledge_authoritative_completion($subscription, $event);
+				return array('event' => $event, 'status' => $claim['status']);
+			}
+
+			$result = new WP_Error('s2m_pay_pending_unknown_outcome', 'Registration payment processing ended without verified completion.');
+			try
+			{
+				//261112.1932 Re-read the original queue row under the claim; never pass a stale or mutable replay to the handler.
+				$pending = self::read_pending(self::pending_name($subscription, $event), $event, $subscription);
+				if(is_wp_error($pending) || $pending === FALSE)
+					$result = is_wp_error($pending) ? $pending : new WP_Error('s2m_pay_pending_missing', 'Pending replay disappeared before fulfillment.');
+				else
+				{
+					//261112.1932 Persist the irreversible-work barrier BEFORE calling any handler capable of updating a user or sending notifications.
+					$begun = self::begin_fulfillment($event, $claim['token']);
+					if($begun !== TRUE)
+						$result = is_wp_error($begun) ? $begun : new WP_Error('s2m_pay_pending_lost_owner', 'Payment lease was lost before fulfillment.');
+					else
+					{
+						$verified = FALSE;
+						try
+						{
+							$verified = call_user_func($fulfill, $pending['ipn'], $event, $claim['token']);
+						}
+						catch(\Throwable $error)
+						{
+							//261112.1932 A thrown side-effect handler leaves an ambiguous outcome; retain the receipt and replay row for reconciliation.
+							$verified = FALSE;
+						}
+						$next_status = ($verified === TRUE) ? 'completed' : 'failed';
+						$transitioned = self::transition($event, $claim['token'], $next_status);
+						if($transitioned !== TRUE)
+							$result = is_wp_error($transitioned) ? $transitioned : new WP_Error('s2m_pay_pending_lost_owner', 'Unable to persist the payment fulfillment outcome.');
+						else if($verified !== TRUE)
+							$result = new WP_Error('s2m_pay_event_ambiguous_fulfillment', 'Payment handler did not verify completion; manual reconciliation is required.');
+						else
+							$result = TRUE;
+					}
+				}
+			}
+			finally
+			{
+				//261112.1932 A failed or throwing callback must not strand an owned lease; never release another worker's token.
+				$released = self::release($event, $claim['token']);
+			}
+			if(is_wp_error($released))
+				return $released;
+			if($released !== TRUE)
+				return new WP_Error('s2m_pay_pending_lost_owner', 'The payment event lease could not be released.');
+			if($result !== TRUE)
+				return $result;
+
+			//261112.1932 The queue is acknowledged only after a fresh durable completed read, never from callback success alone.
+			return self::acknowledge_authoritative_completion($subscription, $event);
+		}
+
+		/**
+		 * Verify authoritative completion and acknowledge its queued payment exactly once.
+		 *
+		 * @since 261112.1932
+		 *
+		 * @param string $subscription Original provider subscription ID.
+		 * @param string $event Durable event name.
+		 *
+		 * @return array|WP_Error Completed outcome or refusal to acknowledge an unverified/legacy receipt.
+		 */
+		private static function acknowledge_authoritative_completion($subscription, $event)
+		{
+			$receipt = self::read($event);
+			if(is_wp_error($receipt) || $receipt === FALSE)
+				return is_wp_error($receipt) ? $receipt : new WP_Error('s2m_pay_pending_missing', 'Completed payment receipt is missing.');
+			if(!isset($receipt['subscription_hash']) || !hash_equals($receipt['subscription_hash'], hash('sha256', $subscription)))
+				return new WP_Error('s2m_pay_pending_subscription_mismatch', 'Payment event belongs to another subscription.');
+			//261112.1932 A terminal status alone is not completion proof for shadow/legacy entries or records missing the effects checkpoint.
+			if($receipt['status'] !== 'completed' || !isset($receipt['replay_origin'], $receipt['replay_authorized'], $receipt['fulfillment_started']))
+				return new WP_Error('s2m_pay_pending_unverified_completion', 'Automatic acknowledgement requires an authorized, checkpointed completion.');
+			$acknowledged = self::acknowledge_pending($subscription, $event);
+			if(is_wp_error($acknowledged))
+				return $acknowledged;
+			return array('event' => $event, 'status' => 'completed', 'acknowledged' => $acknowledged);
+		}
+
+		/**
 		 * Delete a pending replay only after its corresponding receipt is completed.
 		 *
 		 * @since 261112.0600
