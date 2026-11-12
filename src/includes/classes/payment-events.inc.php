@@ -708,6 +708,50 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 		}
 
 		/**
+		 * Confirm an internal handler still owns the exact authorized, checkpointed payment.
+		 *
+		 * This is NOT a payment-authentication endpoint. Only call it after a gateway
+		 * notification has been authenticated, durably queued, and claimed by the
+		 * registration consumer. Do not derive merchant identity from the replay IPN.
+		 *
+		 * @since 261112.2104
+		 *
+		 * @param string $gateway Canonical gateway selected by the internal handler.
+		 * @param array $ipn Original, immutable queued payment payload.
+		 * @param string $event Expected durable payment-event option name.
+		 * @param string $token Current event processing lease owner.
+		 *
+		 * @return bool|WP_Error TRUE only for the currently owned fulfillment checkpoint.
+		 */
+		public static function fulfillment_claim_is_authorized($gateway, $ipn, $event, $token)
+		{
+			if(!is_string($gateway) || !is_array($ipn) || !isset($ipn['subscr_gateway'], $ipn['subscr_id'], $ipn['txn_id'], $ipn['txn_type'])
+			   || !is_string($ipn['subscr_gateway']) || !is_string($ipn['txn_id']) || !self::valid_subscription($ipn['subscr_id'])
+			   || $ipn['txn_type'] !== 'subscr_payment' || !self::valid_name($event)
+			   || !is_string($token) || !preg_match('/^[a-f0-9]{64}$/D', $token))
+				return FALSE;
+			$gateway = strtolower(trim($gateway));
+			if($ipn['subscr_gateway'] !== $gateway)
+				return FALSE;
+			$merchant = self::trusted_merchant($gateway);
+			if(is_wp_error($merchant))
+				return $merchant;
+			$name = self::option_name($gateway, $merchant, $ipn['txn_id'], 'payment');
+			if($name === FALSE || !hash_equals($name, $event))
+				return FALSE;
+			$receipt = self::read($event);
+			if(is_wp_error($receipt) || $receipt === FALSE)
+				return $receipt;
+			//261112.2104 All four conditions are required; even a valid queue payload cannot authorize a stale, shadow, or uncheckpointed handler.
+			if($receipt['gateway'] !== $gateway || $receipt['event'] !== 'payment' || $receipt['status'] !== 'processing'
+			   || !isset($receipt['owner'], $receipt['replay_origin'], $receipt['replay_authorized'], $receipt['fulfillment_started'], $receipt['subscription_hash'])
+			   || !hash_equals($receipt['owner'], $token)
+			   || !hash_equals($receipt['subscription_hash'], hash('sha256', $ipn['subscr_id'])))
+				return FALSE;
+			return c_ws_plugin__s2member_database::lock_is_owned(self::lease_resource($event), $token);
+		}
+
+		/**
 		 * Process exactly one authorized pending registration payment under its event lease.
 		 *
 		 * This is a lower-level consumer primitive, not a registration hook. The callback

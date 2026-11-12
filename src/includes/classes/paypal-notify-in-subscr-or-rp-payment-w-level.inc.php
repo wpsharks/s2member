@@ -29,6 +29,48 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 	class c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level
 	{
 		/**
+		 * Fulfill one authenticated PayPal registration replay in-process.
+		 *
+		 * Only the owned registration consumer may call this with its checkpointed
+		 * token. The queued IPN was authenticated at receipt time; it is NOT a new
+		 * native IPN, and must not be sent through the public proxy endpoint or
+		 * rejected by legacy cross-channel duplicate markers set during enqueue.
+		 * Other gateway proxy integrations are deliberately unsupported until audited.
+		 *
+		 * @since 261112.2104
+		 *
+		 * @param array $ipn Original durable, verified PayPal payment payload.
+		 * @param string $event Expected durable event name.
+		 * @param string $token Event lease owner established by the registration consumer.
+		 *
+		 * @return bool TRUE only after the existing member/payment/hook path reached its verified end.
+		 */
+		public static function fulfill_authorized_registration_payment($ipn, $event, $token)
+		{
+			if(!is_array($ipn) || !isset($ipn['subscr_gateway']) || $ipn['subscr_gateway'] !== 'paypal')
+				return FALSE;
+			$authorized = c_ws_plugin__s2member_payment_events::fulfillment_claim_is_authorized('paypal', $ipn, $event, $token);
+			if($authorized !== TRUE)
+				return FALSE;
+			//261112.2104 No registration-to-user binding means no fulfillment; never create a new legacy transient from an authoritative replay.
+			$user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($ipn['subscr_id']);
+			if(!$user_id || !is_object($user = new WP_User($user_id)) || !$user->ID
+			   || get_user_option('s2member_subscr_id', $user_id) !== $ipn['subscr_id'])
+				return FALSE;
+			//261112.2104 This internal provenance skips only the legacy duplicate gate; the caller must already own the durable payment lease.
+			$paypal = $ipn;
+			$paypal['proxy_verified'] = 'paypal';
+			$paypal['s2member_log'] = array();
+			$_paypal_s = serialize($paypal);
+			$payment_status_issues = '/^(failed|denied|expired|refunded|partially_refunded|reversed|reversal|canceled_reversal|voided)$/i';
+			$coupon = array('full_coupon_code' => '', 'coupon_code' => '', 'affiliate_id' => '');
+			$handled = self::cp(array('paypal' => &$paypal, '_paypal_s' => $_paypal_s, 'coupon' => $coupon,
+			                           'payment_status_issues' => $payment_status_issues,
+			                           's2m_authoritative_event' => $event, 's2m_authoritative_token' => $token));
+			return is_array($handled) && !empty($handled['s2member_authoritative_completion_verified']) && $handled['s2member_authoritative_completion_verified'] === TRUE;
+		}
+
+		/**
 		 * s2Member's PayPal IPN handler (inner processing routine).
 		 *
 		 * @package s2Member\PayPal
@@ -57,6 +99,13 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 				do_action('ws_plugin__s2member_during_paypal_notify_before_subscr_payment', get_defined_vars());
 				unset($__refs, $__v);
 
+				//261112.2104 A replay must prove its active checkpoint again after pre-payment hooks, which may modify the IPN by reference.
+				$authorized_replay = isset($s2m_authoritative_event, $s2m_authoritative_token)
+				                     && c_ws_plugin__s2member_payment_events::fulfillment_claim_is_authorized('paypal', $paypal, $s2m_authoritative_event, $s2m_authoritative_token) === TRUE;
+				//261112.2104 An expired or changed internal claim must fail closed, never drop into the ordinary legacy-IPN path.
+				if((isset($s2m_authoritative_event) || isset($s2m_authoritative_token)) && !$authorized_replay)
+					return FALSE;
+
 				//260406 Cross-channel payment dedupe for PayPal recurring/subscription payments; first arrival wins across webhook proxy and native IPN.
 				$txn_dedupe_key = md5(strtolower((string)$paypal['subscr_id']).'|'.strtolower((string)$paypal['txn_id']));
 				$txn_lock_option = 's2m_paypal_txn_lock_'.$txn_dedupe_key;
@@ -69,20 +118,20 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 					array('prefix' => 's2m_paypal_txn_done_', 'ttl' => $txn_done_ttl),
 				), 6 * HOUR_IN_SECONDS);
 
-				if(c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($txn_done_option, $txn_done_ttl))
+				if(!$authorized_replay && c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($txn_done_option, $txn_done_ttl))
 				{
 					$paypal['s2member_log'][] = 'Not processing. Duplicate notification.';
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `subscr_payment|recurring_payment` ).';
 					$paypal['s2member_log'][] = 'Duplicate notification. This transaction was already processed via another PayPal notification path. This notification will be ignored.';
 				}
 				//261111.1750 Recurring payments use the shared owned lease across native IPN and Checkout webhook paths; retain the original transaction identity and busy result.
-				else if(!is_string($txn_lock_token = c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire_owned($txn_lock_option, $txn_lock_ttl)))
+				else if(!$authorized_replay && !is_string($txn_lock_token = c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire_owned($txn_lock_option, $txn_lock_ttl)))
 				{
 					$paypal['s2member_log'][] = 'Not processing. Duplicate notification.';
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `subscr_payment|recurring_payment` ).';
 					$paypal['s2member_log'][] = 'Duplicate notification. Another PayPal notification path is already processing this transaction. This notification will be ignored.';
 				}
-				else if(!get_transient($transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
+				else if($authorized_replay || (!get_transient($transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10)))
 				{
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as '.($identified_as = '( `subscr_payment|recurring_payment` )').'.';
 
@@ -106,6 +155,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 					if(($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['subscr_id'])) && is_object($user = new WP_User ($user_id)) && $user->ID)
 					{
 						$processing = $during = TRUE; // Yes, we ARE processing this.
+						//261112.2112 Capture the local start of this actual payment update; a pre-existing user timestamp is not proof of this replay.
+						$payment_update_started = time();
 
 						$pr_times                           = get_user_option('s2member_paid_registration_times', $user_id);
 						$pr_times['level']                  = (!$pr_times['level']) ? time() : $pr_times['level']; // Preserves existing.
@@ -193,8 +244,17 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 						do_action('ws_plugin__s2member_during_paypal_notify_during_subscr_payment', get_defined_vars());
 						unset($__refs, $__v);
+						//261112.2104 Re-read durable member updates only after notification URLs, emails, and hooks have been attempted; return a completion signal only for the verified internal replay.
+						if($authorized_replay)
+						{
+							$confirmed_times = get_user_option('s2member_paid_registration_times', $user_id);
+							if(is_array($confirmed_times) && !empty($confirmed_times['level'.$paypal['level']])
+							   && get_user_option('s2member_first_payment_txn_id', $user_id)
+							   && (int)get_user_option('s2member_last_payment_time', $user_id) >= $payment_update_started)
+								$paypal['s2member_authoritative_completion_verified'] = TRUE;
+						}
 					}
-					else // Otherwise, we need to re-generate/store this IPN into a Transient Queue. Then re-process it on registration.
+					else if(!$authorized_replay) // Otherwise, we need to re-generate/store this IPN into a Transient Queue. Then re-process it on registration.
 					{
 						$paypal['s2member_log'][] = 'Skipping this IPN response, for now. The Subscr. ID is not associated with a registered Member.';
 
@@ -217,10 +277,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 						set_transient('s2m_'.md5('s2member_transient_ipn_subscr_payment_'.$paypal['subscr_id']), $ipn, 43200);
 					}
 
-					//260406 Mark this payment transaction done after the winning PayPal notification path has been accepted or queued.
-					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($txn_done_option);
-					//261111.1750 Release only this worker's token after the legacy completion marker is written.
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($txn_lock_option, $txn_lock_token);
+					//261112.2104 The internal replay was already deduplicated by the durable event lease. Never manufacture or release legacy marker ownership it did not acquire.
+					if(!$authorized_replay)
+					{
+						//260406 Mark this payment transaction done after the winning PayPal notification path has been accepted or queued.
+						c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($txn_done_option);
+						//261111.1750 Release only this worker's token after the legacy completion marker is written.
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($txn_lock_option, $txn_lock_token);
+					}
 				}
 				else // Else, this is a duplicate IPN. Must stop here.
 				{
