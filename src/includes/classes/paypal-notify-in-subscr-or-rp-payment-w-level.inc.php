@@ -198,7 +198,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 					{
 						if(is_wp_error($routed))
 						{
-							$paypal['s2member_authoritative_delivery_error'] = $routed->get_error_code();
+							//261113.1000 One request-local retry outcome covers both durable-intake failures and legacy transaction contention.
+							$paypal['s2member_notification_retry_error'] = $routed->get_error_code();
 							$paypal['s2member_log'][] = 'Durable payment intake needs redelivery ('.$routed->get_error_code().').';
 						}
 						else
@@ -239,6 +240,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 				//261111.1750 Recurring payments use the shared owned lease across native IPN and Checkout webhook paths; retain the original transaction identity and busy result.
 				else if(!$authorized_replay && !is_string($txn_lock_token = c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire_owned($txn_lock_option, $txn_lock_ttl)))
 				{
+					//261113.1000 Another worker's lease is not proof of fulfillment. Ask the gateway to retry unless a completed marker was already observed above.
+					$paypal['s2member_notification_retry_error'] = 's2m_paypal_txn_in_flight';
 					$paypal['s2member_log'][] = 'Not processing. Duplicate notification.';
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `subscr_payment|recurring_payment` ).';
 					$paypal['s2member_log'][] = 'Duplicate notification. Another PayPal notification path is already processing this transaction. This notification will be ignored.';
