@@ -228,6 +228,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				/*
 				Log this IPN post-processing event now.
 				*/
+				//261113.0039 Preserve fail-closed response intent before post-notification hooks can mutate their by-reference variables.
+				$authoritative_delivery_failed = !empty($paypal['s2member_authoritative_delivery_error']);
 				c_ws_plugin__s2member_utils_logs::log_entry('gateway-core-ipn', $paypal);
 				/*
 				Hook during core IPN post-processing might be useful for developers.
@@ -235,6 +237,13 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify', get_defined_vars());
 				unset($__refs, $__v);
+				//261113.0039 Never acknowledge a failed durable enqueue or Cron wakeup with HTTP 200; PayPal must be able to retry the same transaction.
+				if($authoritative_delivery_failed)
+				{
+					status_header(503);
+					header('Content-Type: text/plain; charset=UTF-8');
+					exit('Temporary payment notification processing failure.');
+				}
 				/*
 				260322 Log effective response state before/after forcing a 200.
 				Output response headers & content body.

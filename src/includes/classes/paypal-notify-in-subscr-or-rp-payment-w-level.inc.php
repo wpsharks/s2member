@@ -29,6 +29,89 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 	class c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level
 	{
 		/**
+		 * Route a verified PayPal recurring payment to its first-receipt owner.
+		 *
+		 * Called ONLY from the authenticated native/PayPal-proxy handler after its
+		 * ordinary payment, item, and membership checks. An old shadow receipt
+		 * stays with legacy processing; a prior authoritative receipt can never
+		 * fall back to legacy, even if the opt-in is later disabled. No direct
+		 * enrollment, notifications, or transient replay happen in this method.
+		 *
+		 * @since 261113.0039
+		 *
+		 * @param array $paypal Verified and normalized incoming PayPal payment.
+		 *
+		 * @return array|bool|WP_Error FALSE for legacy, queued outcome, or retryable delivery error.
+		 */
+		public static function maybe_queue_authoritative_payment($paypal)
+		{
+			if(!is_array($paypal) || !isset($paypal['subscr_gateway'], $paypal['txn_type'], $paypal['txn_id'], $paypal['subscr_id'])
+			   || $paypal['subscr_gateway'] !== 'paypal' || !is_string($paypal['txn_type'])
+			   || !in_array(strtolower($paypal['txn_type']), array('subscr_payment', 'recurring_payment', 'merch_pmt'), TRUE)
+			   || !is_string($paypal['txn_id']) || $paypal['txn_id'] === '' || !is_string($paypal['subscr_id']) || $paypal['subscr_id'] === '')
+				return FALSE;
+
+			$merchant = c_ws_plugin__s2member_payment_events::trusted_merchant('paypal');
+			if(is_wp_error($merchant))
+				return $merchant;
+			$event = c_ws_plugin__s2member_payment_events::option_name('paypal', $merchant, $paypal['txn_id'], 'payment');
+			if($event === FALSE)
+				return new WP_Error('s2m_pay_cutover_invalid_identity', 'Cannot derive a durable PayPal transaction identity.');
+			$prior = c_ws_plugin__s2member_payment_events::read($event);
+			if(is_wp_error($prior))
+				return $prior;
+			//261113.0039 The first recorded origin wins permanently. A historical shadow cannot acquire replay permission on redelivery.
+			if(is_array($prior) && !isset($prior['replay_origin']))
+				return FALSE;
+
+			$enabled = apply_filters('ws_plugin__s2member_paypal_authoritative_recurring_enabled', FALSE, $paypal) === TRUE;
+			if($prior === FALSE && (!$enabled || strtolower($paypal['txn_type']) === 'merch_pmt'))
+				return FALSE;
+			if($prior === FALSE && $enabled)
+			{
+				//261113.0039 No historical registered payment ledger exists: require a persisted cutover epoch and a verified payment date before authorizing a first receipt.
+				$epoch = get_option('s2m_paypal_authoritative_cutover_epoch', 0);
+				$epoch = (is_scalar($epoch) && ctype_digit((string)$epoch)) ? (int)$epoch : 0;
+				//261113.0047 Only native PayPal validation currently proves the provider payment-date semantics; a verified Checkout proxy may follow an existing authoritative receipt but cannot create one.
+				$paid = empty($paypal['proxy_verified']) && isset($paypal['payment_date']) && is_string($paypal['payment_date']) ? strtotime($paypal['payment_date']) : FALSE;
+				if($epoch < 1 || $paid === FALSE || $paid < $epoch || $paid > time() + 300)
+				{
+					//261113.0039 Also fence the legacy-first path before effects; a racing channel must observe its shadow rather than create an authoritative receipt.
+					$shadow = c_ws_plugin__s2member_payment_events::receive('paypal', $merchant, $paypal['txn_id'], 'payment', FALSE);
+					if(is_wp_error($shadow))
+						return $shadow;
+					if(!isset($shadow['record']['replay_origin']))
+						return FALSE;
+				}
+			}
+
+			$ipn = array('txn_type' => 'subscr_payment');
+			foreach($paypal as $name => $value)
+				if(in_array($name, array('subscr_gateway', 'subscr_id', 'subscr_baid', 'subscr_cid', 'txn_id', 'custom', 'invoice', 'mc_gross', 'mc_currency', 'tax', 'payer_email', 'first_name', 'last_name', 'item_name', 'item_number', 'option_name1', 'option_selection1', 'option_name2', 'option_selection2'), TRUE))
+					$ipn[$name] = $value;
+			$queued = c_ws_plugin__s2member_payment_events::queue_verified_payment('paypal', $merchant, $ipn, TRUE);
+			//261113.0039 A simultaneous legacy-first receipt wins the migration race; preserve its old deduplication path instead of promoting it.
+			if(is_wp_error($queued) && $queued->get_error_code() === 's2m_pay_pending_legacy_shadow')
+				return FALSE;
+			if(is_wp_error($queued))
+				return $queued;
+			if($queued['status'] === 'completed')
+				return $queued;
+			if($queued['status'] !== 'pending_registration')
+				return new WP_Error('s2m_pay_cutover_receipt_not_ready', 'The durable PayPal payment is not safely queued yet.');
+
+			$user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($ipn['subscr_id']);
+			if($user_id)
+			{
+				//261113.0039 Existing members need a Cron wakeup; enqueue success without a worker wakeup must ask PayPal to redeliver.
+				$scheduled = c_ws_plugin__s2member_registrations::schedule_pending_registration_payments($user_id, $ipn['subscr_id']);
+				if($scheduled !== TRUE)
+					return is_wp_error($scheduled) ? $scheduled : new WP_Error('s2m_pay_cutover_cron_failed', 'Could not schedule durable PayPal fulfillment.');
+			}
+			return $queued;
+		}
+
+		/**
 		 * Fulfill one authenticated PayPal registration replay in-process.
 		 *
 		 * Only the owned registration consumer may call this with its checkpointed
@@ -95,6 +178,23 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 			   && (!empty($paypal['txn_id'])) && (!empty($paypal['mc_gross']))
 			)
 			{
+				//261113.0039 Bypass legacy deduplication and member effects only for the verified, durably owned payment path; internal checkpointed replay must reach the original handler.
+				if(!isset($s2m_authoritative_event) && !isset($s2m_authoritative_token))
+				{
+					$routed = self::maybe_queue_authoritative_payment($paypal);
+					if($routed !== FALSE)
+					{
+						if(is_wp_error($routed))
+						{
+							$paypal['s2member_authoritative_delivery_error'] = $routed->get_error_code();
+							$paypal['s2member_log'][] = 'Durable payment intake needs redelivery ('.$routed->get_error_code().').';
+						}
+						else
+							$paypal['s2member_log'][] = 'Durable PayPal payment intake: '.$routed['status'].'.';
+						return $paypal;
+					}
+				}
+
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify_before_subscr_payment', get_defined_vars());
 				unset($__refs, $__v);
