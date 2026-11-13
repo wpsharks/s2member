@@ -716,14 +716,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					}
 				}
 
-				//260228 Ignore legacy/non-coordinator one-time sale/capture webhooks that have no subscription reference.
-				if(!$subscr_id)
+				//261113.1500 Pending/denied captures cannot grant access, even when PayPal includes a subscription ID. A subsequent COMPLETED webhook is processed independently.
+				if(!$subscr_id || in_array($event_type, array('PAYMENT.CAPTURE.PENDING', 'PAYMENT.CAPTURE.DENIED'), TRUE))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'       => 'webhook',
 						'env_setting'=> $env_site,
 						'env_webhook'=> $env_webhook,
-						'event'      => 'ignored_non_subscription_payment',
+						'event'      => $subscr_id ? 'ignored_incomplete_subscription_capture' : 'ignored_non_subscription_payment',
 						'event_id'   => $event_id,
 						'event_type' => $event_type,
 						'resource'   => $resource,
