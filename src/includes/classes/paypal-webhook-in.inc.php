@@ -24,6 +24,31 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 {
 	class c_ws_plugin__s2member_paypal_webhook_in
 	{
+		/**
+		 * Decide whether a failed internal Notify bridge must ask PayPal to redeliver.
+		 *
+		 * A completed subscription payment can still lack a durable receipt when
+		 * its forwarding request fails. A 200 response from this outer webhook
+		 * would permanently consume that delivery without proving enrollment.
+		 * Preserve the older retry rule for subscription-activation callbacks.
+		 *
+		 * @since 261113.0721
+		 *
+		 * @param array $paypal Normalized webhook payment payload.
+		 * @param bool $subscr_handled_by_webhook Existing subscription-activation owner.
+		 *
+		 * @return bool Whether the failed delivery needs a non-2xx acknowledgment.
+		 */
+		public static function failed_notify_requires_retry($paypal, $subscr_handled_by_webhook)
+		{
+			if($subscr_handled_by_webhook)
+				return TRUE;
+			//261113.0721 Only completed recurring payments change behavior; refunds, disputes, and other legacy webhook outcomes retain their existing response policy.
+			return is_array($paypal) && isset($paypal['txn_type'], $paypal['payment_status'])
+			       && $paypal['txn_type'] === 'subscr_payment'
+			       && is_string($paypal['payment_status']) && strcasecmp($paypal['payment_status'], 'Completed') === 0;
+		}
+
 		//260824.1833 Keep dispute transaction extraction directly testable while accepting PayPal's documented nested payload and a tolerated direct fallback.
 		public static function paypal_checkout_dispute_seller_transaction_id($resource = array())
 		{
@@ -899,10 +924,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					'message'    => $message,
 				));
 
-				//260818.0603 Activation fallback must remain retryable when shared fulfillment fails or is still in progress.
-				if($subscr_handled_by_webhook)
+				//261113.0721 A failed subscription-payment proxy is not safely delivered: require redelivery even when this is not the activation webhook.
+				if(self::failed_notify_requires_retry($paypal, $subscr_handled_by_webhook))
 				{
-					status_header(500);
+					//261113.0721 Preserve 500 for activation; 503 identifies the newly retryable recurring payment path.
+					status_header($subscr_handled_by_webhook ? 500 : 503);
 					exit();
 				}
 			}
