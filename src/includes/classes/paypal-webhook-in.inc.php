@@ -25,6 +25,26 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 	class c_ws_plugin__s2member_paypal_webhook_in
 	{
 		/**
+		 * Decide how to acknowledge a duplicate webhook while its event lease is occupied.
+		 *
+		 * An in-flight lease does not prove successful processing. If the first worker
+		 * fails, a 200 for the competing delivery can prevent provider redelivery.
+		 * Only a recorded, unexpired completion marker permits an acknowledgment.
+		 *
+		 * @since 261113.0905
+		 *
+		 * @param string $done_option Webhook event completion option.
+		 * @param int $done_ttl Completion marker lifetime in seconds.
+		 *
+		 * @return int 200 for proven completion, otherwise 503 for retry.
+		 */
+		public static function in_flight_webhook_status($done_option, $done_ttl)
+		{
+			//261113.0905 Recheck after losing the lease: the holder could have completed between the first check and the failed acquisition.
+			return c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done_option, $done_ttl) > 0 ? 200 : 503;
+		}
+
+		/**
 		 * Decide whether a failed internal Notify bridge must ask PayPal to redeliver.
 		 *
 		 * A completed subscription payment can still lack a durable receipt when
@@ -218,17 +238,19 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			$event_lock_token = c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire_owned($event_lock_option, $event_lock_ttl);
 			if(!is_string($event_lock_token))
 			{
+				//261113.0905 A competing request must not acknowledge an event until the first worker has persisted its completion marker.
+				$inflight_status = self::in_flight_webhook_status($event_done_option, $event_done_ttl);
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
 					'env_setting'=> $env_site,
 					'env_webhook'=> $env_webhook,
 					'event'      => 'duplicate_event',
-					'action'     => 'ignored',
-					'note'       => 'Duplicate webhook delivery (event_id already processing).',
+					'action'     => $inflight_status === 200 ? 'ignored' : 'retry_requested',
+					'note'       => $inflight_status === 200 ? 'Duplicate webhook completed during contention.' : 'Duplicate webhook still processing; retry required.',
 					'event_id'   => $event_id,
 					'event_type' => $event_type,
 				));
-				status_header(200);
+				status_header($inflight_status);
 				exit();
 			}
 
