@@ -60,16 +60,25 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 			$prior = c_ws_plugin__s2member_payment_events::read($event);
 			if(is_wp_error($prior))
 				return $prior;
-			//261113.0039 The first recorded origin wins permanently. A historical shadow cannot acquire replay permission on redelivery.
+			//261113.2225 Use one cutover-epoch snapshot for every first-receipt decision in this request.
+			$epoch = get_option('s2m_paypal_authoritative_cutover_epoch', 0);
+			$epoch = (is_scalar($epoch) && ctype_digit((string)$epoch)) ? (int)$epoch : 0;
+			//261113.2224 A shadow receipt does not prove whether legacy fulfillment finished. After cutover,
+			//261113.2224 acknowledge only a live legacy done marker; otherwise require reconciliation.
 			if(is_array($prior) && !isset($prior['replay_origin']))
-				return FALSE;
+			{
+				if($epoch < 1)
+					return FALSE; //261113.2224 Before cutover, preserve the original legacy route.
+				$done = 's2m_paypal_txn_done_'.md5(strtolower($paypal['subscr_id']).'|'.strtolower($paypal['txn_id']));
+				if(c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done, DAY_IN_SECONDS))
+					return array('event' => $event, 'status' => 'legacy_acknowledged', 'created' => FALSE);
+				return new WP_Error('s2m_pay_cutover_shadow_unreconciled', 'An earlier legacy payment may already have produced effects; manual reconciliation is required.');
+			}
 
 			$enabled = apply_filters('ws_plugin__s2member_paypal_authoritative_recurring_enabled', FALSE, $paypal) === TRUE;
 			if($prior === FALSE && (!$enabled || strtolower($paypal['txn_type']) === 'merch_pmt'))
 			{
 				//261113.0834 Once a cutover epoch exists, even an opted-out legacy delivery must reserve the first receipt before member effects. Otherwise a concurrent native IPN can create an authoritative receipt while this request continues down the legacy path.
-				$epoch = get_option('s2m_paypal_authoritative_cutover_epoch', 0);
-				$epoch = (is_scalar($epoch) && ctype_digit((string)$epoch)) ? (int)$epoch : 0;
 				if($epoch < 1)
 					return FALSE;
 				$shadow = c_ws_plugin__s2member_payment_events::receive('paypal', $merchant, $paypal['txn_id'], 'payment', FALSE);
@@ -82,8 +91,6 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 			if($prior === FALSE && $enabled)
 			{
 				//261113.0039 No historical registered payment ledger exists: require a persisted cutover epoch and a verified payment date before authorizing a first receipt.
-				$epoch = get_option('s2m_paypal_authoritative_cutover_epoch', 0);
-				$epoch = (is_scalar($epoch) && ctype_digit((string)$epoch)) ? (int)$epoch : 0;
 				//261113.0047 Only native PayPal validation currently proves the provider payment-date semantics; a verified Checkout proxy may follow an existing authoritative receipt but cannot create one.
 				$paid = empty($paypal['proxy_verified']) && isset($paypal['payment_date']) && is_string($paypal['payment_date']) ? strtotime($paypal['payment_date']) : FALSE;
 				if($epoch < 1 || $paid === FALSE || $paid < $epoch || $paid > time() + 300)
