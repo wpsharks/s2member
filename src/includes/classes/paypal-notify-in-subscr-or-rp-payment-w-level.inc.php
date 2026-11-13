@@ -66,7 +66,19 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 
 			$enabled = apply_filters('ws_plugin__s2member_paypal_authoritative_recurring_enabled', FALSE, $paypal) === TRUE;
 			if($prior === FALSE && (!$enabled || strtolower($paypal['txn_type']) === 'merch_pmt'))
-				return FALSE;
+			{
+				//261113.0834 Once a cutover epoch exists, even an opted-out legacy delivery must reserve the first receipt before member effects. Otherwise a concurrent native IPN can create an authoritative receipt while this request continues down the legacy path.
+				$epoch = get_option('s2m_paypal_authoritative_cutover_epoch', 0);
+				$epoch = (is_scalar($epoch) && ctype_digit((string)$epoch)) ? (int)$epoch : 0;
+				if($epoch < 1)
+					return FALSE;
+				$shadow = c_ws_plugin__s2member_payment_events::receive('paypal', $merchant, $paypal['txn_id'], 'payment', FALSE);
+				if(is_wp_error($shadow))
+					return $shadow;
+				if(!isset($shadow['record']['replay_origin']))
+					return FALSE;
+				//261113.0834 A concurrent authoritative first receipt won; follow its durable path even though this delivery opted out.
+			}
 			if($prior === FALSE && $enabled)
 			{
 				//261113.0039 No historical registered payment ledger exists: require a persisted cutover epoch and a verified payment date before authorizing a first receipt.
