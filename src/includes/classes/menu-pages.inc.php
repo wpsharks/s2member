@@ -266,8 +266,8 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page', TRUE, get_defined_vars()))
 					add_submenu_page($menu, 's2Member PayPal Options', 'PayPal Options', 'create_users', 'ws-plugin--s2member-paypal-ops', 'c_ws_plugin__s2member_menu_pages::paypal_ops_page');
 
-				//261114.0253 Keep the diagnostic view separate from the PayPal settings form; it can never save gateway options.
-				add_submenu_page($menu, 'PayPal Payment Audit (Read Only)', 'Payment Audit', 'manage_options', 'ws-plugin--s2member-paypal-reconciliation', 'c_ws_plugin__s2member_menu_pages::paypal_reconciliation_page');
+				//261114.2331 Retain the privileged Payment Audit renderer for future review, but do not register a public admin page or menu item.
+				//261114.2331 The single-receipt diagnostic is not a subscription dashboard and should not add admin UI until its purpose is agreed.
 
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page', TRUE, get_defined_vars()))
 					add_submenu_page($menu, 's2Member PayPal Buttons', 'PayPal Buttons', 'create_users', 'ws-plugin--s2member-paypal-buttons', 'c_ws_plugin__s2member_menu_pages::paypal_buttons_page');
