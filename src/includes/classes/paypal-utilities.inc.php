@@ -28,6 +28,21 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 		*/
 		class c_ws_plugin__s2member_paypal_utilities
 			{
+				//261114.2134 Preserve the HMAC v2 rejection reason for the HTTP Notify wrapper; never infer fulfillment from an unaccepted message.
+				private static $paypal_proxy_v2_rejection_status = 0;
+
+				/**
+				 * Return the last v2 request's rejection status (403 invalid, 409 replay, 0 otherwise).
+				 * A status is not a fulfillment result; it must not be used to reopen replay claims.
+				 *
+				 * @since 261114.2134
+				 * @return int
+				 */
+				public static function paypal_proxy_v2_rejection_status()
+					{
+						return self::$paypal_proxy_v2_rejection_status;
+					}
+
 				/**
 				* Get ``$_POST`` or ``$_REQUEST`` vars from PayPal.
 				*
@@ -38,6 +53,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				*/
 				public static function paypal_postvars()
 					{
+						//261114.2134 A prior parse in this PHP request cannot poison a new PayPal or proxy validation.
+						self::$paypal_proxy_v2_rejection_status = 0;
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_paypal_postvars", get_defined_vars());
 						unset($__refs, $__v); // Housekeeping.
@@ -130,6 +147,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										//261110.2320 v2 credentials authenticate every POST field, including the gateway, and are never downgraded to the legacy static key on failure.
 										else if(!empty($_POST['s2member_paypal_proxy_verification']) && is_string($_POST['s2member_paypal_proxy_verification']) && strpos($_POST['s2member_paypal_proxy_verification'], 'v2.') === 0)
 											{
+												//261114.2134 Mark rejected signed-proxy attempts explicitly; failed signature and unsigned GET overrides remain forbidden.
+												self::$paypal_proxy_v2_rejection_status = 403;
 												// Only the Notify entrypoint may be in the query: unsigned GET fields must not override signed POST fields.
 												if(count($_GET) !== 1 || !isset($_GET['s2member_paypal_notify']))
 														return false;
@@ -149,8 +168,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 												//261111.0003 Claim the signed message ID only after both HMAC and normalized dispatch payload match; duplicate requests must stop before membership side effects.
 												if(!self::paypal_proxy_v2_claim($verified_signature))
-													return false;
+													{
+														//261114.2134 An authenticated duplicate cannot be acknowledged as a new successful Notify dispatch.
+														self::$paypal_proxy_v2_rejection_status = 409;
+														return false;
+													}
 
+												//261114.2134 Only a freshly authenticated, atomically claimed request can clear the rejection status.
+												self::$paypal_proxy_v2_rejection_status = 0;
 												return apply_filters('ws_plugin__s2member_paypal_postvars', array_merge($postvars, array('proxy_verified' => $_POST['s2member_paypal_proxy'])), get_defined_vars());
 											}
 

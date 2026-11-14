@@ -239,6 +239,15 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify', get_defined_vars());
 				unset($__refs, $__v);
+				//261114.2134 The old unconditional HTTP 200 must not silently acknowledge an invalid or replayed HMAC v2 delivery.
+				//261114.2134 403 means signature/request rejected; 409 means an already-claimed message needs reconciliation, not blind replay.
+				$proxy_v2_rejection_status = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_rejection_status();
+				if($proxy_v2_rejection_status === 403 || $proxy_v2_rejection_status === 409)
+				{
+					status_header($proxy_v2_rejection_status);
+					header('Content-Type: text/plain; charset=UTF-8');
+					exit('Signed payment notification was not accepted.');
+				}
 				//261113.1000 Neither an incomplete durable enqueue nor an occupied legacy transaction lock warrants HTTP 200.
 				if($notification_retry_required)
 				{
