@@ -266,6 +266,9 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page', TRUE, get_defined_vars()))
 					add_submenu_page($menu, 's2Member PayPal Options', 'PayPal Options', 'create_users', 'ws-plugin--s2member-paypal-ops', 'c_ws_plugin__s2member_menu_pages::paypal_ops_page');
 
+				//261114.0253 Keep the diagnostic view separate from the PayPal settings form; it can never save gateway options.
+				add_submenu_page($menu, 'PayPal Payment Audit (Read Only)', 'Payment Audit', 'manage_options', 'ws-plugin--s2member-paypal-reconciliation', 'c_ws_plugin__s2member_menu_pages::paypal_reconciliation_page');
+
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page', TRUE, get_defined_vars()))
 					add_submenu_page($menu, 's2Member PayPal Buttons', 'PayPal Buttons', 'create_users', 'ws-plugin--s2member-paypal-buttons', 'c_ws_plugin__s2member_menu_pages::paypal_buttons_page');
 
@@ -724,6 +727,19 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			include_once dirname(dirname(__FILE__)).'/menu-pages/paypal-ops.inc.php';
 
 			do_action('ws_plugin__s2member_after_paypal_ops_page', get_defined_vars());
+		}
+
+		/**
+		 * Render a privileged, read-only PayPal payment-receipt lookup.
+		 *
+		 * @since 261114.0253
+		 */
+		public static function paypal_reconciliation_page()
+		{
+			if(!current_user_can('manage_options'))
+				return;
+			//261114.0253 No update_all_options() call and no receipt/status mutations in this administrative view.
+			include dirname(dirname(__FILE__)).'/menu-pages/paypal-reconciliation.inc.php';
 		}
 
 		/**
