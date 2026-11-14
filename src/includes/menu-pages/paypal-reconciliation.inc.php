@@ -12,6 +12,17 @@ if(!current_user_can('manage_options'))
     return;
 global $wpdb;
 
+//261114.1807 Read the existing migration fence without modifying it. Disabling the opt-in is a
+//261114.1807 rollback; deleting or rewinding the epoch could reopen historical legacy redelivery.
+$qa_cutover_raw = get_option('s2m_paypal_authoritative_cutover_epoch', NULL);
+$qa_cutover_epoch = is_scalar($qa_cutover_raw) && ctype_digit((string)$qa_cutover_raw) ? (int)$qa_cutover_raw : 0;
+if($qa_cutover_epoch > 0)
+    $qa_cutover_status = 'Recorded: '.gmdate('Y-m-d H:i:s', $qa_cutover_epoch).' UTC (retain this original value during rollback).';
+else if($qa_cutover_raw === NULL || $qa_cutover_raw === FALSE || $qa_cutover_raw === 0 || $qa_cutover_raw === '0')
+    $qa_cutover_status = 'Not configured. No new payment can be authoritative under the current cutover guard.';
+else
+    $qa_cutover_status = 'Invalid epoch value. Investigate configuration before enabling authoritative processing.';
+
 //261114.0253 Require POST + a dedicated nonce: raw PayPal identifiers never enter an audit URL.
 $qa_result = NULL;
 $qa_error = '';
@@ -111,6 +122,10 @@ if($qa_is_post && isset($_POST['s2m_pay_audit_submit']))
 <div class="wrap">
     <h1>PayPal Payment Audit (Read Only)</h1>
     <p>Diagnostic lookup only. A receipt, legacy acceptance marker, or queue row does not prove membership fulfillment, external email, or third-party hook delivery. This page cannot replay, mark complete, or alter a payment. Lookup is scoped to the site's currently configured PayPal merchant; a prior merchant account may require separate records.</p>
+    <h2>Recurring-payment cutover safety</h2>
+    <p><strong>Persisted cutover epoch:</strong> <?php echo esc_html($qa_cutover_status); ?></p>
+    <p><strong>Rollback rule:</strong> Disable the per-payment authoritative opt-in if needed, but retain the original cutover epoch and all durable receipts. Never reset, delete, or rewind the epoch to restore legacy processing. Historical shadows without a current legacy acceptance marker require reconciliation, not replay.</p>
+    <p><strong>Activation status:</strong> This page cannot determine whether the application-supplied, per-payment opt-in filter is enabled. An epoch alone does not activate the authoritative route. No settings are changed here.</p>
     <form method="post" autocomplete="off">
         <?php wp_nonce_field('s2m_pay_reconciliation_audit', 's2m_pay_audit_nonce'); ?>
         <p><label for="s2m-pay-audit-txn">PayPal transaction ID (required)</label><br />
