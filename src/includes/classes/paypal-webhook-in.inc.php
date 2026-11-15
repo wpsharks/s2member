@@ -875,33 +875,51 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			$url = add_query_arg('s2member_paypal_notify', '1', home_url('/'));
 			$notify_duplicate = false;
 
-			if($subscr_handled_by_webhook && !empty($subscr_done_option))
+			//261115.0452 A local Notify hook can now throw into this webhook request; release the event lease and ask PayPal to retry.
+			// The old HTTP hop isolated exceptions in a separate request, so that failure handling is newly required here.
+			try
 			{
-				//260818.0603 Share the subscription Notify lock/done marker with browser confirmation so activation fallback cannot race it.
-				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $subscr_done_option, 'paypal_checkout_webhook');
-				$notify_ok = !empty($notify_result['ok']);
-				$notify_duplicate = !empty($notify_result['duplicate']);
-				$code = !empty($notify_result['code']) ? (int)$notify_result['code'] : 0;
-				$message = !empty($notify_result['message']) ? (string)$notify_result['message'] : (!empty($notify_result['error']) ? (string)$notify_result['error'] : '');
+				if($subscr_handled_by_webhook && !empty($subscr_done_option))
+				{
+					//260818.0603 Share the subscription Notify lock/done marker with browser confirmation so activation fallback cannot race it.
+					//261115.0450 This path follows verified PayPal webhook signatures; use the same local Notify core without another HTTP request.
+					$in_process = apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, !empty($paypal['invoice']) ? (string)$paypal['invoice'] : '', $subscr_id);
+					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $subscr_done_option, 'paypal_checkout_webhook', array(), $in_process);
+					$notify_ok = !empty($notify_result['ok']);
+					$notify_duplicate = !empty($notify_result['duplicate']);
+					$code = !empty($notify_result['code']) ? (int)$notify_result['code'] : 0;
+					$message = !empty($notify_result['message']) ? (string)$notify_result['message'] : (!empty($notify_result['error']) ? (string)$notify_result['error'] : '');
+				}
+				else
+				{
+					$post = array_merge($paypal, array(
+						's2member_paypal_proxy'              => 'paypal',
+						's2member_paypal_proxy_use'          => 'paypal_checkout_webhook',
+						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+					));
+
+					//261115.0452 The provider webhook was signature-verified above; pass only its server-built PayPal payload to Notify.
+					// Keep the established HTTP bridge available through the same opt-out filter used by Framework Checkout.
+					$in_process = apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, !empty($paypal['invoice']) ? (string)$paypal['invoice'] : '', $txn_key);
+					$r = $in_process ? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_inprocess($post) : c_ws_plugin__s2member_utils_urls::remote($url, $post, array(
+						'timeout' => 20,
+					), true);
+
+					if(!is_array($r))
+						$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
+
+					$code = !empty($r['code']) ? (int)$r['code'] : 0;
+					$message = !empty($r['message']) ? (string)$r['message'] : '';
+					$notify_ok = ($code >= 200 && $code <= 299);
+				}
 			}
-			else
+			catch(\Throwable $notify_exception)
 			{
-				$post = array_merge($paypal, array(
-					's2member_paypal_proxy'              => 'paypal',
-					's2member_paypal_proxy_use'          => 'paypal_checkout_webhook',
-					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
-				));
-
-				$r = c_ws_plugin__s2member_utils_urls::remote($url, $post, array(
-					'timeout' => 20,
-				), true);
-
-				if(!is_array($r))
-					$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
-
-				$code = !empty($r['code']) ? (int)$r['code'] : 0;
-				$message = !empty($r['message']) ? (string)$r['message'] : '';
-				$notify_ok = ($code >= 200 && $code <= 299);
+				//261115.0452 A failed local processor must never leave a 15-minute event lease or false webhook acknowledgment.
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
+				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'notify_processing_exception', 'event_id' => $event_id));
+				status_header(503);
+				exit();
 			}
 
 			if($notify_ok)

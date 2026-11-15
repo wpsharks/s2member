@@ -2836,7 +2836,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$extra     = !empty($notify_context['extra']) && is_array($notify_context['extra']) ? $notify_context['extra'] : array();
 
 								//261115.0118 Preserve a valid legacy proxy credential whenever the caller uses the existing HTTP transport.
-								$use_internal_notify = ($in_process && $proxy_use === 'paypal_checkout');
+								//261115.0450 Only the two PayPal Checkout-owned proxy routes can enter the isolated local Notify core.
+								// Pro, other gateways, and arbitrary custom proxy-use values retain the existing signed HTTP transport.
+								$use_internal_notify = ($in_process && in_array($proxy_use, array('paypal_checkout', 'paypal_checkout_webhook'), TRUE));
 								$notify_url = home_url('/?s2member_paypal_notify=1');
 								$notify_post = array_merge($paypal, $extra, array(
 									's2member_paypal_proxy'              => 'paypal',
@@ -2874,14 +2876,15 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 					}
 
+				//261115.0500 Only signature-verified webhook code may call this server-created payload bridge; it is not an HTTP authentication endpoint.
 				/**
-				 * Process a server-created Checkout notification with isolated HTTP-style request variables.
+				 * Process a trusted, server-created Checkout notification with isolated HTTP-style request variables.
 				 *
 				 * @since 261115.0113
-				 * @param array $post Complete signed server-side Notify payload.
+				 * @param array $post Server-created Notify payload, never raw browser or unverified webhook input.
 				 * @return array Normalized response code, message, and body.
 				 */
-				private static function paypal_checkout_notify_inprocess($post)
+				public static function paypal_checkout_notify_inprocess($post)
 					{
 						$home = home_url('/');
 						$host = is_string($home) ? parse_url($home, PHP_URL_HOST) : FALSE;

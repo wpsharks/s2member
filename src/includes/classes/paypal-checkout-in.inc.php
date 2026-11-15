@@ -355,7 +355,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						$notify_extra['s2member_paypal_proxy_return_url'] = (string)$token['s2member_paypal_proxy_return_url'];
 
 					$notify_done_option = 's2m_ppco_capture_done_'.md5($pu_cap_id);
-					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option, $proxy_use, $notify_extra);
+					//261115.0450 Only a verified Framework Checkout capture may skip its same-site HTTP bridge; Pro email/coupon routing stays on HTTP.
+					$in_process = ($proxy_use === 'paypal_checkout' && empty($token['pro_form']) && apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, (string)$token['invoice'], $pu_cap_id));
+					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option, $proxy_use, $notify_extra, $in_process);
 
 					if(empty($notify_result['ok']))
 					{
@@ -523,7 +525,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					$option_ppco_subscr = 's2m_ppco_subscr_done_'.md5($subscription_id);
 
 					//260818.0603 Share the success-only Notify lock/done marker with browser confirmation and webhook activation fallback.
-					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $option_ppco_subscr);
+					//261115.0450 Legacy Framework subscription return can use the same isolated PHP transport after provider verification.
+					$in_process = (empty($token['pro_form']) && apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, (string)$token['invoice'], $subscription_id));
+					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $option_ppco_subscr, 'paypal_checkout', array(), $in_process);
 
 					if(empty($notify_result['ok']))
 					{
@@ -872,7 +876,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 				$option_ppco_subscr = 's2m_ppco_subscr_done_'.md5($subscription_id);
 
 				//260818.0603 Mark the Subscription done only after Notify succeeds, using the same lock as webhook activation fallback.
-				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $option_ppco_subscr);
+				//261115.0450 AJAX confirmation follows the verified Framework subscription return transport and preserves its dedupe marker.
+				$in_process = (empty($token['pro_form']) && apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, (string)$token['invoice'], $subscription_id));
+				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $option_ppco_subscr, 'paypal_checkout', array(), $in_process);
 				$notify_code = !empty($notify_result['code']) ? (int)$notify_result['code'] : 0;
 				$notify_msg  = !empty($notify_result['message']) ? (string)$notify_result['message'] : '';
 				$notify_body = !empty($notify_result['body']) ? (string)$notify_result['body'] : '';
@@ -1398,7 +1404,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 					$notify_extra['s2member_paypal_proxy_return_url'] = (string)$token['s2member_paypal_proxy_return_url'];
 
 				$notify_done_option = 's2m_ppco_capture_done_'.md5($pu_cap_id);
-				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option, $proxy_use, $notify_extra);
+				//261115.0450 AJAX capture shares the redirect transport contract and leaves Pro proxy routing unchanged.
+				$in_process = ($proxy_use === 'paypal_checkout' && empty($token['pro_form']) && apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, (string)$token['invoice'], $pu_cap_id));
+				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $notify_done_option, $proxy_use, $notify_extra, $in_process);
 
 				if(empty($notify_result['ok']))
 					{
