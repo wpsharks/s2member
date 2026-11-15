@@ -2901,6 +2901,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$prior_server = $_SERVER;
 						$prior_ignore_user_abort = ignore_user_abort();
 						$prior_email_config = c_ws_plugin__s2member_email_configs::email_config_status();
+						$prior_user_id = get_current_user_id();
 
 						try
 							{
@@ -2912,6 +2913,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$_REQUEST = array_merge($_GET, $_POST);
 								$_COOKIE = array();
 								$_FILES = array();
+								//261115.2110 Internal Notify runs anonymously, matching a separate HTTP request, then restores the checkout user.
+								wp_set_current_user(0);
 								foreach(array_keys($_SERVER) as $server_key)
 									if(strpos($server_key, 'HTTP_') === 0)
 										unset($_SERVER[$server_key]);
@@ -2941,6 +2944,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$_COOKIE = $prior_cookie;
 								$_FILES = $prior_files;
 								$_SERVER = $prior_server;
+								wp_set_current_user($prior_user_id);
 								ignore_user_abort($prior_ignore_user_abort);
 								//261115.0223 A throwing Notify hook may skip its normal email-filter restoration; preserve the caller's setting.
 								if(c_ws_plugin__s2member_email_configs::email_config_status() !== $prior_email_config)
