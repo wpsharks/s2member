@@ -2731,8 +2731,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(array_key_exists('s2member_paypal_proxy_return_url', $token))
 							$notify_extra['s2member_paypal_proxy_return_url'] = (string)$token['s2member_paypal_proxy_return_url'];
 
-						//260907.1820 Keep the established PayPal Notify path authoritative for entitlement side effects, keyed by capture ID so simultaneous browser/webhook completion cannot process the same transaction twice.
-						$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_capture_done_'.md5($pu_cap_id), $proxy_use, $notify_extra);
+						//261115.0113 Only Framework button captures use the local Notify processor; Pro and other callers keep their HTTP path.
+						// The existing done marker and outer Checkout lock still govern duplicate fulfillment.
+						$in_process = ($proxy_use === 'paypal_checkout' && strpos($invoice, 's2mb-') === 0 && apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, $invoice, $pu_cap_id));
+						$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_capture_done_'.md5($pu_cap_id), $proxy_use, $notify_extra, $in_process);
 						if(empty($notify_result['ok']))
 							return array('ok' => FALSE, 'error' => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed');
 
@@ -2770,10 +2772,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 * @param string $done_option Local fulfillment done-marker option name.
 				 * @param string $proxy_use   Optional proxy-use routing value.
 				 * @param array  $extra       Optional additional server-side Notify variables.
+				 * @param bool   $in_process  Dispatch one trusted Framework capture without a same-site HTTP request.
 				 *
 				 * @return array Result with ok/processed/duplicate/error and response details.
 				 */
-				public static function paypal_checkout_notify_once($paypal = array(), $done_option = '', $proxy_use = 'paypal_checkout', $extra = array())
+				public static function paypal_checkout_notify_once($paypal = array(), $done_option = '', $proxy_use = 'paypal_checkout', $extra = array(), $in_process = FALSE)
 					{
 						if(!is_array($paypal) || !$paypal || !$done_option || !is_string($done_option))
 							return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_invalid_args');
@@ -2832,13 +2835,16 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$proxy_use = isset($notify_context['proxy_use']) ? (string)$notify_context['proxy_use'] : (string)$proxy_use;
 								$extra     = !empty($notify_context['extra']) && is_array($notify_context['extra']) ? $notify_context['extra'] : array();
 
+								//261115.0118 Preserve a valid legacy proxy credential whenever the caller uses the existing HTTP transport.
+								$use_internal_notify = ($in_process && $proxy_use === 'paypal_checkout');
 								$notify_url = home_url('/?s2member_paypal_notify=1');
 								$notify_post = array_merge($paypal, $extra, array(
 									's2member_paypal_proxy'              => 'paypal',
 									's2member_paypal_proxy_use'          => $proxy_use,
-									's2member_paypal_proxy_verification' => self::paypal_proxy_key_gen(),
+									's2member_paypal_proxy_verification' => $use_internal_notify ? '' : self::paypal_proxy_key_gen(),
 								));
-								$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
+								//261115.0113 The local transport signs under its isolated canonical Host, while legacy HTTP keeps the original request signing behavior.
+								$notify_r = $use_internal_notify ? self::paypal_checkout_notify_inprocess($notify_post) : c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
 
 								if(!is_array($notify_r))
 									$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
@@ -2865,6 +2871,78 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							{
 								//261111.0618 Only this Notify worker can release its lease; retry paths retain the existing done-marker semantics.
 								self::dedupe_lock_release_owned($lock_option, $lock_token);
+							}
+					}
+
+				/**
+				 * Process a server-created Checkout notification with isolated HTTP-style request variables.
+				 *
+				 * @since 261115.0113
+				 * @param array $post Complete signed server-side Notify payload.
+				 * @return array Normalized response code, message, and body.
+				 */
+				private static function paypal_checkout_notify_inprocess($post)
+					{
+						$home = home_url('/');
+						$host = is_string($home) ? parse_url($home, PHP_URL_HOST) : FALSE;
+						if(!is_array($post) || !$post || !is_string($host) || $host === '' || !function_exists('wp_slash'))
+							return array('code' => 0, 'message' => 'invalid_internal_notify_context', 'body' => '');
+
+						//261115.0113 Never inherit browser GET/POST fields, proxy credentials, or an untrusted Host header into a payment notification.
+						// Restore the complete caller context even when a filter or Notify handler throws.
+						$prior_get = $_GET;
+						$prior_post = $_POST;
+						$prior_request = $_REQUEST;
+						$prior_cookie = $_COOKIE;
+						$prior_files = $_FILES;
+						$prior_server = $_SERVER;
+						$prior_ignore_user_abort = ignore_user_abort();
+						$prior_email_config = c_ws_plugin__s2member_email_configs::email_config_status();
+
+						try
+							{
+								$path = parse_url($home, PHP_URL_PATH);
+								//261115.0223 A server-generated Notify must not inherit the browser's headers, credentials, cookies or uploads.
+								// Preserve the whole $_SERVER array so even header order and unexpected hook mutations are restored.
+								$_GET = array('s2member_paypal_notify' => '1');
+								$_POST = wp_slash($post); // Match WordPress's slashed incoming POST contract before paypal_postvars() removes slashes.
+								$_REQUEST = array_merge($_GET, $_POST);
+								$_COOKIE = array();
+								$_FILES = array();
+								foreach(array_keys($_SERVER) as $server_key)
+									if(strpos($server_key, 'HTTP_') === 0)
+										unset($_SERVER[$server_key]);
+								unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['AUTH_TYPE'], $_SERVER['REDIRECT_HTTP_AUTHORIZATION']);
+								$_SERVER['REQUEST_METHOD'] = 'POST';
+								$_SERVER['REQUEST_URI'] = (is_string($path) && $path !== '' ? $path : '/').'?s2member_paypal_notify=1';
+								$_SERVER['QUERY_STRING'] = 's2member_paypal_notify=1';
+								$_SERVER['HTTP_HOST'] = $host;
+								$_SERVER['CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
+								$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+								$_SERVER['HTTP_USER_AGENT'] = 's2Member internal Notify';
+
+								//261115.0113 Signing must occur after Host isolation: proxy_key_gen() can incorporate the current request host.
+								$_POST['s2member_paypal_proxy_verification'] = self::paypal_proxy_key_gen();
+								$_REQUEST['s2member_paypal_proxy_verification'] = $_POST['s2member_paypal_proxy_verification'];
+								$outcome = c_ws_plugin__s2member_paypal_notify_in::paypal_notify_process();
+								if(!is_array($outcome) || !isset($outcome['code']) || !is_int($outcome['code']))
+									return array('code' => 0, 'message' => 'invalid_internal_notify_outcome', 'body' => '');
+
+								return array('code' => $outcome['code'], 'message' => $outcome['code'] === 200 ? 'OK' : 'rejected', 'body' => isset($outcome['body']) ? (string)$outcome['body'] : '');
+							}
+						finally
+							{
+								$_GET = $prior_get;
+								$_POST = $prior_post;
+								$_REQUEST = $prior_request;
+								$_COOKIE = $prior_cookie;
+								$_FILES = $prior_files;
+								$_SERVER = $prior_server;
+								ignore_user_abort($prior_ignore_user_abort);
+								//261115.0223 A throwing Notify hook may skip its normal email-filter restoration; preserve the caller's setting.
+								if(c_ws_plugin__s2member_email_configs::email_config_status() !== $prior_email_config)
+									if($prior_email_config) c_ws_plugin__s2member_email_configs::email_config();
+									else c_ws_plugin__s2member_email_configs::email_config_release();
 							}
 					}
 
