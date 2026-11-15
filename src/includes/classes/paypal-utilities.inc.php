@@ -2876,9 +2876,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 					}
 
-				//261115.0500 Only signature-verified webhook code may call this server-created payload bridge; it is not an HTTP authentication endpoint.
 				/**
 				 * Process a trusted, server-created Checkout notification with isolated HTTP-style request variables.
+				 * This is not an HTTP authentication endpoint; callers must verify provider data first.
 				 *
 				 * @since 261115.0113
 				 * @param array $post Server-created Notify payload, never raw browser or unverified webhook input.

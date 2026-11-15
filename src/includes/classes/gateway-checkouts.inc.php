@@ -148,25 +148,20 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 				if($state && (string)$state['gateway'] === $gateway && (string)$state['operation'] === $operation
 				   && (empty($state['user_id']) || ($user_id && (int)$state['user_id'] === $user_id)))
 				{
-					if($purchase_fingerprint)
-					{
-						//260830.0308 Once bound, a checkout cannot be reassigned to different purchase terms or a different known WordPress user.
-						if(!empty($state['purchase_fingerprint']) && !hash_equals((string)$state['purchase_fingerprint'], $purchase_fingerprint))
+					//261115.0528 Bind final purchase terms against the latest state; never overwrite a concurrent webhook or another buyer's binding.
+					return self::mutate_state($gateway_checkout_id, function($current) use ($gateway, $operation, $purchase_fingerprint, $user_id) {
+						if((string)$current['gateway'] !== $gateway || (string)$current['operation'] !== $operation
+						|| (!empty($current['user_id']) && (int)$current['user_id'] !== $user_id)
+						|| ($purchase_fingerprint && !empty($current['purchase_fingerprint']) && !hash_equals((string)$current['purchase_fingerprint'], $purchase_fingerprint)))
 							return FALSE;
-
-						$state['purchase_fingerprint'] = $purchase_fingerprint;
-						if(!$state['user_id'] && $user_id)
-							$state['user_id'] = $user_id;
-						$state['updated_at'] = time();
-
-						if(!update_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, $state, FALSE))
+						if($purchase_fingerprint)
 						{
-							$persisted_state = self::load_state($gateway_checkout_id);
-							if($persisted_state !== $state)
-								return FALSE;
+							$current['purchase_fingerprint'] = $purchase_fingerprint;
+							if($user_id && empty($current['user_id']))
+								$current['user_id'] = $user_id;
 						}
-					}
-					return $state;
+						return $current;
+					});
 				}
 			}
 			return self::create($gateway, $operation, $purchase_fingerprint, $user_id, $ttl);
@@ -267,6 +262,49 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		}
 
 		/**
+		 * Mutates the latest durable state without overwriting another worker's changes.
+		 *
+		 * @since 261115.0528
+		 * @param string   $gateway_checkout_id Gateway Checkout ID.
+		 * @param callable $mutator             Returns the replacement state, or FALSE to reject the update.
+		 * @return array|bool Updated state, else FALSE.
+		 */
+		protected static function mutate_state($gateway_checkout_id = '', $mutator = NULL)
+		{
+			global $wpdb;
+			if(!self::valid_id($gateway_checkout_id) || !is_callable($mutator))
+				return FALSE;
+			$option_name = 'ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id;
+			for($attempt = 0; $attempt < 8; $attempt++)
+			{
+				$raw_state = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option_name));
+				$state = maybe_unserialize($raw_state);
+				if(!is_array($state) || empty($state['id']) || !hash_equals((string)$gateway_checkout_id, (string)$state['id']) || empty($state['expires_at']) || (int)$state['expires_at'] <= time())
+					return FALSE;
+				$next = call_user_func($mutator, $state);
+				//261115.0528 A mutator may change operational data, never the identity or expiration of the checkout.
+				if(!is_array($next) || (string)(isset($next['id']) ? $next['id'] : '') !== (string)$state['id'] || (string)(isset($next['gateway']) ? $next['gateway'] : '') !== (string)$state['gateway']
+				|| (string)(isset($next['operation']) ? $next['operation'] : '') !== (string)$state['operation'] || (int)(isset($next['expires_at']) ? $next['expires_at'] : 0) !== (int)$state['expires_at']
+				|| (!empty($state['purchase_fingerprint']) && (!isset($next['purchase_fingerprint']) || !hash_equals((string)$state['purchase_fingerprint'], (string)$next['purchase_fingerprint'])))
+				|| (!empty($state['user_id']) && (int)(isset($next['user_id']) ? $next['user_id'] : 0) !== (int)$state['user_id']))
+					return FALSE;
+				$next['updated_at'] = time();
+				$encoded = maybe_serialize($next);
+				if($encoded === (string)$raw_state)
+				{
+					wp_cache_delete($option_name, 'options');
+					return $next;
+				}
+				if($wpdb->query($wpdb->prepare("UPDATE {$wpdb->options} SET option_value = %s WHERE option_name = %s AND BINARY option_value = BINARY %s", $encoded, $option_name, (string)$raw_state)))
+				{
+					wp_cache_delete($option_name, 'options');
+					return $next;
+				}
+			}
+			return FALSE;
+		}
+
+		/**
 		 * Updates operational Gateway Checkout state.
 		 *
 		 * @package s2Member\Gateway_Checkouts
@@ -279,23 +317,16 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		 */
 		public static function update($gateway_checkout_id = '', $updates = array())
 		{
-			$state = self::load_state($gateway_checkout_id);
-			if(!$state || !is_array($updates))
+			if(!is_array($updates))
 				return FALSE;
-
-			//260830.0408 Only operational fields are mutable here; gateway, purchase, and user identity are established when the checkout is created/resumed.
 			$updates = array_intersect_key($updates, array('gateway_ids' => TRUE, 'gateway_status' => TRUE, 'fulfillment_status' => TRUE, 'context' => TRUE));
-			$state = array_merge($state, $updates);
-			$state['updated_at'] = time();
-
-			if(!update_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, $state, FALSE))
-			{
-				//260829.2325 WordPress returns FALSE when an update makes no database change; return the persisted state if it already matches.
-				$persisted_state = self::load_state($gateway_checkout_id);
-				if($persisted_state !== $state)
-					return FALSE;
-			}
-			return $state;
+			//261115.0528 Preserve full-field replacement semantics, but do not erase a concurrent fulfillment or unrelated private context.
+			return self::mutate_state($gateway_checkout_id, function($state) use ($updates) {
+				$next = array_merge($state, $updates);
+				if(isset($state['fulfillment_status']) && (string)$state['fulfillment_status'] === 'fulfilled')
+					$next['fulfillment_status'] = 'fulfilled';
+				return $next;
+			});
 		}
 
 		/**
@@ -365,6 +396,32 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 		}
 
 		/**
+		 * Advances an operational generation once, clearing IDs in the same atomic update.
+		 *
+		 * @since 261115.0528
+		 * @param string $gateway_checkout_id Checkout ID.
+		 * @param string $context_key        Generation context key.
+		 * @param array  $clear_gateway_ids  Related gateway IDs to reset.
+		 * @return int|bool New generation, else FALSE.
+		 */
+		public static function advance_generation($gateway_checkout_id = '', $context_key = '', $clear_gateway_ids = array())
+		{
+			if(!is_string($context_key) || !preg_match('/^[a-z0-9_]{1,80}$/D', $context_key) || !is_array($clear_gateway_ids))
+				return FALSE;
+			//261115.0528 A lost concurrent update must retry with the winner's incremented generation.
+			$next = self::mutate_state($gateway_checkout_id, function($state) use ($context_key, $clear_gateway_ids) {
+				$state['context'] = isset($state['context']) ? (array)$state['context'] : array();
+				$state['gateway_ids'] = isset($state['gateway_ids']) ? (array)$state['gateway_ids'] : array();
+				$previous = isset($state['context'][$context_key]) ? (int)$state['context'][$context_key] : 1;
+				$state['context'][$context_key] = max(1, $previous) + 1;
+				foreach($clear_gateway_ids as $key)
+					$state['gateway_ids'][(string)$key] = '';
+				return $state;
+			});
+			return is_array($next) ? (int)$next['context'][$context_key] : FALSE;
+		}
+
+		/**
 		 * Stores private encrypted recovery context for a Gateway Checkout.
 		 *
 		 * @package s2Member\Gateway_Checkouts
@@ -391,16 +448,11 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 					return FALSE;
 			}
 
-			$state['private_context'] = $encrypted;
-			$state['updated_at'] = time();
-
-			if(!update_option('ws_plugin__s2member_gateway_checkout_'.$gateway_checkout_id, $state, FALSE))
-			{
-				$persisted_state = self::load_state($gateway_checkout_id);
-				if($persisted_state !== $state)
-					return FALSE;
-			}
-			return TRUE;
+			//261115.0528 Encryption is prepared once; persist it without replacing another worker's payment or fulfillment fields.
+			return (bool)self::mutate_state($gateway_checkout_id, function($current) use ($encrypted) {
+				$current['private_context'] = $encrypted;
+				return $current;
+			});
 		}
 
 		/**
@@ -473,11 +525,12 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 			if(add_option($option_name, $lock, '', 'no'))
 				return $token;
 
-			$existing = get_option($option_name, FALSE);
-			if(!is_array($existing) || empty($existing['time']) || time() - (int)$existing['time'] >= $timeout)
+			//261115.0528 Inspect the actual lock row rather than an options-cache copy before attempting stale-owner takeover.
+			$raw_existing = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option_name));
+			$existing = maybe_unserialize($raw_existing);
+			if($raw_existing !== NULL && (!is_array($existing) || empty($existing['time']) || time() - (int)$existing['time'] >= $timeout))
 			{
-				//260830.1504 Delete only the stale lock version we inspected; another request may replace it between get_option() and this delete.
-				$deleted = $wpdb->delete($wpdb->options, array('option_name' => $option_name, 'option_value' => maybe_serialize($existing)), array('%s', '%s'));
+				$deleted = $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->options} WHERE option_name = %s AND BINARY option_value = BINARY %s", $option_name, (string)$raw_existing));
 				if($deleted)
 				{
 					wp_cache_delete($option_name, 'options');
@@ -507,12 +560,13 @@ if(!class_exists('c_ws_plugin__s2member_gateway_checkouts'))
 				return FALSE;
 
 			$option_name = 's2m_gateway_checkout_lock_'.$gateway_checkout_id;
-			$existing = get_option($option_name, FALSE);
+			//261115.0528 Compare the current persisted owner and exact lock bytes, not a potentially stale cache entry.
+			$raw_existing = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option_name));
+			$existing = maybe_unserialize($raw_existing);
 			if(!is_array($existing) || empty($existing['token']) || !hash_equals((string)$existing['token'], (string)$token))
 				return FALSE;
 
-			//260830.1504 Release only the lock version owned by this token; a stale owner must never delete a newer replacement lock.
-			$deleted = $wpdb->delete($wpdb->options, array('option_name' => $option_name, 'option_value' => maybe_serialize($existing)), array('%s', '%s'));
+			$deleted = $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->options} WHERE option_name = %s AND BINARY option_value = BINARY %s", $option_name, (string)$raw_existing));
 			if($deleted)
 				wp_cache_delete($option_name, 'options');
 
