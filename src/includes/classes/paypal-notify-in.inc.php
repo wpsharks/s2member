@@ -49,6 +49,58 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 		 */
 		public static function paypal_notify()
 		{
+			//261114.2346 The public HTTP entrypoint alone owns response headers, output buffers, and exit().
+			//261114.2346 Keep the authenticated processing core callable without terminating its caller; 200 is not proof that every side effect completed.
+			$outcome = self::paypal_notify_process();
+			if(!is_array($outcome))
+				return; // No Notify endpoint request; the legacy after-notify hook already ran.
+
+			if($outcome['code'] === 403 || $outcome['code'] === 409 || $outcome['code'] === 503)
+			{
+				status_header($outcome['code']);
+				header('Content-Type: text/plain; charset=UTF-8');
+				exit($outcome['body']);
+			}
+
+			$paypal = $outcome['paypal'];
+			/*
+			260322 Log effective response state before/after forcing a 200.
+			Output response headers & content body.
+			*/
+			$paypal['s2member_log'][] = 'Pre-response `headers_sent`: '.((headers_sent($headers_sent_file, $headers_sent_line)) ? 'yes @ '.$headers_sent_file.':'.$headers_sent_line : 'no');
+			$paypal['s2member_log'][] = 'Pre-response `http_response_code()`: '.((function_exists('http_response_code')) ? (string)http_response_code() : 'n/a');
+			$paypal['s2member_log'][] = 'Pre-response headers: '.var_export(headers_list(), TRUE);
+
+			while(@ob_end_clean()); // Clean output buffers in the HTTP wrapper, never in the reusable processing core.
+
+			if(function_exists('http_response_code'))
+				http_response_code(200);
+
+			if(!empty($_SERVER['SERVER_PROTOCOL']))
+				header($_SERVER['SERVER_PROTOCOL'].' 200 OK', TRUE, 200);
+			else
+				header('HTTP/1.1 200 OK', TRUE, 200);
+
+			status_header(200); // OK status code.
+			header('Content-Type: text/plain; charset=UTF-8');
+
+			$paypal['s2member_log'][] = 'Post-response `http_response_code()`: '.((function_exists('http_response_code')) ? (string)http_response_code() : 'n/a');
+			$paypal['s2member_log'][] = 'Post-response headers: '.var_export(headers_list(), TRUE);
+
+			exit($outcome['body']);
+		}
+
+		/**
+		 * Process a Notify request without sending an HTTP response or exiting.
+		 *
+		 * //261114.2346 Preserve the original hooks, per-request variables, authentication, logging, and gateway conditionals.
+		 * //261114.2346 Callers must still provide a legitimate request context; this method does not bypass gateway verification.
+		 *
+		 * @since 261114.2346
+		 * @return array|null HTTP outcome with code/body (and verified processing log for 200), or null when no Notify request ran.
+		 */
+		public static function paypal_notify_process()
+		{
 			global $current_site, $current_blog;
 
 			do_action('ws_plugin__s2member_before_paypal_notify', get_defined_vars());
@@ -196,6 +248,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				}
 				else // Extensive log reporting here. This is an area where many site owners find trouble. Depending on server configuration; remote HTTPS connections may fail.
 				{
+					//261115.0020 Invalid verification can return FALSE; normalize it before appending diagnostic entries.
+					if($paypal === false)
+						$paypal = array();
+
 					if (!empty($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_SERVER['HTTP_USER_AGENT'])) {
 						if (preg_match('/(msie|trident|gecko|webkit|presto|konqueror|playstation)[\/ ]([0-9\.]+)/i', $_SERVER['HTTP_USER_AGENT'])) {
 							$paypal['s2member_indicator'] = 'This PayPal IPN Handler by s2Member® is active & listening.';
@@ -244,51 +300,28 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				$proxy_v2_rejection_status = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_rejection_status();
 				if($proxy_v2_rejection_status === 403 || $proxy_v2_rejection_status === 409)
 				{
-					status_header($proxy_v2_rejection_status);
-					header('Content-Type: text/plain; charset=UTF-8');
-					exit('Signed payment notification was not accepted.');
+					//261114.2346 An authenticated replay is a conflict, not a safe retry; only the wrapper sends HTTP 409/403.
+					return array('code' => $proxy_v2_rejection_status, 'body' => 'Signed payment notification was not accepted.');
 				}
 				//261113.1000 Neither an incomplete durable enqueue nor an occupied legacy transaction lock warrants HTTP 200.
 				if($notification_retry_required)
 				{
-					status_header(503);
-					header('Content-Type: text/plain; charset=UTF-8');
-					exit('Temporary payment notification processing failure.');
+					//261114.2346 Preserve 503 until the processing core can report durable, per-effect recovery outcomes.
+					return array('code' => 503, 'body' => 'Temporary payment notification processing failure.');
 				}
-				/*
-				260322 Log effective response state before/after forcing a 200.
-				Output response headers & content body.
-				*/
-				$paypal['s2member_log'][] = 'Pre-response `headers_sent`: '.((headers_sent($headers_sent_file, $headers_sent_line)) ? 'yes @ '.$headers_sent_file.':'.$headers_sent_line : 'no');
-				$paypal['s2member_log'][] = 'Pre-response `http_response_code()`: '.((function_exists('http_response_code')) ? (string)http_response_code() : 'n/a');
-				$paypal['s2member_log'][] = 'Pre-response headers: '.var_export(headers_list(), TRUE);
 
-				while(@ob_end_clean()); // Clean output buffers.
-
-				if(function_exists('http_response_code'))
-					http_response_code(200);
-
-				if(!empty($_SERVER['SERVER_PROTOCOL']))
-					header($_SERVER['SERVER_PROTOCOL'].' 200 OK', TRUE, 200);
-				else
-					header('HTTP/1.1 200 OK', TRUE, 200);
-
-				status_header(200); // OK status code.
-				header('Content-Type: text/plain; charset=UTF-8');
-
-				$paypal['s2member_log'][] = 'Post-response `http_response_code()`: '.((function_exists('http_response_code')) ? (string)http_response_code() : 'n/a');
-				$paypal['s2member_log'][] = 'Post-response headers: '.var_export(headers_list(), TRUE);
-
-				if (!empty($paypal['s2member_paypal_proxy_return_url'])) {
-					if(preg_match('/^https?%3A/ui', $paypal['s2member_paypal_proxy_return_url'])) {
-						$paypal['s2member_paypal_proxy_return_url'] = urldecode($paypal['s2member_paypal_proxy_return_url']);
-					} // See: <https://github.com/websharks/s2member/issues/1024>
-					exit($paypal['s2member_paypal_proxy_return_url']);
-				} elseif (!empty($paypal['s2member_indicator'])) {
-					exit($paypal['s2member_indicator']);
-				} else {
-					exit(); // Default behavior.
+				//261114.2346 Preserve historical return-URL/indicator bodies without emitting headers or terminating an in-process caller.
+				$body = '';
+				if(!empty($paypal['s2member_paypal_proxy_return_url']))
+				{
+					$body = $paypal['s2member_paypal_proxy_return_url'];
+					if(preg_match('/^https?%3A/ui', $body))
+						$body = urldecode($body); // See: <https://github.com/websharks/s2member/issues/1024>.
 				}
+				else if(!empty($paypal['s2member_indicator']))
+					$body = $paypal['s2member_indicator'];
+
+				return array('code' => 200, 'body' => $body, 'paypal' => $paypal);
 			}
 			foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 			do_action('ws_plugin__s2member_after_paypal_notify', get_defined_vars());
