@@ -3091,7 +3091,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						'option_name2' => (string)$stored_token['on1'], 'option_selection2' => (string)$stored_token['os1'],
 					);
 
-					$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_subscr_done_'.md5($subscription_id));
+					//261115.0413 Browser confirmation and verified webhook activation share this checked Framework button subscription.
+					// Keep the existing subscription completion marker, but avoid a second HTTP request to this same WordPress site.
+					$in_process = apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, $invoice, $subscription_id);
+					$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_subscr_done_'.md5($subscription_id), 'paypal_checkout', array(), $in_process);
 					if(empty($notify_result['ok']))
 						return array('ok' => FALSE, 'error' => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed');
 
