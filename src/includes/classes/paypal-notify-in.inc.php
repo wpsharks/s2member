@@ -125,7 +125,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				if(is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars()) && ($_paypal = $paypal) && ($_paypal_s = serialize($_paypal)))
 				{
 					//261113.1000 Only verified internal handler decisions may request delivery retry; never accept this control field from a native IPN or proxy payload.
-					unset($paypal['s2member_notification_retry_error']);
+					unset($paypal['s2member_notification_retry_error'], $paypal['s2member_eot_delivery_status']);
 					$paypal['s2member_log'][] = 'IPN received on: '.date('D M j, Y g:i:s a T');
 					$paypal['s2member_log'][] = 's2Member POST vars verified '.((!empty($paypal['proxy_verified'])) ? 'with a Proxy Key' : 'through a POST back to PayPal.');
 

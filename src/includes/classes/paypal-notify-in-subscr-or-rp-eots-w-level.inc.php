@@ -57,12 +57,30 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 			   && (!empty($paypal['subscr_cid']) || ($paypal['subscr_cid'] = $paypal['subscr_id']))
 			)
 			{
+				//261116.0147 Claim new EOT deliveries durably before any EOT hook or membership side effect.
+				$transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s);
+				$eot_receipt = 's2m_eot_receipt_'.hash('sha256', $_paypal_s);
+				$eot_state = get_option($eot_receipt, FALSE);
+				$legacy_seen = get_transient($transient_ipn);
+				$eot_first = $eot_state === FALSE && !$legacy_seen
+				             && add_option($eot_receipt, 'processing', '', 'no')
+				             && set_transient($transient_ipn, time(), 31556926 * 10);
+				if(!$eot_first && ($eot_state !== FALSE || !$legacy_seen))
+				{
+					//261116.0147 A prior uncertain receipt must not invoke EOT hooks again or receive a false HTTP 200.
+					if($eot_state === 'completed')
+						$paypal['s2member_eot_delivery_status'] = 'accepted';
+					else
+						$paypal['s2member_notification_retry_error'] = 'eot_outcome_unknown';
+					return $paypal;
+				}
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify_before_subscr_eot', get_defined_vars());
 				unset($__refs, $__v); // Housekeeping.
 
-				if(!get_transient($transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
+				if($eot_first)
 				{
+					$eot_deferred_persisted = TRUE;
 					//260824.2010 Normalize sparse refund/reversal/dispute fields before direct reads; PayPal `new_case` IPNs do not require `payment_status`.
 					$paypal = c_ws_plugin__s2member_utils_arrays::set_unset_elements($paypal, array('payment_status', 'txn_type', 'case_type', 'parent_txn_id'));
 
@@ -354,7 +372,10 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 
 						$paypal['s2member_log'][] = 'Re-generating. This IPN will go into a Transient Queue; and be re-processed during registration.';
 
-						set_transient('s2m_'.md5('s2member_transient_ipn_subscr_eot_'.$paypal['subscr_id']), $ipn, 43200);
+						$eot_deferred_key = 's2m_'.md5('s2member_transient_ipn_subscr_eot_'.$paypal['subscr_id']);
+						set_transient($eot_deferred_key, $ipn, 43200);
+						//261116.0227 A no-op write can return false; require the exact queued payload before completing an EOT.
+						$eot_deferred_persisted = get_transient($eot_deferred_key) === $ipn;
 					}
 					else $paypal['s2member_log'][] = 'Unable to (demote|delete) Member. Could not get the existing User ID from the DB. It\'s possible that it was ALREADY processed through another IPN, removed manually by a Site Administrator, or by s2Member\'s Auto-EOT Sys.';
 					/*
@@ -446,7 +467,19 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_lev
 				do_action('ws_plugin__s2member_during_paypal_notify_after_subscr_eot', get_defined_vars());
 				unset($__refs, $__v); // Housekeeping.
 
-				return apply_filters('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level', $paypal, get_defined_vars());
+				$result = apply_filters('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level', $paypal, get_defined_vars());
+				if($eot_first)
+				{
+					//261116.0147 Record handler completion only after all EOT hooks/filters return; external side effects still need separate evidence.
+					if(is_array($result) && $eot_deferred_persisted && update_option($eot_receipt, 'completed', FALSE))
+						$result['s2member_eot_delivery_status'] = 'accepted';
+					else
+					{
+						$result = is_array($result) ? $result : $paypal;
+						$result['s2member_notification_retry_error'] = 'eot_completion_unconfirmed';
+					}
+				}
+				return $result;
 			}
 			else return apply_filters('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_eots_w_level', FALSE, get_defined_vars());
 		}

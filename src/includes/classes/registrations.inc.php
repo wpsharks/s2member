@@ -214,11 +214,15 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 
 			$proxy = array('s2member_paypal_proxy' => stripslashes($gateway),
 			               's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen());
+			$local_eot = FALSE;
 			try
 			{
-				//261116.0012 Require HTTP 200; an error body alone is not accepted delivery.
-				$response = c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'),
-					array_merge(stripslashes_deep($ipn), $proxy), array('timeout' => 20), TRUE);
+				$local_eot = $kind === 'eot' && apply_filters('ws_plugin__s2member_registration_eot_local_dispatch', TRUE, $ipn, (int)$user_id) === TRUE;
+				//261116.0147 Local EOT dispatch exposes handler acceptance; a remote HTTP 200 alone cannot prove it.
+				$response = $local_eot
+					? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_inprocess(array_merge(stripslashes_deep($ipn), $proxy), TRUE)
+					: c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'),
+						array_merge(stripslashes_deep($ipn), $proxy), array('timeout' => 20), TRUE);
 			}
 			catch(\Throwable $exception)
 			{
@@ -226,7 +230,9 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 			}
 			$code = is_array($response) && isset($response['code']) ? (int)$response['code'] : 0;
 			if($code !== 200
-			   || ($kind === 'payment' && !c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done_option, DAY_IN_SECONDS)))
+			   || ($kind === 'payment' && !c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done_option, DAY_IN_SECONDS))
+			   || ($kind === 'eot' && (!$local_eot || !isset($response['paypal']['s2member_eot_delivery_status'])
+			                          || $response['paypal']['s2member_eot_delivery_status'] !== 'accepted')))
 			{
 				//261116.0012 Leave ambiguous deliveries untouched; never automatically replay possible partial side effects.
 				do_action('ws_plugin__s2member_registration_notification_unconfirmed', (int)$user_id, $kind, $code);
@@ -237,7 +243,7 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 			if(get_transient($transient) !== $ipn)
 				return 'changed';
 			delete_transient($transient);
-			//261116.0012 EOT has no durable completion marker; HTTP 200 acknowledges transport only.
+			//261116.0147 EOT acceptance proves the handler returned, not that external hooks delivered their own effects.
 			return $kind === 'payment' ? 'completed' : 'acknowledged';
 		}
 

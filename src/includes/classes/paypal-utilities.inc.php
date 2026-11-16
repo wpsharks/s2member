@@ -2882,9 +2882,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 *
 				 * @since 261115.0113
 				 * @param array $post Server-created Notify payload, never raw browser or unverified webhook input.
+				 * @param bool $include_handler_outcome Return internal handler details for trusted recovery callers only.
 				 * @return array Normalized response code, message, and body.
 				 */
-				public static function paypal_checkout_notify_inprocess($post)
+				public static function paypal_checkout_notify_inprocess($post, $include_handler_outcome = FALSE)
 					{
 						$home = home_url('/');
 						$host = is_string($home) ? parse_url($home, PHP_URL_HOST) : FALSE;
@@ -2934,7 +2935,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								if(!is_array($outcome) || !isset($outcome['code']) || !is_int($outcome['code']))
 									return array('code' => 0, 'message' => 'invalid_internal_notify_outcome', 'body' => '');
 
-								return array('code' => $outcome['code'], 'message' => $outcome['code'] === 200 ? 'OK' : 'rejected', 'body' => isset($outcome['body']) ? (string)$outcome['body'] : '');
+								//261116.0147 Ordinary Checkout replies stay unchanged; only trusted recovery callers receive handler details.
+								$response = array('code' => $outcome['code'], 'message' => $outcome['code'] === 200 ? 'OK' : 'rejected',
+								                  'body' => isset($outcome['body']) ? (string)$outcome['body'] : '');
+								if($include_handler_outcome)
+									$response['paypal'] = isset($outcome['paypal']) && is_array($outcome['paypal']) ? $outcome['paypal'] : array();
+								return $response;
 							}
 						finally
 							{
