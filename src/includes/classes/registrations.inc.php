@@ -170,6 +170,78 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 		}
 
 		/**
+		 * Forward a verified cached registration notification without discarding failed delivery attempts.
+		 *
+		 * @since 261116.0012
+		 * @param string $transient Existing per-subscription transient key.
+		 * @param array $ipn Stored notification originally accepted by a gateway handler.
+		 * @param int $user_id Newly registered member.
+		 * @param string $gateway Member's registered gateway.
+		 * @param string $kind Either payment or eot.
+		 * @return string Completed, acknowledged, blocked, changed, or unconfirmed.
+		 */
+		public static function deliver_cached_registration_notification($transient, $ipn, $user_id, $gateway, $kind)
+		{
+			if(!is_string($transient) || !is_array($ipn)
+			   || !in_array($kind, array('payment', 'eot'), TRUE) || !is_string($gateway)
+			   || !isset($ipn['subscr_id'], $ipn['subscr_gateway']) || !is_string($ipn['subscr_id'])
+			   || !is_string($ipn['subscr_gateway']) || $ipn['subscr_id'] === '' || $gateway !== $ipn['subscr_gateway']
+			   || (int)$user_id < 1 || get_user_option('s2member_subscr_id', (int)$user_id) !== $ipn['subscr_id']
+			   || get_user_option('s2member_subscr_gateway', (int)$user_id) !== $gateway
+			   || $transient !== 's2m_'.md5('s2member_transient_ipn_subscr_'.$kind.'_'.$ipn['subscr_id']))
+				return 'blocked';
+			$done_option = '';
+			if($kind === 'payment')
+			{
+				//261116.0012 An authoritative PayPal receipt permanently fences the older registration replay.
+				$legacy_safe = c_ws_plugin__s2member_payment_events::legacy_registration_replay_is_safe($ipn);
+				if($legacy_safe !== TRUE || !isset($ipn['txn_id']) || !is_string($ipn['txn_id']) || $ipn['txn_id'] === '')
+					return 'blocked';
+				$done_option = 's2m_paypal_txn_done_'.md5(strtolower($ipn['subscr_id']).'|'.strtolower($ipn['txn_id']));
+			}
+			if(get_transient($transient) !== $ipn)
+				return 'changed';
+			if($kind === 'payment')
+			{
+				if(c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done_option, DAY_IN_SECONDS))
+				{
+					//261116.0012 A completed transaction needs no second delivery; never delete a replaced transient.
+					if(get_transient($transient) === $ipn)
+						delete_transient($transient);
+					return 'completed';
+				}
+			}
+
+			$proxy = array('s2member_paypal_proxy' => stripslashes($gateway),
+			               's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen());
+			try
+			{
+				//261116.0012 Require HTTP 200; an error body alone is not accepted delivery.
+				$response = c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'),
+					array_merge(stripslashes_deep($ipn), $proxy), array('timeout' => 20), TRUE);
+			}
+			catch(\Throwable $exception)
+			{
+				$response = FALSE;
+			}
+			$code = is_array($response) && isset($response['code']) ? (int)$response['code'] : 0;
+			if($code !== 200
+			   || ($kind === 'payment' && !c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done_option, DAY_IN_SECONDS)))
+			{
+				//261116.0012 Leave ambiguous deliveries untouched; never automatically replay possible partial side effects.
+				do_action('ws_plugin__s2member_registration_notification_unconfirmed', (int)$user_id, $kind, $code);
+				return 'unconfirmed';
+			}
+
+			//261116.0012 A new cached event may have replaced this slot during delivery; do not remove it.
+			if(get_transient($transient) !== $ipn)
+				return 'changed';
+			delete_transient($transient);
+			//261116.0012 EOT has no durable completion marker; HTTP 200 acknowledges transport only.
+			return $kind === 'payment' ? 'completed' : 'acknowledged';
+		}
+
+		/**
 		 * Custom password; else randomly generated password.
 		 *
 		 * @package s2Member\Registrations
@@ -993,14 +1065,10 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											}
 											if(($transient = 's2m_'.md5('s2member_transient_ipn_subscr_payment_'.$subscr_id)) && is_array($subscr_payment = get_transient($transient)) && !empty($subscr_payment['subscr_gateway']))
 											{
-												//261112.2203 A dual-written authoritative receipt must never also execute the old HTTP replay; leave its transient intact for reconciliation.
+												//261116.0012 Preserve the existing blocked-replay hook contract while retaining uncertain payments.
 												$legacy_safe = c_ws_plugin__s2member_payment_events::legacy_registration_replay_is_safe($subscr_payment);
 												if($legacy_safe === TRUE)
-												{
-													$proxy = array('s2member_paypal_proxy' => stripslashes((string)$subscr_payment['subscr_gateway']), 's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen());
-													c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'), array_merge(stripslashes_deep($subscr_payment), $proxy), array('timeout' => 20));
-													delete_transient($transient); // This can be deleted now.
-												}
+													self::deliver_cached_registration_notification($transient, $subscr_payment, $user_id, $subscr_gateway, 'payment');
 												else
 													do_action('ws_plugin__s2member_pending_registration_legacy_blocked', $user_id, $legacy_safe);
 											}
@@ -1014,9 +1082,8 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											}
 											if(($transient = 's2m_'.md5('s2member_transient_ipn_subscr_eot_'.$subscr_id)) && is_array($subscr_eot = get_transient($transient)) && !empty($subscr_eot['subscr_gateway']))
 											{
-												$proxy = array('s2member_paypal_proxy' => stripslashes((string)$subscr_eot['subscr_gateway']), 's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen());
-												c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'), array_merge(stripslashes_deep($subscr_eot), $proxy), array('timeout' => 20));
-												delete_transient($transient); // This can be deleted now.
+												//261116.0012 Never discard a deferred EOT on a failed or uncertain transport attempt.
+												self::deliver_cached_registration_notification($transient, $subscr_eot, $user_id, $subscr_gateway, 'eot');
 											}
 											if(!headers_sent()) // Only if headers are NOT yet sent. Here we establish both Signup and Payment Tracking Cookies.
 												@setcookie('s2member_tracking', ($s2member_tracking = c_ws_plugin__s2member_utils_encryption::encrypt($subscr_id)), time() + 31556926, COOKIEPATH, COOKIE_DOMAIN).
