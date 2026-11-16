@@ -469,16 +469,43 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				public static function paypal_proxy_v2_signing_key()
 					{
 						$option = 'ws_plugin__s2member_paypal_proxy_v2_signing_key';
+						$fence_option = 'ws_plugin__s2member_paypal_proxy_v2_signing_key_fingerprint';
+						$fence = get_option($fence_option, null);
 						$key = get_option($option, null);
 						if($key === null)
 							{
+								//261117.0019 Do not silently rotate a lost key once its durable fingerprint exists: old external signers and replay claims depend on it.
+								if($fence !== null)
+									return false;
 								//261111.0003 Generate only on the server, once per site; add_option uses the database unique key to resolve concurrent first requests.
 								try { $generated = bin2hex(random_bytes(32)); }
 								catch(Exception $exception) { return false; }
 								$key = add_option($option, $generated, '', 'no') ? $generated : get_option($option, null);
 							}
-						//261111.0003 Fail closed on a missing/corrupted stored secret; never silently fall back to the public legacy Proxy Key.
-						return is_string($key) && preg_match('/^[a-f0-9]{64}$/D', $key) ? $key : false;
+						//261117.0019 Bind an existing or newly created signing key before first signed use; never treat a corrupt or conflicting marker as recoverable.
+						if(!is_string($key) || !preg_match('/^[a-f0-9]{64}$/D', $key))
+							return false;
+						$expected = hash('sha256', $key);
+						if($fence === null)
+							$fence = add_option($fence_option, $expected, '', 'no') ? $expected : get_option($fence_option, null);
+						return is_string($fence) && preg_match('/^[a-f0-9]{64}$/D', $fence) && hash_equals($expected, $fence) ? $key : false;
+					}
+				/**
+				 * Read an existing HMAC signing key without initializing or changing the replay namespace.
+				 * An older key without a marker remains inspectable; a changed or damaged marker must fail closed.
+				 *
+				 * @since 261117.0019
+				 * @return string|bool Existing key, or false when missing, corrupt, or inconsistent.
+				 */
+				private static function paypal_proxy_v2_existing_signing_key()
+					{
+						$key = get_option('ws_plugin__s2member_paypal_proxy_v2_signing_key', null);
+						if(!is_string($key) || !preg_match('/^[a-f0-9]{64}$/D', $key))
+							return false;
+						$fence = get_option('ws_plugin__s2member_paypal_proxy_v2_signing_key_fingerprint', null);
+						if($fence === null)
+							return $key; //261117.0019 Older valid signing keys predate the continuity marker; read-only audits must not create it.
+						return is_string($fence) && preg_match('/^[a-f0-9]{64}$/D', $fence) && hash_equals(hash('sha256', $key), $fence) ? $key : false;
 					}
 				/**
 				 * Canonicalize a v2 proxy POST body for a transaction-bound HMAC.
@@ -665,8 +692,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(!is_string($message_id) || !preg_match('/^[a-f0-9]{32}$/D', $message_id))
 							return false;
 						//261116.2220 The inspection path must never generate or replace the signing secret: doing so would change the claim namespace.
-						$key = get_option('ws_plugin__s2member_paypal_proxy_v2_signing_key', null);
-						if(!is_string($key) || !preg_match('/^[a-f0-9]{64}$/D', $key))
+						//261117.0019 An audit must not create a key or misclassify old claims under an altered signing secret.
+						if(($key = self::paypal_proxy_v2_existing_signing_key()) === false)
 							return false;
 						$option = 'ws_plugin__s2member_proxy_v2_seen_'.hash_hmac('sha256', $message_id, $key);
 						global $wpdb;
@@ -699,9 +726,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						|| !preg_match('/^v2\.([0-9]{10,12})\.([a-f0-9]{32})\.([a-f0-9]{64})$/D', $postvars['s2member_paypal_proxy_verification'], $matches))
 							return false;
 						//261116.2325 Never generate a missing signing key during an audit; a new key would change the namespace of historical claims.
-						$key = get_option('ws_plugin__s2member_paypal_proxy_v2_signing_key', null);
+						$key = self::paypal_proxy_v2_existing_signing_key();
 						$payload = self::paypal_proxy_v2_payload($postvars);
-						if(!is_string($key) || !preg_match('/^[a-f0-9]{64}$/D', $key) || $payload === false)
+						//261117.0019 Correlation must fail closed on key continuity errors without writing any audit or payment state.
+						if($key === false || $payload === false)
 							return false;
 						$expected = 'v2.'.(int)$matches[1].'.'.$matches[2].'.'.hash_hmac('sha256', "s2member_paypal_proxy_v2\n".(int)$matches[1]."\n".$matches[2]."\n".$payload, $key);
 						if(!hash_equals($expected, $postvars['s2member_paypal_proxy_verification']))
