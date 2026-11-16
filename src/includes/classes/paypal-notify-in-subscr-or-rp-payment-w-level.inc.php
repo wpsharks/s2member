@@ -60,28 +60,33 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 			$prior = c_ws_plugin__s2member_payment_events::read($event);
 			if(is_wp_error($prior))
 				return $prior;
-			//261113.2225 Use one cutover-epoch snapshot for every first-receipt decision in this request.
-			$epoch = get_option('s2m_paypal_authoritative_cutover_epoch', 0);
-			$epoch = (is_scalar($epoch) && ctype_digit((string)$epoch)) ? (int)$epoch : 0;
-			//261113.2224 A shadow receipt does not prove whether legacy fulfillment finished. After cutover,
-			//261113.2224 acknowledge only a live legacy done marker; otherwise require reconciliation.
+			//261116.0537 A first receipt's subscription and legacy route survive any epoch reset or rollback.
+			if(is_array($prior) && isset($prior['subscription_hash']) && !hash_equals($prior['subscription_hash'], hash('sha256', $paypal['subscr_id'])))
+				return new WP_Error('s2m_pay_cutover_subscription_mismatch', 'An earlier payment receipt belongs to another subscription.');
 			if(is_array($prior) && !isset($prior['replay_origin']))
 			{
-				if($epoch < 1)
-					return FALSE; //261113.2224 Before cutover, preserve the original legacy route.
+				//261116.0537 A shadow can represent effects already performed; an absent epoch cannot authorize replay.
 				$done = 's2m_paypal_txn_done_'.md5(strtolower($paypal['subscr_id']).'|'.strtolower($paypal['txn_id']));
 				if(c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done, DAY_IN_SECONDS))
 					return array('event' => $event, 'status' => 'legacy_acknowledged', 'created' => FALSE);
 				return new WP_Error('s2m_pay_cutover_shadow_unreconciled', 'An earlier legacy payment may already have produced effects; manual reconciliation is required.');
 			}
 
+			//261116.0537 Parse the epoch only for a first receipt; an existing authoritative owner stays authoritative.
+			$epoch_raw = get_option('s2m_paypal_authoritative_cutover_epoch', 0);
+			$epoch = is_scalar($epoch_raw) && ctype_digit((string)$epoch_raw) ? (int)$epoch_raw : 0;
+			if($prior === FALSE && !in_array($epoch_raw, array(FALSE, NULL, 0, '0'), TRUE) && $epoch < 1)
+				return new WP_Error('s2m_pay_cutover_invalid_epoch', 'Invalid cutover epoch; investigate configuration before processing this payment.');
+			//261116.0558 Without an epoch, a new payment stays legacy even if the opt-in is enabled.
+			if($prior === FALSE && $epoch < 1)
+				return FALSE;
 			$enabled = apply_filters('ws_plugin__s2member_paypal_authoritative_recurring_enabled', FALSE, $paypal) === TRUE;
 			if($prior === FALSE && (!$enabled || strtolower($paypal['txn_type']) === 'merch_pmt'))
 			{
 				//261113.0834 Once a cutover epoch exists, even an opted-out legacy delivery must reserve the first receipt before member effects. Otherwise a concurrent native IPN can create an authoritative receipt while this request continues down the legacy path.
 				if($epoch < 1)
 					return FALSE;
-				$shadow = c_ws_plugin__s2member_payment_events::receive('paypal', $merchant, $paypal['txn_id'], 'payment', FALSE);
+				$shadow = c_ws_plugin__s2member_payment_events::receive('paypal', $merchant, $paypal['txn_id'], 'payment', FALSE, $paypal['subscr_id']);
 				if(is_wp_error($shadow))
 					return $shadow;
 				if(!isset($shadow['record']['replay_origin']))
@@ -96,7 +101,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 				if($epoch < 1 || $paid === FALSE || $paid < $epoch || $paid > time() + 300)
 				{
 					//261113.0039 Also fence the legacy-first path before effects; a racing channel must observe its shadow rather than create an authoritative receipt.
-					$shadow = c_ws_plugin__s2member_payment_events::receive('paypal', $merchant, $paypal['txn_id'], 'payment', FALSE);
+					$shadow = c_ws_plugin__s2member_payment_events::receive('paypal', $merchant, $paypal['txn_id'], 'payment', FALSE, $paypal['subscr_id']);
 					if(is_wp_error($shadow))
 						return $shadow;
 					if(!isset($shadow['record']['replay_origin']))

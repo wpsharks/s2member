@@ -163,15 +163,18 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 		 * @param string $transaction Provider transaction ID.
 		 * @param string $event Canonical semantic event type.
 		 * @param bool $authoritative TRUE only when the entire incoming payment flow bypasses legacy transient fulfillment.
+		 * @param string|null $subscription Verified subscription identity to bind to the first receipt, if known.
 		 *
 		 * @return array|WP_Error Array with `created` flag and `record`, or WP_Error.
 		 */
-		public static function receive($gateway, $merchant, $transaction, $event, $authoritative = FALSE)
+		public static function receive($gateway, $merchant, $transaction, $event, $authoritative = FALSE, $subscription = NULL)
 		{
 			global $wpdb;
 
 			if(!is_bool($authoritative) || ($authoritative && (!is_string($event) || strtolower(trim($event)) !== 'payment')))
 				return new WP_Error('s2m_pay_event_invalid_origin', 'Invalid payment-event replay origin.');
+			if($subscription !== NULL && !self::valid_subscription($subscription))
+				return new WP_Error('s2m_pay_event_invalid_subscription', 'Invalid payment subscription identity.');
 			$name = self::option_name($gateway, $merchant, $transaction, $event);
 			if($name === FALSE)
 				return new WP_Error('s2m_pay_event_invalid_identity', 'Invalid payment event identity.');
@@ -190,6 +193,9 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 			//261112.1534 Persist the authoritative origin with the first INSERT, so a pre-enqueue crash remains safely retryable.
 			if($authoritative)
 				$record['replay_origin'] = 'authoritative';
+			//261116.0537 Bind verified subscription identity in the initial atomic insert, not a later mutable update.
+			if($subscription !== NULL)
+				$record['subscription_hash'] = hash('sha256', $subscription);
 			$value = wp_json_encode($record);
 			if(!is_string($value))
 				return new WP_Error('s2m_pay_event_encode_failed', 'Could not encode payment event.');
@@ -219,6 +225,8 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 				return new WP_Error('s2m_pay_event_lost_record', 'Existing payment event disappeared during receipt.');
 			if($existing['gateway'] !== $record['gateway'] || $existing['event'] !== $record['event'])
 				return new WP_Error('s2m_pay_event_identity_mismatch', 'Existing payment event identity is inconsistent.');
+			if($subscription !== NULL && isset($existing['subscription_hash']) && !hash_equals($existing['subscription_hash'], hash('sha256', $subscription)))
+				return new WP_Error('s2m_pay_event_subscription_mismatch', 'Existing payment event belongs to another subscription.');
 			return array('created' => FALSE, 'record' => $existing);
 		}
 
@@ -533,7 +541,7 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 			if($name === FALSE)
 				return new WP_Error('s2m_pay_pending_invalid_identity', 'Pending payment identity is invalid.');
 
-			$receipt = self::receive($gateway, $merchant, $ipn['txn_id'], 'payment', $authoritative);
+			$receipt = self::receive($gateway, $merchant, $ipn['txn_id'], 'payment', $authoritative, $ipn['subscr_id']);
 			if(is_wp_error($receipt))
 				return $receipt;
 
