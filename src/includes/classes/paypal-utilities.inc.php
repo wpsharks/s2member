@@ -711,10 +711,66 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						//261111.0125 Fail closed if the completed marker cannot be read. Cached absence could permit double fulfillment after a concurrent request finishes.
 						$done_time = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $done_option));
-						if($wpdb->last_error !== '')
+						//261116.0440 Unknown completion data must not permit a second fulfillment attempt.
+						if($wpdb->last_error !== '' || ($done_time !== NULL && !is_numeric($done_time)))
 							return TRUE;
 
 						return is_numeric($done_time) && (int)$done_time > 0 && ((int)$done_ttl <= 0 || time() - (int)$done_time < (int)$done_ttl);
+					}
+				/**
+				 * Confirm a completed purchase against the database, never a stale option cache.
+				 *
+				 * @since 261116.0439
+				 * @return bool
+				 */
+				public static function paypal_purchase_done_confirmed($done_option, $done_ttl)
+					{
+						global $wpdb;
+						if(!is_string($done_option) || $done_option === '')
+							return FALSE;
+						$time = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $done_option));
+						return $wpdb->last_error === '' && is_numeric($time) && (int)$time > 0
+							&& ((int)$done_ttl <= 0 || time() - (int)$time < (int)$done_ttl);
+					}
+				/**
+				 * Persist a pre-effect checkpoint on the owned purchase lock.
+				 *
+				 * @since 261116.0439
+				 * @return bool
+				 */
+				public static function paypal_purchase_lock_mark_started($lock_option, $token)
+					{
+						global $wpdb;
+						if(!is_string($lock_option) || $lock_option === '' || !is_string($token) || !preg_match('/^[a-f0-9]{32}$/D', $token))
+							return FALSE;
+						$stored = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $lock_option));
+						if($wpdb->last_error !== '' || $stored === NULL)
+							return FALSE;
+						$lock = maybe_unserialize($stored);
+						if(!is_array($lock) || empty($lock['token']) || !hash_equals((string)$lock['token'], $token))
+							return FALSE;
+						if(!empty($lock['started']))
+							return TRUE;
+						$lock['started'] = time();
+						$new_value = maybe_serialize($lock);
+						//261116.0439 Compare against the exact owned row so a stale worker cannot establish a checkpoint.
+						if($wpdb->update($wpdb->options, array('option_value' => $new_value),
+							array('option_name' => $lock_option, 'option_value' => $stored), array('%s'), array('%s', '%s')) !== 1)
+							return FALSE;
+						self::paypal_purchase_lock_cache_clear($lock_option);
+						$fresh = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $lock_option));
+						return $wpdb->last_error === '' && $fresh === $new_value;
+					}
+				/**
+				 * Write and independently verify a purchase's completion marker.
+				 *
+				 * @since 261116.0439
+				 * @return bool
+				 */
+				public static function paypal_purchase_complete($done_option, $done_ttl)
+					{
+						self::dedupe_done_mark($done_option);
+						return self::paypal_purchase_done_confirmed($done_option, $done_ttl);
 					}
 				/**
 				 * Invalidate a purchase lock's option cache after a direct SQL change.
@@ -772,7 +828,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 								$existing = maybe_unserialize($stored);
 								$lock_time = is_array($existing) && isset($existing['time']) ? (int)$existing['time'] : (is_numeric($existing) ? (int)$existing : 0);
-								if($lock_time <= 0 || time() - $lock_time < $lock_timeout)
+								//261116.0439 A pre-effect checkpoint outlives an expired lease; an unknown outcome must not be replayed.
+								if((is_array($existing) && !empty($existing['started'])) || $lock_time <= 0 || time() - $lock_time < $lock_timeout)
 									return FALSE;
 
 								//261111.0125 Compare-and-delete only the version we observed; another worker may already have replaced this expired lock.

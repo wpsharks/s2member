@@ -53,7 +53,24 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 				do_action('ws_plugin__s2member_during_paypal_notify_before_sp_access', get_defined_vars());
 				unset($__refs, $__v);
 
-				if(!get_transient($transient_ipn = 's2m_ipn_'.md5('s2member_transient_'.$_paypal_s)) && set_transient($transient_ipn, time(), 31556926 * 10))
+				//261111.0100 Lock by authenticated gateway + transaction, not mutable full-IPN serialization; pending and completed payments were gated above.
+				$purchase_key = c_ws_plugin__s2member_paypal_utilities::paypal_purchase_event_key($paypal, 'sp');
+				$purchase_lock = 's2m_purchase_lock_'.$purchase_key;
+				$purchase_done = 's2m_purchase_done_'.$purchase_key;
+				$purchase_done_ttl = 31556926 * 10; // Preserve the earlier IPN transient's ten-year duplicate horizon.
+				$purchase_completed = FALSE;
+				$purchase_started = FALSE;
+				//261111.0104 Existing ten-year transients are read for upgrade compatibility, but new messages are only written to stable transaction markers.
+				$legacy_ipn_seen = !empty($_paypal_s) && is_string($_paypal_s) && get_transient('s2m_ipn_'.md5('s2member_transient_'.$_paypal_s));
+				if($purchase_key !== false)
+					c_ws_plugin__s2member_paypal_utilities::dedupe_markers_cleanup('s2m_purchase_gc', array(
+						array('prefix' => 's2m_purchase_lock_', 'ttl' => 900),
+						array('prefix' => 's2m_purchase_done_', 'ttl' => $purchase_done_ttl),
+					), DAY_IN_SECONDS);
+
+				if($purchase_key !== false && !$legacy_ipn_seen
+				&& !c_ws_plugin__s2member_paypal_utilities::paypal_purchase_done_confirmed($purchase_done, $purchase_done_ttl)
+				&& ($purchase_lock_token = c_ws_plugin__s2member_paypal_utilities::paypal_purchase_lock_claim($purchase_lock, $purchase_done, 900, $purchase_done_ttl)))
 				{
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `web_accept` ) for Specific Post/Page Access.';
 
@@ -68,14 +85,24 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 					$paypal['currency']        = strtoupper($paypal['mc_currency']); // Normalize input currency.
 					$paypal['currency_symbol'] = c_ws_plugin__s2member_utils_cur::symbol($paypal['currency']);
 
-					if(!empty($coupon['coupon_code']) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
-						{
-							$coupon_class = new c_ws_plugin__s2member_pro_coupons();
-							$coupon_class->update_uses($coupon['coupon_code']);
-						}
 					if(($sp_access_url = c_ws_plugin__s2member_sp_access::sp_access_link_gen($paypal['sp_ids'], $paypal['hours'])))
 					{
+						//261116.0439 Establish an owned checkpoint before fulfillment side effects in this handler.
+						if(!c_ws_plugin__s2member_paypal_utilities::paypal_purchase_lock_mark_started($purchase_lock, $purchase_lock_token))
+						{
+							$paypal['s2member_notification_retry_error'] = 's2m_purchase_checkpoint_unavailable';
+							$paypal['s2member_log'][] = 'Purchase checkpoint could not be persisted; payment is not acknowledged.';
+							c_ws_plugin__s2member_paypal_utilities::paypal_purchase_lock_release($purchase_lock, $purchase_lock_token);
+							return apply_filters('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp', $paypal, get_defined_vars());
+						}
+						$purchase_started = TRUE;
 						$processing = $during = TRUE; // Yes, we ARE processing this.
+
+						if(!empty($coupon['coupon_code']) && c_ws_plugin__s2member_utils_conds::pro_is_installed())
+							{
+								$coupon_class = new c_ws_plugin__s2member_pro_coupons();
+								$coupon_class->update_uses($coupon['coupon_code']);
+							}
 
 						if(preg_match('/(referenc|associat)/i', $paypal['option_name1']) && $paypal['option_selection1']) // Associating this purchase with a Member?
 							if(($user_id = c_ws_plugin__s2member_utils_users::get_user_id_with($paypal['option_selection1'], $paypal['option_selection1'])) && is_object($user = new WP_User ($user_id)) && $user->ID)
@@ -215,14 +242,36 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_web_accept_sp'))
 						foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 						do_action('ws_plugin__s2member_during_paypal_notify_during_sp_access', get_defined_vars());
 						unset($__refs, $__v);
+						//261111.0100 Record completion only after all Specific Post/Page work has returned; a missing link may be retried.
+						$purchase_completed = TRUE;
 					}
 					else $paypal['s2member_log'][] = 'Unable to generate Access Link for Specific Post/Page Access. Does your Leading Post/Page still exist?';
+					//261116.0439 Retain the started lock on uncertain completion; only verified completion permits release.
+					if($purchase_completed && c_ws_plugin__s2member_paypal_utilities::paypal_purchase_complete($purchase_done, $purchase_done_ttl))
+						c_ws_plugin__s2member_paypal_utilities::paypal_purchase_lock_release($purchase_lock, $purchase_lock_token);
+					else
+					{
+						$paypal['s2member_notification_retry_error'] = 's2m_purchase_not_confirmed';
+						$paypal['s2member_log'][] = 'Purchase outcome remains unconfirmed; do not replay side effects.';
+						if(!$purchase_started)
+							c_ws_plugin__s2member_paypal_utilities::paypal_purchase_lock_release($purchase_lock, $purchase_lock_token);
+					}
 				}
-				else // Else, this is a duplicate IPN. Must stop here.
+				else // A historical/completed duplicate, or a payment whose outcome is not yet known.
 				{
-					$paypal['s2member_log'][] = 'Not processing. Duplicate IPN.';
+					if(!$legacy_ipn_seen && ($purchase_key === false || !c_ws_plugin__s2member_paypal_utilities::paypal_purchase_done_confirmed($purchase_done, $purchase_done_ttl)))
+					{
+						//261116.0439 A live or uncertain lock is not proof of fulfillment; request a provider retry.
+						$paypal['s2member_notification_retry_error'] = 's2m_purchase_in_flight_or_uncertain';
+						$paypal['s2member_log'][] = 'Purchase still processing or uncertain; no completion acknowledged.';
+					}
+					else
+					{
+						$paypal['s2member_log'][] = 'Not processing. Duplicate IPN.';
+						$paypal['s2member_log'][] = 'Duplicate IPN. Already processed. This IPN will be ignored.';
+					}
 					$paypal['s2member_log'][] = 's2Member `txn_type` identified as ( `web_accept` ) for Specific Post/Page Access.';
-					$paypal['s2member_log'][] = 'Duplicate IPN. Already processed. This IPN will be ignored.';
+
 				}
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify_after_sp_access', get_defined_vars());
