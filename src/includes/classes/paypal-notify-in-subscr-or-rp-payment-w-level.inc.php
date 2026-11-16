@@ -29,6 +29,49 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 	class c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level
 	{
 		/**
+		 * Keep the first observed cutover epoch in one immutable database option.
+		 *
+		 * @since 261116.0612
+		 * @param int $epoch Configured cutover timestamp, or zero before activation.
+		 * @return bool|WP_Error TRUE when unchanged or never configured; error on reset, conflict, or storage failure.
+		 */
+		private static function cutover_epoch_fence($epoch)
+		{
+			global $wpdb;
+
+			$name = 's2m_paypal_authoritative_cutover_epoch_fence';
+			$sql = $wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $name);
+			$saved = $wpdb->get_var($sql);
+			if($wpdb->last_error !== '')
+				return new WP_Error('s2m_pay_cutover_fence_read_failed', 'Cannot verify the original PayPal cutover epoch.');
+			if($saved === NULL && $epoch > 0)
+			{
+				//261116.0612 One atomic insert protects the original epoch against later configuration deletion.
+				$inserted = $wpdb->query($wpdb->prepare("INSERT IGNORE INTO `{$wpdb->options}` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, %s)", $name, (string)$epoch, 'no'));
+				if($inserted === FALSE || $wpdb->last_error !== '' || !in_array($inserted, array(0, 1), TRUE))
+					return new WP_Error('s2m_pay_cutover_fence_write_failed', 'Cannot persist the original PayPal cutover epoch.');
+				if($inserted === 1)
+				{
+					wp_cache_delete($name, 'options');
+					$notoptions = wp_cache_get('notoptions', 'options');
+					if(is_array($notoptions) && isset($notoptions[$name]))
+					{
+						unset($notoptions[$name]);
+						wp_cache_set('notoptions', $notoptions, 'options');
+					}
+				}
+				$saved = $wpdb->get_var($sql);
+				if($wpdb->last_error !== '')
+					return new WP_Error('s2m_pay_cutover_fence_read_failed', 'Cannot verify the original PayPal cutover epoch.');
+			}
+			if($saved === NULL && $epoch === 0)
+				return TRUE;
+			if(!is_string($saved) || !ctype_digit($saved) || (int)$saved < 1 || (string)(int)$saved !== $saved || $saved !== (string)$epoch)
+				return new WP_Error('s2m_pay_cutover_epoch_changed', 'The original PayPal cutover epoch was changed or removed; reconcile before continuing.');
+			return TRUE;
+		}
+
+		/**
 		 * Route a verified PayPal recurring payment to its first-receipt owner.
 		 *
 		 * Called ONLY from the authenticated native/PayPal-proxy handler after its
@@ -74,12 +117,33 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 
 			//261116.0537 Parse the epoch only for a first receipt; an existing authoritative owner stays authoritative.
 			$epoch_raw = get_option('s2m_paypal_authoritative_cutover_epoch', 0);
-			$epoch = is_scalar($epoch_raw) && ctype_digit((string)$epoch_raw) ? (int)$epoch_raw : 0;
+			$epoch = (is_string($epoch_raw) || is_int($epoch_raw)) && ctype_digit((string)$epoch_raw)
+			         && (string)(int)$epoch_raw === (string)$epoch_raw ? (int)$epoch_raw : 0;
 			if($prior === FALSE && !in_array($epoch_raw, array(FALSE, NULL, 0, '0'), TRUE) && $epoch < 1)
 				return new WP_Error('s2m_pay_cutover_invalid_epoch', 'Invalid cutover epoch; investigate configuration before processing this payment.');
-			//261116.0558 Without an epoch, a new payment stays legacy even if the opt-in is enabled.
-			if($prior === FALSE && $epoch < 1)
-				return FALSE;
+			if($prior === FALSE)
+			{
+				$fence = self::cutover_epoch_fence($epoch);
+				if(is_wp_error($fence))
+					return $fence;
+				//261116.0558 Without an epoch, a new payment stays legacy even if the opt-in is enabled.
+				if($epoch < 1)
+					return FALSE;
+				//261116.0612 A pre-cutover native payment without current acceptance evidence cannot start legacy effects again.
+				$paid = empty($paypal['proxy_verified']) && isset($paypal['payment_date']) && is_string($paypal['payment_date']) ? strtotime($paypal['payment_date']) : FALSE;
+				if($epoch <= time() && $paid !== FALSE && $paid < $epoch)
+				{
+					$shadow = c_ws_plugin__s2member_payment_events::receive('paypal', $merchant, $paypal['txn_id'], 'payment', FALSE, $paypal['subscr_id']);
+					if(is_wp_error($shadow))
+						return $shadow;
+					if(isset($shadow['record']['replay_origin']))
+						return new WP_Error('s2m_pay_cutover_conflicting_date', 'The existing payment receipt conflicts with the verified provider payment date.');
+					$done = 's2m_paypal_txn_done_'.md5(strtolower($paypal['subscr_id']).'|'.strtolower($paypal['txn_id']));
+					if(c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done, DAY_IN_SECONDS))
+						return array('event' => $event, 'status' => 'legacy_acknowledged', 'created' => FALSE);
+					return new WP_Error('s2m_pay_cutover_historical_unreconciled', 'A historical PayPal payment has no current legacy acceptance proof; reconcile before processing.');
+				}
+			}
 			$enabled = apply_filters('ws_plugin__s2member_paypal_authoritative_recurring_enabled', FALSE, $paypal) === TRUE;
 			if($prior === FALSE && (!$enabled || strtolower($paypal['txn_type']) === 'merch_pmt'))
 			{
