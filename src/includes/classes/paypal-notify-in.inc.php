@@ -121,8 +121,17 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				c_ws_plugin__s2member_email_configs::email_config_release(); // Release s2Member Filters.
 
 				$paypal = array(); // Initialize PayPal array; verified proxy aliases are established only after authentication.
+				$paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars();
 
-				if(is_array($paypal = c_ws_plugin__s2member_paypal_utilities::paypal_postvars()) && ($_paypal = $paypal) && ($_paypal_s = serialize($_paypal)))
+				//261116.0327 A previously completed identical signed message needs an acknowledgment, not repeated hooks.
+				if(c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_completed_replay())
+				{
+					if($email_configs_were_on)
+						c_ws_plugin__s2member_email_configs::email_config();
+					return array('code' => 200, 'body' => '', 'paypal' => array('s2member_log' => array('Previously completed signed delivery.')));
+				}
+
+				if(is_array($paypal) && ($_paypal = $paypal) && ($_paypal_s = serialize($_paypal)))
 				{
 					//261113.1000 Only verified internal handler decisions may request delivery retry; never accept this control field from a native IPN or proxy payload.
 					unset($paypal['s2member_notification_retry_error'], $paypal['s2member_eot_delivery_status']);
@@ -289,26 +298,25 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in'))
 				//261113.1000 Snapshot a single retry decision for both failed durable intake and unfinished legacy transactions, before by-reference post-notification hooks.
 				$notification_retry_required = !empty($paypal['s2member_notification_retry_error']);
 				c_ws_plugin__s2member_utils_logs::log_entry('gateway-core-ipn', $paypal);
+				//261116.0327 Invalid and uncertain signed messages must not invoke application post-notification hooks.
+				$proxy_v2_rejection_status = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_rejection_status();
+				if($proxy_v2_rejection_status === 403 || $proxy_v2_rejection_status === 409)
+					return array('code' => $proxy_v2_rejection_status, 'body' => 'Signed payment notification was not accepted.');
 				/*
 				Hook during core IPN post-processing might be useful for developers.
 				*/
 				foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
 				do_action('ws_plugin__s2member_during_paypal_notify', get_defined_vars());
 				unset($__refs, $__v);
-				//261114.2134 The old unconditional HTTP 200 must not silently acknowledge an invalid or replayed HMAC v2 delivery.
-				//261114.2134 403 means signature/request rejected; 409 means an already-claimed message needs reconciliation, not blind replay.
-				$proxy_v2_rejection_status = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_rejection_status();
-				if($proxy_v2_rejection_status === 403 || $proxy_v2_rejection_status === 409)
-				{
-					//261114.2346 An authenticated replay is a conflict, not a safe retry; only the wrapper sends HTTP 409/403.
-					return array('code' => $proxy_v2_rejection_status, 'body' => 'Signed payment notification was not accepted.');
-				}
 				//261113.1000 Neither an incomplete durable enqueue nor an occupied legacy transaction lock warrants HTTP 200.
 				if($notification_retry_required)
 				{
 					//261114.2346 Preserve 503 until the processing core can report durable, per-effect recovery outcomes.
 					return array('code' => 503, 'body' => 'Temporary payment notification processing failure.');
 				}
+				//261116.0327 Only after local handlers and hooks return successfully may the signed delivery be completed.
+				if(!c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_complete_claim())
+					return array('code' => 503, 'body' => 'Signed payment notification completion could not be recorded.');
 
 				//261114.2346 Preserve historical return-URL/indicator bodies without emitting headers or terminating an in-process caller.
 				$body = '';

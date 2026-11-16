@@ -30,6 +30,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 			{
 				//261114.2134 Preserve the HMAC v2 rejection reason for the HTTP Notify wrapper; never infer fulfillment from an unaccepted message.
 				private static $paypal_proxy_v2_rejection_status = 0;
+				private static $paypal_proxy_v2_active_claim = null;
+				private static $paypal_proxy_v2_completed_replay = false;
 
 				/**
 				 * Return the last v2 request's rejection status (403 invalid, 409 replay, 0 otherwise).
@@ -42,6 +44,16 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 					{
 						return self::$paypal_proxy_v2_rejection_status;
 					}
+				/**
+				 * Identify an identical signed message already completed by a previous local Notify request.
+				 *
+				 * @since 261116.0327
+				 * @return bool
+				 */
+				public static function paypal_proxy_v2_completed_replay()
+					{
+						return self::$paypal_proxy_v2_completed_replay;
+					}
 
 				/**
 				* Get ``$_POST`` or ``$_REQUEST`` vars from PayPal.
@@ -53,8 +65,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				*/
 				public static function paypal_postvars()
 					{
-						//261114.2134 A prior parse in this PHP request cannot poison a new PayPal or proxy validation.
+						//261116.0327 Never inherit a previous parsing attempt's replay or completion state.
 						self::$paypal_proxy_v2_rejection_status = 0;
+						self::$paypal_proxy_v2_active_claim = null;
+						self::$paypal_proxy_v2_completed_replay = false;
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_paypal_postvars", get_defined_vars());
 						unset($__refs, $__v); // Housekeeping.
@@ -169,8 +183,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 												//261111.0003 Claim the signed message ID only after both HMAC and normalized dispatch payload match; duplicate requests must stop before membership side effects.
 												if(!self::paypal_proxy_v2_claim($verified_signature))
 													{
-														//261114.2134 An authenticated duplicate cannot be acknowledged as a new successful Notify dispatch.
-														self::$paypal_proxy_v2_rejection_status = 409;
+														//261116.0327 Only an identical, durably completed replay is safe to acknowledge without redispatch.
+														self::$paypal_proxy_v2_rejection_status = self::$paypal_proxy_v2_completed_replay ? 0 : 409;
 														return false;
 													}
 
@@ -554,13 +568,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return is_string($expected) && hash_equals($expected, $postvars['s2member_paypal_proxy_verification']);
 					}
 				/**
-				 * Atomically claim a previously authenticated v2 message ID, rejecting duplicate delivery before dispatch.
+				 * Atomically claim a signed v2 delivery, preserving unknown outcomes and recognizing completed duplicates.
 				 *
 				 * @since 261111.0003
-				 *
-				 * @param string $token Verified v2 signature token from the normalized POST body.
-				 *
-				 * @return bool True only for the first accepted delivery of this message ID.
+				 * @param string $token Verified v2 token; the stored digest binds the original payload and gateway.
+				 * @return bool True only for the first delivery of this message ID.
 				 */
 				private static function paypal_proxy_v2_claim($token)
 					{
@@ -568,13 +580,41 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						|| ($key = self::paypal_proxy_v2_signing_key()) === false)
 							return false;
 
-						//261111.0010 TO-DO: When a shared event processor can report durable completion/failure, allow safe retries after downstream failures; this pre-dispatch claim rejects every duplicate delivery.
-						//261111.0003 add_option is an atomic insert against the options table's unique option_name index; transients alone cannot provide this guarantee.
 						$option = 'ws_plugin__s2member_proxy_v2_seen_'.hash_hmac('sha256', $matches[2], $key);
-						if(!add_option($option, (int)$matches[1] + 361, '', 'no'))
-							return false;
+						$expiry = (int)$matches[1] + 361;
+						$digest = hash('sha256', $token);
+						//261116.0327 Keep the numeric expiry prefix for the existing SQL garbage collector and old numeric claims.
+						$pending = $expiry.'|processing|'.$digest;
+						if(!add_option($option, $pending, '', 'no'))
+							{
+								$stored = get_option($option, false);
+								self::$paypal_proxy_v2_completed_replay = is_string($stored)
+									&& hash_equals($expiry.'|completed|'.$digest, $stored);
+								return false;
+							}
 
+						self::$paypal_proxy_v2_active_claim = array($option, $pending, $expiry.'|completed|'.$digest);
 						self::paypal_proxy_v2_prune_replay();
+						return true;
+					}
+				/**
+				 * Mark a locally accepted signed delivery complete without reopening interrupted claims.
+				 *
+				 * @since 261116.0327
+				 * @return bool True when no signed claim exists or its exact record was durably completed.
+				 */
+				public static function paypal_proxy_v2_complete_claim()
+					{
+						if(self::$paypal_proxy_v2_active_claim === null)
+							return true;
+						list($option, $pending, $completed) = self::$paypal_proxy_v2_active_claim;
+						global $wpdb;
+						//261116.0327 Compare-and-swap prevents a stale worker from completing a replaced or changed receipt.
+						$changed = $wpdb->query($wpdb->prepare("UPDATE {$wpdb->options} SET option_value = %s WHERE option_name = %s AND option_value = %s", $completed, $option, $pending));
+						wp_cache_delete($option, 'options');
+						if($changed !== 1 || get_option($option, false) !== $completed)
+							return false;
+						self::$paypal_proxy_v2_active_claim = null;
 						return true;
 					}
 				/**
