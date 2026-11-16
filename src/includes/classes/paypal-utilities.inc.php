@@ -195,7 +195,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 										//261110.2320 TO-DO: Disable the published static key by default once built-in Pro senders and external integrations can migrate; administrators can use the allow-legacy filter in the interim.
 										else if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]) && apply_filters('ws_plugin__s2member_paypal_proxy_allow_legacy_key', true, get_defined_vars()))
+										{
+											//261116.2220 Observe only authenticated legacy-key use; never record credentials, payloads, IPs, or user identifiers.
+											self::paypal_proxy_legacy_note_use();
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_REQUEST["s2member_paypal_proxy"])), get_defined_vars());
+										}
 
 										else if(empty($_POST) && !empty($_GET["s2member_paypal_proxy"]) && !empty($_GET["s2member_paypal_proxy_verification"]) && c_ws_plugin__s2member_utils_urls::s2member_sig_ok($_SERVER["REQUEST_URI"], false, false, "s2member_paypal_proxy_verification"))
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_GET["s2member_paypal_proxy"])), get_defined_vars());
@@ -647,6 +651,54 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							if($deleted === 1)
 								wp_cache_delete($record['option_name'], 'options');
 							}
+					}
+				/**
+				 * Inspect one signed delivery claim without changing its state or generating a missing signing key.
+				 * A claim records authentication/replay state, NEVER successful payment or external side effects.
+				 *
+				 * @since 261116.2220
+				 * @param string $message_id The original 32-character lowercase hexadecimal v2 message ID.
+				 * @return array|bool|WP_Error Read-only classification; false for invalid input or an unavailable signing key.
+				 */
+				public static function paypal_proxy_v2_claim_inspect($message_id)
+					{
+						if(!is_string($message_id) || !preg_match('/^[a-f0-9]{32}$/D', $message_id))
+							return false;
+						//261116.2220 The inspection path must never generate or replace the signing secret: doing so would change the claim namespace.
+						$key = get_option('ws_plugin__s2member_paypal_proxy_v2_signing_key', null);
+						if(!is_string($key) || !preg_match('/^[a-f0-9]{64}$/D', $key))
+							return false;
+						$option = 'ws_plugin__s2member_proxy_v2_seen_'.hash_hmac('sha256', $message_id, $key);
+						global $wpdb;
+						//261116.2220 Query durable storage rather than cached get_option; never call replay pruning during an audit.
+						$stored = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option));
+						if($wpdb->last_error !== '')
+							return new WP_Error('s2m_proxy_v2_inspect_sql', 'The signed-delivery claim could not be inspected.');
+						if($stored === null)
+							return array('state' => 'absent', 'expires' => 0, 'expired' => false);
+						if(is_string($stored) && preg_match('/^([0-9]{10,12})\|(processing|completed)\|[a-f0-9]{64}$/D', $stored, $matches))
+							{
+								$expires = (int)$matches[1];
+								return array('state' => $matches[2], 'expires' => $expires, 'expired' => $expires < time());
+							}
+						//261116.2220 Older numeric claims and malformed records are unresolved evidence, not authorization to reset/replay.
+						return array('state' => is_string($stored) && preg_match('/^[0-9]{10,12}$/D', $stored) ? 'legacy_unknown' : 'invalid_record', 'expires' => 0, 'expired' => false);
+					}
+				/**
+				 * Observe legacy static-key usage without storing secrets or transaction/customer data.
+				 * These timestamps are approximate operational indicators, not an audit-grade event ledger.
+				 *
+				 * @since 261116.2220
+				 * @return void
+				 */
+				private static function paypal_proxy_legacy_note_use()
+					{
+						$now = time();
+						//261116.2220 A unique first-use option survives races; last-use writes are throttled to one per hour per site.
+						add_option('ws_plugin__s2member_paypal_proxy_legacy_first_used', $now, '', 'no');
+						$last = get_option('ws_plugin__s2member_paypal_proxy_legacy_last_used', false);
+						if(!is_numeric($last) || $now - (int)$last >= HOUR_IN_SECONDS)
+							update_option('ws_plugin__s2member_paypal_proxy_legacy_last_used', $now, false);
 					}
 				/**
 				* Generates a PayPal Proxy Key, for simulated IPN responses.

@@ -38,6 +38,34 @@ if($qa_is_post && isset($_POST['s2m_pay_preflight_submit']))
 $qa_cutover_readiness = c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level::cutover_readiness();
 $qa_cutover_status = $qa_cutover_readiness['epoch'];
 
+//261116.2220 Record only coarse usage dates. A missing marker is not proof no external integration uses the legacy credential.
+$qa_legacy_first_seen = get_option('ws_plugin__s2member_paypal_proxy_legacy_first_used', false);
+$qa_legacy_last_seen = get_option('ws_plugin__s2member_paypal_proxy_legacy_last_used', false);
+$qa_legacy_status = is_scalar($qa_legacy_first_seen) && ctype_digit((string)$qa_legacy_first_seen) && (int)$qa_legacy_first_seen > 0
+    ? 'First observed '.gmdate('Y-m-d H:i', (int)$qa_legacy_first_seen).' UTC; last sampled '.(is_scalar($qa_legacy_last_seen) && ctype_digit((string)$qa_legacy_last_seen) && (int)$qa_legacy_last_seen > 0 ? gmdate('Y-m-d H:i', (int)$qa_legacy_last_seen).' UTC' : 'unknown').'.'
+    : 'No authenticated legacy-key use recorded since this monitoring was installed (not evidence of zero usage).';
+
+$qa_proxy_error = '';
+$qa_proxy_result = NULL;
+if($qa_is_post && isset($_POST['s2m_pay_proxy_lookup_submit']))
+{
+    //261116.2220 A dedicated nonce and POST keep message IDs out of URLs, referers, and ordinary server access logs.
+    $qa_nonce = isset($_POST['s2m_pay_proxy_lookup_nonce']) && is_string($_POST['s2m_pay_proxy_lookup_nonce']) ? wp_unslash($_POST['s2m_pay_proxy_lookup_nonce']) : '';
+    if(!wp_verify_nonce($qa_nonce, 's2m_pay_proxy_claim_inspect'))
+        $qa_proxy_error = 'The signed-delivery lookup could not be verified.';
+    else
+    {
+        $qa_message_id = isset($_POST['s2m_pay_proxy_message_id']) && is_string($_POST['s2m_pay_proxy_message_id']) ? wp_unslash($_POST['s2m_pay_proxy_message_id']) : '';
+        $qa_inspected = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_claim_inspect($qa_message_id);
+        if(is_wp_error($qa_inspected))
+            $qa_proxy_error = 'The claim database lookup failed; no changes were made.';
+        else if($qa_inspected === FALSE)
+            $qa_proxy_error = 'Enter a canonical 32-character lowercase hexadecimal message ID, and verify the v2 signing key exists.';
+        else
+            $qa_proxy_result = $qa_inspected;
+    }
+}
+
 //261114.0253 Require POST + a dedicated nonce: raw PayPal identifiers never enter an audit URL.
 $qa_result = NULL;
 $qa_error = '';
@@ -189,4 +217,23 @@ if($qa_is_post && isset($_POST['s2m_pay_audit_submit']))
         </tbody></table>
         <p><strong>Not a resolution or replay authorization.</strong> Verify the authenticated PayPal transaction, existing membership, notifications, and hook effects independently. If evidence is insufficient, leave the payment unresolved.</p>
     <?php endif; ?>
+    <h2>4. Inspect a signed proxy delivery (read only)</h2>
+    <p>A v2 message ID identifies its replay claim, not the underlying payment or fulfillment. Processing and historic claims must be reconciled against provider and external side-effect evidence before any manual recovery. This page does not release claims, replay messages, or expose the HMAC key.</p>
+    <form method="post" autocomplete="off">
+        <?php wp_nonce_field('s2m_pay_proxy_claim_inspect', 's2m_pay_proxy_lookup_nonce'); ?>
+        <p><label for="s2m-pay-proxy-message-id">Signed proxy message ID (32 lowercase hexadecimal characters)</label><br />
+        <input type="password" id="s2m-pay-proxy-message-id" name="s2m_pay_proxy_message_id" size="42" maxlength="32" pattern="[a-f0-9]{32}" autocomplete="off" required="required" /></p>
+        <p><button class="button button-secondary" type="submit" name="s2m_pay_proxy_lookup_submit" value="1">Inspect delivery claim (no changes)</button></p>
+    </form>
+    <?php if($qa_proxy_error !== ''): ?>
+        <div class="notice notice-error" role="alert"><p><?php echo esc_html($qa_proxy_error); ?></p></div>
+    <?php elseif(is_array($qa_proxy_result)): ?>
+        <p><strong>Claim state:</strong> <?php echo esc_html($qa_proxy_result['state']); ?>;
+            <strong>Signed replay window expired:</strong> <?php echo $qa_proxy_result['expired'] ? 'Yes' : 'No'; ?>;
+            <strong>Expiry (UTC):</strong> <?php echo $qa_proxy_result['expires'] ? esc_html(gmdate('Y-m-d H:i:s', $qa_proxy_result['expires'])) : 'Not available'; ?>.</p>
+        <p>Neither an absent nor a completed claim proves provider fulfillment or external mail/hook delivery. Do not clear uncertain claims based on this result alone.</p>
+    <?php endif; ?>
+    <h2>5. Legacy proxy-key migration</h2>
+    <p><strong>Observed legacy-key authentication:</strong> <?php echo esc_html($qa_legacy_status); ?></p>
+    <p>This records only verified use of the old static key, without storing sender addresses, payloads, or credentials. Usage may be from internal or external senders, and timestamps are sampled at most hourly. Keep the legacy compatibility filter unchanged until external senders have been identified and migrated to HMAC-v2.</p>
 </div>
