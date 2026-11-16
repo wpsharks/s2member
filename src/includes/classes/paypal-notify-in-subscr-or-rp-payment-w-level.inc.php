@@ -110,8 +110,8 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 		 *
 		 * This does not inspect provider records or certify fulfillment. An authorized
 		 * operator must independently reconcile payments and retain the evidence.
-		 * No admin route invokes this method; a caller must validate its own CSRF
-		 * boundary and supply the dedicated nonce (e.g. from privileged WP-CLI).
+		 * The privileged audit page and WP-CLI callers supply a dedicated nonce;
+		 * the method independently enforces capabilities, multisite policy, and CSRF.
 		 *
 		 * @since 261116.1626
 		 * @param int|string $epoch Exact canonical configured cutover timestamp.
@@ -196,7 +196,9 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 				$preflight = FALSE;
 			$preflight_status = $preflight === TRUE ? 'Operator acknowledgment recorded for this epoch and merchant; independent provider reconciliation remains required.'
 			                  : 'Not verified for the current epoch and merchant. New authoritative first receipts are blocked.';
-			return array('epoch' => $epoch_status, 'fence' => $fence_status, 'preflight' => $preflight_status);
+			//261116.1810 Expose typed readiness fields so admin UI cannot infer authorization by parsing translated or edited status prose.
+			return array('epoch' => $epoch_status, 'fence' => $fence_status, 'preflight' => $preflight_status,
+			             'epoch_value' => $epoch, 'preflight_recorded' => $preflight === TRUE);
 		}
 
 		/**

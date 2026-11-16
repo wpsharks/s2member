@@ -1,18 +1,40 @@
 <?php
 // @codingStandardsIgnoreFile
 /**
- * Read-only, administrator-only PayPal payment reconciliation diagnostics.
+ * Privileged PayPal preflight acknowledgment and read-only payment diagnostics.
  *
  * @package s2Member\PayPal
  * @since 261114.0253
  */
 if(!defined('WPINC'))
     exit('Do not access this file directly.');
-if(!current_user_can('manage_options'))
+if(!current_user_can('manage_options') || (is_multisite() && !is_super_admin()))
     return;
 global $wpdb;
 
-//261116.1633 Use the router's canonical rules and direct fence/preflight readback; this dormant page never changes activation state.
+$qa_is_post = isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST';
+$qa_preflight_error = '';
+$qa_preflight_success = FALSE;
+//261116.1810 An explicit, privileged POST records operator acknowledgment only; it does not verify provider history or enable cutover.
+if($qa_is_post && isset($_POST['s2m_pay_preflight_submit']))
+{
+    $qa_nonce = isset($_POST['s2m_pay_preflight_nonce']) && is_string($_POST['s2m_pay_preflight_nonce']) ? wp_unslash($_POST['s2m_pay_preflight_nonce']) : '';
+    $qa_epoch = isset($_POST['s2m_pay_preflight_epoch']) && is_string($_POST['s2m_pay_preflight_epoch']) ? wp_unslash($_POST['s2m_pay_preflight_epoch']) : '';
+    $qa_reference = isset($_POST['s2m_pay_preflight_reference']) && is_string($_POST['s2m_pay_preflight_reference']) ? wp_unslash($_POST['s2m_pay_preflight_reference']) : '';
+    $qa_ack = isset($_POST['s2m_pay_preflight_ack']) && $_POST['s2m_pay_preflight_ack'] === '1';
+    if(!$qa_ack)
+        $qa_preflight_error = 'Confirm that external provider and membership reconciliation evidence has been reviewed.';
+    else
+    {
+        //261116.1810 The core API rechecks nonce, epoch, merchant, privilege and immutable database readback; never trust form fields alone.
+        $qa_saved = c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level::prepare_authoritative_cutover($qa_epoch, $qa_reference, $qa_nonce);
+        if(is_wp_error($qa_saved))
+            $qa_preflight_error = $qa_saved->get_error_message();
+        else
+            $qa_preflight_success = TRUE;
+    }
+}
+//261116.1810 Compute readiness AFTER POST so successful approval and immutable conflicts are shown accurately.
 $qa_cutover_readiness = c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level::cutover_readiness();
 $qa_cutover_status = $qa_cutover_readiness['epoch'];
 
@@ -23,7 +45,6 @@ $qa_sub_status = 'Not supplied';
 $qa_marker_status = 'Not checked';
 $qa_queue_status = 'Unknown';
 $qa_lease_status = 'Not processing';
-$qa_is_post = isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST';
 if($qa_is_post && isset($_POST['s2m_pay_audit_submit']))
 {
     $qa_nonce = isset($_POST['s2m_pay_audit_nonce']) && is_string($_POST['s2m_pay_audit_nonce']) ? wp_unslash($_POST['s2m_pay_audit_nonce']) : '';
@@ -113,14 +134,39 @@ if($qa_is_post && isset($_POST['s2m_pay_audit_submit']))
 }
 ?>
 <div class="wrap">
-    <h1>PayPal Payment Audit (Read Only)</h1>
-    <p>Diagnostic lookup only. A receipt, legacy acceptance marker, or queue row does not prove membership fulfillment, external email, or third-party hook delivery. This page cannot replay, mark complete, or alter a payment. Lookup is scoped to the site's currently configured PayPal merchant; a prior merchant account may require separate records.</p>
-    <h2>Recurring-payment cutover safety</h2>
+    <h1>PayPal Cutover &amp; Payment Audit</h1>
+    <p>Payment receipts and legacy markers do not prove that membership fulfillment, external mail, or hooks completed. The receipt lookup is read-only; neither it nor the preflight form replays a payment or changes the authoritative routing filter.</p>
+    <h2>1. Review cutover readiness</h2>
     <p><strong>Persisted cutover epoch:</strong> <?php echo esc_html($qa_cutover_status); ?></p>
     <p><strong>Immutable epoch fence:</strong> <?php echo esc_html($qa_cutover_readiness['fence']); ?></p>
     <p><strong>Activation preflight:</strong> <?php echo esc_html($qa_cutover_readiness['preflight']); ?></p>
-    <p><strong>Rollback rule:</strong> Disable the per-payment authoritative opt-in if needed, but retain the original cutover epoch and all durable receipts. Never reset, delete, or rewind the epoch to restore legacy processing. Historical shadows without a current legacy acceptance marker require reconciliation, not replay.</p>
-    <p><strong>Activation status:</strong> This page cannot determine whether the application-supplied, per-payment opt-in filter is enabled. An epoch alone does not activate the authoritative route. No settings are changed here.</p>
+    <p><strong>Rollback rule:</strong> Disable the per-payment authoritative opt-in if needed, but retain the original cutover epoch and every receipt. Historical shadows without a current legacy acceptance marker require reconciliation, not replay.</p>
+    <p><strong>Activation status:</strong> This page cannot determine whether the application-supplied, per-payment opt-in filter is enabled. No control here enables it.</p>
+    <h2>2. Record external reconciliation review</h2>
+    <p><strong>This is an operator acknowledgment, not provider verification.</strong> Independently reconcile PayPal payment history against memberships, notification hooks, and external effects. Retain supporting evidence outside WordPress before recording its non-secret ticket reference. This cannot repair an uncertain payment.</p>
+    <?php if($qa_preflight_error !== ''): ?>
+        <div class="notice notice-error" role="alert"><p><?php echo esc_html($qa_preflight_error); ?></p></div>
+    <?php elseif($qa_preflight_success): ?>
+        <div class="notice notice-success" role="status"><p>Operator preflight recorded for the original epoch and configured PayPal merchant. This form did not change the application's authoritative opt-in; verify that setting independently.</p></div>
+    <?php endif; ?>
+    <?php if($qa_cutover_readiness['preflight_recorded']): ?>
+        <p><strong>Preflight already recorded.</strong> The original evidence reference cannot be replaced here. Preserve the epoch and approval during rollback.</p>
+    <?php elseif($qa_cutover_readiness['epoch_value'] > 0): ?>
+        <p><strong>Current configured epoch:</strong> <code><?php echo esc_html($qa_cutover_readiness['epoch_value']); ?></code></p>
+        <form method="post" autocomplete="off">
+            <?php wp_nonce_field('s2m_pay_cutover_preflight', 's2m_pay_preflight_nonce'); ?>
+            <p><label for="s2m-pay-preflight-epoch">Confirm the original Unix UTC cutover epoch (must match the configured value exactly)</label><br />
+            <input type="text" id="s2m-pay-preflight-epoch" name="s2m_pay_preflight_epoch" size="24" maxlength="20" inputmode="numeric" autocomplete="off" required="required" /></p>
+            <p><label for="s2m-pay-preflight-reference">External reconciliation evidence ticket (12&ndash;192 characters; no customer identifiers or secrets)</label><br />
+            <input type="text" id="s2m-pay-preflight-reference" name="s2m_pay_preflight_reference" size="55" maxlength="192" autocomplete="off" required="required" /></p>
+            <p><label><input type="checkbox" name="s2m_pay_preflight_ack" value="1" required="required" /> I have reviewed the independent evidence, unresolved payments, and rollback procedure.</label></p>
+            <p><button class="button button-secondary" type="submit" name="s2m_pay_preflight_submit" value="1">Record one-time operator acknowledgment</button></p>
+        </form>
+    <?php else: ?>
+        <p>Configure a canonical, positive cutover epoch using the documented operator procedure before recording preflight. Invalid or absent epochs cannot be approved.</p>
+    <?php endif; ?>
+    <h2>3. Inspect one payment receipt (read only)</h2>
+    <p>Lookup is scoped to the site's currently configured PayPal merchant; an earlier merchant account may require separate records. Raw identifiers are never placed in the URL.</p>
     <form method="post" autocomplete="off">
         <?php wp_nonce_field('s2m_pay_reconciliation_audit', 's2m_pay_audit_nonce'); ?>
         <p><label for="s2m-pay-audit-txn">PayPal transaction ID (required)</label><br />
