@@ -266,10 +266,10 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page', TRUE, get_defined_vars()))
 					add_submenu_page($menu, 's2Member PayPal Options', 'PayPal Options', 'create_users', 'ws-plugin--s2member-paypal-ops', 'c_ws_plugin__s2member_menu_pages::paypal_ops_page');
 
-				//261116.1810 The operator preflight is an authenticated, explicit acknowledgment; this page never enables payment authority or replays receipts.
-				//261116.1810 Multisite preflight is limited to Super Admins, matching the immutable cutover API's authorization rule.
+				//261117.0042 Register the Audit callback beneath the hidden admin.php parent; removing a visible submenu also breaks WordPress's direct-page routing.
+				//261117.0042 Preserve authorized direct access for later review, but never add the page to s2Member's navigation.
 				if((!is_multisite() || is_super_admin()) && apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_audit_page', TRUE, get_defined_vars()))
-					add_submenu_page($menu, 's2Member PayPal Cutover & Payment Audit', 'PayPal Payment Audit', 'manage_options', 'ws-plugin--s2member-paypal-audit', 'c_ws_plugin__s2member_menu_pages::paypal_reconciliation_page');
+					add_submenu_page('admin.php', 's2Member PayPal Cutover & Payment Audit', 'PayPal Payment Audit', 'manage_options', 'ws-plugin--s2member-paypal-audit', 'c_ws_plugin__s2member_menu_pages::paypal_reconciliation_page');
 
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page', TRUE, get_defined_vars()))
 					add_submenu_page($menu, 's2Member PayPal Buttons', 'PayPal Buttons', 'create_users', 'ws-plugin--s2member-paypal-buttons', 'c_ws_plugin__s2member_menu_pages::paypal_buttons_page');
