@@ -634,10 +634,19 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 
 						global $wpdb;
 						$prefix = 'ws_plugin__s2member_proxy_v2_seen_';
-						$expired = $wpdb->get_col($wpdb->prepare("SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s AND CAST(option_value AS UNSIGNED) < %d LIMIT 200", $wpdb->esc_like($prefix).'%', time()));
-						foreach((array)$expired as $option)
-							if(is_string($option) && strpos($option, $prefix) === 0)
-								delete_option($option);
+						//261116.2126 Preserve interrupted processing and historical numeric claims for explicit reconciliation, even after the signing window expires.
+						//261116.2126 Select only expired completed receipts so unresolved claims cannot starve the bounded cleanup batch.
+						$expired = $wpdb->get_results($wpdb->prepare("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s AND option_value LIKE %s AND CAST(option_value AS UNSIGNED) < %d LIMIT 200", $wpdb->esc_like($prefix).'%', '%|completed|%', time()), ARRAY_A);
+						foreach((array)$expired as $record)
+							{
+							if(!is_array($record) || !isset($record['option_name'], $record['option_value']) || !is_string($record['option_name']) || !is_string($record['option_value'])
+							|| strpos($record['option_name'], $prefix) !== 0 || !preg_match('/^[0-9]{10,12}\|completed\|[a-f0-9]{64}$/D', $record['option_value']))
+								continue;
+							//261116.2126 A concurrent update must not be deleted using a stale cleanup snapshot.
+							$deleted = $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->options} WHERE option_name = %s AND BINARY option_value = BINARY %s", $record['option_name'], $record['option_value']));
+							if($deleted === 1)
+								wp_cache_delete($record['option_name'], 'options');
+							}
 					}
 				/**
 				* Generates a PayPal Proxy Key, for simulated IPN responses.
