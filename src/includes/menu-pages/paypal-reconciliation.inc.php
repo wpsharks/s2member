@@ -66,6 +66,37 @@ if($qa_is_post && isset($_POST['s2m_pay_proxy_lookup_submit']))
     }
 }
 
+//261116.2325 Signed-body correlation requires an exact archived request and stays separate from claim-ID-only lookup.
+$qa_correlation_error = '';
+$qa_correlation_result = NULL;
+if($qa_is_post && isset($_POST['s2m_pay_proxy_correlation_submit']))
+{
+    $qa_correlation_nonce = isset($_POST['s2m_pay_proxy_correlation_nonce']) && is_string($_POST['s2m_pay_proxy_correlation_nonce']) ? wp_unslash($_POST['s2m_pay_proxy_correlation_nonce']) : '';
+    $qa_correlation_json = isset($_POST['s2m_pay_proxy_correlation_json']) && is_string($_POST['s2m_pay_proxy_correlation_json']) ? wp_unslash($_POST['s2m_pay_proxy_correlation_json']) : '';
+    if(!wp_verify_nonce($qa_correlation_nonce, 's2m_pay_proxy_correlation'))
+        $qa_correlation_error = 'The signed-delivery correlation request could not be verified.';
+    else if($qa_correlation_json === '' || strlen($qa_correlation_json) > 16384)
+        $qa_correlation_error = 'Supply a signed POST body as JSON (maximum 16 KiB).';
+    else
+    {
+        $qa_correlation_body = json_decode($qa_correlation_json, TRUE);
+        if(!is_array($qa_correlation_body) || json_last_error() !== JSON_ERROR_NONE)
+            $qa_correlation_error = 'The supplied signed POST body must be a valid JSON object.';
+        else
+        {
+            $qa_correlated = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_correlate_signed_delivery($qa_correlation_body);
+            if(is_wp_error($qa_correlated))
+                $qa_correlation_error = 'The claim or payment receipt could not be read. No changes were made.';
+            else if($qa_correlated === FALSE)
+                $qa_correlation_error = 'The archived signed POST body or signature is invalid for this site.';
+            else
+                $qa_correlation_result = $qa_correlated;
+        }
+    }
+    //261116.2325 Never echo the submitted signed body, save it, or place it in a URL; it can contain customer information.
+    unset($qa_correlation_json, $qa_correlation_body);
+}
+
 //261114.0253 Require POST + a dedicated nonce: raw PayPal identifiers never enter an audit URL.
 $qa_result = NULL;
 $qa_error = '';
@@ -233,7 +264,24 @@ if($qa_is_post && isset($_POST['s2m_pay_audit_submit']))
             <strong>Expiry (UTC):</strong> <?php echo $qa_proxy_result['expires'] ? esc_html(gmdate('Y-m-d H:i:s', $qa_proxy_result['expires'])) : 'Not available'; ?>.</p>
         <p>Neither an absent nor a completed claim proves provider fulfillment or external mail/hook delivery. Do not clear uncertain claims based on this result alone.</p>
     <?php endif; ?>
-    <h2>5. Legacy proxy-key migration</h2>
+    <h2>5. Correlate an archived signed delivery (read only)</h2>
+    <p>For an unresolved claim, paste the original, unslashed signed POST fields as a JSON object. The signature is verified against the existing site key even if its delivery window has expired. This is diagnostic only: an expired signature is never accepted for payment processing. The body may contain customer data; use only evidence you are authorized to inspect. Nothing entered here is stored or shown again.</p>
+    <form method="post" autocomplete="off">
+        <?php wp_nonce_field('s2m_pay_proxy_correlation', 's2m_pay_proxy_correlation_nonce'); ?>
+        <p><label for="s2m-pay-proxy-correlation">Original signed POST fields (JSON, including s2member_paypal_proxy_verification)</label><br />
+        <textarea id="s2m-pay-proxy-correlation" name="s2m_pay_proxy_correlation_json" rows="4" cols="75" maxlength="16384" spellcheck="false" autocomplete="off" required="required"></textarea></p>
+        <p><button class="button button-secondary" type="submit" name="s2m_pay_proxy_correlation_submit" value="1">Correlate signed delivery (no changes)</button></p>
+    </form>
+    <?php if($qa_correlation_error !== ''): ?>
+        <div class="notice notice-error" role="alert"><p><?php echo esc_html($qa_correlation_error); ?></p></div>
+    <?php elseif(is_array($qa_correlation_result)): ?>
+        <p><strong>Claim state:</strong> <?php echo esc_html($qa_correlation_result['claim']); ?>;
+            <strong>Exact original token binding:</strong> <?php echo esc_html($qa_correlation_result['binding']); ?>;
+            <strong>Local payment receipt:</strong> <?php echo esc_html($qa_correlation_result['receipt']); ?>;
+            <strong>Receipt origin:</strong> <?php echo esc_html($qa_correlation_result['origin']); ?>.</p>
+        <p>A signature authenticates the local proxy sender, not the payment provider. A matching local receipt does not establish completed membership, email, or hook effects; reconcile those independently before any recovery.</p>
+    <?php endif; ?>
+    <h2>6. Legacy proxy-key migration</h2>
     <p><strong>Observed legacy-key authentication:</strong> <?php echo esc_html($qa_legacy_status); ?></p>
     <p>This records only verified use of the old static key, without storing sender addresses, payloads, or credentials. Usage may be from internal or external senders, and timestamps are sampled at most hourly. Keep the legacy compatibility filter unchanged until external senders have been identified and migrated to HMAC-v2.</p>
 </div>

@@ -685,6 +685,66 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return array('state' => is_string($stored) && preg_match('/^[0-9]{10,12}$/D', $stored) ? 'legacy_unknown' : 'invalid_record', 'expires' => 0, 'expired' => false);
 					}
 				/**
+				 * Verify an archived signed body and correlate its exact claim with an existing payment receipt.
+				 * This is for operator diagnostics: expired signatures may be inspected but NEVER accepted for delivery.
+				 * A local receipt cannot independently prove provider payment, external email, or hook delivery.
+				 *
+				 * @since 261116.2325
+				 * @param array $postvars Original unslashed signed POST values, including verification token.
+				 * @return array|bool|WP_Error Read-only evidence classification; false for invalid signatures/input.
+				 */
+				public static function paypal_proxy_v2_correlate_signed_delivery($postvars)
+					{
+						if(!is_array($postvars) || empty($postvars['s2member_paypal_proxy_verification']) || !is_string($postvars['s2member_paypal_proxy_verification'])
+						|| !preg_match('/^v2\.([0-9]{10,12})\.([a-f0-9]{32})\.([a-f0-9]{64})$/D', $postvars['s2member_paypal_proxy_verification'], $matches))
+							return false;
+						//261116.2325 Never generate a missing signing key during an audit; a new key would change the namespace of historical claims.
+						$key = get_option('ws_plugin__s2member_paypal_proxy_v2_signing_key', null);
+						$payload = self::paypal_proxy_v2_payload($postvars);
+						if(!is_string($key) || !preg_match('/^[a-f0-9]{64}$/D', $key) || $payload === false)
+							return false;
+						$expected = 'v2.'.(int)$matches[1].'.'.$matches[2].'.'.hash_hmac('sha256', "s2member_paypal_proxy_v2\n".(int)$matches[1]."\n".$matches[2]."\n".$payload, $key);
+						if(!hash_equals($expected, $postvars['s2member_paypal_proxy_verification']))
+							return false;
+
+						$option = 'ws_plugin__s2member_proxy_v2_seen_'.hash_hmac('sha256', $matches[2], $key);
+						global $wpdb;
+						//261116.2325 Bind the claim to the token digest, not merely a reused message ID; use durable SQL reads without cleanup or replay.
+						$stored = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option));
+						if($wpdb->last_error !== '')
+							return new WP_Error('s2m_proxy_v2_correlation_sql', 'Signed-delivery correlation could not read the claim.');
+						$state = 'absent';
+						$binding = 'not_proven';
+						if(is_string($stored) && preg_match('/^[0-9]{10,12}\|(processing|completed)\|([a-f0-9]{64})$/D', $stored, $stored_matches))
+							{
+							$state = $stored_matches[1];
+							$binding = hash_equals($stored_matches[2], hash('sha256', $postvars['s2member_paypal_proxy_verification'])) ? 'exact_token' : 'different_token';
+							}
+						else if(is_string($stored))
+							$state = preg_match('/^[0-9]{10,12}$/D', $stored) ? 'legacy_unknown' : 'invalid_record';
+
+						$result = array('claim' => $state, 'binding' => $binding, 'receipt' => 'not_checked', 'origin' => 'unknown');
+						if($binding !== 'exact_token')
+							return $result;
+						$gateway = isset($postvars['s2member_paypal_proxy']) ? $postvars['s2member_paypal_proxy'] : null;
+						$transaction = isset($postvars['txn_id']) ? $postvars['txn_id'] : null;
+						if(!is_string($gateway) || !is_string($transaction))
+							return $result;
+						$merchant = c_ws_plugin__s2member_payment_events::trusted_merchant($gateway);
+						if(is_wp_error($merchant))
+							return $result; // A changed/unknown merchant scope cannot be inferred from posted data.
+						$name = c_ws_plugin__s2member_payment_events::option_name($gateway, $merchant, $transaction, 'payment');
+						if($name === false)
+							return $result;
+						$receipt = c_ws_plugin__s2member_payment_events::read($name);
+						if(is_wp_error($receipt))
+							return $receipt; // Do not misreport a corrupt or unreadable receipt as absent.
+						$result['receipt'] = $receipt === false ? 'absent' : $receipt['status'];
+						if(is_array($receipt) && $receipt['gateway'] === strtolower(trim($gateway)) && $receipt['event'] === 'payment')
+							$result['origin'] = isset($receipt['replay_origin']) ? 'authoritative' : 'legacy_shadow';
+						return $result;
+					}
+				/**
 				 * Observe legacy static-key usage without storing secrets or transaction/customer data.
 				 * These timestamps are approximate operational indicators, not an audit-grade event ledger.
 				 *
