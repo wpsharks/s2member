@@ -46,6 +46,13 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 				return new WP_Error('s2m_pay_cutover_fence_read_failed', 'Cannot verify the original PayPal cutover epoch.');
 			if($saved === NULL && $epoch > 0)
 			{
+				//261116.1626 A recorded preflight proves this fence once existed; its deletion cannot silently reinitialize the epoch.
+				$preflight_name = 's2m_paypal_authoritative_cutover_preflight_v1';
+				$previous_approval = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $preflight_name));
+				if($wpdb->last_error !== '')
+					return new WP_Error('s2m_pay_cutover_fence_read_failed', 'Cannot verify PayPal cutover history.');
+				if($previous_approval !== NULL)
+					return new WP_Error('s2m_pay_cutover_epoch_changed', 'An approved PayPal cutover lost its original epoch fence; reconcile before continuing.');
 				//261116.0612 One atomic insert protects the original epoch against later configuration deletion.
 				$inserted = $wpdb->query($wpdb->prepare("INSERT IGNORE INTO `{$wpdb->options}` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, %s)", $name, (string)$epoch, 'no'));
 				if($inserted === FALSE || $wpdb->last_error !== '' || !in_array($inserted, array(0, 1), TRUE))
@@ -69,6 +76,127 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 			if(!is_string($saved) || !ctype_digit($saved) || (int)$saved < 1 || (string)(int)$saved !== $saved || $saved !== (string)$epoch)
 				return new WP_Error('s2m_pay_cutover_epoch_changed', 'The original PayPal cutover epoch was changed or removed; reconcile before continuing.');
 			return TRUE;
+		}
+
+		/**
+		 * Confirm the recorded operator preflight for one merchant and epoch.
+		 *
+		 * @since 261116.1626
+		 * @param int $epoch Immutable cutover epoch.
+		 * @param string $merchant Trusted PayPal merchant identity.
+		 * @param string $evidence_hash Optional expected external-reference fingerprint.
+		 * @return bool|WP_Error TRUE for a matching immutable record, error otherwise.
+		 */
+		private static function cutover_preflight_record($epoch, $merchant, $evidence_hash = '')
+		{
+			global $wpdb;
+
+			$name = 's2m_paypal_authoritative_cutover_preflight_v1';
+			$saved = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $name));
+			if($wpdb->last_error !== '')
+				return new WP_Error('s2m_pay_cutover_preflight_read_failed', 'Cannot verify PayPal cutover preflight.');
+			if(!is_string($saved) || !preg_match('/^v1\|[1-9][0-9]*\|[a-f0-9]{64}\|[a-f0-9]{64}\|[1-9][0-9]*\|[1-9][0-9]*$/D', $saved))
+				return new WP_Error('s2m_pay_cutover_preflight_missing', 'PayPal cutover needs a reviewed and recorded activation preflight.');
+			$parts = explode('|', $saved);
+			//261116.1626 Bind the one-time operator record to the original epoch and verified merchant, not to a mutable filter.
+			if($parts[1] !== (string)$epoch || !hash_equals($parts[2], hash('sha256', $merchant))
+			   || ($evidence_hash !== '' && !hash_equals($parts[3], $evidence_hash)))
+				return new WP_Error('s2m_pay_cutover_preflight_mismatch', 'PayPal cutover preflight does not match the epoch, merchant, or evidence reference.');
+			return TRUE;
+		}
+
+		/**
+		 * Persist the manual reconciliation acknowledgment before enabling new authority.
+		 *
+		 * This does not inspect provider records or certify fulfillment. An authorized
+		 * operator must independently reconcile payments and retain the evidence.
+		 * No admin route invokes this method; a caller must validate its own CSRF
+		 * boundary and supply the dedicated nonce (e.g. from privileged WP-CLI).
+		 *
+		 * @since 261116.1626
+		 * @param int|string $epoch Exact canonical configured cutover timestamp.
+		 * @param string $reference Non-secret external evidence/ticket identifier.
+		 * @param string $nonce Nonce bound to the current privileged operator.
+		 * @return bool|WP_Error TRUE only after atomic persistence and readback.
+		 */
+		public static function prepare_authoritative_cutover($epoch, $reference, $nonce)
+		{
+			global $wpdb;
+
+			if(!current_user_can('manage_options') || (is_multisite() && !is_super_admin())
+			   || !is_string($nonce) || !wp_verify_nonce($nonce, 's2m_pay_cutover_preflight'))
+				return new WP_Error('s2m_pay_cutover_preflight_unauthorized', 'Cutover preflight requires a privileged and verified operator.');
+			if((!is_string($epoch) && !is_int($epoch)) || !ctype_digit((string)$epoch)
+			   || (string)(int)$epoch !== (string)$epoch || (int)$epoch < 1)
+				return new WP_Error('s2m_pay_cutover_preflight_invalid_epoch', 'A canonical positive cutover epoch is required.');
+			if(!is_string($reference) || !preg_match('/^[A-Za-z0-9][A-Za-z0-9._:\/-]{11,191}$/D', $reference))
+				return new WP_Error('s2m_pay_cutover_preflight_invalid_reference', 'Supply a non-secret external reconciliation evidence identifier (12-192 characters).');
+			$configured = get_option('s2m_paypal_authoritative_cutover_epoch', NULL);
+			if((!is_string($configured) && !is_int($configured)) || (string)$configured !== (string)$epoch)
+				return new WP_Error('s2m_pay_cutover_preflight_epoch_changed', 'Configured epoch does not match the preflight request.');
+			$merchant = c_ws_plugin__s2member_payment_events::trusted_merchant('paypal');
+			if(is_wp_error($merchant))
+				return $merchant;
+			$fence = self::cutover_epoch_fence((int)$epoch);
+			if(is_wp_error($fence))
+				return $fence;
+
+			//261116.1626 The reference is only fingerprinted; no provider IDs, customer data, or review notes enter WordPress options.
+			$evidence_hash = hash('sha256', $reference);
+			$name = 's2m_paypal_authoritative_cutover_preflight_v1';
+			$record = 'v1|'.$epoch.'|'.hash('sha256', $merchant).'|'.$evidence_hash.'|'.get_current_user_id().'|'.time();
+			$inserted = $wpdb->query($wpdb->prepare("INSERT IGNORE INTO `{$wpdb->options}` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, %s)", $name, $record, 'no'));
+			if($inserted === FALSE || $wpdb->last_error !== '' || !in_array($inserted, array(0, 1), TRUE))
+				return new WP_Error('s2m_pay_cutover_preflight_write_failed', 'Cannot persist PayPal cutover preflight.');
+			if($inserted === 1)
+			{
+				wp_cache_delete($name, 'options');
+				$notoptions = wp_cache_get('notoptions', 'options');
+				if(is_array($notoptions) && isset($notoptions[$name]))
+				{
+					unset($notoptions[$name]);
+					wp_cache_set('notoptions', $notoptions, 'options');
+				}
+			}
+			//261116.1626 INSERT IGNORE resolves concurrent operators without allowing the losing request to replace evidence.
+			return self::cutover_preflight_record((int)$epoch, $merchant, $evidence_hash);
+		}
+
+		/**
+		 * Return read-only, operator-safe cutover diagnostics without seeding options.
+		 *
+		 * @since 261116.1626
+		 * @return array Human-readable epoch, fence, and preflight states.
+		 */
+		public static function cutover_readiness()
+		{
+			global $wpdb;
+
+			$raw = get_option('s2m_paypal_authoritative_cutover_epoch', NULL);
+			$epoch = (is_string($raw) || is_int($raw)) && ctype_digit((string)$raw)
+			         && (string)(int)$raw === (string)$raw ? (int)$raw : 0;
+			$absent = in_array($raw, array(NULL, FALSE, 0, '0'), TRUE);
+			$epoch_status = $epoch > 0 ? 'Recorded: '.gmdate('Y-m-d H:i:s', $epoch).' UTC (retain this original value during rollback).'
+			              : ($absent ? 'Not configured. No new payment can be authoritative under the current cutover guard.'
+			                         : 'Invalid epoch value. Investigate configuration before enabling authoritative processing.');
+			$name = 's2m_paypal_authoritative_cutover_epoch_fence';
+			$saved = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $name));
+			if($wpdb->last_error !== '')
+				$fence_status = 'Cannot read immutable epoch fence; do not activate.';
+			else if($saved === NULL)
+				$fence_status = 'Not initialized; first authoritative receipt is not approved.';
+			else if($epoch > 0 && $saved === (string)$epoch)
+				$fence_status = 'Matches the configured epoch.';
+			else
+				$fence_status = 'Missing or conflicting configured epoch; do not activate.';
+			$merchant = c_ws_plugin__s2member_payment_events::trusted_merchant('paypal');
+			if($epoch > 0 && $fence_status === 'Matches the configured epoch.' && !is_wp_error($merchant))
+				$preflight = self::cutover_preflight_record($epoch, $merchant);
+			else
+				$preflight = FALSE;
+			$preflight_status = $preflight === TRUE ? 'Operator acknowledgment recorded for this epoch and merchant; independent provider reconciliation remains required.'
+			                  : 'Not verified for the current epoch and merchant. New authoritative first receipts are blocked.';
+			return array('epoch' => $epoch_status, 'fence' => $fence_status, 'preflight' => $preflight_status);
 		}
 
 		/**
@@ -170,6 +298,13 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 						return $shadow;
 					if(!isset($shadow['record']['replay_origin']))
 						return FALSE;
+				}
+				else if(strtolower($paypal['txn_type']) !== 'merch_pmt')
+				{
+					//261116.1626 A filter alone must never authorize an unreviewed first payment. Existing receipts retain their original route.
+					$preflight = self::cutover_preflight_record($epoch, $merchant);
+					if(is_wp_error($preflight))
+						return $preflight;
 				}
 			}
 
