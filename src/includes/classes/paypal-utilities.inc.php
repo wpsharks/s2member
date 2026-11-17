@@ -171,6 +171,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 												$verified_postvars = stripslashes_deep($_POST);
 												if(!self::paypal_proxy_v2_verify($verified_postvars))
 													return false;
+												//261117.0315 Retain authenticated sender metadata for the replay namespace before stripping internal fields from fulfillment.
+												$signed_postvars = $verified_postvars;
 												$verified_signature = $verified_postvars['s2member_paypal_proxy_verification'];
 												foreach($verified_postvars as $key => $value)
 													if(preg_match('/^s2member_/', $key))
@@ -181,7 +183,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 													return false;
 
 												//261111.0003 Claim the signed message ID only after both HMAC and normalized dispatch payload match; duplicate requests must stop before membership side effects.
-												if(!self::paypal_proxy_v2_claim($verified_signature))
+													if(!self::paypal_proxy_v2_claim($verified_signature, $signed_postvars))
 													{
 														//261116.0327 Only an identical, durably completed replay is safe to acknowledge without redispatch.
 														self::$paypal_proxy_v2_rejection_status = self::$paypal_proxy_v2_completed_replay ? 0 : 409;
@@ -194,8 +196,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											}
 
 										//261110.2320 TO-DO: Disable the published static key by default once built-in Pro senders and external integrations can migrate; administrators can use the allow-legacy filter in the interim.
-										else if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]) && apply_filters('ws_plugin__s2member_paypal_proxy_allow_legacy_key', true, get_defined_vars()))
+										else if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]))
 										{
+											//261117.0256 A disabled or retired static key must get an explicit HTTP 403; never fall through to PayPal verification and falsely acknowledge it.
+											if(!apply_filters('ws_plugin__s2member_paypal_proxy_allow_legacy_key', true, get_defined_vars()) || !self::paypal_proxy_legacy_key_not_retired())
+												{
+												self::$paypal_proxy_v2_rejection_status = 403; //261117.0256 Reuse Notify's existing fail-closed HTTP status without introducing a new response channel.
+												return false;
+											}
 											//261116.2220 Observe only authenticated legacy-key use; never record credentials, payloads, IPs, or user identifiers.
 											self::paypal_proxy_legacy_note_use();
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_REQUEST["s2member_paypal_proxy"])), get_defined_vars());
@@ -509,6 +517,82 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return is_string($fence) && preg_match('/^[a-f0-9]{64}$/D', $fence) && hash_equals(hash('sha256', $key), $fence) ? $key : false;
 					}
 				/**
+				 * Resolve a gateway-scoped external sender's signing key, or the historical site-wide key.
+				 * Sender credentials are provisioned server-side through a filter, not through signed requests.
+				 * Each sender has a durable key fingerprint so changing one cannot silently reopen replay history.
+				 *
+				 * @since 261117.0315
+				 * @param array $postvars Original unslashed signed fields, including gateway and optional sender.
+				 * @param bool $read_only True for archived correlation, which must not initialize options.
+				 * @return string|bool Signing key or false on invalid scope/configuration/continuity.
+				 */
+				private static function paypal_proxy_v2_key_for_postvars($postvars, $read_only = false)
+					{
+						if(!is_array($postvars))
+							return false;
+						if(!array_key_exists('s2member_paypal_proxy_sender', $postvars))
+							return $read_only ? self::paypal_proxy_v2_existing_signing_key() : self::paypal_proxy_v2_signing_key();
+
+						$sender = $postvars['s2member_paypal_proxy_sender'];
+						$gateway = isset($postvars['s2member_paypal_proxy']) ? $postvars['s2member_paypal_proxy'] : null;
+						if(!is_string($sender) || !preg_match('/^[a-z0-9][a-z0-9_-]{0,31}$/D', $sender) || !is_string($gateway) || $gateway === '')
+							return false;
+						$senders = apply_filters('ws_plugin__s2member_paypal_proxy_v2_sender_credentials', array());
+						if(!is_array($senders) || !isset($senders[$sender]) || !is_array($senders[$sender]))
+							return false;
+						$credentials = $senders[$sender];
+						if(!isset($credentials['key'], $credentials['gateways']) || !is_string($credentials['key'])
+						|| !preg_match('/^[a-f0-9]{64}$/D', $credentials['key']) || !is_array($credentials['gateways'])
+						|| !in_array($gateway, $credentials['gateways'], true))
+							return false;
+
+						//261117.0319 Refuse reused secrets: a compromised adapter must not be able to impersonate another sender or the site's unscoped signer.
+						$site_key = self::paypal_proxy_v2_existing_signing_key();
+						if(is_string($site_key) && hash_equals($site_key, $credentials['key']))
+							return false;
+						foreach($senders as $other_id => $other)
+							if($other_id !== $sender && is_array($other) && isset($other['key']) && is_string($other['key']) && hash_equals($credentials['key'], $other['key']))
+								return false;
+
+						//261117.0315 Never grant one sender another gateway's authority; the sender ID and gateway are both bound into the signed body.
+						$marker = 'ws_plugin__s2member_paypal_proxy_v2_sender_fingerprint_'.$sender;
+						$fingerprint = hash('sha256', $credentials['key']);
+						$stored = get_option($marker, null);
+						if($stored === null && !$read_only)
+							$stored = add_option($marker, $fingerprint, '', 'no') ? $fingerprint : get_option($marker, null);
+						//261117.0315 A missing fingerprint on read-only inspection or a mismatched one on any path is unresolved key history, not permission to rotate.
+						return is_string($stored) && preg_match('/^[a-f0-9]{64}$/D', $stored) && hash_equals($fingerprint, $stored) ? $credentials['key'] : false;
+					}
+				/**
+				 * Bind a replay claim to its signer namespace without changing old unscoped claim identifiers.
+				 *
+				 * @since 261117.0315
+				 * @param string $message_id Signed v2 message identifier.
+				 * @param array $postvars Authenticated original POST fields.
+				 * @param bool $read_only Whether claim correlation must avoid writes.
+				 * @return string|bool Option name or false if sender credentials are unavailable.
+				 */
+				private static function paypal_proxy_v2_claim_name($message_id, $postvars, $read_only = false)
+					{
+						if(($key = self::paypal_proxy_v2_key_for_postvars($postvars, $read_only)) === false)
+							return false;
+						//261117.0315 Preserve existing unscoped claim names; never allow identical IDs from distinct scoped senders to share a receipt.
+						$scope = array_key_exists('s2member_paypal_proxy_sender', $postvars) ? 'sender:'.$postvars['s2member_paypal_proxy_sender']."\n" : '';
+						return 'ws_plugin__s2member_proxy_v2_seen_'.hash_hmac('sha256', $scope.$message_id, $key);
+					}
+				/**
+				 * Build domain-separated HMAC input; sender identity cannot be detached from a verified payload.
+				 *
+				 * @since 261117.0315
+				 * @return string Signed data, independent of the signing key.
+				 */
+				private static function paypal_proxy_v2_signed_bytes($timestamp, $message_id, $payload, $postvars)
+					{
+						if(array_key_exists('s2member_paypal_proxy_sender', $postvars))
+							return "s2member_paypal_proxy_v2_sender\n".$postvars['s2member_paypal_proxy_sender']."\n".$timestamp."\n".$message_id."\n".$payload;
+						return "s2member_paypal_proxy_v2\n".$timestamp."\n".$message_id."\n".$payload;
+					}
+				/**
 				 * Validate a legacy signed GET proxy return, optionally enforcing a bounded link lifetime.
 				 * Existing signed browser returns remain compatible until a site explicitly enables expiry.
 				 * This is not an HMAC-v2 authentication or a replay/fulfillment guarantee.
@@ -601,11 +685,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								try { $message_id = bin2hex(random_bytes(16)); }
 								catch(Exception $exception) { return false; }
 							}
-						if(!is_string($message_id) || !preg_match('/^[a-f0-9]{32}$/D', $message_id) || ($key = self::paypal_proxy_v2_signing_key()) === false)
+						if(!is_string($message_id) || !preg_match('/^[a-f0-9]{32}$/D', $message_id) || ($key = self::paypal_proxy_v2_key_for_postvars($postvars)) === false)
 							return false;
 
-						//261111.0003 Bind the timestamp, message ID, gateway, and entire payload; never reuse Checkout or legacy Proxy Key credentials.
-						$signature = hash_hmac('sha256', "s2member_paypal_proxy_v2\n".$timestamp."\n".$message_id."\n".$payload, $key);
+						//261117.0315 Scoped senders use a distinct HMAC domain; unscoped site signatures retain their original bytes for compatibility.
+						$signature = hash_hmac('sha256', self::paypal_proxy_v2_signed_bytes($timestamp, $message_id, $payload, $postvars), $key);
 						return 'v2.'.$timestamp.'.'.$message_id.'.'.$signature;
 					}
 				/**
@@ -623,6 +707,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						|| !preg_match('/^v2\.([0-9]{10,12})\.([a-f0-9]{32})\.([a-f0-9]{64})$/D', $postvars['s2member_paypal_proxy_verification'], $matches))
 							return false;
 
+						//261117.0315 Default to old unscoped compatibility, but allow a site to reject site-wide v2 credentials after scoped senders migrate.
+						if(!array_key_exists('s2member_paypal_proxy_sender', $postvars)
+						&& !apply_filters('ws_plugin__s2member_paypal_proxy_v2_allow_unscoped', true))
+							return false;
 						$timestamp = (int)$matches[1];
 						//261110.2320 Reject expired signatures and future clock skew; signing a payload is insufficient if an old envelope can be reused indefinitely.
 						if($timestamp < time() - 300 || $timestamp > time() + 60)
@@ -637,13 +725,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 * @param string $token Verified v2 token; the stored digest binds the original payload and gateway.
 				 * @return bool True only for the first delivery of this message ID.
 				 */
-				private static function paypal_proxy_v2_claim($token)
+				private static function paypal_proxy_v2_claim($token, $postvars)
 					{
 						if(!is_string($token) || !preg_match('/^v2\.([0-9]{10,12})\.([a-f0-9]{32})\.([a-f0-9]{64})$/D', $token, $matches)
-						|| ($key = self::paypal_proxy_v2_signing_key()) === false)
+						|| ($option = self::paypal_proxy_v2_claim_name($matches[2], $postvars, true)) === false)
 							return false;
 
-						$option = 'ws_plugin__s2member_proxy_v2_seen_'.hash_hmac('sha256', $matches[2], $key);
 						$expiry = (int)$matches[1] + 361;
 						$digest = hash('sha256', $token);
 						//261116.0327 Keep the numeric expiry prefix for the existing SQL garbage collector and old numeric claims.
@@ -758,16 +845,18 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						|| !preg_match('/^v2\.([0-9]{10,12})\.([a-f0-9]{32})\.([a-f0-9]{64})$/D', $postvars['s2member_paypal_proxy_verification'], $matches))
 							return false;
 						//261116.2325 Never generate a missing signing key during an audit; a new key would change the namespace of historical claims.
-						$key = self::paypal_proxy_v2_existing_signing_key();
+						$key = self::paypal_proxy_v2_key_for_postvars($postvars, true);
 						$payload = self::paypal_proxy_v2_payload($postvars);
-						//261117.0019 Correlation must fail closed on key continuity errors without writing any audit or payment state.
+						//261117.0315 Read-only correlation uses the same scoped key/domain and replay namespace as the original delivery, without rotating secrets.
 						if($key === false || $payload === false)
-							return false;
-						$expected = 'v2.'.(int)$matches[1].'.'.$matches[2].'.'.hash_hmac('sha256', "s2member_paypal_proxy_v2\n".(int)$matches[1]."\n".$matches[2]."\n".$payload, $key);
+								return false;
+						$expected = 'v2.'.(int)$matches[1].'.'.$matches[2].'.'.hash_hmac('sha256', self::paypal_proxy_v2_signed_bytes((int)$matches[1], $matches[2], $payload, $postvars), $key);
 						if(!hash_equals($expected, $postvars['s2member_paypal_proxy_verification']))
 							return false;
 
-						$option = 'ws_plugin__s2member_proxy_v2_seen_'.hash_hmac('sha256', $matches[2], $key);
+						$option = self::paypal_proxy_v2_claim_name($matches[2], $postvars, true);
+						if($option === false)
+							return false;
 						global $wpdb;
 						//261116.2325 Bind the claim to the token digest, not merely a reused message ID; use durable SQL reads without cleanup or replay.
 						$stored = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option));
@@ -803,6 +892,24 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(is_array($receipt) && $receipt['gateway'] === strtolower(trim($gateway)) && $receipt['event'] === 'payment')
 							$result['origin'] = isset($receipt['replay_origin']) ? 'authoritative' : 'legacy_shadow';
 						return $result;
+					}
+				/**
+				 * Allow the published legacy proxy key only before an operator explicitly retires it.
+				 * A retirement option row, regardless of value, disables static-key authentication.
+				 * Its absence preserves the historical soft rollout, including the existing allow-legacy filter.
+				 * This does not affect signed GET browser returns, HMAC-v2 POST, or trusted PHP dispatch.
+				 *
+				 * @since 261117.0256
+				 * @return bool True only while no retirement marker exists and SQL can verify that fact.
+				 */
+				public static function paypal_proxy_legacy_key_not_retired()
+					{
+						global $wpdb;
+						//261117.0256 Use durable SQL, not potentially stale option caches: a retired static credential must never be reaccepted by an old cache entry.
+						$marker = 'ws_plugin__s2member_paypal_proxy_legacy_key_retired';
+						$count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name = %s", $marker));
+						//261117.0256 An unreadable/malformed result is not evidence that the legacy key is safe to accept.
+						return $wpdb->last_error === '' && ($count === 0 || $count === '0');
 					}
 				/**
 				 * Observe legacy static-key usage without storing secrets or transaction/customer data.
