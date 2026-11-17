@@ -782,8 +782,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$pending = $expiry.'|processing|'.$digest;
 						if(!add_option($option, $pending, '', 'no'))
 							{
-								$stored = get_option($option, false);
-								self::$paypal_proxy_v2_completed_replay = is_string($stored)
+								global $wpdb;
+								//261117.0534 A cached completed flag cannot authorize a duplicate acknowledgment; verify the exact token in durable SQL.
+								$stored = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option));
+								self::$paypal_proxy_v2_completed_replay = $wpdb->last_error === '' && is_string($stored)
 									&& hash_equals($expiry.'|completed|'.$digest, $stored);
 								return false;
 							}

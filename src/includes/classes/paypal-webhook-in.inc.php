@@ -895,15 +895,16 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					$post = array_merge($paypal, array(
 						's2member_paypal_proxy'              => 'paypal',
 						's2member_paypal_proxy_use'          => 'paypal_checkout_webhook',
-						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+						's2member_paypal_proxy_verification' => '',
 					));
 
 					//261115.0452 The provider webhook was signature-verified above; pass only its server-built PayPal payload to Notify.
 					// Keep the established HTTP bridge available through the same opt-out filter used by Framework Checkout.
 					$in_process = apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, !empty($paypal['invoice']) ? (string)$paypal['invoice'] : '', $txn_key);
-					$r = $in_process ? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_inprocess($post) : c_ws_plugin__s2member_utils_urls::remote($url, $post, array(
-						'timeout' => 20,
-					), true);
+					//261117.0534 Only an explicitly selected HTTP loopback needs the reusable legacy credential; trusted PHP forwarding never does.
+					$r = $in_process ? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_inprocess($post) : c_ws_plugin__s2member_utils_urls::remote($url, array_merge($post, array(
+						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+					)), array('timeout' => 20), true);
 
 					if(!is_array($r))
 						$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');

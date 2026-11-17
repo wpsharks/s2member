@@ -1094,11 +1094,24 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 						'proxy_next_billing_time'            => $next_billing_time, //260517
 						's2member_paypal_proxy'              => 'paypal',
 						's2member_paypal_proxy_use'          => 'paypal_checkout',
-						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+						's2member_paypal_proxy_verification' => '',
 					));
 
-					$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
-
+					//261117.0534 A successfully cancelled subscription can be sent to trusted Notify PHP directly; preserve HTTP as an explicit compatibility opt-out.
+					$local_notify = apply_filters('ws_plugin__s2member_paypal_checkout_cancellation_internal_notify', TRUE, $user_id, $subscr_id);
+					try
+						{
+							$notify_r = $local_notify
+								? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_inprocess($notify_post)
+								: c_ws_plugin__s2member_utils_urls::remote($notify_url, array_merge($notify_post, array(
+									's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+								)), array('timeout' => 20), true);
+						}
+					catch(\Throwable $notify_exception)
+						{
+							//261117.0534 Match HTTP's isolated-failure contract: a Notify exception must not issue a second provider cancellation.
+							$notify_r = false;
+						}
 					if(!is_array($notify_r))
 						$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
 

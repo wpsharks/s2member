@@ -213,16 +213,18 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 			}
 
 			$proxy = array('s2member_paypal_proxy' => stripslashes($gateway),
-			               's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen());
+			               's2member_paypal_proxy_verification' => '');
 			$local_eot = FALSE;
 			try
 			{
 				$local_eot = $kind === 'eot' && apply_filters('ws_plugin__s2member_registration_eot_local_dispatch', TRUE, $ipn, (int)$user_id) === TRUE;
 				//261116.0147 Local EOT dispatch exposes handler acceptance; a remote HTTP 200 alone cannot prove it.
+				//261117.0534 Preserve legacy HTTP payment delivery; avoid creating a proxy credential for trusted local EOT handling.
+				$notify_post = array_merge(stripslashes_deep($ipn), $proxy);
 				$response = $local_eot
-					? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_inprocess(array_merge(stripslashes_deep($ipn), $proxy), TRUE)
+					? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_inprocess($notify_post, TRUE)
 					: c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'),
-						array_merge(stripslashes_deep($ipn), $proxy), array('timeout' => 20), TRUE);
+						array_merge($notify_post, array('s2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen())), array('timeout' => 20), TRUE);
 			}
 			catch(\Throwable $exception)
 			{
