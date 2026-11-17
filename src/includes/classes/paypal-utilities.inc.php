@@ -32,6 +32,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				private static $paypal_proxy_v2_rejection_status = 0;
 				private static $paypal_proxy_v2_active_claim = null;
 				private static $paypal_proxy_v2_completed_replay = false;
+				//261117.0357 Only a trusted in-process Notify invocation may bypass external proxy credentials.
+				private static $paypal_proxy_internal_dispatch = false;
 
 				/**
 				 * Return the last v2 request's rejection status (403 invalid, 409 replay, 0 otherwise).
@@ -158,6 +160,12 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										if(!empty($_GET["s2member_paypal_return"]) && !empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && $_REQUEST["s2member_paypal_proxy"] === "paypal")
 											return false;
 
+										//261117.0357 Trusted in-process Notify has no external bearer credential; this private guard is never set by HTTP input.
+										else if(self::$paypal_proxy_internal_dispatch && count($_GET) === 1 && isset($_GET['s2member_paypal_notify'])
+										&& isset($_POST['s2member_paypal_proxy']) && is_string($_POST['s2member_paypal_proxy']) && $_POST['s2member_paypal_proxy'] !== ''
+										&& isset($_POST['s2member_paypal_proxy_verification']) && $_POST['s2member_paypal_proxy_verification'] === '')
+											return apply_filters('ws_plugin__s2member_paypal_postvars', array_merge($postvars, array('proxy_verified' => $_POST['s2member_paypal_proxy'])), get_defined_vars());
+
 										//261110.2320 v2 credentials authenticate every POST field, including the gateway, and are never downgraded to the legacy static key on failure.
 										else if(!empty($_POST['s2member_paypal_proxy_verification']) && is_string($_POST['s2member_paypal_proxy_verification']) && strpos($_POST['s2member_paypal_proxy_verification'], 'v2.') === 0)
 											{
@@ -251,12 +259,22 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if($merchant_id !== '' && $receiver_id !== '')
 							return hash_equals($merchant_id, $receiver_id);
 
-						//261110.2223 TO-DO: Consider an optional, site-owner-verified primary PayPal recipient email for legacy IPNs without receiver_id. PayPal can report its primary email when paypal_business is a secondary alias; do not trust the IPN business field.
-						//261110.2142 Older subscription events may omit receiver_id; fall back to the verified recipient email.
+						//261117.0357 Older VERIFIED PayPal IPNs may omit receiver_id and report the merchant's primary email instead of the configured secondary alias.
+						// Accept only explicitly site-provisioned additional recipient emails; never derive allowed aliases from the IPN's business or payer fields.
 						if(isset($postvars['receiver_email']) && !is_string($postvars['receiver_email']))
 							return false;
 						$receiver_email = isset($postvars['receiver_email']) ? trim($postvars['receiver_email']) : '';
-						return ($merchant_email !== '' && $receiver_email !== '' && strcasecmp($merchant_email, $receiver_email) === 0);
+						if($receiver_email === '')
+							return false;
+						if($merchant_email !== '' && strcasecmp($merchant_email, $receiver_email) === 0)
+							return true;
+						$aliases = apply_filters('ws_plugin__s2member_paypal_ipn_recipient_email_aliases', array());
+						if(!is_array($aliases))
+							return false;
+						foreach($aliases as $alias)
+							if(is_string($alias) && is_email(trim($alias)) && strcasecmp(trim($alias), $receiver_email) === 0)
+								return true;
+						return false;
 					}
 				/**
 				 * Validate native PayPal payment completion before granting access; preserve nonpayment and proxy event semantics.
@@ -3288,6 +3306,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$prior_ignore_user_abort = ignore_user_abort();
 						$prior_email_config = c_ws_plugin__s2member_email_configs::email_config_status();
 						$prior_user_id = get_current_user_id();
+						$prior_internal_dispatch = self::$paypal_proxy_internal_dispatch; //261117.0357 Nested calls must restore the outer trusted context.
 
 						try
 							{
@@ -3313,9 +3332,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 								$_SERVER['HTTP_USER_AGENT'] = 's2Member internal Notify';
 
-								//261115.0113 Signing must occur after Host isolation: proxy_key_gen() can incorporate the current request host.
-								$_POST['s2member_paypal_proxy_verification'] = self::paypal_proxy_key_gen();
-								$_REQUEST['s2member_paypal_proxy_verification'] = $_POST['s2member_paypal_proxy_verification'];
+								//261117.0357 Local PHP dispatch authenticates by its isolated call stack, not by a reusable key placed in request globals.
+								$_POST['s2member_paypal_proxy_verification'] = '';
+								$_REQUEST['s2member_paypal_proxy_verification'] = '';
+								self::$paypal_proxy_internal_dispatch = true;
 								$outcome = c_ws_plugin__s2member_paypal_notify_in::paypal_notify_process();
 								if(!is_array($outcome) || !isset($outcome['code']) || !is_int($outcome['code']))
 									return array('code' => 0, 'message' => 'invalid_internal_notify_outcome', 'body' => '');
@@ -3329,6 +3349,7 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 						finally
 							{
+								self::$paypal_proxy_internal_dispatch = $prior_internal_dispatch; //261117.0357 Never leave a trusted bypass active after an exception.
 								$_GET = $prior_get;
 								$_POST = $prior_post;
 								$_REQUEST = $prior_request;
