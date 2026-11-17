@@ -201,7 +201,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_REQUEST["s2member_paypal_proxy"])), get_defined_vars());
 										}
 
-										else if(empty($_POST) && !empty($_GET["s2member_paypal_proxy"]) && !empty($_GET["s2member_paypal_proxy_verification"]) && c_ws_plugin__s2member_utils_urls::s2member_sig_ok($_SERVER["REQUEST_URI"], false, false, "s2member_paypal_proxy_verification"))
+										//261117.0240 Signed GET returns are distinct from HMAC-v2 POSTs. A site may opt into a bounded lifetime after reviewing legacy return-link usage.
+										else if(empty($_POST) && !empty($_GET["s2member_paypal_proxy"]) && !empty($_GET["s2member_paypal_proxy_verification"]) && self::paypal_proxy_signed_get_valid($_SERVER["REQUEST_URI"]))
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_GET["s2member_paypal_proxy"])), get_defined_vars());
 
 										else if(trim(strtolower(c_ws_plugin__s2member_utils_urls::remote("https://".$endpoint."/cgi-bin/webscr", $postback, array("timeout" => 20)))) === "verified")
@@ -506,6 +507,37 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if($fence === null)
 							return $key; //261117.0019 Older valid signing keys predate the continuity marker; read-only audits must not create it.
 						return is_string($fence) && preg_match('/^[a-f0-9]{64}$/D', $fence) && hash_equals(hash('sha256', $key), $fence) ? $key : false;
+					}
+				/**
+				 * Validate a legacy signed GET proxy return, optionally enforcing a bounded link lifetime.
+				 * Existing signed browser returns remain compatible until a site explicitly enables expiry.
+				 * This is not an HMAC-v2 authentication or a replay/fulfillment guarantee.
+				 *
+				 * @since 261117.0240
+				 * @param string $request_uri Original request URI including its signed query string.
+				 * @return bool Whether the signed legacy return is acceptable under the configured policy.
+				 */
+				public static function paypal_proxy_signed_get_valid($request_uri)
+					{
+						if(!is_string($request_uri) || !c_ws_plugin__s2member_utils_urls::s2member_sig_ok($request_uri, false, false, 's2member_paypal_proxy_verification'))
+							return false;
+
+						//261117.0240 Zero retains previously issued long-lived return links; positive integer seconds opt into expiry. Invalid policies fail closed.
+						$max_age = apply_filters('ws_plugin__s2member_paypal_proxy_signed_get_max_age', 0);
+						if($max_age === 0)
+							return true;
+						if(!is_int($max_age) || $max_age < 1)
+							return false;
+
+						//261117.0240 Require exactly one canonical timestamp/signature pair in bounded mode; duplicates and ambiguous encodings cannot select a different lifetime.
+						$query = parse_url($request_uri, PHP_URL_QUERY);
+						if(!is_string($query) || preg_match_all('/(?:^|&)s2member_paypal_proxy_verification=([^&]*)/', $query, $tokens) !== 1
+						|| !preg_match('/^([0-9]{10,12})-[a-f0-9]{32}$/D', $tokens[1][0], $matches))
+							return false;
+						$issued = (int)$matches[1];
+						$now = time();
+						//261117.0240 Permit one minute of clock skew for different web nodes, but never an unlimited future or past-dated return.
+						return $issued <= $now + 60 && $now - $issued <= $max_age;
 					}
 				/**
 				 * Canonicalize a v2 proxy POST body for a transaction-bound HMAC.
