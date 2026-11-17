@@ -549,11 +549,19 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(!is_array($postvars))
 							return false;
 						if(!array_key_exists('s2member_paypal_proxy_sender', $postvars))
-							return $read_only ? self::paypal_proxy_v2_existing_signing_key() : self::paypal_proxy_v2_signing_key();
+							{
+								//261117.0527 Retiring site-wide signing stops new unscoped messages, but historical signatures remain inspectable read-only.
+								if(!$read_only && !self::paypal_proxy_v2_sender_not_retired())
+									return false;
+								return $read_only ? self::paypal_proxy_v2_existing_signing_key() : self::paypal_proxy_v2_signing_key();
+							}
 
 						$sender = $postvars['s2member_paypal_proxy_sender'];
 						$gateway = isset($postvars['s2member_paypal_proxy']) ? $postvars['s2member_paypal_proxy'] : null;
 						if(!is_string($sender) || !preg_match('/^[a-z0-9][a-z0-9_-]{0,31}$/D', $sender) || !is_string($gateway) || $gateway === '')
+							return false;
+						//261117.0527 A scoped key can be independently revoked without deleting its fingerprint or historical replay claims.
+						if(!$read_only && !self::paypal_proxy_v2_sender_not_retired($sender))
 							return false;
 						$senders = apply_filters('ws_plugin__s2member_paypal_proxy_v2_sender_credentials', array());
 						if(!is_array($senders) || !isset($senders[$sender]) || !is_array($senders[$sender]))
@@ -580,6 +588,25 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							$stored = add_option($marker, $fingerprint, '', 'no') ? $fingerprint : get_option($marker, null);
 						//261117.0315 A missing fingerprint on read-only inspection or a mismatched one on any path is unresolved key history, not permission to rotate.
 						return is_string($stored) && preg_match('/^[a-f0-9]{64}$/D', $stored) && hash_equals($fingerprint, $stored) ? $credentials['key'] : false;
+					}
+				/**
+				 * Determine whether a site-wide or scoped external HMAC-v2 credential remains authorized.
+				 * The marker must be read from the database, not WordPress's potentially stale option cache.
+				 * Revocation stops new signatures; existing completed and uncertain receipts remain untouched.
+				 *
+				 * @since 261117.0527
+				 * @param string|null $sender Valid sender ID, or null for the old unscoped site key.
+				 * @return bool True only if SQL confirms no revocation marker exists.
+				 */
+				private static function paypal_proxy_v2_sender_not_retired($sender = null)
+					{
+						if($sender !== null && (!is_string($sender) || !preg_match('/^[a-z0-9][a-z0-9_-]{0,31}$/D', $sender)))
+							return false;
+						global $wpdb;
+						$marker = $sender === null ? 'ws_plugin__s2member_paypal_proxy_v2_unscoped_retired' : 'ws_plugin__s2member_paypal_proxy_v2_sender_revoked_'.$sender;
+						//261117.0527 Query the unique option row directly so stale option caches cannot silently restore a retired signing identity.
+						$count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name = %s", $marker));
+						return $wpdb->last_error === '' && ($count === 0 || $count === '0');
 					}
 				/**
 				 * Bind a replay claim to its signer namespace without changing old unscoped claim identifiers.
