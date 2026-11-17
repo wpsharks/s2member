@@ -545,8 +545,14 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 			if(is_wp_error($receipt))
 				return $receipt;
 
+			//261117.1457 A completed shadow or a record without the authorized side-effect checkpoint is not proof of authoritative fulfillment.
 			if($receipt['record']['status'] === 'completed')
+			{
+				if($authoritative && (!isset($receipt['record']['replay_origin'], $receipt['record']['replay_authorized'], $receipt['record']['fulfillment_started'], $receipt['record']['subscription_hash'])
+				   || !hash_equals($receipt['record']['subscription_hash'], hash('sha256', $ipn['subscr_id']))))
+					return new WP_Error('s2m_pay_event_unverified_completion', 'Authoritative completion needs an authorized, checkpointed receipt for the verified subscription.');
 				return array('event' => $name, 'status' => 'completed', 'created' => FALSE);
+			}
 
 			//261112.1527 A pre-cutover shadow receipt may have been fulfilled by the legacy transient; never promote it on redelivery.
 			if($authoritative && !isset($receipt['record']['replay_origin']))

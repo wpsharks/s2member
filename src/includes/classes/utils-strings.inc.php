@@ -1082,7 +1082,8 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 				if($destination === 'recipient' || $destination === 'subject')
 				{
 					$value = str_replace(array("\r", "\n", "\0"), '', $value);
-					return ($destination === 'recipient' && in_array($key, array('first_name', 'last_name', 'full_name'), TRUE)) ? self::esc_dq($value) : $value;
+					//261117.1500 Welcome/admin recipient names also carry the user_ prefix; quote-escape those values once.
+					return ($destination === 'recipient' && in_array($key, array('first_name', 'last_name', 'full_name', 'user_first_name', 'user_last_name', 'user_full_name'), TRUE)) ? self::esc_dq($value) : $value;
 				}
 
 				if($destination === 'tracking')
