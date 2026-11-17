@@ -197,6 +197,15 @@ add_action('admin_print_scripts', 'c_ws_plugin__s2member_menu_pages::add_admin_s
 add_action('admin_print_styles', 'c_ws_plugin__s2member_menu_pages::add_admin_styles');
 add_action('admin_menu', 'c_ws_plugin__s2member_menu_pages::get_help_panel', 12); //250824
 
+//261117.2250 Soft migration: warn only on proven legacy proxy use, or an attempted unapproved PayPal cutover; preserve old processing.
+add_action('admin_init', 'c_ws_plugin__s2member_admin_notices::dismiss_legacy_proxy_migration_notice');
+add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::legacy_proxy_migration_notice', 11);
+add_action('user_admin_notices', 'c_ws_plugin__s2member_admin_notices::legacy_proxy_migration_notice', 11);
+add_action('network_admin_notices', 'c_ws_plugin__s2member_admin_notices::legacy_proxy_migration_notice', 11);
+add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::paypal_cutover_transition_notice', 12);
+add_action('user_admin_notices', 'c_ws_plugin__s2member_admin_notices::paypal_cutover_transition_notice', 12);
+add_action('network_admin_notices', 'c_ws_plugin__s2member_admin_notices::paypal_cutover_transition_notice', 12);
+
 //260813 Warn administrators when shortcodes request user fields that have not been explicitly approved.
 add_action('admin_init', 'c_ws_plugin__s2member_admin_notices::dismiss_shortcode_user_fields_notice');
 add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::shortcode_user_fields_notice', 11);
