@@ -1109,6 +1109,40 @@ if(!class_exists('c_ws_plugin__s2member_utils_strings'))
 			return preg_replace('/%%(.+?)%%/i', 'S2M_VALUE', (string)$template);
 		}
 
+		/**
+		 * Builds one trusted lookup for member/EOT notification templates.
+		 *
+		 * Unlike fill_cvs() followed by preg_replace(), replacement values are never
+		 * reinterpreted as placeholders. Core fields win over untrusted profile keys.
+		 * The caller selects text, URL, or preserving-URL escaping at render time.
+		 *
+		 * @since 261117.1410
+		 *
+		 * @param array $fixed Explicitly supported core fields.
+		 * @param string $custom Historical pipe-delimited custom value, including cv0.
+		 * @param array $fields Custom registration/profile fields.
+		 * @param array $context Optional prior/new EOT access context.
+		 * @return array Lowercase placeholder names and unescaped values.
+		 */
+		public static function member_notification_values($fixed, $custom = '', $fields = array(), $context = array())
+		{
+			$values = array();
+			//261117.1410 Context and core fields are authoritative; profile fields cannot shadow their names.
+			foreach(array($context, $fixed) as $group)
+				foreach((array)$group as $key => $value)
+					if(is_string($key) && preg_match('/^[a-z0-9_]+$/iD', $key) && is_scalar($value))
+						$values[strtolower($key)] = (string)$value;
+
+			foreach(explode('|', (string)$custom) as $i => $value)
+				if(!array_key_exists('cv'.$i, $values))
+					$values['cv'.$i] = trim($value);
+
+			foreach((array)$fields as $key => $value)
+				if(is_string($key) && preg_match('/^[a-z0-9_]+$/iD', $key) && !array_key_exists(strtolower($key), $values))
+					$values[strtolower($key)] = maybe_serialize($value);
+			return $values;
+		}
+
 		public static function fill_cvs($string, $custom, $urlencode = false)
 		{
 			$string = (string)$string;

@@ -747,27 +747,25 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 			$subscr_cid  = get_user_option('s2member_subscr_cid', $user_id);
 			$fields      = get_user_option('s2member_custom_fields', $user_id);
 			$user_reg_ip = get_user_option('s2member_registration_ip', $user_id);
+			//261117.1410 Use a single set of trusted EOT tokens for outbound URL and email rendering.
+			$eot_notification_values = c_ws_plugin__s2member_utils_strings::member_notification_values(array(
+				'eot_del_type' => $eot_del_type,
+				'subscr_id' => $subscr_id, 'subscr_baid' => $subscr_baid, 'subscr_cid' => $subscr_cid,
+				'user_first_name' => $user->first_name, 'user_last_name' => $user->last_name,
+				'user_full_name' => trim($user->first_name.' '.$user->last_name),
+				'user_email' => $user->user_email, 'user_login' => $user->user_login,
+				'user_ip' => $user_reg_ip, 'user_id' => $user_id,
+			), $custom, $fields, $eot_notification_context);
 
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'])
 			{
 				foreach(preg_split("/[\r\n\t]+/", $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url)
-					if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(self::notification_fill($url, $eot_notification_context, TRUE), $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
-						if(($url = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_baid)), $url)) && ($url = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_cid)), $url)))
-							if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
-								if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
-									if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_email)), $url)))
-										if(($url = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_login)), $url)))
-											if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_reg_ip)), $url)))
-												if(($url = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
-												{
-													if(is_array($fields) && !empty($fields))
-														foreach($fields as $var => $val)
-															if(!($url = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
-																break;
-
-													if(($url = trim(preg_replace('/%%(.+?)%%/i', '', $url))))
-														c_ws_plugin__s2member_utils_urls::remote($url);
-												}
+				{
+					//261117.1410 Render access context, custom values, and user fields in the same pass.
+					$url = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, $eot_notification_values, 'url'));
+					if($url)
+						c_ws_plugin__s2member_utils_urls::remote($url);
+				}
 			}
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients'])
 			{
@@ -805,24 +803,11 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 				$msg .= 'cv8: %%cv8%%'."\n";
 				$msg .= 'cv9: %%cv9%%';
 
-				if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)) && ($msg = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($eot_del_type), $msg)) && ($msg = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_id), $msg)))
-					if(($msg = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_baid), $msg)) && ($msg = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_cid), $msg)))
-						if(($msg = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->first_name), $msg)) && ($msg = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->last_name), $msg)))
-							if(($msg = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($user->first_name.' '.$user->last_name)), $msg)))
-								if(($msg = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_email), $msg)))
-									if(($msg = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_login), $msg)))
-										if(($msg = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $msg)))
-											if(($msg = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $msg)))
-											{
-												if(is_array($fields) && !empty($fields))
-													foreach($fields as $var => $val)
-														if(!($msg = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $msg)))
-															break;
-
-												if($sbj && ($msg = trim(preg_replace('/%%(.+?)%%/i', '', $msg))))
-													foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
-														wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-											}
+				//261117.1410 Never expand a placeholder introduced by profile or signed custom data.
+				$msg = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, $eot_notification_values, 'text'));
+				if($sbj && $msg)
+					foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
+						wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
 				if($email_configs_were_on)
 					c_ws_plugin__s2member_email_configs::email_config();
 			}
@@ -1413,27 +1398,26 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 										'subscr_id'        => $subscr_id,
 									));
 
+									//261117.1410 Bind the post-demotion access context to a single rendering pass.
+									$eot_notification_values = c_ws_plugin__s2member_utils_strings::member_notification_values(array(
+										'eot_del_type' => $eot_del_type,
+										'subscr_id' => $subscr_id, 'subscr_baid' => $subscr_baid, 'subscr_cid' => $subscr_cid,
+										'user_first_name' => $user->first_name, 'user_last_name' => $user->last_name,
+										'user_full_name' => trim($user->first_name.' '.$user->last_name),
+										'user_email' => $user->user_email, 'user_login' => $user->user_login,
+										'user_ip' => $user_reg_ip, 'user_id' => $user_id,
+									), $custom, $fields, $eot_notification_context);
+
 									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'])
 									{
 										foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url) // Handle EOT Notifications.
-
-											if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(self::notification_fill($url, $eot_notification_context, TRUE), $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode('auto-eot-cancellation-expiration-demotion')), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
-												if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
-													if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
-														if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_email)), $url)))
-															if(($url = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_login)), $url)))
-																if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_reg_ip)), $url)))
-																	if(($url = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
-																	{
-																		if(is_array($fields) && !empty($fields))
-																			foreach($fields as $var => $val /* Custom Registration/Profile Fields. */)
-																				if(!($url = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
-																					break;
-
-																		if(($url = trim(preg_replace('/%%(.+?)%%/i', '', $url))))
-																			c_ws_plugin__s2member_utils_urls::remote($url);
-																	}
+									{
+										//261117.1410 One-pass replacement also prevents context values from creating new CV tokens.
+										$url = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, $eot_notification_values, 'url'));
+										if($url)
+											c_ws_plugin__s2member_utils_urls::remote($url);
 									}
+								}
 									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients'])
 									{
 										$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status();
@@ -1470,25 +1454,11 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 										$msg .= 'cv8: %%cv8%%'."\n";
 										$msg .= 'cv9: %%cv9%%';
 
-										if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)) && ($msg = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs('auto-eot-cancellation-expiration-demotion'), $msg)) && ($msg = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_id), $msg)))
-											if(($msg = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_baid), $msg)) && ($msg = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_cid), $msg)))
-												if(($msg = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->first_name), $msg)) && ($msg = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->last_name), $msg)))
-													if(($msg = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($user->first_name.' '.$user->last_name)), $msg)))
-														if(($msg = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_email), $msg)))
-															if(($msg = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_login), $msg)))
-																if(($msg = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $msg)))
-																	if(($msg = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $msg)))
-																	{
-																		if(is_array($fields) && !empty($fields))
-																			foreach($fields as $var => $val /* Custom Registration/Profile Fields. */)
-																				if(!($msg = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $msg)))
-																					break;
-
-																		if($sbj && ($msg = trim(preg_replace('/%%(.+?)%%/i', '', $msg))) /* Still have a ``$sbj`` and a ``$msg``? */)
-
-																			foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
-																				wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-																	}
+										//261117.1410 Preserve EOT mail hooks while blocking recursive custom-field substitution.
+										$msg = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, $eot_notification_values, 'text'));
+										if($sbj && $msg)
+											foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
+												wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
 										if($email_configs_were_on) c_ws_plugin__s2member_email_configs::email_config();
 									}
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;

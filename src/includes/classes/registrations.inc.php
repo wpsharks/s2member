@@ -1414,32 +1414,23 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											 * @var $opt_in boolean Reference for IDEs.
 											 * @var $fields array Reference for IDEs.
 											 */
+											//261117.1410 Construct trusted registration tokens once; never rescan substituted custom values.
+											$registration_values = c_ws_plugin__s2member_utils_strings::member_notification_values(array(
+												'role' => $role, 'level' => $level, 'ccaps' => $ccaps, 'auto_eot_time' => $auto_eot_time,
+												'user_first_name' => $fname, 'user_last_name' => $lname, 'user_full_name' => $name,
+												'user_email' => $email, 'user_login' => $login, 'user_pass' => $pass,
+												'user_ip' => $ip, 'user_id' => $user_id,
+											), $custom, $fields);
+
 											if($urls = $GLOBALS['WS_PLUGIN__']['s2member']['o']['registration_notification_urls'])
-
-												foreach(preg_split('/['."\r\n\t".']+/', $urls) as $url) // Notify each of the URLs.
-
-													if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)))
-														if(($url = preg_replace('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($role)), $url)))
-															if(($url = preg_replace('/%%level%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($level)), $url)))
-																if(($url = preg_replace('/%%ccaps%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ccaps)), $url)))
-																	if(($url = preg_replace('/%%auto_eot_time%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($auto_eot_time)), $url)))
-																		if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($fname)), $url)))
-																			if(($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($lname)), $url)))
-																				if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($name)), $url)))
-																					if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($email)), $url)))
-																						if(($url = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($login)), $url)))
-																							if(($url = preg_replace('/%%user_pass%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($pass)), $url)))
-																								if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ip)), $url)))
-																									if(($url = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
-																									{
-																										foreach($fields as $var => $val) // Custom Fields.
-																											if(!($url = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
-																												break;
-
-																										if(($url = trim(preg_replace('/%%(.+?)%%/i', '', $url))))
-																											c_ws_plugin__s2member_utils_urls::remote($url);
-																									}
-											unset($urls, $url, $var, $val); // Housekeeping.
+												foreach(preg_split('/['."\r\n\t".']+/', $urls) as $url)
+												{
+													//261117.1410 Resolve only the original URL's tokens; substituted profile data cannot become another token.
+													$url = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, $registration_values, 'url'));
+													if($url)
+														c_ws_plugin__s2member_utils_urls::remote($url);
+												}
+											unset($urls, $url); // Housekeeping.
 
 											if($GLOBALS['WS_PLUGIN__']['s2member']['o']['registration_notification_recipients'])
 											{
@@ -1476,29 +1467,11 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 												$msg .= 'cv8: %%cv8%%'."\n";
 												$msg .= 'cv9: %%cv9%%';
 
-												if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)))
-													if(($msg = preg_replace('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($role), $msg)))
-														if(($msg = preg_replace('/%%level%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($level), $msg)))
-															if(($msg = preg_replace('/%%ccaps%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($ccaps), $msg)))
-																if(($msg = preg_replace('/%%auto_eot_time%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($auto_eot_time), $msg)))
-																	if(($msg = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($fname), $msg)))
-																		if(($msg = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($lname), $msg)))
-																			if(($msg = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($name), $msg)))
-																				if(($msg = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($email), $msg)))
-																					if(($msg = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($login), $msg)))
-																						if(($msg = preg_replace('/%%user_pass%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($pass), $msg)))
-																							if(($msg = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($ip), $msg)))
-																								if(($msg = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $msg)))
-																								{
-																									foreach($fields as $var => $val) // Custom Fields.
-																										if(!($msg = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $msg)))
-																											break;
-
-																									if($sbj && ($msg = trim(preg_replace('/%%(.+?)%%/i', '', $msg)))) // Still have a ``$sbj`` and a ``$msg``?
-
-																										foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['registration_notification_recipients']) as $recipient)
-																											wp_mail($recipient, apply_filters('ws_plugin__s2member_registration_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_registration_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-																								}
+												//261117.1410 Preserve notification hooks while preventing a second-pass field expansion.
+												$msg = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, $registration_values, 'text'));
+												if($sbj && $msg)
+													foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['registration_notification_recipients']) as $recipient)
+														wp_mail($recipient, apply_filters('ws_plugin__s2member_registration_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_registration_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
 												if($email_configs_were_on) // Back on?
 													c_ws_plugin__s2member_email_configs::email_config();
 
@@ -1506,29 +1479,13 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											}
 
 											if(!empty($GLOBALS['ws_plugin__s2member_registration_return_url']) && ($url = $GLOBALS['ws_plugin__s2member_registration_return_url']))
-
-												if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)))
-													if(($url = preg_replace('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($role)), $url)))
-														if(($url = preg_replace('/%%level%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($level)), $url)))
-															if(($url = preg_replace('/%%ccaps%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ccaps)), $url)))
-																if(($url = preg_replace('/%%auto_eot_time%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($auto_eot_time)), $url)))
-																	if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($fname)), $url)))
-																		if(($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($lname)), $url)))
-																			if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($name)), $url)))
-																				if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($email)), $url)))
-																					if(($url = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($login)), $url)))
-																						if(($url = preg_replace('/%%user_pass%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($pass)), $url)))
-																							if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ip)), $url)))
-																								if(($url = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
-																								{
-																									foreach($fields as $var => $val) // Custom Fields.
-																										if(!($url = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
-																											break;
-
-																									if(($url = trim($url))) // Preserve remaining Replacements; because the parent routine may perform replacements too.
-																										$GLOBALS['ws_plugin__s2member_registration_return_url'] = $url;
-																								}
-											unset($url, $var, $val); // Housekeeping.
+											{
+												//261117.1410 Keep parent-owned placeholders unresolved, but never rescan substituted user data.
+												$url = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, $registration_values, 'url-preserve'));
+												if($url)
+													$GLOBALS['ws_plugin__s2member_registration_return_url'] = $url;
+											}
+											unset($url); // Housekeeping.
 
 											c_ws_plugin__s2member_list_servers::process_list_servers($role, $level, $login, $pass, $email, $fname, $lname, $ip, $opt_in, TRUE, $user_id);
 											/*
