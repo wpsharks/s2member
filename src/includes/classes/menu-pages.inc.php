@@ -77,6 +77,10 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 						if($key === 'ws_plugin__s2member_configured') // s2Member is now configured (according to these options)?
 							($GLOBALS['WS_PLUGIN__']['s2member']['c']['configured'] = $value).update_option('ws_plugin__s2member_configured', $value);
 
+						//261118.0235 A valid options-form nonce is not permission to change payment authentication policy.
+						else if($key === 'ws_plugin__s2member_paypal_proxy_legacy_policy' && (!current_user_can('manage_options') || (is_multisite() && !is_super_admin())))
+							continue;
+
 						else if(!is_array($value) || (is_array($value) && array_shift($value) === 'update-signal')) // Updating an array?
 							$options[preg_replace('/^'.preg_quote('ws_plugin__s2member_', '/').'/', '', $key)] = $value;
 

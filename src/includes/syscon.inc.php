@@ -247,6 +247,8 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 		$default_options['new_user_admin_email_subject']    = sprintf('[%s] New User Registration', get_bloginfo('name'));
 		$default_options['new_user_admin_email_message']    = sprintf("New User Registration on your site: \n%s\n\nUser ID: %%%%user_id%%%%\nUsername: %%%%user_login%%%%\nEmail: %%%%user_email%%%%\nIP Address: %%%%user_ip%%%%", get_bloginfo('name'));
 
+		//261118.0230 Persist an explicit legacy proxy choice across future release-default changes.
+		$default_options['paypal_proxy_legacy_policy'] = 'default'; // `default`, `allow`, or `block`; a durable retirement marker always wins.
 		$default_options['paypal_sandbox']        = '0';
 		$default_options['paypal_business']       = '';
 		$default_options['paypal_merchant_id']    = '';
@@ -596,6 +598,10 @@ if(!function_exists('ws_plugin__s2member_configure_options_and_their_defaults'))
 					$value = $default_options[$key];
 
 				else if(preg_match('/^new_user_admin_email_(?:recipients|subject|message)$/', $key) && (!is_string($value) || !strlen($value)))
+					$value = $default_options[$key];
+
+				//261118.0230 Reject unexpected policy values instead of accidentally authorizing a shared credential.
+				else if($key === 'paypal_proxy_legacy_policy' && (!is_string($value) || !in_array($value, array('default', 'allow', 'block'), true)))
 					$value = $default_options[$key];
 
 				else if($key === 'paypal_sandbox' && (!is_string($value) || !is_numeric($value)))

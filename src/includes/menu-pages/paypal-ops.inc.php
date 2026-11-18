@@ -1028,7 +1028,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 			{
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_before_paypal_ipn", get_defined_vars());
 
-				echo '<div class="ws-menu-page-group" title="PayPal IPN Integration">'."\n";
+				//261118.0242 A notice deep link expands the existing IPN accordion before the hash target is scrolled into view.
+				echo '<div class="ws-menu-page-group" title="PayPal IPN Integration"'.((isset($_GET['s2member-legacy-proxy-review']) && $_GET['s2member-legacy-proxy-review'] === '1') ? ' default-state="open"' : '').'>'."\n";
 
 				echo '<div class="ws-menu-page-section ws-plugin--s2member-paypal-ipn-section">'."\n";
 				echo '<h3>PayPal IPN / Instant Payment Notifications (required, please enable)</h3>'."\n";
@@ -1106,11 +1107,42 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<h3 style="margin:0;">IPN w/ Proxy Key (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-proxy-details\').toggle(); return false;" class="ws-dotted-link">optional, for 3rd-party integrations</a>)</h3>'."\n";
 				echo '<div id="ws-plugin--s2member-paypal-ipn-proxy-details" style="margin-top:10px; display:none;">'."\n";
-				echo '<p>If you\'re using a 3rd-party application that needs to POST simulated IPN transactions to your s2Member installation, you can use this alternate IPN URL, which includes a Proxy Key. This encrypted Proxy Key verifies incoming data being received by s2Member\'s IPN processor. You can change <em>[proxy-gateway]</em> to whatever you like. The <em>[proxy-gateway]</em> value is required. It will be stored by s2Member as the Customer\'s Paid Subscr. Gateway. Your [proxy-gateway] value will also be reflected in s2Member\'s IPN log.</p>'."\n";
+				echo '<p>If you\'re using a 3rd-party application that needs to POST simulated IPN transactions to your s2Member installation, you can use this alternate IPN URL, which includes a Proxy Key. This reusable shared key authenticates a simulated notification to s2Member, but does not verify that the gateway received a payment. Protect the complete URL as a secret because access logs and external integrations may expose it. You can change <em>[proxy-gateway]</em> to whatever you like. The <em>[proxy-gateway]</em> value is required. It will be stored by s2Member as the Customer\'s Paid Subscr. Gateway. Your [proxy-gateway] value will also be reflected in s2Member\'s IPN log.</p>'."\n";
 				echo '<input type="text" autocomplete="off" value="'.format_to_edit(home_url("/?s2member_paypal_notify=1&s2member_paypal_proxy=[proxy-gateway]&s2member_paypal_proxy_verification=".urlencode(c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()), "https")).'" style="width:99%;" />'."\n";
 				echo '<p><em>Any 3rd-party application that is sending IPN transactions to your s2Member installation must include the <code>custom</code> POST variable, and that variable must always start with your installation domain (i.e., custom=<code>'.esc_html($_SERVER["HTTP_HOST"]).'</code>). In addition, the <code>item_number</code> variable must always match a format that s2Member looks for. Generally speaking, the <code>item_number</code> should be <code>1, 2, 3, or 4</code>, indicating a specific s2Member Level #. However, s2Member also uses some advanced formats in this field. Just to be sure, we suggest creating a PayPal Button with the s2Member Button Generator, and then taking a look at the Full Button Code to see how s2Member expects <code>item_number</code> to be formatted. Other than the aforementioned exceptions, all other POST variables should follow PayPal standards. Please see: <a href="https://s2member.com/r/paypal/-ipn-pdt-vars" target="_blank" rel="external">PayPal\'s IPN/PDT reference guide</a> for full documentation.</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn_after_proxy", get_defined_vars());
 				echo '</div>'."\n";
+
+				//261118.0235 Restrict this security control to site administrators (network super-admins in Multisite).
+				if(current_user_can('manage_options') && (!is_multisite() || is_super_admin()))
+				{
+
+					//261118.0230 Put the migration policy beside the existing IPN setup, inside the normal nonce-protected Save All Changes form.
+					$saved_options = get_option('ws_plugin__s2member_options', array());
+					$legacy_policy = (is_array($saved_options) && isset($saved_options['paypal_proxy_legacy_policy'])) ? (string)$saved_options['paypal_proxy_legacy_policy'] : 'default';
+					echo '<h3 id="s2member-legacy-proxy-policy">Legacy Proxy Key Migration</h3>'."\n";
+					echo '<p>This shared credential can authorize simulated payment notifications. Prefer scoped HMAC-v2 keys for each integration. Choose whether legacy requests remain accepted:</p>'."\n";
+					foreach(array('default' => 'Follow release default (currently allow)', 'allow' => 'Explicitly allow the legacy key', 'block' => 'Block the legacy key') as $policy => $label)
+						echo '<p><label><input type="radio" name="ws_plugin__s2member_paypal_proxy_legacy_policy" value="'.esc_attr($policy).'"'.checked($legacy_policy, $policy, false).' /> '.esc_html($label).'</label></p>'."\n";
+					echo '<p><em>Explicit allowance retains the risk of a reusable shared secret and persists if a later release changes its default. A code-level denial or previously recorded permanent retirement takes precedence. This choice does not enable PayPal authoritative processing.</em></p>'."\n";
+					if(!c_ws_plugin__s2member_paypal_utilities::paypal_proxy_legacy_key_not_retired())
+						echo '<p><strong>The legacy key has already been permanently retired on this site; these settings cannot re-enable it.</strong></p>'."\n";
+
+					//261118.0230 Show only recent authenticated hints to administrators; each user-supplied value is escaped before HTML output.
+					if(current_user_can('manage_options') && (!is_multisite() || is_super_admin()))
+					{
+						$callers = get_option('ws_plugin__s2member_paypal_proxy_legacy_callers', array());
+						if(is_array($callers) && $callers)
+						{
+							echo '<h4>Recently accepted legacy-key requests</h4><p><em>Probable sources only. IP is as seen by WordPress; gateway and User-Agent may be spoofed. Reverse proxies may hide caller addresses. Up to 20 recent entries; entries older than 30 days are hidden and pruned when another accepted request arrives.</em></p>'."\n";
+							echo '<table class="widefat striped"><thead><tr><th>Last seen (UTC)</th><th>Gateway</th><th>Source IP</th><th>User-Agent</th></tr></thead><tbody>'."\n";
+							foreach($callers as $caller)
+								if(is_array($caller) && !empty($caller['last']) && (int)$caller['last'] >= time() - 30 * DAY_IN_SECONDS)
+									echo '<tr><td>'.esc_html(gmdate('Y-m-d H:i', (int)$caller['last'])).'</td><td>'.esc_html(isset($caller['gateway']) ? $caller['gateway'] : '').'</td><td>'.esc_html(isset($caller['ip']) ? $caller['ip'] : '').'</td><td>'.esc_html(isset($caller['agent']) ? $caller['agent'] : '').'</td></tr>'."\n";
+							echo '</tbody></table>'."\n";
+						}
+					}
+				}
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";

@@ -219,7 +219,8 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 				return;
 			$dismiss = wp_nonce_url(add_query_arg('s2member-dismiss-legacy-proxy-notice', '1', admin_url()), 's2member-dismiss-legacy-proxy-notice');
 			$message = 'An authenticated request used the legacy reusable PayPal-style proxy key. By default, existing requests remain accepted during this transition. Review external payment adapters and any explicitly selected internal HTTP fallbacks; migrate them to scoped HMAC-v2 or trusted PHP dispatch before retiring the old key.';
-			$details = 'Last observed: '.esc_html(gmdate('Y-m-d H:i', (int)$last).' UTC').'. This timestamp cannot identify the sender; it is not proof that a particular external integration is responsible. The notice can be dismissed until another use is recorded.';
+			//261118.0230 Link the migration warning to source hints and explicit policy instead of leaving the administrator to guess.
+			$details = 'Last observed: '.esc_html(gmdate('Y-m-d H:i', (int)$last).' UTC').'. <a href="'.esc_url(admin_url('admin.php?page=ws-plugin--s2member-paypal-ops&s2member-legacy-proxy-review=1#s2member-legacy-proxy-policy')).'">Review probable callers and the legacy-key policy</a>. Caller hints are not authenticated identities. The notice can be dismissed until another use is recorded.';
 			self::display_security_notice($message, $details, array(), $dismiss);
 		}
 

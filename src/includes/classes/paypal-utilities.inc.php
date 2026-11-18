@@ -203,16 +203,21 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 												return apply_filters('ws_plugin__s2member_paypal_postvars', array_merge($postvars, array('proxy_verified' => $_POST['s2member_paypal_proxy'])), get_defined_vars());
 											}
 
-										//261110.2320 TO-DO: Disable the published static key by default once built-in Pro senders and external integrations can migrate; administrators can use the allow-legacy filter in the interim.
+										//261118.0230 The release-default filter can change later without overriding a site's explicit Allow or Block choice.
 										else if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]))
 										{
 											//261117.0256 A disabled or retired static key must get an explicit HTTP 403; never fall through to PayPal verification and falsely acknowledge it.
-											if(!apply_filters('ws_plugin__s2member_paypal_proxy_allow_legacy_key', true, get_defined_vars()) || !self::paypal_proxy_legacy_key_not_retired())
+											//261118.0230 Follow today's permissive release default unless the operator explicitly allows or blocks the legacy credential.
+											$legacy_policy = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_proxy_legacy_policy']) ? $GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_proxy_legacy_policy'] : 'default';
+											$default_accepts_legacy = apply_filters('ws_plugin__s2member_paypal_proxy_default_legacy_key', true, get_defined_vars());
+											$policy_accepts_legacy = $legacy_policy === 'allow' || ($legacy_policy === 'default' && $default_accepts_legacy);
+											//261118.0230 The existing code-level veto and durable retirement remain absolute even with explicit administrator allowance.
+											if(!$policy_accepts_legacy || !apply_filters('ws_plugin__s2member_paypal_proxy_allow_legacy_key', true, get_defined_vars()) || !self::paypal_proxy_legacy_key_not_retired())
 												{
 												self::$paypal_proxy_v2_rejection_status = 403; //261117.0256 Reuse Notify's existing fail-closed HTTP status without introducing a new response channel.
 												return false;
 											}
-											//261116.2220 Observe only authenticated legacy-key use; never record credentials, payloads, IPs, or user identifiers.
+											//261118.0238 Observe authenticated legacy-key use and bounded caller hints, never credentials, payment payloads, or customer identifiers.
 											self::paypal_proxy_legacy_note_use();
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_REQUEST["s2member_paypal_proxy"])), get_defined_vars());
 										}
@@ -973,6 +978,26 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$last = get_option('ws_plugin__s2member_paypal_proxy_legacy_last_used', false);
 						if(!is_numeric($last) || $now - (int)$last >= HOUR_IN_SECONDS)
 							update_option('ws_plugin__s2member_paypal_proxy_legacy_last_used', $now, false);
+
+						//261118.0230 Capture only source hints after successful key verification, never keys, URLs, notification payloads, or customer identifiers.
+						$gateway = isset($_REQUEST['s2member_paypal_proxy']) && is_string($_REQUEST['s2member_paypal_proxy']) ? substr(sanitize_text_field(wp_unslash($_REQUEST['s2member_paypal_proxy'])), 0, 60) : '';
+						$ip = isset($_SERVER['REMOTE_ADDR']) && is_string($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP) ? $_SERVER['REMOTE_ADDR'] : '';
+						$agent = isset($_SERVER['HTTP_USER_AGENT']) && is_string($_SERVER['HTTP_USER_AGENT']) ? substr(sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])), 0, 120) : '';
+						$fingerprint = hash('sha256', $gateway."\0".$ip."\0".$agent);
+						$option = 'ws_plugin__s2member_paypal_proxy_legacy_callers';
+						$callers = get_option($option, array());
+						if(!is_array($callers))
+							$callers = array();
+						//261118.0230 Bounded source hints, not a forensic ledger: retain 20 recent sources for up to 30 days and update each source at most hourly.
+						foreach($callers as $id => $caller)
+							if(!is_array($caller) || empty($caller['last']) || (int)$caller['last'] < $now - 30 * DAY_IN_SECONDS)
+								unset($callers[$id]);
+						if(!isset($callers[$fingerprint]) || $now - (int)$callers[$fingerprint]['last'] >= HOUR_IN_SECONDS)
+						{
+							$callers[$fingerprint] = array('gateway' => $gateway, 'ip' => $ip, 'agent' => $agent, 'last' => $now);
+							uasort($callers, function($a, $b) { return (int)$b['last'] - (int)$a['last']; });
+							update_option($option, array_slice($callers, 0, 20, true), false);
+						}
 					}
 				/**
 				* Generates a PayPal Proxy Key, for simulated IPN responses.
