@@ -274,6 +274,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_
 					return new WP_Error('s2m_pay_cutover_historical_unreconciled', 'A historical PayPal payment has no current legacy acceptance proof; reconcile before processing.');
 				}
 			}
+			//261118.0632 TO-DO: Before offering PayPal authoritative recurring activation in wp-admin, build a guided cutover with historical-payment reconciliation, verified provider evidence, a fixed epoch, and safe rollback instructions. Do not expose a simple toggle.
 			$enabled = apply_filters('ws_plugin__s2member_paypal_authoritative_recurring_enabled', FALSE, $paypal) === TRUE;
 			if($prior === FALSE && (!$enabled || strtolower($paypal['txn_type']) === 'merch_pmt'))
 			{

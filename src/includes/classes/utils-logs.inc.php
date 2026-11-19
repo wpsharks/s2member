@@ -64,6 +64,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 			$log4 .= @$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI']."\n";
 			$log4 .= 'User-Agent: '.@$_SERVER['HTTP_USER_AGENT'];
 
+			//261118.1735 Request URLs in log headers may contain payment credentials; sanitize them as well as log data.
+			$log4 = self::conceal_private_info($log4);
+
 			$log2 = $slug.'.log'; // Initialize.
 			if(is_multisite() && !is_main_site()) // Child blog in a multisite network?
 				$log2 = $slug.'-4-'.trim(preg_replace('/[^a-z0-9]/i', '-', $GLOBALS['current_blog']->domain.$GLOBALS['current_blog']->path), '-').'.log';

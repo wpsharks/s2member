@@ -1105,26 +1105,34 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-				echo '<h3 style="margin:0;">IPN w/ Proxy Key (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-proxy-details\').toggle(); return false;" class="ws-dotted-link">optional, for 3rd-party integrations</a>)</h3>'."\n";
-				echo '<div id="ws-plugin--s2member-paypal-ipn-proxy-details" style="margin-top:10px; display:none;">'."\n";
+				//261118.0458 Keep the old integration discoverable, but identify it as deprecated and open the nested details from the security notice.
+				echo '<h3 style="margin:0;">IPN w/ Proxy Key (deprecated) (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-proxy-details\').toggle(); return false;" class="ws-dotted-link">details for existing 3rd-party integrations</a>)</h3>'."\n";
+				echo '<div id="ws-plugin--s2member-paypal-ipn-proxy-details" style="margin-top:10px; display:'.((isset($_GET['s2member-legacy-proxy-review']) && $_GET['s2member-legacy-proxy-review'] === '1') ? 'block' : 'none').';">'."\n";
+				//261118.0458 The displayed URL is an actual shared site credential; HMAC-v2 requires an integration developer, not a replacement URL to copy.
+				echo '<p><strong>Deprecated for new integrations.</strong> This older URL uses a reusable key shared by the site\'s external integrations. Existing integrations continue to work while the legacy key is allowed. New integrations should instead have their developer send signed HMAC-v2 POST notifications to s2Member\'s Notify endpoint, using separately configured credentials. This is not a replacement URL you can copy, and ordinary PayPal/s2Member payment setup does not require any action here.</p>'."\n";
 				echo '<p>If you\'re using a 3rd-party application that needs to POST simulated IPN transactions to your s2Member installation, you can use this alternate IPN URL, which includes a Proxy Key. This reusable shared key authenticates a simulated notification to s2Member, but does not verify that the gateway received a payment. Protect the complete URL as a secret because access logs and external integrations may expose it. You can change <em>[proxy-gateway]</em> to whatever you like. The <em>[proxy-gateway]</em> value is required. It will be stored by s2Member as the Customer\'s Paid Subscr. Gateway. Your [proxy-gateway] value will also be reflected in s2Member\'s IPN log.</p>'."\n";
 				echo '<input type="text" autocomplete="off" value="'.format_to_edit(home_url("/?s2member_paypal_notify=1&s2member_paypal_proxy=[proxy-gateway]&s2member_paypal_proxy_verification=".urlencode(c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()), "https")).'" style="width:99%;" />'."\n";
 				echo '<p><em>Any 3rd-party application that is sending IPN transactions to your s2Member installation must include the <code>custom</code> POST variable, and that variable must always start with your installation domain (i.e., custom=<code>'.esc_html($_SERVER["HTTP_HOST"]).'</code>). In addition, the <code>item_number</code> variable must always match a format that s2Member looks for. Generally speaking, the <code>item_number</code> should be <code>1, 2, 3, or 4</code>, indicating a specific s2Member Level #. However, s2Member also uses some advanced formats in this field. Just to be sure, we suggest creating a PayPal Button with the s2Member Button Generator, and then taking a look at the Full Button Code to see how s2Member expects <code>item_number</code> to be formatted. Other than the aforementioned exceptions, all other POST variables should follow PayPal standards. Please see: <a href="https://s2member.com/r/paypal/-ipn-pdt-vars" target="_blank" rel="external">PayPal\'s IPN/PDT reference guide</a> for full documentation.</em></p>'."\n";
 				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn_after_proxy", get_defined_vars());
-				echo '</div>'."\n";
 
+				//261118.0458 Keep the migration choice and caller history inside the deprecated proxy details, rather than detached under another heading.
 				//261118.0235 Restrict this security control to site administrators (network super-admins in Multisite).
 				if(current_user_can('manage_options') && (!is_multisite() || is_super_admin()))
 				{
 
-					//261118.0230 Put the migration policy beside the existing IPN setup, inside the normal nonce-protected Save All Changes form.
+					//261118.0458 Match neighboring PayPal settings: No and Yes only; an unset choice follows today's allow default and a future block default.
 					$saved_options = get_option('ws_plugin__s2member_options', array());
 					$legacy_policy = (is_array($saved_options) && isset($saved_options['paypal_proxy_legacy_policy'])) ? (string)$saved_options['paypal_proxy_legacy_policy'] : 'default';
-					echo '<h3 id="s2member-legacy-proxy-policy">Legacy Proxy Key Migration</h3>'."\n";
-					echo '<p>This shared credential can authorize simulated payment notifications. Prefer scoped HMAC-v2 keys for each integration. Choose whether legacy requests remain accepted:</p>'."\n";
-					foreach(array('default' => 'Follow release default (currently allow)', 'allow' => 'Explicitly allow the legacy key', 'block' => 'Block the legacy key') as $policy => $label)
-						echo '<p><label><input type="radio" name="ws_plugin__s2member_paypal_proxy_legacy_policy" value="'.esc_attr($policy).'"'.checked($legacy_policy, $policy, false).' /> '.esc_html($label).'</label></p>'."\n";
-					echo '<p><em>Explicit allowance retains the risk of a reusable shared secret and persists if a later release changes its default. A code-level denial or previously recorded permanent retirement takes precedence. This choice does not enable PayPal authoritative processing.</em></p>'."\n";
+					echo '<div class="ws-menu-page-hr"></div>'."\n";
+					echo '<table class="form-table" id="s2member-legacy-proxy-policy"><tbody><tr><th>Allow legacy proxy keys?</th></tr><tr><td>'."\n";
+					//261118.0458 The hidden default makes Clear selection persist on Save All Changes; an explicitly checked radio overrides it in form order.
+					echo '<input type="hidden" name="ws_plugin__s2member_paypal_proxy_legacy_policy" value="default" />'."\n";
+					echo '<input type="radio" name="ws_plugin__s2member_paypal_proxy_legacy_policy" id="ws-plugin--s2member-paypal-proxy-legacy-policy-no" value="block"'.checked($legacy_policy, 'block', false).' /> <label for="ws-plugin--s2member-paypal-proxy-legacy-policy-no">No</label> &nbsp;&nbsp;&nbsp; '."\n";
+					echo '<input type="radio" name="ws_plugin__s2member_paypal_proxy_legacy_policy" id="ws-plugin--s2member-paypal-proxy-legacy-policy-yes" value="allow"'.checked($legacy_policy, 'allow', false).' /> <label for="ws-plugin--s2member-paypal-proxy-legacy-policy-yes">Yes, allow legacy proxy keys.</label><br />'."\n";
+					echo '<em>No immediately rejects simulated payment notifications authenticated with the old shared key, including any custom HTTP compatibility fallbacks. Yes preserves acceptance even if a future release changes the default. If neither is selected, this release allows the old key; a later release can default to blocking it. An existing developer security restriction or permanent retirement still takes precedence.</em><br />'."\n";
+					//261118.0458 A previous choice must be reversible without adding a third radio option; this clears both, then Save stores the hidden default.
+					echo '<button type="button" class="button button-secondary" id="s2member-legacy-proxy-clear" onclick="document.getElementById(\'ws-plugin--s2member-paypal-proxy-legacy-policy-no\').checked=false; document.getElementById(\'ws-plugin--s2member-paypal-proxy-legacy-policy-yes\').checked=false;">Clear selection</button>'."\n";
+					echo '</td></tr></tbody></table>'."\n";
 					if(!c_ws_plugin__s2member_paypal_utilities::paypal_proxy_legacy_key_not_retired())
 						echo '<p><strong>The legacy key has already been permanently retired on this site; these settings cannot re-enable it.</strong></p>'."\n";
 
@@ -1143,6 +1151,8 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 						}
 					}
 				}
+				//261118.0458 Close the nested legacy proxy subsection before closing its parent PayPal IPN section and accordion.
+				echo '</div>'."\n";
 				echo '</div>'."\n";
 
 				echo '</div>'."\n";
