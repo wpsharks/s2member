@@ -97,8 +97,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 		 */
 		public static function http_api_debug($response = NULL, $state = NULL, $class = NULL, $args = NULL, $url = NULL)
 		{
-			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs'])
-				return; // Logging is NOT enabled in this case.
+			//261120.2014 HTTP connection diagnostics are high-volume; require Additional Logging Routines as well as standard logging.
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs_extensive'])
+				return;
 
 			$http_api_debug = array(
 				'state' => $state, 'transport_class' => $class,
@@ -107,8 +108,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 			if(!empty($args['s2member']) || strpos($url, 's2member') !== FALSE)
 				self::log_entry('s2-http-api-debug', $http_api_debug);
 
-			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs_extensive'])
-				self::log_entry('wp-http-api-debug', $http_api_debug);
+			self::log_entry('wp-http-api-debug', $http_api_debug);
 		}
 
 		/**
