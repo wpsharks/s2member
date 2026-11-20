@@ -1,3 +1,39 @@
+= v261120 =
+
+- (Pro) **Fix:** Stripe subscription signups could fail when a customer's bank required 3D Secure authentication because s2Member attempted to save the new card before authentication was complete. Checkout now completes the required authentication before continuing the signup. Thanks to sevenpointtwo for reporting this. See [thread #13826](https://f.wpsharks.com/t/13826).
+
+- (Framework) **Fix:** Improved PayPal payment handling for one-time purchases, subscription signups, and recurring payments. Incomplete payments, including pending or declined PayPal Checkout subscription payments, can no longer grant membership access prematurely.
+
+- (Framework) **Fix:** PayPal Checkout now allows unsuccessful renewal-notification deliveries to be retried instead of acknowledging them as completed, reducing the risk of missed membership renewals during temporary server problems.
+
+- (Pro) **Fix:** Stripe webhooks now handle overlapping or temporarily unsuccessful processing more reliably, allowing Stripe to retry unfinished payment notifications instead of treating them as completed.
+
+- (Pro) **Fix:** Added safeguards against repeated Authorize.Net recurring-payment notifications, reducing the risk of duplicate membership changes and improving the handling of interrupted or uncertain payment updates.
+
+- (Pro) **Fix:** Prevented PHP 8+ warnings when an optional coupon field was missing from Authorize.Net, PayPal/Payflow, or Stripe Pro-Form submissions. Thanks to bcolflesh for reporting this. See [thread #13827](https://f.wpsharks.com/t/13827).
+
+- (Framework) **Improvement:** Strengthened verification of PayPal payment notifications, including merchant-account checks, website matching, and identification of originating gateways. These improvements provide additional protection for membership transactions while preserving supported third-party integrations.
+
+- (Pro) **Improvement:** Strengthened Authorize.Net payment notification security with more thorough SHA-2 signature verification and improved handling of malformed notifications, while retaining supported legacy MD5 verification for recurring billing.
+
+- (Framework) **Improvement:** Added a more secure, signed notification method for developers building third-party custom payment integrations, with protection against altered or repeated requests. The older IPN proxy-key method is now deprecated but remains available during the transition. See: _WP Admin > s2Member > PayPal Options > PayPal IPN Integration > IPN w/ Proxy Key (deprecated)_.
+
+- (Pro) **Improvement:** Added optional Stripe webhook signature verification for additional protection when processing payment notifications. Developers can enable it by supplying their Stripe webhook endpoint signing secret through the `ws_plugin__s2member_pro_stripe_webhook_signing_secrets` filter. Existing integrations continue working without configuration changes.
+
+- (Framework) **Security:** Strengthened protection against unintended direct web access to s2Member's supporting PHP files, reducing security exposure without affecting normal WordPress functionality.
+
+- (Framework) **Fix:** The shared payment logger now conceals recognized sensitive credentials appearing in request URLs, including legacy IPN proxy keys, helping protect sensitive information when debug logging is enabled.
+
+- (Framework & Pro) **Improvement:** PayPal Checkout, PayPal Pro/Payflow, Stripe, Authorize.Net, and ClickBank integrations now handle gateway notifications more efficiently, avoiding unnecessary requests and improving reliability on hosting environments with restricted loopback connections.
+
+- (Framework) **Improvement:** Consolidated and improved the locking methods used to prevent overlapping database tasks from interfering with each other. This helps avoid duplicate or incomplete updates when payment notifications, membership expirations, or maintenance tasks happen at the same time.
+
+- (Framework) **Improvement:** Added durable processing records for recurring PayPal notifications, making repeated deliveries and interrupted payment updates easier to investigate while preserving existing subscription processing.
+
+- (Framework) **Improvement:** Refined personalized content handling in registration welcome emails, administrator emails, and membership-expiration notifications, helping ensure custom field values and message content appear as intended.
+
+- (Framework) **Improvement:** Moved verbose HTTP connection diagnostics to the optional Additional Logging setting, reducing unnecessary log growth during normal payment troubleshooting.
+
 = v261110 =
 
 - (Framework) **Improvement:** Refactored s2Member's Tracking, Notification, and URL template processing to use more efficient single-pass replacements, improving consistency and value handling, while preserving supported replacement codes and custom fields.
