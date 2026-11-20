@@ -1105,23 +1105,11 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 
 				echo '<div class="ws-menu-page-hr"></div>'."\n";
 
-				//261120.0638 Show active deprecation guidance separately from the older URL instructions; preserve the existing deep link to this subsection.
-				echo '<h3 style="margin:0;">IPN w/ Proxy Key (deprecated) (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-proxy-details\').toggle(); return false;" class="ws-dotted-link">details for existing integrations</a>)</h3>'."\n";
-				echo '<div id="ws-plugin--s2member-paypal-ipn-proxy-details" style="margin-top:10px; display:'.((isset($_GET['s2member-legacy-proxy-review']) && $_GET['s2member-legacy-proxy-review'] === '1') ? 'block' : 'none').';">'."\n";
-				echo '<h4 style="margin:0 0 8px;">Legacy IPN proxy keys are deprecated</h4>'."\n";
-				echo '<p>This older method lets third-party applications and some legacy gateway integrations send simulated payment notifications using a shared key embedded in a URL. It is <strong>not</strong> the normal PayPal IPN setup. Existing integrations remain allowed by default, but check whether any depend on this key before blocking it.</p>'."\n";
-				echo '<p><strong>For new integrations:</strong> Ask your developer to use signed notifications with a separate secret for each integration instead of sharing a key in a URL. There is no replacement URL to paste into your PayPal account.</p>'."\n";
-				echo '<details style="margin:12px 0;"><summary>Developer instructions for signed notifications</summary><p>Configure a sender-specific key and allowed gateway names through <code>ws_plugin__s2member_paypal_proxy_v2_sender_credentials</code>, then POST the IPN fields plus <code>s2member_paypal_proxy</code> (gateway), <code>s2member_paypal_proxy_sender</code> (sender ID), and a signed <code>s2member_paypal_proxy_verification</code> value to <code>'.esc_html(home_url('/?s2member_paypal_notify=1', 'https')).'</code>; see <code>c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_sign()</code> for the exact HMAC-SHA256 signature format.</p></details>'."\n";
-				//261120.0638 Dim only deprecated integration instructions, not the live security setting or recent-use evidence; #767676 keeps text readable.
-				echo '<h4 style="margin:18px 0 6px;color:#767676;">Old proxy-key instructions (existing integrations only)</h4>'."\n";
-				echo '<div style="color:#767676;">'."\n";
-				echo '<p>The URL below is for existing third-party integrations that POST simulated IPN messages. The reusable key authenticates a request to s2Member, but does not verify that the gateway received a payment. Treat the entire URL as a secret. Replace <em>[proxy-gateway]</em> with the integration name; it is required and will be recorded as the member\'s Paid Subscr. Gateway and in the IPN log.</p>'."\n";
-				echo '<input type="text" autocomplete="off" value="'.format_to_edit(home_url("/?s2member_paypal_notify=1&s2member_paypal_proxy=[proxy-gateway]&s2member_paypal_proxy_verification=".urlencode(c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()), "https")).'" style="width:99%;" />'."\n";
-				echo '<p><em>Any 3rd-party application that is sending IPN transactions to your s2Member installation must include the <code>custom</code> POST variable, and that variable must always start with your installation domain (i.e., custom=<code>'.esc_html($_SERVER["HTTP_HOST"]).'</code>). In addition, the <code>item_number</code> variable must always match a format that s2Member looks for. Generally speaking, the <code>item_number</code> should be <code>1, 2, 3, or 4</code>, indicating a specific s2Member Level #. However, s2Member also uses some advanced formats in this field. Just to be sure, we suggest creating a PayPal Button with the s2Member Button Generator, and then taking a look at the Full Button Code to see how s2Member expects <code>item_number</code> to be formatted. Other than the aforementioned exceptions, all other POST variables should follow PayPal standards. Please see: <a href="https://s2member.com/r/paypal/-ipn-pdt-vars" target="_blank" rel="external">PayPal\'s IPN/PDT reference guide</a> for full documentation.</em></p>'."\n";
-				echo '</div>'."\n";
-				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn_after_proxy", get_defined_vars());
-
-				//261118.0458 Keep the migration choice and caller history inside the deprecated proxy details, rather than detached under another heading.
+				//261120.0714 Keep this deprecated subsection collapsible like neighboring PayPal IPN details; open it for legacy-proxy security review links.
+				echo '<h3 id="s2member-legacy-proxy-section" style="margin:0;">IPN w/ Proxy Key (deprecated) (<a href="#" onclick="jQuery(\'div#ws-plugin--s2member-paypal-ipn-proxy-details\').toggle(); return false;" class="ws-dotted-link">show/hide details</a>)</h3>'."\n";
+				echo '<div id="ws-plugin--s2member-paypal-ipn-proxy-details" style="margin-top:12px; display:'.((isset($_GET['s2member-legacy-proxy-review']) && $_GET['s2member-legacy-proxy-review'] === '1') ? 'block' : 'none').';">'."\n";
+				echo '<p style="margin:0 0 12px;">Some third-party custom integrations, such as ones involving JVZoo, can notify s2Member using an IPN URL with a shared proxy key. This older method is being deprecated in favor of signed notifications. It is separate from normal PayPal IPN.</p>'."\n";
+				echo '<p>If you still use this method, select <strong>Yes</strong> and save your settings to keep receiving its notifications while your integration provider updates it. Otherwise, select <strong>No</strong>. If you are unsure, check the recent requests below or ask your provider first.</p>'."\n";
 				//261118.0235 Restrict this security control to site administrators (network super-admins in Multisite).
 				if(current_user_can('manage_options') && (!is_multisite() || is_super_admin()))
 				{
@@ -1129,33 +1117,44 @@ if(!class_exists("c_ws_plugin__s2member_menu_page_paypal_ops"))
 					//261118.0458 Match neighboring PayPal settings: No and Yes only; an unset choice follows today's allow default and a future block default.
 					$saved_options = get_option('ws_plugin__s2member_options', array());
 					$legacy_policy = (is_array($saved_options) && isset($saved_options['paypal_proxy_legacy_policy'])) ? (string)$saved_options['paypal_proxy_legacy_policy'] : 'default';
-					echo '<div class="ws-menu-page-hr"></div>'."\n";
 					echo '<table class="form-table" id="s2member-legacy-proxy-policy"><tbody><tr><th>Allow notifications using the old proxy key?</th></tr><tr><td>'."\n";
 					//261120.0638 Keep the implicit release default when neither option is selected; a selected radio overrides this hidden value on Save.
 					echo '<input type="hidden" name="ws_plugin__s2member_paypal_proxy_legacy_policy" value="default" />'."\n";
-					echo '<input type="radio" name="ws_plugin__s2member_paypal_proxy_legacy_policy" id="ws-plugin--s2member-paypal-proxy-legacy-policy-no" value="block"'.checked($legacy_policy, 'block', false).' /> <label for="ws-plugin--s2member-paypal-proxy-legacy-policy-no">No, block old proxy-key requests.</label> &nbsp;&nbsp;&nbsp; '."\n";
+					echo '<input type="radio" name="ws_plugin__s2member_paypal_proxy_legacy_policy" id="ws-plugin--s2member-paypal-proxy-legacy-policy-no" value="block"'.checked($legacy_policy, 'block', false).' /> <label for="ws-plugin--s2member-paypal-proxy-legacy-policy-no">No</label> &nbsp;&nbsp;&nbsp; '."\n";
 					echo '<input type="radio" name="ws_plugin__s2member_paypal_proxy_legacy_policy" id="ws-plugin--s2member-paypal-proxy-legacy-policy-yes" value="allow"'.checked($legacy_policy, 'allow', false).' /> <label for="ws-plugin--s2member-paypal-proxy-legacy-policy-yes">Yes, continue allowing them.</label><br />'."\n";
-					echo '<em>No blocks notifications authenticated with the old shared key, including any older gateway integration or HTTP compatibility fallback that still uses it. Yes keeps allowing these requests even if a future release changes the default. If neither is selected, this release allows them. Check recent usage before choosing No; a developer restriction or permanent retirement cannot be overridden here. Normal PayPal IPN and signed notifications are unaffected.</em><br />'."\n";
+					echo '<em>Yes keeps accepting notifications sent with the old IPN proxy key; No blocks them. This setting does not affect normal PayPal IPN or signed notifications. Developer security restrictions and permanent retirement take precedence.</em><br />'."\n";
 					echo '</td></tr></tbody></table>'."\n";
+					//261118.0636 Older Pro versions may still rely on HTTP forwarding; update Pro before explicitly blocking legacy proxy requests.
+					if(defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') && version_compare(WS_PLUGIN__S2MEMBER_PRO_VERSION, '261117.0444', '<'))
+						echo '<p><strong>Your installed s2Member Pro v'.esc_html(WS_PLUGIN__S2MEMBER_PRO_VERSION).' needs updating before you choose No.</strong></p>'."\n";
 					if(!c_ws_plugin__s2member_paypal_utilities::paypal_proxy_legacy_key_not_retired())
 						echo '<p><strong>The legacy key has already been permanently retired on this site; these settings cannot re-enable it.</strong></p>'."\n";
 
-					//261118.0230 Show only recent authenticated hints to administrators; each user-supplied value is escaped before HTML output.
-					if(current_user_can('manage_options') && (!is_multisite() || is_super_admin()))
-					{
-						$callers = get_option('ws_plugin__s2member_paypal_proxy_legacy_callers', array());
-						if(is_array($callers) && $callers)
-						{
-							echo '<h4>Recently accepted legacy-key requests</h4><p><em>Probable sources only. IP is as seen by WordPress; gateway and User-Agent may be spoofed. Reverse proxies may hide caller addresses. Up to 20 recent entries; entries older than 30 days are hidden and pruned when another accepted request arrives.</em></p>'."\n";
-							echo '<table class="widefat striped"><thead><tr><th>Last seen (UTC)</th><th>Gateway</th><th>Source IP</th><th>User-Agent</th></tr></thead><tbody>'."\n";
-							foreach($callers as $caller)
-								if(is_array($caller) && !empty($caller['last']) && (int)$caller['last'] >= time() - 30 * DAY_IN_SECONDS)
-									echo '<tr><td>'.esc_html(gmdate('Y-m-d H:i', (int)$caller['last'])).'</td><td>'.esc_html(isset($caller['gateway']) ? $caller['gateway'] : '').'</td><td>'.esc_html(isset($caller['ip']) ? $caller['ip'] : '').'</td><td>'.esc_html(isset($caller['agent']) ? $caller['agent'] : '').'</td></tr>'."\n";
-							echo '</tbody></table>'."\n";
-						}
-					}
+					//261120.1425 Always show the 30-day activity table, including its empty state, so admins can assess the legacy-key setting without guessing whether records exist.
+					$callers = get_option('ws_plugin__s2member_paypal_proxy_legacy_callers', array());
+					$recent_count = 0;
+					echo '<h4 style="margin:20px 0 8px;">Recent IPN proxy-key requests</h4>'."\n";
+					echo '<p><em>Accepted requests from the past 30 days (up to 20). The gateway name and IP address may help identify an integration but do not prove who sent a request.</em></p>'."\n";
+					echo '<table class="widefat striped"><thead><tr><th>Last seen (UTC)</th><th>Gateway</th><th>Source IP</th></tr></thead><tbody>'."\n";
+					if(is_array($callers))
+						foreach($callers as $caller)
+							if(is_array($caller) && !empty($caller['last']) && (int)$caller['last'] >= time() - 30 * DAY_IN_SECONDS)
+							{
+								echo '<tr><td>'.esc_html(gmdate('Y-m-d H:i', (int)$caller['last'])).'</td><td>'.esc_html(isset($caller['gateway']) ? $caller['gateway'] : '').'</td><td>'.esc_html(isset($caller['ip']) ? $caller['ip'] : '').'</td></tr>'."\n";
+								$recent_count++;
+							}
+					if(!$recent_count)
+						echo '<tr><td colspan="3">No accepted IPN proxy-key requests recorded in the past 30 days.</td></tr>'."\n";
+					echo '</tbody></table>'."\n";
 				}
-				//261118.0458 Close the nested legacy proxy subsection before closing its parent PayPal IPN section and accordion.
+				echo '<p style="margin:18px 0 12px;"><strong>For developers building new integrations:</strong> Configure a sender-specific key and allowed gateway names through <code>ws_plugin__s2member_paypal_proxy_v2_sender_credentials</code>, then POST the IPN fields plus <code>s2member_paypal_proxy</code> (gateway), <code>s2member_paypal_proxy_sender</code> (sender ID), and a signed <code>s2member_paypal_proxy_verification</code> value to <code>'.esc_html(home_url('/?s2member_paypal_notify=1', 'https')).'</code>; see <code>c_ws_plugin__s2member_paypal_utilities::paypal_proxy_v2_sign()</code> for the exact HMAC-SHA256 signature format.</p>'."\n";
+				echo '<p style="margin:20px 0 6px;color:#aaa;"><strong>Old proxy-key URL and instructions</strong> (existing integrations only)</p>'."\n";
+				echo '<div style="color:#aaa;">'."\n";
+				echo '<p>The URL below is only for integrations already using the old proxy-key method. The key authenticates a simulated request to s2Member; it does <strong>not</strong> prove payment occurred. Keep the URL secret. Replace <em>[proxy-gateway]</em> with the integration name; it is stored as the member\'s Paid Subscr. Gateway and in the IPN log.</p>'."\n";
+				echo '<input type="text" autocomplete="off" value="'.format_to_edit(home_url("/?s2member_paypal_notify=1&s2member_paypal_proxy=[proxy-gateway]&s2member_paypal_proxy_verification=".urlencode(c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()), "https")).'" style="width:99%;color:#aaa;" />'."\n";
+				echo '<p><em>Any 3rd-party application that is sending IPN transactions to your s2Member installation must include the <code>custom</code> POST variable, and that variable must always start with your installation domain (i.e., custom=<code>'.esc_html($_SERVER["HTTP_HOST"]).'</code>). In addition, the <code>item_number</code> variable must always match a format that s2Member looks for. Generally speaking, the <code>item_number</code> should be <code>1, 2, 3, or 4</code>, indicating a specific s2Member Level #. However, s2Member also uses some advanced formats in this field. Just to be sure, we suggest creating a PayPal Button with the s2Member Button Generator, and then taking a look at the Full Button Code to see how s2Member expects <code>item_number</code> to be formatted. Other than the aforementioned exceptions, all other POST variables should follow PayPal standards. Please see: <a href="https://s2member.com/r/paypal/-ipn-pdt-vars" style="color:#aaa;" target="_blank" rel="external">PayPal\'s IPN/PDT reference guide</a> for full documentation.</em></p>'."\n";
+				echo '</div>'."\n";
+				do_action("ws_plugin__s2member_during_paypal_ops_page_during_left_sections_during_paypal_ipn_after_proxy", get_defined_vars());
 				echo '</div>'."\n";
 				echo '</div>'."\n";
 

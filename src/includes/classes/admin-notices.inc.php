@@ -218,12 +218,9 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 			if(!c_ws_plugin__s2member_paypal_utilities::paypal_proxy_legacy_key_not_retired())
 				return;
 			$dismiss = wp_nonce_url(add_query_arg('s2member-dismiss-legacy-proxy-notice', '1', admin_url()), 's2member-dismiss-legacy-proxy-notice');
-			$message = 'An authenticated request used the legacy reusable PayPal-style proxy key. By default, existing requests remain accepted during this transition. Review external payment adapters and any explicitly selected internal HTTP fallbacks; migrate them to scoped HMAC-v2 or trusted PHP dispatch before retiring the old key.';
-			//261118.0230 Link the migration warning to source hints and explicit policy instead of leaving the administrator to guess.
-			$details = 'Last observed: '.esc_html(gmdate('Y-m-d H:i', (int)$last).' UTC').'. <a href="'.esc_url(admin_url('admin.php?page=ws-plugin--s2member-paypal-ops&s2member-legacy-proxy-review=1#s2member-legacy-proxy-policy')).'">Review probable callers and the legacy-key policy</a>. Caller hints are not authenticated identities. The notice can be dismissed until another use is recorded.';
-			//261118.0636 Warn about older Pro builds that predate supported PHP forwarding, without treating deprecated gateways as a modernization requirement.
-			if(defined('WS_PLUGIN__S2MEMBER_PRO_VERSION') && version_compare(WS_PLUGIN__S2MEMBER_PRO_VERSION, '261117.0444', '<'))
-				$details .= ' Installed s2Member Pro v'.esc_html(WS_PLUGIN__S2MEMBER_PRO_VERSION).' predates the updated built-in gateway forwarding. Update Pro to the release paired with your Framework before disabling legacy proxy keys.';
+			$message = 's2Member received a notification using the deprecated <strong>IPN proxy key</strong>.';
+			//261120.1425 Link straight to the relevant setting; the detailed request history and developer guidance belong on that screen, not in the notice.
+			$details = '<em>Please see: <a href="'.esc_url(admin_url('admin.php?page=ws-plugin--s2member-paypal-ops&s2member-legacy-proxy-review=1#s2member-legacy-proxy-section')).'">s2Member &gt; PayPal Options &gt; PayPal IPN Integration &gt; IPN w/ Proxy Key</a></em>';
 			self::display_security_notice($message, $details, array(), $dismiss);
 		}
 
