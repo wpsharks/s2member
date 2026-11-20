@@ -226,7 +226,11 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 					: c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'),
 						array_merge($notify_post, array('s2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen())), array('timeout' => 20), TRUE);
 			}
-			catch(\Throwable $exception)
+			catch(\Exception $exception)
+			{
+				$response = FALSE;
+			}
+			catch(\Error $exception)
 			{
 				$response = FALSE;
 			}

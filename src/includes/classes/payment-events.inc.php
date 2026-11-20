@@ -937,7 +937,11 @@ if(!class_exists('c_ws_plugin__s2member_payment_events'))
 						{
 							$verified = call_user_func($fulfill, $pending['ipn'], $event, $claim['token']);
 						}
-						catch(\Throwable $error)
+						catch(\Exception $error)
+						{
+							$verified = FALSE;
+						}
+						catch(\Error $error)
 						{
 							//261112.1932 A thrown side-effect handler leaves an ambiguous outcome; retain the receipt and replay row for reconciliation.
 							$verified = FALSE;

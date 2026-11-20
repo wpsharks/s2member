@@ -1107,7 +1107,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_checkout_in'))
 									's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
 								)), array('timeout' => 20), true);
 						}
-					catch(\Throwable $notify_exception)
+					catch(\Exception $notify_exception)
+						{
+							$notify_r = false;
+						}
+					catch(\Error $notify_exception)
 						{
 							//261117.0534 Match HTTP's isolated-failure contract: a Notify exception must not issue a second provider cancellation.
 							$notify_r = false;

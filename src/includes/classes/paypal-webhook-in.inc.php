@@ -914,7 +914,14 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					$notify_ok = ($code >= 200 && $code <= 299);
 				}
 			}
-			catch(\Throwable $notify_exception)
+			catch(\Exception $notify_exception)
+			{
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
+				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'notify_processing_exception', 'event_id' => $event_id));
+				status_header(503);
+				exit();
+			}
+			catch(\Error $notify_exception)
 			{
 				//261115.0452 A failed local processor must never leave a 15-minute event lease or false webhook acknowledgment.
 				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
