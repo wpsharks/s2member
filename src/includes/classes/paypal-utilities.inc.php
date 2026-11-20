@@ -1499,8 +1499,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$logm = c_ws_plugin__s2member_utilities::mem_details();
 						$log4 = $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]."\nUser-Agent: ".@$_SERVER["HTTP_USER_AGENT"];
 						$log4 = (is_multisite() && !is_main_site()) ? ($_log4 = $current_blog->domain.$current_blog->path)."\n".$log4 : $log4;
-						//261118.1735 Payment log headers can contain shared proxy credentials; redact the request URL before writing.
-						$log4 = c_ws_plugin__s2member_utils_logs::conceal_private_info($log4);
 						$log2 = (is_multisite() && !is_main_site()) ? "paypal-api-4-".trim(preg_replace("/[^a-z0-9]/i", "-", $_log4), "-").".log" : "paypal-api.log";
 
 						if(isset($post_vars["ACCT"]) && strlen($post_vars["ACCT"]) > 4)
@@ -1638,8 +1636,6 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						$logm = c_ws_plugin__s2member_utilities::mem_details();
 						$log4 = $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]."\nUser-Agent: ".@$_SERVER["HTTP_USER_AGENT"];
 						$log4 = (is_multisite() && !is_main_site()) ? ($_log4 = $current_blog->domain.$current_blog->path)."\n".$log4 : $log4;
-						//261118.1735 Payment log headers can contain shared proxy credentials; redact the request URL before writing.
-						$log4 = c_ws_plugin__s2member_utils_logs::conceal_private_info($log4);
 						$log2 = (is_multisite() && !is_main_site()) ? "paypal-payflow-api-4-".trim(preg_replace("/[^a-z0-9]/i", "-", $_log4), "-").".log" : "paypal-payflow-api.log";
 
 						if(isset($post_vars["ACCT"]) && strlen($post_vars["ACCT"]) > 4)
