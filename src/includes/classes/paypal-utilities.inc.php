@@ -28,6 +28,35 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 		*/
 		class c_ws_plugin__s2member_paypal_utilities
 			{
+				//261114.2134 Preserve the HMAC v2 rejection reason for the HTTP Notify wrapper; never infer fulfillment from an unaccepted message.
+				private static $paypal_proxy_v2_rejection_status = 0;
+				private static $paypal_proxy_v2_active_claim = null;
+				private static $paypal_proxy_v2_completed_replay = false;
+				//261117.0357 Only a trusted in-process Notify invocation may bypass external proxy credentials.
+				private static $paypal_proxy_internal_dispatch = false;
+
+				/**
+				 * Return the last v2 request's rejection status (403 invalid, 409 replay, 0 otherwise).
+				 * A status is not a fulfillment result; it must not be used to reopen replay claims.
+				 *
+				 * @since 261114.2134
+				 * @return int
+				 */
+				public static function paypal_proxy_v2_rejection_status()
+					{
+						return self::$paypal_proxy_v2_rejection_status;
+					}
+				/**
+				 * Identify an identical signed message already completed by a previous local Notify request.
+				 *
+				 * @since 261116.0327
+				 * @return bool
+				 */
+				public static function paypal_proxy_v2_completed_replay()
+					{
+						return self::$paypal_proxy_v2_completed_replay;
+					}
+
 				/**
 				* Get ``$_POST`` or ``$_REQUEST`` vars from PayPal.
 				*
@@ -38,6 +67,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				*/
 				public static function paypal_postvars()
 					{
+						//261116.0327 Never inherit a previous parsing attempt's replay or completion state.
+						self::$paypal_proxy_v2_rejection_status = 0;
+						self::$paypal_proxy_v2_active_claim = null;
+						self::$paypal_proxy_v2_completed_replay = false;
 						foreach(array_keys(get_defined_vars())as$__v)$__refs[$__v]=&$$__v;
 						do_action("ws_plugin__s2member_before_paypal_postvars", get_defined_vars());
 						unset($__refs, $__v); // Housekeeping.
@@ -112,6 +145,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 											if(preg_match("/^s2member_/", $key))
 												unset($postvars[$key]);
 
+										//261110.1954 `proxy_verified` is an internal authentication result, never a PayPal-supplied field.
+										unset($postvars["proxy_verified"]);
 										$postback = $postvars; // Copy.
 										$postback["cmd"] = "_notify-validate";
 
@@ -125,11 +160,70 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 										if(!empty($_GET["s2member_paypal_return"]) && !empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && $_REQUEST["s2member_paypal_proxy"] === "paypal")
 											return false;
 
-										//260909.0411 Normalize proxy verification input types and use the standard constant-time comparison helper.
-										else if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]))
-											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_REQUEST["s2member_paypal_proxy"])), get_defined_vars());
+										//261117.0357 Trusted in-process Notify has no external bearer credential; this private guard is never set by HTTP input.
+										else if(self::$paypal_proxy_internal_dispatch && count($_GET) === 1 && isset($_GET['s2member_paypal_notify'])
+										&& isset($_POST['s2member_paypal_proxy']) && is_string($_POST['s2member_paypal_proxy']) && $_POST['s2member_paypal_proxy'] !== ''
+										&& isset($_POST['s2member_paypal_proxy_verification']) && $_POST['s2member_paypal_proxy_verification'] === '')
+											return apply_filters('ws_plugin__s2member_paypal_postvars', array_merge($postvars, array('proxy_verified' => $_POST['s2member_paypal_proxy'])), get_defined_vars());
 
-										else if(empty($_POST) && !empty($_GET["s2member_paypal_proxy"]) && !empty($_GET["s2member_paypal_proxy_verification"]) && c_ws_plugin__s2member_utils_urls::s2member_sig_ok($_SERVER["REQUEST_URI"], false, false, "s2member_paypal_proxy_verification"))
+										//261110.2320 v2 credentials authenticate every POST field, including the gateway, and are never downgraded to the legacy static key on failure.
+										else if(!empty($_POST['s2member_paypal_proxy_verification']) && is_string($_POST['s2member_paypal_proxy_verification']) && strpos($_POST['s2member_paypal_proxy_verification'], 'v2.') === 0)
+											{
+												//261114.2134 Mark rejected signed-proxy attempts explicitly; failed signature and unsigned GET overrides remain forbidden.
+												self::$paypal_proxy_v2_rejection_status = 403;
+												// Only the Notify entrypoint may be in the query: unsigned GET fields must not override signed POST fields.
+												if(count($_GET) !== 1 || !isset($_GET['s2member_paypal_notify']))
+														return false;
+
+												// WordPress slash-escapes incoming POST values; verify the exact unslashed data that downstream handlers will process.
+												$verified_postvars = stripslashes_deep($_POST);
+												if(!self::paypal_proxy_v2_verify($verified_postvars))
+													return false;
+												//261117.0315 Retain authenticated sender metadata for the replay namespace before stripping internal fields from fulfillment.
+												$signed_postvars = $verified_postvars;
+												$verified_signature = $verified_postvars['s2member_paypal_proxy_verification'];
+												foreach($verified_postvars as $key => $value)
+													if(preg_match('/^s2member_/', $key))
+														unset($verified_postvars[$key]);
+												unset($verified_postvars['proxy_verified']);
+												$verified_postvars = self::paypal_postvars_utf8(c_ws_plugin__s2member_utils_strings::trim_deep(self::paypal_postvars_back_compat($verified_postvars)));
+												if($verified_postvars !== $postvars)
+													return false;
+
+												//261111.0003 Claim the signed message ID only after both HMAC and normalized dispatch payload match; duplicate requests must stop before membership side effects.
+													if(!self::paypal_proxy_v2_claim($verified_signature, $signed_postvars))
+													{
+														//261116.0327 Only an identical, durably completed replay is safe to acknowledge without redispatch.
+														self::$paypal_proxy_v2_rejection_status = self::$paypal_proxy_v2_completed_replay ? 0 : 409;
+														return false;
+													}
+
+												//261114.2134 Only a freshly authenticated, atomically claimed request can clear the rejection status.
+												self::$paypal_proxy_v2_rejection_status = 0;
+												return apply_filters('ws_plugin__s2member_paypal_postvars', array_merge($postvars, array('proxy_verified' => $_POST['s2member_paypal_proxy'])), get_defined_vars());
+											}
+
+										//261118.0230 The release-default filter can change later without overriding a site's explicit Allow or Block choice.
+										else if(!empty($_REQUEST["s2member_paypal_proxy"]) && is_string($_REQUEST["s2member_paypal_proxy"]) && !empty($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($_REQUEST["s2member_paypal_proxy_verification"]) && is_string($proxy_verification_key = c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen()) && hash_equals($proxy_verification_key, $_REQUEST["s2member_paypal_proxy_verification"]))
+										{
+											//261117.0256 A disabled or retired static key must get an explicit HTTP 403; never fall through to PayPal verification and falsely acknowledge it.
+											//261118.0230 Follow today's permissive release default unless the operator explicitly allows or blocks the legacy credential.
+											$legacy_policy = isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_proxy_legacy_policy']) ? $GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_proxy_legacy_policy'] : 'default';
+											$default_accepts_legacy = apply_filters('ws_plugin__s2member_paypal_proxy_default_legacy_key', true, get_defined_vars());
+											$policy_accepts_legacy = $legacy_policy === 'allow' || ($legacy_policy === 'default' && $default_accepts_legacy);
+											//261118.0230 The existing code-level veto and durable retirement remain absolute even with explicit administrator allowance.
+											if(!$policy_accepts_legacy || !apply_filters('ws_plugin__s2member_paypal_proxy_allow_legacy_key', true, get_defined_vars()) || !self::paypal_proxy_legacy_key_not_retired())
+												{
+												self::$paypal_proxy_v2_rejection_status = 403; //261117.0256 Reuse Notify's existing fail-closed HTTP status without introducing a new response channel.
+												return false;
+											}
+											//261118.0238 Observe authenticated legacy-key use and bounded caller hints, never credentials, payment payloads, or customer identifiers.
+											self::paypal_proxy_legacy_note_use();
+											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_REQUEST["s2member_paypal_proxy"])), get_defined_vars());
+										}
+
+										//261117.0240 Signed GET returns are distinct from HMAC-v2 POSTs. A site may opt into a bounded lifetime after reviewing legacy return-link usage.
+										else if(empty($_POST) && !empty($_GET["s2member_paypal_proxy"]) && !empty($_GET["s2member_paypal_proxy_verification"]) && self::paypal_proxy_signed_get_valid($_SERVER["REQUEST_URI"]))
 											return apply_filters("ws_plugin__s2member_paypal_postvars", array_merge($postvars, array("proxy_verified" => $_GET["s2member_paypal_proxy"])), get_defined_vars());
 
 										else if(trim(strtolower(c_ws_plugin__s2member_utils_urls::remote("https://".$endpoint."/cgi-bin/webscr", $postback, array("timeout" => 20)))) === "verified")
@@ -145,6 +239,94 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$postvars = self::paypal_postvars_back_compat($postvars);
 								return apply_filters("ws_plugin__s2member_paypal_postvars", $postvars, get_defined_vars());
 							}
+					}
+				/**
+				 * Verify the account receiving a native PayPal IPN against this site's merchant settings.
+				 *
+				 * @since 261110.2142
+				 *
+				 * @param array $postvars Verified PayPal notification fields.
+				 *
+				 * @return bool Whether the recipient is the configured PayPal merchant.
+				 */
+				public static function paypal_ipn_recipient_matches($postvars)
+					{
+						if(!is_array($postvars))
+							return false;
+
+						$merchant_id = (isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_merchant_id']) && is_string($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_merchant_id'])) ? trim($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_merchant_id']) : '';
+						$merchant_email = (isset($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business']) && is_string($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business'])) ? trim($GLOBALS['WS_PLUGIN__']['s2member']['o']['paypal_business']) : '';
+
+						//261110.2142 Prefer the PayPal account ID when both sides provide one; email aliases may differ on the same merchant account.
+						if(isset($postvars['receiver_id']) && !is_string($postvars['receiver_id']))
+							return false;
+						$receiver_id = isset($postvars['receiver_id']) ? trim($postvars['receiver_id']) : '';
+						if($merchant_id !== '' && $receiver_id !== '')
+							return hash_equals($merchant_id, $receiver_id);
+
+						//261117.0357 Older VERIFIED PayPal IPNs may omit receiver_id and report the merchant's primary email instead of the configured secondary alias.
+						// Accept only explicitly site-provisioned additional recipient emails; never derive allowed aliases from the IPN's business or payer fields.
+						if(isset($postvars['receiver_email']) && !is_string($postvars['receiver_email']))
+							return false;
+						$receiver_email = isset($postvars['receiver_email']) ? trim($postvars['receiver_email']) : '';
+						if($receiver_email === '')
+							return false;
+						if($merchant_email !== '' && strcasecmp($merchant_email, $receiver_email) === 0)
+							return true;
+						$aliases = apply_filters('ws_plugin__s2member_paypal_ipn_recipient_email_aliases', array());
+						if(!is_array($aliases))
+							return false;
+						foreach($aliases as $alias)
+							if(is_string($alias) && is_email(trim($alias)) && strcasecmp(trim($alias), $receiver_email) === 0)
+								return true;
+						return false;
+					}
+				/**
+				 * Validate native PayPal payment completion before granting access; preserve nonpayment and proxy event semantics.
+				 *
+				 * @since 261110.2228
+				 *
+				 * @param array $postvars Authenticated gateway payment or subscription fields.
+				 * @param string $payment_status_issues Legacy rejected statuses for other gateway events.
+				 *
+				 * @return bool Whether the event may proceed to the matching handler.
+				 */
+				public static function paypal_payment_status_allows_access($postvars, $payment_status_issues = '')
+					{
+						if(!is_array($postvars))
+							return false;
+
+						//261110.2228 PayPal's VERIFIED response authenticates an event, not receipt of a completed payment.
+						if(empty($postvars['proxy_verified']) && !empty($postvars['txn_type']) && is_string($postvars['txn_type'])
+						&& preg_match('/^(web_accept|subscr_payment|recurring_payment|merch_pmt)$/i', $postvars['txn_type']))
+							return isset($postvars['payment_status']) && is_string($postvars['payment_status'])
+								&& strcasecmp(trim($postvars['payment_status']), 'Completed') === 0;
+
+						//261110.2228 Subscription signups may omit payment_status; existing authenticated proxy integrations use their own status conventions.
+						if(empty($postvars['payment_status']))
+							return true;
+						return is_string($postvars['payment_status'])
+							&& ($payment_status_issues === '' || !preg_match($payment_status_issues, $postvars['payment_status']));
+					}
+				/**
+				 * Verify the complete host portion of s2Member's PayPal custom field, not just a matching prefix.
+				 *
+				 * @since 261110.2250
+				 *
+				 * @param string $custom Verified payment's custom value (host, optionally followed by pipe-delimited data).
+				 * @param string $host Expected installation host, without a numeric port.
+				 *
+				 * @return bool Whether the custom value identifies the exact installation host.
+				 */
+				public static function paypal_custom_origin_matches($custom, $host)
+					{
+						if(!is_string($custom) || !is_string($host) || $host === '')
+							return false;
+
+						//261110.2250 Preserve the documented host|custom-fields format and custom values created with HTTP_HOST including a numeric port.
+						$custom_parts = explode('|', $custom, 2);
+						$custom_host = preg_replace('/:[0-9]+$/', '', $custom_parts[0]);
+						return strcasecmp($custom_host, $host) === 0;
 					}
 				/**
 				 * Convert PayPal post vars to UTF-8 when PayPal reports a usable charset.
@@ -310,6 +492,515 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						return hash_equals($expected, $signature);
 					}
 				/**
+				 * Get an independent, persistent secret for signing external v2 proxy messages.
+				 *
+				 * @since 261111.0003
+				 *
+				 * @return string|bool Hex-encoded secret, or false when it cannot be securely loaded or stored.
+				 */
+				public static function paypal_proxy_v2_signing_key()
+					{
+						$option = 'ws_plugin__s2member_paypal_proxy_v2_signing_key';
+						$fence_option = 'ws_plugin__s2member_paypal_proxy_v2_signing_key_fingerprint';
+						$fence = get_option($fence_option, null);
+						$key = get_option($option, null);
+						if($key === null)
+							{
+								//261117.0019 Do not silently rotate a lost key once its durable fingerprint exists: old external signers and replay claims depend on it.
+								if($fence !== null)
+									return false;
+								//261111.0003 Generate only on the server, once per site; add_option uses the database unique key to resolve concurrent first requests.
+								try { $generated = bin2hex(random_bytes(32)); }
+								catch(Exception $exception) { return false; }
+								$key = add_option($option, $generated, '', 'no') ? $generated : get_option($option, null);
+							}
+						//261117.0019 Bind an existing or newly created signing key before first signed use; never treat a corrupt or conflicting marker as recoverable.
+						if(!is_string($key) || !preg_match('/^[a-f0-9]{64}$/D', $key))
+							return false;
+						$expected = hash('sha256', $key);
+						if($fence === null)
+							$fence = add_option($fence_option, $expected, '', 'no') ? $expected : get_option($fence_option, null);
+						return is_string($fence) && preg_match('/^[a-f0-9]{64}$/D', $fence) && hash_equals($expected, $fence) ? $key : false;
+					}
+				/**
+				 * Read an existing HMAC signing key without initializing or changing the replay namespace.
+				 * An older key without a marker remains inspectable; a changed or damaged marker must fail closed.
+				 *
+				 * @since 261117.0019
+				 * @return string|bool Existing key, or false when missing, corrupt, or inconsistent.
+				 */
+				private static function paypal_proxy_v2_existing_signing_key()
+					{
+						$key = get_option('ws_plugin__s2member_paypal_proxy_v2_signing_key', null);
+						if(!is_string($key) || !preg_match('/^[a-f0-9]{64}$/D', $key))
+							return false;
+						$fence = get_option('ws_plugin__s2member_paypal_proxy_v2_signing_key_fingerprint', null);
+						if($fence === null)
+							return $key; //261117.0019 Older valid signing keys predate the continuity marker; read-only audits must not create it.
+						return is_string($fence) && preg_match('/^[a-f0-9]{64}$/D', $fence) && hash_equals(hash('sha256', $key), $fence) ? $key : false;
+					}
+				/**
+				 * Resolve a gateway-scoped external sender's signing key, or the historical site-wide key.
+				 * Sender credentials are provisioned server-side through a filter, not through signed requests.
+				 * Each sender has a durable key fingerprint so changing one cannot silently reopen replay history.
+				 *
+				 * @since 261117.0315
+				 * @param array $postvars Original unslashed signed fields, including gateway and optional sender.
+				 * @param bool $read_only True for archived correlation, which must not initialize options.
+				 * @return string|bool Signing key or false on invalid scope/configuration/continuity.
+				 */
+				private static function paypal_proxy_v2_key_for_postvars($postvars, $read_only = false)
+					{
+						if(!is_array($postvars))
+							return false;
+						if(!array_key_exists('s2member_paypal_proxy_sender', $postvars))
+							{
+								//261117.0527 Retiring site-wide signing stops new unscoped messages, but historical signatures remain inspectable read-only.
+								if(!$read_only && !self::paypal_proxy_v2_sender_not_retired())
+									return false;
+								return $read_only ? self::paypal_proxy_v2_existing_signing_key() : self::paypal_proxy_v2_signing_key();
+							}
+
+						$sender = $postvars['s2member_paypal_proxy_sender'];
+						$gateway = isset($postvars['s2member_paypal_proxy']) ? $postvars['s2member_paypal_proxy'] : null;
+						if(!is_string($sender) || !preg_match('/^[a-z0-9][a-z0-9_-]{0,31}$/D', $sender) || !is_string($gateway) || $gateway === '')
+							return false;
+						//261117.0527 A scoped key can be independently revoked without deleting its fingerprint or historical replay claims.
+						if(!$read_only && !self::paypal_proxy_v2_sender_not_retired($sender))
+							return false;
+						$senders = apply_filters('ws_plugin__s2member_paypal_proxy_v2_sender_credentials', array());
+						if(!is_array($senders) || !isset($senders[$sender]) || !is_array($senders[$sender]))
+							return false;
+						$credentials = $senders[$sender];
+						if(!isset($credentials['key'], $credentials['gateways']) || !is_string($credentials['key'])
+						|| !preg_match('/^[a-f0-9]{64}$/D', $credentials['key']) || !is_array($credentials['gateways'])
+						|| !in_array($gateway, $credentials['gateways'], true))
+							return false;
+
+						//261117.0319 Refuse reused secrets: a compromised adapter must not be able to impersonate another sender or the site's unscoped signer.
+						$site_key = self::paypal_proxy_v2_existing_signing_key();
+						if(is_string($site_key) && hash_equals($site_key, $credentials['key']))
+							return false;
+						foreach($senders as $other_id => $other)
+							if($other_id !== $sender && is_array($other) && isset($other['key']) && is_string($other['key']) && hash_equals($credentials['key'], $other['key']))
+								return false;
+
+						//261117.0315 Never grant one sender another gateway's authority; the sender ID and gateway are both bound into the signed body.
+						//261118.0506 TO-DO: Document safe scoped-key rotation using a new sender ID; reconcile uncertain deliveries before revoking the old ID. Never overwrite a pinned fingerprint.
+						$marker = 'ws_plugin__s2member_paypal_proxy_v2_sender_fingerprint_'.$sender;
+						$fingerprint = hash('sha256', $credentials['key']);
+						$stored = get_option($marker, null);
+						if($stored === null && !$read_only)
+							$stored = add_option($marker, $fingerprint, '', 'no') ? $fingerprint : get_option($marker, null);
+						//261117.0315 A missing fingerprint on read-only inspection or a mismatched one on any path is unresolved key history, not permission to rotate.
+						return is_string($stored) && preg_match('/^[a-f0-9]{64}$/D', $stored) && hash_equals($fingerprint, $stored) ? $credentials['key'] : false;
+					}
+				/**
+				 * Determine whether a site-wide or scoped external HMAC-v2 credential remains authorized.
+				 * The marker must be read from the database, not WordPress's potentially stale option cache.
+				 * Revocation stops new signatures; existing completed and uncertain receipts remain untouched.
+				 *
+				 * @since 261117.0527
+				 * @param string|null $sender Valid sender ID, or null for the old unscoped site key.
+				 * @return bool True only if SQL confirms no revocation marker exists.
+				 */
+				private static function paypal_proxy_v2_sender_not_retired($sender = null)
+					{
+						if($sender !== null && (!is_string($sender) || !preg_match('/^[a-z0-9][a-z0-9_-]{0,31}$/D', $sender)))
+							return false;
+						global $wpdb;
+						$marker = $sender === null ? 'ws_plugin__s2member_paypal_proxy_v2_unscoped_retired' : 'ws_plugin__s2member_paypal_proxy_v2_sender_revoked_'.$sender;
+						//261117.0527 Query the unique option row directly so stale option caches cannot silently restore a retired signing identity.
+						$count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name = %s", $marker));
+						return $wpdb->last_error === '' && ($count === 0 || $count === '0');
+					}
+				/**
+				 * Bind a replay claim to its signer namespace without changing old unscoped claim identifiers.
+				 *
+				 * @since 261117.0315
+				 * @param string $message_id Signed v2 message identifier.
+				 * @param array $postvars Authenticated original POST fields.
+				 * @param bool $read_only Whether claim correlation must avoid writes.
+				 * @return string|bool Option name or false if sender credentials are unavailable.
+				 */
+				private static function paypal_proxy_v2_claim_name($message_id, $postvars, $read_only = false)
+					{
+						if(($key = self::paypal_proxy_v2_key_for_postvars($postvars, $read_only)) === false)
+							return false;
+						//261117.0315 Preserve existing unscoped claim names; never allow identical IDs from distinct scoped senders to share a receipt.
+						$scope = array_key_exists('s2member_paypal_proxy_sender', $postvars) ? 'sender:'.$postvars['s2member_paypal_proxy_sender']."\n" : '';
+						return 'ws_plugin__s2member_proxy_v2_seen_'.hash_hmac('sha256', $scope.$message_id, $key);
+					}
+				/**
+				 * Build domain-separated HMAC input; sender identity cannot be detached from a verified payload.
+				 *
+				 * @since 261117.0315
+				 * @return string Signed data, independent of the signing key.
+				 */
+				private static function paypal_proxy_v2_signed_bytes($timestamp, $message_id, $payload, $postvars)
+					{
+						if(array_key_exists('s2member_paypal_proxy_sender', $postvars))
+							return "s2member_paypal_proxy_v2_sender\n".$postvars['s2member_paypal_proxy_sender']."\n".$timestamp."\n".$message_id."\n".$payload;
+						return "s2member_paypal_proxy_v2\n".$timestamp."\n".$message_id."\n".$payload;
+					}
+				/**
+				 * Validate a legacy signed GET proxy return, optionally enforcing a bounded link lifetime.
+				 * Existing signed browser returns remain compatible until a site explicitly enables expiry.
+				 * This is not an HMAC-v2 authentication or a replay/fulfillment guarantee.
+				 *
+				 * @since 261117.0240
+				 * @param string $request_uri Original request URI including its signed query string.
+				 * @return bool Whether the signed legacy return is acceptable under the configured policy.
+				 */
+				public static function paypal_proxy_signed_get_valid($request_uri)
+					{
+						if(!is_string($request_uri) || !c_ws_plugin__s2member_utils_urls::s2member_sig_ok($request_uri, false, false, 's2member_paypal_proxy_verification'))
+							return false;
+
+						//261117.0240 Zero retains previously issued long-lived return links; positive integer seconds opt into expiry. Invalid policies fail closed.
+						$max_age = apply_filters('ws_plugin__s2member_paypal_proxy_signed_get_max_age', 0);
+						if($max_age === 0)
+							return true;
+						if(!is_int($max_age) || $max_age < 1)
+							return false;
+
+						//261117.0240 Require exactly one canonical timestamp/signature pair in bounded mode; duplicates and ambiguous encodings cannot select a different lifetime.
+						$query = parse_url($request_uri, PHP_URL_QUERY);
+						if(!is_string($query) || preg_match_all('/(?:^|&)s2member_paypal_proxy_verification=([^&]*)/', $query, $tokens) !== 1
+						|| !preg_match('/^([0-9]{10,12})-[a-f0-9]{32}$/D', $tokens[1][0], $matches))
+							return false;
+						$issued = (int)$matches[1];
+						$now = time();
+						//261117.0240 Permit one minute of clock skew for different web nodes, but never an unlimited future or past-dated return.
+						return $issued <= $now + 60 && $now - $issued <= $max_age;
+					}
+				/**
+				 * Canonicalize a v2 proxy POST body for a transaction-bound HMAC.
+				 *
+				 * @since 261110.2320
+				 *
+				 * @param array $postvars POST fields, including the gateway and optionally the verification field.
+				 *
+				 * @return string|bool Deterministic RFC3986 query encoding, else false for unsupported values.
+				 */
+				public static function paypal_proxy_v2_payload($postvars)
+					{
+						if(!is_array($postvars) || empty($postvars['s2member_paypal_proxy']) || !is_string($postvars['s2member_paypal_proxy']))
+							return false;
+
+						unset($postvars['s2member_paypal_proxy_verification']);
+						$normalize = function($values) use (&$normalize)
+							{
+								if(!is_array($values))
+									return false;
+								$result = array();
+								foreach($values as $key => $value)
+									{
+										if(is_array($value))
+											{
+												if(!$value || ($value = $normalize($value)) === false)
+													return false;
+											}
+										else if(!is_scalar($value))
+											return false;
+										$result[$key] = is_array($value) ? $value : (string)$value;
+									}
+								ksort($result, SORT_STRING);
+								return $result;
+							};
+
+						if(($postvars = $normalize($postvars)) === false)
+							return false;
+						return http_build_query($postvars, '', '&', PHP_QUERY_RFC3986);
+					}
+				/**
+				 * Sign a complete v2 proxy POST using a unique message ID and independent site secret.
+				 *
+				 * @since 261110.2320
+				 *
+				 * @param array $postvars All unslashed POST fields except the signature (including s2member_paypal_proxy).
+				 * @param int|null $timestamp Optional Unix timestamp; defaults to the current time.
+				 * @param string|null $message_id Optional 128-bit lowercase hex message ID; defaults to a new cryptographic random value.
+				 *
+				 * @return string|bool v2 timestamped, message-bound HMAC, or false on invalid input.
+				 */
+				public static function paypal_proxy_v2_sign($postvars, $timestamp = null, $message_id = null)
+					{
+						if(($payload = self::paypal_proxy_v2_payload($postvars)) === false)
+							return false;
+						$timestamp = $timestamp === null ? time() : $timestamp;
+						if(!is_int($timestamp) || $timestamp < 1000000000)
+							return false;
+						if($message_id === null)
+							{
+								try { $message_id = bin2hex(random_bytes(16)); }
+								catch(Exception $exception) { return false; }
+							}
+						if(!is_string($message_id) || !preg_match('/^[a-f0-9]{32}$/D', $message_id) || ($key = self::paypal_proxy_v2_key_for_postvars($postvars)) === false)
+							return false;
+
+						//261117.0315 Scoped senders use a distinct HMAC domain; unscoped site signatures retain their original bytes for compatibility.
+						$signature = hash_hmac('sha256', self::paypal_proxy_v2_signed_bytes($timestamp, $message_id, $payload, $postvars), $key);
+						return 'v2.'.$timestamp.'.'.$message_id.'.'.$signature;
+					}
+				/**
+				 * Validate the signature and age of a v2 proxy POST without consuming its message ID.
+				 *
+				 * @since 261110.2320
+				 *
+				 * @param array $postvars Received unslashed POST fields, including the signature and gateway.
+				 *
+				 * @return bool Whether the signed transaction fields are intact and timely; replay is checked separately at the HTTP boundary.
+				 */
+				public static function paypal_proxy_v2_verify($postvars)
+					{
+						if(!is_array($postvars) || !isset($postvars['s2member_paypal_proxy_verification']) || !is_string($postvars['s2member_paypal_proxy_verification'])
+						|| !preg_match('/^v2\.([0-9]{10,12})\.([a-f0-9]{32})\.([a-f0-9]{64})$/D', $postvars['s2member_paypal_proxy_verification'], $matches))
+							return false;
+
+						//261117.0315 Default to old unscoped compatibility, but allow a site to reject site-wide v2 credentials after scoped senders migrate.
+						if(!array_key_exists('s2member_paypal_proxy_sender', $postvars)
+						&& !apply_filters('ws_plugin__s2member_paypal_proxy_v2_allow_unscoped', true))
+							return false;
+						$timestamp = (int)$matches[1];
+						//261110.2320 Reject expired signatures and future clock skew; signing a payload is insufficient if an old envelope can be reused indefinitely.
+						if($timestamp < time() - 300 || $timestamp > time() + 60)
+							return false;
+						$expected = self::paypal_proxy_v2_sign($postvars, $timestamp, $matches[2]);
+						return is_string($expected) && hash_equals($expected, $postvars['s2member_paypal_proxy_verification']);
+					}
+				/**
+				 * Atomically claim a signed v2 delivery, preserving unknown outcomes and recognizing completed duplicates.
+				 *
+				 * @since 261111.0003
+				 * @param string $token Verified v2 token; the stored digest binds the original payload and gateway.
+				 * @return bool True only for the first delivery of this message ID.
+				 */
+				private static function paypal_proxy_v2_claim($token, $postvars)
+					{
+						if(!is_string($token) || !preg_match('/^v2\.([0-9]{10,12})\.([a-f0-9]{32})\.([a-f0-9]{64})$/D', $token, $matches)
+						|| ($option = self::paypal_proxy_v2_claim_name($matches[2], $postvars, true)) === false)
+							return false;
+
+						$expiry = (int)$matches[1] + 361;
+						$digest = hash('sha256', $token);
+						//261116.0327 Keep the numeric expiry prefix for the existing SQL garbage collector and old numeric claims.
+						$pending = $expiry.'|processing|'.$digest;
+						if(!add_option($option, $pending, '', 'no'))
+							{
+								global $wpdb;
+								//261117.0534 A cached completed flag cannot authorize a duplicate acknowledgment; verify the exact token in durable SQL.
+								$stored = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option));
+								self::$paypal_proxy_v2_completed_replay = $wpdb->last_error === '' && is_string($stored)
+									&& hash_equals($expiry.'|completed|'.$digest, $stored);
+								return false;
+							}
+
+						self::$paypal_proxy_v2_active_claim = array($option, $pending, $expiry.'|completed|'.$digest);
+						self::paypal_proxy_v2_prune_replay();
+						return true;
+					}
+				/**
+				 * Mark a locally accepted signed delivery complete without reopening interrupted claims.
+				 *
+				 * @since 261116.0327
+				 * @return bool True when no signed claim exists or its exact record was durably completed.
+				 */
+				public static function paypal_proxy_v2_complete_claim()
+					{
+						if(self::$paypal_proxy_v2_active_claim === null)
+							return true;
+						list($option, $pending, $completed) = self::$paypal_proxy_v2_active_claim;
+						global $wpdb;
+						//261116.0327 Compare-and-swap prevents a stale worker from completing a replaced or changed receipt.
+						$changed = $wpdb->query($wpdb->prepare("UPDATE {$wpdb->options} SET option_value = %s WHERE option_name = %s AND option_value = %s", $completed, $option, $pending));
+						wp_cache_delete($option, 'options');
+						if($changed !== 1 || get_option($option, false) !== $completed)
+							return false;
+						self::$paypal_proxy_v2_active_claim = null;
+						return true;
+					}
+				/**
+				 * Remove expired replay records without depending on WP-Cron or persistent object-cache atomicity.
+				 *
+				 * @since 261111.0003
+				 *
+				 * @return void
+				 */
+				private static function paypal_proxy_v2_prune_replay()
+					{
+						//261111.0003 A transient only throttles cleanup. Replay rejection is solely the durable, uniquely indexed add_option record above.
+						$throttle = 'ws_plugin__s2member_proxy_v2_gc_throttle';
+						if(get_transient($throttle))
+							return;
+						set_transient($throttle, 1, 30);
+
+						global $wpdb;
+						$prefix = 'ws_plugin__s2member_proxy_v2_seen_';
+						//261116.2126 Preserve interrupted processing and historical numeric claims for explicit reconciliation, even after the signing window expires.
+						//261116.2126 Select only expired completed receipts so unresolved claims cannot starve the bounded cleanup batch.
+						$expired = $wpdb->get_results($wpdb->prepare("SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s AND option_value LIKE %s AND CAST(option_value AS UNSIGNED) < %d LIMIT 200", $wpdb->esc_like($prefix).'%', '%|completed|%', time()), ARRAY_A);
+						foreach((array)$expired as $record)
+							{
+							if(!is_array($record) || !isset($record['option_name'], $record['option_value']) || !is_string($record['option_name']) || !is_string($record['option_value'])
+							|| strpos($record['option_name'], $prefix) !== 0 || !preg_match('/^[0-9]{10,12}\|completed\|[a-f0-9]{64}$/D', $record['option_value']))
+								continue;
+							//261116.2126 A concurrent update must not be deleted using a stale cleanup snapshot.
+							$deleted = $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->options} WHERE option_name = %s AND BINARY option_value = BINARY %s", $record['option_name'], $record['option_value']));
+							if($deleted === 1)
+								wp_cache_delete($record['option_name'], 'options');
+							}
+					}
+				/**
+				 * Inspect one signed delivery claim without changing its state or generating a missing signing key.
+				 * A claim records authentication/replay state, NEVER successful payment or external side effects.
+				 *
+				 * @since 261116.2220
+				 * @param string $message_id The original 32-character lowercase hexadecimal v2 message ID.
+				 * @return array|bool|WP_Error Read-only classification; false for invalid input or an unavailable signing key.
+				 */
+				public static function paypal_proxy_v2_claim_inspect($message_id)
+					{
+						if(!is_string($message_id) || !preg_match('/^[a-f0-9]{32}$/D', $message_id))
+							return false;
+						//261116.2220 The inspection path must never generate or replace the signing secret: doing so would change the claim namespace.
+						//261117.0019 An audit must not create a key or misclassify old claims under an altered signing secret.
+						if(($key = self::paypal_proxy_v2_existing_signing_key()) === false)
+							return false;
+						$option = 'ws_plugin__s2member_proxy_v2_seen_'.hash_hmac('sha256', $message_id, $key);
+						global $wpdb;
+						//261116.2220 Query durable storage rather than cached get_option; never call replay pruning during an audit.
+						$stored = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option));
+						if($wpdb->last_error !== '')
+							return new WP_Error('s2m_proxy_v2_inspect_sql', 'The signed-delivery claim could not be inspected.');
+						if($stored === null)
+							return array('state' => 'absent', 'expires' => 0, 'expired' => false);
+						if(is_string($stored) && preg_match('/^([0-9]{10,12})\|(processing|completed)\|[a-f0-9]{64}$/D', $stored, $matches))
+							{
+								$expires = (int)$matches[1];
+								return array('state' => $matches[2], 'expires' => $expires, 'expired' => $expires < time());
+							}
+						//261116.2220 Older numeric claims and malformed records are unresolved evidence, not authorization to reset/replay.
+						return array('state' => is_string($stored) && preg_match('/^[0-9]{10,12}$/D', $stored) ? 'legacy_unknown' : 'invalid_record', 'expires' => 0, 'expired' => false);
+					}
+				/**
+				 * Verify an archived signed body and correlate its exact claim with an existing payment receipt.
+				 * This is for operator diagnostics: expired signatures may be inspected but NEVER accepted for delivery.
+				 * A local receipt cannot independently prove provider payment, external email, or hook delivery.
+				 *
+				 * @since 261116.2325
+				 * @param array $postvars Original unslashed signed POST values, including verification token.
+				 * @return array|bool|WP_Error Read-only evidence classification; false for invalid signatures/input.
+				 */
+				public static function paypal_proxy_v2_correlate_signed_delivery($postvars)
+					{
+						if(!is_array($postvars) || empty($postvars['s2member_paypal_proxy_verification']) || !is_string($postvars['s2member_paypal_proxy_verification'])
+						|| !preg_match('/^v2\.([0-9]{10,12})\.([a-f0-9]{32})\.([a-f0-9]{64})$/D', $postvars['s2member_paypal_proxy_verification'], $matches))
+							return false;
+						//261116.2325 Never generate a missing signing key during an audit; a new key would change the namespace of historical claims.
+						$key = self::paypal_proxy_v2_key_for_postvars($postvars, true);
+						$payload = self::paypal_proxy_v2_payload($postvars);
+						//261117.0315 Read-only correlation uses the same scoped key/domain and replay namespace as the original delivery, without rotating secrets.
+						if($key === false || $payload === false)
+								return false;
+						$expected = 'v2.'.(int)$matches[1].'.'.$matches[2].'.'.hash_hmac('sha256', self::paypal_proxy_v2_signed_bytes((int)$matches[1], $matches[2], $payload, $postvars), $key);
+						if(!hash_equals($expected, $postvars['s2member_paypal_proxy_verification']))
+							return false;
+
+						$option = self::paypal_proxy_v2_claim_name($matches[2], $postvars, true);
+						if($option === false)
+							return false;
+						global $wpdb;
+						//261116.2325 Bind the claim to the token digest, not merely a reused message ID; use durable SQL reads without cleanup or replay.
+						$stored = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM {$wpdb->options} WHERE option_name = %s LIMIT 1", $option));
+						if($wpdb->last_error !== '')
+							return new WP_Error('s2m_proxy_v2_correlation_sql', 'Signed-delivery correlation could not read the claim.');
+						$state = 'absent';
+						$binding = 'not_proven';
+						if(is_string($stored) && preg_match('/^[0-9]{10,12}\|(processing|completed)\|([a-f0-9]{64})$/D', $stored, $stored_matches))
+							{
+							$state = $stored_matches[1];
+							$binding = hash_equals($stored_matches[2], hash('sha256', $postvars['s2member_paypal_proxy_verification'])) ? 'exact_token' : 'different_token';
+							}
+						else if(is_string($stored))
+							$state = preg_match('/^[0-9]{10,12}$/D', $stored) ? 'legacy_unknown' : 'invalid_record';
+
+						$result = array('claim' => $state, 'binding' => $binding, 'receipt' => 'not_checked', 'origin' => 'unknown');
+						if($binding !== 'exact_token')
+							return $result;
+						$gateway = isset($postvars['s2member_paypal_proxy']) ? $postvars['s2member_paypal_proxy'] : null;
+						$transaction = isset($postvars['txn_id']) ? $postvars['txn_id'] : null;
+						if(!is_string($gateway) || !is_string($transaction))
+							return $result;
+						$merchant = c_ws_plugin__s2member_payment_events::trusted_merchant($gateway);
+						if(is_wp_error($merchant))
+							return $result; // A changed/unknown merchant scope cannot be inferred from posted data.
+						$name = c_ws_plugin__s2member_payment_events::option_name($gateway, $merchant, $transaction, 'payment');
+						if($name === false)
+							return $result;
+						$receipt = c_ws_plugin__s2member_payment_events::read($name);
+						if(is_wp_error($receipt))
+							return $receipt; // Do not misreport a corrupt or unreadable receipt as absent.
+						$result['receipt'] = $receipt === false ? 'absent' : $receipt['status'];
+						if(is_array($receipt) && $receipt['gateway'] === strtolower(trim($gateway)) && $receipt['event'] === 'payment')
+							$result['origin'] = isset($receipt['replay_origin']) ? 'authoritative' : 'legacy_shadow';
+						return $result;
+					}
+				/**
+				 * Allow the published legacy proxy key only before an operator explicitly retires it.
+				 * A retirement option row, regardless of value, disables static-key authentication.
+				 * Its absence preserves the historical soft rollout, including the existing allow-legacy filter.
+				 * This does not affect signed GET browser returns, HMAC-v2 POST, or trusted PHP dispatch.
+				 *
+				 * @since 261117.0256
+				 * @return bool True only while no retirement marker exists and SQL can verify that fact.
+				 */
+				public static function paypal_proxy_legacy_key_not_retired()
+					{
+						global $wpdb;
+						//261117.0256 Use durable SQL, not potentially stale option caches: a retired static credential must never be reaccepted by an old cache entry.
+						$marker = 'ws_plugin__s2member_paypal_proxy_legacy_key_retired';
+						$count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name = %s", $marker));
+						//261117.0256 An unreadable/malformed result is not evidence that the legacy key is safe to accept.
+						return $wpdb->last_error === '' && ($count === 0 || $count === '0');
+					}
+				/**
+				 * Observe legacy static-key usage without storing secrets or transaction/customer data.
+				 * These timestamps are approximate operational indicators, not an audit-grade event ledger.
+				 *
+				 * @since 261116.2220
+				 * @return void
+				 */
+				private static function paypal_proxy_legacy_note_use()
+					{
+						$now = time();
+						//261116.2220 A unique first-use option survives races; last-use writes are throttled to one per hour per site.
+						add_option('ws_plugin__s2member_paypal_proxy_legacy_first_used', $now, '', 'no');
+						$last = get_option('ws_plugin__s2member_paypal_proxy_legacy_last_used', false);
+						if(!is_numeric($last) || $now - (int)$last >= HOUR_IN_SECONDS)
+							update_option('ws_plugin__s2member_paypal_proxy_legacy_last_used', $now, false);
+
+						//261118.0230 Capture only source hints after successful key verification, never keys, URLs, notification payloads, or customer identifiers.
+						$gateway = isset($_REQUEST['s2member_paypal_proxy']) && is_string($_REQUEST['s2member_paypal_proxy']) ? substr(sanitize_text_field(wp_unslash($_REQUEST['s2member_paypal_proxy'])), 0, 60) : '';
+						$ip = isset($_SERVER['REMOTE_ADDR']) && is_string($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP) ? $_SERVER['REMOTE_ADDR'] : '';
+						$agent = isset($_SERVER['HTTP_USER_AGENT']) && is_string($_SERVER['HTTP_USER_AGENT']) ? substr(sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])), 0, 120) : '';
+						$fingerprint = hash('sha256', $gateway."\0".$ip."\0".$agent);
+						$option = 'ws_plugin__s2member_paypal_proxy_legacy_callers';
+						$callers = get_option($option, array());
+						if(!is_array($callers))
+							$callers = array();
+						//261118.0230 Bounded source hints, not a forensic ledger: retain 20 recent sources for up to 30 days and update each source at most hourly.
+						foreach($callers as $id => $caller)
+							if(!is_array($caller) || empty($caller['last']) || (int)$caller['last'] < $now - 30 * DAY_IN_SECONDS)
+								unset($callers[$id]);
+						if(!isset($callers[$fingerprint]) || $now - (int)$callers[$fingerprint]['last'] >= HOUR_IN_SECONDS)
+						{
+							$callers[$fingerprint] = array('gateway' => $gateway, 'ip' => $ip, 'agent' => $agent, 'last' => $now);
+							uasort($callers, function($a, $b) { return (int)$b['last'] - (int)$a['last']; });
+							update_option($option, array_slice($callers, 0, 20, true), false);
+						}
+					}
+				/**
 				* Generates a PayPal Proxy Key, for simulated IPN responses.
 				*
 				* @package s2Member\PayPal
@@ -339,6 +1030,297 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						}
 
 						return apply_filters("ws_plugin__s2member_paypal_proxy_key_gen", $key, get_defined_vars());
+					}
+				/**
+				 * Derive a stable purchase-event identity from the authenticated gateway and transaction ID.
+				 *
+				 * @since 261111.0100
+				 *
+				 * @param array  $postvars Authenticated notification fields, including the verified gateway origin.
+				 * @param string $purchase_type Purchase handler family: sp or ccaps.
+				 *
+				 * @return string|bool SHA-256 event identity, or false when required identity is missing.
+				 */
+				public static function paypal_purchase_event_key($postvars, $purchase_type)
+					{
+						if(!is_array($postvars) || !in_array($purchase_type, array('sp', 'ccaps'), TRUE)
+						|| !isset($postvars['subscr_gateway'], $postvars['txn_id'])
+						|| !is_string($postvars['subscr_gateway']) || !is_string($postvars['txn_id']))
+							return false;
+
+						$gateway = strtolower(trim($postvars['subscr_gateway']));
+						$txn_id = trim($postvars['txn_id']);
+						if($gateway === '' || $txn_id === '')
+							return false;
+
+						//261111.0100 Use length-delimited fields; mutable descriptions, invoice fields, and delivery metadata must not change purchase identity.
+						return hash('sha256', $purchase_type.'|'.strlen($gateway).':'.$gateway.'|'.strlen($txn_id).':'.$txn_id);
+					}
+				/**
+				 * Read a completed purchase marker directly from the database, bypassing potentially stale option caches.
+				 *
+				 * @since 261111.0125
+				 *
+				 * @param string $done_option Completed purchase option name.
+				 * @param int    $done_ttl    Completed marker lifetime in seconds.
+				 *
+				 * @return bool Whether the purchase was completed, or the database cannot safely determine that status.
+				 */
+				private static function paypal_purchase_is_done_fresh($done_option, $done_ttl)
+					{
+						global $wpdb;
+
+						//261111.0125 Fail closed if the completed marker cannot be read. Cached absence could permit double fulfillment after a concurrent request finishes.
+						$done_time = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $done_option));
+						//261116.0440 Unknown completion data must not permit a second fulfillment attempt.
+						if($wpdb->last_error !== '' || ($done_time !== NULL && !is_numeric($done_time)))
+							return TRUE;
+
+						return is_numeric($done_time) && (int)$done_time > 0 && ((int)$done_ttl <= 0 || time() - (int)$done_time < (int)$done_ttl);
+					}
+				/**
+				 * Confirm a completed purchase against the database, never a stale option cache.
+				 *
+				 * @since 261116.0439
+				 * @return bool
+				 */
+				public static function paypal_purchase_done_confirmed($done_option, $done_ttl)
+					{
+						global $wpdb;
+						if(!is_string($done_option) || $done_option === '')
+							return FALSE;
+						$time = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $done_option));
+						return $wpdb->last_error === '' && is_numeric($time) && (int)$time > 0
+							&& ((int)$done_ttl <= 0 || time() - (int)$time < (int)$done_ttl);
+					}
+				/**
+				 * Persist a pre-effect checkpoint on the owned purchase lock.
+				 *
+				 * @since 261116.0439
+				 * @return bool
+				 */
+				public static function paypal_purchase_lock_mark_started($lock_option, $token)
+					{
+						global $wpdb;
+						if(!is_string($lock_option) || $lock_option === '' || !is_string($token) || !preg_match('/^[a-f0-9]{32}$/D', $token))
+							return FALSE;
+						$stored = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $lock_option));
+						if($wpdb->last_error !== '' || $stored === NULL)
+							return FALSE;
+						$lock = maybe_unserialize($stored);
+						if(!is_array($lock) || empty($lock['token']) || !hash_equals((string)$lock['token'], $token))
+							return FALSE;
+						if(!empty($lock['started']))
+							return TRUE;
+						$lock['started'] = time();
+						$new_value = maybe_serialize($lock);
+						//261116.0439 Compare against the exact owned row so a stale worker cannot establish a checkpoint.
+						if($wpdb->update($wpdb->options, array('option_value' => $new_value),
+							array('option_name' => $lock_option, 'option_value' => $stored), array('%s'), array('%s', '%s')) !== 1)
+							return FALSE;
+						self::paypal_purchase_lock_cache_clear($lock_option);
+						$fresh = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $lock_option));
+						return $wpdb->last_error === '' && $fresh === $new_value;
+					}
+				/**
+				 * Write and independently verify a purchase's completion marker.
+				 *
+				 * @since 261116.0439
+				 * @return bool
+				 */
+				public static function paypal_purchase_complete($done_option, $done_ttl)
+					{
+						self::dedupe_done_mark($done_option);
+						return self::paypal_purchase_done_confirmed($done_option, $done_ttl);
+					}
+				/**
+				 * Invalidate a purchase lock's option cache after a direct SQL change.
+				 *
+				 * @since 261111.0125
+				 *
+				 * @param string $lock_option Per-purchase lock option name.
+				 *
+				 * @return void
+				 */
+				private static function paypal_purchase_lock_cache_clear($lock_option)
+					{
+						wp_cache_delete($lock_option, 'options');
+						$notoptions = wp_cache_get('notoptions', 'options');
+						if(is_array($notoptions) && isset($notoptions[$lock_option]))
+							{
+								unset($notoptions[$lock_option]);
+								wp_cache_set('notoptions', $notoptions, 'options');
+							}
+					}
+				/**
+				 * Claim exclusive processing of a purchase with an owner token and an uncached completion recheck.
+				 *
+				 * @since 261111.0125
+				 *
+				 * @param string $lock_option Per-purchase lock option name.
+				 * @param string $done_option Per-purchase completion marker name.
+				 * @param int    $lock_timeout Maximum lock age in seconds.
+				 * @param int    $done_ttl Completed marker lifetime in seconds.
+				 *
+				 * @return string|bool Owner token if acquired, else FALSE.
+				 */
+				public static function paypal_purchase_lock_claim($lock_option, $done_option, $lock_timeout = 900, $done_ttl = 315569260)
+					{
+						global $wpdb;
+
+						if(!is_string($lock_option) || $lock_option === '' || !is_string($done_option) || $done_option === '')
+							return FALSE;
+
+						$lock_timeout = max(30, abs((int)$lock_timeout));
+						if(self::paypal_purchase_is_done_fresh($done_option, $done_ttl))
+							return FALSE;
+
+						$token = bin2hex(random_bytes(16));
+						$lock = array('token' => $token, 'time' => time());
+						//261111.0125 Avoid add_option(): overlapping calls can take WordPress's ON DUPLICATE KEY UPDATE path and overwrite a live lock.
+						$insert = $wpdb->prepare("INSERT IGNORE INTO `{$wpdb->options}` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, %s)", $lock_option, maybe_serialize($lock), 'no');
+						$acquired = ($wpdb->query($insert) === 1);
+						if(!$acquired)
+							{
+								//261111.0125 Read the current lock from the database rather than a possibly stale WordPress option cache.
+								$stored = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $lock_option));
+								if($wpdb->last_error !== '' || $stored === NULL)
+									return FALSE;
+
+								$existing = maybe_unserialize($stored);
+								$lock_time = is_array($existing) && isset($existing['time']) ? (int)$existing['time'] : (is_numeric($existing) ? (int)$existing : 0);
+								//261116.0439 A pre-effect checkpoint outlives an expired lease; an unknown outcome must not be replayed.
+								if((is_array($existing) && !empty($existing['started'])) || $lock_time <= 0 || time() - $lock_time < $lock_timeout)
+									return FALSE;
+
+								//261111.0125 Compare-and-delete only the version we observed; another worker may already have replaced this expired lock.
+								$deleted = $wpdb->delete($wpdb->options, array('option_name' => $lock_option, 'option_value' => $stored), array('%s', '%s'));
+								if(!$deleted)
+									return FALSE;
+
+								self::paypal_purchase_lock_cache_clear($lock_option);
+								$acquired = ($wpdb->query($insert) === 1);
+						}
+						if(!$acquired)
+							return FALSE;
+
+						self::paypal_purchase_lock_cache_clear($lock_option);
+						//261111.0125 The first completion check can race with another worker's commit and unlock; recheck after claiming the lock.
+						if(self::paypal_purchase_is_done_fresh($done_option, $done_ttl))
+							{
+								self::paypal_purchase_lock_release($lock_option, $token);
+								return FALSE;
+							}
+						return $token;
+					}
+				/**
+				 * Release a purchase lock only if this request still owns its token.
+				 *
+				 * @since 261111.0125
+				 *
+				 * @param string $lock_option Per-purchase lock option name.
+				 * @param string $token Owner token returned by paypal_purchase_lock_claim().
+				 *
+				 * @return bool Whether this request released the lock.
+				 */
+				public static function paypal_purchase_lock_release($lock_option, $token)
+					{
+						global $wpdb;
+
+						if(!is_string($lock_option) || $lock_option === '' || !is_string($token) || !preg_match('/^[a-f0-9]{32}$/D', $token))
+							return FALSE;
+
+						$stored = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $lock_option));
+						if($wpdb->last_error !== '' || $stored === NULL)
+							return FALSE;
+
+						$existing = maybe_unserialize($stored);
+						if(!is_array($existing) || empty($existing['token']) || !hash_equals((string)$existing['token'], $token))
+							return FALSE;
+
+						//261111.0125 Compare-and-delete prevents an expired owner from releasing a lock now owned by a different request.
+						$deleted = $wpdb->delete($wpdb->options, array('option_name' => $lock_option, 'option_value' => $stored), array('%s', '%s'));
+						if($deleted)
+							self::paypal_purchase_lock_cache_clear($lock_option);
+
+						return (bool)$deleted;
+					}
+				/**
+				 * Check whether an older, timestamp-only PayPal deduplication lock is still active.
+				 *
+				 * This transitional check fails closed on malformed records or database errors. The
+				 * new owner-token locks use a separate namespace and never delete these legacy rows.
+				 *
+				 * @since 261111.0352
+				 *
+				 * @param string $lock_option Existing PayPal lock option name.
+				 * @param int    $lock_timeout Legacy lock lifetime in seconds.
+				 *
+				 * @return bool TRUE when a legacy lock might still be active or cannot be read safely.
+				 */
+				private static function dedupe_lock_legacy_active($lock_option, $lock_timeout)
+					{
+						global $wpdb;
+
+						$value = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $lock_option));
+						if($wpdb->last_error !== '')
+							return TRUE;
+						if($value === NULL)
+							return FALSE;
+						if(!is_string($value) || !preg_match('/^[1-9][0-9]{0,12}$/D', $value))
+							return TRUE;
+
+						return ((int)$value > time() - $lock_timeout);
+					}
+				/**
+				 * Acquire an owner-token lease while respecting still-active legacy PayPal locks.
+				 *
+				 * The old boolean-only dedupe_lock_* API is retained for unmigrated callers.
+				 * This bridge protects new requests but cannot fence already-running PHP workers
+				 * executing an older plugin version; deployments must drain those workers.
+				 *
+				 * @since 261111.0352
+				 *
+				 * @param string $lock_option Original PayPal dedupe lock identity.
+				 * @param int    $lock_timeout Lease duration in seconds.
+				 *
+				 * @return string|bool Owner token on success; FALSE on contention or failure.
+				 */
+				public static function dedupe_lock_acquire_owned($lock_option, $lock_timeout = 900)
+					{
+						if(!is_string($lock_option) || $lock_option === '' || !is_int($lock_timeout) || $lock_timeout < 1 || $lock_timeout > 86400)
+							return FALSE;
+						if(self::dedupe_lock_legacy_active($lock_option, $lock_timeout))
+							return FALSE;
+
+						$resource = 'paypal-dedupe/'.$lock_option;
+						$token = c_ws_plugin__s2member_database::lock_acquire($resource, $lock_timeout);
+						if(!is_string($token)) //261111.0352 WP_Error is truthy; treat database errors as failed acquisition.
+							return FALSE;
+
+						//261111.0352 Recheck the old record after our claim so an overlapping older worker cannot be silently ignored.
+						if(self::dedupe_lock_legacy_active($lock_option, $lock_timeout))
+							{
+								c_ws_plugin__s2member_database::lock_release($resource, $token);
+								return FALSE;
+							}
+						return $token;
+					}
+				/**
+				 * Release a migrated PayPal dedupe lease only when this worker owns its token.
+				 *
+				 * @since 261111.0352
+				 *
+				 * @param string $lock_option Original PayPal lock identity.
+				 * @param string $token Owner token returned by dedupe_lock_acquire_owned().
+				 *
+				 * @return bool Whether this worker released its lease.
+				 */
+				public static function dedupe_lock_release_owned($lock_option, $token)
+					{
+						if(!is_string($lock_option) || $lock_option === '')
+							return FALSE;
+						return c_ws_plugin__s2member_database::lock_release('paypal-dedupe/'.$lock_option, $token) === TRUE;
 					}
 				/**
 				* Acquires a short-lived dedupe lock.
@@ -1947,8 +2929,14 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						}
 
 						$capture_lock = $gateway_checkout_id ? '' : 's2m_ppco_capture_lock_'.md5($order_id);
-						if(!$gateway_checkout_id && !self::dedupe_lock_acquire($capture_lock, 300))
-							return array('__error' => 'capture_in_progress');
+						$capture_lock_token = '';
+						if(!$gateway_checkout_id)
+							{
+								//261111.0352 Coordinator-free capture now uses an owner-token lease; keep its existing 300-second timeout and busy result.
+								$capture_lock_token = self::dedupe_lock_acquire_owned($capture_lock, 300);
+								if(!$capture_lock_token)
+									return array('__error' => 'capture_in_progress');
+							}
 
 						try
 						{
@@ -2075,8 +3063,8 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						{
 							if($gateway_checkout_id && $gateway_checkout_lock)
 								c_ws_plugin__s2member_gateway_checkouts::processing_unlock($gateway_checkout_id, $gateway_checkout_lock);
-							else if(!$gateway_checkout_id && $capture_lock)
-								self::dedupe_lock_release($capture_lock);
+							else if(!$gateway_checkout_id && $capture_lock_token)
+								self::dedupe_lock_release_owned($capture_lock, $capture_lock_token);
 						}
 					}
 
@@ -2201,8 +3189,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						if(array_key_exists('s2member_paypal_proxy_return_url', $token))
 							$notify_extra['s2member_paypal_proxy_return_url'] = (string)$token['s2member_paypal_proxy_return_url'];
 
-						//260907.1820 Keep the established PayPal Notify path authoritative for entitlement side effects, keyed by capture ID so simultaneous browser/webhook completion cannot process the same transaction twice.
-						$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_capture_done_'.md5($pu_cap_id), $proxy_use, $notify_extra);
+						//261115.0113 Only Framework button captures use the local Notify processor; Pro and other callers keep their HTTP path.
+						// The existing done marker and outer Checkout lock still govern duplicate fulfillment.
+						$in_process = ($proxy_use === 'paypal_checkout' && strpos($invoice, 's2mb-') === 0 && apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, $invoice, $pu_cap_id));
+						$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_capture_done_'.md5($pu_cap_id), $proxy_use, $notify_extra, $in_process);
 						if(empty($notify_result['ok']))
 							return array('ok' => FALSE, 'error' => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed');
 
@@ -2240,10 +3230,11 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 				 * @param string $done_option Local fulfillment done-marker option name.
 				 * @param string $proxy_use   Optional proxy-use routing value.
 				 * @param array  $extra       Optional additional server-side Notify variables.
+				 * @param bool   $in_process  Dispatch one trusted Framework capture without a same-site HTTP request.
 				 *
 				 * @return array Result with ok/processed/duplicate/error and response details.
 				 */
-				public static function paypal_checkout_notify_once($paypal = array(), $done_option = '', $proxy_use = 'paypal_checkout', $extra = array())
+				public static function paypal_checkout_notify_once($paypal = array(), $done_option = '', $proxy_use = 'paypal_checkout', $extra = array(), $in_process = FALSE)
 					{
 						if(!is_array($paypal) || !$paypal || !$done_option || !is_string($done_option))
 							return array('ok' => false, 'processed' => false, 'duplicate' => false, 'error' => 'notify_invalid_args');
@@ -2264,7 +3255,9 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 
 						$lock_option = 's2m_ppco_notify_lock_'.md5($done_option);
-						if(!self::dedupe_lock_acquire($lock_option, 900))
+						//261111.0618 Use the shared owner-token lease for Notify forwarding; the bridge also respects active historical timestamp locks.
+						$lock_token = self::dedupe_lock_acquire_owned($lock_option, 900);
+						if(!is_string($lock_token))
 							{
 								if(self::dedupe_done_time_get($done_option, DAY_IN_SECONDS))
 									{
@@ -2300,13 +3293,18 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 								$proxy_use = isset($notify_context['proxy_use']) ? (string)$notify_context['proxy_use'] : (string)$proxy_use;
 								$extra     = !empty($notify_context['extra']) && is_array($notify_context['extra']) ? $notify_context['extra'] : array();
 
+								//261115.0118 Preserve a valid legacy proxy credential whenever the caller uses the existing HTTP transport.
+								//261115.0450 Only the two PayPal Checkout-owned proxy routes can enter the isolated local Notify core.
+								// Pro, other gateways, and arbitrary custom proxy-use values retain the existing signed HTTP transport.
+								$use_internal_notify = ($in_process && in_array($proxy_use, array('paypal_checkout', 'paypal_checkout_webhook'), TRUE));
 								$notify_url = home_url('/?s2member_paypal_notify=1');
 								$notify_post = array_merge($paypal, $extra, array(
 									's2member_paypal_proxy'              => 'paypal',
 									's2member_paypal_proxy_use'          => $proxy_use,
-									's2member_paypal_proxy_verification' => self::paypal_proxy_key_gen(),
+									's2member_paypal_proxy_verification' => $use_internal_notify ? '' : self::paypal_proxy_key_gen(),
 								));
-								$notify_r = c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
+								//261115.0113 The local transport signs under its isolated canonical Host, while legacy HTTP keeps the original request signing behavior.
+								$notify_r = $use_internal_notify ? self::paypal_checkout_notify_inprocess($notify_post) : c_ws_plugin__s2member_utils_urls::remote($notify_url, $notify_post, array('timeout' => 20), true);
 
 								if(!is_array($notify_r))
 									$notify_r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
@@ -2331,7 +3329,94 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 							}
 						finally
 							{
-								self::dedupe_lock_release($lock_option);
+								//261111.0618 Only this Notify worker can release its lease; retry paths retain the existing done-marker semantics.
+								self::dedupe_lock_release_owned($lock_option, $lock_token);
+							}
+					}
+
+				/**
+				 * Process a trusted, server-created Checkout notification with isolated HTTP-style request variables.
+				 * This is not an HTTP authentication endpoint; callers must verify provider data first.
+				 *
+				 * @since 261115.0113
+				 * @param array $post Server-created Notify payload, never raw browser or unverified webhook input.
+				 * @param bool $include_handler_outcome Return internal handler details for trusted recovery callers only.
+				 * @return array Normalized response code, message, and body.
+				 */
+				public static function paypal_checkout_notify_inprocess($post, $include_handler_outcome = FALSE)
+					{
+						$home = home_url('/');
+						$host = is_string($home) ? parse_url($home, PHP_URL_HOST) : FALSE;
+						if(!is_array($post) || !$post || !is_string($host) || $host === '' || !function_exists('wp_slash'))
+							return array('code' => 0, 'message' => 'invalid_internal_notify_context', 'body' => '');
+
+						//261115.0113 Never inherit browser GET/POST fields, proxy credentials, or an untrusted Host header into a payment notification.
+						// Restore the complete caller context even when a filter or Notify handler throws.
+						$prior_get = $_GET;
+						$prior_post = $_POST;
+						$prior_request = $_REQUEST;
+						$prior_cookie = $_COOKIE;
+						$prior_files = $_FILES;
+						$prior_server = $_SERVER;
+						$prior_ignore_user_abort = ignore_user_abort();
+						$prior_email_config = c_ws_plugin__s2member_email_configs::email_config_status();
+						$prior_user_id = get_current_user_id();
+						$prior_internal_dispatch = self::$paypal_proxy_internal_dispatch; //261117.0357 Nested calls must restore the outer trusted context.
+
+						try
+							{
+								$path = parse_url($home, PHP_URL_PATH);
+								//261115.0223 A server-generated Notify must not inherit the browser's headers, credentials, cookies or uploads.
+								// Preserve the whole $_SERVER array so even header order and unexpected hook mutations are restored.
+								$_GET = array('s2member_paypal_notify' => '1');
+								$_POST = wp_slash($post); // Match WordPress's slashed incoming POST contract before paypal_postvars() removes slashes.
+								$_REQUEST = array_merge($_GET, $_POST);
+								$_COOKIE = array();
+								$_FILES = array();
+								//261115.2110 Internal Notify runs anonymously, matching a separate HTTP request, then restores the checkout user.
+								wp_set_current_user(0);
+								foreach(array_keys($_SERVER) as $server_key)
+									if(strpos($server_key, 'HTTP_') === 0)
+										unset($_SERVER[$server_key]);
+								unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['AUTH_TYPE'], $_SERVER['REDIRECT_HTTP_AUTHORIZATION']);
+								$_SERVER['REQUEST_METHOD'] = 'POST';
+								$_SERVER['REQUEST_URI'] = (is_string($path) && $path !== '' ? $path : '/').'?s2member_paypal_notify=1';
+								$_SERVER['QUERY_STRING'] = 's2member_paypal_notify=1';
+								$_SERVER['HTTP_HOST'] = $host;
+								$_SERVER['CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
+								$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+								$_SERVER['HTTP_USER_AGENT'] = 's2Member internal Notify';
+
+								//261117.0357 Local PHP dispatch authenticates by its isolated call stack, not by a reusable key placed in request globals.
+								$_POST['s2member_paypal_proxy_verification'] = '';
+								$_REQUEST['s2member_paypal_proxy_verification'] = '';
+								self::$paypal_proxy_internal_dispatch = true;
+								$outcome = c_ws_plugin__s2member_paypal_notify_in::paypal_notify_process();
+								if(!is_array($outcome) || !isset($outcome['code']) || !is_int($outcome['code']))
+									return array('code' => 0, 'message' => 'invalid_internal_notify_outcome', 'body' => '');
+
+								//261116.0147 Ordinary Checkout replies stay unchanged; only trusted recovery callers receive handler details.
+								$response = array('code' => $outcome['code'], 'message' => $outcome['code'] === 200 ? 'OK' : 'rejected',
+								                  'body' => isset($outcome['body']) ? (string)$outcome['body'] : '');
+								if($include_handler_outcome)
+									$response['paypal'] = isset($outcome['paypal']) && is_array($outcome['paypal']) ? $outcome['paypal'] : array();
+								return $response;
+							}
+						finally
+							{
+								self::$paypal_proxy_internal_dispatch = $prior_internal_dispatch; //261117.0357 Never leave a trusted bypass active after an exception.
+								$_GET = $prior_get;
+								$_POST = $prior_post;
+								$_REQUEST = $prior_request;
+								$_COOKIE = $prior_cookie;
+								$_FILES = $prior_files;
+								$_SERVER = $prior_server;
+								wp_set_current_user($prior_user_id);
+								ignore_user_abort($prior_ignore_user_abort);
+								//261115.0223 A throwing Notify hook may skip its normal email-filter restoration; preserve the caller's setting.
+								if(c_ws_plugin__s2member_email_configs::email_config_status() !== $prior_email_config)
+									if($prior_email_config) c_ws_plugin__s2member_email_configs::email_config();
+									else c_ws_plugin__s2member_email_configs::email_config_release();
 							}
 					}
 
@@ -2480,7 +3565,10 @@ if(!class_exists("c_ws_plugin__s2member_paypal_utilities"))
 						'option_name2' => (string)$stored_token['on1'], 'option_selection2' => (string)$stored_token['os1'],
 					);
 
-					$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_subscr_done_'.md5($subscription_id));
+					//261115.0413 Browser confirmation and verified webhook activation share this checked Framework button subscription.
+					// Keep the existing subscription completion marker, but avoid a second HTTP request to this same WordPress site.
+					$in_process = apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, $invoice, $subscription_id);
+					$notify_result = self::paypal_checkout_notify_once($paypal, 's2m_ppco_subscr_done_'.md5($subscription_id), 'paypal_checkout', array(), $in_process);
 					if(empty($notify_result['ok']))
 						return array('ok' => FALSE, 'error' => !empty($notify_result['error']) ? (string)$notify_result['error'] : 'notify_proxy_failed');
 

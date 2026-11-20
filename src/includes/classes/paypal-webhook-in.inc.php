@@ -24,6 +24,51 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 {
 	class c_ws_plugin__s2member_paypal_webhook_in
 	{
+		/**
+		 * Decide how to acknowledge a duplicate webhook while its event lease is occupied.
+		 *
+		 * An in-flight lease does not prove successful processing. If the first worker
+		 * fails, a 200 for the competing delivery can prevent provider redelivery.
+		 * Only a recorded, unexpired completion marker permits an acknowledgment.
+		 *
+		 * @since 261113.0905
+		 *
+		 * @param string $done_option Webhook event completion option.
+		 * @param int $done_ttl Completion marker lifetime in seconds.
+		 *
+		 * @return int 200 for proven completion, otherwise 503 for retry.
+		 */
+		public static function in_flight_webhook_status($done_option, $done_ttl)
+		{
+			//261113.0905 Recheck after losing the lease: the holder could have completed between the first check and the failed acquisition.
+			return c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done_option, $done_ttl) > 0 ? 200 : 503;
+		}
+
+		/**
+		 * Decide whether a failed internal Notify bridge must ask PayPal to redeliver.
+		 *
+		 * A completed subscription payment can still lack a durable receipt when
+		 * its forwarding request fails. A 200 response from this outer webhook
+		 * would permanently consume that delivery without proving enrollment.
+		 * Preserve the older retry rule for subscription-activation callbacks.
+		 *
+		 * @since 261113.0721
+		 *
+		 * @param array $paypal Normalized webhook payment payload.
+		 * @param bool $subscr_handled_by_webhook Existing subscription-activation owner.
+		 *
+		 * @return bool Whether the failed delivery needs a non-2xx acknowledgment.
+		 */
+		public static function failed_notify_requires_retry($paypal, $subscr_handled_by_webhook)
+		{
+			if($subscr_handled_by_webhook)
+				return TRUE;
+			//261113.0721 Only completed recurring payments change behavior; refunds, disputes, and other legacy webhook outcomes retain their existing response policy.
+			return is_array($paypal) && isset($paypal['txn_type'], $paypal['payment_status'])
+			       && $paypal['txn_type'] === 'subscr_payment'
+			       && is_string($paypal['payment_status']) && strcasecmp($paypal['payment_status'], 'Completed') === 0;
+		}
+
 		//260824.1833 Keep dispute transaction extraction directly testable while accepting PayPal's documented nested payload and a tolerated direct fallback.
 		public static function paypal_checkout_dispute_seller_transaction_id($resource = array())
 		{
@@ -189,19 +234,23 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 				exit();
 			}
 
-			if(!c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire($event_lock_option, $event_lock_ttl))
+			//261111.1723 Webhook retries keep their existing HTTP/done-marker behavior, but only the claiming worker may release this event lease.
+			$event_lock_token = c_ws_plugin__s2member_paypal_utilities::dedupe_lock_acquire_owned($event_lock_option, $event_lock_ttl);
+			if(!is_string($event_lock_token))
 			{
+				//261113.0905 A competing request must not acknowledge an event until the first worker has persisted its completion marker.
+				$inflight_status = self::in_flight_webhook_status($event_done_option, $event_done_ttl);
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
 					'env_setting'=> $env_site,
 					'env_webhook'=> $env_webhook,
 					'event'      => 'duplicate_event',
-					'action'     => 'ignored',
-					'note'       => 'Duplicate webhook delivery (event_id already processing).',
+					'action'     => $inflight_status === 200 ? 'ignored' : 'retry_requested',
+					'note'       => $inflight_status === 200 ? 'Duplicate webhook completed during contention.' : 'Duplicate webhook still processing; retry required.',
 					'event_id'   => $event_id,
 					'event_type' => $event_type,
 				));
-				status_header(200);
+				status_header($inflight_status);
 				exit();
 			}
 
@@ -245,7 +294,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								'subscr_id'  => $subscr_id,
 								'details'    => $subscription_details,
 							));
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500);
 							exit();
 						}
@@ -283,7 +332,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								'invoice'    => $invoice,
 								'recovery'   => $recovery,
 							));
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500);
 							exit();
 						}
@@ -303,7 +352,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 					//260902.0200 CREATED repairs coordinator identity only; it remains unpaid/unfulfilled until PayPal activates the subscription.
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 					status_header(200);
 					exit();
@@ -328,7 +377,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						));
 
 						c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 						status_header(200);
 						exit();
@@ -357,7 +406,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								'subscr_id'  => $subscr_id,
 							));
 
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500);
 							exit();
 						}
@@ -379,12 +428,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								'recovery'   => $activation_recovery,
 							));
 							c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(200);
 							exit();
 						}
 
-						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 						status_header(500);
 						exit();
 					}
@@ -403,12 +452,12 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						if(empty($button_fulfillment['ok']))
 						{
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'button_subscription_fulfillment_retry', 'subscription_id' => $subscr_id, 'invoice' => (string)$paypal['invoice'], 'error' => !empty($button_fulfillment['error']) ? (string)$button_fulfillment['error'] : 'unknown'));
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500); //260928.1538 Leave the activation event unconsumed so PayPal retries on temporary recovery/Notify failure.
 							exit();
 						}
 						c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 						status_header(200);
 						exit();
 					}
@@ -441,7 +490,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 					//260406 Mark the webhook event done and release its lock for valid terminal events.
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 					status_header(200);
 					exit();
@@ -500,7 +549,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					));
 
 					// A verified but incomplete dispute should be retried; do not mark it complete.
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 					status_header(500);
 					exit();
 				}
@@ -605,7 +654,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						if(!empty($order['__error']))
 						{
 							//260902.0635 Do not consume a coordinator capture webhook when its authoritative order lookup temporarily fails; PayPal can redeliver it.
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(500);
 							exit();
 						}
@@ -624,13 +673,13 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 									//260902.0646 A conflicting late webhook is diagnostic only; never let it replace or fulfill against the checkout's authoritative provider identity.
 									c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'capture_recovery_conflict_ignored', 'event_id' => $event_id, 'event_type' => $event_type, 'recovery' => $recovery));
 									c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 									status_header(200);
 									exit();
 								}
 								else
 								{
-									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 									status_header(500);
 									exit();
 								}
@@ -644,7 +693,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								$token = is_array($private_context) && !empty($private_context['paypal_checkout']['token']) && is_array($private_context['paypal_checkout']['token']) ? $private_context['paypal_checkout']['token'] : array();
 								if(!$token || ($validation_error = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_completion_error($order, $order_id, $token)))
 								{
-									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 									status_header(500);
 									exit();
 								}
@@ -652,7 +701,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 								$fulfillment = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_order_fulfill($order, $token);
 								if(empty($fulfillment['ok']))
 								{
-									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+									c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 									status_header(500);
 									exit();
 								}
@@ -660,21 +709,21 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 							c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'one_time_capture_recovered', 'event_id' => $event_id, 'event_type' => $event_type, 'order_id' => $order_id, 'capture_id' => $capture_id, 'invoice' => $invoice));
 							c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+							c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 							status_header(200);
 							exit();
 						}
 					}
 				}
 
-				//260228 Ignore legacy/non-coordinator one-time sale/capture webhooks that have no subscription reference.
-				if(!$subscr_id)
+				//261113.1500 Pending/denied captures cannot grant access, even when PayPal includes a subscription ID. A subsequent COMPLETED webhook is processed independently.
+				if(!$subscr_id || in_array($event_type, array('PAYMENT.CAPTURE.PENDING', 'PAYMENT.CAPTURE.DENIED'), TRUE))
 				{
 					c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 						'ppco'       => 'webhook',
 						'env_setting'=> $env_site,
 						'env_webhook'=> $env_webhook,
-						'event'      => 'ignored_non_subscription_payment',
+						'event'      => $subscr_id ? 'ignored_incomplete_subscription_capture' : 'ignored_non_subscription_payment',
 						'event_id'   => $event_id,
 						'event_type' => $event_type,
 						'resource'   => $resource,
@@ -682,7 +731,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 					//260406 Mark the webhook event done and release its lock for valid terminal events.
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+					c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 					status_header(200);
 					exit();
@@ -767,7 +816,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 
 				//260406 Mark the webhook event done and release its lock for valid terminal events.
 				c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 				status_header(200);
 				exit();
@@ -814,7 +863,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 						));
 
 						c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+						c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 						status_header(200);
 						exit();
@@ -826,39 +875,65 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			$url = add_query_arg('s2member_paypal_notify', '1', home_url('/'));
 			$notify_duplicate = false;
 
-			if($subscr_handled_by_webhook && !empty($subscr_done_option))
+			//261115.0452 A local Notify hook can now throw into this webhook request; release the event lease and ask PayPal to retry.
+			// The old HTTP hop isolated exceptions in a separate request, so that failure handling is newly required here.
+			try
 			{
-				//260818.0603 Share the subscription Notify lock/done marker with browser confirmation so activation fallback cannot race it.
-				$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $subscr_done_option, 'paypal_checkout_webhook');
-				$notify_ok = !empty($notify_result['ok']);
-				$notify_duplicate = !empty($notify_result['duplicate']);
-				$code = !empty($notify_result['code']) ? (int)$notify_result['code'] : 0;
-				$message = !empty($notify_result['message']) ? (string)$notify_result['message'] : (!empty($notify_result['error']) ? (string)$notify_result['error'] : '');
+				if($subscr_handled_by_webhook && !empty($subscr_done_option))
+				{
+					//260818.0603 Share the subscription Notify lock/done marker with browser confirmation so activation fallback cannot race it.
+					//261115.0450 This path follows verified PayPal webhook signatures; use the same local Notify core without another HTTP request.
+					$in_process = apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, !empty($paypal['invoice']) ? (string)$paypal['invoice'] : '', $subscr_id);
+					$notify_result = c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_once($paypal, $subscr_done_option, 'paypal_checkout_webhook', array(), $in_process);
+					$notify_ok = !empty($notify_result['ok']);
+					$notify_duplicate = !empty($notify_result['duplicate']);
+					$code = !empty($notify_result['code']) ? (int)$notify_result['code'] : 0;
+					$message = !empty($notify_result['message']) ? (string)$notify_result['message'] : (!empty($notify_result['error']) ? (string)$notify_result['error'] : '');
+				}
+				else
+				{
+					$post = array_merge($paypal, array(
+						's2member_paypal_proxy'              => 'paypal',
+						's2member_paypal_proxy_use'          => 'paypal_checkout_webhook',
+						's2member_paypal_proxy_verification' => '',
+					));
+
+					//261115.0452 The provider webhook was signature-verified above; pass only its server-built PayPal payload to Notify.
+					// Keep the established HTTP bridge available through the same opt-out filter used by Framework Checkout.
+					$in_process = apply_filters('ws_plugin__s2member_paypal_checkout_internal_notify', TRUE, !empty($paypal['invoice']) ? (string)$paypal['invoice'] : '', $txn_key);
+					//261117.0534 Only an explicitly selected HTTP loopback needs the reusable legacy credential; trusted PHP forwarding never does.
+					$r = $in_process ? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_inprocess($post) : c_ws_plugin__s2member_utils_urls::remote($url, array_merge($post, array(
+						's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
+					)), array('timeout' => 20), true);
+
+					if(!is_array($r))
+						$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
+
+					$code = !empty($r['code']) ? (int)$r['code'] : 0;
+					$message = !empty($r['message']) ? (string)$r['message'] : '';
+					$notify_ok = ($code >= 200 && $code <= 299);
+				}
 			}
-			else
+			catch(\Exception $notify_exception)
 			{
-				$post = array_merge($paypal, array(
-					's2member_paypal_proxy'              => 'paypal',
-					's2member_paypal_proxy_use'          => 'paypal_checkout_webhook',
-					's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen(),
-				));
-
-				$r = c_ws_plugin__s2member_utils_urls::remote($url, $post, array(
-					'timeout' => 20,
-				), true);
-
-				if(!is_array($r))
-					$r = array('code' => 0, 'message' => 'request_failed', 'body' => '');
-
-				$code = !empty($r['code']) ? (int)$r['code'] : 0;
-				$message = !empty($r['message']) ? (string)$r['message'] : '';
-				$notify_ok = ($code >= 200 && $code <= 299);
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
+				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'notify_processing_exception', 'event_id' => $event_id));
+				status_header(503);
+				exit();
+			}
+			catch(\Error $notify_exception)
+			{
+				//261115.0452 A failed local processor must never leave a 15-minute event lease or false webhook acknowledgment.
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
+				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array('ppco' => 'webhook', 'event' => 'notify_processing_exception', 'event_id' => $event_id));
+				status_header(503);
+				exit();
 			}
 
 			if($notify_ok)
 			{
 				c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($event_done_option);
-				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 				if(!empty($txn_done_option))
 					c_ws_plugin__s2member_paypal_utilities::dedupe_done_mark($txn_done_option);
@@ -881,7 +956,7 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 			else
 			{
 				//260406 Release the in-flight webhook lock on failure so PayPal retries can proceed.
-				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release($event_lock_option);
+				c_ws_plugin__s2member_paypal_utilities::dedupe_lock_release_owned($event_lock_option, $event_lock_token);
 
 				c_ws_plugin__s2member_utils_logs::log_entry('paypal-checkout', array(
 					'ppco'       => 'webhook',
@@ -897,10 +972,11 @@ if(!class_exists('c_ws_plugin__s2member_paypal_webhook_in'))
 					'message'    => $message,
 				));
 
-				//260818.0603 Activation fallback must remain retryable when shared fulfillment fails or is still in progress.
-				if($subscr_handled_by_webhook)
+				//261113.0721 A failed subscription-payment proxy is not safely delivered: require redelivery even when this is not the activation webhook.
+				if(self::failed_notify_requires_retry($paypal, $subscr_handled_by_webhook))
 				{
-					status_header(500);
+					//261113.0721 Preserve 500 for activation; 503 identifies the newly retryable recurring payment path.
+					status_header($subscr_handled_by_webhook ? 500 : 503);
 					exit();
 				}
 			}

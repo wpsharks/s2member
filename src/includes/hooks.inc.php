@@ -133,6 +133,8 @@ add_filter('bp_core_get_site_options', 'c_ws_plugin__s2member_option_forces::che
 
 add_filter('random_password', 'c_ws_plugin__s2member_registrations::generate_password');
 add_action('user_register', 'c_ws_plugin__s2member_registrations::configure_user_registration');
+//261112.2203 Continue bounded PayPal registration queue pages in separate WP-Cron requests; each pass revalidates the member binding.
+add_action('ws_plugin__s2member_pending_registration_payment_batch', 'c_ws_plugin__s2member_registrations::consume_pending_registration_payments', 10, 4);
 add_action('register_form', 'c_ws_plugin__s2member_custom_reg_fields::custom_registration_fields');
 add_filter('registration_errors', 'c_ws_plugin__s2member_registrations::custom_registration_field_errors', 10, 3);
 add_filter('send_password_change_email', '__return_false'); // Turn this off in favor of s2Member.
@@ -194,6 +196,15 @@ add_action('admin_bar_menu', 'c_ws_plugin__s2member_admin_lockouts::filter_admin
 add_action('admin_print_scripts', 'c_ws_plugin__s2member_menu_pages::add_admin_scripts');
 add_action('admin_print_styles', 'c_ws_plugin__s2member_menu_pages::add_admin_styles');
 add_action('admin_menu', 'c_ws_plugin__s2member_menu_pages::get_help_panel', 12); //250824
+
+//261117.2250 Soft migration: warn only on proven legacy proxy use, or an attempted unapproved PayPal cutover; preserve old processing.
+add_action('admin_init', 'c_ws_plugin__s2member_admin_notices::dismiss_legacy_proxy_migration_notice');
+add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::legacy_proxy_migration_notice', 11);
+add_action('user_admin_notices', 'c_ws_plugin__s2member_admin_notices::legacy_proxy_migration_notice', 11);
+add_action('network_admin_notices', 'c_ws_plugin__s2member_admin_notices::legacy_proxy_migration_notice', 11);
+add_action('admin_notices', 'c_ws_plugin__s2member_admin_notices::paypal_cutover_transition_notice', 12);
+add_action('user_admin_notices', 'c_ws_plugin__s2member_admin_notices::paypal_cutover_transition_notice', 12);
+add_action('network_admin_notices', 'c_ws_plugin__s2member_admin_notices::paypal_cutover_transition_notice', 12);
 
 //260813 Warn administrators when shortcodes request user fields that have not been explicitly approved.
 add_action('admin_init', 'c_ws_plugin__s2member_admin_notices::dismiss_shortcode_user_fields_notice');

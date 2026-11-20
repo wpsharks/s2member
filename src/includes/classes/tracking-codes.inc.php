@@ -65,7 +65,8 @@ if(!class_exists("c_ws_plugin__s2member_tracking_codes"))
 					unset($__refs, $__v);
 
 					$code = (string)apply_filters("ws_plugin__s2member_signup_tracking_codes", $code, get_defined_vars());
-					echo $code."\n";
+					//261117.2305 Restore supported WordPress shortcode expansion; PHP-looking tracking text remains inert.
+					echo do_shortcode($code)."\n";
 				}
 			}
 			do_action("ws_plugin__s2member_after_display_signup_tracking_codes", get_defined_vars());
@@ -107,7 +108,8 @@ if(!class_exists("c_ws_plugin__s2member_tracking_codes"))
 					unset($__refs, $__v);
 
 					$code = (string)apply_filters("ws_plugin__s2member_modification_tracking_codes", $code, get_defined_vars());
-					echo $code."\n";
+					//261117.2305 Restore supported WordPress shortcode expansion; PHP-looking tracking text remains inert.
+					echo do_shortcode($code)."\n";
 				}
 			}
 			do_action("ws_plugin__s2member_after_display_modification_tracking_codes", get_defined_vars());
@@ -149,7 +151,8 @@ if(!class_exists("c_ws_plugin__s2member_tracking_codes"))
 					unset($__refs, $__v);
 
 					$code = (string)apply_filters("ws_plugin__s2member_ccap_tracking_codes", $code, get_defined_vars());
-					echo $code."\n";
+					//261117.2305 Restore supported WordPress shortcode expansion; PHP-looking tracking text remains inert.
+					echo do_shortcode($code)."\n";
 				}
 			}
 			do_action("ws_plugin__s2member_after_display_ccap_tracking_codes", get_defined_vars());

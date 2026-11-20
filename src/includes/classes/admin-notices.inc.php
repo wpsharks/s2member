@@ -196,6 +196,75 @@ if(!class_exists('c_ws_plugin__s2member_admin_notices'))
 			echo '<div class="'.esc_attr($_notice_class).'" style="position:relative; margin:0 0 15px 2px !important; padding:8px 60px 8px 8px !important;">'.$_dismiss.'<table cellspacing="0" cellpadding="0"><tr><td style="vertical-align:top; padding:0 10px 0 0;"><img src="'.esc_url($_logo_url).'" alt="" width="40" height="40" style="border:0;" /></td><td style="vertical-align:top;">'.$_title.wp_kses_post($message).(($review !== '') ? '<br />'.wp_kses_post($review) : '').(($_items) ? '<br />'.implode('<br />', $_items) : '').'</td></tr></table></div>';
 		}
 
+
+		/**
+		 * Warn only after a real authenticated legacy HTTP proxy credential was accepted.
+		 * This is the soft migration stage: delivery still succeeds until explicitly retired.
+		 *
+		 * @since 261117.2250
+		 */
+		public static function legacy_proxy_migration_notice()
+		{
+			if(!current_user_can('manage_options') || (is_multisite() && !is_super_admin()))
+				return;
+			//261117.2250 Only a previously authenticated legacy request records this value; do not alarm every site on activation.
+			$last = get_option('ws_plugin__s2member_paypal_proxy_legacy_last_used', FALSE);
+			if(!is_numeric($last) || (int)$last < 1)
+				return;
+			$ack = get_option('ws_plugin__s2member_paypal_proxy_legacy_notice_ack', 0);
+			if(is_numeric($ack) && (int)$ack >= (int)$last)
+				return;
+			//261117.2250 A retired credential can no longer produce new accepted requests. Historical observations remain preserved.
+			if(!c_ws_plugin__s2member_paypal_utilities::paypal_proxy_legacy_key_not_retired())
+				return;
+			$dismiss = wp_nonce_url(add_query_arg('s2member-dismiss-legacy-proxy-notice', '1', admin_url()), 's2member-dismiss-legacy-proxy-notice');
+			$message = 's2Member received a notification using the deprecated <strong>IPN proxy key</strong>.';
+			//261120.1425 Link straight to the relevant setting; the detailed request history and developer guidance belong on that screen, not in the notice.
+			$details = '<em>Please see: <a href="'.esc_url(admin_url('admin.php?page=ws-plugin--s2member-paypal-ops&s2member-legacy-proxy-review=1#s2member-legacy-proxy-section')).'">s2Member &gt; PayPal Options &gt; PayPal IPN Integration &gt; IPN w/ Proxy Key</a></em>';
+			self::display_security_notice($message, $details, array(), $dismiss);
+		}
+
+		/**
+		 * Dismiss a legacy-key incident, retaining the observation and future warning signal.
+		 *
+		 * @since 261117.2250
+		 */
+		public static function dismiss_legacy_proxy_migration_notice()
+		{
+			if(!is_admin() || !current_user_can('manage_options') || (is_multisite() && !is_super_admin())
+			   || !isset($_GET['s2member-dismiss-legacy-proxy-notice']) || $_GET['s2member-dismiss-legacy-proxy-notice'] !== '1')
+				return;
+			check_admin_referer('s2member-dismiss-legacy-proxy-notice');
+			$last = get_option('ws_plugin__s2member_paypal_proxy_legacy_last_used', FALSE);
+			if(is_numeric($last) && (int)$last > 0)
+				update_option('ws_plugin__s2member_paypal_proxy_legacy_notice_ack', (int)$last, FALSE);
+			wp_safe_redirect(wp_get_referer() ? wp_get_referer() : admin_url());
+			exit;
+		}
+
+		/**
+		 * Warn when PayPal authoritative cutover setup has begun but its mandatory
+		 * provider-reconciliation preflight is not yet valid. No authority is enabled here.
+		 *
+		 * @since 261117.2250
+		 */
+		public static function paypal_cutover_transition_notice()
+		{
+			if(!current_user_can('manage_options') || (is_multisite() && !is_super_admin()))
+				return;
+			$raw = get_option('s2m_paypal_authoritative_cutover_epoch', NULL);
+			//261117.2250 Avoid generic notices for sites that have not started the separate PayPal cutover.
+			if(in_array($raw, array(NULL, FALSE, 0, '0'), TRUE))
+				return;
+			$readiness = c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level::cutover_readiness();
+			if(is_array($readiness) && !empty($readiness['preflight_recorded']))
+				return;
+			$link = admin_url('admin.php?page=ws-plugin--s2member-paypal-audit');
+			$message = 'PayPal recurring authoritative cutover configuration was detected, but the required reconciliation preflight is not verified. Do not enable authoritative first-payment processing until the historical transactions are reconciled and the recorded epoch, merchant and provider evidence have been reviewed.';
+			$details = 'Review the existing <a href="'.esc_url($link).'">PayPal Payment Audit</a> (direct authorized URL; no new menu item). Existing legacy payment processing is not disabled by this notice.';
+			self::display_security_notice($message, $details);
+		}
+
 		/**
 		 * Records a shortcode user field that is not approved for cross-user display.
 		 *

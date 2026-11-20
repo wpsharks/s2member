@@ -747,27 +747,25 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 			$subscr_cid  = get_user_option('s2member_subscr_cid', $user_id);
 			$fields      = get_user_option('s2member_custom_fields', $user_id);
 			$user_reg_ip = get_user_option('s2member_registration_ip', $user_id);
+			//261117.1410 Use a single set of trusted EOT tokens for outbound URL and email rendering.
+			$eot_notification_values = c_ws_plugin__s2member_utils_strings::member_notification_values(array(
+				'eot_del_type' => $eot_del_type,
+				'subscr_id' => $subscr_id, 'subscr_baid' => $subscr_baid, 'subscr_cid' => $subscr_cid,
+				'user_first_name' => $user->first_name, 'user_last_name' => $user->last_name,
+				'user_full_name' => trim($user->first_name.' '.$user->last_name),
+				'user_email' => $user->user_email, 'user_login' => $user->user_login,
+				'user_ip' => $user_reg_ip, 'user_id' => $user_id,
+			), $custom, $fields, $eot_notification_context);
 
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'])
 			{
 				foreach(preg_split("/[\r\n\t]+/", $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url)
-					if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(self::notification_fill($url, $eot_notification_context, TRUE), $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($eot_del_type)), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
-						if(($url = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_baid)), $url)) && ($url = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_cid)), $url)))
-							if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
-								if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
-									if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_email)), $url)))
-										if(($url = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_login)), $url)))
-											if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_reg_ip)), $url)))
-												if(($url = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
-												{
-													if(is_array($fields) && !empty($fields))
-														foreach($fields as $var => $val)
-															if(!($url = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
-																break;
-
-													if(($url = trim(preg_replace('/%%(.+?)%%/i', '', $url))))
-														c_ws_plugin__s2member_utils_urls::remote($url);
-												}
+				{
+					//261117.1410 Render access context, custom values, and user fields in the same pass.
+					$url = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, $eot_notification_values, 'url'));
+					if($url)
+						c_ws_plugin__s2member_utils_urls::remote($url);
+				}
 			}
 			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients'])
 			{
@@ -805,24 +803,11 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 				$msg .= 'cv8: %%cv8%%'."\n";
 				$msg .= 'cv9: %%cv9%%';
 
-				if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)) && ($msg = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($eot_del_type), $msg)) && ($msg = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_id), $msg)))
-					if(($msg = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_baid), $msg)) && ($msg = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_cid), $msg)))
-						if(($msg = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->first_name), $msg)) && ($msg = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->last_name), $msg)))
-							if(($msg = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($user->first_name.' '.$user->last_name)), $msg)))
-								if(($msg = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_email), $msg)))
-									if(($msg = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_login), $msg)))
-										if(($msg = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $msg)))
-											if(($msg = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $msg)))
-											{
-												if(is_array($fields) && !empty($fields))
-													foreach($fields as $var => $val)
-														if(!($msg = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $msg)))
-															break;
-
-												if($sbj && ($msg = trim(preg_replace('/%%(.+?)%%/i', '', $msg))))
-													foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
-														wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-											}
+				//261117.1410 Never expand a placeholder introduced by profile or signed custom data.
+				$msg = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, $eot_notification_values, 'text'));
+				if($sbj && $msg)
+					foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
+						wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
 				if($email_configs_were_on)
 					c_ws_plugin__s2member_email_configs::email_config();
 			}
@@ -989,6 +974,67 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 
 
 		/**
+		 * Conditionally delete one legacy Auto-EOT heartbeat without erasing a replacement worker's evidence.
+		 *
+		 * The shared lease serializes newer workers; this exact-value check also protects against an
+		 * older deployed worker that does not know the shared lease exists.
+		 *
+		 * @since 261117.0145
+		 * @param string $option Existing Auto-EOT lock option name.
+		 * @param mixed  $expected Previously read legacy option value.
+		 * @return bool Whether exactly the expected record was deleted.
+		 */
+		private static function auto_eot_legacy_lock_compare_delete($option, $expected)
+		{
+			global $wpdb;
+
+			$removed = $wpdb->delete($wpdb->options, array('option_name' => $option, 'option_value' => maybe_serialize($expected)), array('%s', '%s'));
+			if($removed !== 1 || $wpdb->last_error !== '')
+				return FALSE;
+			wp_cache_delete($option, 'options');
+			wp_cache_delete('notoptions', 'options');
+			return TRUE;
+		}
+
+		/**
+		 * Advance a legacy heartbeat only while this exact worker still owns its stored record.
+		 *
+		 * @since 261117.0145
+		 * @param string $option Existing Auto-EOT lock option name.
+		 * @param array  $before Heartbeat previously held by this worker.
+		 * @param array  $after New heartbeat with the same run token.
+		 * @return bool Whether the owner-matched heartbeat was updated.
+		 */
+		private static function auto_eot_legacy_lock_compare_update($option, $before, $after)
+		{
+			global $wpdb;
+
+			if(!is_array($before) || !is_array($after) || empty($before['token']) || !isset($after['token']) || $before['token'] !== $after['token'])
+				return FALSE;
+			$changed = $wpdb->update($wpdb->options, array('option_value' => maybe_serialize($after)), array('option_name' => $option, 'option_value' => maybe_serialize($before)), array('%s'), array('%s', '%s'));
+			if($changed !== 1 || $wpdb->last_error !== '')
+				return FALSE;
+			wp_cache_delete($option, 'options');
+			return TRUE;
+		}
+
+		/**
+		 * Read the actual legacy heartbeat from SQL to detect takeover by an old worker.
+		 *
+		 * @since 261117.0145
+		 * @param string $option Existing Auto-EOT lock option name.
+		 * @param array  $expected Heartbeat currently held by this worker.
+		 * @return bool TRUE only while this precise record remains stored.
+		 */
+		private static function auto_eot_legacy_lock_is_owned($option, $expected)
+		{
+			global $wpdb;
+
+			$stored = $wpdb->get_var($wpdb->prepare("SELECT `option_value` FROM `{$wpdb->options}` WHERE `option_name` = %s LIMIT 1", $option));
+			return $wpdb->last_error === '' && $stored !== NULL && $stored === maybe_serialize($expected);
+		}
+
+		/**
 		 * Processed by WP_Cron; this handles Auto-EOTs *(EOT = End Of Term)*.
 		 *
 		 * Normal processing is runtime-adaptive. The historical `$per_process` argument/filter remains
@@ -1058,12 +1104,25 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 				$lock_option = 'ws_plugin__s2member_auto_eot_lock';
 				$state_option = 'ws_plugin__s2member_auto_eot_state';
 				$lock_stale_after = max(120, (int)ceil(($runtime_budget * 2) + 30));
+
+				//261117.0145 Acquire the shared lease first; retain the legacy heartbeat for upgrade overlap and crash diagnostics.
+				// The lease exceeds a normal run's budget; periodic renewals also detect lost ownership.
+				$shared_resource = 'auto-eot-system';
+				$shared_ttl = min(86400, $lock_stale_after);
+				$shared_owner = c_ws_plugin__s2member_database::lock_acquire($shared_resource, $shared_ttl);
+				if(!is_string($shared_owner) || preg_match('/^[a-f0-9]{64}$/D', $shared_owner) !== 1)
+					return; // Contention, invalid owner or database failure: never process EOTs without coordination.
 				$existing_lock = get_option($lock_option);
 
 				//260820.0149 Discard malformed leftover state before evaluating whether another worker is active.
 				if($existing_lock !== FALSE && (!is_array($existing_lock) || empty($existing_lock['heartbeat_at'])))
 				{
-					delete_option($lock_option);
+					//261117.0145 An old worker may rewrite this option while we inspect it; never remove its newer value.
+					if(!self::auto_eot_legacy_lock_compare_delete($lock_option, $existing_lock))
+					{
+						c_ws_plugin__s2member_database::lock_release($shared_resource, $shared_owner);
+						return;
+					}
 					delete_transient('ws_plugin__s2member_auto_eot_health');
 					$existing_lock = FALSE;
 				}
@@ -1079,20 +1138,37 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 					$state['last_abandoned_processed'] = !empty($existing_lock['processed']) ? (int)$existing_lock['processed'] : 0;
 					$state['last_abandoned_user_id'] = !empty($existing_lock['current_user_id']) ? (int)$existing_lock['current_user_id'] : 0;
 					$state['consecutive_abandoned_runs'] = !empty($state['consecutive_abandoned_runs']) ? (int)$state['consecutive_abandoned_runs'] + 1 : 1;
+					//261117.0145 Record abandonment only after the exact stale heartbeat was safely retired.
+					if(!self::auto_eot_legacy_lock_compare_delete($lock_option, $existing_lock))
+					{
+						c_ws_plugin__s2member_database::lock_release($shared_resource, $shared_owner);
+						return;
+					}
 					update_option($state_option, $state, FALSE);
-					delete_option($lock_option);
 					delete_transient('ws_plugin__s2member_auto_eot_health');
 					$existing_lock = FALSE;
 				}
 
 				//260820.0056 A fresh marker belongs to another worker that should still be alive; never process the same overdue population concurrently.
 				if(is_array($existing_lock) && !empty($existing_lock['heartbeat_at']))
+				{
+					c_ws_plugin__s2member_database::lock_release($shared_resource, $shared_owner);
 					return;
+				}
 
-				//260820.0056 Use add_option() for lock acquisition so two workers racing here cannot both believe they acquired it.
+				//260820.0056 Use add_option() for lock acquisition so older workers racing here cannot both believe they acquired it.
 				$lock = array('token' => $run_token, 'started_at' => time(), 'heartbeat_at' => time(), 'processed' => 0, 'current_user_id' => 0);
 				if(!add_option($lock_option, $lock, '', FALSE))
-					return; // Another worker acquired the lock between our read and add.
+				{
+					c_ws_plugin__s2member_database::lock_release($shared_resource, $shared_owner);
+					return; // Another worker acquired the legacy marker between our read and add.
+				}
+				if(c_ws_plugin__s2member_database::lock_is_owned($shared_resource, $shared_owner) !== TRUE)
+				{
+					self::auto_eot_legacy_lock_compare_delete($lock_option, $lock);
+					c_ws_plugin__s2member_database::lock_release($shared_resource, $shared_owner);
+					return;
+				}
 
 				//260820.0056 Persist only operational health between runs; performance timing remains local to each pass so it adapts organically to current conditions.
 				$state = get_option($state_option);
@@ -1118,6 +1194,7 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 				$cursor_time = 0;
 				$cursor_umeta_id = 0;
 				$stop_reason = 'queue_empty';
+				$lock_lost = FALSE;
 				$meta_key = $wpdb->prefix.'s2member_auto_eot_time';
 
 				while(TRUE)
@@ -1185,6 +1262,14 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 						if($remaining_runtime <= $safety_buffer + $estimated_next_duration)
 						{
 							$stop_reason = 'runtime_budget';
+							break 2;
+						}
+
+						//261117.0145 Check shared ownership before each user's destructive work, not merely at chunk boundaries.
+						if(c_ws_plugin__s2member_database::lock_is_owned($shared_resource, $shared_owner) !== TRUE
+						   || !self::auto_eot_legacy_lock_is_owned($lock_option, $lock))
+						{
+							$lock_lost = TRUE;
 							break 2;
 						}
 
@@ -1313,27 +1398,26 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 										'subscr_id'        => $subscr_id,
 									));
 
+									//261117.1410 Bind the post-demotion access context to a single rendering pass.
+									$eot_notification_values = c_ws_plugin__s2member_utils_strings::member_notification_values(array(
+										'eot_del_type' => $eot_del_type,
+										'subscr_id' => $subscr_id, 'subscr_baid' => $subscr_baid, 'subscr_cid' => $subscr_cid,
+										'user_first_name' => $user->first_name, 'user_last_name' => $user->last_name,
+										'user_full_name' => trim($user->first_name.' '.$user->last_name),
+										'user_email' => $user->user_email, 'user_login' => $user->user_login,
+										'user_ip' => $user_reg_ip, 'user_id' => $user_id,
+									), $custom, $fields, $eot_notification_context);
+
 									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls'])
 									{
 										foreach(preg_split('/['."\r\n\t".']+/', $GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_urls']) as $url) // Handle EOT Notifications.
-
-											if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs(self::notification_fill($url, $eot_notification_context, TRUE), $custom, true)) && ($url = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode('auto-eot-cancellation-expiration-demotion')), $url)) && ($url = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($subscr_id)), $url)))
-												if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->first_name)), $url)) && ($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->last_name)), $url)))
-													if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(trim($user->first_name.' '.$user->last_name))), $url)))
-														if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_email)), $url)))
-															if(($url = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user->user_login)), $url)))
-																if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_reg_ip)), $url)))
-																	if(($url = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
-																	{
-																		if(is_array($fields) && !empty($fields))
-																			foreach($fields as $var => $val /* Custom Registration/Profile Fields. */)
-																				if(!($url = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
-																					break;
-
-																		if(($url = trim(preg_replace('/%%(.+?)%%/i', '', $url))))
-																			c_ws_plugin__s2member_utils_urls::remote($url);
-																	}
+									{
+										//261117.1410 One-pass replacement also prevents context values from creating new CV tokens.
+										$url = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, $eot_notification_values, 'url'));
+										if($url)
+											c_ws_plugin__s2member_utils_urls::remote($url);
 									}
+								}
 									if($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients'])
 									{
 										$email_configs_were_on = c_ws_plugin__s2member_email_configs::email_config_status();
@@ -1370,25 +1454,11 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 										$msg .= 'cv8: %%cv8%%'."\n";
 										$msg .= 'cv9: %%cv9%%';
 
-										if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)) && ($msg = preg_replace('/%%eot_del_type%%/i', c_ws_plugin__s2member_utils_strings::esc_refs('auto-eot-cancellation-expiration-demotion'), $msg)) && ($msg = preg_replace('/%%subscr_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_id), $msg)))
-											if(($msg = preg_replace('/%%subscr_baid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_baid), $msg)) && ($msg = preg_replace('/%%subscr_cid%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($subscr_cid), $msg)))
-												if(($msg = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->first_name), $msg)) && ($msg = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->last_name), $msg)))
-													if(($msg = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(trim($user->first_name.' '.$user->last_name)), $msg)))
-														if(($msg = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_email), $msg)))
-															if(($msg = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user->user_login), $msg)))
-																if(($msg = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_reg_ip), $msg)))
-																	if(($msg = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $msg)))
-																	{
-																		if(is_array($fields) && !empty($fields))
-																			foreach($fields as $var => $val /* Custom Registration/Profile Fields. */)
-																				if(!($msg = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $msg)))
-																					break;
-
-																		if($sbj && ($msg = trim(preg_replace('/%%(.+?)%%/i', '', $msg))) /* Still have a ``$sbj`` and a ``$msg``? */)
-
-																			foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
-																				wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-																	}
+										//261117.1410 Preserve EOT mail hooks while blocking recursive custom-field substitution.
+										$msg = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, $eot_notification_values, 'text'));
+										if($sbj && $msg)
+											foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['eot_del_notification_recipients']) as $recipient)
+												wp_mail($recipient, apply_filters('ws_plugin__s2member_eot_del_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_eot_del_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
 										if($email_configs_were_on) c_ws_plugin__s2member_email_configs::email_config();
 									}
 									foreach(array_keys(get_defined_vars()) as $__v) $__refs[$__v] =& $$__v;
@@ -1430,10 +1500,18 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 						//260820.0056 Refresh the lock periodically rather than per user, preserving useful crash evidence without creating unnecessary option writes.
 						if($processed_count % 5 === 0 || microtime(TRUE) - $last_heartbeat >= 5)
 						{
-							$lock['heartbeat_at'] = time();
-							$lock['processed'] = $processed_count;
-							$lock['current_user_id'] = $user_id;
-							update_option($lock_option, $lock, FALSE);
+							$next_lock = $lock;
+							$next_lock['heartbeat_at'] = time();
+							$next_lock['processed'] = $processed_count;
+							$next_lock['current_user_id'] = $user_id;
+							//261117.0145 Renew ownership before advancing the legacy heartbeat. Losing either lock stops further EOT processing.
+							if(c_ws_plugin__s2member_database::lock_renew($shared_resource, $shared_owner, $shared_ttl) !== TRUE
+							   || !self::auto_eot_legacy_lock_compare_update($lock_option, $lock, $next_lock))
+							{
+								$lock_lost = TRUE;
+								break 2;
+							}
+							$lock = $next_lock;
 							$last_heartbeat = microtime(TRUE);
 						}
 					}
@@ -1441,6 +1519,15 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 					//260820.0056 A short chunk means the ordered query reached the end of the due rows visible during this pass; otherwise fetch the next cursor chunk.
 					if(count($eots) < $query_limit)
 						break;
+				}
+
+				//261117.0145 An uncertain or lost lock cannot be recorded as a successful Auto-EOT completion.
+				// Preserve the existing heartbeat for abandonment diagnostics; only the matching lease may be released.
+				if($lock_lost || c_ws_plugin__s2member_database::lock_is_owned($shared_resource, $shared_owner) !== TRUE)
+				{
+					c_ws_plugin__s2member_database::lock_release($shared_resource, $shared_owner);
+					delete_transient('ws_plugin__s2member_auto_eot_health');
+					return;
 				}
 
 				//260820.0149 One aggregate gives both catch-up state and the pending/oldest values needed by diagnostics.
@@ -1455,6 +1542,15 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 				$estimated_next_duration = max($last_item_duration, $average_item_duration);
 				$remaining_safe_runtime = max(0, ($deadline - microtime(TRUE)) - $safety_buffer);
 				$legacy_cap_estimated_additional = ($stop_reason === 'legacy_item_cap' && $more_due_work && $estimated_next_duration > 0) ? (int)floor($remaining_safe_runtime / $estimated_next_duration) : 0;
+
+				//261117.0145 Revalidate ownership after the pending-work query, before writing a successful completion.
+				if(c_ws_plugin__s2member_database::lock_renew($shared_resource, $shared_owner, $shared_ttl) !== TRUE
+				   || !self::auto_eot_legacy_lock_is_owned($lock_option, $lock))
+				{
+					c_ws_plugin__s2member_database::lock_release($shared_resource, $shared_owner);
+					delete_transient('ws_plugin__s2member_auto_eot_health');
+					return;
+				}
 
 				//260820.0056 Save compact operational health for diagnostics/UI; these are run results, not persistent performance-learning values.
 				$state = get_option($state_option);
@@ -1479,8 +1575,10 @@ if(!class_exists('c_ws_plugin__s2member_eot'))
 
 				update_option($state_option, $state, FALSE);
 
-				//260820.0056 Delete the lock only after state is safely recorded; if PHP dies earlier, the surviving lock is what lets a future pass detect the abandoned run.
-				delete_option($lock_option);
+				//261117.0145 After recording completion, retire only our own legacy heartbeat and lease.
+				// A later worker's marker must never be deleted by this worker's delayed cleanup.
+				self::auto_eot_legacy_lock_compare_delete($lock_option, $lock);
+				c_ws_plugin__s2member_database::lock_release($shared_resource, $shared_owner);
 
 				//260820.0056 In WP-Cron mode, continue soon while overdue EOTs remain; external-cron installations already control their own invocation cadence.
 				if((string)$GLOBALS['WS_PLUGIN__']['s2member']['o']['auto_eot_system_enabled'] === '1' && $more_due_work && ($hard_cap === NULL || $hard_cap > 0))

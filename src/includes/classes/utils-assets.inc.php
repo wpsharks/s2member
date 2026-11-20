@@ -357,26 +357,27 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		{
 			global $wpdb;
 
-			$option = 'ws_plugin__s2member_assets_health_logkeeper_lock';
-			$lock = time().':'.sha1(microtime(TRUE)."\0".wp_rand());
-			if(add_option($option, $lock, '', 'no'))
-				return $lock;
-
-			$current = (string)get_option($option, '');
-			$parts = explode(':', $current, 2);
-			$locked_at = (!empty($parts[0]) && is_numeric($parts[0])) ? (int)$parts[0] : 0;
-			//260913.0454 Delete only the stale lock version we inspected; another Logkeeper may replace it before this request reaches the delete.
-			if(!$locked_at || $locked_at < time() - 2 * MINUTE_IN_SECONDS)
+			//261117.0112 Respect an in-flight pre-migration Logkeeper: the old option and new shared lease occupy different namespaces.
+			$legacy_option = 'ws_plugin__s2member_assets_health_logkeeper_lock';
+			$legacy = get_option($legacy_option, FALSE);
+			if($legacy !== FALSE)
 			{
-				$deleted = $wpdb->delete($wpdb->options, array('option_name' => $option, 'option_value' => maybe_serialize($current)), array('%s', '%s'));
-				if($deleted)
-				{
-					wp_cache_delete($option, 'options');
-					if(add_option($option, $lock, '', 'no'))
-						return $lock;
-				}
+				if(!is_string($legacy))
+					return ''; //261117.0112 Unknown legacy lock state must not be treated as permission to start another worker.
+				$parts = explode(':', $legacy, 2);
+				$locked_at = (!empty($parts[0]) && is_numeric($parts[0])) ? (int)$parts[0] : 0;
+				if($locked_at && $locked_at >= time() - 2 * MINUTE_IN_SECONDS)
+					return '';
+				//261117.0112 Retire only the exact stale legacy value we observed; a replacement owner's lock must survive.
+				$deleted = $wpdb->delete($wpdb->options, array('option_name' => $legacy_option, 'option_value' => maybe_serialize($legacy)), array('%s', '%s'));
+				if($deleted !== 1)
+					return '';
+				wp_cache_delete($legacy_option, 'options');
 			}
-			return '';
+
+			//261117.0112 Use the shared owner-token lease instead of another independently managed add_option() lock.
+			$owner = c_ws_plugin__s2member_database::lock_acquire('assets-health-logkeeper', 2 * MINUTE_IN_SECONDS);
+			return is_string($owner) ? $owner : ''; //261117.0112 Contention or database errors must fail closed without blocking frontend requests.
 		}
 
 		/**
@@ -385,22 +386,14 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		 * @package s2Member\Utilities
 		 * @since 260912.0258
 		 *
-		 * @param string $lock Unique lock value returned by health_logkeeper_lock_acquire().
+		 * @param string $lock Unique owner token returned by health_logkeeper_lock_acquire().
 		 * @return null
 		 */
 		protected static function health_logkeeper_lock_release($lock = '')
 		{
-			global $wpdb;
-
-			$option = 'ws_plugin__s2member_assets_health_logkeeper_lock';
-			$current = (string)get_option($option, '');
-			if($lock !== '' && $current !== '' && hash_equals($current, (string)$lock))
-			{
-				//260913.0454 Release only the exact lock version owned by this request; an expired owner must never delete a newer Logkeeper's lock.
-				$deleted = $wpdb->delete($wpdb->options, array('option_name' => $option, 'option_value' => maybe_serialize($current)), array('%s', '%s'));
-				if($deleted)
-					wp_cache_delete($option, 'options');
-			}
+			//261117.0112 The shared utility conditionally releases only an unexpired matching owner; never remove a successor's lease.
+			if(is_string($lock) && preg_match('/^[a-f0-9]{64}$/D', $lock))
+				c_ws_plugin__s2member_database::lock_release('assets-health-logkeeper', $lock);
 			return;
 		}
 
@@ -2426,6 +2419,74 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 		}
 
 		/**
+		 * Acquire the shared asset-repair lease and an old-format marker for rolling-upgrade safety.
+		 *
+		 * 261117.0133 Old plugin workers recognize only the legacy marker, so both leases are
+		 * required during the compatibility transition. An error acquiring either means no build.
+		 *
+		 * @since 261117.0133
+		 * @param string $id Supported static asset ID.
+		 * @return array|bool Both owner identities, or FALSE on contention/error.
+		 */
+		protected static function static_asset_repair_lock_acquire($id = '')
+		{
+			$id = (string)$id;
+			if(!in_array($id, array('s2member.css', 's2member-pro.css', 's2member.js', 's2member-pro.js'), TRUE))
+				return FALSE;
+
+			$option = 'ws_plugin__s2member_static_asset_repair_lock_'.str_replace('.', '_', $id);
+			$previous = get_option($option, FALSE);
+			if($previous !== FALSE)
+			{
+				if(!is_string($previous) || $previous === '')
+					return FALSE; //261117.0133 Unknown marker formats fail closed rather than deleting a possibly live owner.
+				$parts = explode(':', $previous, 2);
+				$locked_at = (!empty($parts[0]) && preg_match('/^[0-9]+$/D', $parts[0]) === 1) ? (int)$parts[0] : 0;
+				if($locked_at && $locked_at >= time() - 30)
+					return FALSE;
+				//261117.0133 Delete only the observed stale marker; never remove a replacement worker's value.
+				if(!self::static_asset_repair_lock_delete($option, $previous))
+					return FALSE;
+			}
+
+			$legacy = time().':'.sha1(microtime(TRUE)."\0".wp_rand());
+			if(!add_option($option, $legacy, '', 'no'))
+				return FALSE;
+			$owner = c_ws_plugin__s2member_database::lock_acquire('static-asset-repair:'.$id, 30);
+			if(!is_string($owner) || !preg_match('/^[a-f0-9]{64}$/D', $owner))
+			{
+				//261117.0133 Roll back our legacy reservation if the shared database lease is busy or unavailable.
+				self::static_asset_repair_lock_delete($option, $legacy);
+				return FALSE;
+			}
+			return array('id' => $id, 'option' => $option, 'legacy' => $legacy, 'owner' => $owner);
+		}
+
+		/**
+		 * Release only this request's two asset-repair lock owners.
+		 *
+		 * 261117.0133 The legacy lock remains until old workers have been retired; release it
+		 * conditionally so a worker finishing late cannot delete a successor's marker.
+		 *
+		 * @since 261117.0133
+		 * @param array $lock Both identities returned by static_asset_repair_lock_acquire().
+		 * @return null
+		 */
+		protected static function static_asset_repair_lock_release($lock = array())
+		{
+			if(!is_array($lock) || !isset($lock['id'], $lock['option'], $lock['legacy'], $lock['owner']))
+				return;
+			$id = $lock['id'];
+			$option = 'ws_plugin__s2member_static_asset_repair_lock_'.str_replace('.', '_', (string)$id);
+			if($lock['option'] !== $option || !is_string($lock['owner']) || !preg_match('/^[a-f0-9]{64}$/D', $lock['owner']))
+				return;
+			//261117.0133 This request's build has ended; compare-and-delete the old marker, then release its shared lease.
+			self::static_asset_repair_lock_delete($option, $lock['legacy']);
+			c_ws_plugin__s2member_database::lock_release('static-asset-repair:'.$id, $lock['owner']);
+			return;
+		}
+
+		/**
 		 * Returns one current generated frontend asset URL, building it when stale/uninitialized.
 		 *
 		 * Active timestamped files are existence-checked before their URLs are emitted. A missing or
@@ -2461,8 +2522,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$active_build = abs($state);
 			$base = substr($id, 0, -strlen('.'.$type));
 			$failure_key = 'ws_plugin__s2member_static_asset_failure_'.str_replace('.', '_', $id);
-			$repair_lock_key = '';
-			$repair_lock_value = '';
+			$repair_lock = FALSE;
 			$data_map_signature = array('ok' => TRUE, 'signature' => '', 'error' => '');
 			$uses_data_map = $type === 'js' && self::static_js_text_delivery() === 'page';
 			if($uses_data_map)
@@ -2490,15 +2550,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 					//260911.1806 A configured static file that vanished locally is not an admin preference: try one guarded synchronous repair, then let normal dynamic fallback handle this request if repair cannot complete.
 					if($failure = get_transient($failure_key))
 						return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$failure);
-					$repair_lock_key = 'ws_plugin__s2member_static_asset_repair_lock_'.str_replace('.', '_', $id);
-					$repair_lock_current = (string)get_option($repair_lock_key, '');
-					$repair_lock_parts = explode(':', $repair_lock_current, 2);
-					$repair_lock_time = (!empty($repair_lock_parts[0]) && is_numeric($repair_lock_parts[0])) ? (int)$repair_lock_parts[0] : 0;
-					//260913.0704 Preserve compatibility with older timestamp-only locks while making stale takeover conditional on the exact lock value this request inspected.
-					if($repair_lock_current !== '' && (!$repair_lock_time || $repair_lock_time < time() - 30))
-						self::static_asset_repair_lock_delete($repair_lock_key, $repair_lock_current);
-					$repair_lock_value = time().':'.sha1(microtime(TRUE)."\0".wp_rand());
-					if(!add_option($repair_lock_key, $repair_lock_value, '', 'no'))
+					//261117.0133 Require both the shared lease and legacy marker before building a missing active file.
+					$repair_lock = self::static_asset_repair_lock_acquire($id);
+					if($repair_lock === FALSE)
 						return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => 'Expected static asset '.$id.' is missing; another request is already rebuilding it.');
 					$dirty = TRUE;
 				}
@@ -2517,10 +2571,10 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 			$definition = self::static_asset_definition($id, TRUE);
 			if(empty($definition['ok']))
 			{
-				if($repair_lock_key !== '')
+				if($repair_lock !== FALSE)
 				{
 					set_transient($failure_key, (string)$definition['error'], 5 * MINUTE_IN_SECONDS);
-					self::static_asset_repair_lock_delete($repair_lock_key, $repair_lock_value);
+					self::static_asset_repair_lock_release($repair_lock);
 				}
 				return self::$static_asset_cache[$id] = array('ok' => FALSE, 'url' => '', 'build' => $active_build, 'error' => (string)$definition['error']);
 			}
@@ -2542,18 +2596,18 @@ if(!class_exists('c_ws_plugin__s2member_utils_assets'))
 				//260905.0106 Prune only after the new timestamp is current so the previous generation is treated as stale instead of protected.
 				self::prune_static_asset_generations(dirname($result['path']), $result['path']);
 				delete_transient($failure_key);
-				if($repair_lock_key !== '')
+				if($repair_lock !== FALSE)
 				{
 					//260911.1834 A missing active file that repaired successfully is still useful history, but it must not lower the health score because this request retained static delivery.
 					$health_id = self::asset_runtime_health_id($id, $type, 'static');
 					self::queue_asset_health_issue_snapshot('repaired', self::asset_runtime_health_label($health_id), 'Expected static asset '.$id.' was missing and was rebuilt automatically.');
-					self::static_asset_repair_lock_delete($repair_lock_key, $repair_lock_value);
+					self::static_asset_repair_lock_release($repair_lock);
 				}
 				return self::$static_asset_cache[$id] = array('ok' => TRUE, 'url' => $result['url'], 'build' => $build, 'error' => '');
 			}
 			set_transient($failure_key, (string)$result['error'], 5 * MINUTE_IN_SECONDS);
-			if($repair_lock_key !== '')
-				self::static_asset_repair_lock_delete($repair_lock_key, $repair_lock_value);
+			if($repair_lock !== FALSE)
+				self::static_asset_repair_lock_release($repair_lock);
 
 			//260907.2203 Preserve failed generation details even when delivery later falls back or recovers automatically.
 			c_ws_plugin__s2member_utils_logs::log_entry('css-js', array(

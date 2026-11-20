@@ -64,6 +64,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 			$log4 .= @$_SERVER['HTTP_HOST'].@$_SERVER['REQUEST_URI']."\n";
 			$log4 .= 'User-Agent: '.@$_SERVER['HTTP_USER_AGENT'];
 
+			//261118.1735 Request URLs in log headers may contain payment credentials; sanitize them as well as log data.
+			$log4 = self::conceal_private_info($log4);
+
 			$log2 = $slug.'.log'; // Initialize.
 			if(is_multisite() && !is_main_site()) // Child blog in a multisite network?
 				$log2 = $slug.'-4-'.trim(preg_replace('/[^a-z0-9]/i', '-', $GLOBALS['current_blog']->domain.$GLOBALS['current_blog']->path), '-').'.log';
@@ -94,8 +97,9 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 		 */
 		public static function http_api_debug($response = NULL, $state = NULL, $class = NULL, $args = NULL, $url = NULL)
 		{
-			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs'])
-				return; // Logging is NOT enabled in this case.
+			//261120.2014 HTTP connection diagnostics are high-volume; require Additional Logging Routines as well as standard logging.
+			if(!$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs'] || !$GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs_extensive'])
+				return;
 
 			$http_api_debug = array(
 				'state' => $state, 'transport_class' => $class,
@@ -104,8 +108,7 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 			if(!empty($args['s2member']) || strpos($url, 's2member') !== FALSE)
 				self::log_entry('s2-http-api-debug', $http_api_debug);
 
-			if($GLOBALS['WS_PLUGIN__']['s2member']['o']['gateway_debug_logs_extensive'])
-				self::log_entry('wp-http-api-debug', $http_api_debug);
+			self::log_entry('wp-http-api-debug', $http_api_debug);
 		}
 
 		/**
@@ -153,6 +156,12 @@ if(!class_exists('c_ws_plugin__s2member_utils_logs'))
 			$log_entry = preg_replace('/(\"[^\"]*(?:CVV2?|CVC2?|CSC|CARD_?CODE|X_CARD_CODE|x_card_code|card_?code|card_?verification)[^\"]*\"\s*\:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/cvv'.'$3', $log_entry);
 			$log_entry = preg_replace('/((?:^|[&?])[^&\r\n]*(?:CVV2?|CVC2?|CSC|CARD_?CODE|X_CARD_CODE|x_card_code|card_?code|card_?verification)(?:\[[^\]&=]*\]|%5B[^&=]*%5D)?\=)([^&\r\n]+)/im', '$1'.'xxxxxxxx/cvv', $log_entry);
 			$log_entry = preg_replace('/(<((?:CVV2?|CVC2?|CSC|CARD_?CODE|X_CARD_CODE|x_card_code|card_?code|card_?verification))\b[^>]*>)(.*?)(<\/\2>)/is', '$1'.'xxxxxxxx/cvv'.'$4', $log_entry);
+
+			//261110.1847 Redact proxy verification values from diagnostics, including request URLs.
+			$log_entry = preg_replace('/(\'s2member_paypal_proxy_verification\'\s*\=\>\s*\')([^\']+)(\')/i', '$1'.'xxxxxxxx/proxy-key'.'$3', $log_entry);
+			$log_entry = preg_replace('/(\[\s*s2member_paypal_proxy_verification\s*\]\s*\=\>\s*)([^\r\n]*)/i', '$1'.'xxxxxxxx/proxy-key', $log_entry);
+			$log_entry = preg_replace('/(\"s2member_paypal_proxy_verification\"\s*\:\s*\")([^\"]+)(\")/i', '$1'.'xxxxxxxx/proxy-key'.'$3', $log_entry);
+			$log_entry = preg_replace('/((?:^|[&?])s2member_paypal_proxy_verification=)([^&\r\n]+)/im', '$1'.'xxxxxxxx/proxy-key', $log_entry);
 
 			$log_entry = preg_replace('/(Authorization\s*:\s*Basic\s+)[A-Za-z0-9\/\+\=]+/i', '$1'.'xxxxxxxx/basic-auth', $log_entry);
 			$log_entry = preg_replace('/(\[\s*Authorization\s*\]\s*=\>\s*Basic\s+)[A-Za-z0-9\/\+\=]+/i', '$1'.'xxxxxxxx/basic-auth', $log_entry);

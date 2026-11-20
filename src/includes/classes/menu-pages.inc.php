@@ -77,6 +77,10 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 						if($key === 'ws_plugin__s2member_configured') // s2Member is now configured (according to these options)?
 							($GLOBALS['WS_PLUGIN__']['s2member']['c']['configured'] = $value).update_option('ws_plugin__s2member_configured', $value);
 
+						//261118.0235 A valid options-form nonce is not permission to change payment authentication policy.
+						else if($key === 'ws_plugin__s2member_paypal_proxy_legacy_policy' && (!current_user_can('manage_options') || (is_multisite() && !is_super_admin())))
+							continue;
+
 						else if(!is_array($value) || (is_array($value) && array_shift($value) === 'update-signal')) // Updating an array?
 							$options[preg_replace('/^'.preg_quote('ws_plugin__s2member_', '/').'/', '', $key)] = $value;
 
@@ -265,6 +269,11 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_ops_page', TRUE, get_defined_vars()))
 					add_submenu_page($menu, 's2Member PayPal Options', 'PayPal Options', 'create_users', 'ws-plugin--s2member-paypal-ops', 'c_ws_plugin__s2member_menu_pages::paypal_ops_page');
+
+				//261117.0042 Register the Audit callback beneath the hidden admin.php parent; removing a visible submenu also breaks WordPress's direct-page routing.
+				//261117.0042 Preserve authorized direct access for later review, but never add the page to s2Member's navigation.
+				if((!is_multisite() || is_super_admin()) && apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_audit_page', TRUE, get_defined_vars()))
+					add_submenu_page('admin.php', 's2Member PayPal Cutover & Payment Audit', 'PayPal Payment Audit', 'manage_options', 'ws-plugin--s2member-paypal-audit', 'c_ws_plugin__s2member_menu_pages::paypal_reconciliation_page');
 
 				if(apply_filters('ws_plugin__s2member_during_add_admin_options_add_paypal_buttons_page', TRUE, get_defined_vars()))
 					add_submenu_page($menu, 's2Member PayPal Buttons', 'PayPal Buttons', 'create_users', 'ws-plugin--s2member-paypal-buttons', 'c_ws_plugin__s2member_menu_pages::paypal_buttons_page');
@@ -724,6 +733,19 @@ if(!class_exists('c_ws_plugin__s2member_menu_pages'))
 			include_once dirname(dirname(__FILE__)).'/menu-pages/paypal-ops.inc.php';
 
 			do_action('ws_plugin__s2member_after_paypal_ops_page', get_defined_vars());
+		}
+
+		/**
+		 * Render the privileged PayPal activation acknowledgment and read-only receipt lookup.
+		 *
+		 * @since 261114.0253
+		 */
+		public static function paypal_reconciliation_page()
+		{
+			if(!current_user_can('manage_options') || (is_multisite() && !is_super_admin()))
+				return;
+			//261116.1810 Receipt diagnostics remain read-only; the separate preflight form only calls the guarded, immutable acknowledgment API.
+			include dirname(dirname(__FILE__)).'/menu-pages/paypal-reconciliation.inc.php';
 		}
 
 		/**

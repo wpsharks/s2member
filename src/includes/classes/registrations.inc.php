@@ -29,6 +29,231 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 	class c_ws_plugin__s2member_registrations
 	{
 		/**
+		 * Schedule owned registration payment processing without delaying the registering member.
+		 *
+		 * Only the exact existing PayPal member is eligible. Scheduling an event is not
+		 * evidence of fulfillment: the Cron consumer still verifies each owned receipt.
+		 *
+		 * @since 261112.2236
+		 *
+		 * @param int $user_id Existing registered member ID.
+		 * @param string $subscription Exact provider subscription ID.
+		 *
+		 * @return bool|WP_Error TRUE if queued, or an explicit failure.
+		 */
+		public static function schedule_pending_registration_payments($user_id, $subscription)
+		{
+			$user_id = (int)$user_id;
+			if($user_id < 1 || !is_string($subscription) || $subscription === '' || strlen($subscription) > 255
+			   || get_user_option('s2member_subscr_id', $user_id) !== $subscription
+			   || get_user_option('s2member_subscr_gateway', $user_id) !== 'paypal'
+			   || (int)c_ws_plugin__s2member_utils_users::get_user_id_with($subscription) !== $user_id)
+				return new WP_Error('s2m_pay_pending_member_mismatch', 'Cannot schedule a payment for an unbound PayPal member.');
+			//261112.2236 No queue SQL or payment hooks execute in the registration request. WP-Cron owns all new durable-queue work.
+			if(!c_ws_plugin__s2member_cron_jobs::maybe_schedule_single_event(
+				'ws_plugin__s2member_pending_registration_payment_batch', time() + 10, array($user_id, $subscription, 0, 0)))
+				return new WP_Error('s2m_pay_pending_initial_unscheduled', 'Could not schedule background payment processing.');
+			return TRUE;
+		}
+
+		/**
+		 * Calculate a conservative, request-relative wall-clock budget for payment callbacks.
+		 *
+		 * Based on Auto-EOT and Pro reminder runtime budgets, but kept payment-specific:
+		 * notification URLs and third-party hooks have different latency and retry risks.
+		 *
+		 * @since 261112.2236
+		 *
+		 * @return float Runtime budget in seconds.
+		 */
+		public static function pending_registration_payment_runtime_budget()
+		{
+			$limit = (int)ini_get('max_execution_time');
+			$automatic = $limit > 0 ? max(1, floor($limit * 0.50)) : 20;
+			//261112.2236 Allow site-specific tuning while keeping headroom under a finite PHP execution limit.
+			$budget = (float)apply_filters('ws_plugin__s2member_pending_registration_payment_runtime', $automatic);
+			return max(1.0, $limit > 0 ? min($budget, max(1, floor($limit * 0.80))) : $budget);
+		}
+
+		/**
+		 * Consume one ordered PayPal payment page within the shared WP-Cron time budget.
+		 *
+		 * Each invocation rechecks user, subscription and gateway; shadows are never
+		 * replayed. A page size bounds SQL reads, not the count of payment side effects.
+		 * Continuation keeps the first unexamined row, including after runtime exhaustion.
+		 *
+		 * @since 261112.2203
+		 *
+		 * @param int $user_id Existing registered member ID.
+		 * @param string $subscription Exact provider subscription ID.
+		 * @param int $after_id Last scanned options row ID.
+		 * @param int $retry Attempt count for transient busy/error recovery (0–2).
+		 *
+		 * @return array|WP_Error Count/status summary, or a fail-closed error.
+		 */
+		public static function consume_pending_registration_payments($user_id, $subscription, $after_id = 0, $retry = 0)
+		{
+			$user_id = (int)$user_id;
+			if($user_id < 1 || !is_string($subscription) || $subscription === '' || strlen($subscription) > 255
+			   || !is_int($after_id) || $after_id < 0 || !is_int($retry) || $retry < 0 || $retry > 2
+			   || get_user_option('s2member_subscr_id', $user_id) !== $subscription
+			   || get_user_option('s2member_subscr_gateway', $user_id) !== 'paypal'
+			   || (int)c_ws_plugin__s2member_utils_users::get_user_id_with($subscription) !== $user_id)
+				return new WP_Error('s2m_pay_pending_member_mismatch', 'Pending payment does not belong to this registered PayPal member.');
+			$runtime_budget = self::pending_registration_payment_runtime_budget();
+			$request_started = isset($_SERVER['REQUEST_TIME_FLOAT']) && is_numeric($_SERVER['REQUEST_TIME_FLOAT'])
+				? (float)$_SERVER['REQUEST_TIME_FLOAT'] : microtime(TRUE);
+			$deadline = $request_started + $runtime_budget;
+			$safety_buffer = min($runtime_budget * 0.25, 1.0);
+			$page = c_ws_plugin__s2member_payment_events::pending_page_for_subscription($subscription, $after_id, 50);
+			if(is_wp_error($page))
+				return $page;
+			$completed = 0;
+			$unresolved = 0;
+			$retryable = FALSE;
+			$cursor = $after_id;
+			$scanned = 0;
+			$effect_duration = 0.0;
+			$last_effect_duration = 0.0;
+			$runtime_exhausted = FALSE;
+			foreach($page['entries'] as $entry)
+			{
+				//261112.2236 Stop before advancing the cursor: an unexamined payment must survive in the next Cron page.
+				$average_effect_duration = ($completed + $unresolved) > 0 ? $effect_duration / ($completed + $unresolved) : 0.0;
+				$estimated_next_duration = max(2.0, $last_effect_duration, $average_effect_duration);
+				if($deadline - microtime(TRUE) <= $safety_buffer + $estimated_next_duration)
+				{
+					$runtime_exhausted = TRUE;
+					break;
+				}
+				$cursor = $entry['option_id'];
+				++$scanned;
+				//261112.2203 Only an immutable authoritative PayPal receipt may enter the v9 owned handler; Pro gateways remain untouched.
+				if(!$entry['replay_authorized'] || $entry['gateway'] !== 'paypal' || $entry['ipn']['subscr_gateway'] !== 'paypal')
+					continue;
+				$effect_started = microtime(TRUE);
+				$result = c_ws_plugin__s2member_payment_events::consume_authorized_registration_payment($subscription, $entry['event'],
+					array('c_ws_plugin__s2member_paypal_notify_in_subscr_or_rp_payment_w_level', 'fulfill_authorized_registration_payment'));
+				$last_effect_duration = max(0.0, microtime(TRUE) - $effect_started);
+				$effect_duration += $last_effect_duration;
+				if(is_array($result) && $result['status'] === 'completed')
+					++$completed;
+				else
+				{
+					++$unresolved;
+					//261112.2203 Busy or pre-checkpoint faults deserve bounded retry; an ambiguous checkpoint does NOT permit automatic replay.
+					if((is_array($result) && $result['status'] === 'busy')
+					   || (is_wp_error($result) && $result->get_error_code() !== 's2m_pay_event_ambiguous_fulfillment'))
+						$retryable = TRUE;
+					do_action('ws_plugin__s2member_pending_registration_payment_unresolved', $entry['event'], $result);
+				}
+			}
+			$has_more = $page['has_more'] || $cursor < $page['cursor'];
+			if($has_more)
+			{
+				//261112.2236 Leave remaining payment work to a fresh Cron request; the current worker already used its measured budget.
+				$scheduled = c_ws_plugin__s2member_cron_jobs::maybe_schedule_single_event(
+					'ws_plugin__s2member_pending_registration_payment_batch', time() + 10, array($user_id, $subscription, $cursor, 0));
+				if(!$scheduled)
+					return new WP_Error('s2m_pay_pending_continuation_unscheduled', 'Pending payment continuation could not be scheduled.');
+			}
+			if($retryable && $retry < 2)
+			{
+				//261112.2203 Retry the same page at most twice; ambiguous outcomes remain available for explicit reconciliation, not automatic replay.
+				$scheduled = c_ws_plugin__s2member_cron_jobs::maybe_schedule_single_event(
+					'ws_plugin__s2member_pending_registration_payment_batch', time() + 60, array($user_id, $subscription, $after_id, $retry + 1));
+				if(!$scheduled)
+					return new WP_Error('s2m_pay_pending_retry_unscheduled', 'Pending payment retry could not be scheduled.');
+			}
+			return array('completed' => $completed, 'unresolved' => $unresolved, 'scanned' => $scanned,
+			             'cursor' => $cursor, 'has_more' => $has_more, 'stop_reason' => $runtime_exhausted ? 'runtime_budget' : 'page_end');
+		}
+
+		/**
+		 * Forward a verified cached registration notification without discarding failed delivery attempts.
+		 *
+		 * @since 261116.0012
+		 * @param string $transient Existing per-subscription transient key.
+		 * @param array $ipn Stored notification originally accepted by a gateway handler.
+		 * @param int $user_id Newly registered member.
+		 * @param string $gateway Member's registered gateway.
+		 * @param string $kind Either payment or eot.
+		 * @return string Completed, acknowledged, blocked, changed, or unconfirmed.
+		 */
+		public static function deliver_cached_registration_notification($transient, $ipn, $user_id, $gateway, $kind)
+		{
+			if(!is_string($transient) || !is_array($ipn)
+			   || !in_array($kind, array('payment', 'eot'), TRUE) || !is_string($gateway)
+			   || !isset($ipn['subscr_id'], $ipn['subscr_gateway']) || !is_string($ipn['subscr_id'])
+			   || !is_string($ipn['subscr_gateway']) || $ipn['subscr_id'] === '' || $gateway !== $ipn['subscr_gateway']
+			   || (int)$user_id < 1 || get_user_option('s2member_subscr_id', (int)$user_id) !== $ipn['subscr_id']
+			   || get_user_option('s2member_subscr_gateway', (int)$user_id) !== $gateway
+			   || $transient !== 's2m_'.md5('s2member_transient_ipn_subscr_'.$kind.'_'.$ipn['subscr_id']))
+				return 'blocked';
+			$done_option = '';
+			if($kind === 'payment')
+			{
+				//261116.0012 An authoritative PayPal receipt permanently fences the older registration replay.
+				$legacy_safe = c_ws_plugin__s2member_payment_events::legacy_registration_replay_is_safe($ipn);
+				if($legacy_safe !== TRUE || !isset($ipn['txn_id']) || !is_string($ipn['txn_id']) || $ipn['txn_id'] === '')
+					return 'blocked';
+				$done_option = 's2m_paypal_txn_done_'.md5(strtolower($ipn['subscr_id']).'|'.strtolower($ipn['txn_id']));
+			}
+			if(get_transient($transient) !== $ipn)
+				return 'changed';
+			if($kind === 'payment')
+			{
+				if(c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done_option, DAY_IN_SECONDS))
+				{
+					//261116.0012 A completed transaction needs no second delivery; never delete a replaced transient.
+					if(get_transient($transient) === $ipn)
+						delete_transient($transient);
+					return 'completed';
+				}
+			}
+
+			$proxy = array('s2member_paypal_proxy' => stripslashes($gateway),
+			               's2member_paypal_proxy_verification' => '');
+			$local_eot = FALSE;
+			try
+			{
+				$local_eot = $kind === 'eot' && apply_filters('ws_plugin__s2member_registration_eot_local_dispatch', TRUE, $ipn, (int)$user_id) === TRUE;
+				//261116.0147 Local EOT dispatch exposes handler acceptance; a remote HTTP 200 alone cannot prove it.
+				//261117.0534 Preserve legacy HTTP payment delivery; avoid creating a proxy credential for trusted local EOT handling.
+				$notify_post = array_merge(stripslashes_deep($ipn), $proxy);
+				$response = $local_eot
+					? c_ws_plugin__s2member_paypal_utilities::paypal_checkout_notify_inprocess($notify_post, TRUE)
+					: c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'),
+						array_merge($notify_post, array('s2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen())), array('timeout' => 20), TRUE);
+			}
+			catch(\Exception $exception)
+			{
+				$response = FALSE;
+			}
+			catch(\Error $exception)
+			{
+				$response = FALSE;
+			}
+			$code = is_array($response) && isset($response['code']) ? (int)$response['code'] : 0;
+			if($code !== 200
+			   || ($kind === 'payment' && !c_ws_plugin__s2member_paypal_utilities::dedupe_done_time_get($done_option, DAY_IN_SECONDS))
+			   || ($kind === 'eot' && (!$local_eot || !isset($response['paypal']['s2member_eot_delivery_status'])
+			                          || $response['paypal']['s2member_eot_delivery_status'] !== 'accepted')))
+			{
+				//261116.0012 Leave ambiguous deliveries untouched; never automatically replay possible partial side effects.
+				do_action('ws_plugin__s2member_registration_notification_unconfirmed', (int)$user_id, $kind, $code);
+				return 'unconfirmed';
+			}
+
+			//261116.0012 A new cached event may have replaced this slot during delivery; do not remove it.
+			if(get_transient($transient) !== $ipn)
+				return 'changed';
+			delete_transient($transient);
+			//261116.0147 EOT acceptance proves the handler returned, not that external hooks delivered their own effects.
+			return $kind === 'payment' ? 'completed' : 'acknowledged';
+		}
+
+		/**
 		 * Custom password; else randomly generated password.
 		 *
 		 * @package s2Member\Registrations
@@ -852,15 +1077,25 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											}
 											if(($transient = 's2m_'.md5('s2member_transient_ipn_subscr_payment_'.$subscr_id)) && is_array($subscr_payment = get_transient($transient)) && !empty($subscr_payment['subscr_gateway']))
 											{
-												$proxy = array('s2member_paypal_proxy' => stripslashes((string)$subscr_payment['subscr_gateway']), 's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen());
-												c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'), array_merge(stripslashes_deep($subscr_payment), $proxy), array('timeout' => 20));
-												delete_transient($transient); // This can be deleted now.
+												//261116.0012 Preserve the existing blocked-replay hook contract while retaining uncertain payments.
+												$legacy_safe = c_ws_plugin__s2member_payment_events::legacy_registration_replay_is_safe($subscr_payment);
+												if($legacy_safe === TRUE)
+													self::deliver_cached_registration_notification($transient, $subscr_payment, $user_id, $subscr_gateway, 'payment');
+												else
+													do_action('ws_plugin__s2member_pending_registration_legacy_blocked', $user_id, $legacy_safe);
+											}
+											//261112.2203 Drain the new authorized PayPal queue after the registered member binding exists; shadow payments remain legacy-only.
+											if($subscr_gateway === 'paypal')
+											{
+												//261112.2236 Registration has its own membership work; do not make this member wait for payment notifications or other queued payments.
+												$queue_result = self::schedule_pending_registration_payments($user_id, $subscr_id);
+												if(is_wp_error($queue_result))
+													do_action('ws_plugin__s2member_pending_registration_payment_error', $queue_result, $user_id);
 											}
 											if(($transient = 's2m_'.md5('s2member_transient_ipn_subscr_eot_'.$subscr_id)) && is_array($subscr_eot = get_transient($transient)) && !empty($subscr_eot['subscr_gateway']))
 											{
-												$proxy = array('s2member_paypal_proxy' => stripslashes((string)$subscr_eot['subscr_gateway']), 's2member_paypal_proxy_verification' => c_ws_plugin__s2member_paypal_utilities::paypal_proxy_key_gen());
-												c_ws_plugin__s2member_utils_urls::remote(home_url('/?s2member_paypal_notify=1'), array_merge(stripslashes_deep($subscr_eot), $proxy), array('timeout' => 20));
-												delete_transient($transient); // This can be deleted now.
+												//261116.0012 Never discard a deferred EOT on a failed or uncertain transport attempt.
+												self::deliver_cached_registration_notification($transient, $subscr_eot, $user_id, $subscr_gateway, 'eot');
 											}
 											if(!headers_sent()) // Only if headers are NOT yet sent. Here we establish both Signup and Payment Tracking Cookies.
 												@setcookie('s2member_tracking', ($s2member_tracking = c_ws_plugin__s2member_utils_encryption::encrypt($subscr_id)), time() + 31556926, COOKIEPATH, COOKIE_DOMAIN).
@@ -1183,32 +1418,23 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											 * @var $opt_in boolean Reference for IDEs.
 											 * @var $fields array Reference for IDEs.
 											 */
+											//261117.1410 Construct trusted registration tokens once; never rescan substituted custom values.
+											$registration_values = c_ws_plugin__s2member_utils_strings::member_notification_values(array(
+												'role' => $role, 'level' => $level, 'ccaps' => $ccaps, 'auto_eot_time' => $auto_eot_time,
+												'user_first_name' => $fname, 'user_last_name' => $lname, 'user_full_name' => $name,
+												'user_email' => $email, 'user_login' => $login, 'user_pass' => $pass,
+												'user_ip' => $ip, 'user_id' => $user_id,
+											), $custom, $fields);
+
 											if($urls = $GLOBALS['WS_PLUGIN__']['s2member']['o']['registration_notification_urls'])
-
-												foreach(preg_split('/['."\r\n\t".']+/', $urls) as $url) // Notify each of the URLs.
-
-													if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)))
-														if(($url = preg_replace('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($role)), $url)))
-															if(($url = preg_replace('/%%level%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($level)), $url)))
-																if(($url = preg_replace('/%%ccaps%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ccaps)), $url)))
-																	if(($url = preg_replace('/%%auto_eot_time%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($auto_eot_time)), $url)))
-																		if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($fname)), $url)))
-																			if(($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($lname)), $url)))
-																				if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($name)), $url)))
-																					if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($email)), $url)))
-																						if(($url = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($login)), $url)))
-																							if(($url = preg_replace('/%%user_pass%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($pass)), $url)))
-																								if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ip)), $url)))
-																									if(($url = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
-																									{
-																										foreach($fields as $var => $val) // Custom Fields.
-																											if(!($url = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
-																												break;
-
-																										if(($url = trim(preg_replace('/%%(.+?)%%/i', '', $url))))
-																											c_ws_plugin__s2member_utils_urls::remote($url);
-																									}
-											unset($urls, $url, $var, $val); // Housekeeping.
+												foreach(preg_split('/['."\r\n\t".']+/', $urls) as $url)
+												{
+													//261117.1410 Resolve only the original URL's tokens; substituted profile data cannot become another token.
+													$url = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, $registration_values, 'url'));
+													if($url)
+														c_ws_plugin__s2member_utils_urls::remote($url);
+												}
+											unset($urls, $url); // Housekeeping.
 
 											if($GLOBALS['WS_PLUGIN__']['s2member']['o']['registration_notification_recipients'])
 											{
@@ -1245,29 +1471,11 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 												$msg .= 'cv8: %%cv8%%'."\n";
 												$msg .= 'cv9: %%cv9%%';
 
-												if(($msg = c_ws_plugin__s2member_utils_strings::fill_cvs($msg, $custom)))
-													if(($msg = preg_replace('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($role), $msg)))
-														if(($msg = preg_replace('/%%level%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($level), $msg)))
-															if(($msg = preg_replace('/%%ccaps%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($ccaps), $msg)))
-																if(($msg = preg_replace('/%%auto_eot_time%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($auto_eot_time), $msg)))
-																	if(($msg = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($fname), $msg)))
-																		if(($msg = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($lname), $msg)))
-																			if(($msg = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($name), $msg)))
-																				if(($msg = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($email), $msg)))
-																					if(($msg = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($login), $msg)))
-																						if(($msg = preg_replace('/%%user_pass%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($pass), $msg)))
-																							if(($msg = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($ip), $msg)))
-																								if(($msg = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs($user_id), $msg)))
-																								{
-																									foreach($fields as $var => $val) // Custom Fields.
-																										if(!($msg = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(maybe_serialize($val)), $msg)))
-																											break;
-
-																									if($sbj && ($msg = trim(preg_replace('/%%(.+?)%%/i', '', $msg)))) // Still have a ``$sbj`` and a ``$msg``?
-
-																										foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['registration_notification_recipients']) as $recipient)
-																											wp_mail($recipient, apply_filters('ws_plugin__s2member_registration_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_registration_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
-																								}
+												//261117.1410 Preserve notification hooks while preventing a second-pass field expansion.
+												$msg = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($msg, $registration_values, 'text'));
+												if($sbj && $msg)
+													foreach(c_ws_plugin__s2member_utils_strings::parse_emails($GLOBALS['WS_PLUGIN__']['s2member']['o']['registration_notification_recipients']) as $recipient)
+														wp_mail($recipient, apply_filters('ws_plugin__s2member_registration_notification_email_sbj', $sbj, get_defined_vars()), apply_filters('ws_plugin__s2member_registration_notification_email_msg', $msg, get_defined_vars()), 'Content-Type: text/plain; charset=UTF-8');
 												if($email_configs_were_on) // Back on?
 													c_ws_plugin__s2member_email_configs::email_config();
 
@@ -1275,29 +1483,13 @@ if(!class_exists('c_ws_plugin__s2member_registrations'))
 											}
 
 											if(!empty($GLOBALS['ws_plugin__s2member_registration_return_url']) && ($url = $GLOBALS['ws_plugin__s2member_registration_return_url']))
-
-												if(($url = c_ws_plugin__s2member_utils_strings::fill_cvs($url, $custom, true)))
-													if(($url = preg_replace('/%%role%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($role)), $url)))
-														if(($url = preg_replace('/%%level%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($level)), $url)))
-															if(($url = preg_replace('/%%ccaps%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ccaps)), $url)))
-																if(($url = preg_replace('/%%auto_eot_time%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($auto_eot_time)), $url)))
-																	if(($url = preg_replace('/%%user_first_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($fname)), $url)))
-																		if(($url = preg_replace('/%%user_last_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($lname)), $url)))
-																			if(($url = preg_replace('/%%user_full_name%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($name)), $url)))
-																				if(($url = preg_replace('/%%user_email%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($email)), $url)))
-																					if(($url = preg_replace('/%%user_login%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($login)), $url)))
-																						if(($url = preg_replace('/%%user_pass%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($pass)), $url)))
-																							if(($url = preg_replace('/%%user_ip%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($ip)), $url)))
-																								if(($url = preg_replace('/%%user_id%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode($user_id)), $url)))
-																								{
-																									foreach($fields as $var => $val) // Custom Fields.
-																										if(!($url = preg_replace('/%%'.preg_quote($var, '/').'%%/i', c_ws_plugin__s2member_utils_strings::esc_refs(urlencode(maybe_serialize($val))), $url)))
-																											break;
-
-																									if(($url = trim($url))) // Preserve remaining Replacements; because the parent routine may perform replacements too.
-																										$GLOBALS['ws_plugin__s2member_registration_return_url'] = $url;
-																								}
-											unset($url, $var, $val); // Housekeeping.
+											{
+												//261117.1410 Keep parent-owned placeholders unresolved, but never rescan substituted user data.
+												$url = trim(c_ws_plugin__s2member_utils_strings::fill_paypal_template_once($url, $registration_values, 'url-preserve'));
+												if($url)
+													$GLOBALS['ws_plugin__s2member_registration_return_url'] = $url;
+											}
+											unset($url); // Housekeeping.
 
 											c_ws_plugin__s2member_list_servers::process_list_servers($role, $level, $login, $pass, $email, $fname, $lname, $ip, $opt_in, TRUE, $user_id);
 											/*
